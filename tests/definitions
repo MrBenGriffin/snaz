@@ -6,8 +6,8 @@ F showDefines	1
 U zp		0	1	01	␉[⍟1]␉
 U zs		0	1	10	␉[⍟1]␉
 
-s0zp		⌽zp(␉H␉R␉)						␉[H␉R]␉
-s0zs		⌽zs(␉H␉R␉)						[␉H␉R␉]
+s0zp		⌽zp(␉H␉R␉)		␉[H␉R]␉
+s0zs		⌽zs(␉H␉R␉)		[␉H␉R␉]
 
 X
 
