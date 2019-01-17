@@ -1,0 +1,153 @@
+%{
+/* C++ string header, for string ops below */
+#include <string>
+#include <iostream>
+
+/* Implementation of yyFlexScanner */ 
+#include "../advanced.h"
+#undef  YY_DECL
+#define YY_DECL int mt::Advanced::yylex( mt::Parser::semantic_type * const lval, mt::Parser::location_type *loc )
+
+/* typedef to make the returns for the tokens shorter */
+using token = mt::Parser::token;
+
+/* define yyterminate as this instead of NULL */
+#define yyterminate() return( token::END )
+
+/* update location on matching */
+#define YY_USER_ACTION loc->step(); loc->columns(yyleng);
+
+%}
+%option debug
+%option yyclass="mt::Advanced"
+%option noyywrap
+%option c++
+%option stack
+%option warn
+%x macro fatMacro parm brace bracket literal
+
+%%
+%{          /** Code executed at the beginning of yylex **/
+            yylval = lval;
+            yy_flex_debug=0;
+%}
+
+   /** honour (fat)macros and injections anywhere but in a macro name,literal **/
+<INITIAL,parm,brace,bracket>{
+   ⌽[a-zA-Z_0-9]+\( {
+     yylval->build< std::string >( std::string(yytext + 3, yyleng -4) );
+     yy_push_state(macro);
+     yy_push_state(parm);
+     return( token::MACRO_IN );
+   }
+   ⌽[a-zA-Z_0-9]+❪ {
+     yylval->build< std::string >( std::string(yytext + 3, yyleng -6) );
+     yy_push_state(fatMacro);
+     yy_push_state(parm);
+     return( token::MACRO_IN );
+   }
+   ⍟(^*)([ijk]|[0-9]+|\((^*)([ijkn]([.+-][0-9]+)?|[0-9]+("+"?)|(p(s|[0-9]?)))\)) {
+     if(defining) {
+         yylval->build< std::string >( std::string(yytext + 3, yyleng -3) );
+         return( token::INJECTION );
+     } else {
+         yylval->build< std::string >( yytext );
+         return( token::TEXT );
+     }
+   }
+}
+
+<parm>{
+    , {
+        yylval->build<std::string>(std::string(yytext, yyleng -1));
+        return( token::PARM );
+     }
+
+     \) {
+         if(yy_top_state() == macro) {
+            yylval->build<std::string>(std::string(yytext, yyleng -1));
+            yy_pop_state(); /**  Pop Parm to macro **/
+            yy_pop_state(); /**  Pop Macro **/
+            return( token::MACRO_OUT );
+         } else {
+          yymore();
+        }
+     }
+
+     ❫ {
+         if(yy_top_state() == fatMacro) {
+            yylval->build<std::string>(std::string(yytext, yyleng -3));
+            yy_pop_state(); /**  Pop Parm to macro **/
+            yy_pop_state(); /**  Pop Macro **/
+            return( token::MACRO_OUT );
+         } else {
+          yymore();
+        }
+     }
+}
+
+  /** everything is unrestricted in literal ⎣ context, except for close literal. E2 8E A6 = close lit **/
+<literal>{
+   ([^\xe2]|\xe2[^\x8e][^\0]|\xe2\x8e[^\xa6])+⎦ {
+       yylval->build<std::string>(std::string(yytext, yyleng -3));
+       yy_pop_state(); /**  Pop Literal **/
+       return( token::TEXT );
+    }
+}
+
+  /** literals are to be honoured everywhere but in macro and literals **/
+<INITIAL,parm,brace,bracket>⎣ yy_push_state(literal);
+
+  /** non restricted-characters are to be eaten ⎡⎤⎣⌽⍟ all need protecting.. **/
+  /** this is (⌽:e2 8c bd)(⍟:E2 8d 9F)(⎡:E2 8e A1)(⎣:E2 8e A3)(⎤:E2 8e A4) **/
+<parm,brace,bracket>([^,\(\)\xe2]|(\xe2[^\x8c-\x8e][^\0])|(\xe2\x8c[^\xbd])|(\xe2\x8d[^\x9f])|(\xe2\x8e[^\xa1\xa3\xa4]))+ {
+     yylval->build<std::string>(std::string(yytext, yyleng));
+     return( token::TEXT );
+}
+
+  /** braces are to be honoured in brace and parm context only **/
+<parm,brace>⎡ yy_push_state(brace);
+
+
+  /** brackets are to be honoured in brackets and parm context only **/
+<parm,bracket>\( { yymore(); yy_push_state(bracket); }
+
+  /** comma is unrestricted inside brace or bracket **/
+<brace,bracket>, yymore();
+
+  /** brackets are unrestricted in brace context, close brace pops **/
+<brace>{
+    ⎤ {
+     yylval->build<std::string>(std::string(yytext, yyleng -3));
+     yy_pop_state();
+     return( token::TEXT );
+    }
+    [\(\)]+ yymore();
+}
+
+
+  /** braces are unrestricted in bracket context, close bracket pops **/
+<bracket>{
+    \) {
+     yylval->build<std::string>(yytext);
+     yy_pop_state();
+     return( token::TEXT );
+    }
+    [⎡⎤]+ yymore();
+}
+
+[\t\n]+ {
+    if(!stripped) {
+        yylval->build<std::string>(yytext);
+        return( token::TEXT );
+    }
+}
+
+  /** This is (⌽:e2 8c bd)(⎣:E2 8E A3)(⍟:E2 8D 9F) **/
+(([^\xe2])|(\xe2[^\x8c-\x8e][^\0])|(\xe2\x8c[^\xbd])|(\xe2\x8d[^\x9f])|(\xe2\x8e[^\xa3]))+ {
+    yylval->build<std::string>(yytext);
+    return( token::TEXT );
+}
+
+%%
+

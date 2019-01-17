@@ -1,0 +1,60 @@
+// Lines starting with a U are user macro definitions
+// 111 expansion (111 = strip,ptrim,preparse) newline:[␤ ␊ ␍] tab:␉
+// macro 'a' is used as a simple [] wrapper in various tests
+
+F showDefines	1
+U zp		0	1	01	␉[⍟1]␉
+U zs		0	1	10	␉[⍟1]␉
+
+s0zp		⌽zp(␉H␉R␉)						␉[H␉R]␉
+s0zs		⌽zs(␉H␉R␉)						[␉H␉R␉]
+
+X
+
+U r			0	1	00	[crlf]
+U a			0	1	00	[⍟1]
+U zv		0	1	00	␉[⍟1]␉
+U zb		0	1	11	␉[⍟1]␉
+
+U vv		0	1	00	␉[⍟1]␉
+U vp		0	1	01	␉[⍟1]␉
+U vs		0	1	10	␉[⍟1]␉
+U vb		0	1	11	␉[⍟1]␉
+
+// cr/crlf/newline tests
+U	xcr		0	0	00	␍
+U	xcrlf	0	0	00	␍␊
+U	xnl		0	0	00	␤
+
+
+// some typical xml markup macros.
+U wa		1	2	01	 ⍟1="⍟2"
+U wt		1	1	11	<⍟1>
+U wtagi		1	2	11	⌽wt(⍟1⍟2)
+U wtago		1	1	11	⌽wt(/⍟1)
+U wtag		2	3	00	⌽wtagi(⍟1,⍟2)⍟3⌽wtago(⍟1)
+U wstag		1	2	00	⌽wt(⍟1⍟2 /)
+U wTr		1	2	11	⌽wtag(tr,⍟1,⍟2)
+U wTd		1	2	11	⌽wtag(td,⍟1,⍟2)
+U ent		1	1	11	⌽iExists(Entities,,⌽iSet(Entities,⎡nbsp;iexcl;cent;pound;curren⎤)⌽iSet(EntCodes,⎡00A0;00A1;00A2;00A3;00A4⎤))⌽iSet(*entid,⌽iIndex(;,⌽iGet(Entities),find,⍟1))⌽iEq(⌽iGet(*entid),-1,⍟1,#x⌽iIndex(;,⌽iGet(EntCodes),get,⌽iGet(*entid)))
+U entx		1	1	11	⌽iRegex(&([a-z]+);,&⌽ent(\1);,⍟1)
+
+// Decomposing emojis and testing mid/left/right strings.
+U bits		1	1	11	[⌽iLeft(⍟1,1)][⌽iMid(⍟1,1,1)][⌽iRight(⍟1,1)]
+U bxts		1	1	11	[⌽iMid(⍟1,0,1)][⌽iMid(⍟1,1,1)][⌽iMid(⍟1,2,1)]
+
+// testing recursive macros
+U fx		1	1	11	.⌽iEq(⍟1,,,⎡[⌽iLeft(⍟1,1)]⌽fx(⌽iRight(⍟1,-1))⎤)
+U fr		1	1	11	.⌽iEq(⍟1,,,[⌽iLeft(⍟1,1)]⌽fx(⌽iRight(⍟1,-1)))
+U commas	1	-1	10	⍟(i)⌽iEq(⍟(k),⍟(n),,⎡,⎤)
+U acommas	1	-1	10	⍟(i)⌽iEq(⍟(k),⍟(n),,⎡,⎤)
+U ucomma	1	-1	10	⌽commas(⍟(1+))
+U vcomma	0	0	10	⌽ucomma(X,Y,⎡ss,uu,vv⎤,⎣⌽b0rked⎦)
+
+U xz		0	1	10	[⌽iEq(⍟1,,⍟(ps),⍟(p3))]
+U xy		0	1	10	⌽xz(⍟1)
+U xx		0	1	10	⌽xy(⍟1)
+U xw		0	1	10	⌽xx(⍟1)
+U xv		0	1	10	⌽xw(⍟1)
+U onlyMe	0	0	10	⍟0
+

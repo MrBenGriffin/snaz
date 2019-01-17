@@ -1,0 +1,25 @@
+// This is a tab-delimited file of tests.
+F showPassed	1
+F showDefines	1
+
+
+// name		code										expected result
+// example	[abcdef]									[abcdef]
+//!	b0rked
+
+//! syntax
+//-- included files
+ !	definitions
+ !	basic_advanced
+// !	taxonomy
+// !	media
+// !	strings
+// !	storage
+// !	utility
+// !	nodetree
+// !	nodeaccessors
+// !	encoding
+// !	obyx
+
+// !	reset
+

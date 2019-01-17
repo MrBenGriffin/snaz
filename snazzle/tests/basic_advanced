@@ -1,0 +1,169 @@
+// This is a tab-delimited file of tests.
+// Any empty line or line beginning with a / is ignored.
+// Lines starting with a # are test headings
+// All other lines are tab-delimited name,macrotext,expected result
+
+//F showPassed	0
+// name		code															expected result
+# Stripping stuff
+strips0001		H␍R															H␍R
+strips0002		␉H␍R␉														␉H␍R␉
+strips0010		⌽zv(␉H␍R␉)													␉[␉H␍R␉]␉
+strips0011		⌽zp(␉H␍R␉)													␉[H␍R]␉
+strips0012		⌽zs(␉H␍R␉)													[␉H␍R␉]
+
+X
+strips0013		⌽zb(␉H␍R␉)													[HR]
+strips0020		⌽vv(␉H␍R␉)													␉[␉H␍R␉]␉
+strips0021		⌽vp(␉H␍R␉)													␉[HR]␉
+strips0022		⌽vs(␉H␍R␉)													[␉H␍R␉]
+strips0023		⌽vb(␉H␍R␉)													[HR]
+strips0030		⌽zv(␉H␍R␉)													␉[␉H␍R␉]␉
+strips0031		⌽zp(␉H␍R␉)													␉[HR]␉
+strips0032		⌽zs(␉H␍R␉)													[␉H␍R␉]
+strips0033		⌽zb(␉H␍R␉)													[HR]
+strips0040		⌽vv(␉H␍R␉)													␉[␉H␍R␉]␉
+strips0041		⌽vp(␉H␍R␉)													␉[HR]␉
+strips0042		⌽vs(␉H␍R␉)													[␉H␍R␉]
+strips0043		⌽vb(␉H␍R␉)													[HR]
+
+# CRLF stuff
+crlf01		[⌽xcr()]		[␍]
+crlf02		[⌽xcrlf()]		[␊]
+crlf03		[⌽r()]			[␊]
+crlf04		[⌽rh()]			[␍␊]
+
+# Syntax
+sTX 0001		HELO																HELO
+sTX 0002		H⍟1O																H⍟1O
+sTX 0003		H⍟pO																H⍟pO
+sTX 0004		H⍟zO																H⍟zO
+sTX 0005		H⍟iO																H⍟iO
+sTX 0006		H⍟1O																H⍟1O
+sTX 0007		H⍟pO																H⍟pO
+sTX 0008		H⍟zO																H⍟zO
+sTX 0009		H⍟iO																H⍟iO
+sTX 0010		⌽a(H⍟1O)															[H⍟1O]
+
+# Basic macro tests using a
+Bas 001			⌽a()																	[]
+Bas 002			⌽a(A)																	[A]
+Bas 003			⌽a( )																	[ ]
+Bas repeats		⌽a(A)⌽a(B)⌽a(A)⌽a(B)													[A][B][A][B]
+Bas recCall		⌽a(+⌽a(A))																[+[A]]
+Bas deeper		⌽a(⌽a(⌽a(⌽a(⌽a(A)))))													[[[[[A]]]]]
+Bas brcbrk		⌽a(⎡(((a)))⎤)															[(((a)))]
+Bas brackets1	⌽a((((a))))																[(((a)))]
+Bas brackets2a	⌽a❪❪❪x❫❫❫																[❪❪x]❫❫
+Bas brackets2b	⌽a❪❪❪❪a❫❫❫❫																[❪❪❪a]❫❫❫
+Bas brackets3	⌽a(❪❪❪a❫❫❫)																[❪❪❪a❫❫❫]
+Bas brackets4	⌽a❪(((a)))❫																[(((a)))]
+
+# Recursive User Macros
+tru Recursion	⌽fx(abc)																.[a].[b].[c].
+tru Recursion	⌽fr(abc)																.[a].[b].[c].
+
+# Advanced macro tests using b
+Bas 001			⌽a()																	[]
+Bas 002			⌽a(A)																	[A]
+Bas 003			⌽a( )																	[ ]
+Bas repeats		⌽a(A)⌽a(B)⌽a(A)⌽a(B)													[A][B][A][B]
+Bas recCall		⌽a(+⌽a(A))																[+[A]]
+Bas deeper		⌽a(⌽a(⌽a(⌽a(⌽a(A)))))													[[[[[A]]]]]
+Bas brcbrk		⌽a(⎡(((a)))⎤)															[(((a)))]
+Bas brackets1	⌽a((((a))))																[(((a)))]
+Bas brackets2a	⌽a❪❪❪x❫❫❫																[❪❪x]❫❫
+Bas brackets2b	⌽a❪❪❪❪a❫❫❫❫																[❪❪❪a]❫❫❫
+Bas brackets3	⌽a(❪❪❪a❫❫❫)																[❪❪❪a❫❫❫]
+Bas brackets4	⌽a❪(((a)))❫																[(((a)))]
+
+# (A) Recursive User Macros
+tru Recursion	⌽fx(abc)																.[a].[b].[c].
+tru Recursion	⌽fr(abc)																.[a].[b].[c].
+
+# Mixed syntax
+Mix braces		⎡⌽a(⎡A,b⎤)⎤																⎡[A,b]⎤
+
+# Advanced nested user macro tests
+U b		0	1	11	⌽a(⍟1)
+b01 empty		⌽b()																	[]
+b02 filled		⌽b(A)																	[A]
+b03 braces		⎡⌽b(⎡A,b⎤)⎤																[A,b]
+b04 repeats		⌽b(A)⌽b(B)⌽b(A)⌽b(B)													[A][B][A][B]
+b05 recurse		⌽b(+⌽b(A))																[+[A]]
+b06 deeper		⌽b(⌽b(⌽b(⌽b(⌽b(A)))))													[[[[[A]]]]]
+b07 entity		⌽ent(nbsp)																#x00A0
+~b
+
+# nested user macro tests
+U c		0	1	11	⌽a(⎡⍟1⎤)
+c01 empty		⌽c()																	[]
+c02 filled		⌽c(A)																	[A]
+c03 braces		⎡⌽c(⎡A,b⎤)⎤																[A,b]
+c04 repeats		⌽c(A)⌽c(B)⌽c(A)⌽c(B)													[A][B][A][B]
+c05 recurse		⌽c(+⌽c(A))																[+[A]]
+c06 deeper		⌽c(⌽c(⌽c(⌽c(⌽c(A)))))													[[[[[A]]]]]
+~c
+
+# nested user macro tests
+U d		0	1	11	⌽a(⎡=⍟1=⎤)
+d01 empty		⌽d❪❫																		[==]
+d02 filled		⌽d(A)																	[=A=]
+d03 braces		⎡⌽d(⎡A,b⎤)⎤																[=A,b=]
+d04 repeats		⌽d(A)⌽d(B)⌽d(A)⌽d(B)													[=A=][=B=][=A=][=B=]
+d05 recurse		⌽d(+⌽d(A))																[=+[=A=]=]
+d06 deeper		⌽d(⌽d(⌽d(⌽d(⌽d(A)))))													[=[=[=[=[=A=]=]=]=]=]
+d07 tags			⌽wTr(⌽wa(class,test),⌽wTd(,⎡Hello, you.⎤))								<tr class="test"><td>Hello, you.</td></tr>
+~d
+
+
+# nested fat bracket macro tests
+U e		0	1	11	⌽a❪~⍟1❫
+e01 empty		⌽e()																	[~]
+e02 filled		⌽e(A)																	[~A]
+e03 braces		⎡⌽e(⎡A,b⎤)⎤																[~A,b]
+e04 repeats		⌽e(A)⌽e(B)⌽e(A)⌽e(B)													[~A][~B][~A][~B]
+e05 recurse		⌽e(+⌽e(A))																[~+[~A]]
+e06 deeper		⌽e(⌽e(⌽e(⌽e(⌽e(A)))))													[~[~[~[~[~A]]]]]
+~e
+
+# Parameter range error tests
+U pt	1	1	11	Hello
+pt 001	⌽pt()																!1!Range error. 'pt' uses exactly 1 parameter but 0 were found.
+pt 002	⌽pt(P,Q)															!1!Range error. 'pt' uses exactly 1 parameter but 2 were found.
+pt 003	⌽pt(P)																Hello
+
+U pt	1	-1	11	Hello
+pt 011	⌽pt()																!1!Range error. 'pt' uses at least 1 parameter but 0 were found.
+pt 012	⌽pt(P,Q)															Hello
+pt 013	⌽pt(P)																Hello
+
+U pt	2	-1	11	Hello
+pt 021	⌽pt()																!1!Range error. 'pt' uses at least 2 parameters but 0 were found.
+pt 023	⌽pt(P,Q)															Hello
+
+U pt	1	2	11	Hello
+pt 031	⌽pt()																!1!Range error. 'pt' uses 1 to 2 parameters but 0 were found.
+pt 032	⌽pt(P,Q,R)															!1!Range error. 'pt' uses 1 to 2 parameters but 3 were found.
+pt 033	⌽pt(P,Q)															Hello
+pt 034	⌽pt(Q)																Hello
+
+# testing iterated macros.
+01 iterated			[⌽ucomma(X,Y,⎡ss,uu,vv⎤,⎣⌽b0rked⎦,thin)]							[X,Y,ss,uu,vv,⌽b0rked,thin]
+02a stacked			⌽xv()																[xz;xy;xx;xw;xv;02a stacked;]
+02b stacked			⌽xv(o)																[xv]
+03 special			[⌽onlyMe()]															[onlyMe]
+04 nonmacro			[⍟0]																[⍟0]
+
+# various earlier tests
+U foo	1	2	11	(⍟0:⎡⍟1:⍟2:⍟1⎤)
+U bim	1	1	11	(⍟0:⎡⌽foo(⍟1,Y)⎤)
+U bar	1	2	11	(⍟0:⎡⌽foo(⍟1,⍟2):⌽foo(⎡⍟2,⍟1⎤,⍟1)⎤)
+foo 01			⌽foo(p1,p2)																(foo:p1:p2:p1)
+foo 02			⌽foo(⎡a,b,c⎤,2)															(foo:a,b,c:2:a,b,c)
+bim 01			⌽bim(X)																	(bim:(foo:X:Y:X))
+bim 02			⌽bim(X)																	(bim:(foo:X:Y:X))
+bar 01			⌽bar(A,B)																(bar:(foo:A:B:A):(foo:B,A:A:B,A))
+~foo
+~bim
+~bar

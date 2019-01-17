@@ -1,0 +1,46 @@
+// This is a tab-delimited file of tests.
+// Any empty line or line beginning with a / is ignored.
+// Lines starting with a # are test headings
+// All other lines are tab-delimited name,macrotext,expected result
+
+# Node Accessors
+
+// name		code															expected result
+
+iTitle 001		[@iTitle(!siteSections/n-1)]								[Preparse nesting]
+iTitle 001		[@iTitle(!siteSections/n-1,Preparse nesting,T)]				[T]
+iLinkRef		[@iLinkRef(!siteSections/n-1)]								[preparse-nesting]
+
+iExistContent	@iExistContent(!siteSections,f_seodirectory,T,F)			T
+iExistContent	@iExistContent(!siteSections,code,T,F)						F
+iExistContent	@iExistContent(!siteSections,code,T,F)						F
+
+//SegmentName is done from within iContent..
+segmentName 01	@iSegmentName(foo,T,F)										!2!iSegmentName called outside an existing segment (iContent)
+
+//Errors on file not found.
+iLink 03		@iLink(!simple:2)											!2!Path: !simple:2 did not find a node.
+iSuffix 01		@iSuffix(!simple)											php
+iSuffix 02		@iSuffix(!simple:1)											ixml
+
+iID 01			@iID(!simple)												120
+
+iLink 01		@iLink(!simple:0)											simple.php
+iLink 02		@iLink(!simple:1)											simple_1.ixml
+iLink 04		@iLink()													simple.php
+iLink 05		@iNull(@iLink(!simple:1))@iLink()							simple.php
+
+iContent 01		@iContent(!simple,control)									control[crlf]OK
+iContent 02		@iContent(!simple,Control)									control[crlf]OK
+
+iNumCh 001	@iNumChildren(!siteSections)									5
+iNumCh 002	@iNumChildren(!siteSections/^1)									6
+nodeAc 003	@iNumGen(!siteSections)											3
+nodeAc 004	@iNumGens()														7
+nodeAc 005	@iNumPage()														0
+nodeAc 006	@iNumPages(!siteSections/0+1)									1
+nodeAc 007	@iNumSib(!siteSections/n-1)										4
+
+iLinkRef	[@iLinkRef(!siteSections/n-1)]								[preparse-nesting]
+
+

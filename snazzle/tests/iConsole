@@ -1,0 +1,27 @@
+# iConsole
+
+U c		1	2	011	⌽iConsole(⍟1,⍟2)
+U d		1	1	011	⌽c(T,⍟1)
+
+iConsole 001	[@iConsole(woot)]													[]
+iConsole B02	[@iConsole(B,woot)]													[]
+iConsole S03	[@iConsole(S,woot)]													[]
+iConsole N04	[@iConsole(N,woot)]													[]
+iConsole I05	[@iConsole(I,woot)]													[]
+iConsole W06	[@iConsole(W,woot)]													[]
+iConsole E07	[@iConsole(E,woot)]													[]
+iConsole X08	[@iConsole(X,woot)]													[]
+iConsole T08	[@iConsole(T,woot)]													[]
+iConsole n001	[@c(woot)]															[]
+iConsole nB02	[@c(B,woot)]														[]
+iConsole nS03	[@c(S,woot)]														[]
+iConsole nN04	[@c(N,woot)]														[]
+iConsole nI05	[@c(I,woot)]														[]
+iConsole nW06	[@c(W,woot)]														[]
+iConsole nE07	[@c(E,woot)]														[]
+iConsole nX08	[@c(X,woot)]														[]
+iConsole nT08	[@c(T,woot)]														[]
+iConsole nT09	[@d(woot)]															[]
+
+~c
+~d

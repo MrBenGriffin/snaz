@@ -1,0 +1,36 @@
+// This is a tab-delimited file of tests.
+// Any empty line or line beginning with a / is ignored.
+// Lines starting with a # are test headings
+// All other lines are tab-delimited name,macrotext,expected result
+
+# Taxonomy Tests
+// name				code														expected result
+iTax 01				@iTax(164,title)											Trends
+iTax 02				@iTax(164,id)												164
+iTax 03				@iTax(164,scope)											29
+iTax 04				[@iTax(164,linkref)]										[29]
+iTax 05				[@iTax(164,team)]											[1]
+iTax 06				[@iTax(164,shorttitle)]										[]
+iTax 07				[@iTax(164,classcode)]										[]
+iTax 08				@iTax(164,synonyms)											trends
+iTax 09				[@iTax(164,article)]										[]
+iTax 10				@iTax(164,synonyms,trends,T,F)								T
+iTax 11				@iTax(164,synonyms,tronds,T,F)								F
+
+iForTax 01			@iForTax(!simple,!Regions,*,[@iTitle(T*)])						[Norway][Poland][Switzerland][Brunei]
+iForTax 02			@iForTax(!simple,!Regions,*,[@iID(T*)])							[111][112][118][314]
+iForTax 03			@iForTax(!simple,!Regions,*,[@iTax(*,scope)])					[22][23][29][]
+
+// iForTaxNodes 01		[@iIndex(;,@iForTaxNodes(!Poland,*,$,+,@iID(*);))]				[19;120;24;132;26;4;17;77;115;118;32;65;58;129]
+// iForTaxNodes 02		[@iIndex(;,@iForTaxNodes(!Poland,*,$,-,@iID(*);))]				[129;58;65;32;118;115;77;17;4;26;132;24;120;19]
+// iForTaxNodes 03		(@iIndex(;,@iForTaxNodes(!Poland,*,$,+[*f_code],@iID(*);)))		(19;24;26;120;58;115;118;17;77;32;65)
+
+U taxi	3	3	011	@iForSimilar(%1,$,#,R,%2,@iSet(*S$,[@iID($)=@iExpr(floor(p2*p1)/p2,#,%3)]))
+
+iExistSimilar 01	@iExistSimilar(!simple,T,F)										T
+taxCheckFloorFn		@iExpr(floor(p2*p1)/p2,0.2145,100)								0.21
+iForSimilar 01		@iForSimilar(4,$,#,F,5,[@iID($)=@iExpr(floor(p2*p1)/p2,#,100)])	[132=100][129=100][120=100][118=100][115=100]
+iForSimilar 02		@taxi(4,15,10000)@iGet(*S20)									[20=82.6652]
+iForSimilar 03		@taxi(4,15,1000)@iGet(*S20)										[20=82.665]
+
+iForTaxNodes 04		[@iForTaxNodes(!Poland,$,#,-[*date],@iID($);)]				[19;120;24;132;26;4;17;77;115;11]

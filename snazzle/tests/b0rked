@@ -1,0 +1,84 @@
+// This is a tab-delimited file of tests.
+// Any empty line or line beginning with a / is ignored.
+// Lines starting with a # are test headings
+// All other lines are tab-delimited name,macrotext,expected result
+F showPassed	1
+// B0rked – Work in progress / Bugged code
+// iAppend from builderTests
+// @iUse(~categoryLinks)
+
+//program	std::__1::string	"[@iID(%1)=@iExpr(floor(p2*p1)/p2,%2,100)]"	
+
+// U	navItem	0	-1	010	<li>%(i)<li>
+// U	nav		0	-1	010	<nav><ul>@navItem(%(1+))</ul></nav>
+// 
+// nav001		@nav(a,b,c,d,e,f,Simoneeeeee)		[23 16]
+
+iFile 001	@iFile(src/test.txt)									hello [FOO] world!
+
+
+//WORKS f: @f_mparms(@f_pc(%1),%2,%3,%4,%5,%6)
+//FAILS f: @f_mparms(@f_pc(%1),%(2+))
+
+//[@iID(I0) @iID(m)]
+//nLoc001		@iContent(23,f_copy)		[23 16]
+// 
+// U f_nil			0	1	010	%1
+// U f_mparms		1	-1	010	⌽iPosition(⍟(i),⎡,⎤,0,⍟(i),{⍟(i)})⌽iEq(⍟(k),⍟(n),,⎡,⎤)
+// U ftest			1	-1	010	@f_mparms(@f_nil(%1),%(2+))
+// U thong				1	1	010	%1:@thing(a,b,c,d)
+// U thing				1	-1	010	[%(^1)-%i]
+
+// U thing		1	1	010	@iExistNode(%1/0+1,@iForSibs(%1/0+1,*,$,@iKV(nodes,set,*,$)@thing(*)))
+// U thong			1	1	010	@iExistNode(%1/0+1,@iForSibs(%1/0+1,*,$,@iSet(~nodes,@iIndex(;,@iUse(~nodes),uappend,*))@thong(*)))
+// U thang			1	1	010	@iExistNode(%1/0+1,@iForSibs(%1/0+1,*,$,@iList(N,uadd,*)@thang(*)))
+
+// keys0		[@thing(A1)@thing(A1)@thing(A1)@thing(A1)@thing(A1)]				[]
+// koys0		[@thong(A1)@thong(A1)@thong(A1)@thong(A1)@thong(A1)]				[]
+// kays0		[@thang(A1)@thang(A1)@thang(A1)@thang(A1)@thang(A1)]				[]
+
+// keys1		[@iKV(nodes,keys,;)]		[]
+// koys1		[@iIndex(;,@iGet(~nodes),normalise)]		[]
+// koys2		[@iIndex(;,@iGet(~nodes),normalise)]		[]
+// kays1		@iList(N,s):@iList(N,f:15,*,+N,@iID(*);)		[]
+
+
+// kays11		@iList(N,f:15,*,R,@iID(*);)		[]
+// kays12		@iList(N,f:15,*,R,@iID(*);)		[]
+// kays13		@iList(N,f:15,*,R,@iID(*);)		[]
+// kays14		@iList(N,f:15,*,R,@iID(*);)		[]
+
+
+// kays2		@iList(N,s)@iList(N,n,*,+N,@iID(*);)		[]
+// kays10		[@iList(nodes,f,*,,*;)]		[]
+
+// keys2		[@iKV(nodes,keys,;)]					[]
+// koys2		[@iIndex(;,@iGet(~nodes),normalise)]	[]
+// kays2		[@iList(nodes,n,*,+T,[@iTitle(*)])]		[]
+// kays20		[@iList(nodes,f,*,,*;)]		[]
+
+
+// setup		[@iSet(~all,dog;dog;cat;giraffe;thing;dog;dinosaur;cat;fry;thing;paper;dog;dog;cat;zebra;giraffe;thing;dog;cat;bar;bar;foo;dog;cat;thing)]		[]
+// 161_iFi 	[@iForIndex(;,@iGet(~all),*,,,@iExists(~FL@iTrim(*),@iAppend(~FL@iTrim(*),;x),@iSet(~FL@iTrim(*),@iTrim(*))@iAppend(~Array,~FL@iTrim(*);)))]	[]
+// 124_iFi 	@iForIndex(;,@iGet(~Array),*,,,[@iIndex(;,@iGet(*),get,0):@iIndex(;,@iUse(*),size)])	[dog:7][cat:5][giraffe:2][thing:4][dinosaur:1][fry:1][paper:1][zebra:1][bar:2][foo:1]
+// 126_iFi 	[@iForIndex(;,@iUse(~all),*,,,@iExists(~FL*,,@iAppend(~Array,*;))@iAppend(~FL*,x;))]	[]
+// //
+// 127_iFi 	[@iForIndex(;,@iGet(~Array),*,,,@iExists(~FQ@iIndex(;,@iGet(~FL*),size),,@iAppend(~AQ,@iIndex(;,@iGet(~FL*),size);))@iAppend(~FQ@iIndex(;,@iUse(~FL*),size),*;))]		[]
+// 162_iFi 	@iForIndex(;,@iUse(~AQ),¢,,+N,@iEq(¢,0,,[¢=@iIndex(:,@iForIndex(;,@iUse(~FQ¢),$,,+I,$:))]))	[1=dinosaur:foo:fry:paper:zebra][2=bar:giraffe][4=thing][5=cat][7=dog]
+
+// - program:@iForIndex(;,@iUse(~AQ),*,,+N,@iEq(*,0,,[*:@iIndex({|,|},@iForIndex(;,@iUse(~FQ*),$,,+I,{|$,|}))]))
+// - returned:[1:%(i),%(i),%(i),%(i),%(i)][2:%(i),%(i)][4:%(i)][5:%(i)][7:%(i)]
+// - expected:[1:dinosaur,foo,fry,paper,zebra][2:bar,giraffe][4:thing][5:cat][7:dog]
+
+// @iSuffix(1266)
+
+// bog001	@thong(A)			A:[A-a][A-b][A-c][A-d]
+// bog002	[@iSuffix(1266:0)]	[css]
+// bog003	@iForSibs(1265/0+1,$NODE$,,[$NODE$;@iSuffix($NODE$);@iSuffix($NODE$:0)])	[1266;css;css]
+// bog004	@odd(1266)		[1266;css;css]
+// bog005	@odo(1266)		[1266;css;css]
+
+//returned:[target,ancestorparm]
+
+
+	

@@ -1,0 +1,96 @@
+// This is a tab-delimited file of tests.
+// Any empty line or line beginning with a / is ignored.
+// Lines starting with a # are test headings
+// All other lines are tab-delimited name,macrotext,expected result
+
+// STORAGE INTERNALS TESTS
+
+# Random Storage
+sto 001		@iSet(x,trot)@iGet(x)														trot
+sto 002		@iExists(x,T,F)																T
+sto 003		@iExists(wap,T,F)															F
+sto 004		@iSet(x,bar)@iSet(x,bim)@iGet(x):@iGet(x,bar,Y,N)							bim:N
+340 Init0	@iSet(x,AA).																.
+341 Init1	@iAppend(x,BB).																.
+342 Init2	@iSig(x,Y,N)																Y
+343 Init3	@iUse(x)																	AABB
+
+# iReset from builderTests
+11 iRes		@iSet(x,bar)@iGet(x)														bar
+12 iRes		@iSet(x,bar)@iExists(x,T,F)													T
+13 iRes		@iSet(x)@iExists(x,T,F)														T
+14 iRes		@iReset(x)@iExists(x,T,F)													F
+
+# iSet from builderTests
+16 iSet		@iSet(x,trot)@iGet(x)														trot
+17 iSet		@iSet(~x,tront)@iGet(~x)													tront
+18 iSet		@iGet(~x):@iGet(x)															tront:trot
+19 iSet		@iGet(x,trot,T,F)															T
+20 iSet		@iGet(x,tront,T,F)															F
+21 iSet		@iSet(x,{|@X(fop)|})@iGet(x)												@X(fop)
+22 iSet		@iSet(x,{|@X(foo)|})@iGet(x,{|@X(foo)|},T,F)								T
+161 iSet	@iSet(x,trot)@iGet(x)														trot
+162 iSet	@iSet(x,trot)@iGet(x)														trot
+163 iSet	@iSet(x)[@iGet(x)]															[]
+164 iSet	@iSet(x,trot)@iGet(x)														trot
+
+# iSetCache from builderTests
+iSetC 001	[@iSetCache(~A,X)@iGet(~A)]													[X]
+
+# iAppend from builderTests
+24_iApp		@iSet(x,trot)@iGet(x)											trot
+25_iApp		@iSet(~x,tront)@iGet(~x)										tront
+26_iApp		@iAppend(x,ter)@iGet(x)											trotter
+27_iApp		@iAppend(~x,ter)@iGet(~x)										trontter
+274_iApp	@iSet(x)[@iGet(x)]												[]
+275_iApp	@iSet(x,A)@iGet(x)												A
+276_iApp	@iAppend(x,B)@iGet(x)											AB
+277_iApp	@iAppend(x)@iGet(x)												AB
+278_iApp	@iAppend(x,C)@iGet(x)											ABC
+279_iApp	@iAppend(x,DEF)@iGet(x)											ABCDEF
+370_iApp	@iAppend(x,@iGet(x))@iGet(x)									ABCDEFABCDEF
+
+# iSig from builderTests
+29 iSig		@iSet(x,trot)@iSig(x,Y,N)													Y
+30 iSig		@iSet(x)@iSig(x,Y,N)														N
+31 iSig		@iSig(wap,Y,N)																N
+
+# iUse from builderTests
+34 iUse		@iSet(x,trot)@iSig(x,Y,N)													Y
+33 iUse		@iReset(x)@iSig(x,Y,N)														N
+35 iUse		@iSet(x,trot)@iUse(x):@iExists(x,Y,N)										trot:N
+35 iUse		[@iReset(x)@iUse(x)@iExists(x,Y,N)]											[N]
+
+# iKV from builderTests
+37 iKV		@iKV(foo,new,A,1)@iKV(foo,exists,T,F)										T
+38 iKV		@iKV(foo,clear)@iKV(foo,exists,T,F)											F
+39 iKV		@iKV(foo,new,A,1)@iKV(foo,get,A)											1
+40 iKV		@iKV(foo,new,A,2)@iKV(foo,get,A)											1
+41 iKV		@iKV(foo,set,A,3)@iKV(foo,get,A)											3
+42 iKV		@iKV(foo,set,A,1)@iKV(foo,get,A)											1
+43 iKV		@iKV(foo,set,A,1)@iKV(foo,use,A)											1
+44 iKV		@iKV(foo,del,A)@iKV(foo,has,A,T,F)											F
+45 iKV		@iKV(foo,set,A,1)@iKV(foo,has,A,T,F)										T
+46 iKV		@iKV(foo,set,A,1)@iKV(foo,set,B,2)@iKV(foo,list,=,;)						B=2;A=1;
+47 iKV		@iKV(foo,array,=,;)															B=2;A=1
+48 iKV		@iKV(foo,clear)@iKV(foo,read,=,;,A=1;B=2;)@iKV(foo,list,=,:)				B=2:A=1:
+49 iKV		@iKV(foo,clear)@iKV(foo,read,=,;,A=1;B=2;)@iKV(foo,keys,;)					B;A;
+50 iKV		@iKV(foo,clear)@iKV(foo,read,=,;,A=1;B=2;)@iKV(foo,values,;)				2;1;
+51 iKV		@iKV(bar,read,=,;,Z=7;Y=4;)@iKV(foo,merge,bar)@iKV(foo,list,=,;)			Z=7;B=2;Y=4;A=1;
+52 iKV		@iKV(zoo,read,=,;,Zoo=A;zoo=B;zOo=C;)@iKV(zoo,list,=,;)						zOo=C;zoo=B;Zoo=A;
+53 iKV		@iKV(zoo,get,Zoo)															A
+54 iKV		@iKV(zoo,get,zoo)															B
+55 iKV		@iKV(zoo,get,zOo)															C
+56 iKV		@iKV(zoo,size)																3
+57 iKVRegx	@iKV(zoo,find,=,;,o.)														Zoo=A;zoo=B;
+58 iKVRegx	@iKV(zoo,find,=,;,^z.+$)													zoo=B;zOo=C;
+59 iKV		@iKV(too,set,A,B)@iKV(too,get,A)											B
+60 iKV		@iKV(too,set,A,C)@iKV(too,get,A)											C
+61 iKV		@iKV(too,set,A)@iKV(too,exists)												1
+62 iKV		@iKV(too,size)																1
+63 iKV		@iKV(too,del,A)@iKV(too,exists)												0
+64 iKV		@iKV(xoo,exists)															0
+65 iKV		@iKV(foo,new,A,1)@iKV(foo,exists,T,F)										T
+
+XX iKV		[@iKV(foo,del)@iKV(too,del)@iKV(bar,del)@iKV(zoo,del)]						[]
+iKVTech 01	@iKV(T~x,set,a,bo)@iKV(T~x,get,a)											bo

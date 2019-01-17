@@ -1,0 +1,117 @@
+// This is a tab-delimited file of tests.
+// Any empty line or line beginning with a / is ignored.
+// Lines starting with a # are test headings
+// All other lines are tab-delimited name,macrotext,expected result
+// iConsole is separate!!
+
+// name		code											expected result
+
+# Strings Internals: iLeft
+iLef200 	[@iLeft(UVWXYZ,0)]								[]
+iLef201 	[@iLeft(,0)]									[]
+iLef202 	@iLeft(UVWXYZ,-1)								UVWXY
+iLef203 	@iLeft(UVWXYZ,-4)								UV
+iLef204 	@iLeft({UVWXYZ},-4)								UV
+iLef205 	@iLeft({UVWXYZ},-2)								UVWX
+iLef206 	@iLeft(UVWXYZ,1)								U
+iLef207 	@iLeft(UVWXYZ,2)								UV
+iLef208 	@iLeft(UVWXYZ,3)								UVW
+iLef209 	@iLeft(UVWXYZ,3,UVW,T,F)						T
+iLef210 	@iLeft(UVWXYZ,3,UV,T,F)							F
+iLef211 	@iLeft(UVWXYZ,2,UV)								1
+iLef212 	[@iLeft(▩ཨཨཨ,1)]								[▩]
+iLef213 	@iLeft(😬😈💀☠️,1)								😬
+iLef214 	@iLeft(😬🤗💀☠️,2)								😬🤗
+iLeft215	@iLeft(👍🏽,1)										👍
+iLeft216	[@iLeft(👳,1)@iLeft(🏽,1)]						[👳🏽]
+iLeft217	[@iLeft(🖕,1)@iLeft(🏿,1)]						[🖕🏿]
+iLeft218	[@iLeft(🖖,1)@iLeft(🏻,1)]						[🖖🏻]
+iLeft219	@bits(👩🏻‍🌾)										[👩][🏻][🌾]
+iLeft220	@bits(👩🏼‍🚒)										[👩][🏼][🚒]
+iLeft215	@iLeft(👍🏽,1)										👍
+
+# Strings Internals: iRight
+iRig200 	[@iRight(UVWXYZ,0)]								[]
+iRig201 	[@iRight(,0)]									[]
+iRig202 	@iRight(UVWXYZ,-1)								VWXYZ
+iRig203 	@iRight(UVWXYZ,-4)								YZ
+iRig204 	@iRight({UVWXYZ},-4)							YZ
+iRig205 	@iRight({UVWXYZ},-2)							WXYZ
+iRig206 	@iRight(UVWXYZ,1)								Z
+iRig207 	@iRight(UVWXYZ,2)								YZ
+iRig208 	@iRight(UVWXYZ,3)								XYZ
+iRig209 	@iRight(UVWXYZ,3,UVW,T,F)						F
+iRig210 	@iRight(UVWXYZ,3,XYZ,T,F)						T
+iRig211 	@iRight(UVWXYZ,2,YZ)							1
+iRig212 	[@iRight(ཨཨཨཨ▩,1)]								[▩]
+
+# Strings Internals: iLength
+iLen200 	@iLength(UVWXYZ)								6
+iLen201 	@iLength()										0
+iLen202 	@iLength(UVWXYZ,6)								1
+iLen203 	@iLength(UVWXYZ,4)								0
+iLen204 	@iLength({UVWXYZ},6,T)							T
+iLen205 	@iLength({UVWXYZ},4,T,F)						F
+iLen206 	@iLength(ཨཨཨཨ▩)									5
+iLen207 	@iLength(😕ཨཨཨ▩)								5
+iLen208 	@iLength(👍🏽)										2
+iLen209 	@iLength(👍)										1
+
+# Strings Internals: iMid
+iMid340 	[@iMid(UVWXYZ,0,0)]						[]
+iMid341 	[@iMid(,0,1)]							[]
+iMid342 	@iMid(UVWXYZ,0,1)						U
+iMid343 	@iMid(UVWXYZ,1,1)						V
+iMid344 	@iMid(UVWXYZ,-1,2)						UV
+iMid345 	@iMid(UVWXYZ,-4,1)						U
+iMid346 	@iMid(UVWXYZ,-4,2)						UV
+iMid347 	@iMid(UVWXYZ,-4,3)						UVW
+iMid348 	@iMid(UVWXYZ,3,2)						XY
+iMid349 	@iMid(UVWXYZ,3,2,XY,T,F)				T
+iMid350 	@iMid(UVWXYZ,3,2,UV,T,F)				F
+iMid351.1 	@iRight(UV[WX]YZ1234,-2)				[WX]YZ1234
+iMid351.2 	@iLeft([WX]YZ1234,4)					[WX]
+iMid351.3 	@iLeft(@iRight(UV[WX]YZ1234,-2),4)		[WX]
+iMid351 	@iMid(UV[WX]YZ1234,2,4)					[WX]
+iMid352 	[@iMid(▩▤▥▦▧▨,2,1)]					[▥]
+iMid419		@bits(👩🏻‍🌾)									[👩][🏻][🌾]
+iMid420		@bits(👩🏼‍🚒)									[👩][🏼][🚒]
+
+# Strings Internals: iPosition
+iPos750 	[@iPosition(UVWXYZ,LONGP)]										[0]
+iPos751 	[@iPosition(UVWXYZ,UV)]											[1]
+iPos752 	[@iPosition(UVWXYZ,LONGP,0,T,F)]								[T]
+iPos753 	[@iPosition(UVWXYZ,WX,3,T,F)]									[T]
+iPos754 	[@iPosition(UVWXYZ,LONGP,3,T,F)]								[F]
+iPos755 	[@iPosition(UVWXYZ,WU,3,T,F)]									[F]
+iPos756 	[@iPosition(👩🏼‍🚒,🏼,2,T,F)]										[T]
+
+# Strings Internals: iReplace
+iRep 100 	[@iReplace(*,fun,this is *)]					[this is fun]
+iRep 101 	[@iReplace(xx,y,txxy)]							[tyy]
+iRep 102 	[@iReplace(z,,xzxzx)]							[xxx]
+iRep 103 	[@iReplace(xzxzx)]								[]
+
+# Strings Internals: iRegex
+iRgx_001	@iRegex(s,b,dd)																				dd
+iRgx_002	@iRegex(P,fun,this is P)																	this is fun
+iRgx_003	@iRegex((x+),[\1],txxy)																		t[xx]y
+iRgx_004	@iRegex(xx,y,txxy)																			tyy
+iRgx_005	@iRegex({|(?:[0-9]+:)*([0-9]+):|},{|\1|},12:174:54:505:19:233:134:234:809:)					809
+iRgx_006	@iRegex((?:[0-9]+:)*([0-9]+):|},{|\1|},12:)													12
+iRgx_007	@iRegex({|[0-9:]*:([0-9]+):$|},{|\1|},[])													[]
+iRgx_008	@iRegex(n="(?!prx")[^"]+" v="[^"]+",,n="prx" v="x_";n="key" v="4";)							n="prx" v="x_";n="key" v="4";
+iRgx_009	@entx(&nbsp;)																				&#x00A0;
+
+# Strings Internals: iRembr
+iRembr0010	@zv(@iRembr(␉H␍R␉))								␉[HR]␉
+iRembr0011	@zp(@iRembr(␉H␍R␉))								␉[HR]␉
+iRembr0012	@zs(@iRembr(␉H␍R␉))								[HR]
+iRembr0013	@zb(@iRembr(␉H␍R␉))								[HR]
+
+# Strings Internals: iRembrp
+iRembrp0010	@zv(␉@iRembrp(␉H␍R␉))							␉[␉␉H␍R␉]␉
+iRembrp0011	@zp(␉@iRembrp(␉H␍R␉))							␉[HR]␉
+iRembrp0012	@zs(␉@iRembrp(␉H␍R␉))							[␉␉H␍R␉]
+iRembrp0013	@zb(␉@iRembrp(␉H␍R␉))							[HR]
+

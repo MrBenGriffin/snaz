@@ -1,0 +1,22 @@
+// This is a tab-delimited file of tests.
+// Any empty line or line beginning with a / is ignored.
+// Lines starting with a # are test headings
+// All other lines are tab-delimited name,macrotext,expected result
+
+# B0rked – Work in progress / Bugged code
+// name		code													expected result
+iExistMedia 01	@iExistMedia(wibble,T,F)							T
+iExistMedia 02	@iExistMedia(wobble,T,F)							F
+iExistMedia 03	@iExistMedia(blank,ready,F)							ready
+
+iEmbed 01		@iEmbed(wibble)										[WIBBLE]
+iEmbed 02		@iEmbed(wibble,base64)								W1dJQkJMRV0=
+iEmbed 03		@iEmbed(wibble,editor)								lkyrkos
+
+//Following test is done twice to ensure the name-caching is working
+iMedia 01a	@iMedia(exampleRight)										/media/images/right.png
+iMedia 02c	@iMedia(exampleRight:png)									/media/images/right_56337545A8E241063032C52082F7BA8B.png
+iMedia 02d	@iMedia(exampleRight:txt(plum))								/media/images/right_3B0E81B37800F4B64ABACE438CAEC49C.png
+iMedia 02f	@iMedia(exampleRight:txt(azure))							/media/images/right_065F751B39B1904AB4B29DE319D590E6.png
+iMedia 003a	@iMedia(exampleRight:png,editor)							pdhaliwal
+iMedia 003b	@iMedia(exampleRight:png,width)								250

@@ -1,0 +1,72 @@
+// This is a tab-delimited file of tests.
+// Any empty line or line beginning with a / is ignored.
+// Lines starting with a # are test headings
+// All other lines are tab-delimited name,macrotext,expected result
+F showPassed	1
+
+U wa					1	2	001	 %1="%2"
+U wt					1	1	011	<⍟1>
+U wtagi					1	2	011	@wt(%1%2)
+U wtago					1	1	011	@wt(/%1)
+U wtag					2	3	000	@wtagi(%1,%2)%3@wtago(%1)
+U wstag					1	2	000	@wt(%1%2 /)
+
+U fLink					0	2	010	@f_link(@iEq(%1,,I0,%1),%2)
+U f_link				0	2	010	@iExistNode(%1,@iLink(%1:@f_linkFileNo(%1,@iEq(%2,,C,@iUpper(%2)))),@iConsole(T,Link '%1' does not exist))
+U f_linkFileNo			2	2	010	@iEq(%2,C,0,@iEq(%2,V,@iNumPages(%1,1,0,1),@iEq(%2,P,@iEq(@f_isFormlet(%1),true,2,0@iConsole(T,{pageswitch 'P' can only be used for formlets})),0@iConsole(T,{pageswitch '%2' found; must be one of C,V,P}))))
+
+U f_isFormlet			1	1	010	@iExistContent(%1,f3_formlet_populate,true,@iExistContent(%1,f3_formlet_validate,true,@iExistContent(%1,f3_formlet_construct,true,@iExistContent(%1,f3_formlet_errpop,true,@iExistContent(%1,f3_formlet_success,true,false)))))
+U f_ptype				1	8	011	@f_iko(%1,@wa(name,%2)@f_attr(%(4+)),%3)
+
+U fkC					0	0	000	
+U fkLB					0	0	000	
+U fkRB					0	0	000	
+U nsObyx				0	0	000	http://www.obyx.org
+U fkOV					0	0	000	1.120501
+U f_nodeRole			0	1	000	@f_nodeContentAnc(%1,f3_role)
+
+U fcomment				1	-1	010	@iEq(0,1,{|%1|})
+
+U f_nodeContentAnc		1	2	010	@iReset(~%0)@iEq(@iExistContent(@iEq(%1,,I0,%1),%2,@iContent(@iEq(%1,,I0,%1),%2)),,,@iSet(~%0,@iContent(@iEq(%1,,I0,%1),%2)))@iForAncestry(@iEq(%1,,I0,%1),F,@iEq(%1,,I0,%1)/A1,*,@iExists(~%0,,@iEq(@iExistContent(*,%2,@iContent(*,%2)),,,@iSet(~%0,@iContent(*,%2)))))@iGet(~%0)
+
+U f_inputs				0	-1	010	@f_macro(f_itype,{input,,%(i)})
+U f_pinputs				0	-1	010	@iEq(%(i),,,@iEq(%(k),1,@f_macro(f_itype,{input,,%(i)}),@f_macro(f_ptype,{input,%(i)})))
+
+U f_mparms				0	-1	010	{|{|}%(i){|}|}@iEq(%(k),%(n),,{,})
+U f_macro				1	2	010	⌽iEval(⌽at()⍟1(⌽iReplace(⌽at(),{|⌽at()|},⍟2)))
+U f_asafe				1	1	010	@iPosition(%1,<,0,@iPosition(%1,",0,true,false),false)
+U f_iko					1	3	010	@iEq(@f_asafe(%3),true,@iEq(%3,,@iEq(%1,output,@iEq(%2,,,@wstag(%1,%2)),@wstag(%1,%2)),@wstag(%1,%2@wa(value,%3))),@wtag(%1,%(2+)))
+U f__trim				0	1	010	@iEq(%(n),1,@iRegex(\s,,%1))
+U f_output				0	6	010	@iEq(%1,,,@iEq(@f_ospace(%2),,@iConsole(T,non-space outputs cannot have a value; value[%1] found in @iLinkRef(I0) with no space being used.))@iEq(@f_ospace(%2),@wa(space,immediate),@iConsole(E,immediate outputs cannot have a value; [%1] found in @iLinkRef(I0).)))@f_iko(output,@f_ospace(%2)@f_context(%3)@f_encoder(%4)@f_kind(%5)%6,%1)
+U f_ospace				0	2	010	@fcomment(for a non output default, use empty string. Immediate will generate an immediate output which is useful when using multiple outputs.Also store flavours are used: ancestor/document/global)@iPosition([][immediate][none][store][ancestor][document][global][file][cookie][error][http][grammar][namespace],[%1],0,@iConsole(T,%0:P1 output space %1 not known!),@iPosition([][immediate][none][store][ancestor][document][global][file][cookie][error][http][grammar][namespace],[%2],0,@iConsole(T,%0:P2 output space %2 not known!),@iSet(%0,@iEq(%1,,%2,%1))@iEq(@iGet(%0),,,@iEq(@iGet(%0),ancestor,@wa(space,store)@wa(scope,ancestor),@iEq(@iGet(%0),document,@wa(space,store)@wa(scope,document),@iEq(@iGet(%0),global,@wa(space,store)@wa(scope,global),@wa(space,@iGet(%0))))))@iReset(%0)))
+U f_ispace				0	2	010	@iPosition([][immediate][none][store][ancestor][document][global][file][cookie][error][sysenv][sysparm][url][parm][field][grammar][namespace],[%1],0,@iConsole(T,%0:P1 space [%1] not known!),@iPosition([][immediate][none][store][file][cookie][error][sysenv][sysparm][url][parm][field][grammar][namespace],[%2],0,@iConsole(T,%0:P2 space [%2] not known!),@iEq(%1,immediate,,@iEq(%1,,@iEq(%2,,,@iEq(%2,immediate,,@wa(space,%2))),@wa(space,@iEq(%1,ancestor,store,@iEq(%1,document,store,@iEq(%1,global,store,%1))))))))
+U f_context				0	2	010	@iPosition([][immediate][none][store][file][cookie][parm][field][sysenv][sysparm],[%1],0,@iConsole(T,%0:context space %1 not known!),@iEq(%1,,,@iEq(%1,immediate,,@wa(context,%1))))
+U f_encoder				0	2	010	@iSet(%0P,@iEq(%1,,,@iLeft(%1,1,D,@wa(process,decode))))@iSet(%0E,@iEq(%1,,,@iLeft(%1,1,D,@iRight(%1,-1),@iLeft(%1,1,E,@iRight(%1,-1),%1))))@iPosition([][none][name][digits][xml][url][sql][base16][base64][base64s][btwoc][qp][hex][message][md5][sha1][sha224][sha256][sha384][sha512][dss1][mdc2][ripemd160][secret][deflate][json],[@iGet(%0E)],0,@iConsole(T,@iLinkRef(I0); %0:P1 encoder @iGet(%0E) not known!),@iEq(@iGet(%0E),none,,@iEq(%1,,,@wa(encoder,@iGet(%0E))@iGet(%0P))))
+U f_kind				0	1	010	@iPosition([][auto][text][raw][object],[%1],0,@iConsole(T,@iLinkRef(I0); %0:kind %1 not known!),@iEq(%1,auto,,@iEq(%1,,,@wa(kind,%1))))
+U f_foutput				0	1	010	@iLeft(%1,7,<output,%1,@f_macro(f_output,%1))
+U f_attr				0	5	010	@f_ispace(@f__trim(%1))@f_context(@f__trim(%2))@f_encoder(@f__trim(%3))@f_kind(@f__trim(%4))%5
+U f_itype				1	8	010	@f_iko(%1,%2@f_attr(%(4+)),%3)
+U f_OpC					1	1	010	@iPosition(%1,#,0,@iSet(%0O,%1)@iSet(%0P),@iSet(%0O,@iLeft(%1,@iMath(-,@iPosition(%1,#),1)))@iSet(%0P,@iRight(%1,-@iPosition(%1,#)))@fcomment({|@iConsole(N,[@iGet(%0O)][@iGet(%0P)])|}))@iPosition(@iGet(%0P),#,0,@iSet(%0Q),@iSet(%0X,@iLeft(@iGet(%0P),@iMath(-,@iPosition(@iGet(%0P),#),1)))@iSet(%0Q,@iRight(@iGet(%0P),-@iPosition(@iGet(%0P),#)))@iSet(%0P,@iUse(%0X))@fcomment({|@iConsole(N,[@iGet(%0P)][@iGet(%0Q)])|}))@iPosition([][equal][existent][empty][found][significant][greater][lesser][true],[@iGet(%0O)],0,@iPosition([!equal][!existent][!empty][!found][!significant][!greater][!lesser][!true],[@iGet(%0O)],0,@iConsole(T,%0:Operation @iGet(%0O) not known!),@wa(invert,true)@wa(operation,@iRight(@iGet(%0O),-1))),@iEq(@iGet(%0O),,,@iEq(@iGet(%0O),equal,,@wa(operation,@iGet(%0O)))))@iPosition([][all][any],[@iGet(%0P)],0,@iPosition([true][false],[@iGet(%0P)],0,@iConsole(T,%0:Logic/Break attribute @iGet(%0P) not known!),@iEq(@iGet(%0P),,,@wa(break,@iGet(%0P)))),@iEq(@iGet(%0P),,,@iEq(@iGet(%0P),all,,@wa(logic,@iGet(%0P)))))@iPosition([][all][any],[@iGet(%0Q)],0,@iPosition([true][false],[@iGet(%0Q)],0,@iConsole(T,%0:Logic/Break attribute @iGet(%0Q) not known!),@iEq(@iGet(%0Q),,,@wa(break,@iGet(%0Q)))),@iEq(@iGet(%0Q),,,@iEq(@iGet(%0Q),all,,@wa(logic,@iGet(%0Q)))))
+U f_OpI					1	1	010	@iPosition(%1,#,0,@iSet(%0O,%1)@iSet(%0P),@iSet(%0O,@iLeft(%1,@iMath(-,@iPosition(%1,#),1)))@iSet(%0P,@iRight(%1,-@iPosition(%1,#)))@fcomment({|@iConsole(N,[@iGet(%0O)][@iGet(%0P)])|}))@iPosition([][assign][hmac][function][unique][query][append][arithmetic][bitwise][left][substring][position][length][min][max][right][reverse][lower][upper][random][add][multiply][divide][quotient][sort][remainder][kind][shell][subtract],[@iGet(%0O)],0,@iConsole(T,%0:Operation @iGet(%0O) not known!),@iEq(@iGet(%0O),,,@iEq(@iGet(%0O),assign,,@wa(operation,@iGet(%0O)))))@iEq(@iGet(%0P),,,@wa(precision,@iGet(%0P)))
+U f_comparates			1	-1	010	@iLeft(%1,10,<comparate,%(1+),@f_macro(f_itype,{comparate,,%(i)}))
+U f_signature			0	0	010	@iExistContent(I0,f3_signature,@iEq(@fContent(I0,f3_signature),,@iExistContent(I0/^1,f3_signature,@iEq(@fContent(I0/^1,f3_signature),,,@wa(signature,@fContent(I0/^1,f3_signature))),@iEq(@f_isFormlet(I0),true,@wa(signature,@f_baseFilename(I0)),@iEq(@f_isFormlet(I0/^1),true,@wa(signature,@f_baseFilename(I0/^1))))),@wa(signature,@fContent(I0,f3_signature))),@iEq(@f_isFormlet(I0),true,@wa(signature,@f_baseFilename(I0)),@iEq(@f_isFormlet(I0/^1),true,@wa(signature,@f_baseFilename(I0/^1)))))
+U framework				1	1	010	@iReplace(@fkC(),{,},@iReplace(@fkLB(),@iUnHex(7B),@iReplace(@fkRB(),@iUnHex(7D),%1)))
+U f_pc					0	1	010	@iReplace({,},@fkC(),@iReplace(@iUnHex(7B),@fkLB(),@iReplace(@iUnHex(7D),@fkRB(),%1)))
+
+U f						0	6	010	@f_mparms(%1,%(2+))
+U fx					0	6	010	@f_mparms(@f_pc(%1),%2,%3,%4,%5,%6)
+U fp					0	7	010	@f_mparms(%1,@f_pc(%2),%(3+))
+
+U fo					0	6	010	@iEq(%(n),1,@iEq(%1,,,@iConsole(T,%0 needs both a value and a space)))@f_macro(f_output,@f_mparms(%(1+)))
+U fC					5	-1	010	@wtag(comparison,@f_OpC(%1),@f_foutput(%2)@f_comparates(%(5+))@iEq(%3,,,@f_macro(f_itype,{ontrue,,%3}))@iEq(%4,,,@f_macro(f_itype,{onfalse,,%4})))
+U fId					3	-1	010	@framework(@wtag(instruction,@f_OpI(%1)@f_signature()@wa(xmlns,@nsObyx())@wa(version,@fkOV())@wa(note,@f_nodeRole(I0)),@f_foutput(%2)@iEq('%1',@iRegex((function|bitwise|arithmetic),'\1',%1),@f_pinputs(%(3+)),@f_inputs(%(3+)))))
+U onf					0	1	010	@f_macro(f_itype,{onfalse,,%1})
+
+
+// obyx 001	@onf(@f(UNIQUE_ID,sysenv,,md5))		<onfalse space="sysenv" encoder="md5" value="UNIQUE_ID" />
+// obyx 002	@fC(significant,,@f(xsession,cookie),@fC(significant,@fo(,immediate)@fo(xsession,cookie),@f(session,cookie),@f(UNIQUE_ID,sysenv,,md5),@f(session,cookie)),@f(xsession,cookie))		<comparison operation="significant"><comparate space="cookie" value="xsession" /><ontrue space="cookie" value="xsession" /><onfalse><comparison operation="significant"><output space="immediate" /><output space="cookie" value="xsession" /><comparate space="cookie" value="session" /><ontrue space="cookie" value="session" /><onfalse space="sysenv" encoder="md5" value="UNIQUE_ID" /></comparison></onfalse></comparison>
+// obyx 003	@fId(function,,@f(@fLink(!fSession_init_do),file),@fp(session,@fC(significant,,@f(xsession,cookie),@fC(significant,@fo(,immediate)@fo(xsession,cookie),@f(session,cookie),@f(UNIQUE_ID,sysenv,,md5),@f(session,cookie)),@f(xsession,cookie))))		EEEP
+
+obyx 004	@fC(significant,@fo(,immediate)@fo(xsession,cookie),@f(session,cookie),@f(UNIQUE_ID,sysenv,,md5),@f(session,cookie))	eep
+obyx 005	@fC(significant,@fo(,immediate)@fo(xsession,cookie),@f(session,cookie),@fx(UNIQUE_ID,sysenv,,md5),@f(session,cookie))	eep
+obyx 006	@fId(function,,@f(@fLink(!fSession_init_do),file),@fp(session,@fC(significant,,@f(xsession,cookie),@fC(significant,@fo(,immediate)@fo(xsession,cookie),@f(session,cookie),@f(UNIQUE_ID,sysenv,,md5),@f(session,cookie)),@f(xsession,cookie)))) EEP
