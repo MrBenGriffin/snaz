@@ -9,8 +9,10 @@ F showDefines	1
 
 //! syntax
 //-- included files
- !	definitions
- !	basic_advanced
+!	definitions
+//d07tags		⌽wTr(⌽wa(class,test),⌽wTd(,⎡Hello, you.⎤))								<tr class="test"><td>Hello, you.</td></tr>
+
+!	basic_advanced
 // !	taxonomy
 // !	media
 // !	strings

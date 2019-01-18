@@ -20,143 +20,223 @@ using token = mt::Parser::token;
 %}
 %option debug
 %option yyclass="mt::Advanced"
-%option noyywrap
+%option noyywrap noinput nounput nodefault
 %option c++
 %option stack
 %option warn
-%x macro fatMacro parm brace bracket literal
+%x macro fatmac parm brace bracket literal injection
+
+  /** ,\t\n()⌽⍟⎡⎤⎣⎦❪❫ **/
+DELIMITER	,
+BRACKET_IN	\(
+BRACKET_OUT	\)
+FAT_ONE_IN	❪
+FAT_ONE_OUT	❫
+LITERAL_IN	⎣
+BRACE_IN	⎡
+BRACE_OUT	⎤
+INJECT_SIGN	⍟
+I_OFFSET	(^*)
+I_NUMBER	([0-9]+)
+I_ITS		[ijkn]
+I_STACK		p(s|[0-9]+)?
+I_ITER		([ijkn]([.+-][0-9]+)?)
+I_MORE		([0-9]+("+"?))
+MACRO_SIGN	⌽
+MACRO_NAME	[a-zA-Z_0-9]+
+WHITESPACE	([\t\n\x0d\x0a])+
+
+	/** ⎦: \xe2 \x8e \xa6 **/
+LITERAL_OUT			⎦
+NOT_LITERAL_OUT		(([^\xe2])|(\xe2[^\x8e][^\0])|(\xe2\x8e[^\xa6]))
+
+NOT_SPECIAL_1C		([^\t\n\x0d\x0a,\(\)\xe2])
+NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x8e[^\xa1\xa3\xa4])|(\x9d[^\xab])))
+
+	/**
+	**/
+	/** ALL START E2. (⌽ 8c bd)(⍟ 8d 9F)(⎡8e A1)(⎤ 8e A4)(⎣ 8e A3)(❫ 9D AB) **/
 
 %%
-%{          /** Code  executed at the beginning of yylex **/
-            yylval = lval;
-            yy_flex_debug=0;
+%{	/** Code  executed at the beginning of yylex **/
+	yylval = lval;
+	yy_flex_debug=0;
 %}
 
-  /** everything is unrestricted in literal ⎣ context, except for close literal. E2 8E A6 = close lit **/
+	/** everything is unrestricted in literal ⎣ context, except for close literal. E2 8E A6 = close lit **/
 <literal>{
-   (([^\xe2])|(\xe2[^\x8e][^\0])|(\xe2\x8e[^\xa6]))+⎦ {
-       yylval->build<std::string>(std::string(yytext, yyleng -3));
-       yy_pop_state(); /**  Pop Literal **/
-       return( token::TEXT );
-   }
+	{NOT_LITERAL_OUT}+{LITERAL_OUT} {
+		yylval->build<std::string>(std::string(yytext, yyleng -3));
+		yy_pop_state(); /**  Pop Literal **/
+		return( token::TEXT );
+	}
 }
 
-<parm>{  /** PARM [,❫)] **/
-    , {
-        yylval->build<std::string>(std::string(yytext, yyleng -1));
-        return( token::PARM );
-     }
+<parm>{
 
-    \) {
-         if(yy_top_state() == macro) {
-            yylval->build<std::string>(std::string(yytext, yyleng -1));
-            yy_pop_state(); /**  Pop Parm to macro **/
-            yy_pop_state(); /**  Pop Macro **/
-            return( token::MACRO_OUT );
-         } else {
-          yymore();
-        }
-    }
+	{DELIMITER} {
+		yylval->build<std::string>(std::string(yytext, yyleng -1));
+		return( token::PARM );
+	}
 
-    ❫ {
-         if(yy_top_state() == fatMacro) {
-            yylval->build<std::string>(std::string(yytext, yyleng -3));
-            yy_pop_state(); /**  Pop Parm to macro **/
-            yy_pop_state(); /**  Pop Macro **/
-            return( token::MACRO_OUT );
-         } else {
-          yymore();
-        }
-    }
+	{BRACKET_OUT} {
+		if(yy_top_state() == macro) {
+			yylval->build<std::string>(std::string(yytext, yyleng -1));
+			yy_pop_state(); /**  Pop Parm to macro **/
+			yy_pop_state(); /**  Pop Macro **/
+			return( token::MACRO_OUT );
+		} else {
+			yymore();
+		}
+	}
+
+	{FAT_ONE_OUT} {
+		if(yy_top_state() == fatmac) {
+			yylval->build<std::string>(std::string(yytext, yyleng -3));
+			yy_pop_state(); /**  Pop Parm to macro **/
+			yy_pop_state(); /**  Pop Macro **/
+			return( token::MACRO_OUT );
+		} else {
+			yymore();
+		}
+	}
+
+	{BRACE_OUT}+ {
+		yymore();
+	}
+
 }
 
-  /** braces are to be honoured in brace and parm context only **/
-<parm,brace>⎡ yy_push_state(brace);
+	/** braces are to be honoured in brace and parm context only **/
+<parm,brace>{BRACE_IN} {
+	yy_push_state(brace);
+}
 
   /** brackets are to be honoured in brackets and parm context only **/
-<parm,bracket>\( { yymore(); yy_push_state(bracket); }
+<parm,bracket>{BRACKET_IN} {
+	yymore();
+	yy_push_state(bracket);
+}
 
   /** comma is unrestricted inside brace or bracket **/
-<brace,bracket>, yymore();
+<brace,bracket>{DELIMITER} {
+	yymore();
+}
 
-  /** brackets are unrestricted in brace context, close brace pops **/
+	/** brackets are unrestricted in brace context, close brace pops **/
 <brace>{
-    ⎤ {
-     yylval->build<std::string>(std::string(yytext, yyleng -3));
-     yy_pop_state();
-     return( token::TEXT );
-    }
-    ([\(\)]|❫)+ yymore();
+
+	{BRACE_OUT} {
+		yylval->build<std::string>(std::string(yytext, yyleng -3));
+		yy_pop_state();
+		return( token::TEXT );
+	}
+
+	({BRACKET_IN}|{BRACKET_OUT}|{FAT_ONE_IN}|{FAT_ONE_OUT})+ {
+		yymore();
+	};
 }
 
-  /** braces are unrestricted in bracket context, close bracket pops **/
+	/** braces are unrestricted in bracket context, close bracket pops **/
 <bracket>{
-    \) {
-     yylval->build<std::string>(yytext);
-     yy_pop_state();
-     return( token::TEXT );
-    }
-    (⎡|⎤|❫)+ yymore();
+
+	{BRACKET_OUT} {
+		yylval->build<std::string>(yytext);
+		yy_pop_state();
+		return( token::TEXT );
+	}
+
+	({BRACE_IN}|{BRACE_OUT}|{FAT_ONE_IN}|{FAT_ONE_OUT})+ {
+		yymore();
+	}
 }
 
-   /** honour (fat)macros and injections anywhere but in a macro name,literal **/
+	/** honour (fat)macros and injections anywhere but in a macro name,literal **/
 <INITIAL,parm,brace,bracket>{
-  /** non restricted-characters are to be eaten; E2 9D AB ❫⎡⎤⎣⌽⍟ all need protecting.. **/
-  /** this is (⌽:e2 8c bd)(⍟:E2 8d 9F)(⎡:E2 8e A1)(⎣:E2 8e A3)(⎤:E2 8e A4)(❫:E2 9D AB) **/
-    ([^,\t\n\(\)\xe2]|(\xe2[^\x8c-\x8e\x9d][^\0])|(\xe2\x8c[^\xbd])|(\xe2\x8d[^\x9f])|(\xe2\x8e[^\xa1\xa3\xa4])|(\xe2\x9d[^\xab]))+ {
-     yylval->build<std::string>(std::string(yytext, yyleng));
-     return( token::TEXT );
-    }
 
-   ⎣ {
-     yy_push_state(literal);
-   }
+	{LITERAL_IN} {
+		yy_push_state(literal);
+	}
 
-   ⌽[a-zA-Z_0-9]+\( {
-     yylval->build< std::string >( std::string(yytext + 3, yyleng -4) );
-     yy_push_state(macro);
-     yy_push_state(parm);
-     return( token::MACRO_IN );
-   }
-   ⌽[a-zA-Z_0-9]+❪ {
-     yylval->build< std::string >( std::string(yytext + 3, yyleng -6) );
-     yy_push_state(fatMacro);
-     yy_push_state(parm);
-     return( token::MACRO_IN );
-   }
-   ⍟(^*)([ijk]|[0-9]+|\((^*)([ijkn]([.+-][0-9]+)?|[0-9]+("+"?)|(p(s|[0-9]?)))\)) {
-     if(defining) {
-         yylval->build< std::string >( std::string(yytext + 3, yyleng -3) );
-         return( token::INJECTION );
-     } else {
-         yylval->build< std::string >( yytext );
-         return( token::TEXT );
-     }
-   }
-   [\t\n]+ {
-        if(!stripped) {
-            yylval->build<std::string>(yytext);
-            return( token::TEXT );
-        }
-    }
+	{WHITESPACE} {
+		if(!stripped) {
+			yylval->build<std::string>(yytext);
+			return( token::TEXT );
+		}
+	}
+
+	{MACRO_SIGN}{MACRO_NAME}{BRACKET_IN} {
+		yylval->build< std::string >( std::string(yytext + 3, yyleng -4) );
+		yy_push_state(macro);
+		yy_push_state(parm);
+		return( token::MACRO_IN );
+	}
+
+	{MACRO_SIGN}{MACRO_NAME}{FAT_ONE_IN} {
+		yylval->build< std::string >( std::string(yytext + 3, yyleng -6) );
+		yy_push_state(fatmac);
+		yy_push_state(parm);
+		return( token::MACRO_IN );
+	}
+
+	{INJECT_SIGN} {
+		yy_push_state(injection);
+	}
+
+	/** NOT ",\t\n()⌽⍟⎡⎤⎣❫" **/
+	({NOT_SPECIAL_1C}|{NOT_SPECIAL_3C})+ {
+		yylval->build<std::string>(yytext);
+		return( token::TEXT );
+	}
+
+}
+
+<injection>{
+
+	{I_OFFSET}({I_NUMBER}|{I_ITS}|({BRACKET_IN}{I_OFFSET}({I_STACK}|{I_ITER}|{I_MORE}){BRACKET_OUT})) {
+		yy_pop_state();
+		if(defining) {
+			yylval->build< std::string >(yytext);
+			return(token::INJECTION);
+		} else {
+			std::string sign("⍟");
+			yylval->build< std::string >( sign + yytext );
+			return( token::TEXT );
+		}
+	}
+
+	. {
+		yy_pop_state();
+		std::string sign("⍟");
+		yylval->build< std::string >( sign + yytext );
+		return( token::TEXT );
+	}
+
 }
 
 <INITIAL>{
-   ([,\(\)]|❫)+ {
-     yymore();
-   }
-   ⎡ {
-     if(!defining) {
-       yy_push_state(brace);
-     } else {
-       yymore();
-     }
-   }
+
+	({DELIMITER}|{BRACKET_IN}|{BRACKET_OUT}|{BRACE_OUT}|{FAT_ONE_OUT})+ {
+		yylval->build< std::string >(yytext);
+		return(token::TEXT);
+	}
+
+	{BRACE_IN} {
+		yy_push_state(brace);
+		/**
+		if(!defining) {
+			yy_push_state(brace);
+		} else {
+			yymore();
+		}
+		**/
+	}
+
 }
 
-<INITIAL,parm>{
-    ⎤ yymore();
-}
+
+
+.	std::cout << "bad input character " << yytext << " at line " << yylineno << std::endl;
 
 %%
 

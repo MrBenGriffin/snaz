@@ -72,7 +72,10 @@ namespace mt {
 
     class Driver {
     public:
-        Driver();
+		static size_t mac_type;
+		static size_t inj_type;
+		static size_t str_type;
+		Driver();
 
         virtual ~Driver();
 
@@ -83,15 +86,14 @@ namespace mt {
         void store( const std::string &);
         void inject( const std::string &);
         void add_parm( const std::string &);
-
         void store_macro();
 
         static std::ostream& visit(mtext&, std::ostream &stream);
-        static void expand(mtext&,std::ostream&,mstack&);
+        static void expand(mtext&,std::ostream&,mstack& = empty_stack);
 
-    private:
-        static size_t mac_type;
-        static size_t inj_type;
+	private:
+		static mstack empty_stack;
+
         bool         iterated;
 
         mtext        final;

@@ -6,83 +6,73 @@
 //F showPassed	0
 // name		code															expected result
 # Stripping stuff
+F showPassed	0
 strips0001		H␍R															H␍R
 strips0002		␉H␍R␉														␉H␍R␉
 strips0010		⌽zv(␉H␍R␉)													␉[␉H␍R␉]␉
 strips0011		⌽zp(␉H␍R␉)													␉[H␍R]␉
 strips0012		⌽zs(␉H␍R␉)													[␉H␍R␉]
-
-X
-strips0013		⌽zb(␉H␍R␉)													[HR]
+strips0013		⌽zb(␉H␍R␉)													[H␍R]
 strips0020		⌽vv(␉H␍R␉)													␉[␉H␍R␉]␉
-strips0021		⌽vp(␉H␍R␉)													␉[HR]␉
+strips0021		⌽vp(␉H␍R␉)													␉[H␍R]␉
 strips0022		⌽vs(␉H␍R␉)													[␉H␍R␉]
-strips0023		⌽vb(␉H␍R␉)													[HR]
+strips0023		⌽vb(␉H␍R␉)													[H␍R]
 strips0030		⌽zv(␉H␍R␉)													␉[␉H␍R␉]␉
-strips0031		⌽zp(␉H␍R␉)													␉[HR]␉
+strips0031		⌽zp(␉H␍R␉)													␉[H␍R]␉
 strips0032		⌽zs(␉H␍R␉)													[␉H␍R␉]
-strips0033		⌽zb(␉H␍R␉)													[HR]
+strips0033		⌽zb(␉H␍R␉)													[H␍R]
 strips0040		⌽vv(␉H␍R␉)													␉[␉H␍R␉]␉
-strips0041		⌽vp(␉H␍R␉)													␉[HR]␉
+strips0041		⌽vp(␉H␍R␉)													␉[H␍R]␉
 strips0042		⌽vs(␉H␍R␉)													[␉H␍R␉]
-strips0043		⌽vb(␉H␍R␉)													[HR]
+strips0043		⌽vb(␉H␍R␉)													[H␍R]
+
 
 # CRLF stuff
-crlf01		[⌽xcr()]		[␍]
-crlf02		[⌽xcrlf()]		[␊]
-crlf03		[⌽r()]			[␊]
-crlf04		[⌽rh()]			[␍␊]
+crlf01		[⌽xcr()]														[␍]
+crlf02		[⌽xcrlf()]														[␍␊]
+crlf03		[⌽r()]															[[crlf]]
+crlf04		[⌽rh()]															[␍␊]
 
 # Syntax
-sTX 0001		HELO																HELO
-sTX 0002		H⍟1O																H⍟1O
-sTX 0003		H⍟pO																H⍟pO
-sTX 0004		H⍟zO																H⍟zO
-sTX 0005		H⍟iO																H⍟iO
-sTX 0006		H⍟1O																H⍟1O
-sTX 0007		H⍟pO																H⍟pO
-sTX 0008		H⍟zO																H⍟zO
-sTX 0009		H⍟iO																H⍟iO
-sTX 0010		⌽a(H⍟1O)															[H⍟1O]
+sTX 0001		HELO														HELO
+sTX 0002		H⍟1O														H⍟1O
+sTX 0003		H⍟pO														H⍟pO
+sTX 0004		H⍟zO														H⍟zO
+sTX 0005		H⍟iO														H⍟iO
+sTX 0010		⌽a(H⍟1O)													[H⍟1O]
 
 # Basic macro tests using a
-Bas 001			⌽a()																	[]
-Bas 002			⌽a(A)																	[A]
-Bas 003			⌽a( )																	[ ]
-Bas repeats		⌽a(A)⌽a(B)⌽a(A)⌽a(B)													[A][B][A][B]
-Bas recCall		⌽a(+⌽a(A))																[+[A]]
-Bas deeper		⌽a(⌽a(⌽a(⌽a(⌽a(A)))))													[[[[[A]]]]]
-Bas brcbrk		⌽a(⎡(((a)))⎤)															[(((a)))]
-Bas brackets1	⌽a((((a))))																[(((a)))]
-Bas brackets2a	⌽a❪❪❪x❫❫❫																[❪❪x]❫❫
-Bas brackets2b	⌽a❪❪❪❪a❫❫❫❫																[❪❪❪a]❫❫❫
-Bas brackets3	⌽a(❪❪❪a❫❫❫)																[❪❪❪a❫❫❫]
-Bas brackets4	⌽a❪(((a)))❫																[(((a)))]
-
-# Recursive User Macros
-tru Recursion	⌽fx(abc)																.[a].[b].[c].
-tru Recursion	⌽fr(abc)																.[a].[b].[c].
+Bas 001			⌽a()														[]
+Bas 002			⌽a(A)														[A]
+Bas 003			⌽a( )														[ ]
+Bas 004			⌽a(A)⌽a(B)⌽a(A)⌽a(B)										[A][B][A][B]
+Bas 005			⌽a(+⌽a(A))													[+[A]]
+Bas 006			⌽a(_⌽a(A)_)													[_[A]_]
+Bas 007			⌽a(⌽a(⌽a(⌽a(⌽a(A)))))										[[[[[A]]]]]
+Bas 008			⌽a(⎡(((a)))⎤)												[(((a)))]
+Bas 009			⌽a((((a))))													[(((a)))]
+Bas 010			⌽a❪❪x❫❫														[❪x]❫
+Bas 011			⌽a❪❪❪❪a❫❫❫❫													[❪❪❪a]❫❫❫
+Bas brackets3	⌽a(❪❪❪a❫❫❫)													[❪❪❪a❫❫❫]
+Bas brackets4	⌽a❪(((a)))❫													[(((a)))]
 
 # Advanced macro tests using b
-Bas 001			⌽a()																	[]
-Bas 002			⌽a(A)																	[A]
-Bas 003			⌽a( )																	[ ]
-Bas repeats		⌽a(A)⌽a(B)⌽a(A)⌽a(B)													[A][B][A][B]
-Bas recCall		⌽a(+⌽a(A))																[+[A]]
-Bas deeper		⌽a(⌽a(⌽a(⌽a(⌽a(A)))))													[[[[[A]]]]]
-Bas brcbrk		⌽a(⎡(((a)))⎤)															[(((a)))]
-Bas brackets1	⌽a((((a))))																[(((a)))]
-Bas brackets2a	⌽a❪❪❪x❫❫❫																[❪❪x]❫❫
-Bas brackets2b	⌽a❪❪❪❪a❫❫❫❫																[❪❪❪a]❫❫❫
-Bas brackets3	⌽a(❪❪❪a❫❫❫)																[❪❪❪a❫❫❫]
-Bas brackets4	⌽a❪(((a)))❫																[(((a)))]
+Bas 001			⌽a()														[]
+Bas 002			⌽a(A)														[A]
+Bas 003			⌽a( )														[ ]
+Bas repeats		⌽a(A)⌽a(B)⌽a(A)⌽a(B)										[A][B][A][B]
+Bas recCall		⌽a(+⌽a(A))													[+[A]]
+Bas deeper		⌽a(⌽a(⌽a(⌽a(⌽a(A)))))										[[[[[A]]]]]
+Bas brcbrk		⌽a(⎡(((a)))⎤)												[(((a)))]
+Bas brackets1	⌽a((((a))))													[(((a)))]
+Bas brackets2a	⌽a❪❪❪x❫❫❫													[❪❪x]❫❫
+Bas brackets2b	⌽a❪❪❪❪a❫❫❫❫													[❪❪❪a]❫❫❫
+Bas brackets3	⌽a(❪❪❪a❫❫❫)													[❪❪❪a❫❫❫]
+Bas brackets4	⌽a❪(((a)))❫													[(((a)))]
 
-# (A) Recursive User Macros
-tru Recursion	⌽fx(abc)																.[a].[b].[c].
-tru Recursion	⌽fr(abc)																.[a].[b].[c].
 
-# Mixed syntax
-Mix braces		⎡⌽a(⎡A,b⎤)⎤																⎡[A,b]⎤
+# Mixed syntax (not sure about this - or what we want to do with this)
+Mix braces		⎡⌽a(⎡A,b⎤)⎤																[A,b]
 
 # Advanced nested user macro tests
 U b		0	1	11	⌽a(⍟1)
@@ -92,7 +82,6 @@ b03 braces		⎡⌽b(⎡A,b⎤)⎤																[A,b]
 b04 repeats		⌽b(A)⌽b(B)⌽b(A)⌽b(B)													[A][B][A][B]
 b05 recurse		⌽b(+⌽b(A))																[+[A]]
 b06 deeper		⌽b(⌽b(⌽b(⌽b(⌽b(A)))))													[[[[[A]]]]]
-b07 entity		⌽ent(nbsp)																#x00A0
 ~b
 
 # nested user macro tests
@@ -113,9 +102,13 @@ d03 braces		⎡⌽d(⎡A,b⎤)⎤																[=A,b=]
 d04 repeats		⌽d(A)⌽d(B)⌽d(A)⌽d(B)													[=A=][=B=][=A=][=B=]
 d05 recurse		⌽d(+⌽d(A))																[=+[=A=]=]
 d06 deeper		⌽d(⌽d(⌽d(⌽d(⌽d(A)))))													[=[=[=[=[=A=]=]=]=]=]
-d07 tags			⌽wTr(⌽wa(class,test),⌽wTd(,⎡Hello, you.⎤))								<tr class="test"><td>Hello, you.</td></tr>
+d07 tags		⌽wTr(⌽wa(class,test),⌽wTd(,⎡Hello, you.⎤))								<tr class="test"><td>Hello, you.</td></tr>
 ~d
 
+# (A) Recursive User Macros -- Needs INTERNALS
+// tru Recursion	⌽fx(abc)																.[a].[b].[c].
+// tru Recursion	⌽fr(abc)																.[a].[b].[c].
+// b07 entity		⌽ent(nbsp)																#x00A0
 
 # nested fat bracket macro tests
 U e		0	1	11	⌽a❪~⍟1❫
@@ -148,13 +141,7 @@ pt 032	⌽pt(P,Q,R)															!1!Range error. 'pt' uses 1 to 2 parameters bu
 pt 033	⌽pt(P,Q)															Hello
 pt 034	⌽pt(Q)																Hello
 
-# testing iterated macros.
-01 iterated			[⌽ucomma(X,Y,⎡ss,uu,vv⎤,⎣⌽b0rked⎦,thin)]							[X,Y,ss,uu,vv,⌽b0rked,thin]
-02a stacked			⌽xv()																[xz;xy;xx;xw;xv;02a stacked;]
-02b stacked			⌽xv(o)																[xv]
-03 special			[⌽onlyMe()]															[onlyMe]
-04 nonmacro			[⍟0]																[⍟0]
-
+F showPassed	1
 # various earlier tests
 U foo	1	2	11	(⍟0:⎡⍟1:⍟2:⍟1⎤)
 U bim	1	1	11	(⍟0:⎡⌽foo(⍟1,Y)⎤)
@@ -167,3 +154,12 @@ bar 01			⌽bar(A,B)																(bar:(foo:A:B:A):(foo:B,A:A:B,A))
 ~foo
 ~bim
 ~bar
+
+# testing iterated macros.
+01 iterated			[⌽ucomma(X,Y,⎡ss,uu,vv⎤,⎣⌽b0rked⎦,thin)]							[X,Y,ss,uu,vv,⌽b0rked,thin]
+02a stacked			⌽xv()																[xz;xy;xx;xw;xv;02a stacked;]
+02b stacked			⌽xv(o)																[xv]
+03 special			[⌽onlyMe()]															[onlyMe]
+04 nonmacro			[⍟0]																[⍟0]
+X
+

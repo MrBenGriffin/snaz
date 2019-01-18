@@ -189,7 +189,7 @@ namespace testing {
                         getline(infile,expansion);
                         String::fandr(expansion,"␉","\t");
                         String::fandr(expansion,"␍","\x0D");
-                        String::fandr(expansion,"␍","\x0D");
+                        String::fandr(expansion,"␊","\x0A");
                         String::fandr(expansion,"␤","\n");
                         userMacro macro(name,expansion,min,max,bools[0]=='1',bools[1]=='1',bools[2]=='1');
                         userMacro::add(macro);
@@ -242,8 +242,7 @@ namespace testing {
                         std::istringstream code(pprogram);
                         mt::mtext structure = driver.parse(code,true,false); //bool advanced, bool strip
                         result expansion(name);
-                        mt::mstack context; //start with an empty context.
-                        mt::Driver::expand(structure,expansion.out,context);
+                        mt::Driver::expand(structure,expansion.out);
 
                         if(expansion.out.str() == pexpected /*&& !expansion.second.marked()*/) {
                             if (showGood) {
@@ -275,8 +274,13 @@ namespace testing {
                                 String::fandr(returned,"\x0A","␊");
                                 title(name,3);
                                 cout << lred << " - program:"  << program << endl;
+								cout << " -  parsed:" ;
+								mt::Driver::visit(structure,cout);
+								cout << endl;
                                 cout << " - returned:" << returned << endl;
-                                cout << " - expected:" << expected << endl << norm;
+                                cout << " - expected:" << expected << endl;
+								cout << norm;
+
                             }
                         }
                     }

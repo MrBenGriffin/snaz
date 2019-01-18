@@ -18,7 +18,7 @@ public:
 private:
     static userMacro empty;
     static unordered_map<string,userMacro> library;
-    static void trim(std::string&);
+    static void trim(mt::plist&,mt::plist &);
 protected:
     size_t counter;
     mt::mtext expansion;

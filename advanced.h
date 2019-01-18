@@ -26,7 +26,7 @@ namespace mt {
                           mt::Parser::location_type *location);
 
     private:
-         mt::Parser::semantic_type *yylval = nullptr;
+        mt::Parser::semantic_type *yylval = nullptr;
     };
 
 }

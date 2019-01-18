@@ -32,7 +32,6 @@
 %define parse.assert
 
 %token               END    0     "end of file"
-%token <std::string> WS
 %token <std::string> TEXT
 %token <std::string> MACRO_IN
 %token <std::string> PARM
@@ -51,16 +50,15 @@ list
   ;
 
 item
-  : TEXT          { driver.store($1); }
-  | WS            { driver.store($1); }
-  | INJECTION     { driver.inject($1); }
-  | macro         { driver.store_macro(); }
+  : TEXT			{ driver.store($1); }
+  | INJECTION		{ driver.inject($1); }
+  | macro			{ driver.store_macro(); }
   ;
 
 macro
-  : MACRO_IN      { driver.new_macro($1); }
+  : MACRO_IN		{ driver.new_macro($1); }
     parms
-    MACRO_OUT     { driver.add_parm($4); }
+    MACRO_OUT		{ driver.add_parm($4); }
   ;
 
 parms
@@ -74,14 +72,14 @@ parm
   | parm pitem
 
 pitem
-  : PARM         { driver.add_parm($1); }
-  | TEXT         { driver.store($1); }
-  | WS           { driver.store($1); }
-  | INJECTION    { driver.inject($1); }
-  | macro        { driver.store_macro(); }
+  : PARM			{ driver.add_parm($1); }
+  | TEXT			{ driver.store($1); }
+  | INJECTION		{ driver.inject($1); }
+  | macro			{ driver.store_macro(); }
   ;
 
 %%
 void mt::Parser::error( const location_type &l, const std::string &err_message ) {
-   std::cerr << "Error: " << err_message << " at " << l << "\n";
+   std::cerr << "Error: ";
+   std::cerr << err_message << " at " << l << "\n";
 }

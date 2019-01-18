@@ -69,32 +69,44 @@ std::ostream& userMacro::visit(std::ostream& o) {
 
 void userMacro::expand(std::ostream& o,mt::plist& myParms,mt::mstack& context) {
     if(!preExpand) {
-        mt::plist parms;
-        for (auto& parm : myParms) {
+        mt::plist mt_parms;
+        if(trimParms) {
+            trim(myParms,mt_parms);
+            myParms = std::move(mt_parms);
+        }
+ 		for (auto& parm : myParms) {
             ostringstream in;
             mt::Driver::expand(parm,in,context);
-            std::string str = in.str(); in.str("");
-            if(trimParms) trim(str);
-            parms.push_back({str});
+            mt_parms.push_back({in.str()});
         }
-        context.push_front({this,parms});
+        context.push_front({this,mt_parms});
     } else {
         context.push_front({this,myParms});
     }
-     mt::Driver::expand(expansion,o,context);
+    mt::Driver::expand(expansion,o,context);
     context.pop_front();
 }
 
-void userMacro::trim(std::string &str) {
-    char const* unwanted = " \t\r\n";
-    string::size_type  notWhite = str.find_first_not_of(unwanted);
-    str.erase(0,notWhite);
-    notWhite = str.find_last_not_of(unwanted);
-    str.erase(notWhite+1);
+void userMacro::trim(mt::plist &bits,mt::plist &bobs) {
+   for(auto& j : bits) { //each parameter.
+       while (!j.empty()) {
+           auto& i = j.front();
+           if(i.has_value() &&
+              !((i.type().hash_code() == mt::Driver::str_type) && (std::any_cast<std::string>(i).find_first_not_of("\t\n\x0d\x0a") == std::string::npos))
+           ) break;
+           j.pop_front();
+       }
+       while (!j.empty()) {
+           auto& i = j.back();
+           if(i.has_value() &&
+              !((i.type().hash_code() == mt::Driver::str_type) && (std::any_cast<std::string>(i).find_first_not_of("\t\n\x0d\x0a") == std::string::npos))
+           ) break;
+           j.pop_back();
+       }
+       bobs.push_back(std::move(j));
+   }
 }
 
-
-//static
 void userMacro::terminate() {
 }
 
