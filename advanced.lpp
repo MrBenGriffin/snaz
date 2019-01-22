@@ -44,13 +44,13 @@ I_ITER		([ijkn]([.+-][0-9]+)?)
 I_MORE		([0-9]+("+"?))
 MACRO_SIGN	⌽
 MACRO_NAME	[a-zA-Z_0-9]+
-WHITESPACE	([\t\n\x0d\x0a])+
+WHITESPACE	[\t\x0d\x0a]+
 
 	/** ⎦: \xe2 \x8e \xa6 **/
 LITERAL_OUT			⎦
 NOT_LITERAL_OUT		(([^\xe2])|(\xe2[^\x8e][^\0])|(\xe2\x8e[^\xa6]))
 
-NOT_SPECIAL_1C		([^\t\n\x0d\x0a,\(\)\xe2])
+NOT_SPECIAL_1C		([^\t\x0d\x0a,\(\)\xe2])
 NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x8e[^\xa1\xa3\xa4])|(\x9d[^\xab])))
 
 	/**
@@ -75,7 +75,7 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 <parm>{
 
 	{DELIMITER} {
-		yylval->build<std::string>(std::string(yytext, yyleng -1));
+		/** yylval->build<std::string>(std::string(yytext, yyleng -1)); **/
 		return( token::PARM );
 	}
 
@@ -86,7 +86,9 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 			yy_pop_state(); /**  Pop Macro **/
 			return( token::MACRO_OUT );
 		} else {
-			yymore();
+            yylval->build<std::string>(yytext);
+            return( token::TEXT );
+            /** yymore(); **/
 		}
 	}
 
@@ -97,12 +99,16 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 			yy_pop_state(); /**  Pop Macro **/
 			return( token::MACRO_OUT );
 		} else {
-			yymore();
+            yylval->build<std::string>(yytext);
+            return( token::TEXT );
+            /** yymore(); **/
 		}
 	}
 
-	{BRACE_OUT}+ {
-		yymore();
+	{BRACE_OUT} {
+	    yylval->build<std::string>(yytext);
+        return( token::TEXT );
+		/** yymore(); **/
 	}
 
 }
@@ -114,13 +120,16 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 
   /** brackets are to be honoured in brackets and parm context only **/
 <parm,bracket>{BRACKET_IN} {
-	yymore();
+    yylval->build<std::string>(yytext);
 	yy_push_state(bracket);
+    return( token::TEXT );
+ 	/** yymore(); **/
 }
 
-  /** comma is unrestricted inside brace or bracket **/
+  /** comma is unrestricted inside brace or bracket. Maybe we can fix these text tokens later.. **/
 <brace,bracket>{DELIMITER} {
-	yymore();
+    yylval->build<std::string>(yytext);
+    return( token::TEXT );
 }
 
 	/** brackets are unrestricted in brace context, close brace pops **/
@@ -133,7 +142,9 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 	}
 
 	({BRACKET_IN}|{BRACKET_OUT}|{FAT_ONE_IN}|{FAT_ONE_OUT})+ {
-		yymore();
+        yylval->build<std::string>(yytext);
+        return( token::TEXT );
+        /** yymore(); **/
 	};
 }
 
@@ -147,7 +158,9 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 	}
 
 	({BRACE_IN}|{BRACE_OUT}|{FAT_ONE_IN}|{FAT_ONE_OUT})+ {
-		yymore();
+        yylval->build<std::string>(yytext);
+        return( token::TEXT );
+        /** yymore(); **/
 	}
 }
 
@@ -161,7 +174,7 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 	{WHITESPACE} {
 		if(!stripped) {
 			yylval->build<std::string>(yytext);
-			return( token::TEXT );
+			return( token::WSS );
 		}
 	}
 
@@ -227,16 +240,16 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 		if(!defining) {
 			yy_push_state(brace);
 		} else {
-			yymore();
+            yylval->build<std::string>(yytext);
+            return( token::TEXT );
+            /-- yymore(); --/
 		}
 		**/
 	}
 
 }
 
-
-
-.	std::cout << "bad input character " << yytext << " at line " << yylineno << std::endl;
+.	std::cout << "Bad input character " << yytext << " at line " << yylineno << std::endl;
 
 %%
 

@@ -9,10 +9,14 @@
 #include "Driver.h"
 namespace mt {
 
+	size_t Driver::wss_type = typeid(wss).hash_code();
 	size_t Driver::mac_type = typeid(macro).hash_code();
 	size_t Driver::inj_type = typeid(Injection).hash_code();
 	size_t Driver::str_type = typeid(std::string).hash_code();
 	mstack Driver::empty_stack {};
+
+	wss::wss(const std::string& w) : text(w) {}
+	wss::wss(wss& o,const std::string &w) { text=std::move(o.text); text.append(w); };
 
 	void Injection::parseStart() {
 		switch(basis[0]) {
@@ -146,14 +150,12 @@ namespace mt {
 		if(type == It::text) {
 			result << basis;
 		} else {
-			result << "%";
 			if (sValue != 0) {
 				result << sValue;
 			}
 			if(stack) {
 				result << "s";
 			}
-			result << "[";
 			switch(type) {
 				case It::plain:     result << value; break;
 				case It::current:   result << "i"; break;
@@ -171,7 +173,6 @@ namespace mt {
 			if(list) {
 				result << "+";
 			}
-			result << "]";
 		}
 		return result;
 	}
@@ -191,18 +192,14 @@ namespace mt {
 	}
 
 	std::ostream& macro::visit(std::ostream &result) {
-		result << "@" << name << "(";
+		result << name << "⸠";
 		for (auto &p : parms) {
+            result << "「";
 			if (!p.empty()) {
-				result << "{";
 				Driver::visit(p,result);
-				result << "}";
 			}
-			if (&p != &parms.back()) {
-				result << ",";
-			}
+            result << "」";
 		}
-		result << ")";
 		return result;
 	}
 
@@ -254,15 +251,58 @@ namespace mt {
 		}
 	}
 
+	/*
+	 * Because we are parsing, we want to try and keep strings in a lump, rather than have lots of them
+	 * adding up (which happens because of state changes).  So, we append a string when we find it.
+	 * This could possibly be done a bit more tidily - and though it looks slow, it's far better to manage this
+	 * in the parse than it is in the expansion.
+	 * */
 	void Driver::store(const std::string &str) {
 		if(!str.empty()) {
-			if (macro_stack.empty()) {
-				final.emplace_back(str);
+			if ( macro_stack.empty()) {
+				if (!final.empty() && final.back().type().hash_code() == str_type) {
+					std::string back = std::move(std::any_cast<std::string>(final.back()));
+					final.pop_back();
+					back.append(str);
+					final.emplace_back(std::move(back));
+				} else {
+					final.emplace_back(std::move(str));
+				}
 			} else {
-				parm.emplace_back(str);
+				if (!parm.empty() && parm.back().type().hash_code() == str_type) {
+					std::string back = std::move(std::any_cast<std::string>(parm.back()));
+					parm.pop_back();
+					back.append(str);
+					parm.emplace_back(std::move(back));
+				} else {
+					parm.emplace_back(std::move(str));
+				}
 			}
 		}
 	}
+
+	void Driver::storeWss(const std::string &str) {
+		if(!str.empty()) {
+			if (macro_stack.empty()) {
+				if (!final.empty() && final.back().type().hash_code() == wss_type) {
+					wss back = std::move(std::any_cast<wss>(final.back()));
+					final.pop_back();
+					final.emplace_back(std::move(wss(back,str)));
+				} else {
+					final.emplace_back(std::move(wss(str)));
+				}
+			} else {
+				if (!parm.empty() && parm.back().type().hash_code() == wss_type) {
+					wss back = std::move(std::any_cast<wss>(parm.back()));
+					parm.pop_back();
+					parm.emplace_back(std::move(wss(back,str)));
+				} else {
+					parm.emplace_back(std::move(wss(str)));
+				}
+			}
+		}
+	}
+
 
 	void Driver::inject(const std::string &word) {
 		Injection i(word);
@@ -274,7 +314,6 @@ namespace mt {
 		}
 	}
 
-//	using plist=std::vector<mtext>;
 	void Driver::store_macro() {
 		macro mac = macro_stack.front();
 		macro_stack.pop_front();
@@ -295,34 +334,14 @@ namespace mt {
 		macro_stack.emplace_front(std::move(macro(word)));
 	}
 
-	void Driver::add_parm(const std::string &word) {
-		if(!word.empty()) {
-			parm.emplace_back(word);
-		}
+	void Driver::add_parm(/*const std::string &word*/) {
+//		if(!word.empty()) {
+//		    cout << "text '" << word << "' was found in add_parm";
+//			parm.emplace_back(word);
+//		}
 		macro_stack.front().parms.emplace_back(parm);
 		parm.clear();
 	}
-
-//		size_t b = 0;
-//		size_t e = object.size();
-//		if(trim) {
-//			while(b++ < e) {
-//				auto& i = object[b];
-//				if(i.has_value() &&
-//					!((i.type().hash_code() == str_type) && (std::any_cast<std::string>(i).find_first_not_of("\t\n\x0d\x0a") == std::string::npos))
-//				) break;
-//			}
-//			while(--e > b) {
-//				auto& i = object[e];
-//				if(i.has_value() &&
-//					!((i.type().hash_code() == str_type) && (std::any_cast<std::string>(i).find_first_not_of("\t\n\x0d\x0a") == std::string::npos))
-//				) break;
-//			}
-//		}
-//		for (; b < e; b++ ) {
-//		auto& j = object[b];
-//	}
-
 
 	void Driver::expand(mtext& object,std::ostream& o,mstack& context) {
 		for(auto& j : object) {
@@ -334,27 +353,44 @@ namespace mt {
 					if (type == inj_type) {
 						std::any_cast<Injection>(j).expand(o,context);
 					} else {
-						o << std::any_cast<std::string>(j);
+						if (type == wss_type) {
+							o << std::any_cast<wss>(j).text;
+						} else {
+							o << std::any_cast<std::string>(j);
+						}
 					}
 				}
 			}
 		}
 	}
 
-	std::ostream& Driver::visit(mtext& object, std::ostream &o) {
-		for (auto &j : object) {
-			if (j.has_value()) {
-				size_t type = j.type().hash_code();
-				if (type == mac_type) {
-					std::any_cast<macro>(j).visit(o);
+	std::ostream& Driver::visit(std::any& j, std::ostream &o) {
+		if (j.has_value()) {
+			size_t type = j.type().hash_code();
+			if (type == mac_type) {
+				o << "❰";
+				std::any_cast<macro>(j).visit(o);
+				o << "❱";
+			} else {
+				if (type == inj_type) {
+					o << "⎧";
+					std::any_cast<Injection>(j).visit(o);
+					o << "⎫";
 				} else {
-					if (type == inj_type) {
-						std::any_cast<Injection>(j).visit(o);
+					if (type == wss_type) {
+						o << "“" << std::any_cast<wss>(j).text << "”";
 					} else {
-						o << std::any_cast<std::string>(j);
+						o << "‘" << std::any_cast<std::string>(j) << "’";
 					}
 				}
 			}
+		}
+		return o;
+	}
+
+	std::ostream& Driver::visit(mtext& object, std::ostream &o) {
+		for (auto &j : object) {
+			visit(j,o);
 		}
 		return o;
 	}

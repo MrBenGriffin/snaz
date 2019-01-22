@@ -10,7 +10,7 @@ F showPassed	0
 strips0001		H␍R															H␍R
 strips0002		␉H␍R␉														␉H␍R␉
 strips0010		⌽zv(␉H␍R␉)													␉[␉H␍R␉]␉
-strips0011		⌽zp(␉H␍R␉)													␉[H␍R]␉
+stripsX011		⌽zp(␉H␍R␉)													␉[H␍R]␉
 strips0012		⌽zs(␉H␍R␉)													[␉H␍R␉]
 strips0013		⌽zb(␉H␍R␉)													[H␍R]
 strips0020		⌽vv(␉H␍R␉)													␉[␉H␍R␉]␉
@@ -141,7 +141,6 @@ pt 032	⌽pt(P,Q,R)															!1!Range error. 'pt' uses 1 to 2 parameters bu
 pt 033	⌽pt(P,Q)															Hello
 pt 034	⌽pt(Q)																Hello
 
-F showPassed	1
 # various earlier tests
 U foo	1	2	11	(⍟0:⎡⍟1:⍟2:⍟1⎤)
 U bim	1	1	11	(⍟0:⎡⌽foo(⍟1,Y)⎤)
@@ -155,6 +154,7 @@ bar 01			⌽bar(A,B)																(bar:(foo:A:B:A):(foo:B,A:A:B,A))
 ~bim
 ~bar
 
+F showPassed	1
 # testing iterated macros.
 01 iterated			[⌽ucomma(X,Y,⎡ss,uu,vv⎤,⎣⌽b0rked⎦,thin)]							[X,Y,ss,uu,vv,⌽b0rked,thin]
 02a stacked			⌽xv()																[xz;xy;xx;xw;xv;02a stacked;]

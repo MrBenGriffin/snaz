@@ -54,7 +54,16 @@ namespace mt {
 
     };
 
-    /**
+	class wss {
+	public:
+		std::string text;
+//		friend std::string* (*std::any_cast<std::string>(wss& o)) { return o.text; }
+//		operator std::string() { return text; }
+		wss(const std::string &);
+		wss(wss&,const std::string &);
+	};
+
+	/**
      * This is the parser-macro.
      * It forms a part of the macrotext.
      * It needs context to be an instance.
@@ -75,6 +84,7 @@ namespace mt {
 		static size_t mac_type;
 		static size_t inj_type;
 		static size_t str_type;
+		static size_t wss_type;
 		Driver();
 
         virtual ~Driver();
@@ -83,11 +93,13 @@ namespace mt {
         parse_result define(std::istream &iss,bool,bool);
 
         void new_macro( const std::string & );
+		void storeWss(const std::string &);
         void store( const std::string &);
         void inject( const std::string &);
-        void add_parm( const std::string &);
+        void add_parm( /*const std::string &*/ );
         void store_macro();
 
+		static std::ostream& visit(std::any&, std::ostream &stream);
         static std::ostream& visit(mtext&, std::ostream &stream);
         static void expand(mtext&,std::ostream&,mstack& = empty_stack);
 

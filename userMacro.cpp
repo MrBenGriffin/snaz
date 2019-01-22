@@ -74,7 +74,7 @@ void userMacro::expand(std::ostream& o,mt::plist& myParms,mt::mstack& context) {
             trim(myParms,mt_parms);
             myParms = std::move(mt_parms);
         }
- 		for (auto& parm : myParms) {
+         for (auto& parm : myParms) {
             ostringstream in;
             mt::Driver::expand(parm,in,context);
             mt_parms.push_back({in.str()});
@@ -88,23 +88,42 @@ void userMacro::expand(std::ostream& o,mt::plist& myParms,mt::mstack& context) {
 }
 
 void userMacro::trim(mt::plist &bits,mt::plist &bobs) {
-   for(auto& j : bits) { //each parameter.
+//    for(auto& j : bits) {
+//        for (auto& k : j) {
+//            cout << "[" << flush;
+//            mt::Driver::visit(k, cout);
+//            cout << "]" << endl;
+//        }
+//        cout << endl;
+//    }
+
+    for(auto& j : bits) { //each parameter.
        while (!j.empty()) {
            auto& i = j.front();
-           if(i.has_value() &&
-              !((i.type().hash_code() == mt::Driver::str_type) && (std::any_cast<std::string>(i).find_first_not_of("\t\n\x0d\x0a") == std::string::npos))
-           ) break;
+           if(i.has_value() && !(i.type().hash_code() == mt::Driver::wss_type)) {
+               break;
+           }
            j.pop_front();
        }
        while (!j.empty()) {
            auto& i = j.back();
-           if(i.has_value() &&
-              !((i.type().hash_code() == mt::Driver::str_type) && (std::any_cast<std::string>(i).find_first_not_of("\t\n\x0d\x0a") == std::string::npos))
-           ) break;
+           if(i.has_value() && !(i.type().hash_code() == mt::Driver::wss_type)) {
+               break;
+           }
            j.pop_back();
        }
        bobs.push_back(std::move(j));
    }
+
+//    for(auto& j : bobs) {
+//        for (auto& k : j) {
+//            cout << "[" << flush;
+//            mt::Driver::visit(k, cout);
+//            cout << "]" << endl;
+//        }
+//        cout << endl;
+//    }
+
 }
 
 void userMacro::terminate() {

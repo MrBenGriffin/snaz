@@ -3,9 +3,40 @@
 // Lines starting with a # are test headings
 // All other lines are tab-delimited name,macrotext,expected result
 F showPassed	1
+F showDefines	1
 // B0rked – Work in progress / Bugged code
 // iAppend from builderTests
 // @iUse(~categoryLinks)
+//zp:					␉[%1]␉ 0-1 SPx:010
+U zp		0	1	01	␉[⍟1]␉
+U zs		0	1	10	␉[⍟1]␉
+U r		0	1	00	[crlf]
+U zv		0	1	00	␉[⍟1]␉
+U zb		0	1	11	␉[⍟1]␉
+U vv		0	1	00	␉[⍟1]␉
+U vp		0	1	01	␉[⍟1]␉
+U vs		0	1	10	␉[⍟1]␉
+U vb		0	1	11	␉[⍟1]␉
+stripsX011		⌽zp(␉H␍R␉)														␉[H␍R]␉
+strips0013		⌽zb(␉H␍R␉)													[H␍R]
+strips0020		⌽vv(␉H␍R␉)													␉[␉H␍R␉]␉
+strips0021		⌽vp(␉H␍R␉)													␉[H␍R]␉
+strips0022		⌽vs(␉H␍R␉)													[␉H␍R␉]
+strips0023		⌽vb(␉H␍R␉)													[H␍R]
+
+
+
+// U a	1	1	10	(⍟1–⍟1)
+// U b	1	-1	10	[⌽a(⍟1.⍟1),⌽a(⍟1.⍟2),⌽a(⍟2.⍟1),⌽a(⍟2.⍟2)]
+// a001	⌽a(A.A)	(A.A–A.A)
+// b001	⌽b(A,B)	[(A.A–A.A),(A.B–A.B),(B.A–B.A),(B.B–B.B)]
+// 
+// U x	1	2	11	(⍟0=⎡⍟1;⍟2;⍟1⎤)
+// U y	1	2	11	(⍟0.⎡⌽x(⍟1,⍟2)-⌽x(⎡⍟2,⍟1⎤,⍟1)⎤)
+// 
+// x001	⌽x(⎡A,B⎤,C)	(x=A,B;C;A,B)
+// y001	⌽y(A,B)		(y.(x=A;B;A)-(x=B,A;A;B,A))
+
 
 //program	std::__1::string	"[@iID(%1)=@iExpr(floor(p2*p1)/p2,%2,100)]"	
 
@@ -14,7 +45,7 @@ F showPassed	1
 // 
 // nav001		@nav(a,b,c,d,e,f,Simoneeeeee)		[23 16]
 
-iFile 001	@iFile(src/test.txt)									hello [FOO] world!
+//iFile 001	@iFile(src/test.txt)									hello [FOO] world!
 
 
 //WORKS f: @f_mparms(@f_pc(%1),%2,%3,%4,%5,%6)

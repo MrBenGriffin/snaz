@@ -88,6 +88,21 @@ namespace testing {
         cout  << blue << m << f << f << f << f << f << n << " " << title << " " << n << head << m << norm << endl;
     }
 
+    void group::wss(std::string& basis,bool toSym) {
+        if (toSym) {
+            String::fandr(basis, "\t"  , "␉");
+            String::fandr(basis, "\n"  , "␤");
+            String::fandr(basis, "\x0D", "␍");
+            String::fandr(basis, "\x0A", "␊");
+        } else {
+            String::fandr(basis, "␉", "\t");
+            String::fandr(basis, "␤", "\n");
+            String::fandr(basis, "␍", "\x0D");
+            String::fandr(basis, "␊", "\x0A");
+        }
+    }
+
+
     void group::load(string filename="main", bool showGood, bool showDefines) {
         ifstream infile(base+filename);
         if (infile.is_open()) {
@@ -187,10 +202,7 @@ namespace testing {
                             bools.append(string(3-bools.size(),'0')); //default to false..
                         }
                         getline(infile,expansion);
-                        String::fandr(expansion,"␉","\t");
-                        String::fandr(expansion,"␍","\x0D");
-                        String::fandr(expansion,"␊","\x0A");
-                        String::fandr(expansion,"␤","\n");
+                        wss(expansion,false);
                         userMacro macro(name,expansion,min,max,bools[0]=='1',bools[1]=='1',bools[2]=='1');
                         userMacro::add(macro);
                         if(showDefines) {
@@ -199,10 +211,7 @@ namespace testing {
                             std::ostringstream result;
                             i.visit(result);
                             std::string definition = result.str();
-                            String::fandr(expansion,"\n","␤");
-                            String::fandr(definition,"\t","␉");
-                            String::fandr(definition,"\x0D","␍");
-                            String::fandr(definition,"\x0A","␊");
+                            wss(definition,true);
                             cout << definition << " " << min << "-" << max << " SPx:" << bools << std::endl;
                         }
                     } break;
@@ -214,11 +223,6 @@ namespace testing {
                         name = c + name;
                         string program,expected,pprogram,pexpected;
                         do getline(infile, program ,'\t'); while (!infile.eof() && program.empty());
-                        pprogram = program;
-                        String::fandr(pprogram,"␤","\n");
-                        String::fandr(pprogram,"␉","\t");
-                        String::fandr(pprogram,"␍","\x0D");
-                        String::fandr(pprogram,"␊","\x0A");
                         getline(infile, expected);
                         expected.erase(0, expected.find_first_not_of('\t'));
 
@@ -232,15 +236,15 @@ namespace testing {
                                 expected.erase(0,num+1);
                             }
                         }
-                        pexpected = expected;
-                        String::fandr(pprogram,"␤","\n");
-                        String::fandr(pexpected,"␉","\t");
-                        String::fandr(pexpected,"␍","\x0D");
-                        String::fandr(pexpected,"␊","\x0A");
 
                         mt::Driver driver;
+                        pprogram = program;
+                        wss(pprogram,false);
                         std::istringstream code(pprogram);
                         mt::mtext structure = driver.parse(code,true,false); //bool advanced, bool strip
+                        pexpected = expected;
+                        wss(pexpected,false);
+
                         result expansion(name);
                         mt::Driver::expand(structure,expansion.out);
 
@@ -267,16 +271,15 @@ namespace testing {
                                 }
                                 */
                             } else {
-                                string returned = expansion.out.str();
-                                String::fandr(pprogram,"\n","␤");
-                                String::fandr(returned,"\t","␉");
-                                String::fandr(returned,"\x0D","␍");
-                                String::fandr(returned,"\x0A","␊");
+                                ostringstream pstuff;
+                                string parsed,returned = expansion.out.str();
+                                mt::Driver::visit(structure,pstuff);
+                                parsed = pstuff.str();
+                                wss(returned,true); wss(parsed,true);
                                 title(name,3);
-                                cout << lred << " - program:"  << program << endl;
-								cout << " -  parsed:" ;
-								mt::Driver::visit(structure,cout);
-								cout << endl;
+                                cout << lred << " - program:" << blue << program << lred << endl;
+
+								cout << " -  parsed:" << blue << parsed << lred << endl;
                                 cout << " - returned:" << returned << endl;
                                 cout << " - expected:" << expected << endl;
 								cout << norm;

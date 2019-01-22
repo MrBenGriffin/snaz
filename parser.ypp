@@ -32,9 +32,10 @@
 %define parse.assert
 
 %token               END    0     "end of file"
+%token PARM
 %token <std::string> TEXT
+%token <std::string> WSS
 %token <std::string> MACRO_IN
-%token <std::string> PARM
 %token <std::string> MACRO_OUT
 %token <std::string> INJECTION
 
@@ -51,6 +52,7 @@ list
 
 item
   : TEXT			{ driver.store($1); }
+  | WSS		        { driver.storeWss($1); }
   | INJECTION		{ driver.inject($1); }
   | macro			{ driver.store_macro(); }
   ;
@@ -58,7 +60,7 @@ item
 macro
   : MACRO_IN		{ driver.new_macro($1); }
     parms
-    MACRO_OUT		{ driver.add_parm($4); }
+    MACRO_OUT		{ driver.store($4); driver.add_parm(); }
   ;
 
 parms
@@ -72,7 +74,8 @@ parm
   | parm pitem
 
 pitem
-  : PARM			{ driver.add_parm($1); }
+  : PARM			{ driver.add_parm(); }
+  | WSS		        { driver.storeWss($1); }
   | TEXT			{ driver.store($1); }
   | INJECTION		{ driver.inject($1); }
   | macro			{ driver.store_macro(); }

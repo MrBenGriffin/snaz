@@ -39,6 +39,7 @@ namespace testing {
         const std::string blue   = "\033[1;34m";
         const std::string purple = "\033[1;35m";
         const std::string norm   = "\033[0;37m";
+        void wss(std::string&,bool);
     protected:
         vector<test> tests;
 
