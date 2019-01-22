@@ -15,6 +15,29 @@ namespace mt {
 	size_t Driver::str_type = typeid(std::string).hash_code();
 	mstack Driver::empty_stack {};
 
+	vMap Driver::vis = {
+		  {mac_type,[](std::any& j,std::ostream &o) {
+			  o << "❰"; std::any_cast<macro>(j).visit(o); o << "❱";
+		  	}
+		},{inj_type,[](std::any& j,std::ostream &o){
+				o << "⎧"; std::any_cast<Injection>(j).visit(o); o << "⎫";
+			}
+		},{str_type,[](std::any& j,std::ostream &o){
+				o << "‘" << std::any_cast<std::string>(j) << "’";
+			}
+		},{wss_type,[](std::any& j,std::ostream &o){
+				o << "“" << std::any_cast<wss>(j).text << "”";
+			}
+		}
+	};
+
+	eMap Driver::exp = {
+	   {mac_type,[](std::any& j,std::ostream &o,mstack& c){ std::any_cast<macro>(j).expand(o,c); }},
+	   {inj_type,[](std::any& j,std::ostream &o,mstack& c){ std::any_cast<Injection>(j).expand(o,c); }},
+	   {str_type,[](std::any& j,std::ostream &o,mstack& c){ o << std::any_cast<std::string>(j); }},
+	   {wss_type,[](std::any& j,std::ostream &o,mstack& c){ o << std::any_cast<wss>(j).text; }}
+	};
+
 	wss::wss(const std::string& w) : text(w) {}
 	wss::wss(wss& o,const std::string &w) { text=std::move(o.text); text.append(w); };
 
@@ -203,7 +226,9 @@ namespace mt {
 		return result;
 	}
 
-	Driver::Driver() { }
+	Driver::Driver() {
+
+	}
 
 	mtext Driver::parse(std::istream &stream, bool advanced, bool strip) {
 		if (!stream.good() && stream.eof()) {
@@ -334,32 +359,16 @@ namespace mt {
 		macro_stack.emplace_front(std::move(macro(word)));
 	}
 
-	void Driver::add_parm(/*const std::string &word*/) {
-//		if(!word.empty()) {
-//		    cout << "text '" << word << "' was found in add_parm";
-//			parm.emplace_back(word);
-//		}
+	void Driver::add_parm() {
 		macro_stack.front().parms.emplace_back(parm);
 		parm.clear();
 	}
 
-	void Driver::expand(mtext& object,std::ostream& o,mstack& context) {
+	void Driver::expand(mtext& object,std::ostream& outStream,mstack& context) {
 		for(auto& j : object) {
 			if (j.has_value()) {
 				size_t type = j.type().hash_code();
-				if (type == mac_type) {
-					std::any_cast<macro>(j).expand(o,context);
-				} else {
-					if (type == inj_type) {
-						std::any_cast<Injection>(j).expand(o,context);
-					} else {
-						if (type == wss_type) {
-							o << std::any_cast<wss>(j).text;
-						} else {
-							o << std::any_cast<std::string>(j);
-						}
-					}
-				}
+				Driver::exp[type](j,outStream,context);
 			}
 		}
 	}
@@ -367,23 +376,7 @@ namespace mt {
 	std::ostream& Driver::visit(std::any& j, std::ostream &o) {
 		if (j.has_value()) {
 			size_t type = j.type().hash_code();
-			if (type == mac_type) {
-				o << "❰";
-				std::any_cast<macro>(j).visit(o);
-				o << "❱";
-			} else {
-				if (type == inj_type) {
-					o << "⎧";
-					std::any_cast<Injection>(j).visit(o);
-					o << "⎫";
-				} else {
-					if (type == wss_type) {
-						o << "“" << std::any_cast<wss>(j).text << "”";
-					} else {
-						o << "‘" << std::any_cast<std::string>(j) << "’";
-					}
-				}
-			}
+			Driver::vis[type](j,o);
 		}
 		return o;
 	}

@@ -13,11 +13,12 @@
 #include <sstream>
 #include <vector>
 #include <forward_list>
+#include <unordered_map>
 #include <deque>
+#include <functional>
 
 #include "advanced.h"
 #include "parser.tab.hpp"
-//#include "userMacro.h"
 
 class userMacro;
 
@@ -27,8 +28,10 @@ namespace mt {
     using parse_result=std::pair<mtext,bool>;
     using plist=std::vector<mtext>;
     using mstack=std::deque< std::pair< const userMacro *,plist>>;
+	using vMap=std::unordered_map<size_t,std::function<void (std::any&,std::ostream &)>>;
+	using eMap=std::unordered_map<size_t,std::function<void (std::any&,std::ostream &,mstack&)>>;
 
-    //This is the parser-injection.
+	//This is the parser-injection.
     class Injection {
     private:
         enum class It { plain,text,current,count,size }; //not iteration,not injection,i,j,k,n respectively
@@ -57,8 +60,6 @@ namespace mt {
 	class wss {
 	public:
 		std::string text;
-//		friend std::string* (*std::any_cast<std::string>(wss& o)) { return o.text; }
-//		operator std::string() { return text; }
 		wss(const std::string &);
 		wss(wss&,const std::string &);
 	};
@@ -105,6 +106,8 @@ namespace mt {
 
 	private:
 		static mstack empty_stack;
+		static vMap   vis;
+		static eMap   exp;
 
         bool         iterated;
 
