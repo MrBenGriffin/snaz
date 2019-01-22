@@ -88,15 +88,6 @@ void userMacro::expand(std::ostream& o,mt::plist& myParms,mt::mstack& context) {
 }
 
 void userMacro::trim(mt::plist &bits,mt::plist &bobs) {
-//    for(auto& j : bits) {
-//        for (auto& k : j) {
-//            cout << "[" << flush;
-//            mt::Driver::visit(k, cout);
-//            cout << "]" << endl;
-//        }
-//        cout << endl;
-//    }
-
     for(auto& j : bits) { //each parameter.
        while (!j.empty()) {
            auto& i = j.front();
@@ -114,16 +105,6 @@ void userMacro::trim(mt::plist &bits,mt::plist &bobs) {
        }
        bobs.push_back(std::move(j));
    }
-
-//    for(auto& j : bobs) {
-//        for (auto& k : j) {
-//            cout << "[" << flush;
-//            mt::Driver::visit(k, cout);
-//            cout << "]" << endl;
-//        }
-//        cout << endl;
-//    }
-
 }
 
 void userMacro::terminate() {

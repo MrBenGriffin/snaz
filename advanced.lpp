@@ -171,7 +171,7 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 		yy_push_state(literal);
 	}
 
-	{WHITESPACE} {
+	({WHITESPACE})+ {
 		if(!stripped) {
 			yylval->build<std::string>(yytext);
 			return( token::WSS );
