@@ -29,7 +29,6 @@ U	xcrlf	0	0	00	␍␊
 U	xnl		0	0	00	␤
 U	rh		0	0	00	⎣␍␊⎦
 
-
 // some typical xml markup macros.
 U wa		1	2	01	 ⍟1="⍟2"
 U wt		1	1	11	<⍟1>

@@ -7,17 +7,21 @@
 #include "userMacro.h"
 
 #include "Driver.h"
+#include "Wss.h"
+#include "Injection.h"
+#include "Macro.h"
+
 namespace mt {
 
-	size_t Driver::wss_type = typeid(wss).hash_code();
-	size_t Driver::mac_type = typeid(macro).hash_code();
+	size_t Driver::wss_type = typeid(Wss).hash_code();
+	size_t Driver::mac_type = typeid(Macro).hash_code();
 	size_t Driver::inj_type = typeid(Injection).hash_code();
 	size_t Driver::str_type = typeid(std::string).hash_code();
 	mstack Driver::empty_stack {};
 
 	vMap Driver::vis = {
 		  {mac_type,[](std::any& j,std::ostream &o) {
-			  o << "❰"; std::any_cast<macro>(j).visit(o); o << "❱";
+			  o << "❰"; std::any_cast<Macro>(j).visit(o); o << "❱";
 		  	}
 		},{inj_type,[](std::any& j,std::ostream &o){
 				o << "⎧"; std::any_cast<Injection>(j).visit(o); o << "⎫";
@@ -26,208 +30,25 @@ namespace mt {
 				o << "‘" << std::any_cast<std::string>(j) << "’";
 			}
 		},{wss_type,[](std::any& j,std::ostream &o){
-				o << "“" << std::any_cast<wss>(j).text << "”";
+				o << "“" << std::any_cast<Wss>(j).text << "”";
 			}
 		}
 	};
 
 	eMap Driver::exp = {
-	   {mac_type,[](std::any& j,std::ostream &o,mstack& c){ std::any_cast<macro>(j).expand(o,c); }},
+	   {mac_type,[](std::any& j,std::ostream &o,mstack& c){ std::any_cast<Macro>(j).expand(o,c); }},
 	   {inj_type,[](std::any& j,std::ostream &o,mstack& c){ std::any_cast<Injection>(j).expand(o,c); }},
-	   {str_type,[](std::any& j,std::ostream &o,mstack& c){ o << std::any_cast<std::string>(j); }},
-	   {wss_type,[](std::any& j,std::ostream &o,mstack& c){ o << std::any_cast<wss>(j).text; }}
+	   {str_type,[](std::any& j,std::ostream &o,mstack& c){
+			o << std::any_cast<std::string>(j);
+	   	}},
+	   {wss_type,[](std::any& j,std::ostream &o,mstack& c){
+			  o << std::any_cast<Wss>(j).text;
+	   }}
 	};
 
-	wss::wss(const std::string& w) : text(w) {}
-	wss::wss(wss& o,const std::string &w) { text=std::move(o.text); text.append(w); };
 
-	void Injection::parseStart() {
-		switch(basis[0]) {
-			case '^' : parseParent(); break;
-			case '(' : parseBrackets(); break;
-			case 'p' : parsePName(); break; //same as ^0
-			case 'i' :
-			case 'j' :
-			case 'k' :
-			case 'n' : parseIterated(); break;
-			case '0' :
-			case '1' :
-			case '2' :
-			case '3' :
-			case '4' :
-			case '5' :
-			case '6' :
-			case '7' :
-			case '8' :
-			case '9' : {
-				value = stoul(basis);
-			} break;
-			default: {
-				type=It::text;
-			}
-		}
-	}
-	void Injection::parseIterated() {
-		switch(basis[0]) {
-			case 'i': iterator = true; type = It::current; break;
-			case 'j': iterator = true; type = It::current; offset = 1; break;
-			case 'k': iterator = true; type = It::count; break;
-			case 'n': type = It::size; break;
-			default: break;
-		}
-		basis.erase(0,1);
-		if(!basis.empty()) {
-			if(basis[0] == '.') {
-				modulus = true;
-				basis[0] = '+';
-			}
-			offset = stol(basis);
-		}
-	}
-	void Injection::parsePName() {
-		basis.erase(0,1);
-		if(basis[0] == 's') {
-			stack=true;
-			basis.erase(0,1);
-		} else {
-			sValue++;
-		}
-	}
-	void Injection::parseBrackets() {
-		basis.erase(0, 1);
-		basis.pop_back();
-		if (!basis.empty()) {
-			if (basis.back() == '+') { // is it a list of parameters?
-				basis.pop_back();      // remove the list marker
-				list = true;           // mark as a list.
-				value = stoul(basis);  // so get the offset.
-			} else {
-				parseStart();         // needs more work.
-			}
-		}
-	}
-	void Injection::parseParent() {
-		while(basis[0] == '^') {       // go up the stack.
-			sValue++;
-			basis.erase(0,1);
-		}
-		parseStart();                 // now work out the rest.
-	}
-	Injection::Injection(const std::string src) :
-			type(It::plain),value(0),sValue(0),offset(0),
-			modulus(false),stack(false),list(false),iterator(false),basis(src) {
-		// ⍟^*([ijk]|[0-9]+|\(^*([ijkn]([.+-][0-9]+)?|[0-9]++?|(p(s|[0-9]?)))\))
-		parseStart();
-	}
-
-	void Injection::expand(std::ostream& result,mstack& context) {
-		if (type == It::text) {
-			result << basis;
-		} else {
-			auto& contextMacro = context[sValue].first;
-			auto& contextParms = context[sValue].second;
-			size_t parmCount = contextParms.size();
-			if (stack) {
-				result << "[TODO::STACK]";
-			}
-			if (list) {
-				result << "[TODO::LIST " << value << "]";
-			} else {
-				switch (type) {
-					case It::plain:
-						if((contextMacro->minParms <= value <= contextMacro->maxParms) && (value <= parmCount)) {
-							if(value > 0) {
-								if(sValue == 0) {
-									Driver::expand(contextParms[value - 1],result,context);
-								} else {
-									mstack subContext(context.begin() + sValue,context.end());
-									Driver::expand(contextParms[value - 1],result,subContext);
-								}
-							} else {
-								result << contextMacro->name;
-							}
-						} else {
-							//TODO: Report value being asked for is out of the range of the definition.
-						}
-						break;
-					case It::current:
-						result << "[TODO::ITERATOR I]";
-						if (offset != 0) {
-							result << "[TODO::OFFSET " << offset << " from " << value << "]";
-						}
-						break;
-					case It::count:
-						result << "[TODO::ITERATOR K]";
-						break;
-					case It::size:
-						result << parmCount;
-						break;
-					default:
-						break;
-				}
-			}
-		}
-	}
-
-	std::ostream& Injection::visit(std::ostream &result) {
-		if(type == It::text) {
-			result << basis;
-		} else {
-			if (sValue != 0) {
-				result << sValue;
-			}
-			if(stack) {
-				result << "s";
-			}
-			switch(type) {
-				case It::plain:     result << value; break;
-				case It::current:   result << "i"; break;
-				case It::count:     result << "k"; break;
-				case It::size:      result << "n"; break;
-				default: break;
-			}
-			if(offset != 0) {
-				if(modulus) {
-					result << "." << offset;
-				} else {
-					result << std::showpos << offset;
-				}
-			}
-			if(list) {
-				result << "+";
-			}
-		}
-		return result;
-	}
-
-	macro::macro(std::string n) : name(std::move(n)) {};
-	macro::macro(const macro &o) {
-		name = o.name;
-		parms = o.parms;
-	}
-
-	void macro::expand(std::ostream& o,mstack& context) {
-		if(userMacro::has(name)) {
-			userMacro::get(name).expand(o,parms,context);
-		} else {
-			visit(o);
-		}
-	}
-
-	std::ostream& macro::visit(std::ostream &result) {
-		result << name << "⸠";
-		for (auto &p : parms) {
-            result << "「";
-			if (!p.empty()) {
-				Driver::visit(p,result);
-			}
-            result << "」";
-		}
-		return result;
-	}
 
 	Driver::Driver() {
-
 	}
 
 	mtext Driver::parse(std::istream &stream, bool advanced, bool strip) {
@@ -310,19 +131,19 @@ namespace mt {
 		if(!str.empty()) {
 			if (macro_stack.empty()) {
 				if (!final.empty() && final.back().type().hash_code() == wss_type) {
-					wss back = std::move(std::any_cast<wss>(final.back()));
+					Wss back = std::move(std::any_cast<Wss>(final.back()));
 					final.pop_back();
-					final.emplace_back(std::move(wss(back,str)));
+					final.emplace_back(std::move(Wss(back,str)));
 				} else {
-					final.emplace_back(std::move(wss(str)));
+					final.emplace_back(std::move(Wss(str)));
 				}
 			} else {
 				if (!parm.empty() && parm.back().type().hash_code() == wss_type) {
-					wss back = std::move(std::any_cast<wss>(parm.back()));
+					Wss back = std::move(std::any_cast<Wss>(parm.back()));
 					parm.pop_back();
-					parm.emplace_back(std::move(wss(back,str)));
+					parm.emplace_back(std::move(Wss(back,str)));
 				} else {
-					parm.emplace_back(std::move(wss(str)));
+					parm.emplace_back(std::move(Wss(str)));
 				}
 			}
 		}
@@ -340,7 +161,7 @@ namespace mt {
 	}
 
 	void Driver::store_macro() {
-		macro mac = macro_stack.front();
+		Macro mac = macro_stack.front();
 		macro_stack.pop_front();
 		if (macro_stack.empty()) {
 			final.emplace_back(std::move(mac));
@@ -356,7 +177,7 @@ namespace mt {
 			macro_stack.front().parms.emplace_back(parm);
 			parm.clear();
 		}
-		macro_stack.emplace_front(std::move(macro(word)));
+		macro_stack.emplace_front(std::move(Macro(word)));
 	}
 
 	void Driver::add_parm() {

@@ -150,6 +150,87 @@ Driver.cpp.s:
 	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Driver.cpp.s
 .PHONY : Driver.cpp.s
 
+Injection.o: Injection.cpp.o
+
+.PHONY : Injection.o
+
+# target to build an object file
+Injection.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Injection.cpp.o
+.PHONY : Injection.cpp.o
+
+Injection.i: Injection.cpp.i
+
+.PHONY : Injection.i
+
+# target to preprocess a source file
+Injection.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Injection.cpp.i
+.PHONY : Injection.cpp.i
+
+Injection.s: Injection.cpp.s
+
+.PHONY : Injection.s
+
+# target to generate assembly for a file
+Injection.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Injection.cpp.s
+.PHONY : Injection.cpp.s
+
+Macro.o: Macro.cpp.o
+
+.PHONY : Macro.o
+
+# target to build an object file
+Macro.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Macro.cpp.o
+.PHONY : Macro.cpp.o
+
+Macro.i: Macro.cpp.i
+
+.PHONY : Macro.i
+
+# target to preprocess a source file
+Macro.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Macro.cpp.i
+.PHONY : Macro.cpp.i
+
+Macro.s: Macro.cpp.s
+
+.PHONY : Macro.s
+
+# target to generate assembly for a file
+Macro.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Macro.cpp.s
+.PHONY : Macro.cpp.s
+
+Wss.o: Wss.cpp.o
+
+.PHONY : Wss.o
+
+# target to build an object file
+Wss.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Wss.cpp.o
+.PHONY : Wss.cpp.o
+
+Wss.i: Wss.cpp.i
+
+.PHONY : Wss.i
+
+# target to preprocess a source file
+Wss.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Wss.cpp.i
+.PHONY : Wss.cpp.i
+
+Wss.s: Wss.cpp.s
+
+.PHONY : Wss.s
+
+# target to generate assembly for a file
+Wss.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Wss.cpp.s
+.PHONY : Wss.cpp.s
+
 advanced.yy.o: advanced.yy.cpp.o
 
 .PHONY : advanced.yy.o
@@ -324,6 +405,15 @@ help:
 	@echo "... Driver.o"
 	@echo "... Driver.i"
 	@echo "... Driver.s"
+	@echo "... Injection.o"
+	@echo "... Injection.i"
+	@echo "... Injection.s"
+	@echo "... Macro.o"
+	@echo "... Macro.i"
+	@echo "... Macro.s"
+	@echo "... Wss.o"
+	@echo "... Wss.i"
+	@echo "... Wss.s"
 	@echo "... advanced.yy.o"
 	@echo "... advanced.yy.i"
 	@echo "... advanced.yy.s"

@@ -5,6 +5,9 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
   "/Users/ben/CLionProjects/snaz/Driver.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/Driver.cpp.o"
+  "/Users/ben/CLionProjects/snaz/Injection.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/Injection.cpp.o"
+  "/Users/ben/CLionProjects/snaz/Macro.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/Macro.cpp.o"
+  "/Users/ben/CLionProjects/snaz/Wss.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/Wss.cpp.o"
   "/Users/ben/CLionProjects/snaz/cmake-build-debug/advanced.yy.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/advanced.yy.cpp.o"
   "/Users/ben/CLionProjects/snaz/main.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/main.cpp.o"
   "/Users/ben/CLionProjects/snaz/cmake-build-debug/parser.tab.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/parser.tab.cpp.o"

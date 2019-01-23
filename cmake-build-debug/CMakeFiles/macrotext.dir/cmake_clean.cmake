@@ -9,6 +9,9 @@ file(REMOVE_RECURSE
   "CMakeFiles/macrotext.dir/test.cpp.o"
   "CMakeFiles/macrotext.dir/storage.cpp.o"
   "CMakeFiles/macrotext.dir/userMacro.cpp.o"
+  "CMakeFiles/macrotext.dir/Injection.cpp.o"
+  "CMakeFiles/macrotext.dir/Wss.cpp.o"
+  "CMakeFiles/macrotext.dir/Macro.cpp.o"
   "macrotext.pdb"
   "macrotext"
 )

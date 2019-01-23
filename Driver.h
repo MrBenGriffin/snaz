@@ -17,68 +17,15 @@
 #include <deque>
 #include <functional>
 
+#include "mt.h"
 #include "advanced.h"
 #include "parser.tab.hpp"
 
-class userMacro;
-
 namespace mt {
 
-    using mtext=std::deque<std::any>;
-    using parse_result=std::pair<mtext,bool>;
-    using plist=std::vector<mtext>;
-    using mstack=std::deque< std::pair< const userMacro *,plist>>;
-	using vMap=std::unordered_map<size_t,std::function<void (std::any&,std::ostream &)>>;
-	using eMap=std::unordered_map<size_t,std::function<void (std::any&,std::ostream &,mstack&)>>;
-
 	//This is the parser-injection.
-    class Injection {
-    private:
-        enum class It { plain,text,current,count,size }; //not iteration,not injection,i,j,k,n respectively
-        It type;            // tells us the iteration type
-        size_t value;       // the parameter number being asked for (when plain)
-        size_t sValue;      // the stack offset
-        long offset;        // the offset value (signed!)
-        bool modulus;       // if the offset is a modulus.
-        bool stack;         // if this is a full stack trace
-        bool list;          // if we are passing a list of parameters over (eg %(3+))
-        std::string basis;  // What we are working with.
 
-        void parseStart();
-        void parseIterated();
-        void parsePName();
-        void parseBrackets();
-        void parseParent();
-    public:
-        bool iterator;      // This is injection defines the macro as an iterator.
-        Injection(const std::string);
-        std::ostream& visit(std::ostream&);
-        void expand(std::ostream&,mstack&);
-
-    };
-
-	class wss {
-	public:
-		std::string text;
-		wss(const std::string &);
-		wss(wss&,const std::string &);
-	};
-
-	/**
-     * This is the parser-macro.
-     * It forms a part of the macrotext.
-     * It needs context to be an instance.
-     * It may be PART of a usermacro definition.
-    **/
-    class macro {
-      public:
-        std::string name;
-        plist parms;
-        void expand(std::ostream&,mstack&);
-        std::ostream& visit(std::ostream&);
-        explicit macro(std::string);
-        macro(const macro &);
-     };
+	class Macro;
 
     class Driver {
     public:
@@ -113,7 +60,7 @@ namespace mt {
 
         mtext        final;
         mtext        parm;
-        std::forward_list<macro>    macro_stack;
+        std::forward_list<Macro>    macro_stack;
 
         void parse_helper( std::istream &stream, bool, bool, bool );
 
