@@ -2,9 +2,12 @@
 // Created by Ben on 2019-01-10.
 //
 
-#include "userMacro.h"
-
 #include <utility>
+#include <variant>
+#include "userMacro.h"
+#include "mt.h"
+
+using namespace mt;
 
 unordered_map<string, userMacro > userMacro::library;
 userMacro userMacro::empty("__empty","",false,false,false);
@@ -74,35 +77,42 @@ void userMacro::expand(std::ostream& o,mt::plist& myParms,mt::mstack& context) {
             trim(myParms,mt_parms);
             myParms = std::move(mt_parms);
         }
-         for (auto& parm : myParms) {
+        deque<string> rendered;
+        for (auto& parm : myParms) {
             ostringstream in;
             mt::Driver::expand(parm,in,context);
-            mt_parms.push_back({in.str()});
+            rendered.push_back(in.str());
+        }
+        while (!rendered.empty() && rendered.back().empty()) {
+            rendered.pop_back();
+        }
+        mt_parms.clear();
+        for(auto& j : rendered) {
+            mt_parms.push_back({mt::Text(j)});
         }
         context.push_front({this,mt_parms});
     } else {
         context.push_front({this,myParms});
     }
-    mt::Driver::expand(expansion,o,context);
-    context.pop_front();
+    if(iterated) {
+        size_t n = context.front().second.size();
+        for(size_t i=1 ; i <= n; i++) {
+            mt::Driver::expand(expansion,o,context,{i,n});
+        }
+    } else {
+        mt::Driver::expand(expansion,o,context);
+    }
+     context.pop_front();
 }
 
 void userMacro::trim(mt::plist &bits,mt::plist &bobs) {
     for(auto& j : bits) { //each parameter.
-       while (!j.empty()) {
-           auto& i = j.front();
-           if(i.has_value() && !(i.type().hash_code() == mt::Driver::wss_type)) {
-               break;
-           }
-           j.pop_front();
-       }
-       while (!j.empty()) {
-           auto& i = j.back();
-           if(i.has_value() && !(i.type().hash_code() == mt::Driver::wss_type)) {
-               break;
-           }
-           j.pop_back();
-       }
+        while (!j.empty() && std::holds_alternative<mt::Wss>(j.front())) {
+            j.pop_front();
+        }
+        while (!j.empty() && std::holds_alternative<mt::Wss>(j.back())) {
+            j.pop_back();
+        }
        bobs.push_back(std::move(j));
    }
 }

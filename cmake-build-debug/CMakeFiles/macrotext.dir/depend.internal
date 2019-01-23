@@ -6,6 +6,7 @@ CMakeFiles/macrotext.dir/Driver.cpp.o
  /Users/ben/CLionProjects/snaz/Driver.h
  /Users/ben/CLionProjects/snaz/Injection.h
  /Users/ben/CLionProjects/snaz/Macro.h
+ /Users/ben/CLionProjects/snaz/Text.h
  /Users/ben/CLionProjects/snaz/Wss.h
  /Users/ben/CLionProjects/snaz/advanced.h
  /Users/ben/CLionProjects/snaz/mt.h
@@ -17,6 +18,9 @@ CMakeFiles/macrotext.dir/Injection.cpp.o
  /Users/ben/CLionProjects/snaz/Driver.h
  /Users/ben/CLionProjects/snaz/Injection.cpp
  /Users/ben/CLionProjects/snaz/Injection.h
+ /Users/ben/CLionProjects/snaz/Macro.h
+ /Users/ben/CLionProjects/snaz/Text.h
+ /Users/ben/CLionProjects/snaz/Wss.h
  /Users/ben/CLionProjects/snaz/advanced.h
  /Users/ben/CLionProjects/snaz/mt.h
  /Users/ben/CLionProjects/snaz/userMacro.h
@@ -25,17 +29,41 @@ CMakeFiles/macrotext.dir/Injection.cpp.o
  parser.tab.hpp
 CMakeFiles/macrotext.dir/Macro.cpp.o
  /Users/ben/CLionProjects/snaz/Driver.h
+ /Users/ben/CLionProjects/snaz/Injection.h
  /Users/ben/CLionProjects/snaz/Macro.cpp
  /Users/ben/CLionProjects/snaz/Macro.h
+ /Users/ben/CLionProjects/snaz/Text.h
+ /Users/ben/CLionProjects/snaz/Wss.h
  /Users/ben/CLionProjects/snaz/advanced.h
  /Users/ben/CLionProjects/snaz/mt.h
  /Users/ben/CLionProjects/snaz/userMacro.h
  /usr/local/include/FlexLexer.h
  location.hh
  parser.tab.hpp
+CMakeFiles/macrotext.dir/Text.cpp.o
+ /Users/ben/CLionProjects/snaz/Driver.h
+ /Users/ben/CLionProjects/snaz/Injection.h
+ /Users/ben/CLionProjects/snaz/Macro.h
+ /Users/ben/CLionProjects/snaz/Text.cpp
+ /Users/ben/CLionProjects/snaz/Text.h
+ /Users/ben/CLionProjects/snaz/Wss.h
+ /Users/ben/CLionProjects/snaz/advanced.h
+ /Users/ben/CLionProjects/snaz/mt.h
+ /usr/local/include/FlexLexer.h
+ location.hh
+ parser.tab.hpp
 CMakeFiles/macrotext.dir/Wss.cpp.o
+ /Users/ben/CLionProjects/snaz/Driver.h
+ /Users/ben/CLionProjects/snaz/Injection.h
+ /Users/ben/CLionProjects/snaz/Macro.h
+ /Users/ben/CLionProjects/snaz/Text.h
  /Users/ben/CLionProjects/snaz/Wss.cpp
  /Users/ben/CLionProjects/snaz/Wss.h
+ /Users/ben/CLionProjects/snaz/advanced.h
+ /Users/ben/CLionProjects/snaz/mt.h
+ /usr/local/include/FlexLexer.h
+ location.hh
+ parser.tab.hpp
 CMakeFiles/macrotext.dir/advanced.yy.cpp.o
  /Users/ben/CLionProjects/snaz/advanced.h
  /Users/ben/CLionProjects/snaz/cmake-build-debug/advanced.yy.cpp
@@ -47,6 +75,10 @@ CMakeFiles/macrotext.dir/main.cpp.o
  /Users/ben/CLionProjects/snaz/test.h
 CMakeFiles/macrotext.dir/parser.tab.cpp.o
  /Users/ben/CLionProjects/snaz/Driver.h
+ /Users/ben/CLionProjects/snaz/Injection.h
+ /Users/ben/CLionProjects/snaz/Macro.h
+ /Users/ben/CLionProjects/snaz/Text.h
+ /Users/ben/CLionProjects/snaz/Wss.h
  /Users/ben/CLionProjects/snaz/advanced.h
  /Users/ben/CLionProjects/snaz/cmake-build-debug/location.hh
  /Users/ben/CLionProjects/snaz/cmake-build-debug/parser.tab.cpp
@@ -58,6 +90,10 @@ CMakeFiles/macrotext.dir/storage.cpp.o
  /Users/ben/CLionProjects/snaz/storage.h
 CMakeFiles/macrotext.dir/test.cpp.o
  /Users/ben/CLionProjects/snaz/Driver.h
+ /Users/ben/CLionProjects/snaz/Injection.h
+ /Users/ben/CLionProjects/snaz/Macro.h
+ /Users/ben/CLionProjects/snaz/Text.h
+ /Users/ben/CLionProjects/snaz/Wss.h
  /Users/ben/CLionProjects/snaz/advanced.h
  /Users/ben/CLionProjects/snaz/mt.h
  /Users/ben/CLionProjects/snaz/test.cpp
@@ -68,6 +104,10 @@ CMakeFiles/macrotext.dir/test.cpp.o
  parser.tab.hpp
 CMakeFiles/macrotext.dir/userMacro.cpp.o
  /Users/ben/CLionProjects/snaz/Driver.h
+ /Users/ben/CLionProjects/snaz/Injection.h
+ /Users/ben/CLionProjects/snaz/Macro.h
+ /Users/ben/CLionProjects/snaz/Text.h
+ /Users/ben/CLionProjects/snaz/Wss.h
  /Users/ben/CLionProjects/snaz/advanced.h
  /Users/ben/CLionProjects/snaz/mt.h
  /Users/ben/CLionProjects/snaz/userMacro.cpp

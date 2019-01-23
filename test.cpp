@@ -188,6 +188,40 @@ namespace testing {
                         userMacro::del(name);
                     } break;
 
+                    case 'P': {
+                        //Parse		code    expected
+                        //P			2		1
+                        string code,pcode,expected;
+                        unsigned define;
+                        infile >> ws >> define  >> ws;
+                        do getline(infile, code ,'\t'); while (!infile.eof() && code.empty());
+                        getline(infile, expected);
+                        expected.erase(0, expected.find_first_not_of('\t'));
+                        mt::Driver driver;
+                        pcode = code;
+                        wss(pcode,false);
+                        std::istringstream cStream(code);
+                        result expansion(name);
+                        if(define) {
+                            userMacro macro(name,pcode,0,-1,false,false,false);
+                            macro.visit(expansion.out);
+                        } else {
+                            mt::mtext structure = driver.parse(cStream,true,false); //bool advanced, bool strip
+                            mt::Driver::visit(structure,expansion.out);
+                        }
+                        string visited=expansion.out.str();
+                        wss(pcode,true);
+                        if(visited == expected) {
+                            if (showGood) {
+                                title(code,2);
+                            }
+                        } else {
+                            title(code,3);
+                            cout << lred << " -found:"  << blue << visited  << endl;
+                            cout << lred << " -not  :" << expected << endl << norm;
+                         }
+                    } break;
+
                     case 'U': { // define macro
                         //U	a	0	1	11	[%1]
                         //U	b	0	1	11	⌽a(⍟1)

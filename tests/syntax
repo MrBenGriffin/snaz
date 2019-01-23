@@ -1,80 +1,53 @@
-// Definition.
-// U name	minparms	maxparms	stripping
-// stripping (11 = strip newlines and tabs,trim parameters of newlines and tabs) cr: ␍ tab:␉
+// Syntax.
+F showPassed	0
 
-# Defines (lexical tests)
-// U wtag6		1	1	11	⌽wt(oooooo⍟1)
-//U wtag5		1	1	11	⌽wt(ooooo⍟1)
-//U wtag4		1	1	11	⌽wt(oooo⍟1)
-//U wtag3		1	1	11	⌽wt(ooo⍟1)
-//U wtag2		1	1	11	⌽wt(oo⍟1)
-//U wtag1		1	1	11	⌽wt(o⍟1)
-//U wtag0		1	1	11	⌽wt(⍟1)
+//// Outside of a macro definition, these should return as strings.
+P	1	⍟(i)q			⁅i⁆“q”
+P	1	⍟1				⁅1⁆
+P	1	⍟1120P			⁅1120⁆“P”
+P	1	-⍟(1+)-			“-”⁅1+⁆“-”
+P	1	⍟(i),⍟(k),⍟(n)	⁅i⁆“,”⁅k⁆“,”⁅n⁆
+P	1	⍟(j)			⁅i+1⁆
+P	1	⍟(k.2)			⁅k.2⁆
+P	1	⍟(p)			⁅1:0⁆
+P	1	⍟(ps)			⁅s0⁆
+P	1	⍟^(k-3)			⁅1:k-3⁆
 
-U a		0	1	00	[⍟1]
-U r		0	1	00	[crlf]
-U a		0	1	00	[⍟1]
-U zv	0	1	00	␉[⍟1]␉
-U zp	0	1	01	␉[⍟1]␉
-U zs	0	1	10	␉[⍟1]␉
-U zb	0	1	11	␉[⍟1]␉
-
-// cr/crlf tests
-U	xcr		0	0	00	␍
-U	xcrlf	0	0	00	␍␊
-
-// some typical xml markup macros.
-U wt		1	1	11	<⍟1>
-U wtago		1	1	11	⌽wt(/⍟1)
-U wtagi		1	2	10	⌽wt(⍟1⍟2)
-U wtag		2	3	00	⌽wtagi(⍟1,⍟2)⍟3⌽wtago(⍟1)
-U wstag		1	2	00	⌽wt(⍟1⍟2 /)
-U wa		1	2	01	 ⍟1="⍟2"
-
-// Outside of a macro definition, these should return as strings.
-U p01		1	1	11	⍟(i)
-U p02		1	1	11	⍟1
-U p03		1	1	11	⍟1120P
-U p04		1	1	11	-⍟(1+)-
-U p05		1	1	11	⍟(i),⍟(k),⍟(n)
-U p06		1	1	11	⍟(j)
-U p07		1	1	11	⍟(k.2)
-U p08		1	1	11	⍟(p)
-U p09		1	1	11	⍟(ps)
-U p10		1	1	11	⍟^(k-3)
-
+# Defines (lexical tests) (0 means not-macro,1 means macro def)
+P	0	⌽wx(oooooo⍟1)		⸠wx「“oooooo⍟1”」
+P	1	⌽wt(oooooo⍟1)		⸠wt「“oooooo”⁅1⁆」
+P	1	⌽wt(ooooo⍟1)		⸠wt「“ooooo”⁅1⁆」
+P	1	⌽wt(oooo⍟1)			⸠wt「“oooo”⁅1⁆」
+P	1	⌽wt(ooo⍟1)			⸠wt「“ooo”⁅1⁆」
+P	1	⌽wt(oo⍟1)			⸠wt「“oo”⁅1⁆」
+P	1	⌽wt(o⍟1)			⸠wt「“o”⁅1⁆」
+P	1	⌽wt(⍟1)				⸠wt「⁅1⁆」
 
 # Tests
-m00001			⌽a(teen)						[teen]
-m00002			[⌽wa(foo,bar)]					[ foo="bar"]
-m00003			[⌽wtagi(bog,blob)]				[<bogblob>]
-m00010			⌽wtag(bog,⌽wa(foo,bar),hi)		<bog foo="bar">hi</bog>
+P	0		⌽a(teen)							⸠a「“teen”」
+P	0		[⌽wa(foo,bar)]						“[”⸠wa「“foo”」「“bar”」“]”
+P	0		[⌽wtagi(bog,blob)]					“[”⸠wtagi「“bog”」「“blob”」“]”
+P	0		⌽wtag(bog,⌽wa(foo,bar),hi)			⸠wtag「“bog”」「⸠wa「“foo”」「“bar”」」「“hi”」
 
 // Basic Syntax returning debugging visit 
-s00001			EX⌽wibble_33(teen,foy)PO		EX@wibble_33({teen},{foy})PO
-s00002			EX⌽wibble_33(teen)PO			EX@wibble_33({teen})PO
-s00003			[⌽wi(teen)⌽w()]					[@wi({teen})@w()]
-s00004			[⌽we_33()]						[@we_33()]
-
-sb0001			EX⌽wibble_33❪teen,foy❫PO		EX@wibble_33({teen},{foy})PO
-sb0002			EX⌽wibble_33❪teen❫PO			EX@wibble_33({teen})PO
-sb0003			[⌽wi❪teen❫⌽w❪❫]					[@wi({teen})@w()]
-sb0004			[⌽we_33❪❫]						[@we_33()]
-
-s000b1			[⌽wibble_33(teen,⎡p,⎤ t)]		[@wibble_33({teen},{p, t})]
-s000b2			[⌽wibble_33(⎡p,⎤ t)]			[@wibble_33({p, t})]
-
-s00005			[⌽b(⎡⎤)]						[@b()]
-s00006			[⌽b(⎡⎤,⎡⎤,p)]					[@b(,,{p})]
-s00007			[⌽b(⎡⎤,)]						[@b(,)]
-s00008			[⌽b(())]						[@b({()})]
-s00009			[⌽b(⎡)⎤)]						[@b({)})]
-
-s0n001			[⌽b(⌽c())]						[@b({@c()})]
-sbn001			[⌽b❪⌽c❪❫❫]						[@b({@c()})]
-
-s0n002			[⌽o(⌽f(q(6),for),big,⎡or, not⎤,⎡seven⎤ teen)]		[@o({@f({q(6)},{for})},{big},{or, not},{seven teen})]
-
-s00010			[⎣⌽b(⎡⎤,)⎦]						[⌽b(⎡⎤,)]
+P	0			EX⌽wibble_33(teen,foy)PO		“EX”⸠wibble_33「“teen”」「“foy”」“PO”
+P	0			EX⌽wibble_33(teen)PO			“EX”⸠wibble_33「“teen”」“PO”
+P	0			[⌽wi(teen)⌽w()]					“[”⸠wi「“teen”」⸠w「」“]”
+P	0			[⌽we_33()]						“[”⸠we_33「」“]”
+P	0			EX⌽wibble_33❪teen,foy❫PO		“EX”⸠wibble_33「“teen”」「“foy”」“PO”
+P	0			EX⌽wibble_33❪teen❫PO			“EX”⸠wibble_33「“teen”」“PO”
+P	0			[⌽wi❪teen❫⌽w❪❫]					“[”⸠wi「“teen”」⸠w「」“]”
+P	0			[⌽we_33❪❫]						“[”⸠we_33「」“]”
+P	0			[⌽wibble_33(teen,⎡p,⎤ t)]		“[”⸠wibble_33「“teen”」「“p, t”」“]”
+P	0			[⌽wibble_33(⎡p,⎤ t)]			“[”⸠wibble_33「“p, t”」“]”
+P	0			[⌽b(⎡⎤)]						“[”⸠b「」“]”
+P	0			[⌽b(⎡⎤,⎡⎤,p)]					“[”⸠b「」「」「“p”」“]”
+P	0			[⌽b(⎡⎤,)]						“[”⸠b「」「」“]”
+P	0			[⌽b(())]						“[”⸠b「“()”」“]”
+P	0			[⌽b(⎡)⎤)]						“[”⸠b「“)”」“]”
+P	0			[⌽b(⌽c())]						“[”⸠b「⸠c「」」“]”
+P	0			[⌽b❪⌽c❪❫❫]						“[”⸠b「⸠c「」」“]”
+P	0			[⌽o(⌽f(q(6),for),big,⎡or, not⎤,⎡seven⎤ teen)]		“[”⸠o「⸠f「“q(6)”」「“for”」」「“big”」「“or, not”」「“seven teen”」“]”
+P	0			[⎣⌽b(⎡⎤,)⎦]						“[⌽b(⎡⎤,)]”
 
 

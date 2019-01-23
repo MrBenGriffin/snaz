@@ -5,10 +5,10 @@ F showDefines	1
 
 // name		code										expected result
 // example	[abcdef]									[abcdef]
-//!	b0rked
-
-//! syntax
+!	b0rked
+X
 //-- included files
+!	syntax
 !	definitions
 !	basic_advanced
 // !	taxonomy

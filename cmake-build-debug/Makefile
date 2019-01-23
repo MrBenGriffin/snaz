@@ -204,6 +204,33 @@ Macro.cpp.s:
 	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Macro.cpp.s
 .PHONY : Macro.cpp.s
 
+Text.o: Text.cpp.o
+
+.PHONY : Text.o
+
+# target to build an object file
+Text.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Text.cpp.o
+.PHONY : Text.cpp.o
+
+Text.i: Text.cpp.i
+
+.PHONY : Text.i
+
+# target to preprocess a source file
+Text.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Text.cpp.i
+.PHONY : Text.cpp.i
+
+Text.s: Text.cpp.s
+
+.PHONY : Text.s
+
+# target to generate assembly for a file
+Text.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Text.cpp.s
+.PHONY : Text.cpp.s
+
 Wss.o: Wss.cpp.o
 
 .PHONY : Wss.o
@@ -411,6 +438,9 @@ help:
 	@echo "... Macro.o"
 	@echo "... Macro.i"
 	@echo "... Macro.s"
+	@echo "... Text.o"
+	@echo "... Text.i"
+	@echo "... Text.s"
 	@echo "... Wss.o"
 	@echo "... Wss.i"
 	@echo "... Wss.s"

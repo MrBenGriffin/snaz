@@ -1,59 +1,20 @@
 #include <utility>
-
+#include <deque>
 #include <typeinfo>
 #include <cctype>
 #include <fstream>
 #include <cassert>
-#include "userMacro.h"
 
 #include "Driver.h"
-#include "Wss.h"
-#include "Injection.h"
-#include "Macro.h"
+#include "userMacro.h"
 
 namespace mt {
 
-	size_t Driver::wss_type = typeid(Wss).hash_code();
-	size_t Driver::mac_type = typeid(Macro).hash_code();
-	size_t Driver::inj_type = typeid(Injection).hash_code();
-	size_t Driver::str_type = typeid(std::string).hash_code();
 	mstack Driver::empty_stack {};
-
-	vMap Driver::vis = {
-		  {mac_type,[](std::any& j,std::ostream &o) {
-			  o << "❰"; std::any_cast<Macro>(j).visit(o); o << "❱";
-		  	}
-		},{inj_type,[](std::any& j,std::ostream &o){
-				o << "⎧"; std::any_cast<Injection>(j).visit(o); o << "⎫";
-			}
-		},{str_type,[](std::any& j,std::ostream &o){
-				o << "‘" << std::any_cast<std::string>(j) << "’";
-			}
-		},{wss_type,[](std::any& j,std::ostream &o){
-				o << "“" << std::any_cast<Wss>(j).text << "”";
-			}
-		}
-	};
-
-	eMap Driver::exp = {
-	   {mac_type,[](std::any& j,std::ostream &o,mstack& c){ std::any_cast<Macro>(j).expand(o,c); }},
-	   {inj_type,[](std::any& j,std::ostream &o,mstack& c){ std::any_cast<Injection>(j).expand(o,c); }},
-	   {str_type,[](std::any& j,std::ostream &o,mstack& c){
-			o << std::any_cast<std::string>(j);
-	   	}},
-	   {wss_type,[](std::any& j,std::ostream &o,mstack& c){
-			  o << std::any_cast<Wss>(j).text;
-	   }}
-	};
-
-
-
-	Driver::Driver() {
-	}
 
 	mtext Driver::parse(std::istream &stream, bool advanced, bool strip) {
 		if (!stream.good() && stream.eof()) {
-			return {{},false};
+			return {};
 		}
 		parse_helper(stream,advanced,strip,false);
 		return final;
@@ -105,55 +66,30 @@ namespace mt {
 	 * */
 	void Driver::store(const std::string &str) {
 		if(!str.empty()) {
+			Text text(str);
 			if ( macro_stack.empty()) {
-				if (!final.empty() && final.back().type().hash_code() == str_type) {
-					std::string back = std::move(std::any_cast<std::string>(final.back()));
-					final.pop_back();
-					back.append(str);
-					final.emplace_back(std::move(back));
-				} else {
-					final.emplace_back(std::move(str));
-				}
+				text.add(final);
 			} else {
-				if (!parm.empty() && parm.back().type().hash_code() == str_type) {
-					std::string back = std::move(std::any_cast<std::string>(parm.back()));
-					parm.pop_back();
-					back.append(str);
-					parm.emplace_back(std::move(back));
-				} else {
-					parm.emplace_back(std::move(str));
-				}
+				text.add(parm);
 			}
 		}
 	}
 
 	void Driver::storeWss(const std::string &str) {
 		if(!str.empty()) {
-			if (macro_stack.empty()) {
-				if (!final.empty() && final.back().type().hash_code() == wss_type) {
-					Wss back = std::move(std::any_cast<Wss>(final.back()));
-					final.pop_back();
-					final.emplace_back(std::move(Wss(back,str)));
-				} else {
-					final.emplace_back(std::move(Wss(str)));
-				}
+			Wss wss(str);
+			if ( macro_stack.empty()) {
+				wss.add(final);
 			} else {
-				if (!parm.empty() && parm.back().type().hash_code() == wss_type) {
-					Wss back = std::move(std::any_cast<Wss>(parm.back()));
-					parm.pop_back();
-					parm.emplace_back(std::move(Wss(back,str)));
-				} else {
-					parm.emplace_back(std::move(Wss(str)));
-				}
+				wss.add(parm);
 			}
 		}
 	}
 
-
 	void Driver::inject(const std::string &word) {
 		Injection i(word);
 		iterated = iterated || i.iterator;
-		if (macro_stack.empty()) {
+		if ( macro_stack.empty()) {
 			final.emplace_back(std::move(i));
 		} else {
 			parm.emplace_back(std::move(i));
@@ -185,26 +121,20 @@ namespace mt {
 		parm.clear();
 	}
 
-	void Driver::expand(mtext& object,std::ostream& outStream,mstack& context) {
+	void Driver::expand(mtext& object,std::ostream& o,mstack& c,iteration i) {
 		for(auto& j : object) {
-			if (j.has_value()) {
-				size_t type = j.type().hash_code();
-				Driver::exp[type](j,outStream,context);
-			}
+			std::visit([&o,&c,&i](auto&& arg){ arg.expand(o,c,i);},j);
 		}
 	}
 
-	std::ostream& Driver::visit(std::any& j, std::ostream &o) {
-		if (j.has_value()) {
-			size_t type = j.type().hash_code();
-			Driver::vis[type](j,o);
-		}
+	std::ostream& Driver::visit(Token& j, std::ostream &o) {
+		std::visit([&o](auto&& arg){ arg.visit(o);},j); o << flush;
 		return o;
 	}
 
 	std::ostream& Driver::visit(mtext& object, std::ostream &o) {
 		for (auto &j : object) {
-			visit(j,o);
+			visit(j,o); o << flush;
 		}
 		return o;
 	}

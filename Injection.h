@@ -6,12 +6,12 @@
 #define MACROTEXT_INJECTION_H
 
 #include <string>
-#include <sstream>
-
 #include "mt.h"
 
 namespace mt {
+
     class Injection {
+
     private:
         enum class It { plain,text,current,count,size }; //not iteration,not injection,i,j,k,n respectively
         It type;            // tells us the iteration type
@@ -28,11 +28,14 @@ namespace mt {
         void parsePName();
         void parseBrackets();
         void parseParent();
+
     public:
-        bool iterator;      // This is injection defines the macro as an iterator.
+        Injection();
         Injection(const std::string);
+        Injection(const Injection& ) = default;
+        bool iterator;      // This is injection defines the macro as an iterator.
         std::ostream& visit(std::ostream&);
-        void expand(std::ostream&,mstack&);
+        void expand(std::ostream&,mstack&,const iteration);
 
     };
 }

@@ -20,9 +20,10 @@ namespace mt {
     public:
         std::string name;
         plist parms;
-        void expand(std::ostream&,mstack&);
+        void expand(std::ostream&,mstack&,const iteration);
         std::ostream& visit(std::ostream&);
         explicit Macro(std::string);
+        void add(mtext&);
     };
 }
 

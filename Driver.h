@@ -5,7 +5,7 @@
 #ifndef MT_DRIVER_H
 #define MT_DRIVER_H
 
-#include <any>
+#include <variant>
 #include <type_traits>
 #include <string>
 #include <cstddef>
@@ -25,15 +25,11 @@ namespace mt {
 
 	//This is the parser-injection.
 
-	class Macro;
-
     class Driver {
-    public:
-		static size_t mac_type;
-		static size_t inj_type;
-		static size_t str_type;
-		static size_t wss_type;
-		Driver();
+
+	public:
+
+		Driver() = default;
 
         virtual ~Driver();
 
@@ -44,20 +40,16 @@ namespace mt {
 		void storeWss(const std::string &);
         void store( const std::string &);
         void inject( const std::string &);
-        void add_parm( /*const std::string &*/ );
+        void add_parm();
         void store_macro();
 
-		static std::ostream& visit(std::any&, std::ostream &stream);
+		static std::ostream& visit(Token&, std::ostream &stream);
         static std::ostream& visit(mtext&, std::ostream &stream);
-        static void expand(mtext&,std::ostream&,mstack& = empty_stack);
+        static void expand(mtext&,std::ostream&,mstack& = empty_stack,iteration = {0,0});
 
 	private:
-		static mstack empty_stack;
-		static vMap   vis;
-		static eMap   exp;
-
+		static 		mstack empty_stack;
         bool         iterated;
-
         mtext        final;
         mtext        parm;
         std::forward_list<Macro>    macro_stack;

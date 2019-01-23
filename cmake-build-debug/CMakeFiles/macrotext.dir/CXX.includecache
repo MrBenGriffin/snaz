@@ -7,7 +7,7 @@
 #IncludeRegexTransform: 
 
 /Users/ben/CLionProjects/snaz/Driver.h
-any
+variant
 -
 type_traits
 -
@@ -36,13 +36,31 @@ advanced.h
 parser.tab.hpp
 /Users/ben/CLionProjects/snaz/parser.tab.hpp
 
-/Users/ben/CLionProjects/snaz/Macro.cpp
-Macro.h
-/Users/ben/CLionProjects/snaz/Macro.h
+/Users/ben/CLionProjects/snaz/Injection.cpp
+mt.h
+/Users/ben/CLionProjects/snaz/mt.h
 userMacro.h
 /Users/ben/CLionProjects/snaz/userMacro.h
 
+/Users/ben/CLionProjects/snaz/Injection.h
+string
+-
+mt.h
+/Users/ben/CLionProjects/snaz/mt.h
+
 /Users/ben/CLionProjects/snaz/Macro.h
+string
+-
+mt.h
+/Users/ben/CLionProjects/snaz/mt.h
+
+/Users/ben/CLionProjects/snaz/Text.h
+string
+-
+mt.h
+/Users/ben/CLionProjects/snaz/mt.h
+
+/Users/ben/CLionProjects/snaz/Wss.h
 string
 -
 mt.h
@@ -57,18 +75,24 @@ location.hh
 /Users/ben/CLionProjects/snaz/location.hh
 
 /Users/ben/CLionProjects/snaz/mt.h
-any
+variant
 -
-istream
+ostream
 -
 vector
 -
-unordered_map
--
 deque
 -
-functional
--
+Wss.h
+/Users/ben/CLionProjects/snaz/Wss.h
+Text.h
+/Users/ben/CLionProjects/snaz/Text.h
+Injection.h
+/Users/ben/CLionProjects/snaz/Injection.h
+Macro.h
+/Users/ben/CLionProjects/snaz/Macro.h
+Driver.h
+/Users/ben/CLionProjects/snaz/Driver.h
 
 /Users/ben/CLionProjects/snaz/userMacro.h
 unordered_map
@@ -77,8 +101,8 @@ string
 -
 vector
 -
-Driver.h
-/Users/ben/CLionProjects/snaz/Driver.h
+mt.h
+/Users/ben/CLionProjects/snaz/mt.h
 
 /usr/local/include/FlexLexer.h
 iostream

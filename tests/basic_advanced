@@ -158,6 +158,6 @@ bar 01			⌽bar(A,B)																(bar:(foo:A:B:A):(foo:B,A:A:B,A))
 01 iterated			[⌽ucomma(X,Y,⎡ss,uu,vv⎤,⎣⌽b0rked⎦,thin)]							[X,Y,ss,uu,vv,⌽b0rked,thin]
 02a stacked			⌽xv()																[xz;xy;xx;xw;xv;02a stacked;]
 02b stacked			⌽xv(o)																[xv]
-03 special			[⌽onlyMe()]															[onlyMe]
+03 special			[⌽onlyMe()]															“[”⸠onlyMe「」“]”
 04 nonmacro			[⍟0]																[⍟0]
 

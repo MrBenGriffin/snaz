@@ -12,6 +12,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/macrotext.dir/Injection.cpp.o"
   "CMakeFiles/macrotext.dir/Wss.cpp.o"
   "CMakeFiles/macrotext.dir/Macro.cpp.o"
+  "CMakeFiles/macrotext.dir/Text.cpp.o"
   "macrotext.pdb"
   "macrotext"
 )

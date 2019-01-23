@@ -2,14 +2,14 @@
 // Created by Ben on 2019-01-23.
 //
 
-#include "Macro.h"
+#include "mt.h"
 #include "userMacro.h"
 
 namespace mt {
 
     Macro::Macro(std::string n) : name(std::move(n)) {};
 
-    void Macro::expand(std::ostream &o, mstack &context) {
+    void Macro::expand(std::ostream &o,mstack &context,const iteration i) {
         if (userMacro::has(name)) {
             userMacro::get(name).expand(o, parms, context);
         } else {
@@ -18,7 +18,7 @@ namespace mt {
     }
 
     std::ostream &Macro::visit(std::ostream &result) {
-        result << name << "⸠";
+        result << "⸠" << name;
         for (auto &p : parms) {
             result << "「";
             if (!p.empty()) {
@@ -28,5 +28,10 @@ namespace mt {
         }
         return result;
     }
+
+    void Macro::add(mtext& mt) {
+        mt.emplace_back(std::move(*this));
+    }
+
 }
 

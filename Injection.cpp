@@ -2,7 +2,7 @@
 // Created by Ben on 2019-01-23.
 //
 
-#include "Injection.h"
+#include "mt.h"
 #include "userMacro.h"
 
 namespace mt {
@@ -106,6 +106,11 @@ namespace mt {
         parseStart();                 // now work out the rest.
     }
 
+    Injection::Injection() :
+        type(It::plain), value(0), sValue(0), offset(0),
+        modulus(false), stack(false), list(false), iterator(false), basis("") {
+    }
+
     Injection::Injection(const std::string src) :
             type(It::plain), value(0), sValue(0), offset(0),
             modulus(false), stack(false), list(false), iterator(false), basis(src) {
@@ -113,7 +118,7 @@ namespace mt {
         parseStart();
     }
 
-    void Injection::expand(std::ostream &result, mstack &context) {
+    void Injection::expand(std::ostream &result,mstack &context,const iteration iter) {
         if (type == It::text) {
             result << basis;
         } else {
@@ -124,14 +129,14 @@ namespace mt {
                 result << "[TODO::STACK]";
             }
             if (list) {
-
                 result << "[TODO::LIST " << value << "]";
-
             } else {
                 switch (type) {
                     case It::plain:
-                        if ((contextMacro->minParms <= value <= contextMacro->maxParms) && (value <= parmCount)) {
-                            if (value > 0) {
+                        if(value == 0) {
+                            result << contextMacro->name;
+                        } else {
+                            if ((contextMacro->minParms <= value <= contextMacro->maxParms) && (value <= parmCount)) {
                                 if (sValue == 0) {
                                     Driver::expand(contextParms[value - 1], result, context);
                                 } else {
@@ -139,20 +144,28 @@ namespace mt {
                                     Driver::expand(contextParms[value - 1], result, subContext);
                                 }
                             } else {
-                                result << contextMacro->name;
+                                //TODO: Report value being asked for is out of the range of the definition.
+                            }
+                        }
+                        break;
+                    case It::current: {
+                        auto posi = iter.first + offset;
+                        if ( 0 < posi <  parmCount) {
+                            if (sValue == 0) {
+                                Driver::expand(contextParms[posi - 1], result, context);
+                            } else {
+                                //TODO: Work out what the hell this means...
                             }
                         } else {
-                            //TODO: Report value being asked for is out of the range of the definition.
+                            if (posi == 0) {
+                                result << contextMacro->name;
+                            } else {
+                                //TODO: value being asked for is out of the range of those supplied.
+                            }
                         }
-                        break;
-                    case It::current:
-                        result << "[TODO::ITERATOR I]";
-                        if (offset != 0) {
-                            result << "[TODO::OFFSET " << offset << " from " << value << "]";
-                        }
-                        break;
+                    }  break;
                     case It::count:
-                        result << "[TODO::ITERATOR K]";
+                        result << iter.first;
                         break;
                     case It::size:
                         result << parmCount;
@@ -165,11 +178,13 @@ namespace mt {
     }
 
     std::ostream &Injection::visit(std::ostream &result) {
+        result << "⁅";
         if (type == It::text) {
             result << basis;
         } else {
             if (sValue != 0) {
                 result << sValue;
+                result << ":";
             }
             if (stack) {
                 result << "s";
@@ -201,6 +216,7 @@ namespace mt {
                 result << "+";
             }
         }
+        result << "⁆" << std::flush;
         return result;
     }
 }
