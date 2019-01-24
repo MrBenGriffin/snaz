@@ -19,12 +19,11 @@ namespace mt {
     public:
         std::string name;
         plist parms;        /* parsed parms */
-        void expand(std::ostream&,mstack&) const;
+        void expand(mtext&,mstack&) const;
         std::ostream& visit(std::ostream&) const;
         explicit Macro(std::string);
         void add(mtext&);
     };
 }
-
 
 #endif //MACROTEXT_MACRO_H

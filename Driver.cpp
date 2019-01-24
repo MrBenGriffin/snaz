@@ -122,17 +122,29 @@ namespace mt {
 	}
 
 	void Driver::expand(const mtext& object,std::ostream& o,mstack& c) {
-		for(auto& j : object) {
-			std::visit([&o,&c](auto&& arg){ arg.expand(o,c);},j);
+		mtext result;
+		expand(object,result,c);
+		if(result.size() == 1 && std::holds_alternative<Text>(result.front())) {
+			o << std::get<Text>(result.front()).get();
+		} else {
+			for(auto& j: result) {
+				std::visit([&o](auto&& arg){ arg.visit(o);},j);
+			}
 		}
 	}
 
-	std::ostream& Driver::visit(const Token& j, std::ostream &o) {
-		std::visit([&o](auto&& arg){ arg.visit(o);},j); o << std::flush;
+	void Driver::expand(const mtext& object,mtext& x,mstack& c) {
+		for(auto& j : object) {
+			std::visit([&x,&c](auto&& arg){ arg.expand(x,c);},j);
+		}
+	}
+
+	std::ostream& Driver::visit(const Token& j, std::ostream& o) {
+		std::visit([&o](auto&& arg){ arg.visit(o);},j);
 		return o;
 	}
 
-	std::ostream& Driver::visit(const mtext& object, std::ostream &o) {
+	std::ostream& Driver::visit(const mtext& object, std::ostream& o) {
 		for (auto& j : object) {
 			std::visit([&o](auto&& arg){ arg.visit(o);},j); o << std::flush;
 		}

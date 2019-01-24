@@ -43,9 +43,10 @@ namespace mt {
         void add_parm();
         void store_macro();
 
-		static std::ostream& visit(const Token&, std::ostream &stream);
-        static std::ostream& visit(const mtext&, std::ostream &stream) ;
+  		static std::ostream& visit(const Token&, std::ostream&);
+        static std::ostream& visit(const mtext&, std::ostream&);
         static void expand(const mtext&,std::ostream&,mstack& = empty_stack);
+		static void expand(const mtext&,mtext&,mstack& = empty_stack);
 
 	private:
 		static 		 mstack empty_stack;
@@ -56,7 +57,7 @@ namespace mt {
 
         void parse_helper( std::istream &stream, bool, bool, bool );
 
-        Parser  *parser  = nullptr;
+        Parser   *parser  = nullptr;
         Advanced *scanner = nullptr;
 
     };

@@ -13,10 +13,12 @@
 
 namespace mt {
 
+    //The following are Token classes.
     class Macro;
     class Injection;
     class Wss;
     class Text;
+
     class Definition;
 
     using Token=std::variant<Macro,Wss,Injection,Text>;

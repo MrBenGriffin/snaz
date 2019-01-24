@@ -10,9 +10,14 @@ namespace mt {
         o << "‘" << text << "’" << std::flush;
         return o;
     }
-    void Wss::expand(std::ostream& o,const mstack&) const {
-        o << text;
-    }
+
+    void Wss::expand(mtext& o,const mstack&) const {
+        if (!o.empty() && std::holds_alternative<Wss>(o.back())) {
+            std::get<Wss>(o.back()).text.append(text);
+        } else {
+            o.emplace_back(*this);
+        }
+     }
 
     void Wss::add(mtext& mt) {
         if (!mt.empty() && std::holds_alternative<Wss>(mt.back())) {

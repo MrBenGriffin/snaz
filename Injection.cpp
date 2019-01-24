@@ -114,26 +114,31 @@ namespace mt {
         parseStart();
     }
 
-    void Injection::expand(std::ostream &result,mstack &context) const {
+    void Injection::expand(mtext &result,mstack &context) const {
         if (type == It::text) {
-            result << basis;
-        } else {
+            Text(basis).expand(result,context);
+         } else {
             auto &contextMacro = context[sValue].first;
             auto &instance = context[sValue].second;
             auto &parms = instance.parms;
             auto &iter = instance.it;
             size_t parmCount = parms->size();
             if (stack) {
-                result << "[TODO::STACK]";
+                Text("[TODO::STACK]").expand(result,context);
             }
             if (list) {
-                result << "[TODO::LIST " << value << "]";
+                for(size_t i=value; i <= parmCount; i++) {
+                    mtext tmp;
+                    Driver::expand((*parms)[i - 1], tmp, context);
+                    result.push_back(tmp.front()); //if tmp has MORE than one result.. what then?!
+                }
+//                Text("[TODO::LIST]").expand(result,context);
             } else {
                 switch (type) {
                     case It::plain:
                         if(value == 0) {
-                            result << contextMacro->name;
-                        } else {
+                            Text(contextMacro->name).expand(result,context);
+                         } else {
                             if ((contextMacro->minParms <= value <= contextMacro->maxParms) && (value <= parmCount)) {
                                 if (sValue == 0) {
                                     Driver::expand((*parms)[value - 1], result, context);
@@ -156,18 +161,22 @@ namespace mt {
                             }
                         } else {
                             if (posi == 0) {
-                                result << contextMacro->name;
+                                Text(contextMacro->name).expand(result,context);
                             } else {
                                 //TODO: value being asked for is out of the range of those supplied.
                             }
                         }
                     }  break;
-                    case It::count:
-                        result << iter.first;
-                        break;
-                    case It::size:
-                        result << parmCount;
-                        break;
+                    case It::count: {
+                        std::ostringstream a;
+                        a << iter.first;
+                        Text(a.str()).expand(result, context);
+                    } break;
+                    case It::size: {
+                        std::ostringstream a;
+                        a << iter.second;
+                        Text(a.str()).expand(result, context);
+                    } break;
                     default:
                         break;
                 }

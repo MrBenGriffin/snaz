@@ -16,12 +16,12 @@ namespace mt {
         Text() = default;
         Text(const std::string &);
         std::ostream& visit(std::ostream&) const;
-        void expand(std::ostream&,const mstack&) const;
+        void expand(mtext&,const mstack&) const;
         void add(mtext&);
+        std::string get();
         bool empty() const { return text.empty(); }
     };
 
 };
-
 
 #endif //MACROTEXT_TEXT_H

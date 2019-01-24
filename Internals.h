@@ -10,7 +10,7 @@
 #include "mt.h"
 
 namespace mt {
-    struct iEq { void expand(std::ostream &,Instance&,mstack&); };
+    struct iEq { void expand(mtext&,Instance&,mstack&); };
 }
 
 

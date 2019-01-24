@@ -35,7 +35,9 @@ namespace mt {
         Injection(const Injection& ) = default;
         bool iterator;      // This is injection defines the macro as an iterator.
         std::ostream& visit(std::ostream&) const;
-        void expand(std::ostream&,mstack&) const;
+        void expand(mtext&,mstack&) const;
+        bool empty() const { return false; }
+
 
     };
 }

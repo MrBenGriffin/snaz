@@ -32,26 +32,24 @@ namespace mt {
         }
     }
 
-    void Definition::expand(std::ostream &o,Instance &instance, mstack &context) {
+    void Definition::expand(mtext& o,Instance &instance, mstack &context) {
         Instance modified(instance.parms,instance.it);
-        plist mt_parms = *instance.parms;
+        plist rendered;
         if (!preExpand) {
+            plist mt_parms = *instance.parms;
             if (trimParms) { trim(mt_parms); }
-            std::deque<std::string> rendered;
-            for (auto &parm : mt_parms) {
-                std::ostringstream in;
-                Driver::expand(parm, in, context);
-                rendered.push_back(in.str());
+             for (auto &parm : mt_parms) {
+                 mtext expanded;
+                 Driver::expand(parm, expanded, context);
+                 for(auto& i : expanded) {
+                     rendered.push_back({i}); //each one as a separate parm!!
+                 }
             }
             while (!rendered.empty() && rendered.back().empty()) {
                 rendered.pop_back();
             }
-            mt_parms.clear();
-            for (auto &j : rendered) {
-                mt_parms.push_back({Text(j)});
-            }
-            modified.parms = &mt_parms;
-            modified.it = {0,mt_parms.size()};
+            modified.parms = &rendered;
+            modified.it = {0,rendered.size()};
         }
         context.push_front({this, modified});
         if (iterated) {
@@ -94,10 +92,10 @@ namespace mt {
          }
     }
 
-    void Definition::exp(std::string name,std::ostream& o,Instance& i,mt::mstack& c) {
+    void Definition::exp(std::string name,mtext& result,Instance& i,mt::mstack& c) {
         auto good = Definition::library.find(name);
         if(good != Definition::library.end()) {
-            std::visit([&o,&i,&c](auto&& arg){ arg.expand(o,i,c);},good->second);
+            std::visit([&result,&i,&c](auto&& arg){ arg.expand(result,i,c);},good->second);
         }
     }
 

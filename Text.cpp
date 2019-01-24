@@ -11,8 +11,14 @@ namespace mt {
         o << "“" << text << "”" << std::flush;
         return o;
     }
-    void Text::expand(std::ostream& o,const mstack&) const {
-        o << text;
+
+    std::string Text::get() { return text; }
+    void Text::expand(mtext& o,const mstack&) const {
+        if (!o.empty() && std::holds_alternative<Text>(o.back())) {
+            std::get<Text>(o.back()).text.append(text);
+        } else {
+            o.emplace_back(*this);
+        }
     }
 
     void Text::add(mtext& mt) {

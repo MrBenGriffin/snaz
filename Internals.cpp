@@ -5,12 +5,8 @@
 #include "Internals.h"
 
 namespace mt {
-    void iEq::expand(std::ostream& o,Instance& instance,mstack& context) {
-//        auto &contextMacro = context[sValue].first;
-//        auto &instance = context[sValue].second;
+    void iEq::expand(mtext& o,Instance& instance,mstack& context) {
         auto &myParms = instance.parms;
-//        auto &iter = instance.it;
-
         auto size = myParms->size();
         std::string a,b;
         if (size > 0) {
@@ -29,10 +25,10 @@ namespace mt {
                         } //else return empty-string.
                     }
                 } else {
-                    o << (left.str() == right.str() ? "1" : "0");
+                    o.emplace_back(Text(left.str() == right.str() ? "1" : "0"));
                 }
             } else {
-                o << (left.str().empty() ? "1" : "0");
+                o.emplace_back(Text(left.str().empty() ? "1" : "0"));
             }
         }
     }

@@ -41,7 +41,7 @@ namespace mt {
 
         Definition(std::string, std::string, long, long, bool= true, bool= true, bool= false);
 
-        void expand(std::ostream&,Instance&,mstack&);
+        void expand(mtext&,Instance&,mstack&);
 
         static bool test_adv(std::string &);
 
@@ -53,7 +53,8 @@ namespace mt {
 
         //By Library call..
         static void vis(std::string,std::ostream&);
-        static void exp(std::string,std::ostream&,Instance&,mstack&);
+
+        static void exp(std::string,mtext&,Instance&,mstack&);
 
         static void list(std::ostream&);
 
