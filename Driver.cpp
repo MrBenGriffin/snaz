@@ -6,7 +6,7 @@
 #include <cassert>
 
 #include "Driver.h"
-#include "userMacro.h"
+#include "Definition.h"
 
 namespace mt {
 
@@ -121,20 +121,20 @@ namespace mt {
 		parm.clear();
 	}
 
-	void Driver::expand(mtext& object,std::ostream& o,mstack& c,iteration i) {
+	void Driver::expand(const mtext& object,std::ostream& o,mstack& c) {
 		for(auto& j : object) {
-			std::visit([&o,&c,&i](auto&& arg){ arg.expand(o,c,i);},j);
+			std::visit([&o,&c](auto&& arg){ arg.expand(o,c);},j);
 		}
 	}
 
-	std::ostream& Driver::visit(Token& j, std::ostream &o) {
-		std::visit([&o](auto&& arg){ arg.visit(o);},j); o << flush;
+	std::ostream& Driver::visit(const Token& j, std::ostream &o) {
+		std::visit([&o](auto&& arg){ arg.visit(o);},j); o << std::flush;
 		return o;
 	}
 
-	std::ostream& Driver::visit(mtext& object, std::ostream &o) {
-		for (auto &j : object) {
-			visit(j,o); o << flush;
+	std::ostream& Driver::visit(const mtext& object, std::ostream &o) {
+		for (auto& j : object) {
+			std::visit([&o](auto&& arg){ arg.visit(o);},j); o << std::flush;
 		}
 		return o;
 	}

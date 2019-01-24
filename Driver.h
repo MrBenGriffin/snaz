@@ -43,12 +43,12 @@ namespace mt {
         void add_parm();
         void store_macro();
 
-		static std::ostream& visit(Token&, std::ostream &stream);
-        static std::ostream& visit(mtext&, std::ostream &stream);
-        static void expand(mtext&,std::ostream&,mstack& = empty_stack,iteration = {0,0});
+		static std::ostream& visit(const Token&, std::ostream &stream);
+        static std::ostream& visit(const mtext&, std::ostream &stream) ;
+        static void expand(const mtext&,std::ostream&,mstack& = empty_stack);
 
 	private:
-		static 		mstack empty_stack;
+		static 		 mstack empty_stack;
         bool         iterated;
         mtext        final;
         mtext        parm;

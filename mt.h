@@ -10,7 +10,6 @@
 #include <vector>
 #include <deque>
 
-class userMacro;
 
 namespace mt {
 
@@ -18,13 +17,20 @@ namespace mt {
     class Injection;
     class Wss;
     class Text;
+    class Definition;
 
     using Token=std::variant<Macro,Wss,Injection,Text>;
     using mtext=std::deque<Token>;
     using parse_result=std::pair<mtext, bool>;
-    using plist=std::vector<mtext>;
-    using mstack=std::deque<std::pair<userMacro*, plist>>;
     using iteration=std::pair<size_t,size_t>;
+    using plist=std::vector<mtext>;
+    struct Instance {
+        const plist* parms = nullptr;
+        iteration it = {0,0};
+        Instance(const plist* p,iteration i) : parms(p),it(i) {}
+    };
+
+    using mstack=std::deque<std::pair<Definition*, Instance> >;
 }
 
 #include "Wss.h"
@@ -32,5 +38,6 @@ namespace mt {
 #include "Injection.h"
 #include "Macro.h"
 #include "Driver.h"
+#include "Definition.h"
 
 #endif //MACROTEXT_MT_H

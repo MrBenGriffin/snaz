@@ -6,11 +6,11 @@
 namespace mt {
     Wss::Wss(const std::string &w) : text(w) {}
 
-    std::ostream& Wss::visit(std::ostream& o) {
+    std::ostream& Wss::visit(std::ostream& o) const {
         o << "‘" << text << "’" << std::flush;
         return o;
     }
-    void Wss::expand(std::ostream& o,const mstack&,const iteration) {
+    void Wss::expand(std::ostream& o,const mstack&) const {
         o << text;
     }
 

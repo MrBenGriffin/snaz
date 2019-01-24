@@ -3,21 +3,22 @@
 //
 
 #include "mt.h"
-#include "userMacro.h"
+#include "Definition.h"
 
 namespace mt {
 
     Macro::Macro(std::string n) : name(std::move(n)) {};
 
-    void Macro::expand(std::ostream &o,mstack &context,const iteration i) {
-        if (userMacro::has(name)) {
-            userMacro::get(name).expand(o, parms, context);
+    void Macro::expand(std::ostream &o,mstack &context) const {
+        if (Definition::has(name)) {
+            Instance instance(&parms,{0,parms.size()});
+            Definition::exp(name,o,instance,context);
         } else {
             visit(o);
         }
     }
 
-    std::ostream &Macro::visit(std::ostream &result) {
+    std::ostream &Macro::visit(std::ostream &result) const {
         result << "⸠" << name;
         for (auto &p : parms) {
             result << "「";

@@ -123,6 +123,33 @@ macrotext/fast:
 	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/build
 .PHONY : macrotext/fast
 
+Definition.o: Definition.cpp.o
+
+.PHONY : Definition.o
+
+# target to build an object file
+Definition.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Definition.cpp.o
+.PHONY : Definition.cpp.o
+
+Definition.i: Definition.cpp.i
+
+.PHONY : Definition.i
+
+# target to preprocess a source file
+Definition.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Definition.cpp.i
+.PHONY : Definition.cpp.i
+
+Definition.s: Definition.cpp.s
+
+.PHONY : Definition.s
+
+# target to generate assembly for a file
+Definition.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Definition.cpp.s
+.PHONY : Definition.cpp.s
+
 Driver.o: Driver.cpp.o
 
 .PHONY : Driver.o
@@ -176,6 +203,33 @@ Injection.s: Injection.cpp.s
 Injection.cpp.s:
 	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Injection.cpp.s
 .PHONY : Injection.cpp.s
+
+Internals.o: Internals.cpp.o
+
+.PHONY : Internals.o
+
+# target to build an object file
+Internals.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Internals.cpp.o
+.PHONY : Internals.cpp.o
+
+Internals.i: Internals.cpp.i
+
+.PHONY : Internals.i
+
+# target to preprocess a source file
+Internals.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Internals.cpp.i
+.PHONY : Internals.cpp.i
+
+Internals.s: Internals.cpp.s
+
+.PHONY : Internals.s
+
+# target to generate assembly for a file
+Internals.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Internals.cpp.s
+.PHONY : Internals.cpp.s
 
 Macro.o: Macro.cpp.o
 
@@ -393,33 +447,6 @@ test.cpp.s:
 	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/test.cpp.s
 .PHONY : test.cpp.s
 
-userMacro.o: userMacro.cpp.o
-
-.PHONY : userMacro.o
-
-# target to build an object file
-userMacro.cpp.o:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/userMacro.cpp.o
-.PHONY : userMacro.cpp.o
-
-userMacro.i: userMacro.cpp.i
-
-.PHONY : userMacro.i
-
-# target to preprocess a source file
-userMacro.cpp.i:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/userMacro.cpp.i
-.PHONY : userMacro.cpp.i
-
-userMacro.s: userMacro.cpp.s
-
-.PHONY : userMacro.s
-
-# target to generate assembly for a file
-userMacro.cpp.s:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/userMacro.cpp.s
-.PHONY : userMacro.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -429,12 +456,18 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... macrotext"
+	@echo "... Definition.o"
+	@echo "... Definition.i"
+	@echo "... Definition.s"
 	@echo "... Driver.o"
 	@echo "... Driver.i"
 	@echo "... Driver.s"
 	@echo "... Injection.o"
 	@echo "... Injection.i"
 	@echo "... Injection.s"
+	@echo "... Internals.o"
+	@echo "... Internals.i"
+	@echo "... Internals.s"
 	@echo "... Macro.o"
 	@echo "... Macro.i"
 	@echo "... Macro.s"
@@ -459,9 +492,6 @@ help:
 	@echo "... test.o"
 	@echo "... test.i"
 	@echo "... test.s"
-	@echo "... userMacro.o"
-	@echo "... userMacro.i"
-	@echo "... userMacro.s"
 .PHONY : help
 
 

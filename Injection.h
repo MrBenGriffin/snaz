@@ -31,11 +31,11 @@ namespace mt {
 
     public:
         Injection();
-        Injection(const std::string);
+        Injection(std::string);
         Injection(const Injection& ) = default;
         bool iterator;      // This is injection defines the macro as an iterator.
-        std::ostream& visit(std::ostream&);
-        void expand(std::ostream&,mstack&,const iteration);
+        std::ostream& visit(std::ostream&) const;
+        void expand(std::ostream&,mstack&) const;
 
     };
 }

@@ -5,7 +5,8 @@
 
 #include "test.h"
 #include "Driver.h"
-#include "userMacro.h"
+#include "Definition.h"
+#include "Internals.h"
 
 using namespace std;
 
@@ -185,7 +186,7 @@ namespace testing {
                     case '~': { // delete a user macro.
                         getline(infile,name);
                         name.erase(name.find_last_not_of(" \t")+1);
-                        userMacro::del(name);
+                        mt::Definition::del(name);
                     } break;
 
                     case 'P': {
@@ -203,7 +204,7 @@ namespace testing {
                         std::istringstream cStream(code);
                         result expansion(name);
                         if(define) {
-                            userMacro macro(name,pcode,0,-1,false,false,false);
+                            mt::Definition macro(name,pcode,0,-1,false,false,false);
                             macro.visit(expansion.out);
                         } else {
                             mt::mtext structure = driver.parse(cStream,true,false); //bool advanced, bool strip
@@ -237,13 +238,12 @@ namespace testing {
                         }
                         getline(infile,expansion);
                         wss(expansion,false);
-                        userMacro macro(name,expansion,min,max,bools[0]=='1',bools[1]=='1',bools[2]=='1');
-                        userMacro::add(macro);
+                        mt::Definition macro(name,expansion,min,max,bools[0]=='1',bools[1]=='1',bools[2]=='1');
+                        mt::Definition::add(macro);
                         if(showDefines) {
-                            userMacro& i = userMacro::get(name);
-                            cout << "Defined " << name << ":" ;
+                             cout << "Defined " << name << ":" ;
                             std::ostringstream result;
-                            i.visit(result);
+                            mt::Definition::vis(name,result);
                             std::string definition = result.str();
                             wss(definition,true);
                             cout << definition << " " << min << "-" << max << " SPx:" << bools << std::endl;

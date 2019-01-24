@@ -3,7 +3,7 @@
 //
 
 #include "mt.h"
-#include "userMacro.h"
+#include "Definition.h"
 
 namespace mt {
 
@@ -42,7 +42,6 @@ namespace mt {
             }
         }
     }
-
     void Injection::parseIterated() {
         switch (basis[0]) {
             case 'i':
@@ -73,7 +72,6 @@ namespace mt {
             offset = stol(basis);
         }
     }
-
     void Injection::parsePName() {
         basis.erase(0, 1);
         if (basis[0] == 's') {
@@ -83,7 +81,6 @@ namespace mt {
             sValue++;
         }
     }
-
     void Injection::parseBrackets() {
         basis.erase(0, 1);
         basis.pop_back();
@@ -97,7 +94,6 @@ namespace mt {
             }
         }
     }
-
     void Injection::parseParent() {
         while (basis[0] == '^') {       // go up the stack.
             sValue++;
@@ -118,13 +114,15 @@ namespace mt {
         parseStart();
     }
 
-    void Injection::expand(std::ostream &result,mstack &context,const iteration iter) {
+    void Injection::expand(std::ostream &result,mstack &context) const {
         if (type == It::text) {
             result << basis;
         } else {
             auto &contextMacro = context[sValue].first;
-            auto &contextParms = context[sValue].second;
-            size_t parmCount = contextParms.size();
+            auto &instance = context[sValue].second;
+            auto &parms = instance.parms;
+            auto &iter = instance.it;
+            size_t parmCount = parms->size();
             if (stack) {
                 result << "[TODO::STACK]";
             }
@@ -138,10 +136,10 @@ namespace mt {
                         } else {
                             if ((contextMacro->minParms <= value <= contextMacro->maxParms) && (value <= parmCount)) {
                                 if (sValue == 0) {
-                                    Driver::expand(contextParms[value - 1], result, context);
+                                    Driver::expand((*parms)[value - 1], result, context);
                                 } else {
                                     mstack subContext(context.begin() + sValue, context.end());
-                                    Driver::expand(contextParms[value - 1], result, subContext);
+                                    Driver::expand((*parms)[value - 1], result, subContext);
                                 }
                             } else {
                                 //TODO: Report value being asked for is out of the range of the definition.
@@ -152,7 +150,7 @@ namespace mt {
                         auto posi = iter.first + offset;
                         if ( 0 < posi <  parmCount) {
                             if (sValue == 0) {
-                                Driver::expand(contextParms[posi - 1], result, context);
+                                Driver::expand((*parms)[posi - 1], result, context);
                             } else {
                                 //TODO: Work out what the hell this means...
                             }
@@ -177,7 +175,7 @@ namespace mt {
         }
     }
 
-    std::ostream &Injection::visit(std::ostream &result) {
+    std::ostream &Injection::visit(std::ostream &result) const {
         result << "⁅";
         if (type == It::text) {
             result << basis;

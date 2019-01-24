@@ -16,8 +16,8 @@ namespace mt {
         std::string text;
     public:
         Wss(const std::string &);
-        std::ostream& visit(std::ostream&);
-        void expand(std::ostream&,const mstack&,const iteration);
+        std::ostream& visit(std::ostream&) const;
+        void expand(std::ostream&,const mstack&) const;
         void add(mtext&);
         bool empty() const { return text.empty(); }
 

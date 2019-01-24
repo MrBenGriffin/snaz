@@ -11,17 +11,16 @@
 
 namespace mt {
     /**
-    * This is the parser-macro.
-    * It forms a part of the macrotext.
-    * It needs context to be an instance.
+    * an instance of this is a macro token instance in a piece of text.
     * It may be PART of a usermacro definition.
+    * With a context, it can be evaluete
    **/
     class Macro {
     public:
         std::string name;
-        plist parms;
-        void expand(std::ostream&,mstack&,const iteration);
-        std::ostream& visit(std::ostream&);
+        plist parms;        /* parsed parms */
+        void expand(std::ostream&,mstack&) const;
+        std::ostream& visit(std::ostream&) const;
         explicit Macro(std::string);
         void add(mtext&);
     };

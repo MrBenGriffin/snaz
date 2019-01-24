@@ -2,15 +2,23 @@
 F showPassed	1
 F showDefines	1
 
-
 // name		code										expected result
 // example	[abcdef]									[abcdef]
-!	b0rked
+//!	b0rked
+
+# Testing Iteration stacks.
+U iter		0	-1	11	[⍟(i)]
+U stack		1	-1	10	⌽iter(⍟(1+))
+// 010 iter			⌽iter(X,Y,Z)							[X][Y][Z]
+020 stack			⌽stack(X,Y,Z)							[X][Y][Z]
+
 X
+
 //-- included files
 !	syntax
 !	definitions
 !	basic_advanced
+!	iEq
 // !	taxonomy
 // !	media
 // !	strings

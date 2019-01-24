@@ -7,11 +7,11 @@ namespace mt {
 
     Text::Text(const std::string &w) : text(w) {}
 
-    std::ostream& Text::visit(std::ostream& o) {
+    std::ostream& Text::visit(std::ostream& o) const {
         o << "“" << text << "”" << std::flush;
         return o;
     }
-    void Text::expand(std::ostream& o,const mstack&,const iteration) {
+    void Text::expand(std::ostream& o,const mstack&) const {
         o << text;
     }
 

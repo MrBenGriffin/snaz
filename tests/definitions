@@ -3,15 +3,15 @@
 // macro 'a' is used as a simple [] wrapper in various tests
 
 F showDefines	0
-F showPassed	1
+F showPassed	0
 
 U a			0	1	00	[⍟1]
-//Basic1			⌽a(+⌽a(A))													[+[A]]
+Basic1			⌽a(+⌽a(A))													[+[A]]
 
 U b			0	1	00	[⍟(1)]
-//Basic2			⌽a(_⌽a(A)_)													[_[A]_]
-//Basic3			⌽b(+⌽b(A))													[+[A]]
-//Basic4			⌽b(_⌽b(A)_)													[_[A]_]
+Basic2			⌽a(_⌽a(A)_)													[_[A]_]
+Basic3			⌽b(+⌽b(A))													[+[A]]
+Basic4			⌽b(_⌽b(A)_)													[_[A]_]
 
 U zp		0	1	01	␉[⍟1]␉
 U zs		0	1	10	␉[⍟1]␉
@@ -48,15 +48,5 @@ U bxts		1	1	11	[⌽iMid(⍟1,0,1)][⌽iMid(⍟1,1,1)][⌽iMid(⍟1,2,1)]
 // testing recursive macros
 U fx		1	1	11	.⌽iEq(⍟1,,,⎡[⌽iLeft(⍟1,1)]⌽fx(⌽iRight(⍟1,-1))⎤)
 U fr		1	1	11	.⌽iEq(⍟1,,,[⌽iLeft(⍟1,1)]⌽fx(⌽iRight(⍟1,-1)))
-U commas	1	-1	10	⍟(i)⌽iEq(⍟(k),⍟(n),,⎡,⎤)
-U acommas	1	-1	10	⍟(i)⌽iEq(⍟(k),⍟(n),,⎡,⎤)
-U ucomma	1	-1	10	⌽commas(⍟(1+))
-U vcomma	0	0	10	⌽ucomma(X,Y,⎡ss,uu,vv⎤,⎣⌽b0rked⎦)
-
-U xz		0	1	10	[⌽iEq(⍟1,,⍟(ps),⍟(p3))]
-U xy		0	1	10	⌽xz(⍟1)
-U xx		0	1	10	⌽xy(⍟1)
-U xw		0	1	10	⌽xx(⍟1)
-U xv		0	1	10	⌽xw(⍟1)
 U onlyMe	0	0	00	⍟0
 
