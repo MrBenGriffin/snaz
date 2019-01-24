@@ -6,6 +6,7 @@
 namespace mt {
     Wss::Wss(const std::string &w) : text(w) {}
 
+    std::string Wss::get() { return text; }
     std::ostream& Wss::visit(std::ostream& o) const {
         o << "‘" << text << "’" << std::flush;
         return o;

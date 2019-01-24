@@ -124,11 +124,11 @@ namespace mt {
 	void Driver::expand(const mtext& object,std::ostream& o,mstack& c) {
 		mtext result;
 		expand(object,result,c);
-		if(result.size() == 1 && std::holds_alternative<Text>(result.front())) {
-			o << std::get<Text>(result.front()).get();
-		} else {
-			for(auto& j: result) {
-				std::visit([&o](auto&& arg){ arg.visit(o);},j);
+		for(auto& i : result) {
+			if (std::holds_alternative<Text>(i)) { o << std::get<Text>(i).get(); } else {
+				if (std::holds_alternative<Wss>(i)) { o << std::get<Wss>(i).get(); } else {
+					std::visit([&o](auto&& arg){ arg.visit(o);},i);
+				}
 			}
 		}
 	}
