@@ -56,7 +56,7 @@ Bas 011			⌽a❪❪❪❪a❫❫❫❫													[❪❪❪a]❫❫❫
 Bas brackets3	⌽a(❪❪❪a❫❫❫)													[❪❪❪a❫❫❫]
 Bas brackets4	⌽a❪(((a)))❫													[(((a)))]
 
-# Advanced macro tests using b
+# Macro tests using b
 Bas 001			⌽a()														[]
 Bas 002			⌽a(A)														[A]
 Bas 003			⌽a( )														[ ]
@@ -70,6 +70,12 @@ Bas brackets2b	⌽a❪❪❪❪a❫❫❫❫													[❪❪❪a]❫❫❫
 Bas brackets3	⌽a(❪❪❪a❫❫❫)													[❪❪❪a❫❫❫]
 Bas brackets4	⌽a❪(((a)))❫													[(((a)))]
 
+# Missing / Empty Parameter tests
+mt_p01			⌽mt_p(X,Y,Z)							[X:Y:Z:::::]
+mt_p02			⌽mt_p(X,Y,,Z)							[X:Y::Z::::]
+mt_p03			⌽mt_p(X,,Y,,Z)							[X::Y::Z:::]
+mt_p04			⌽mt_p(,X,,Y,,Z)							[:X::Y::Z::]
+mt_p05			⌽mt_p(,,X,,Y,,Z)						[::X::Y::Z:]
 
 # Mixed syntax (not sure about this - or what we want to do with this)
 Mix braces		⎡⌽a(⎡A,b⎤)⎤																[A,b]

@@ -41,8 +41,12 @@ namespace mt {
              for (auto &parm : mt_parms) {
                  mtext expanded;
                  Driver::expand(parm, expanded, context);
-                 for(auto& i : expanded) {
-                     rendered.push_back({i}); //each one as a separate parm!!
+                 if(expanded.empty()) { //we must preserve an empty parm in the parm list.
+                     rendered.push_back({});
+                 } else {
+                     for(auto& i : expanded) {
+                         rendered.push_back({i}); //each one as a separate parm!!
+                     }
                  }
             }
             while (!rendered.empty() && rendered.back().empty()) {

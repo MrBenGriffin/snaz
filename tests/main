@@ -9,7 +9,6 @@ F showDefines	1
 //U a			0	1	00	[⍟1]
 //Basic1			⌽a(+⌽a(A))													[+[A]]
 
-
 # Testing Iteration stacks.
 //U iter		0	-1	11	[⍟(i)]
 //U stack		1	-1	10	⌽iter(⍟(1+))
