@@ -10,7 +10,15 @@
 #include "mt.h"
 
 namespace mt {
-    struct iEq { void expand(mtext&,Instance&,mstack&); };
+    struct Internal {
+        size_t minParms {0}, maxParms {0};
+        Internal(size_t min,size_t max) : minParms(min),maxParms(max) {}
+    };
+    struct iEq : public Internal {
+        iEq() : Internal(0,4) {}
+        void expand(mtext&,Instance&,mstack&);
+    };
+
 }
 
 

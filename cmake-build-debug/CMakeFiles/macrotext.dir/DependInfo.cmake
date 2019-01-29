@@ -4,6 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
+  "/Users/ben/CLionProjects/snaz/Current.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/Current.cpp.o"
   "/Users/ben/CLionProjects/snaz/Definition.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/Definition.cpp.o"
   "/Users/ben/CLionProjects/snaz/Driver.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/Driver.cpp.o"
   "/Users/ben/CLionProjects/snaz/Injection.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/Injection.cpp.o"

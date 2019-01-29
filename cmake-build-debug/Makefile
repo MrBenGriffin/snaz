@@ -123,6 +123,33 @@ macrotext/fast:
 	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/build
 .PHONY : macrotext/fast
 
+Current.o: Current.cpp.o
+
+.PHONY : Current.o
+
+# target to build an object file
+Current.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Current.cpp.o
+.PHONY : Current.cpp.o
+
+Current.i: Current.cpp.i
+
+.PHONY : Current.i
+
+# target to preprocess a source file
+Current.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Current.cpp.i
+.PHONY : Current.cpp.i
+
+Current.s: Current.cpp.s
+
+.PHONY : Current.s
+
+# target to generate assembly for a file
+Current.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Current.cpp.s
+.PHONY : Current.cpp.s
+
 Definition.o: Definition.cpp.o
 
 .PHONY : Definition.o
@@ -456,6 +483,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... macrotext"
+	@echo "... Current.o"
+	@echo "... Current.i"
+	@echo "... Current.s"
 	@echo "... Definition.o"
 	@echo "... Definition.i"
 	@echo "... Definition.s"

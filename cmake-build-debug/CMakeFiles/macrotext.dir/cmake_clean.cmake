@@ -14,6 +14,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/macrotext.dir/Macro.cpp.o"
   "CMakeFiles/macrotext.dir/Text.cpp.o"
   "CMakeFiles/macrotext.dir/Internals.cpp.o"
+  "CMakeFiles/macrotext.dir/Current.cpp.o"
   "macrotext.pdb"
   "macrotext"
 )

@@ -6,8 +6,8 @@ F showDefines	1
 // example	[abcdef]									[abcdef]
 //!	b0rked
 
-U a			0	1	00	[⍟1]
-Basic1			⌽a(+⌽a(A))													[+[A]]
+//U a			0	1	00	[⍟1]
+//Basic1			⌽a(+⌽a(A))													[+[A]]
 
 
 # Testing Iteration stacks.
