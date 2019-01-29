@@ -1,0 +1,35 @@
+F showPassed	0
+
+# iEq from builderTests
+iEq 001		-⌽iEq(X)-															-0-
+iEq 002		-⌽iEq(X,Y,)-														--
+iEq 003		⌽iEq(X,X,YY)														YY
+iEq 004		⌽iEq(X,Y,YY,NN)														NN
+iEq 005		⌽iEq(1,2,3,4)														4
+iEq 006		⌽iEq()																1
+iEq 007		⌽iEq(A)																0
+iEq 008		⌽iEq(A,A)															1
+iEq 009		⌽iEq(A,B)															0
+iEq 010		⌽iEq(A,A,T)															T
+iEq 011		-⌽iEq(A,B,T)-														--
+iEq 012		⌽iEq(A,A,T,F)														T
+iEq 013		⌽iEq(A,B,T,F)														F
+iEq 014		⌽iEq(⎡and | pipes⎤,and ⌽iEq(⎣⌽⎦,foo,⎡bar,four⎤) ⎡or, not⎤)		0
+
+# iteration tests that use iEq indirectly...
+F showPassed	1
+
+# Testing iterated macros.
+U commas	1	-1	10	⍟(i)⌽iEq(⍟(k),⍟(n),,⎡,⎤)
+U mcommas	1	-1	10	⌽commas(⍟(1+))
+001iterated			[⌽commas(X,Y,⎡ss,uu,vv⎤,⎣⌽b0rked⎦,thin)]							[X,Y,ss,uu,vv,⌽b0rked,thin]
+002iterated			[⌽mcommas(X,Y,⎡ss,uu,vv⎤,⎣⌽b0rked⎦,thin)]							[X,Y,ss,uu,vv,⌽b0rked,thin]
+
+U xoz		0	1	10	[⌽iEq(⍟1,,⍟(ps),⍟(p3))]
+//02b stacked			⌽xv(o)																[xv]
+
+# iEq non-evaluating requires iSet/iGet
+//iEqn 001	⌽iSet(A,X)⌽iEq(A,B,⌽iSet(A,Y),-)⌽iGet(A)							-X
+//iEqn 002	⌽iSet(A,X)⌽iEq(A,A,⌽iSet(A,Y),-)⌽iGet(A)							Y
+//iEqn 003	⌽iSet(A,X)⌽iEq(A,B,-,⌽iSet(A,Y))⌽iGet(A)							Y
+//iEqn 004	⌽iSet(A,X)⌽iEq(A,A,-,⌽iSet(A,Y))⌽iGet(A)							-X
