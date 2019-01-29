@@ -177,6 +177,33 @@ main.cpp.s:
 	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+mt/Content.o: mt/Content.cpp.o
+
+.PHONY : mt/Content.o
+
+# target to build an object file
+mt/Content.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Content.cpp.o
+.PHONY : mt/Content.cpp.o
+
+mt/Content.i: mt/Content.cpp.i
+
+.PHONY : mt/Content.i
+
+# target to preprocess a source file
+mt/Content.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Content.cpp.i
+.PHONY : mt/Content.cpp.i
+
+mt/Content.s: mt/Content.cpp.s
+
+.PHONY : mt/Content.s
+
+# target to generate assembly for a file
+mt/Content.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Content.cpp.s
+.PHONY : mt/Content.cpp.s
+
 mt/Current.o: mt/Current.cpp.o
 
 .PHONY : mt/Current.o
@@ -393,33 +420,6 @@ mt/Wss.cpp.s:
 	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Wss.cpp.s
 .PHONY : mt/Wss.cpp.s
 
-mt/storage.o: mt/storage.cpp.o
-
-.PHONY : mt/storage.o
-
-# target to build an object file
-mt/storage.cpp.o:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/storage.cpp.o
-.PHONY : mt/storage.cpp.o
-
-mt/storage.i: mt/storage.cpp.i
-
-.PHONY : mt/storage.i
-
-# target to preprocess a source file
-mt/storage.cpp.i:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/storage.cpp.i
-.PHONY : mt/storage.cpp.i
-
-mt/storage.s: mt/storage.cpp.s
-
-.PHONY : mt/storage.s
-
-# target to generate assembly for a file
-mt/storage.cpp.s:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/storage.cpp.s
-.PHONY : mt/storage.cpp.s
-
 parser.tab.o: parser.tab.cpp.o
 
 .PHONY : parser.tab.o
@@ -446,6 +446,33 @@ parser.tab.s: parser.tab.cpp.s
 parser.tab.cpp.s:
 	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/parser.tab.cpp.s
 .PHONY : parser.tab.cpp.s
+
+storage.o: storage.cpp.o
+
+.PHONY : storage.o
+
+# target to build an object file
+storage.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/storage.cpp.o
+.PHONY : storage.cpp.o
+
+storage.i: storage.cpp.i
+
+.PHONY : storage.i
+
+# target to preprocess a source file
+storage.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/storage.cpp.i
+.PHONY : storage.cpp.i
+
+storage.s: storage.cpp.s
+
+.PHONY : storage.s
+
+# target to generate assembly for a file
+storage.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/storage.cpp.s
+.PHONY : storage.cpp.s
 
 test.o: test.cpp.o
 
@@ -489,6 +516,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... mt/Content.o"
+	@echo "... mt/Content.i"
+	@echo "... mt/Content.s"
 	@echo "... mt/Current.o"
 	@echo "... mt/Current.i"
 	@echo "... mt/Current.s"
@@ -513,12 +543,12 @@ help:
 	@echo "... mt/Wss.o"
 	@echo "... mt/Wss.i"
 	@echo "... mt/Wss.s"
-	@echo "... mt/storage.o"
-	@echo "... mt/storage.i"
-	@echo "... mt/storage.s"
 	@echo "... parser.tab.o"
 	@echo "... parser.tab.i"
 	@echo "... parser.tab.s"
+	@echo "... storage.o"
+	@echo "... storage.i"
+	@echo "... storage.s"
 	@echo "... test.o"
 	@echo "... test.i"
 	@echo "... test.s"

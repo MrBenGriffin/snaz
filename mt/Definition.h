@@ -14,14 +14,13 @@
 //using namespace std;
 namespace mt {
 
-    class iEq;
-    using Handler=std::variant<Definition,iEq>;
-
     class Definition {
     public:
         static void initialise();
 
     private:
+        long minParms, maxParms;
+        std::string _name;
         static Definition empty;
         static std::unordered_map<std::string, Handler> library;
 
@@ -31,10 +30,9 @@ namespace mt {
         size_t counter;
         mt::mtext expansion;
 
-
     public:
-        std::string name;
-        long minParms, maxParms;
+        std::string name() const { return _name; }
+        bool inRange(size_t i) const { return minParms <= i <= maxParms;}
         bool iterated, trimParms, preExpand;
 
         std::ostream &visit(std::ostream &);

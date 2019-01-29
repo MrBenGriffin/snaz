@@ -19,7 +19,8 @@ namespace mt {
     class Wss;
     class Text;
 
-    class Definition;
+    class iEq; class Definition; class Content;
+    using Handler=std::variant<Content,Definition,iEq>;
 
     using Token=std::variant<Macro,Wss,Injection,Text>;
     using mtext=std::deque<Token>;
@@ -31,14 +32,15 @@ namespace mt {
         iteration it = {0,0};
         Instance(const plist* p,iteration i) : parms(p),it(i) {}
     };
-
-    using mstack=std::deque<std::pair<Definition*, Instance> >;
+    using Carriage= std::pair<Handler*, Instance>;
+    using mstack=std::deque< Carriage >;
 }
 
 #include "Wss.h"
 #include "Text.h"
 #include "Injection.h"
 #include "Macro.h"
+#include "Content.h"
 #include "Driver.h"
 #include "Definition.h"
 

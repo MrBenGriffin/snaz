@@ -17,7 +17,7 @@ namespace mt {
     Definition::Definition(
             std::string name_i, std::string expansion_i,
             long min, long max, bool strip, bool trimParms_i, bool preExpand_i)
-            : counter(0), minParms(min), name(std::move(name_i)), trimParms(trimParms_i), preExpand(preExpand_i) {
+            : counter(0), minParms(min), _name(std::move(name_i)), trimParms(trimParms_i), preExpand(preExpand_i) {
         maxParms = max == -1 ? INT_MAX : max;
         if(expansion_i.empty()) {
             expansion = {};
@@ -55,7 +55,8 @@ namespace mt {
             modified.parms = &rendered;
             modified.it = {0,rendered.size()};
         }
-        context.push_front({this, modified});
+        Handler handler(*this);
+        context.push_front({&handler,modified});
         if (iterated) {
             iteration* i = &(context.front().second.it);
              for (i->first = 1; i->first <= i->second; i->first++) {
@@ -104,9 +105,9 @@ namespace mt {
     }
 
     void Definition::add(Definition& macro) {
-        del(macro.name);
-        std::string name(macro.name);
-        library.emplace(name,Handler(std::move(macro)));
+        del(macro.name());
+        std::string name(macro.name());
+        library.emplace(macro.name(),Handler(std::move(macro)));
     }
 
     bool Definition::has(std::string name) {

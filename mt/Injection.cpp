@@ -124,12 +124,9 @@ namespace mt {
             auto &iter = instance.it;
             size_t parmCount = parms->size();
             if (stack) {
-                std::ostringstream val;
-                for(auto& s : context) {
-                    val << s.first->name << ";";
-               }
-                result.push_back(Text(val.str())); //if tmp has MORE than one result.. what then?!
-//                Text("[TODO::STACK]").expand(result,context);
+                 for(auto& s : context) {
+                    std::visit([&result](auto const &a){ result.push_back(Text(a.name() + ";")); },*(s.first));
+                 }
             }
             if (list) {
                 for(size_t i=value; i <= parmCount; i++) {
@@ -137,13 +134,16 @@ namespace mt {
                     Driver::expand((*parms)[i - 1], tmp, context);
                     result.push_back(tmp.front()); //if tmp has MORE than one result.. what then?!
                 }
-            } else {
+            }
+            if(!stack && !list) {
                 switch (type) {
                     case It::plain:
                         if(value == 0) {
-                            Text(contextMacro->name).expand(result,context);
+                            std::visit([&result](auto const &a){ result.push_back(Text(a.name())); },*contextMacro);
                          } else {
-                            if ((contextMacro->minParms <= value <= contextMacro->maxParms) && (value <= parmCount)) {
+                            bool legal=false; size_t index=value;
+                            std::visit([&legal,&index](auto const &a){ legal = a.inRange(index); },*contextMacro);
+                            if(legal && (value <= parmCount)) {
                                 if (sValue == 0) {
                                     Driver::expand((*parms)[value - 1], result, context);
                                 } else {
@@ -165,7 +165,7 @@ namespace mt {
                             }
                         } else {
                             if (posi == 0) {
-                                Text(contextMacro->name).expand(result,context);
+                                std::visit([&result](auto const &a){ result.push_back(Text(a.name())); },*contextMacro);
                             } else {
                                 //TODO: value being asked for is out of the range of those supplied.
                             }

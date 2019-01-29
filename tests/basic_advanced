@@ -164,11 +164,22 @@ bar 01			⌽bar(A,B)																(bar:(foo:A:B:A):(foo:B,A:A:B,A))
 03 special			[⌽onlyMe()]															[onlyMe]
 04 nonmacro			[⍟0]																[⍟0]
 
-# Testing Iteration stacks.
-U stack		0	-1	11	[⍟(i)]
-U ustack	1	-1	10	⌽stack(⍟(1+))
+# Testing Injection Iterations.
+U iter		0	-1	11	[⍟(i)]
+U uiter	1	-1	10	⌽iter(⍟(1+))
 
-010stack			⌽stack(X,Y,Z)							[X][Y][Z]
-020ustack			⌽ustack(X,Y,Z)							[X][Y][Z]
+010iter			⌽iter(X,Y,Z)							[X][Y][Z]
+020uiter		⌽uiter(X,Y,Z)							[X][Y][Z]
+
+# Testing Injection Stacks.
+U xz		0	1	10	[⍟(ps)]
+U xy		0	1	10	⌽xz(⍟1)
+U xx		0	1	10	⌽xy(⍟1)
+U xw		0	1	10	⌽xx(⍟1)
+U xv		0	1	10	⌽xw(⍟1)
+
+stacked001		⌽xv()																[xz;xy;xx;xw;xv;stacked001;]
+
+
 
 

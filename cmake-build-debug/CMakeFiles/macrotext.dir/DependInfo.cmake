@@ -6,6 +6,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_CXX
   "/Users/ben/CLionProjects/snaz/cmake-build-debug/advanced.yy.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/advanced.yy.cpp.o"
   "/Users/ben/CLionProjects/snaz/main.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/main.cpp.o"
+  "/Users/ben/CLionProjects/snaz/mt/Content.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/mt/Content.cpp.o"
   "/Users/ben/CLionProjects/snaz/mt/Current.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/mt/Current.cpp.o"
   "/Users/ben/CLionProjects/snaz/mt/Definition.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/mt/Definition.cpp.o"
   "/Users/ben/CLionProjects/snaz/mt/Driver.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/mt/Driver.cpp.o"
@@ -14,8 +15,8 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/Users/ben/CLionProjects/snaz/mt/Macro.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/mt/Macro.cpp.o"
   "/Users/ben/CLionProjects/snaz/mt/Text.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/mt/Text.cpp.o"
   "/Users/ben/CLionProjects/snaz/mt/Wss.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/mt/Wss.cpp.o"
-  "/Users/ben/CLionProjects/snaz/mt/storage.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/mt/storage.cpp.o"
   "/Users/ben/CLionProjects/snaz/cmake-build-debug/parser.tab.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/parser.tab.cpp.o"
+  "/Users/ben/CLionProjects/snaz/storage.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/storage.cpp.o"
   "/Users/ben/CLionProjects/snaz/test.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/test.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "AppleClang")

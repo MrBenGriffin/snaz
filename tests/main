@@ -6,15 +6,6 @@ F showDefines	1
 // example	[abcdef]									[abcdef]
 //!	b0rked
 
-//U a			0	1	00	[⍟1]
-//Basic1			⌽a(+⌽a(A))													[+[A]]
-
-# Testing Iteration stacks.
-//U iter		0	-1	11	[⍟(i)]
-//U stack		1	-1	10	⌽iter(⍟(1+))
-// 010 iter			⌽iter(X,Y,Z)							[X][Y][Z]
-//020 stack			⌽stack(X,Y,Z)							[X][Y][Z]
-
 //-- included files
 !	syntax
 !	definitions

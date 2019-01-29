@@ -280,7 +280,7 @@ namespace testing {
                         wss(pexpected,false);
 
                         result expansion(name);
-                        mt::Driver::expand(structure,expansion.out);
+                        mt::Driver::expand(structure,expansion.out,name);
 
                         if(expansion.out.str() == pexpected /*&& !expansion.second.marked()*/) {
                             if (showGood) {

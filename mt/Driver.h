@@ -45,7 +45,8 @@ namespace mt {
 
   		static std::ostream& visit(const Token&, std::ostream&);
         static std::ostream& visit(const mtext&, std::ostream&);
-        static void expand(const mtext&,std::ostream&,mstack& = empty_stack);
+        static void expand(const mtext&,std::ostream&,const std::string &);
+		static void expand(const mtext&,std::ostream&,mstack&);
 		static void expand(const mtext&,mtext&,mstack& = empty_stack);
 
 	private:

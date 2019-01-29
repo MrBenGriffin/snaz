@@ -121,6 +121,24 @@ namespace mt {
 		parm.clear();
 	}
 
+	void Driver::expand(const mtext& object,std::ostream& o,const std::string &title) {
+		mtext result;
+		mstack  context;
+		Content start(title);
+		Instance zero(nullptr,{0,0});
+		Handler handler(start);
+		context.push_back({&handler,zero});
+		expand(object,result,context);
+		for(auto& i : result) {
+			if (std::holds_alternative<Text>(i)) { o << std::get<Text>(i).get(); } else {
+				if (std::holds_alternative<Wss>(i)) { o << std::get<Wss>(i).get(); } else {
+					std::visit([&o](auto&& arg){ arg.visit(o);},i);
+				}
+			}
+		}
+	}
+
+	//parameter expansion..
 	void Driver::expand(const mtext& object,std::ostream& o,mstack& c) {
 		mtext result;
 		expand(object,result,c);

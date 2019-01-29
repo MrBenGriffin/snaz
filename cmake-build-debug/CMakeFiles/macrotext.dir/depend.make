@@ -9,6 +9,7 @@ CMakeFiles/macrotext.dir/advanced.yy.cpp.o: parser.tab.hpp
 
 CMakeFiles/macrotext.dir/main.cpp.o: ../advanced.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../main.cpp
+CMakeFiles/macrotext.dir/main.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../mt/Driver.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../mt/Injection.h
@@ -22,7 +23,23 @@ CMakeFiles/macrotext.dir/main.cpp.o: /usr/local/include/FlexLexer.h
 CMakeFiles/macrotext.dir/main.cpp.o: location.hh
 CMakeFiles/macrotext.dir/main.cpp.o: parser.tab.hpp
 
+CMakeFiles/macrotext.dir/mt/Content.cpp.o: ../advanced.h
+CMakeFiles/macrotext.dir/mt/Content.cpp.o: ../mt/Content.cpp
+CMakeFiles/macrotext.dir/mt/Content.cpp.o: ../mt/Content.h
+CMakeFiles/macrotext.dir/mt/Content.cpp.o: ../mt/Definition.h
+CMakeFiles/macrotext.dir/mt/Content.cpp.o: ../mt/Driver.h
+CMakeFiles/macrotext.dir/mt/Content.cpp.o: ../mt/Injection.h
+CMakeFiles/macrotext.dir/mt/Content.cpp.o: ../mt/Internals.h
+CMakeFiles/macrotext.dir/mt/Content.cpp.o: ../mt/Macro.h
+CMakeFiles/macrotext.dir/mt/Content.cpp.o: ../mt/Text.h
+CMakeFiles/macrotext.dir/mt/Content.cpp.o: ../mt/Wss.h
+CMakeFiles/macrotext.dir/mt/Content.cpp.o: ../mt/mt.h
+CMakeFiles/macrotext.dir/mt/Content.cpp.o: /usr/local/include/FlexLexer.h
+CMakeFiles/macrotext.dir/mt/Content.cpp.o: location.hh
+CMakeFiles/macrotext.dir/mt/Content.cpp.o: parser.tab.hpp
+
 CMakeFiles/macrotext.dir/mt/Current.cpp.o: ../advanced.h
+CMakeFiles/macrotext.dir/mt/Current.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/mt/Current.cpp.o: ../mt/Current.cpp
 CMakeFiles/macrotext.dir/mt/Current.cpp.o: ../mt/Current.h
 CMakeFiles/macrotext.dir/mt/Current.cpp.o: ../mt/Definition.h
@@ -38,6 +55,7 @@ CMakeFiles/macrotext.dir/mt/Current.cpp.o: location.hh
 CMakeFiles/macrotext.dir/mt/Current.cpp.o: parser.tab.hpp
 
 CMakeFiles/macrotext.dir/mt/Definition.cpp.o: ../advanced.h
+CMakeFiles/macrotext.dir/mt/Definition.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/mt/Definition.cpp.o: ../mt/Definition.cpp
 CMakeFiles/macrotext.dir/mt/Definition.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/mt/Definition.cpp.o: ../mt/Driver.h
@@ -52,6 +70,7 @@ CMakeFiles/macrotext.dir/mt/Definition.cpp.o: location.hh
 CMakeFiles/macrotext.dir/mt/Definition.cpp.o: parser.tab.hpp
 
 CMakeFiles/macrotext.dir/mt/Driver.cpp.o: ../advanced.h
+CMakeFiles/macrotext.dir/mt/Driver.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/mt/Driver.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/mt/Driver.cpp.o: ../mt/Driver.cpp
 CMakeFiles/macrotext.dir/mt/Driver.cpp.o: ../mt/Driver.h
@@ -66,6 +85,7 @@ CMakeFiles/macrotext.dir/mt/Driver.cpp.o: location.hh
 CMakeFiles/macrotext.dir/mt/Driver.cpp.o: parser.tab.hpp
 
 CMakeFiles/macrotext.dir/mt/Injection.cpp.o: ../advanced.h
+CMakeFiles/macrotext.dir/mt/Injection.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/mt/Injection.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/mt/Injection.cpp.o: ../mt/Driver.h
 CMakeFiles/macrotext.dir/mt/Injection.cpp.o: ../mt/Injection.cpp
@@ -80,6 +100,7 @@ CMakeFiles/macrotext.dir/mt/Injection.cpp.o: location.hh
 CMakeFiles/macrotext.dir/mt/Injection.cpp.o: parser.tab.hpp
 
 CMakeFiles/macrotext.dir/mt/Internals.cpp.o: ../advanced.h
+CMakeFiles/macrotext.dir/mt/Internals.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/mt/Internals.cpp.o: ../mt/Current.h
 CMakeFiles/macrotext.dir/mt/Internals.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/mt/Internals.cpp.o: ../mt/Driver.h
@@ -95,6 +116,7 @@ CMakeFiles/macrotext.dir/mt/Internals.cpp.o: location.hh
 CMakeFiles/macrotext.dir/mt/Internals.cpp.o: parser.tab.hpp
 
 CMakeFiles/macrotext.dir/mt/Macro.cpp.o: ../advanced.h
+CMakeFiles/macrotext.dir/mt/Macro.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/mt/Macro.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/mt/Macro.cpp.o: ../mt/Driver.h
 CMakeFiles/macrotext.dir/mt/Macro.cpp.o: ../mt/Injection.h
@@ -109,6 +131,7 @@ CMakeFiles/macrotext.dir/mt/Macro.cpp.o: location.hh
 CMakeFiles/macrotext.dir/mt/Macro.cpp.o: parser.tab.hpp
 
 CMakeFiles/macrotext.dir/mt/Text.cpp.o: ../advanced.h
+CMakeFiles/macrotext.dir/mt/Text.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/mt/Text.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/mt/Text.cpp.o: ../mt/Driver.h
 CMakeFiles/macrotext.dir/mt/Text.cpp.o: ../mt/Injection.h
@@ -123,6 +146,7 @@ CMakeFiles/macrotext.dir/mt/Text.cpp.o: location.hh
 CMakeFiles/macrotext.dir/mt/Text.cpp.o: parser.tab.hpp
 
 CMakeFiles/macrotext.dir/mt/Wss.cpp.o: ../advanced.h
+CMakeFiles/macrotext.dir/mt/Wss.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/mt/Wss.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/mt/Wss.cpp.o: ../mt/Driver.h
 CMakeFiles/macrotext.dir/mt/Wss.cpp.o: ../mt/Injection.h
@@ -136,13 +160,11 @@ CMakeFiles/macrotext.dir/mt/Wss.cpp.o: /usr/local/include/FlexLexer.h
 CMakeFiles/macrotext.dir/mt/Wss.cpp.o: location.hh
 CMakeFiles/macrotext.dir/mt/Wss.cpp.o: parser.tab.hpp
 
-CMakeFiles/macrotext.dir/mt/storage.cpp.o: ../mt/storage.cpp
-CMakeFiles/macrotext.dir/mt/storage.cpp.o: ../mt/storage.h
-
 CMakeFiles/macrotext.dir/parser.tab.cpp.o: ../advanced.h
 CMakeFiles/macrotext.dir/parser.tab.cpp.o: location.hh
 CMakeFiles/macrotext.dir/parser.tab.cpp.o: parser.tab.cpp
 CMakeFiles/macrotext.dir/parser.tab.cpp.o: parser.tab.hpp
+CMakeFiles/macrotext.dir/parser.tab.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/parser.tab.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/parser.tab.cpp.o: ../mt/Driver.h
 CMakeFiles/macrotext.dir/parser.tab.cpp.o: ../mt/Injection.h
@@ -153,7 +175,11 @@ CMakeFiles/macrotext.dir/parser.tab.cpp.o: ../mt/Wss.h
 CMakeFiles/macrotext.dir/parser.tab.cpp.o: ../mt/mt.h
 CMakeFiles/macrotext.dir/parser.tab.cpp.o: /usr/local/include/FlexLexer.h
 
+CMakeFiles/macrotext.dir/storage.cpp.o: ../storage.cpp
+CMakeFiles/macrotext.dir/storage.cpp.o: ../storage.h
+
 CMakeFiles/macrotext.dir/test.cpp.o: ../advanced.h
+CMakeFiles/macrotext.dir/test.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/test.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/test.cpp.o: ../mt/Driver.h
 CMakeFiles/macrotext.dir/test.cpp.o: ../mt/Injection.h

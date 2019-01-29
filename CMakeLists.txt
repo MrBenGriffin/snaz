@@ -13,4 +13,4 @@ FLEX_TARGET(advanced advanced.lpp ${CMAKE_CURRENT_BINARY_DIR}/advanced.yy.cpp CO
 BISON_TARGET(parser mt/parser.ypp ${CMAKE_CURRENT_BINARY_DIR}/parser.tab.cpp)
 ADD_FLEX_BISON_DEPENDENCY(advanced parser)
 
-add_executable(macrotext ${BISON_parser_OUTPUTS} ${FLEX_advanced_OUTPUTS} main.cpp mt/Driver.cpp test.cpp mt/storage.cpp mt/Definition.cpp mt/Injection.cpp mt/Wss.cpp mt/Macro.cpp mt/Text.cpp mt/Internals.cpp mt/Current.cpp)
+add_executable(macrotext ${BISON_parser_OUTPUTS} ${FLEX_advanced_OUTPUTS} main.cpp mt/Driver.cpp test.cpp storage.cpp mt/Definition.cpp mt/Injection.cpp mt/Wss.cpp mt/Macro.cpp mt/Text.cpp mt/Internals.cpp mt/Current.cpp mt/Content.cpp mt/Content.h)

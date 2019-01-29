@@ -7,7 +7,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/macrotext.dir/main.cpp.o"
   "CMakeFiles/macrotext.dir/mt/Driver.cpp.o"
   "CMakeFiles/macrotext.dir/test.cpp.o"
-  "CMakeFiles/macrotext.dir/mt/storage.cpp.o"
+  "CMakeFiles/macrotext.dir/storage.cpp.o"
   "CMakeFiles/macrotext.dir/mt/Definition.cpp.o"
   "CMakeFiles/macrotext.dir/mt/Injection.cpp.o"
   "CMakeFiles/macrotext.dir/mt/Wss.cpp.o"
@@ -15,6 +15,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/macrotext.dir/mt/Text.cpp.o"
   "CMakeFiles/macrotext.dir/mt/Internals.cpp.o"
   "CMakeFiles/macrotext.dir/mt/Current.cpp.o"
+  "CMakeFiles/macrotext.dir/mt/Content.cpp.o"
   "macrotext.pdb"
   "macrotext"
 )

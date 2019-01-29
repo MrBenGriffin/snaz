@@ -11,11 +11,14 @@
 
 namespace mt {
     struct Internal {
-        size_t minParms {0}, maxParms {0};
-        Internal(size_t min,size_t max) : minParms(min),maxParms(max) {}
+        std::string _name;
+        long minParms {0}, maxParms {0};
+        bool inRange(size_t i) const { return minParms <= i <= maxParms;}
+        std::string name() const {return _name;}
+        Internal(std::string name,size_t min,size_t max) : _name(name),minParms(min),maxParms(max) {}
     };
     struct iEq : public Internal {
-        iEq() : Internal(0,4) {}
+        iEq() : Internal("iEq",0,4) {}
         void expand(mtext&,Instance&,mstack&);
     };
 
