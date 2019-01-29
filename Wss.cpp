@@ -12,13 +12,21 @@ namespace mt {
         return o;
     }
 
-    void Wss::expand(mtext& o,const mstack&) const {
-        if (!o.empty() && std::holds_alternative<Wss>(o.back())) {
-            std::get<Wss>(o.back()).text.append(text);
+    void Wss::expand(mtext &mt, const mstack &) const {
+        if (!mt.empty()) {
+            if (std::holds_alternative<Wss>(mt.back())) {
+                std::get<Wss>(mt.back()).text.append(text);
+            } else {
+                if (std::holds_alternative<Text>(mt.back())) {
+                    std::get<Text>(mt.back()).append(text);
+                } else {
+                    mt.emplace_back(*this);
+                }
+            }
         } else {
-            o.emplace_back(*this);
+            mt.emplace_back(*this);
         }
-     }
+    }
 
     void Wss::add(mtext& mt) {
         if (!mt.empty() && std::holds_alternative<Wss>(mt.back())) {

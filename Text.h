@@ -19,6 +19,7 @@ namespace mt {
         void expand(mtext&,const mstack&) const;
         void add(mtext&);
         std::string get();
+        void append(std::string);
         bool empty() const { return text.empty(); }
     };
 
