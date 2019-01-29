@@ -124,7 +124,12 @@ namespace mt {
             auto &iter = instance.it;
             size_t parmCount = parms->size();
             if (stack) {
-                Text("[TODO::STACK]").expand(result,context);
+                std::ostringstream val;
+                for(auto& s : context) {
+                    val << s.first->name << ";";
+               }
+                result.push_back(Text(val.str())); //if tmp has MORE than one result.. what then?!
+//                Text("[TODO::STACK]").expand(result,context);
             }
             if (list) {
                 for(size_t i=value; i <= parmCount; i++) {
@@ -132,7 +137,6 @@ namespace mt {
                     Driver::expand((*parms)[i - 1], tmp, context);
                     result.push_back(tmp.front()); //if tmp has MORE than one result.. what then?!
                 }
-//                Text("[TODO::LIST]").expand(result,context);
             } else {
                 switch (type) {
                     case It::plain:

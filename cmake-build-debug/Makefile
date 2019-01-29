@@ -123,222 +123,6 @@ macrotext/fast:
 	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/build
 .PHONY : macrotext/fast
 
-Current.o: Current.cpp.o
-
-.PHONY : Current.o
-
-# target to build an object file
-Current.cpp.o:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Current.cpp.o
-.PHONY : Current.cpp.o
-
-Current.i: Current.cpp.i
-
-.PHONY : Current.i
-
-# target to preprocess a source file
-Current.cpp.i:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Current.cpp.i
-.PHONY : Current.cpp.i
-
-Current.s: Current.cpp.s
-
-.PHONY : Current.s
-
-# target to generate assembly for a file
-Current.cpp.s:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Current.cpp.s
-.PHONY : Current.cpp.s
-
-Definition.o: Definition.cpp.o
-
-.PHONY : Definition.o
-
-# target to build an object file
-Definition.cpp.o:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Definition.cpp.o
-.PHONY : Definition.cpp.o
-
-Definition.i: Definition.cpp.i
-
-.PHONY : Definition.i
-
-# target to preprocess a source file
-Definition.cpp.i:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Definition.cpp.i
-.PHONY : Definition.cpp.i
-
-Definition.s: Definition.cpp.s
-
-.PHONY : Definition.s
-
-# target to generate assembly for a file
-Definition.cpp.s:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Definition.cpp.s
-.PHONY : Definition.cpp.s
-
-Driver.o: Driver.cpp.o
-
-.PHONY : Driver.o
-
-# target to build an object file
-Driver.cpp.o:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Driver.cpp.o
-.PHONY : Driver.cpp.o
-
-Driver.i: Driver.cpp.i
-
-.PHONY : Driver.i
-
-# target to preprocess a source file
-Driver.cpp.i:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Driver.cpp.i
-.PHONY : Driver.cpp.i
-
-Driver.s: Driver.cpp.s
-
-.PHONY : Driver.s
-
-# target to generate assembly for a file
-Driver.cpp.s:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Driver.cpp.s
-.PHONY : Driver.cpp.s
-
-Injection.o: Injection.cpp.o
-
-.PHONY : Injection.o
-
-# target to build an object file
-Injection.cpp.o:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Injection.cpp.o
-.PHONY : Injection.cpp.o
-
-Injection.i: Injection.cpp.i
-
-.PHONY : Injection.i
-
-# target to preprocess a source file
-Injection.cpp.i:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Injection.cpp.i
-.PHONY : Injection.cpp.i
-
-Injection.s: Injection.cpp.s
-
-.PHONY : Injection.s
-
-# target to generate assembly for a file
-Injection.cpp.s:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Injection.cpp.s
-.PHONY : Injection.cpp.s
-
-Internals.o: Internals.cpp.o
-
-.PHONY : Internals.o
-
-# target to build an object file
-Internals.cpp.o:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Internals.cpp.o
-.PHONY : Internals.cpp.o
-
-Internals.i: Internals.cpp.i
-
-.PHONY : Internals.i
-
-# target to preprocess a source file
-Internals.cpp.i:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Internals.cpp.i
-.PHONY : Internals.cpp.i
-
-Internals.s: Internals.cpp.s
-
-.PHONY : Internals.s
-
-# target to generate assembly for a file
-Internals.cpp.s:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Internals.cpp.s
-.PHONY : Internals.cpp.s
-
-Macro.o: Macro.cpp.o
-
-.PHONY : Macro.o
-
-# target to build an object file
-Macro.cpp.o:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Macro.cpp.o
-.PHONY : Macro.cpp.o
-
-Macro.i: Macro.cpp.i
-
-.PHONY : Macro.i
-
-# target to preprocess a source file
-Macro.cpp.i:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Macro.cpp.i
-.PHONY : Macro.cpp.i
-
-Macro.s: Macro.cpp.s
-
-.PHONY : Macro.s
-
-# target to generate assembly for a file
-Macro.cpp.s:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Macro.cpp.s
-.PHONY : Macro.cpp.s
-
-Text.o: Text.cpp.o
-
-.PHONY : Text.o
-
-# target to build an object file
-Text.cpp.o:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Text.cpp.o
-.PHONY : Text.cpp.o
-
-Text.i: Text.cpp.i
-
-.PHONY : Text.i
-
-# target to preprocess a source file
-Text.cpp.i:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Text.cpp.i
-.PHONY : Text.cpp.i
-
-Text.s: Text.cpp.s
-
-.PHONY : Text.s
-
-# target to generate assembly for a file
-Text.cpp.s:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Text.cpp.s
-.PHONY : Text.cpp.s
-
-Wss.o: Wss.cpp.o
-
-.PHONY : Wss.o
-
-# target to build an object file
-Wss.cpp.o:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Wss.cpp.o
-.PHONY : Wss.cpp.o
-
-Wss.i: Wss.cpp.i
-
-.PHONY : Wss.i
-
-# target to preprocess a source file
-Wss.cpp.i:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Wss.cpp.i
-.PHONY : Wss.cpp.i
-
-Wss.s: Wss.cpp.s
-
-.PHONY : Wss.s
-
-# target to generate assembly for a file
-Wss.cpp.s:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Wss.cpp.s
-.PHONY : Wss.cpp.s
-
 advanced.yy.o: advanced.yy.cpp.o
 
 .PHONY : advanced.yy.o
@@ -393,6 +177,249 @@ main.cpp.s:
 	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+mt/Current.o: mt/Current.cpp.o
+
+.PHONY : mt/Current.o
+
+# target to build an object file
+mt/Current.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Current.cpp.o
+.PHONY : mt/Current.cpp.o
+
+mt/Current.i: mt/Current.cpp.i
+
+.PHONY : mt/Current.i
+
+# target to preprocess a source file
+mt/Current.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Current.cpp.i
+.PHONY : mt/Current.cpp.i
+
+mt/Current.s: mt/Current.cpp.s
+
+.PHONY : mt/Current.s
+
+# target to generate assembly for a file
+mt/Current.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Current.cpp.s
+.PHONY : mt/Current.cpp.s
+
+mt/Definition.o: mt/Definition.cpp.o
+
+.PHONY : mt/Definition.o
+
+# target to build an object file
+mt/Definition.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Definition.cpp.o
+.PHONY : mt/Definition.cpp.o
+
+mt/Definition.i: mt/Definition.cpp.i
+
+.PHONY : mt/Definition.i
+
+# target to preprocess a source file
+mt/Definition.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Definition.cpp.i
+.PHONY : mt/Definition.cpp.i
+
+mt/Definition.s: mt/Definition.cpp.s
+
+.PHONY : mt/Definition.s
+
+# target to generate assembly for a file
+mt/Definition.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Definition.cpp.s
+.PHONY : mt/Definition.cpp.s
+
+mt/Driver.o: mt/Driver.cpp.o
+
+.PHONY : mt/Driver.o
+
+# target to build an object file
+mt/Driver.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Driver.cpp.o
+.PHONY : mt/Driver.cpp.o
+
+mt/Driver.i: mt/Driver.cpp.i
+
+.PHONY : mt/Driver.i
+
+# target to preprocess a source file
+mt/Driver.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Driver.cpp.i
+.PHONY : mt/Driver.cpp.i
+
+mt/Driver.s: mt/Driver.cpp.s
+
+.PHONY : mt/Driver.s
+
+# target to generate assembly for a file
+mt/Driver.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Driver.cpp.s
+.PHONY : mt/Driver.cpp.s
+
+mt/Injection.o: mt/Injection.cpp.o
+
+.PHONY : mt/Injection.o
+
+# target to build an object file
+mt/Injection.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Injection.cpp.o
+.PHONY : mt/Injection.cpp.o
+
+mt/Injection.i: mt/Injection.cpp.i
+
+.PHONY : mt/Injection.i
+
+# target to preprocess a source file
+mt/Injection.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Injection.cpp.i
+.PHONY : mt/Injection.cpp.i
+
+mt/Injection.s: mt/Injection.cpp.s
+
+.PHONY : mt/Injection.s
+
+# target to generate assembly for a file
+mt/Injection.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Injection.cpp.s
+.PHONY : mt/Injection.cpp.s
+
+mt/Internals.o: mt/Internals.cpp.o
+
+.PHONY : mt/Internals.o
+
+# target to build an object file
+mt/Internals.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Internals.cpp.o
+.PHONY : mt/Internals.cpp.o
+
+mt/Internals.i: mt/Internals.cpp.i
+
+.PHONY : mt/Internals.i
+
+# target to preprocess a source file
+mt/Internals.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Internals.cpp.i
+.PHONY : mt/Internals.cpp.i
+
+mt/Internals.s: mt/Internals.cpp.s
+
+.PHONY : mt/Internals.s
+
+# target to generate assembly for a file
+mt/Internals.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Internals.cpp.s
+.PHONY : mt/Internals.cpp.s
+
+mt/Macro.o: mt/Macro.cpp.o
+
+.PHONY : mt/Macro.o
+
+# target to build an object file
+mt/Macro.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Macro.cpp.o
+.PHONY : mt/Macro.cpp.o
+
+mt/Macro.i: mt/Macro.cpp.i
+
+.PHONY : mt/Macro.i
+
+# target to preprocess a source file
+mt/Macro.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Macro.cpp.i
+.PHONY : mt/Macro.cpp.i
+
+mt/Macro.s: mt/Macro.cpp.s
+
+.PHONY : mt/Macro.s
+
+# target to generate assembly for a file
+mt/Macro.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Macro.cpp.s
+.PHONY : mt/Macro.cpp.s
+
+mt/Text.o: mt/Text.cpp.o
+
+.PHONY : mt/Text.o
+
+# target to build an object file
+mt/Text.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Text.cpp.o
+.PHONY : mt/Text.cpp.o
+
+mt/Text.i: mt/Text.cpp.i
+
+.PHONY : mt/Text.i
+
+# target to preprocess a source file
+mt/Text.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Text.cpp.i
+.PHONY : mt/Text.cpp.i
+
+mt/Text.s: mt/Text.cpp.s
+
+.PHONY : mt/Text.s
+
+# target to generate assembly for a file
+mt/Text.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Text.cpp.s
+.PHONY : mt/Text.cpp.s
+
+mt/Wss.o: mt/Wss.cpp.o
+
+.PHONY : mt/Wss.o
+
+# target to build an object file
+mt/Wss.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Wss.cpp.o
+.PHONY : mt/Wss.cpp.o
+
+mt/Wss.i: mt/Wss.cpp.i
+
+.PHONY : mt/Wss.i
+
+# target to preprocess a source file
+mt/Wss.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Wss.cpp.i
+.PHONY : mt/Wss.cpp.i
+
+mt/Wss.s: mt/Wss.cpp.s
+
+.PHONY : mt/Wss.s
+
+# target to generate assembly for a file
+mt/Wss.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Wss.cpp.s
+.PHONY : mt/Wss.cpp.s
+
+mt/storage.o: mt/storage.cpp.o
+
+.PHONY : mt/storage.o
+
+# target to build an object file
+mt/storage.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/storage.cpp.o
+.PHONY : mt/storage.cpp.o
+
+mt/storage.i: mt/storage.cpp.i
+
+.PHONY : mt/storage.i
+
+# target to preprocess a source file
+mt/storage.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/storage.cpp.i
+.PHONY : mt/storage.cpp.i
+
+mt/storage.s: mt/storage.cpp.s
+
+.PHONY : mt/storage.s
+
+# target to generate assembly for a file
+mt/storage.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/storage.cpp.s
+.PHONY : mt/storage.cpp.s
+
 parser.tab.o: parser.tab.cpp.o
 
 .PHONY : parser.tab.o
@@ -419,33 +446,6 @@ parser.tab.s: parser.tab.cpp.s
 parser.tab.cpp.s:
 	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/parser.tab.cpp.s
 .PHONY : parser.tab.cpp.s
-
-storage.o: storage.cpp.o
-
-.PHONY : storage.o
-
-# target to build an object file
-storage.cpp.o:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/storage.cpp.o
-.PHONY : storage.cpp.o
-
-storage.i: storage.cpp.i
-
-.PHONY : storage.i
-
-# target to preprocess a source file
-storage.cpp.i:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/storage.cpp.i
-.PHONY : storage.cpp.i
-
-storage.s: storage.cpp.s
-
-.PHONY : storage.s
-
-# target to generate assembly for a file
-storage.cpp.s:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/storage.cpp.s
-.PHONY : storage.cpp.s
 
 test.o: test.cpp.o
 
@@ -483,42 +483,42 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... macrotext"
-	@echo "... Current.o"
-	@echo "... Current.i"
-	@echo "... Current.s"
-	@echo "... Definition.o"
-	@echo "... Definition.i"
-	@echo "... Definition.s"
-	@echo "... Driver.o"
-	@echo "... Driver.i"
-	@echo "... Driver.s"
-	@echo "... Injection.o"
-	@echo "... Injection.i"
-	@echo "... Injection.s"
-	@echo "... Internals.o"
-	@echo "... Internals.i"
-	@echo "... Internals.s"
-	@echo "... Macro.o"
-	@echo "... Macro.i"
-	@echo "... Macro.s"
-	@echo "... Text.o"
-	@echo "... Text.i"
-	@echo "... Text.s"
-	@echo "... Wss.o"
-	@echo "... Wss.i"
-	@echo "... Wss.s"
 	@echo "... advanced.yy.o"
 	@echo "... advanced.yy.i"
 	@echo "... advanced.yy.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... mt/Current.o"
+	@echo "... mt/Current.i"
+	@echo "... mt/Current.s"
+	@echo "... mt/Definition.o"
+	@echo "... mt/Definition.i"
+	@echo "... mt/Definition.s"
+	@echo "... mt/Driver.o"
+	@echo "... mt/Driver.i"
+	@echo "... mt/Driver.s"
+	@echo "... mt/Injection.o"
+	@echo "... mt/Injection.i"
+	@echo "... mt/Injection.s"
+	@echo "... mt/Internals.o"
+	@echo "... mt/Internals.i"
+	@echo "... mt/Internals.s"
+	@echo "... mt/Macro.o"
+	@echo "... mt/Macro.i"
+	@echo "... mt/Macro.s"
+	@echo "... mt/Text.o"
+	@echo "... mt/Text.i"
+	@echo "... mt/Text.s"
+	@echo "... mt/Wss.o"
+	@echo "... mt/Wss.i"
+	@echo "... mt/Wss.s"
+	@echo "... mt/storage.o"
+	@echo "... mt/storage.i"
+	@echo "... mt/storage.s"
 	@echo "... parser.tab.o"
 	@echo "... parser.tab.i"
 	@echo "... parser.tab.s"
-	@echo "... storage.o"
-	@echo "... storage.i"
-	@echo "... storage.s"
 	@echo "... test.o"
 	@echo "... test.i"
 	@echo "... test.s"

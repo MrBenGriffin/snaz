@@ -4,7 +4,7 @@
 #include <sstream>
 #include <clocale>
 #include "test.h"
-#include "mt.h"
+#include "mt/mt.h"
 
 int main( const int argc, const char **argv ) {
    std::setlocale(LC_ALL, "en_UK.UTF-8");

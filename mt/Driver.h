@@ -18,7 +18,7 @@
 #include <functional>
 
 #include "mt.h"
-#include "advanced.h"
+#include "../advanced.h"
 #include "parser.tab.hpp"
 
 namespace mt {

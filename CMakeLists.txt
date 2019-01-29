@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD 17)
 include_directories(${CMAKE_CURRENT_BINARY_DIR};/usr/local/include)
 
 FLEX_TARGET(advanced advanced.lpp ${CMAKE_CURRENT_BINARY_DIR}/advanced.yy.cpp COMPILE_FLAGS -d)
-BISON_TARGET(parser parser.ypp ${CMAKE_CURRENT_BINARY_DIR}/parser.tab.cpp)
+BISON_TARGET(parser mt/parser.ypp ${CMAKE_CURRENT_BINARY_DIR}/parser.tab.cpp)
 ADD_FLEX_BISON_DEPENDENCY(advanced parser)
 
-add_executable(macrotext ${BISON_parser_OUTPUTS} ${FLEX_advanced_OUTPUTS} main.cpp Driver.cpp test.cpp test.h storage.cpp storage.h Definition.cpp Definition.h Injection.cpp Injection.h Wss.cpp Wss.h Macro.cpp Macro.h mt.h Text.cpp Text.h Internals.cpp Internals.h Current.cpp Current.h)
+add_executable(macrotext ${BISON_parser_OUTPUTS} ${FLEX_advanced_OUTPUTS} main.cpp mt/Driver.cpp test.cpp mt/storage.cpp mt/Definition.cpp mt/Injection.cpp mt/Wss.cpp mt/Macro.cpp mt/Text.cpp mt/Internals.cpp mt/Current.cpp)

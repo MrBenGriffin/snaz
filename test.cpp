@@ -4,9 +4,9 @@
 #include <cstdlib>
 
 #include "test.h"
-#include "Driver.h"
-#include "Definition.h"
-#include "Internals.h"
+#include "mt/Driver.h"
+#include "mt/Definition.h"
+#include "mt/Internals.h"
 
 using namespace std;
 

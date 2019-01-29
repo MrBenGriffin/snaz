@@ -54,7 +54,7 @@
 #  endif
 # endif
 
-#line 4 "parser.ypp" // location.cc:360
+#line 4 "mt/parser.ypp" // location.cc:360
 namespace mt {
 #line 60 "/Users/ben/CLionProjects/snaz/cmake-build-debug/location.hh" // location.cc:360
   /// A point in a source file.
@@ -316,7 +316,7 @@ namespace mt {
     return ostr;
   }
 
-#line 4 "parser.ypp" // location.cc:360
+#line 4 "mt/parser.ypp" // location.cc:360
 } // mt
 #line 322 "/Users/ben/CLionProjects/snaz/cmake-build-debug/location.hh" // location.cc:360
 #endif // !YY_YY_USERS_BEN_CLIONPROJECTS_SNAZ_CMAKE_BUILD_DEBUG_LOCATION_HH_INCLUDED
