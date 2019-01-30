@@ -43,7 +43,7 @@ namespace testing {
 				n = " ";
 				f = " ";
 			} break;
-				//								cout << "• " << name << " √ " << endl;
+				//cout << "• " << name << " √ " << endl;
 			default: {
 				title.insert(0,1,' ');
 				title.push_back(' ');

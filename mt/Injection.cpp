@@ -78,7 +78,13 @@ namespace mt {
             stack = true;
             basis.erase(0, 1);
         } else {
-            sValue++;
+            if(!basis.empty()) {
+                parseStart();                 // now work out the rest.
+                sValue = value;
+                value = 0;
+            } else {
+                sValue++;
+            }
         }
     }
 

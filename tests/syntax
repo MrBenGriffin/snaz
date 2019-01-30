@@ -1,7 +1,7 @@
 // Syntax.
 F showPassed	0
 
-//// Outside of a macro definition, these should return as strings.
+# Advanced: Injections outside of a definition.
 P	1	⍟(i)q			⁅i⁆“q”
 P	1	⍟1				⁅1⁆
 P	1	⍟1120P			⁅1120⁆“P”
@@ -13,7 +13,7 @@ P	1	⍟(p)			⁅1:0⁆
 P	1	⍟(ps)			⁅s0⁆
 P	1	⍟^(k-3)			⁅1:k-3⁆
 
-# Defines (lexical tests) (0 means not-macro,1 means macro def)
+# Advanced: Defines (lexical tests) (0 means not-macro,1 means macro def)
 P	0	⌽wx(oooooo⍟1)		⸠wx「“oooooo⍟1”」
 P	1	⌽wt(oooooo⍟1)		⸠wt「“oooooo”⁅1⁆」
 P	1	⌽wt(ooooo⍟1)		⸠wt「“ooooo”⁅1⁆」
@@ -23,31 +23,80 @@ P	1	⌽wt(oo⍟1)			⸠wt「“oo”⁅1⁆」
 P	1	⌽wt(o⍟1)			⸠wt「“o”⁅1⁆」
 P	1	⌽wt(⍟1)				⸠wt「⁅1⁆」
 
-# Tests
-P	0		⌽a(teen)							⸠a「“teen”」
-P	0		[⌽wa(foo,bar)]						“[”⸠wa「“foo”」「“bar”」“]”
-P	0		[⌽wtagi(bog,blob)]					“[”⸠wtagi「“bog”」「“blob”」“]”
-P	0		⌽wtag(bog,⌽wa(foo,bar),hi)			⸠wtag「“bog”」「⸠wa「“foo”」「“bar”」」「“hi”」
+# Advanced: Tests
+P	0	⌽a(teen)							⸠a「“teen”」
+P	0	[⌽wa(foo,bar)]						“[”⸠wa「“foo”」「“bar”」“]”
+P	0	[⌽wtagi(bog,blob)]					“[”⸠wtagi「“bog”」「“blob”」“]”
+P	0	⌽wtag(bog,⌽wa(foo,bar),hi)			⸠wtag「“bog”」「⸠wa「“foo”」「“bar”」」「“hi”」
 
-// Basic Syntax returning debugging visit 
-P	0			EX⌽wibble_33(teen,foy)PO		“EX”⸠wibble_33「“teen”」「“foy”」“PO”
-P	0			EX⌽wibble_33(teen)PO			“EX”⸠wibble_33「“teen”」“PO”
-P	0			[⌽wi(teen)⌽w()]					“[”⸠wi「“teen”」⸠w「」“]”
-P	0			[⌽we_33()]						“[”⸠we_33「」“]”
-P	0			EX⌽wibble_33❪teen,foy❫PO		“EX”⸠wibble_33「“teen”」「“foy”」“PO”
-P	0			EX⌽wibble_33❪teen❫PO			“EX”⸠wibble_33「“teen”」“PO”
-P	0			[⌽wi❪teen❫⌽w❪❫]					“[”⸠wi「“teen”」⸠w「」“]”
-P	0			[⌽we_33❪❫]						“[”⸠we_33「」“]”
-P	0			[⌽wibble_33(teen,⎡p,⎤ t)]		“[”⸠wibble_33「“teen”」「“p, t”」“]”
-P	0			[⌽wibble_33(⎡p,⎤ t)]			“[”⸠wibble_33「“p, t”」“]”
-P	0			[⌽b(⎡⎤)]						“[”⸠b「」“]”
-P	0			[⌽b(⎡⎤,⎡⎤,p)]					“[”⸠b「」「」「“p”」“]”
-P	0			[⌽b(⎡⎤,)]						“[”⸠b「」「」“]”
-P	0			[⌽b(())]						“[”⸠b「“()”」“]”
-P	0			[⌽b(⎡)⎤)]						“[”⸠b「“)”」“]”
-P	0			[⌽b(⌽c())]						“[”⸠b「⸠c「」」“]”
-P	0			[⌽b❪⌽c❪❫❫]						“[”⸠b「⸠c「」」“]”
-P	0			[⌽o(⌽f(q(6),for),big,⎡or, not⎤,⎡seven⎤ teen)]		“[”⸠o「⸠f「“q(6)”」「“for”」」「“big”」「“or, not”」「“seven teen”」“]”
-P	0			[⎣⌽b(⎡⎤,)⎦]						“[⌽b(⎡⎤,)]”
+# Advanced: Basic Syntax returning debugging visit
+P	0	EX⌽wibble_33(teen,foy)PO		“EX”⸠wibble_33「“teen”」「“foy”」“PO”
+P	0	EX⌽wibble_33(teen)PO			“EX”⸠wibble_33「“teen”」“PO”
+P	0	[⌽wi(teen)⌽w()]					“[”⸠wi「“teen”」⸠w「」“]”
+P	0	[⌽we_33()]						“[”⸠we_33「」“]”
+P	0	EX⌽wibble_33❪teen,foy❫PO		“EX”⸠wibble_33「“teen”」「“foy”」“PO”
+P	0	EX⌽wibble_33❪teen❫PO			“EX”⸠wibble_33「“teen”」“PO”
+P	0	[⌽wi❪teen❫⌽w❪❫]					“[”⸠wi「“teen”」⸠w「」“]”
+P	0	[⌽we_33❪❫]						“[”⸠we_33「」“]”
+P	0	[⌽wibble_33(teen,⎡p,⎤ t)]		“[”⸠wibble_33「“teen”」「“p, t”」“]”
+P	0	[⌽wibble_33(⎡p,⎤ t)]			“[”⸠wibble_33「“p, t”」“]”
+P	0	[⌽b(⎡⎤)]						“[”⸠b「」“]”
+P	0	[⌽b(⎡⎤,⎡⎤,p)]					“[”⸠b「」「」「“p”」“]”
+P	0	[⌽b(⎡⎤,)]						“[”⸠b「」「」“]”
+P	0	[⌽b(())]						“[”⸠b「“()”」“]”
+P	0	[⌽b(⎡)⎤)]						“[”⸠b「“)”」“]”
+P	0	[⌽b(⌽c())]						“[”⸠b「⸠c「」」“]”
+P	0	[⌽b❪⌽c❪❫❫]						“[”⸠b「⸠c「」」“]”
+P	0	[⌽o(⌽f(q(6),for),big,⎡or, not⎤,⎡seven⎤ teen)]		“[”⸠o「⸠f「“q(6)”」「“for”」」「“big”」「“or, not”」「“seven teen”」“]”
+P	0	[⎣⌽b(⎡⎤,)⎦]						“[⌽b(⎡⎤,)]”
 
+
+# Classic: Injections outside of a definition.
+P	1	%(i)q			⁅i⁆“q”
+P	1	%1				⁅1⁆
+P	1	%1120P			⁅1120⁆“P”
+P	1	-%(1+)-			“-”⁅1+⁆“-”
+P	1	%(i),%(k),%(n)	⁅i⁆“,”⁅k⁆“,”⁅n⁆
+P	1	%(j)			⁅i+1⁆
+P	1	%(k.2)			⁅k.2⁆
+P	1	%(p)			⁅1:0⁆
+P	1	%(ps)			⁅s0⁆
+P	1	%^(k-3)			⁅1:k-3⁆
+
+# Classic: Defines (lexical tests) (0 means not-macro,1 means macro def)
+P	0	@wx(oooooo%1)		⸠wx「“oooooo%1”」
+P	1	@wt(oooooo%1)		⸠wt「“oooooo”⁅1⁆」
+P	1	@wt(ooooo%1)		⸠wt「“ooooo”⁅1⁆」
+P	1	@wt(oooo%1)			⸠wt「“oooo”⁅1⁆」
+P	1	@wt(ooo%1)			⸠wt「“ooo”⁅1⁆」
+P	1	@wt(oo%1)			⸠wt「“oo”⁅1⁆」
+P	1	@wt(o%1)			⸠wt「“o”⁅1⁆」
+P	1	@wt(%1)				⸠wt「⁅1⁆」
+
+# Classic: Tests
+P	0	@a(teen)							⸠a「“teen”」
+P	0	[@wa(foo,bar)]						“[”⸠wa「“foo”」「“bar”」“]”
+P	0	[@wtagi(bog,blob)]					“[”⸠wtagi「“bog”」「“blob”」“]”
+P	0	@wtag(bog,@wa(foo,bar),hi)			⸠wtag「“bog”」「⸠wa「“foo”」「“bar”」」「“hi”」
+
+# Classic: Basic Syntax returning debugging visit
+P	0	EX@wibble_33(teen,foy)PO		“EX”⸠wibble_33「“teen”」「“foy”」“PO”
+P	0	EX@wibble_33(teen)PO			“EX”⸠wibble_33「“teen”」“PO”
+P	0	[@wi(teen)@w()]					“[”⸠wi「“teen”」⸠w「」“]”
+P	0	[@we_33()]						“[”⸠we_33「」“]”
+P	0	EX@wibble_33❪teen,foy❫PO		“EX”⸠wibble_33「“teen”」「“foy”」“PO”
+P	0	EX@wibble_33❪teen❫PO			“EX”⸠wibble_33「“teen”」“PO”
+P	0	[@wi❪teen❫@w❪❫]					“[”⸠wi「“teen”」⸠w「」“]”
+P	0	[@we_33❪❫]						“[”⸠we_33「」“]”
+P	0	[@wibble_33(teen,{p,} t)]		“[”⸠wibble_33「“teen”」「“p, t”」“]”
+P	0	[@wibble_33({p,} t)]			“[”⸠wibble_33「“p, t”」“]”
+P	0	[@b({})]						“[”⸠b「」“]”
+P	0	[@b({},{},p)]					“[”⸠b「」「」「“p”」“]”
+P	0	[@b({},)]						“[”⸠b「」「」“]”
+P	0	[@b(())]						“[”⸠b「“()”」“]”
+P	0	[@b({)})]						“[”⸠b「“)”」“]”
+P	0	[@b(@c())]						“[”⸠b「⸠c「」」“]”
+P	0	[@b❪@c❪❫❫]						“[”⸠b「⸠c「」」“]”
+P	0	[@o(@f(q(6),for),big,{or, not},{seven} teen)]		“[”⸠o「⸠f「“q(6)”」「“for”」」「“big”」「“or, not”」「“seven teen”」“]”
+P	0	[{|@b({},)|}]						“[@b({},)]”
 

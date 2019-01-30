@@ -94,3 +94,4 @@ iSetC 001	[@iSetCache(~A,X)@iGet(~A)]													[X]
 
 XX iKV		[@iKV(foo,del)@iKV(too,del)@iKV(bar,del)@iKV(zoo,del)]						[]
 iKVTech 01	@iKV(T~x,set,a,bo)@iKV(T~x,get,a)											bo
+b07 entity	@ent(nbsp)																#x00A0
