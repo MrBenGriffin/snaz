@@ -23,6 +23,7 @@ namespace mt {
         bool list;          // if we are passing a list of parameters over (eg %(3+))
         std::string basis;  // What we are working with.
 
+        void adjust(size_t& base) const;  //modulus etc.
         void parseStart();
         void parseIterated();
         void parsePName();

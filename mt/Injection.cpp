@@ -81,6 +81,7 @@ namespace mt {
             sValue++;
         }
     }
+
     void Injection::parseBrackets() {
         basis.erase(0, 1);
         basis.pop_back();
@@ -94,6 +95,7 @@ namespace mt {
             }
         }
     }
+
     void Injection::parseParent() {
         while (basis[0] == '^') {       // go up the stack.
             sValue++;
@@ -117,7 +119,7 @@ namespace mt {
     void Injection::expand(mtext &result,mstack &context) const {
         if (type == It::text) {
             Text(basis).expand(result,context);
-         } else {
+        } else {
             auto &contextMacro = context[sValue].first;
             auto &instance = context[sValue].second;
             auto &parms = instance.parms;
@@ -125,14 +127,17 @@ namespace mt {
             size_t parmCount = parms->size();
             if (stack) {
                  for(auto& s : context) {
-                    std::visit([&result](auto const &a){ result.push_back(Text(a.name() + ";")); },*(s.first));
+                     if(s.first!= nullptr) {
+                         std::visit([&result](auto const &a){ result.push_back(Text(a.name() + ";")); },*(s.first));
+                     }
                  }
             }
             if (list) {
+                plist* p_parms = const_cast <plist *>(context.back().second.parms);
                 for(size_t i=value; i <= parmCount; i++) {
                     mtext tmp;
-                    Driver::expand((*parms)[i - 1], tmp, context);
-                    result.push_back(tmp.front()); //if tmp has MORE than one result.. what then?!
+                    Driver::inject((*parms)[i - 1], tmp, context);
+                    p_parms->push_back(std::move(tmp));
                 }
             }
             if(!stack && !list) {
@@ -140,7 +145,7 @@ namespace mt {
                     case It::plain:
                         if(value == 0) {
                             std::visit([&result](auto const &a){ result.push_back(Text(a.name())); },*contextMacro);
-                         } else {
+                        } else {
                             bool legal=false; size_t index=value;
                             std::visit([&legal,&index](auto const &a){ legal = a.inRange(index); },*contextMacro);
                             if(legal && (value <= parmCount)) {
@@ -156,8 +161,9 @@ namespace mt {
                         }
                         break;
                     case It::current: {
-                        auto posi = iter.first + offset;
-                        if ( 0 < posi <  parmCount) {
+                        auto posi = iter.first;
+                        adjust(posi);
+                        if ( (0 < posi) &&  (posi <=  parmCount)) {
                             if (sValue == 0) {
                                 Driver::expand((*parms)[posi - 1], result, context);
                             } else {
@@ -173,12 +179,16 @@ namespace mt {
                     }  break;
                     case It::count: {
                         std::ostringstream a;
-                        a << iter.first;
+                        size_t value = iter.first;
+                        adjust(value);
+                        a << value;
                         Text(a.str()).expand(result, context);
                     } break;
                     case It::size: {
                         std::ostringstream a;
-                        a << iter.second;
+                        size_t value = iter.second;
+                        adjust(value);
+                        a << value;
                         Text(a.str()).expand(result, context);
                     } break;
                     default:
@@ -186,6 +196,10 @@ namespace mt {
                 }
             }
         }
+    }
+
+    void Injection::adjust(size_t& base) const { //modulus etc.
+        base = modulus ? base % offset : base + offset;
     }
 
     std::ostream &Injection::visit(std::ostream &result) const {

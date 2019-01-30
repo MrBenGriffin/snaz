@@ -9,8 +9,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR};/usr/local/include)
 
-FLEX_TARGET(advanced advanced.lpp ${CMAKE_CURRENT_BINARY_DIR}/advanced.yy.cpp COMPILE_FLAGS -d)
+FLEX_TARGET(advanced mt/advanced.lpp ${CMAKE_CURRENT_BINARY_DIR}/advanced.yy.cpp COMPILE_FLAGS -d)
 BISON_TARGET(parser mt/parser.ypp ${CMAKE_CURRENT_BINARY_DIR}/parser.tab.cpp)
 ADD_FLEX_BISON_DEPENDENCY(advanced parser)
 
-add_executable(macrotext ${BISON_parser_OUTPUTS} ${FLEX_advanced_OUTPUTS} main.cpp mt/Driver.cpp test.cpp storage.cpp mt/Definition.cpp mt/Injection.cpp mt/Wss.cpp mt/Macro.cpp mt/Text.cpp mt/Internals.cpp mt/Current.cpp mt/Content.cpp mt/Content.h)
+add_executable(macrotext ${BISON_parser_OUTPUTS} ${FLEX_advanced_OUTPUTS} main.cpp mt/Driver.cpp test.cpp storage.cpp mt/Definition.cpp mt/Injection.cpp mt/Wss.cpp mt/Macro.cpp mt/Text.cpp mt/Internals.cpp mt/Current.cpp mt/Content.cpp mt/Content.h support/Infix.cpp support/Infix.h support/Message.cpp support/Message.h support/Encode.cpp support/Encode.h support/Fandr.cpp support/Fandr.h support/Convert.cpp support/Convert.h)

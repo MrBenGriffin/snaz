@@ -18,7 +18,7 @@
 #include <functional>
 
 #include "mt.h"
-#include "../advanced.h"
+#include "advanced.h"
 #include "parser.tab.hpp"
 
 namespace mt {
@@ -45,9 +45,10 @@ namespace mt {
 
   		static std::ostream& visit(const Token&, std::ostream&);
         static std::ostream& visit(const mtext&, std::ostream&);
-        static void expand(const mtext&,std::ostream&,const std::string &);
+		static void expand(const mtext&,std::ostream&,const std::string &);
 		static void expand(const mtext&,std::ostream&,mstack&);
 		static void expand(const mtext&,mtext&,mstack& = empty_stack);
+		static void inject(const mtext&,mtext&,mstack&);
 
 	private:
 		static 		 mstack empty_stack;

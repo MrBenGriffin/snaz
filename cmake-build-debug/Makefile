@@ -39,10 +39,10 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = "/Users/ben/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/183.4886.39/CLion.app/Contents/bin/cmake/mac/bin/cmake"
+CMAKE_COMMAND = "/Users/ben/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/183.5153.40/CLion.app/Contents/bin/cmake/mac/bin/cmake"
 
 # The command to remove a file.
-RM = "/Users/ben/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/183.4886.39/CLion.app/Contents/bin/cmake/mac/bin/cmake" -E remove -f
+RM = "/Users/ben/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/183.5153.40/CLion.app/Contents/bin/cmake/mac/bin/cmake" -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
@@ -59,7 +59,7 @@ CMAKE_BINARY_DIR = /Users/ben/CLionProjects/snaz/cmake-build-debug
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	"/Users/ben/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/183.4886.39/CLion.app/Contents/bin/cmake/mac/bin/cmake" -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	"/Users/ben/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/183.5153.40/CLion.app/Contents/bin/cmake/mac/bin/cmake" -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -70,7 +70,7 @@ rebuild_cache/fast: rebuild_cache
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	"/Users/ben/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/183.4886.39/CLion.app/Contents/bin/cmake/mac/bin/cmake" -E echo No\ interactive\ CMake\ dialog\ available.
+	"/Users/ben/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/183.5153.40/CLion.app/Contents/bin/cmake/mac/bin/cmake" -E echo No\ interactive\ CMake\ dialog\ available.
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -474,6 +474,141 @@ storage.cpp.s:
 	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/storage.cpp.s
 .PHONY : storage.cpp.s
 
+support/Convert.o: support/Convert.cpp.o
+
+.PHONY : support/Convert.o
+
+# target to build an object file
+support/Convert.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Convert.cpp.o
+.PHONY : support/Convert.cpp.o
+
+support/Convert.i: support/Convert.cpp.i
+
+.PHONY : support/Convert.i
+
+# target to preprocess a source file
+support/Convert.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Convert.cpp.i
+.PHONY : support/Convert.cpp.i
+
+support/Convert.s: support/Convert.cpp.s
+
+.PHONY : support/Convert.s
+
+# target to generate assembly for a file
+support/Convert.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Convert.cpp.s
+.PHONY : support/Convert.cpp.s
+
+support/Encode.o: support/Encode.cpp.o
+
+.PHONY : support/Encode.o
+
+# target to build an object file
+support/Encode.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Encode.cpp.o
+.PHONY : support/Encode.cpp.o
+
+support/Encode.i: support/Encode.cpp.i
+
+.PHONY : support/Encode.i
+
+# target to preprocess a source file
+support/Encode.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Encode.cpp.i
+.PHONY : support/Encode.cpp.i
+
+support/Encode.s: support/Encode.cpp.s
+
+.PHONY : support/Encode.s
+
+# target to generate assembly for a file
+support/Encode.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Encode.cpp.s
+.PHONY : support/Encode.cpp.s
+
+support/Fandr.o: support/Fandr.cpp.o
+
+.PHONY : support/Fandr.o
+
+# target to build an object file
+support/Fandr.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Fandr.cpp.o
+.PHONY : support/Fandr.cpp.o
+
+support/Fandr.i: support/Fandr.cpp.i
+
+.PHONY : support/Fandr.i
+
+# target to preprocess a source file
+support/Fandr.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Fandr.cpp.i
+.PHONY : support/Fandr.cpp.i
+
+support/Fandr.s: support/Fandr.cpp.s
+
+.PHONY : support/Fandr.s
+
+# target to generate assembly for a file
+support/Fandr.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Fandr.cpp.s
+.PHONY : support/Fandr.cpp.s
+
+support/Infix.o: support/Infix.cpp.o
+
+.PHONY : support/Infix.o
+
+# target to build an object file
+support/Infix.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Infix.cpp.o
+.PHONY : support/Infix.cpp.o
+
+support/Infix.i: support/Infix.cpp.i
+
+.PHONY : support/Infix.i
+
+# target to preprocess a source file
+support/Infix.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Infix.cpp.i
+.PHONY : support/Infix.cpp.i
+
+support/Infix.s: support/Infix.cpp.s
+
+.PHONY : support/Infix.s
+
+# target to generate assembly for a file
+support/Infix.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Infix.cpp.s
+.PHONY : support/Infix.cpp.s
+
+support/Message.o: support/Message.cpp.o
+
+.PHONY : support/Message.o
+
+# target to build an object file
+support/Message.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Message.cpp.o
+.PHONY : support/Message.cpp.o
+
+support/Message.i: support/Message.cpp.i
+
+.PHONY : support/Message.i
+
+# target to preprocess a source file
+support/Message.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Message.cpp.i
+.PHONY : support/Message.cpp.i
+
+support/Message.s: support/Message.cpp.s
+
+.PHONY : support/Message.s
+
+# target to generate assembly for a file
+support/Message.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Message.cpp.s
+.PHONY : support/Message.cpp.s
+
 test.o: test.cpp.o
 
 .PHONY : test.o
@@ -549,6 +684,21 @@ help:
 	@echo "... storage.o"
 	@echo "... storage.i"
 	@echo "... storage.s"
+	@echo "... support/Convert.o"
+	@echo "... support/Convert.i"
+	@echo "... support/Convert.s"
+	@echo "... support/Encode.o"
+	@echo "... support/Encode.i"
+	@echo "... support/Encode.s"
+	@echo "... support/Fandr.o"
+	@echo "... support/Fandr.i"
+	@echo "... support/Fandr.s"
+	@echo "... support/Infix.o"
+	@echo "... support/Infix.i"
+	@echo "... support/Infix.s"
+	@echo "... support/Message.o"
+	@echo "... support/Message.i"
+	@echo "... support/Message.s"
 	@echo "... test.o"
 	@echo "... test.i"
 	@echo "... test.s"

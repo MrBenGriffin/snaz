@@ -157,6 +157,18 @@ namespace mt {
 		}
 	}
 
+	// Evaluate ONLY injections.
+	void Driver::inject(const mtext& object,mtext& x,mstack& c) {
+		for(auto& i : object) {
+			if (std::holds_alternative<Injection>(i)) {
+				std::visit([&x,&c](auto&& arg){ arg.expand(x,c);},i);
+			} else {
+				x.push_back(i);
+			}
+		}
+	}
+
+
 	std::ostream& Driver::visit(const Token& j, std::ostream& o) {
 		std::visit([&o](auto&& arg){ arg.visit(o);},j);
 		return o;

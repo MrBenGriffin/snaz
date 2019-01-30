@@ -1,6 +1,6 @@
 // This is a tab-delimited file of tests.
-F showPassed	1
-F showDefines	1
+F showPassed	0
+F showDefines	0
 
 // name		code										expected result
 // example	[abcdef]									[abcdef]
@@ -22,6 +22,5 @@ F showDefines	1
 // !	nodeaccessors
 // !	encoding
 // !	obyx
-
 // !	reset
 

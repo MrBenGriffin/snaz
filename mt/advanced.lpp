@@ -4,7 +4,7 @@
 #include <iostream>
 
 /* Implementation of yyFlexScanner */ 
-#include "../advanced.h"
+#include "../mt/advanced.h"
 #undef  YY_DECL
 #define YY_DECL int mt::Advanced::yylex( mt::Parser::semantic_type * const lval, mt::Parser::location_type *loc )
 

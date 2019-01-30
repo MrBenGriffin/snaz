@@ -1,24 +1,54 @@
-
-
+U bktiny	1	-1	010	[⍟(i)]
+U bracks	1	-1	010	[⍟(i):⍟(k)/⍟(n)]
+U dobrack	1	-1	010	[⍟i]
+U vcomma	1	-1	010	⌽dobrack(⍟(1+))
 U commas	1	-1	010	⍟(i)⌽iEq(⍟(k),⍟(n),,⎡-⎤)
 U ucomma	1	-1	010	[⌽commas(⍟(1+))]
+
 U docomm	1	-1	010	[⌽commas(⍟i)]
 U dcomma	1	-1	010	⌽docomm(⍟(1+))
 U ecomma	1	-1	010	⌽dcomma(⍟(1+))
+
 U xcomma	1	-1	010	⌽iEq(⍟(k),⍟(n),,⎡[⍟(i),⍟(j)]⎤)
-U exprmd	0	-1	010	⌽iEq(⌽iExpr(mod(p1,p2),⍟(k),2),1,⎡[⍟(i)⌽iEq(⍟k,⍟n,,-⍟(j))]⎤)
-U exprid	0	-1	010	⌽iEq(⍟(k.2),1,[⍟(i)⌽iEq(⍟k,⍟n,,-⍟(i+1))])
 
-U exp3df	0	-1	010	⌽iEq(⍟(k.3),1,[⍟(i);⍟(i+1);⍟(i+2)])
+it002		⌽ucomma(a,b,c,d,e)		[a-b-c-d-e]
+it004		⌽xcomma(a,b,c,d,e)		[a,b][b,c][c,d][d,e]
+iv001		⌽dobrack(a,b,c,d,e)		[a][b][c][d][e]
+iv002		⌽vcomma(a,b,c,d,e)		[a][b][c][d][e]
 
-U exp3db	0	-1	010	⌽iEq(⍟(k.3),0,[⍟(i-2);⍟(i-1);⍟(i)])
+tiny01		⌽bktiny(a)				[a]
+itb00		⌽bracks(a,b,c,d,e)		[a:1/5][b:2/5][c:3/5][d:4/5][e:5/5]
+itc01		⌽commas(a,b,c,d,e)		a-b-c-d-e
+itc03		⌽docomm(a,b,c,d,e)		[a][b][c][d][e]
+itc04		⌽dcomma(a,b,c,d,e)		[a][b][c][d][e]
+itc05		⌽ecomma(a,b,c,d,e)		[a][b][c][d][e]
 
 it001		⌽dcomma(a,b,c,d,e)		[a][b][c][d][e]
-it002		⌽ucomma(a,b,c,d,e)		[a-b-c-d-e]
 it003		⌽ecomma(a,b,c,d,e)		[a][b][c][d][e]
-it004		⌽xcomma(a,b,c,d,e)		[a,b][b,c][c,d][d,e]
-it005		⌽exprmd(a,b,c,d,e)		[a-b][c-d][e]
+
+U injbar	0	-1	110	[⍟i:⍟j:⍟k:⍟n]
+U injbkr	0	-1	110	[⍟(i):⍟(j):⍟(k):⍟(n)]
+U injmod	0	-1	110	[⍟(k.2)]
+U ieqmod	0	-1	110	[⌽iEq(⍟(k.2),0,F,T)]
+U injoff	0	-1	110	[⍟(i):⍟(i+1)]
+U ieqoff	0	-1	110	[⌽iEq(⍟(k.2),0,F,T)]
+
+U exprid	0	-1	010	⌽iEq(⍟(k.2),1,[⍟(i)⌽iEq(⍟k,⍟n,,-⍟(i+1))])
+
+bar01		⌽injbar(a,b)			[a:b:1:2][b::2:2]
+bkr01		⌽injbkr(a,b)			[a:b:1:2][b::2:2]
+mod01		⌽injmod(a,b,c,d,e)		[1][0][1][0][1]
+mod02		⌽ieqmod(a,b,c,d,e)		[T][F][T][F][T]
+off01		⌽injoff(a,b,c,d,e)		[a:b][b:c][c:d][d:e][e:]
+
 it006		⌽exprid(a,b,c,d,e)		[a-b][c-d][e]
+
+U exp3df	0	-1	010	⌽iEq(⍟(k.3),1,[⍟(i);⍟(i+1);⍟(i+2)])
+U exp3db	0	-1	010	⌽iEq(⍟(k.3),0,[⍟(i-2);⍟(i-1);⍟(i)])
+U exprid	0	-1	010	⌽iEq(⍟(k.2),1,[⍟(i)⌽iEq(⍟k,⍟n,,-⍟(i+1))])
+
+it006		⌽exprid(a,b,c,d,e)		[a-b][c-d][e]
+
 it007		⌽exp3df(a,b,c,d,e,f)	[a;b;c][d;e;f]
 it008		⌽exp3db(a,b,c,d,e,f)	[a;b;c][d;e;f]
 it009		⌽exp3df(a,b,c,d,e)		[a;b;c][d;e;]
@@ -26,5 +56,8 @@ it010		⌽exp3db(a,b,c,d,e)		[a;b;c]
 
 it011		⌽exp3df(a,b,c,d)		[a;b;c][d;;]
 it012		⌽exp3db(a,b,c,d)		[a;b;c]
+it013		⌽ucomma(X,Y,⎡ss,uu,vv⎤,⎣⌽b0rked⎦,thin)			[X-Y-ss,uu,vv-⌽b0rked-thin]
 
-01 iterated		[⌽ucomma(X,Y,⎡ss,uu,vv⎤,⎣⌽b0rked⎦,thin)]							[X,Y,ss,uu,vv,⌽b0rked,thin]
+// Depends upon iExpr
+//U exprmd	0	-1	010	⌽iEq(⌽iExpr(mod(p1,p2),⍟(k),2),1,⎡[⍟(i)⌽iEq(⍟k,⍟n,,-⍟(j))]⎤)
+//it005		⌽exprmd(a,b,c,d,e)		[a-b][c-d][e]

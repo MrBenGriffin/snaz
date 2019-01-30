@@ -33,26 +33,25 @@ namespace mt {
     }
 
     void Definition::expand(mtext& o,Instance &instance, mstack &context) {
-        Instance modified(instance.parms,instance.it);
+        Instance modified(nullptr,instance.it);
         plist rendered;
         if (!preExpand) {
             plist mt_parms = *instance.parms;
             if (trimParms) { trim(mt_parms); }
+             modified.parms = &rendered;
+             context.push_back({nullptr,modified}); //This is done for injections like %(1+).
              for (auto &parm : mt_parms) {
                  mtext expanded;
+                 auto i=rendered.size();
                  Driver::expand(parm, expanded, context);
-                 if(expanded.empty()) { //we must preserve an empty parm in the parm list.
-                     rendered.push_back({});
-                 } else {
-                     for(auto& i : expanded) {
-                         rendered.push_back({i}); //each one as a separate parm!!
-                     }
+                 if(rendered.size() == i) {
+                     rendered.push_back(std::move(expanded)); //each one as a separate parm!!
                  }
-            }
+             }
+            context.pop_back();
             while (!rendered.empty() && rendered.back().empty()) {
                 rendered.pop_back();
             }
-            modified.parms = &rendered;
             modified.it = {0,rendered.size()};
         }
         Handler handler(*this);

@@ -17,7 +17,6 @@ iEq 013		⌽iEq(A,B,T,F)														F
 iEq 014		⌽iEq(⎡and | pipes⎤,and ⌽iEq(⎣⌽⎦,foo,⎡bar,four⎤) ⎡or, not⎤)		0
 
 # iteration tests that use iEq indirectly...
-F showPassed	1
 
 # Testing iterated macros.
 U commas	1	-1	10	⍟(i)⌽iEq(⍟(k),⍟(n),,⎡,⎤)

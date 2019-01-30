@@ -3,6 +3,7 @@
     <words>
       <w>parms</w>
       <w>posi</w>
+      <w>retval</w>
       <w>yymore</w>
     </words>
   </dictionary>

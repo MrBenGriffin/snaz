@@ -16,6 +16,11 @@ file(REMOVE_RECURSE
   "CMakeFiles/macrotext.dir/mt/Internals.cpp.o"
   "CMakeFiles/macrotext.dir/mt/Current.cpp.o"
   "CMakeFiles/macrotext.dir/mt/Content.cpp.o"
+  "CMakeFiles/macrotext.dir/support/Infix.cpp.o"
+  "CMakeFiles/macrotext.dir/support/Message.cpp.o"
+  "CMakeFiles/macrotext.dir/support/Encode.cpp.o"
+  "CMakeFiles/macrotext.dir/support/Fandr.cpp.o"
+  "CMakeFiles/macrotext.dir/support/Convert.cpp.o"
   "macrotext.pdb"
   "macrotext"
 )
