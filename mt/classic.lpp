@@ -3,22 +3,22 @@
 #include <string>
 #include <iostream>
 
-/* Implementation of yyFlexScanner */ 
+/* Implementation of yyFlexScanner */
 #include "parser.tab.hpp"
 #include "mt/Scanner.h"
 namespace mt {
-	class Advanced : public Scanner, public aFlexLexer {
+	class Classic : public Scanner, public cFlexLexer {
 	public:
-		Advanced(std::istream *in) : Scanner(),aFlexLexer(in) {}
-		virtual ~Advanced() = default;
-		using aFlexLexer::yylex;
+		Classic(std::istream *in) : Scanner(),cFlexLexer(in) {}
+		virtual ~Classic() = default;
+		using cFlexLexer::yylex;
 		virtual int yylex(mt::Parser::semantic_type *const,mt::Parser::location_type *);
 	private:
 		mt::Parser::semantic_type *yylval = nullptr;
 	};
 }
 #undef  YY_DECL
-#define YY_DECL int mt::Advanced::yylex( mt::Parser::semantic_type * const lval, mt::Parser::location_type *loc )
+#define YY_DECL int mt::Classic::yylex(mt::Parser::semantic_type * const lval, mt::Parser::location_type *loc)
 
 /* typedef to make the returns for the tokens shorter */
 using token = mt::Parser::token;
@@ -30,10 +30,9 @@ using token = mt::Parser::token;
 #define YY_USER_ACTION loc->step(); loc->columns(yyleng);
 
 %}
-
 %option debug
-%option yyclass="mt::Advanced"
-%option prefix="a"
+%option yyclass="mt::Classic"
+%option prefix="c"
 %option noyywrap noinput nounput nodefault
 %option noyymore
 %option never-interactive
@@ -42,32 +41,30 @@ using token = mt::Parser::token;
 %option warn
 %x macro fatmac parm brace bracket literal injection
 
-  /** ,\t\n()⌽⍟⎡⎤⎣⎦❪❫ **/
+  /** ,\t\n()@%{}❪❫ **/
 DELIMITER	,
 BRACKET_IN	\(
 BRACKET_OUT	\)
 FAT_ONE_IN	❪
 FAT_ONE_OUT	❫
-LITERAL_IN	⎣
-BRACE_IN	⎡
-BRACE_OUT	⎤
-INJECT_SIGN	⍟
+LITERAL_IN	\{\|
+BRACE_IN	\{
+BRACE_OUT	\}
+INJECT_SIGN	%
 I_OFFSET	(^*)
 I_NUMBER	([0-9]+)
 I_ITS		[ijkn]
 I_STACK		p(s|[0-9]+)?
 I_ITER		([ijkn]([.+-][0-9]+)?)
 I_MORE		([0-9]+("+"?))
-MACRO_SIGN	⌽
+MACRO_SIGN	@
 MACRO_NAME	[a-zA-Z_0-9]+
 WHITESPACE	[\t\x0d\x0a]+
+LITERAL_OUT			\|\}
+NOT_LITERAL_OUT		([^|]|\|[^}])
 
-	/** ⎦: \xe2 \x8e \xa6 **/
-LITERAL_OUT			⎦
-NOT_LITERAL_OUT		(([^\xe2])|(\xe2[^\x8e][^\0])|(\xe2\x8e[^\xa6]))
-
-NOT_SPECIAL_1C		([^\t\x0d\x0a,\(\)\xe2])
-NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x8e[^\xa1\xa3\xa4])|(\x9d[^\xab])))
+NOT_SPECIAL_1C		([^\t\x0d\x0a,\(\)\{\}@%\xe2])
+NOT_SPECIAL_3C		(\xe2(([^\x9d][^\0])|(\x9d[^\xab])))
 
 	/**
 	**/
@@ -75,14 +72,14 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 
 %%
 %{	/** Code  executed at the beginning of yylex **/
-	yylval = lval;
+	yylval = lval; /** read in from yylex **/
 	yy_flex_debug=0;
 %}
 
 	/** everything is unrestricted in literal ⎣ context, except for close literal. E2 8E A6 = close lit **/
 <literal>{
 	{NOT_LITERAL_OUT}+{LITERAL_OUT} {
-		yylval->build<std::string>(std::string(yytext, yyleng -3));
+		yylval->build<std::string>(std::string(yytext, yyleng -2));
 		yy_pop_state(); /**  Pop Literal **/
 		return( token::TEXT );
 	}
@@ -152,7 +149,7 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 <brace>{
 
 	{BRACE_OUT} {
-		yylval->build<std::string>(std::string(yytext, yyleng -3));
+		yylval->build<std::string>(std::string(yytext, yyleng -1));
 		yy_pop_state();
 		return( token::TEXT );
 	}
@@ -195,14 +192,14 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 	}
 
 	{MACRO_SIGN}{MACRO_NAME}{BRACKET_IN} {
-		yylval->build< std::string >( std::string(yytext + 3, yyleng -4) );
+		yylval->build< std::string >( std::string(yytext + 1, yyleng -2) );
 		yy_push_state(macro);
 		yy_push_state(parm);
 		return( token::MACRO_IN );
 	}
 
 	{MACRO_SIGN}{MACRO_NAME}{FAT_ONE_IN} {
-		yylval->build< std::string >( std::string(yytext + 3, yyleng -6) );
+		yylval->build< std::string >( std::string(yytext + 1, yyleng -4) );
 		yy_push_state(fatmac);
 		yy_push_state(parm);
 		return( token::MACRO_IN );
@@ -228,7 +225,7 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 			yylval->build< std::string >(yytext);
 			return(token::INJECTION);
 		} else {
-			std::string sign("⍟");
+			std::string sign("%");
 			yylval->build< std::string >( sign + yytext );
 			return( token::TEXT );
 		}
@@ -236,7 +233,7 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 
 	. {
 		yy_pop_state();
-		std::string sign("⍟");
+		std::string sign("%");
 		yylval->build< std::string >( sign + yytext );
 		return( token::TEXT );
 	}

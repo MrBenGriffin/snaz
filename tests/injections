@@ -58,6 +58,3 @@ it011		⌽exp3df(a,b,c,d)		[a;b;c][d;;]
 it012		⌽exp3db(a,b,c,d)		[a;b;c]
 it013		⌽ucomma(X,Y,⎡ss,uu,vv⎤,⎣⌽b0rked⎦,thin)			[X-Y-ss,uu,vv-⌽b0rked-thin]
 
-// Depends upon iExpr
-//U exprmd	0	-1	010	⌽iEq(⌽iExpr(mod(p1,p2),⍟(k),2),1,⎡[⍟(i)⌽iEq(⍟k,⍟n,,-⍟(j))]⎤)
-//it005		⌽exprmd(a,b,c,d,e)		[a-b][c-d][e]

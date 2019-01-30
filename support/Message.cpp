@@ -20,14 +20,24 @@ namespace Support {
 			case debug:  log << "debug"; break;
 			case scope:  log << "<<<<<"; break;
 			case endsc:  log << ">>>>>"; break;
+			case context:log << "using"; break;
 			case trace:  log << "trace"; break;
-			case code:   log << "raw"; break;
+			case code:   log << "-raw-"; break;
 		}
 		log << ": ";
 		if (lineNum != SIZE_MAX) {
 			log << " at Line No." << lineNum << ", Character Pos. " << charNum << ". ";
 		}
 		log << content << endl;
+	}
+
+	void Messages::enscope(string s) {
+		list.push_front(std::move(Message(scope,s)));
+		list.push_back(std::move(Message(endsc,"")));
+	}
+
+	void Messages::prefix(Message m) {
+		list.push_front(std::move(m));
 	}
 
 	Messages& Messages::operator<< (Message m) {

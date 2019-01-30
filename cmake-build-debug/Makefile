@@ -150,6 +150,33 @@ advanced.yy.cpp.s:
 	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/advanced.yy.cpp.s
 .PHONY : advanced.yy.cpp.s
 
+classic.yy.o: classic.yy.cpp.o
+
+.PHONY : classic.yy.o
+
+# target to build an object file
+classic.yy.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/classic.yy.cpp.o
+.PHONY : classic.yy.cpp.o
+
+classic.yy.i: classic.yy.cpp.i
+
+.PHONY : classic.yy.i
+
+# target to preprocess a source file
+classic.yy.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/classic.yy.cpp.i
+.PHONY : classic.yy.cpp.i
+
+classic.yy.s: classic.yy.cpp.s
+
+.PHONY : classic.yy.s
+
+# target to generate assembly for a file
+classic.yy.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/classic.yy.cpp.s
+.PHONY : classic.yy.cpp.s
+
 main.o: main.cpp.o
 
 .PHONY : main.o
@@ -648,6 +675,9 @@ help:
 	@echo "... advanced.yy.o"
 	@echo "... advanced.yy.i"
 	@echo "... advanced.yy.s"
+	@echo "... classic.yy.o"
+	@echo "... classic.yy.i"
+	@echo "... classic.yy.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

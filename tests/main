@@ -1,6 +1,14 @@
 // This is a tab-delimited file of tests.
+F showPassed	1
+F showDefines	1
+
+//U a			0	1	00	[⍟1]
+//Mix braces		⎡⌽a(⎡A,b⎤)⎤																[A,b]
+
+//X
 F showPassed	0
 F showDefines	0
+
 
 // name		code										expected result
 // example	[abcdef]									[abcdef]
@@ -10,7 +18,9 @@ F showDefines	0
 !	syntax
 !	definitions
 !	basic_advanced
+!	basic_classic
 !	iEq
+!	iExpr
 !	injections
 
 // !	taxonomy

@@ -1,6 +1,7 @@
 //
 // Created by Ben Griffin on 2019-01-30.
 //
+#include <iostream>
 
 #include "Infix.h"
 #include "Convert.h"

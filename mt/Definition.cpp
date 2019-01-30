@@ -17,19 +17,24 @@ namespace mt {
     Definition::Definition(
             std::string name_i, std::string expansion_i,
             long min, long max, bool strip, bool trimParms_i, bool preExpand_i)
-            : counter(0), minParms(min), _name(std::move(name_i)), trimParms(trimParms_i), preExpand(preExpand_i) {
+            : counter(0), _name(std::move(name_i)), trimParms(trimParms_i), preExpand(preExpand_i) {
+        minParms = min == -1 ? 0 : min;
         maxParms = max == -1 ? INT_MAX : max;
         if(expansion_i.empty()) {
             expansion = {};
             iterated = false;
         } else {
-            Driver driver;
             std::istringstream code(expansion_i);
             bool advanced = test_adv(expansion_i);
-            parse_result result = driver.define(code, advanced, strip);
+            Driver driver(code,advanced);
+            parse_result result = driver.define(strip);
             expansion = result.first;
             iterated = result.second;
         }
+    }
+
+    bool Definition::inRange(size_t i) const {
+        return (i <= maxParms);
     }
 
     void Definition::expand(mtext& o,Instance &instance, mstack &context) {
@@ -69,17 +74,17 @@ namespace mt {
 
 
     bool Definition::test_adv(std::string &basis) {
-        //⌽E2.8C.BD ⍟E2.8D.9F ⎣E2.8E.A3
+        //⌽E2.8C.BD ⍟E2.8D.9F ⎣E2.8E.A3 ⎡e2.8e.A1 	/** ALL START E2. (⌽ 8c bd)(⍟ 8d 9F)(⎡8e A1)(⎤ 8e A4)(⎣ 8e A3)(❫ 9D AB) **/
         if (!basis.empty()) {
             size_t size = basis.size();
             size_t offset = basis.find(0xE2);
-            for (; offset != std::string::npos && offset + 2 < size; offset += 2) {
+            while(offset != std::string::npos && offset + 2 < size) {
                 char a = basis[offset + 1];
                 char b = basis[offset + 2];
-                if (a == char(0x8C) && b == char(0xBD)) return true;
-                if (a == char(0x8D) && b == char(0x9F)) return true;
-                if (a == char(0x8E) && b == char(0xA3)) return true;
-                offset = basis.find(0xE2, offset);
+                if (a == char(0x8C) && b == char(0xBD)) return true; // ⌽
+                if (a == char(0x8D) && b == char(0x9F)) return true; // ⍟
+                if (a == char(0x8E) && (b == char(0xA1) || b == char(0xA3))) return true; //⎡  or  ⎣
+                offset = basis.find(0xE2, offset+2);
             }
         }
         return false;
@@ -146,6 +151,7 @@ namespace mt {
 
     void Definition::initialise() {
         library.emplace("iEq",Handler(std::move(iEq())));
+        library.emplace("iExpr",Handler(std::move(iExpr())));
     }
 
 

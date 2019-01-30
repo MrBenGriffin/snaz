@@ -19,7 +19,7 @@ namespace mt {
         static void initialise();
 
     private:
-        long minParms, maxParms;
+        size_t minParms, maxParms;
         std::string _name;
         static Definition empty;
         static std::unordered_map<std::string, Handler> library;
@@ -32,7 +32,7 @@ namespace mt {
 
     public:
         std::string name() const { return _name; }
-        bool inRange(size_t i) const { return minParms <= i <= maxParms;}
+        bool inRange(size_t) const;
         bool iterated, trimParms, preExpand;
 
         std::ostream &visit(std::ostream &);

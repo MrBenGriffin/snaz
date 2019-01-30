@@ -6,26 +6,25 @@
 %define parse.trace
 
 %code requires{
-   namespace mt {
+
+  namespace mt {
       class Driver;
-      class Advanced;
+      class Scanner;
    }
 }
 
-%parse-param { Advanced  &scanner }
-%parse-param { Driver    &driver  }
-  /**
-    %parse-param { bool    stripped  }
-    %parse-param { bool    defining  }
- **/
+%parse-param { Scanner* scanner }
+%parse-param { Driver   &driver  }
+
 %code{
    #include <iostream>
    #include <cstdlib>
    #include <fstream>
-   #include "../mt/Driver.h"
+   #include "mt/Driver.h"
+   #include "mt/Scanner.h"
 
 #undef yylex
-#define yylex scanner.yylex
+#define yylex scanner->yylex
 }
 
 %define api.value.type variant

@@ -163,16 +163,17 @@ namespace testing {
 						do getline(infile, code ,'\t'); while (!infile.eof() && code.empty());
 						getline(infile, expected);
 						expected.erase(0, expected.find_first_not_of('\t'));
-						mt::Driver driver;
 						pcode = code;
 						wss(pcode,false);
+						bool advanced = mt::Definition::test_adv(code);
 						std::istringstream cStream(code);
+						mt::Driver driver(cStream,advanced);
 						result expansion(name);
 						if(define) {
 							mt::Definition macro(name,pcode,0,-1,false,false,false);
 							macro.visit(expansion.out);
 						} else {
-							mt::mtext structure = driver.parse(cStream,true,false); //bool advanced, bool strip
+							mt::mtext structure = driver.parse(false); 	//bool advanced, bool strip
 							mt::Driver::visit(structure,expansion.out);
 						}
 						string visited=expansion.out.str();
@@ -196,7 +197,7 @@ namespace testing {
 						signed long min,max;
 						infile >> ws;
 						getline(infile,name,'\t');
-						infile >> min >> max >> ws;
+						infile >> ws >> min >> max >> ws;
 						getline(infile,bools,'\t');
 						if (bools.size() < 3) {
 							bools.append(string(3-bools.size(),'0')); //default to false..
@@ -236,16 +237,17 @@ namespace testing {
 							}
 						}
 
-						mt::Driver driver;
 						pprogram = program;
 						wss(pprogram,false);
 						std::istringstream code(pprogram);
-						mt::mtext structure = driver.parse(code,true,false); //bool advanced, bool strip
+						bool advanced = mt::Definition::test_adv(pprogram);
+						mt::Driver driver(code,advanced);
+						mt::mtext structure = driver.parse(false); //bool advanced, bool strip
 						pexpected = expected;
 						wss(pexpected,false);
 
 						result expansion(name);
-						mt::Driver::expand(structure,expansion.out,name);
+						driver.expand(expansion.out,name);
 
 						if(expansion.out.str() == pexpected /*&& !expansion.second.marked()*/) {
 							if (showGood) {

@@ -112,8 +112,12 @@ d03 braces		{@d({A,b})}																[=A,b=]
 d04 repeats		@d(A)@d(B)@d(A)@d(B)													[=A=][=B=][=A=][=B=]
 d05 recurse		@d(+@d(A))																[=+[=A=]=]
 d06 deeper		@d(@d(@d(@d(@d(A)))))													[=[=[=[=[=A=]=]=]=]=]
-d07 tags			@wTr(@wa(class,test),@wTd(,{Hello, you.}))								<tr class="test"><td>Hello, you.</td></tr>
+d07mtags		@wTr(@wa(class,test),@wTd(,{Hello, you.}))								<tr class="test"><td>Hello, you.</td></tr>
 ~d
+
+# min/max parameter test.
+U a6		4	4	01	⍟1⍟2⍟3⍟4
+a6a6		⌽a6(A,B,C,D)																ABCD
 
 
 # nested fat bracket macro tests

@@ -79,6 +79,7 @@ mt_p05			⌽mt_p(,,X,,Y,,Z)						[::X::Y::Z:]
 
 # Mixed syntax (not sure about this - or what we want to do with this)
 Mix braces		⎡⌽a(⎡A,b⎤)⎤																[A,b]
+literals		⎣⌽a(⎡A,b⎤)⎦																⌽a(⎡A,b⎤)
 
 # Advanced nested user macro tests
 U b		0	1	11	⌽a(⍟1)
@@ -102,14 +103,17 @@ c06 deeper		⌽c(⌽c(⌽c(⌽c(⌽c(A)))))													[[[[[A]]]]]
 
 # nested user macro tests
 U d		0	1	11	⌽a(⎡=⍟1=⎤)
-d01 empty		⌽d❪❫																		[==]
-d02 filled		⌽d(A)																	[=A=]
-d03 braces		⎡⌽d(⎡A,b⎤)⎤																[=A,b=]
-d04 repeats		⌽d(A)⌽d(B)⌽d(A)⌽d(B)													[=A=][=B=][=A=][=B=]
-d05 recurse		⌽d(+⌽d(A))																[=+[=A=]=]
-d06 deeper		⌽d(⌽d(⌽d(⌽d(⌽d(A)))))													[=[=[=[=[=A=]=]=]=]=]
-d07 tags		⌽wTr(⌽wa(class,test),⌽wTd(,⎡Hello, you.⎤))								<tr class="test"><td>Hello, you.</td></tr>
+d01aempty		⌽d❪❫																	[==]
+d02afilled		⌽d(A)																	[=A=]
+d03abraces		⎡⌽d(⎡A,b⎤)⎤																[=A,b=]
+d04arepeats		⌽d(A)⌽d(B)⌽d(A)⌽d(B)													[=A=][=B=][=A=][=B=]
+d05arecurse		⌽d(+⌽d(A))																[=+[=A=]=]
+d06adeeper		⌽d(⌽d(⌽d(⌽d(⌽d(A)))))													[=[=[=[=[=A=]=]=]=]=]
+d07atags		⌽wTr(⌽wa(class,test),⌽wTd(,⎡Hello, you.⎤))								<tr class="test"><td>Hello, you.</td></tr>
 ~d
+
+d07awTr			⌽wTr(⌽wa(A,X),B)														<tr A="X">B</tr>
+d07awTd			⌽wTd(⌽wa(A,X),B)														<td A="X">B</td>
 
 # (A) Recursive User Macros -- Needs INTERNALS
 // tru Recursion	⌽fx(abc)																.[a].[b].[c].

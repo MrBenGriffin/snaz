@@ -7,56 +7,45 @@
 
 #include "Driver.h"
 #include "Definition.h"
+#include "Advanced.h"
+#include "Classic.h"
+
 
 namespace mt {
 
-	mstack Driver::empty_stack {};
+	mstack	Driver::empty_stack {};
+	int 	Driver::accept = 0;
 
-	mtext Driver::parse(std::istream &stream, bool advanced, bool strip) {
-		if (!stream.good() && stream.eof()) {
-			return {};
+	Driver::Driver(std::istream &stream,bool advanced) :
+		iterated(false) {
+		if (stream.good() && !stream.eof()) {
+			if(advanced) {
+				scanner = new Advanced(&stream);
+			} else {
+				scanner = new Classic(&stream);
+			}
+			parser = new Parser(scanner,(*this));
 		}
-		parse_helper(stream,advanced,strip,false);
+	}
+
+	mtext Driver::parse(bool strip) {
+		scanner->stripped=strip;
+		scanner->defining=false;
+		if (parser->parse() != accept) {
+			std::cout << "Parse failed!!" << std::endl;
+		}
 		return final;
 	}
 
-	parse_result Driver::define(std::istream &stream, bool advanced, bool strip) {
-		if (!stream.good() && stream.eof()) {
-			return {{},false};
+	parse_result Driver::define(bool strip) {
+		scanner->stripped=strip;
+		scanner->defining=true;
+		if (parser->parse() != accept) {
+			std::cout << "Define failed!!" << std::endl;
 		}
-		parse_helper(stream,advanced,strip,true);
 		return {final,iterated};
 	}
 
-	void Driver::parse_helper(std::istream &stream,bool advanced,bool stripped,bool defining) {
-		iterated = false;
-		delete (scanner);
-		//TODO: This needs to allow for classic once we are happy with the advance scanners.
-		//       if(advanced || !advanced) {
-		try {
-			scanner = new mt::Advanced(&stream,stripped,defining);
-		}
-		catch (std::bad_alloc &ba) {
-			std::cerr << "Failed to allocate scanner: (" <<
-					  ba.what() << "), exiting!!\n";
-			exit(EXIT_FAILURE);
-		}
-		//       }
-		delete (parser);
-		try {
-			parser = new mt::Parser((*scanner),(*this));
-			// parser->set_debug_level(1);
-		}
-		catch (std::bad_alloc &ba) {
-			std::cerr << "Failed to allocate parser: (" <<
-					  ba.what() << "), exiting!!\n";
-			exit(EXIT_FAILURE);
-		}
-		const int accept(0);
-		if (parser->parse() != accept) {
-			std::cerr << "Parse failed!!\n";
-		}
-	}
 
 	/*
 	 * Because we are parsing, we want to try and keep strings in a lump, rather than have lots of them
@@ -121,14 +110,12 @@ namespace mt {
 		parm.clear();
 	}
 
-	void Driver::expand(const mtext& object,std::ostream& o,const std::string &title) {
+	void Driver::expand(std::ostream& o,const std::string &title) {
 		mtext result;
-		mstack  context;
-		Content start(title);
-		Instance zero(nullptr,{0,0});
-		Handler handler(start);
-		context.push_back({&handler,zero});
-		expand(object,result,context);
+		mstack context;
+		Handler handler({title}); //Implicitly constructs a Content..
+		context.push_back({&handler,{nullptr,{0,0}}});
+		expand(final,result,context);
 		for(auto& i : result) {
 			if (std::holds_alternative<Text>(i)) { o << std::get<Text>(i).get(); } else {
 				if (std::holds_alternative<Wss>(i)) { o << std::get<Wss>(i).get(); } else {

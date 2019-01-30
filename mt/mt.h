@@ -10,18 +10,12 @@
 #include <vector>
 #include <deque>
 
+#include "support/Message.h"
+#include "declarations.h"
 
 namespace mt {
 
-    //The following are Token classes.
-    class Macro;
-    class Injection;
-    class Wss;
-    class Text;
-
-    class iEq; class Definition; class Content;
-    using Handler=std::variant<Content,Definition,iEq>;
-
+    using Handler=std::variant<Content,Definition,iEq,iExpr>;
     using Token=std::variant<Macro,Wss,Injection,Text>;
     using mtext=std::deque<Token>;
     using parse_result=std::pair<mtext, bool>;
@@ -43,5 +37,7 @@ namespace mt {
 #include "Content.h"
 #include "Driver.h"
 #include "Definition.h"
+#include "Internals.h"
+
 
 #endif //MACROTEXT_MT_H
