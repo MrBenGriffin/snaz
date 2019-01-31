@@ -26,6 +26,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/macrotext.dir/mt/InternalsStorage.cpp.o"
   "CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o"
   "CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o"
+  "CMakeFiles/macrotext.dir/support/Comparison.cpp.o"
   "macrotext.pdb"
   "macrotext"
 )

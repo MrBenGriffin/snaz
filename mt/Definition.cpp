@@ -33,6 +33,14 @@ namespace mt {
 		}
 	}
 
+	//used for pre-parsed definitions (eg in iForSibs)
+	Definition::Definition(std::string name_i, const mtext code,
+		long min, long max, bool iter, bool tP, bool preEx):
+		counter(0), _name(std::move(name_i)),iterated(iter), trimParms(tP), preExpand(preEx),expansion(code) {
+		minParms = min == -1 ? 0 : min;
+		maxParms = max == -1 ? INT_MAX : max;
+	}
+
 	bool Definition::inRange(size_t i) const {
 		return (i <= maxParms);
 	}

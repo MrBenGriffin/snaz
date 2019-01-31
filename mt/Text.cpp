@@ -12,7 +12,7 @@ namespace mt {
         return o;
     }
 
-    std::string Text::get() { return text; }
+    std::string Text::get() const { return text; }
     void Text::append(std::string right) { text.append(right); };
 
     void Text::expand(Messages&,mtext &mt, const mstack &) const {

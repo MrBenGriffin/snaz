@@ -25,6 +25,7 @@ namespace mt {
         InternalsCommon(const Internal*,Support::Messages&,mtext&,Instance&,mstack&);
 
         std::string     parm(size_t);
+        const mtext*    praw(size_t);
         void            expand(size_t);
         void            set(std::string);
         void            logic(bool,size_t);

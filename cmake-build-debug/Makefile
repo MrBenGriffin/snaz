@@ -555,6 +555,33 @@ parser.tab.cpp.s:
 	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/parser.tab.cpp.s
 .PHONY : parser.tab.cpp.s
 
+support/Comparison.o: support/Comparison.cpp.o
+
+.PHONY : support/Comparison.o
+
+# target to build an object file
+support/Comparison.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Comparison.cpp.o
+.PHONY : support/Comparison.cpp.o
+
+support/Comparison.i: support/Comparison.cpp.i
+
+.PHONY : support/Comparison.i
+
+# target to preprocess a source file
+support/Comparison.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Comparison.cpp.i
+.PHONY : support/Comparison.cpp.i
+
+support/Comparison.s: support/Comparison.cpp.s
+
+.PHONY : support/Comparison.s
+
+# target to generate assembly for a file
+support/Comparison.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Comparison.cpp.s
+.PHONY : support/Comparison.cpp.s
+
 support/Convert.o: support/Convert.cpp.o
 
 .PHONY : support/Convert.o
@@ -801,6 +828,9 @@ help:
 	@echo "... parser.tab.o"
 	@echo "... parser.tab.i"
 	@echo "... parser.tab.s"
+	@echo "... support/Comparison.o"
+	@echo "... support/Comparison.i"
+	@echo "... support/Comparison.s"
 	@echo "... support/Convert.o"
 	@echo "... support/Convert.i"
 	@echo "... support/Convert.s"

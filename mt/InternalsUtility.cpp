@@ -45,8 +45,12 @@ namespace mt {
 		string sortStr = my.parm(5);
 		vector<string> idx;
 		tolist(idx,index_string,delimiter);
-//		doSort(idx,sortStr);
-//		expand(idx,praw(6),my.parm(3),my.parm(4));
+		doSort(idx,sortStr);
+		plist parms;
+		for(auto& i : idx) {
+			parms.push_back({Text(i)});
+		}
+		generate(e,o,context,parms,my.praw(6),my.parm(3),my.parm(4));
 	}
 
 	void iIndex::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {

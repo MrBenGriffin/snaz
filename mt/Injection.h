@@ -39,6 +39,8 @@ namespace mt {
         std::ostream& visit(std::ostream&) const;
         void expand(Messages&,mtext&,mstack&) const;
         bool empty() const { return false; }
+        void seti() { iterator = true; type = It::current; }
+        void setk() { iterator = true; type = It::count; }
 
 
     };

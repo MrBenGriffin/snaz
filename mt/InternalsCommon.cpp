@@ -21,6 +21,15 @@ namespace mt {
 		return result.str();
 	}
 
+	const mtext*	InternalsCommon::praw(size_t i) {
+		const mtext* m = nullptr;
+		if(parms->size() >= i) {
+			m = &((*parms)[i - 1]);
+		}
+		return m;
+	}
+
+
 	void InternalsCommon::expand(size_t i) {
 		Driver::expand((*parms)[i - 1],*errs, *output, *context);
 	}

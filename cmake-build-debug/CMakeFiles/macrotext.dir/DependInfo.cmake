@@ -20,6 +20,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/Users/ben/CLionProjects/snaz/mt/Text.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/mt/Text.cpp.o"
   "/Users/ben/CLionProjects/snaz/mt/Wss.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/mt/Wss.cpp.o"
   "/Users/ben/CLionProjects/snaz/cmake-build-debug/parser.tab.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/parser.tab.cpp.o"
+  "/Users/ben/CLionProjects/snaz/support/Comparison.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/support/Comparison.cpp.o"
   "/Users/ben/CLionProjects/snaz/support/Convert.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/support/Convert.cpp.o"
   "/Users/ben/CLionProjects/snaz/support/Encode.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/support/Encode.cpp.o"
   "/Users/ben/CLionProjects/snaz/support/Fandr.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/support/Fandr.cpp.o"

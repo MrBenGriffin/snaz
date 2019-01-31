@@ -19,7 +19,7 @@ namespace mt {
         std::ostream& visit(std::ostream&) const;
         void expand(Messages&,mtext&,const mstack&) const;
         void add(mtext&);
-        std::string get();
+        std::string get() const;
         void append(std::string);
         bool empty() const { return text.empty(); }
     };
