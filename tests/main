@@ -2,9 +2,6 @@
 F showPassed	1
 F showDefines	1
 
-
-
-//X
 F showPassed	0
 F showDefines	0
 
@@ -19,9 +16,11 @@ F showDefines	0
 !	basic_advanced
 !	basic_classic
 !	basicmixed
+!	injections
 !	iEq
 !	iExpr
-!	injections
+!	iSet
+!	iLeft
 
 // !	taxonomy
 // !	media

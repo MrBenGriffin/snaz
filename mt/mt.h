@@ -15,8 +15,6 @@
 
 namespace mt {
 
-    using Handler=std::variant<Content,Definition,iEq,iExpr>;
-    using Token=std::variant<Macro,Wss,Injection,Text>;
     using mtext=std::deque<Token>;
     using parse_result=std::pair<mtext, bool>;
     using iteration=std::pair<size_t,size_t>;

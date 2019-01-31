@@ -1,0 +1,21 @@
+# iSet from builderTests
+16 iSet		@iSet(x,trot)@iGet(x)														trot
+17 iSet		@iSet(~x,tront)@iGet(~x)													tront
+18 iSet		@iGet(~x):@iGet(x)															tront:trot
+19 iSet		@iGet(x,trot,T,F)															T
+20 iSet		@iGet(x,tront,T,F)															F
+21 iSet		@iSet(x,{|@X(fop)|})@iGet(x)												@X(fop)
+22 iSet		@iSet(x,{|@X(foo)|})@iGet(x,{|@X(foo)|},T,F)								T
+161 iSet	@iSet(x,trot)@iGet(x)														trot
+162 iSet	@iSet(x,trot)@iGet(x)														trot
+163 iSet	@iSet(x)[@iGet(x)]															[]
+164 iSet	@iSet(x,trot)@iGet(x)														trot
+
+# iExists
+iExists01	@iSet(A,T)@iExists(A)														1
+iExists02	@iExists(wap)																0
+iExists03	@iExists(A,T,F)																T
+iExists04	@iExists(wap,T,F)															F
+
+b07 entity	@ent(nbsp)																	#x00A0
+b08 entity	@ent(cent)																	#x00A2

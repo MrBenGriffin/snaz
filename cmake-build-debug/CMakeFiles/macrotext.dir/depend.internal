@@ -15,6 +15,7 @@ CMakeFiles/macrotext.dir/classic.yy.cpp.o
  /usr/local/include/FlexLexer.h
 CMakeFiles/macrotext.dir/main.cpp.o
  ..//support/Message.h
+ ..//support/Storage.h
  /Users/ben/CLionProjects/snaz/main.cpp
  /Users/ben/CLionProjects/snaz/mt/Content.h
  /Users/ben/CLionProjects/snaz/mt/Definition.h
@@ -33,6 +34,7 @@ CMakeFiles/macrotext.dir/main.cpp.o
  parser.tab.hpp
 CMakeFiles/macrotext.dir/mt/Content.cpp.o
  ..//support/Message.h
+ ..//support/Storage.h
  /Users/ben/CLionProjects/snaz/mt/Content.cpp
  /Users/ben/CLionProjects/snaz/mt/Content.h
  /Users/ben/CLionProjects/snaz/mt/Definition.h
@@ -46,24 +48,9 @@ CMakeFiles/macrotext.dir/mt/Content.cpp.o
  /Users/ben/CLionProjects/snaz/mt/mt.h
  location.hh
  parser.tab.hpp
-CMakeFiles/macrotext.dir/mt/Current.cpp.o
- ..//support/Message.h
- /Users/ben/CLionProjects/snaz/mt/Content.h
- /Users/ben/CLionProjects/snaz/mt/Current.cpp
- /Users/ben/CLionProjects/snaz/mt/Current.h
- /Users/ben/CLionProjects/snaz/mt/Definition.h
- /Users/ben/CLionProjects/snaz/mt/Driver.h
- /Users/ben/CLionProjects/snaz/mt/Injection.h
- /Users/ben/CLionProjects/snaz/mt/Internals.h
- /Users/ben/CLionProjects/snaz/mt/Macro.h
- /Users/ben/CLionProjects/snaz/mt/Text.h
- /Users/ben/CLionProjects/snaz/mt/Wss.h
- /Users/ben/CLionProjects/snaz/mt/declarations.h
- /Users/ben/CLionProjects/snaz/mt/mt.h
- location.hh
- parser.tab.hpp
 CMakeFiles/macrotext.dir/mt/Definition.cpp.o
  ..//support/Message.h
+ ..//support/Storage.h
  /Users/ben/CLionProjects/snaz/mt/Content.h
  /Users/ben/CLionProjects/snaz/mt/Definition.cpp
  /Users/ben/CLionProjects/snaz/mt/Definition.h
@@ -79,6 +66,7 @@ CMakeFiles/macrotext.dir/mt/Definition.cpp.o
  parser.tab.hpp
 CMakeFiles/macrotext.dir/mt/Driver.cpp.o
  ..//support/Message.h
+ ..//support/Storage.h
  /Users/ben/CLionProjects/snaz/mt/Advanced.h
  /Users/ben/CLionProjects/snaz/mt/Classic.h
  /Users/ben/CLionProjects/snaz/mt/Content.h
@@ -98,6 +86,7 @@ CMakeFiles/macrotext.dir/mt/Driver.cpp.o
  parser.tab.hpp
 CMakeFiles/macrotext.dir/mt/Injection.cpp.o
  ..//support/Message.h
+ ..//support/Storage.h
  /Users/ben/CLionProjects/snaz/mt/Content.h
  /Users/ben/CLionProjects/snaz/mt/Definition.h
  /Users/ben/CLionProjects/snaz/mt/Driver.h
@@ -114,14 +103,90 @@ CMakeFiles/macrotext.dir/mt/Injection.cpp.o
 CMakeFiles/macrotext.dir/mt/Internals.cpp.o
  ..//support/Infix.h
  ..//support/Message.h
+ ..//support/Storage.h
  ../support/Message.h
  /Users/ben/CLionProjects/snaz/mt/Content.h
- /Users/ben/CLionProjects/snaz/mt/Current.h
  /Users/ben/CLionProjects/snaz/mt/Definition.h
  /Users/ben/CLionProjects/snaz/mt/Driver.h
  /Users/ben/CLionProjects/snaz/mt/Injection.h
  /Users/ben/CLionProjects/snaz/mt/Internals.cpp
  /Users/ben/CLionProjects/snaz/mt/Internals.h
+ /Users/ben/CLionProjects/snaz/mt/InternalsCommon.h
+ /Users/ben/CLionProjects/snaz/mt/Macro.h
+ /Users/ben/CLionProjects/snaz/mt/Text.h
+ /Users/ben/CLionProjects/snaz/mt/Wss.h
+ /Users/ben/CLionProjects/snaz/mt/declarations.h
+ /Users/ben/CLionProjects/snaz/mt/mt.h
+ location.hh
+ parser.tab.hpp
+CMakeFiles/macrotext.dir/mt/InternalsCommon.cpp.o
+ ..//support/Message.h
+ ..//support/Storage.h
+ /Users/ben/CLionProjects/snaz/mt/Content.h
+ /Users/ben/CLionProjects/snaz/mt/Definition.h
+ /Users/ben/CLionProjects/snaz/mt/Driver.h
+ /Users/ben/CLionProjects/snaz/mt/Injection.h
+ /Users/ben/CLionProjects/snaz/mt/Internals.h
+ /Users/ben/CLionProjects/snaz/mt/InternalsCommon.cpp
+ /Users/ben/CLionProjects/snaz/mt/InternalsCommon.h
+ /Users/ben/CLionProjects/snaz/mt/Macro.h
+ /Users/ben/CLionProjects/snaz/mt/Text.h
+ /Users/ben/CLionProjects/snaz/mt/Wss.h
+ /Users/ben/CLionProjects/snaz/mt/declarations.h
+ /Users/ben/CLionProjects/snaz/mt/mt.h
+ location.hh
+ parser.tab.hpp
+CMakeFiles/macrotext.dir/mt/InternalsStorage.cpp.o
+ ..//support/Infix.h
+ ..//support/Message.h
+ ..//support/Storage.h
+ ../support/Message.h
+ /Users/ben/CLionProjects/snaz/mt/Content.h
+ /Users/ben/CLionProjects/snaz/mt/Definition.h
+ /Users/ben/CLionProjects/snaz/mt/Driver.h
+ /Users/ben/CLionProjects/snaz/mt/Injection.h
+ /Users/ben/CLionProjects/snaz/mt/Internals.h
+ /Users/ben/CLionProjects/snaz/mt/InternalsCommon.h
+ /Users/ben/CLionProjects/snaz/mt/InternalsStorage.cpp
+ /Users/ben/CLionProjects/snaz/mt/Macro.h
+ /Users/ben/CLionProjects/snaz/mt/Text.h
+ /Users/ben/CLionProjects/snaz/mt/Wss.h
+ /Users/ben/CLionProjects/snaz/mt/declarations.h
+ /Users/ben/CLionProjects/snaz/mt/mt.h
+ location.hh
+ parser.tab.hpp
+CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o
+ ..//support/Convert.h
+ ..//support/Fandr.h
+ ..//support/Message.h
+ ..//support/Storage.h
+ /Users/ben/CLionProjects/snaz/mt/Content.h
+ /Users/ben/CLionProjects/snaz/mt/Definition.h
+ /Users/ben/CLionProjects/snaz/mt/Driver.h
+ /Users/ben/CLionProjects/snaz/mt/Injection.h
+ /Users/ben/CLionProjects/snaz/mt/Internals.h
+ /Users/ben/CLionProjects/snaz/mt/InternalsCommon.h
+ /Users/ben/CLionProjects/snaz/mt/InternalsString.cpp
+ /Users/ben/CLionProjects/snaz/mt/Macro.h
+ /Users/ben/CLionProjects/snaz/mt/Text.h
+ /Users/ben/CLionProjects/snaz/mt/Wss.h
+ /Users/ben/CLionProjects/snaz/mt/declarations.h
+ /Users/ben/CLionProjects/snaz/mt/mt.h
+ location.hh
+ parser.tab.hpp
+CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o
+ ..//support/Convert.h
+ ..//support/Infix.h
+ ..//support/Message.h
+ ..//support/Storage.h
+ ../support/Message.h
+ /Users/ben/CLionProjects/snaz/mt/Content.h
+ /Users/ben/CLionProjects/snaz/mt/Definition.h
+ /Users/ben/CLionProjects/snaz/mt/Driver.h
+ /Users/ben/CLionProjects/snaz/mt/Injection.h
+ /Users/ben/CLionProjects/snaz/mt/Internals.h
+ /Users/ben/CLionProjects/snaz/mt/InternalsCommon.h
+ /Users/ben/CLionProjects/snaz/mt/InternalsUtility.cpp
  /Users/ben/CLionProjects/snaz/mt/Macro.h
  /Users/ben/CLionProjects/snaz/mt/Text.h
  /Users/ben/CLionProjects/snaz/mt/Wss.h
@@ -131,6 +196,7 @@ CMakeFiles/macrotext.dir/mt/Internals.cpp.o
  parser.tab.hpp
 CMakeFiles/macrotext.dir/mt/Macro.cpp.o
  ..//support/Message.h
+ ..//support/Storage.h
  /Users/ben/CLionProjects/snaz/mt/Content.h
  /Users/ben/CLionProjects/snaz/mt/Definition.h
  /Users/ben/CLionProjects/snaz/mt/Driver.h
@@ -146,6 +212,7 @@ CMakeFiles/macrotext.dir/mt/Macro.cpp.o
  parser.tab.hpp
 CMakeFiles/macrotext.dir/mt/Text.cpp.o
  ..//support/Message.h
+ ..//support/Storage.h
  /Users/ben/CLionProjects/snaz/mt/Content.h
  /Users/ben/CLionProjects/snaz/mt/Definition.h
  /Users/ben/CLionProjects/snaz/mt/Driver.h
@@ -161,6 +228,7 @@ CMakeFiles/macrotext.dir/mt/Text.cpp.o
  parser.tab.hpp
 CMakeFiles/macrotext.dir/mt/Wss.cpp.o
  ..//support/Message.h
+ ..//support/Storage.h
  /Users/ben/CLionProjects/snaz/mt/Content.h
  /Users/ben/CLionProjects/snaz/mt/Definition.h
  /Users/ben/CLionProjects/snaz/mt/Driver.h
@@ -178,6 +246,7 @@ CMakeFiles/macrotext.dir/parser.tab.cpp.o
  ..//mt/Driver.h
  ..//mt/Scanner.h
  ..//support/Message.h
+ ..//support/Storage.h
  ../mt/Content.h
  ../mt/Definition.h
  ../mt/Driver.h
@@ -191,9 +260,6 @@ CMakeFiles/macrotext.dir/parser.tab.cpp.o
  /Users/ben/CLionProjects/snaz/cmake-build-debug/location.hh
  /Users/ben/CLionProjects/snaz/cmake-build-debug/parser.tab.cpp
  /Users/ben/CLionProjects/snaz/cmake-build-debug/parser.tab.hpp
-CMakeFiles/macrotext.dir/storage.cpp.o
- /Users/ben/CLionProjects/snaz/storage.cpp
- /Users/ben/CLionProjects/snaz/storage.h
 CMakeFiles/macrotext.dir/support/Convert.cpp.o
  /Users/ben/CLionProjects/snaz/support/Convert.cpp
  /Users/ben/CLionProjects/snaz/support/Convert.h
@@ -213,8 +279,12 @@ CMakeFiles/macrotext.dir/support/Infix.cpp.o
 CMakeFiles/macrotext.dir/support/Message.cpp.o
  /Users/ben/CLionProjects/snaz/support/Message.cpp
  /Users/ben/CLionProjects/snaz/support/Message.h
+CMakeFiles/macrotext.dir/support/Storage.cpp.o
+ /Users/ben/CLionProjects/snaz/support/Storage.cpp
+ /Users/ben/CLionProjects/snaz/support/Storage.h
 CMakeFiles/macrotext.dir/test.cpp.o
  ..//support/Message.h
+ ..//support/Storage.h
  /Users/ben/CLionProjects/snaz/mt/Content.h
  /Users/ben/CLionProjects/snaz/mt/Definition.h
  /Users/ben/CLionProjects/snaz/mt/Driver.h

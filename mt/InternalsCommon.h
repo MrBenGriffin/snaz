@@ -14,7 +14,7 @@ namespace mt {
     using namespace Support;
     // Used by Internals to hold current evaluation,
     // and also manages common utility functions.
-    class Current {
+    class InternalsCommon {
      public:
         size_t          min {0}, max{0}, count {0};
         mtext*          output {nullptr};
@@ -22,12 +22,13 @@ namespace mt {
         const plist*    parms {nullptr};
         mstack*         context {nullptr};
         Messages*       errs;
-        Current(const Internal*,Support::Messages&,mtext&,Instance&,mstack&);
+        InternalsCommon(const Internal*,Support::Messages&,mtext&,Instance&,mstack&);
 
         std::string     parm(size_t);
         void            expand(size_t);
         void            set(std::string);
-        void            logic(size_t);
+        void            logic(bool,size_t);
+        void            logic(std::string&,size_t);
     };
 
 }

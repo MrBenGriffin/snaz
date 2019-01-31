@@ -231,33 +231,6 @@ mt/Content.cpp.s:
 	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Content.cpp.s
 .PHONY : mt/Content.cpp.s
 
-mt/Current.o: mt/Current.cpp.o
-
-.PHONY : mt/Current.o
-
-# target to build an object file
-mt/Current.cpp.o:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Current.cpp.o
-.PHONY : mt/Current.cpp.o
-
-mt/Current.i: mt/Current.cpp.i
-
-.PHONY : mt/Current.i
-
-# target to preprocess a source file
-mt/Current.cpp.i:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Current.cpp.i
-.PHONY : mt/Current.cpp.i
-
-mt/Current.s: mt/Current.cpp.s
-
-.PHONY : mt/Current.s
-
-# target to generate assembly for a file
-mt/Current.cpp.s:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Current.cpp.s
-.PHONY : mt/Current.cpp.s
-
 mt/Definition.o: mt/Definition.cpp.o
 
 .PHONY : mt/Definition.o
@@ -366,6 +339,114 @@ mt/Internals.cpp.s:
 	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Internals.cpp.s
 .PHONY : mt/Internals.cpp.s
 
+mt/InternalsCommon.o: mt/InternalsCommon.cpp.o
+
+.PHONY : mt/InternalsCommon.o
+
+# target to build an object file
+mt/InternalsCommon.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalsCommon.cpp.o
+.PHONY : mt/InternalsCommon.cpp.o
+
+mt/InternalsCommon.i: mt/InternalsCommon.cpp.i
+
+.PHONY : mt/InternalsCommon.i
+
+# target to preprocess a source file
+mt/InternalsCommon.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalsCommon.cpp.i
+.PHONY : mt/InternalsCommon.cpp.i
+
+mt/InternalsCommon.s: mt/InternalsCommon.cpp.s
+
+.PHONY : mt/InternalsCommon.s
+
+# target to generate assembly for a file
+mt/InternalsCommon.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalsCommon.cpp.s
+.PHONY : mt/InternalsCommon.cpp.s
+
+mt/InternalsStorage.o: mt/InternalsStorage.cpp.o
+
+.PHONY : mt/InternalsStorage.o
+
+# target to build an object file
+mt/InternalsStorage.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalsStorage.cpp.o
+.PHONY : mt/InternalsStorage.cpp.o
+
+mt/InternalsStorage.i: mt/InternalsStorage.cpp.i
+
+.PHONY : mt/InternalsStorage.i
+
+# target to preprocess a source file
+mt/InternalsStorage.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalsStorage.cpp.i
+.PHONY : mt/InternalsStorage.cpp.i
+
+mt/InternalsStorage.s: mt/InternalsStorage.cpp.s
+
+.PHONY : mt/InternalsStorage.s
+
+# target to generate assembly for a file
+mt/InternalsStorage.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalsStorage.cpp.s
+.PHONY : mt/InternalsStorage.cpp.s
+
+mt/InternalsString.o: mt/InternalsString.cpp.o
+
+.PHONY : mt/InternalsString.o
+
+# target to build an object file
+mt/InternalsString.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o
+.PHONY : mt/InternalsString.cpp.o
+
+mt/InternalsString.i: mt/InternalsString.cpp.i
+
+.PHONY : mt/InternalsString.i
+
+# target to preprocess a source file
+mt/InternalsString.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalsString.cpp.i
+.PHONY : mt/InternalsString.cpp.i
+
+mt/InternalsString.s: mt/InternalsString.cpp.s
+
+.PHONY : mt/InternalsString.s
+
+# target to generate assembly for a file
+mt/InternalsString.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalsString.cpp.s
+.PHONY : mt/InternalsString.cpp.s
+
+mt/InternalsUtility.o: mt/InternalsUtility.cpp.o
+
+.PHONY : mt/InternalsUtility.o
+
+# target to build an object file
+mt/InternalsUtility.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o
+.PHONY : mt/InternalsUtility.cpp.o
+
+mt/InternalsUtility.i: mt/InternalsUtility.cpp.i
+
+.PHONY : mt/InternalsUtility.i
+
+# target to preprocess a source file
+mt/InternalsUtility.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.i
+.PHONY : mt/InternalsUtility.cpp.i
+
+mt/InternalsUtility.s: mt/InternalsUtility.cpp.s
+
+.PHONY : mt/InternalsUtility.s
+
+# target to generate assembly for a file
+mt/InternalsUtility.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.s
+.PHONY : mt/InternalsUtility.cpp.s
+
 mt/Macro.o: mt/Macro.cpp.o
 
 .PHONY : mt/Macro.o
@@ -473,33 +554,6 @@ parser.tab.s: parser.tab.cpp.s
 parser.tab.cpp.s:
 	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/parser.tab.cpp.s
 .PHONY : parser.tab.cpp.s
-
-storage.o: storage.cpp.o
-
-.PHONY : storage.o
-
-# target to build an object file
-storage.cpp.o:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/storage.cpp.o
-.PHONY : storage.cpp.o
-
-storage.i: storage.cpp.i
-
-.PHONY : storage.i
-
-# target to preprocess a source file
-storage.cpp.i:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/storage.cpp.i
-.PHONY : storage.cpp.i
-
-storage.s: storage.cpp.s
-
-.PHONY : storage.s
-
-# target to generate assembly for a file
-storage.cpp.s:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/storage.cpp.s
-.PHONY : storage.cpp.s
 
 support/Convert.o: support/Convert.cpp.o
 
@@ -636,6 +690,33 @@ support/Message.cpp.s:
 	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Message.cpp.s
 .PHONY : support/Message.cpp.s
 
+support/Storage.o: support/Storage.cpp.o
+
+.PHONY : support/Storage.o
+
+# target to build an object file
+support/Storage.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Storage.cpp.o
+.PHONY : support/Storage.cpp.o
+
+support/Storage.i: support/Storage.cpp.i
+
+.PHONY : support/Storage.i
+
+# target to preprocess a source file
+support/Storage.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Storage.cpp.i
+.PHONY : support/Storage.cpp.i
+
+support/Storage.s: support/Storage.cpp.s
+
+.PHONY : support/Storage.s
+
+# target to generate assembly for a file
+support/Storage.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Storage.cpp.s
+.PHONY : support/Storage.cpp.s
+
 test.o: test.cpp.o
 
 .PHONY : test.o
@@ -684,9 +765,6 @@ help:
 	@echo "... mt/Content.o"
 	@echo "... mt/Content.i"
 	@echo "... mt/Content.s"
-	@echo "... mt/Current.o"
-	@echo "... mt/Current.i"
-	@echo "... mt/Current.s"
 	@echo "... mt/Definition.o"
 	@echo "... mt/Definition.i"
 	@echo "... mt/Definition.s"
@@ -699,6 +777,18 @@ help:
 	@echo "... mt/Internals.o"
 	@echo "... mt/Internals.i"
 	@echo "... mt/Internals.s"
+	@echo "... mt/InternalsCommon.o"
+	@echo "... mt/InternalsCommon.i"
+	@echo "... mt/InternalsCommon.s"
+	@echo "... mt/InternalsStorage.o"
+	@echo "... mt/InternalsStorage.i"
+	@echo "... mt/InternalsStorage.s"
+	@echo "... mt/InternalsString.o"
+	@echo "... mt/InternalsString.i"
+	@echo "... mt/InternalsString.s"
+	@echo "... mt/InternalsUtility.o"
+	@echo "... mt/InternalsUtility.i"
+	@echo "... mt/InternalsUtility.s"
 	@echo "... mt/Macro.o"
 	@echo "... mt/Macro.i"
 	@echo "... mt/Macro.s"
@@ -711,9 +801,6 @@ help:
 	@echo "... parser.tab.o"
 	@echo "... parser.tab.i"
 	@echo "... parser.tab.s"
-	@echo "... storage.o"
-	@echo "... storage.i"
-	@echo "... storage.s"
 	@echo "... support/Convert.o"
 	@echo "... support/Convert.i"
 	@echo "... support/Convert.s"
@@ -729,6 +816,9 @@ help:
 	@echo "... support/Message.o"
 	@echo "... support/Message.i"
 	@echo "... support/Message.s"
+	@echo "... support/Storage.o"
+	@echo "... support/Storage.i"
+	@echo "... support/Storage.s"
 	@echo "... test.o"
 	@echo "... test.i"
 	@echo "... test.s"

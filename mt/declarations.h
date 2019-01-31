@@ -12,12 +12,30 @@ namespace mt {
 	class Injection;
 	class Wss;
 	class Text;
+	using Token=std::variant<Macro,Wss,Injection,Text>;
 
 	//The following are Handler classes.
+	//Remember to add these to  Definition::initialise() on line 180 of Definition.cpp
 	class Definition;
 	class Content;
+	//utility
 	class iEq;
+	class iIndex;
+	class iForIndex;
 	class iExpr;
+
+	//storage
+	class iExists;
+	class iSet;
+	class iGet;
+
+	//string
+	class iLeft;
+	class iMid;
+	class iRight;
+
+	using Handler=std::variant<Content,Definition,iEq,iExpr,iIndex,iForIndex,iSet,iGet,iExists,iLeft,iMid,iRight>;
+
 }
 
 #endif //MACROTEXT_DECLARATIONS_H

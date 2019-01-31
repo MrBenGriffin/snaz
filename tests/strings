@@ -6,44 +6,6 @@
 
 // name		code											expected result
 
-# Strings Internals: iLeft
-iLef200 	[@iLeft(UVWXYZ,0)]								[]
-iLef201 	[@iLeft(,0)]									[]
-iLef202 	@iLeft(UVWXYZ,-1)								UVWXY
-iLef203 	@iLeft(UVWXYZ,-4)								UV
-iLef204 	@iLeft({UVWXYZ},-4)								UV
-iLef205 	@iLeft({UVWXYZ},-2)								UVWX
-iLef206 	@iLeft(UVWXYZ,1)								U
-iLef207 	@iLeft(UVWXYZ,2)								UV
-iLef208 	@iLeft(UVWXYZ,3)								UVW
-iLef209 	@iLeft(UVWXYZ,3,UVW,T,F)						T
-iLef210 	@iLeft(UVWXYZ,3,UV,T,F)							F
-iLef211 	@iLeft(UVWXYZ,2,UV)								1
-iLef212 	[@iLeft(▩ཨཨཨ,1)]								[▩]
-iLef213 	@iLeft(😬😈💀☠️,1)								😬
-iLef214 	@iLeft(😬🤗💀☠️,2)								😬🤗
-iLeft215	@iLeft(👍🏽,1)										👍
-iLeft216	[@iLeft(👳,1)@iLeft(🏽,1)]						[👳🏽]
-iLeft217	[@iLeft(🖕,1)@iLeft(🏿,1)]						[🖕🏿]
-iLeft218	[@iLeft(🖖,1)@iLeft(🏻,1)]						[🖖🏻]
-iLeft219	@bits(👩🏻‍🌾)										[👩][🏻][🌾]
-iLeft220	@bits(👩🏼‍🚒)										[👩][🏼][🚒]
-iLeft215	@iLeft(👍🏽,1)										👍
-
-# Strings Internals: iRight
-iRig200 	[@iRight(UVWXYZ,0)]								[]
-iRig201 	[@iRight(,0)]									[]
-iRig202 	@iRight(UVWXYZ,-1)								VWXYZ
-iRig203 	@iRight(UVWXYZ,-4)								YZ
-iRig204 	@iRight({UVWXYZ},-4)							YZ
-iRig205 	@iRight({UVWXYZ},-2)							WXYZ
-iRig206 	@iRight(UVWXYZ,1)								Z
-iRig207 	@iRight(UVWXYZ,2)								YZ
-iRig208 	@iRight(UVWXYZ,3)								XYZ
-iRig209 	@iRight(UVWXYZ,3,UVW,T,F)						F
-iRig210 	@iRight(UVWXYZ,3,XYZ,T,F)						T
-iRig211 	@iRight(UVWXYZ,2,YZ)							1
-iRig212 	[@iRight(ཨཨཨཨ▩,1)]								[▩]
 
 # Strings Internals: iLength
 iLen200 	@iLength(UVWXYZ)								6

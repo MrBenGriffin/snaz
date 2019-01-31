@@ -32,10 +32,6 @@ Bas brackets2b	@a❪❪❪❪a❫❫❫❫																	[❪❪❪a]❫❫❫
 Bas brackets3	@a(❪❪❪a❫❫❫)																[❪❪❪a❫❫❫]
 Bas brackets4	@a❪(((a)))❫																[(((a)))]
 
-# Recursive User Macros
-//tru Recursion	@fx(abc)																.[a].[b].[c].
-//tru Recursion	@fr(abc)																.[a].[b].[c].
-
 # Advanced macro tests using b
 Bas 001			⌽a()																	[]
 Bas 002			⌽a(A)																	[A]
@@ -50,9 +46,6 @@ Bas brackets2b	⌽a❪❪❪❪a❫❫❫❫																	[❪❪❪a]❫❫�
 Bas brackets3	⌽a(❪❪❪a❫❫❫)																[❪❪❪a❫❫❫]
 Bas brackets4	⌽a❪(((a)))❫																[(((a)))]
 
-# (A) Recursive User Macros
-//tru Recursion	⌽fx(abc)																.[a].[b].[c].
-//tru Recursion	⌽fr(abc)																.[a].[b].[c].
 
 # Mixed syntax
 Mix braces		{⌽a(⎡A,b⎤)}															{[A,b]}
