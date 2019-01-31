@@ -110,12 +110,12 @@ namespace mt {
 		parm.clear();
 	}
 
-	void Driver::expand(std::ostream& o,const std::string &title) {
+	void Driver::expand(std::ostream& o,Messages& e,const std::string &title) {
 		mtext result;
 		mstack context;
 		Handler handler({title}); //Implicitly constructs a Content..
 		context.push_back({&handler,{nullptr,{0,0}}});
-		expand(final,result,context);
+		expand(final,e,result,context);
 		for(auto& i : result) {
 			if (std::holds_alternative<Text>(i)) { o << std::get<Text>(i).get(); } else {
 				if (std::holds_alternative<Wss>(i)) { o << std::get<Wss>(i).get(); } else {
@@ -126,9 +126,9 @@ namespace mt {
 	}
 
 	//parameter expansion..
-	void Driver::expand(const mtext& object,std::ostream& o,mstack& c) {
+	void Driver::expand(const mtext& object,Messages& e,std::ostream& o,mstack& c) {
 		mtext result;
-		expand(object,result,c);
+		expand(object,e,result,c);
 		for(auto& i : result) {
 			if (std::holds_alternative<Text>(i)) { o << std::get<Text>(i).get(); } else {
 				if (std::holds_alternative<Wss>(i)) { o << std::get<Wss>(i).get(); } else {
@@ -138,17 +138,17 @@ namespace mt {
 		}
 	}
 
-	void Driver::expand(const mtext& object,mtext& x,mstack& c) {
+	void Driver::expand(const mtext& object,Messages& e,mtext& x,mstack& c) {
 		for(auto& j : object) {
-			std::visit([&x,&c](auto&& arg){ arg.expand(x,c);},j);
+			std::visit([&e,&x,&c](auto&& arg){ arg.expand(e,x,c);},j);
 		}
 	}
 
 	// Evaluate ONLY injections.
-	void Driver::inject(const mtext& object,mtext& x,mstack& c) {
+	void Driver::inject(const mtext& object,Messages& e,mtext& x,mstack& c) {
 		for(auto& i : object) {
 			if (std::holds_alternative<Injection>(i)) {
-				std::visit([&x,&c](auto&& arg){ arg.expand(x,c);},i);
+				std::visit([&e,&x,&c](auto&& arg){ arg.expand(e,x,c);},i);
 			} else {
 				x.push_back(i);
 			}

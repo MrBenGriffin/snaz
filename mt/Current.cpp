@@ -7,7 +7,8 @@
 
 namespace mt {
 
-    Current::Current(const Internal *thing, mtext &o, Instance &i, mstack &c) : output(&o), instance(&i), context(&c) {
+    Current::Current(const Internal *thing,Messages& e,mtext &o, Instance &i, mstack &c) :
+        output(&o), instance(&i), context(&c),errs(&e) {
         parms = i.parms;
         count = parms->size();
         min = thing->minParms;
@@ -16,12 +17,12 @@ namespace mt {
 
     std::string Current::parm(size_t i) {
         std::ostringstream result;
-        Driver::expand((*parms)[i - 1], result, *context);
+        Driver::expand((*parms)[i - 1],*errs, result, *context);
         return result.str();
     }
 
     void Current::expand(size_t i) {
-        Driver::expand((*parms)[i - 1], *output, *context);
+        Driver::expand((*parms)[i - 1],*errs, *output, *context);
     }
 
     void Current::set(std::string str) {

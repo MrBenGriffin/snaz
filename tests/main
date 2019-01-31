@@ -2,8 +2,7 @@
 F showPassed	1
 F showDefines	1
 
-//U a			0	1	00	[⍟1]
-//Mix braces		⎡⌽a(⎡A,b⎤)⎤																[A,b]
+
 
 //X
 F showPassed	0

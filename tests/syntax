@@ -13,7 +13,8 @@ P	1	⍟(p)			⁅1:0⁆
 P	1	⍟(ps)			⁅s0⁆
 P	1	⍟^(k-3)			⁅1:k-3⁆
 
-# Advanced: Defines (lexical tests) (0 means not-macro,1 means macro def)
+# Advanced: Defines
+// (0 means not-macro,1 means macro def)
 P	0	⌽wx(oooooo⍟1)		⸠wx「“oooooo⍟1”」
 P	1	⌽wt(oooooo⍟1)		⸠wt「“oooooo”⁅1⁆」
 P	1	⌽wt(ooooo⍟1)		⸠wt「“ooooo”⁅1⁆」
@@ -63,7 +64,8 @@ P	1	%(p)			⁅1:0⁆
 P	1	%(ps)			⁅s0⁆
 P	1	%^(k-3)			⁅1:k-3⁆
 
-# Classic: Defines (lexical tests) (0 means not-macro,1 means macro def)
+# Classic: Defines (lexical tests)
+// (0 means not-macro,1 means macro def)
 P	0	@wx(oooooo%1)		⸠wx「“oooooo%1”」
 P	1	@wt(oooooo%1)		⸠wt「“oooooo”⁅1⁆」
 P	1	@wt(ooooo%1)		⸠wt「“ooooo”⁅1⁆」

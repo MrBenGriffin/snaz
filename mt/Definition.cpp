@@ -37,7 +37,35 @@ namespace mt {
         return (i <= maxParms);
     }
 
-    void Definition::expand(mtext& o,Instance &instance, mstack &context) {
+    bool Definition::parmCheck(Support::Messages& e,size_t parmcount) const {
+        if((minParms <= parmcount) && (parmcount <= maxParms)) {
+            return true;
+        }
+        std::ostringstream errstr;
+        errstr << "Range error. '" << _name << "' uses ";
+        if (maxParms == 2147483647) {
+            errstr << "at least " << minParms;
+            errstr << " paramete" << (minParms == 1 ? "r" : "rs");
+        } else {
+            if(minParms == maxParms) {
+                errstr << "exactly " << minParms;
+                errstr << " paramete" << (minParms == 1 ? "r" : "rs");
+            } else {
+                errstr << minParms << " to " << maxParms << " parameters";
+            }
+        }
+        errstr << " but " << parmcount << " were found.";
+        e << Message(range,errstr.str());
+        return false;
+    }
+
+
+    void Definition::expand(Support::Messages& e,mtext& o,Instance &instance, mstack &context) {
+ //       Range error. 'pt' uses exactly 1 parameter but 0 were found.
+        size_t pCount = instance.parms->size() == 1 ? instance.parms->front().empty() ? 0 : 1 : instance.parms->size();
+        if(!parmCheck(e,pCount)) {
+            return;
+        }
         Instance modified(nullptr,instance.it);
         plist rendered;
         if (!preExpand) {
@@ -48,7 +76,7 @@ namespace mt {
              for (auto &parm : mt_parms) {
                  mtext expanded;
                  auto i=rendered.size();
-                 Driver::expand(parm, expanded, context);
+                 Driver::expand(parm,e,expanded, context);
                  if(rendered.size() == i) {
                      rendered.push_back(std::move(expanded)); //each one as a separate parm!!
                  }
@@ -64,10 +92,10 @@ namespace mt {
         if (iterated) {
             iteration* i = &(context.front().second.it);
              for (i->first = 1; i->first <= i->second; i->first++) {
-                Driver::expand(expansion, o, context);
+                Driver::expand(expansion,e, o, context);
             }
         } else {
-            Driver::expand(expansion, o, context);
+            Driver::expand(expansion,e, o, context);
         }
         context.pop_front();
     }
@@ -101,10 +129,12 @@ namespace mt {
          }
     }
 
-    void Definition::exp(std::string name,mtext& result,Instance& i,mt::mstack& c) {
+    void Definition::exp(std::string name,Messages& e,mtext& o,Instance& i,mt::mstack& c) {
         auto good = Definition::library.find(name);
         if(good != Definition::library.end()) {
-            std::visit([&result,&i,&c](auto&& arg){ arg.expand(result,i,c);},good->second);
+            std::visit([&e,&o,&i,&c](auto&& arg){ arg.expand(e,o,i,c);},good->second);
+        } else {
+            e << Message(error,name + " not found.");
         }
     }
 

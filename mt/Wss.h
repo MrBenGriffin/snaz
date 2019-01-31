@@ -10,7 +10,7 @@
 
 
 namespace mt {
-
+    using namespace Support;
     class Wss {
     private:
         std::string text;
@@ -18,7 +18,7 @@ namespace mt {
         Wss(const std::string &);
         std::string get();
         std::ostream& visit(std::ostream&) const;
-        void expand(mtext&,const mstack&) const;
+        void expand(Messages&,mtext&,const mstack&) const;
         void add(mtext&);
         bool empty() const { return text.empty(); }
 

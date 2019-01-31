@@ -9,6 +9,7 @@
 #include "mt.h"
 
 namespace mt {
+    using namespace Support;
     class Text {
     private:
         std::string text;
@@ -16,7 +17,7 @@ namespace mt {
         Text() = default;
         Text(const std::string &);
         std::ostream& visit(std::ostream&) const;
-        void expand(mtext&,const mstack&) const;
+        void expand(Messages&,mtext&,const mstack&) const;
         void add(mtext&);
         std::string get();
         void append(std::string);

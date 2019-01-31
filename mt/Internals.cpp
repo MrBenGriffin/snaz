@@ -9,15 +9,15 @@
 #include "support/Message.h"
 
 namespace mt {
-    void iEq::expand(mtext& o,Instance& instance,mstack& context) {
-        Current my(this,o,instance,context);
+    using namespace Support;
+    void iEq::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
+        Current my(this,e,o,instance,context);
         my.logic(1);
     }
 
-    void iExpr::expand(mtext& o,Instance& instance,mstack& context) {
-        Support::Messages msg;
-        Current my(this,o,instance,context);
-        Support::Infix::Evaluate expression;
+    void iExpr::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
+        Current my(this,e,o,instance,context);
+        Infix::Evaluate expression;
         auto expr=my.parm(1);
         expression.set_expression(expr);
         for (size_t i=2; i <= my.count; i++) {
@@ -28,11 +28,10 @@ namespace mt {
             auto number = strtold(&parmValue[0], end);
             expression.add_parm(ost.str(),number);
         }
-        long double value = expression.process(msg);
-        if(msg.marked()) {
-            msg.prefix({Support::context,expr});
-            msg.enscope("Within iExpr");
-            msg.str(std::cout);
+        long double value = expression.process(*my.errs);
+        if(my.errs->marked()) {
+            my.errs->prefix({usage,expr});
+            my.errs->enscope("Within iExpr");
         }
         std::ostringstream ost; ost << value;
         my.set(ost.str());

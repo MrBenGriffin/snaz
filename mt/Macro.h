@@ -10,6 +10,7 @@
 
 
 namespace mt {
+    using namespace Support;
     /**
     * an instance of this is a macro token instance in a piece of text.
     * It may be PART of a usermacro definition.
@@ -19,7 +20,7 @@ namespace mt {
     public:
         std::string name;
         plist parms;        /* parsed parms */
-        void expand(mtext&,mstack&) const;
+        void expand(Messages&,mtext&,mstack&) const;
         std::ostream& visit(std::ostream&) const;
         explicit Macro(std::string);
         void add(mtext&);

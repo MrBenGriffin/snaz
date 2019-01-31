@@ -20,11 +20,11 @@ namespace mt {
 	};
 	struct iEq : public Internal {
 		iEq() : Internal("iEq",0,4) {}
-		void expand(mtext&,Instance&,mstack&);
+		void expand(Support::Messages&,mtext&,Instance&,mstack&);
 	};
 	struct iExpr : public Internal {
 		iExpr() : Internal("iExpr",1,INT_MAX) {}
-		void expand(mtext&,Instance&,mstack&);
+		void expand(Support::Messages&,mtext&,Instance&,mstack&);
 	};
 
 }

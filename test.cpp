@@ -245,18 +245,16 @@ namespace testing {
 						mt::mtext structure = driver.parse(false); //bool advanced, bool strip
 						pexpected = expected;
 						wss(pexpected,false);
-
+						Support::Messages errs;
 						result expansion(name);
-						driver.expand(expansion.out,name);
-
+						driver.expand(expansion.out,errs,name);
 						if(expansion.out.str() == pexpected /*&& !expansion.second.marked()*/) {
 							if (showGood) {
 								title(name,2);
 							}
 						} else {
-							if(error_test /* && expansion.second.marked() */) {
-								/*
-								 string message = expansion.second.line(error_index,false);
+							if(error_test  && errs.marked() ) {
+								 string message = errs.line(error_index);
 								 if(message == expected) {
 									 if(showGood) {
 										 title(name,2);
@@ -266,11 +264,12 @@ namespace testing {
 									 cout << " E program:"  << program << endl;
 									 cout << " E returned:\"" << message <<  "\" on line:" << error_index  << endl;
 									 cout << " E expected:\"" << expected << "\"" << endl;
-									 if(expansion.second.marked()) {
-										 cout << "Errors: " << expansion.second.str() << endl << endl;
+									 if(errs.marked()) {
+										 cout << "Errors: ";
+										 errs.str(cout);
+										 cout << endl;
 									 }
 								 }
-								 */
 							} else {
 								ostringstream pstuff;
 								string parsed,returned = expansion.out.str();

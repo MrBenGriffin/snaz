@@ -77,7 +77,7 @@ mt_p03			⌽mt_p(X,,Y,,Z)							[X::Y::Z:::]
 mt_p04			⌽mt_p(,X,,Y,,Z)							[:X::Y::Z::]
 mt_p05			⌽mt_p(,,X,,Y,,Z)						[::X::Y::Z:]
 
-# Mixed syntax (not sure about this - or what we want to do with this)
+# Additional braces syntax
 Mix braces		⎡⌽a(⎡A,b⎤)⎤																[A,b]
 literals		⎣⌽a(⎡A,b⎤)⎦																⌽a(⎡A,b⎤)
 

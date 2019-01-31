@@ -9,14 +9,14 @@
 #include "mt.h"
 
 namespace mt {
-
+    using namespace Support;
     struct Content {
         std::string _name;
         std::string name() const { return _name; }
         bool inRange(size_t i) const { return  i == 0;}
         Content(std::string name) : _name(name) {}
         std::ostream &visit(std::ostream &o ) { return o; }
-        void expand(mtext&,Instance&,mstack&) {}
+        void expand(Messages&,mtext&,Instance&,mstack&) {}
 
     };
 

@@ -11,8 +11,8 @@
 #include "mt.h"
 #include "Internals.h"
 
-//using namespace std;
 namespace mt {
+	using namespace Support;
 
     class Definition {
     public:
@@ -33,13 +33,15 @@ namespace mt {
     public:
         std::string name() const { return _name; }
         bool inRange(size_t) const;
+		bool parmCheck(Messages&,size_t) const;
+
         bool iterated, trimParms, preExpand;
 
         std::ostream &visit(std::ostream &);
 
         Definition(std::string, std::string, long, long, bool= true, bool= true, bool= false);
 
-        void expand(mtext&,Instance&,mstack&);
+        void expand(Messages&,mtext&,Instance&,mstack&);
 
         static bool test_adv(std::string &);
 
@@ -52,7 +54,7 @@ namespace mt {
         //By Library call..
         static void vis(std::string,std::ostream&);
 
-        static void exp(std::string,mtext&,Instance&,mstack&);
+        static void exp(std::string,Messages&,mtext&,Instance&,mstack&);
 
         static void list(std::ostream&);
 

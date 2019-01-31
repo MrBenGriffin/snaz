@@ -15,12 +15,13 @@ namespace Support {
 			case error:  log << "error"; break;
 			case syntax: log << "syntax"; break;
 			case parms:  log << "parms"; break;
+			case range:  log << "range"; break;
 			case warn:   log << "warn"; break;
 			case info:   log << "info"; break;
 			case debug:  log << "debug"; break;
 			case scope:  log << "<<<<<"; break;
 			case endsc:  log << ">>>>>"; break;
-			case context:log << "using"; break;
+			case usage:	 log << "using"; break;
 			case trace:  log << "trace"; break;
 			case code:   log << "-raw-"; break;
 		}
@@ -30,6 +31,14 @@ namespace Support {
 		}
 		log << content << endl;
 	}
+
+	string Messages::line(size_t line_number) const {
+		if (_marked && (line_number > 0) && (line_number <= list.size())) {
+			return list[line_number-1].content;
+		}
+		return "";
+	}
+
 
 	void Messages::enscope(string s) {
 		list.push_front(std::move(Message(scope,s)));

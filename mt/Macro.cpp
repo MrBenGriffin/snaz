@@ -9,10 +9,10 @@ namespace mt {
 
     Macro::Macro(std::string n) : name(std::move(n)) {};
 
-    void Macro::expand(mtext& result,mstack &context) const {
+    void Macro::expand(Messages& errs,mtext& result,mstack &context) const {
         if (Definition::has(name)) {
             Instance instance(&parms,{0,parms.size()});
-            Definition::exp(name,result,instance,context);
+            Definition::exp(name,errs,result,instance,context);
         } else {
             result.emplace_back(*this);
         }

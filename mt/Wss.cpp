@@ -12,7 +12,7 @@ namespace mt {
         return o;
     }
 
-    void Wss::expand(mtext &mt, const mstack &) const {
+    void Wss::expand(Messages&,mtext &mt, const mstack &) const {
         if (!mt.empty()) {
             if (std::holds_alternative<Wss>(mt.back())) {
                 std::get<Wss>(mt.back()).text.append(text);

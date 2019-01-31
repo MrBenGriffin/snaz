@@ -15,7 +15,7 @@ namespace mt {
     std::string Text::get() { return text; }
     void Text::append(std::string right) { text.append(right); };
 
-    void Text::expand(mtext &mt, const mstack &) const {
+    void Text::expand(Messages&,mtext &mt, const mstack &) const {
         if (!mt.empty()) {
             if (std::holds_alternative<Text>(mt.back())) {
                 std::get<Text>(mt.back()).text.append(text);

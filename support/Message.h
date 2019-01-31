@@ -13,7 +13,7 @@
 namespace Support {
 	using namespace std;
 
-	enum channel { fatal, error, syntax, parms, warn, info, debug, context, scope, endsc, trace, code };
+	enum channel { fatal, error, syntax, range, parms, warn, info, debug, usage, scope, endsc, trace, code };
 
 	// Message is a single message.
 	class Message {
@@ -39,6 +39,7 @@ namespace Support {
 		void suppress(bool s=true) { _suppressed=s; }
 		void prefix(Message);
 		void enscope(string);
+		string line(size_t) const;
 
 		Messages& operator<< (Message);
 
