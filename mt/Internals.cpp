@@ -9,6 +9,7 @@
 
 #include "Internals.h"
 #include "InternalsCommon.h"
+#include "Definition.h"
 #include "support/Infix.h"
 #include "support/Message.h"
 #include "support/Fandr.h"
@@ -23,62 +24,15 @@ namespace mt {
     Library Internal::cache;
     LStore Internal::lStore;
 
-// Must split the string into text tokens with marker/count tokens being substituted by the i and the k.
-// https://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
-
-	void Internal::split1(mtext& result,string& s,string& d1,Injection t1) {
-		size_t pos_start = 0, pos_end, dSize = d1.size();
-		while ((pos_end=s.find (d1,pos_start)) != string::npos) {
-			string txt = s.substr (pos_start, pos_end - pos_start);
-			pos_start = pos_end + dSize;
-			if(!txt.empty()) { result.push_back(Text(txt)); }		//store the left-string (if it's not empty).
-			result.push_back(t1);									//push back the count
-		}
-		string txt = s.substr(pos_start);
-		if(!txt.empty()) { result.push_back(Text(txt)); }			//store the left-string (if it's not empty).
-	}
-
-	void Internal::split2(mtext& result,string& s,string& d1,Injection t1,string& d2,Injection t2) {
-		size_t pos_start = 0, pos_end, dSize = d1.size();
-		while ((pos_end=s.find (d1,pos_start)) != string::npos) {
-			string txt = s.substr (pos_start, pos_end - pos_start);
-			pos_start = pos_end + dSize;
-			if(!txt.empty()) {
-				split1(result,txt,d2,t2);
-			}
-			result.push_back(t1);										//push back the count
-		}
-		string txt = s.substr(pos_start);
-		if(!txt.empty()) {
-			split1(result,txt,d2,t2);
-		}
-	}
-
-	void Internal::generate(Messages& e,mtext& o,mstack& c,plist& list,const mtext* pbase,string marker,string count) {
-		//So, we need to iterate through the program - and replace text instances 'marker' and 'count' with injection instances.
-		Injection ivalue; Injection icount; ivalue.seti(); icount.setk();
-		mtext program;
-		//TODO:: Fix this. Currently this does not go into (and does not deal with) the contents of the parms held by macros.
-		//TODO:: Each macro token itself has it's own set of parms as tokens.
-		//TODO:: So, we should really store this to prevent too much re-working.
-		//TODO:: Or, write a serialiser / deserialiser.
-		for(auto& t : *pbase) {
-			//but we need to go into macros..
-			if (std::holds_alternative<Text>(t)) {
-				std::string text = std::get<Text>(t).get();
-				split2(program,text,marker,ivalue,count,icount);
-			} else {
-				program.push_back(t);
-			}
-		}
-		cout << marker << " " << count << endl;
-		Driver::visit(*pbase,cout);
-		cout << endl;
-		Driver::visit(program,cout);
-		cout << endl;
-		Definition macro(":generated:",program);
-		Instance instance(&list,{1,list.size()});
-		macro.expand(e,o,instance,c);
+	void Internal::generate(Messages& e,mtext& o,mstack& c,plist& list,const mtext* program,string value,string count) {
+		Instance i(&list,{1,list.size()},true); //set as generated.
+		i.iValue = value;
+		i.iCount = count;
+		Definition macro(*program);
+		Handler hmac({macro});
+		c.push_back({&hmac,i}); //This is done for injections like %(1+).
+		macro.expand(e,o,i,c);
+		c.pop_back();
 	}
 
 	void Internal::doSort(vector<string>& idx,string sortstr) {

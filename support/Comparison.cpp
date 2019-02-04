@@ -31,7 +31,7 @@ namespace Support {
 	}
 
 	bool asc_casesensitive(const string& s1, const string& s2) {
-		return s1.compare(Sort::offset,string::npos,s2,Sort::offset,string::npos) == 0;
+		return s1.compare(Sort::offset,string::npos,s2,Sort::offset,string::npos) < 0;
 //		return s1.compare(s2) < 0;
 	}
 
@@ -40,7 +40,9 @@ namespace Support {
 		try {
 			a = stold(s1.substr(Sort::offset));
 			b = stold(s2.substr(Sort::offset));
-		}  catch (...) {}
+		}  catch (...) {
+			return false;
+		}
 		return a < b;
 	}
 

@@ -34,9 +34,9 @@ namespace mt {
 	}
 
 	//used for pre-parsed definitions (eg in iForSibs)
-	Definition::Definition(std::string name_i, const mtext code,
+	Definition::Definition(const mtext code,
 		long min, long max, bool iter, bool tP, bool preEx):
-		counter(0), _name(std::move(name_i)),iterated(iter), trimParms(tP), preExpand(preEx),expansion(code) {
+		counter(0), _name(":internal:"),iterated(iter), trimParms(tP), preExpand(preEx),expansion(code) {
 		minParms = min == -1 ? 0 : min;
 		maxParms = max == -1 ? INT_MAX : max;
 	}
@@ -69,12 +69,12 @@ namespace mt {
 
 
 	void Definition::expand(Support::Messages& e,mtext& o,Instance &instance, mstack &context) {
-		//       Range error. 'pt' uses exactly 1 parameter but 0 were found.
+		//Range error. 'pt' uses exactly 1 parameter but 0 were found.
 		size_t pCount = instance.parms->size() == 1 ? instance.parms->front().empty() ? 0 : 1 : instance.parms->size();
 		if(!parmCheck(e,pCount)) {
 			return;
 		}
-		Instance modified(nullptr,instance.it);
+		Instance modified(instance);
 		plist rendered;
 		if (!preExpand) {
 			plist mt_parms = *instance.parms;

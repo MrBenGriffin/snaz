@@ -101,6 +101,8 @@ CMakeFiles/macrotext.dir/mt/Injection.cpp.o
  location.hh
  parser.tab.hpp
 CMakeFiles/macrotext.dir/mt/Internals.cpp.o
+ ..//support/Comparison.h
+ ..//support/Fandr.h
  ..//support/Infix.h
  ..//support/Message.h
  ..//support/Storage.h
@@ -260,6 +262,10 @@ CMakeFiles/macrotext.dir/parser.tab.cpp.o
  /Users/ben/CLionProjects/snaz/cmake-build-debug/location.hh
  /Users/ben/CLionProjects/snaz/cmake-build-debug/parser.tab.cpp
  /Users/ben/CLionProjects/snaz/cmake-build-debug/parser.tab.hpp
+CMakeFiles/macrotext.dir/support/Comparison.cpp.o
+ /Users/ben/CLionProjects/snaz/support/Comparison.cpp
+ /Users/ben/CLionProjects/snaz/support/Comparison.h
+ /Users/ben/CLionProjects/snaz/support/Convert.h
 CMakeFiles/macrotext.dir/support/Convert.cpp.o
  /Users/ben/CLionProjects/snaz/support/Convert.cpp
  /Users/ben/CLionProjects/snaz/support/Convert.h

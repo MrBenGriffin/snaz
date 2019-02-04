@@ -100,6 +100,8 @@ CMakeFiles/macrotext.dir/mt/Injection.cpp.o: ../mt/mt.h
 CMakeFiles/macrotext.dir/mt/Injection.cpp.o: location.hh
 CMakeFiles/macrotext.dir/mt/Injection.cpp.o: parser.tab.hpp
 
+CMakeFiles/macrotext.dir/mt/Internals.cpp.o: ../support/Comparison.h
+CMakeFiles/macrotext.dir/mt/Internals.cpp.o: ../support/Fandr.h
 CMakeFiles/macrotext.dir/mt/Internals.cpp.o: ../support/Infix.h
 CMakeFiles/macrotext.dir/mt/Internals.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/mt/Internals.cpp.o: ../support/Storage.h
@@ -259,6 +261,10 @@ CMakeFiles/macrotext.dir/parser.tab.cpp.o: ../mt/mt.h
 CMakeFiles/macrotext.dir/parser.tab.cpp.o: location.hh
 CMakeFiles/macrotext.dir/parser.tab.cpp.o: parser.tab.cpp
 CMakeFiles/macrotext.dir/parser.tab.cpp.o: parser.tab.hpp
+
+CMakeFiles/macrotext.dir/support/Comparison.cpp.o: ../support/Comparison.cpp
+CMakeFiles/macrotext.dir/support/Comparison.cpp.o: ../support/Comparison.h
+CMakeFiles/macrotext.dir/support/Comparison.cpp.o: ../support/Convert.h
 
 CMakeFiles/macrotext.dir/support/Convert.cpp.o: ../support/Convert.cpp
 CMakeFiles/macrotext.dir/support/Convert.cpp.o: ../support/Convert.h

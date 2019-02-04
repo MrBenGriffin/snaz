@@ -40,7 +40,7 @@ namespace mt {
         std::ostream &visit(std::ostream &);
 
         Definition(std::string, std::string, long = 0, long = -1, bool= true, bool= true, bool= false);
-		Definition(std::string, const mtext, long = 0, long = -1, bool= true, bool= true, bool= false);
+		Definition(const mtext, long = 0, long = -1, bool= true, bool= true, bool= false);
 
         void expand(Messages&,mtext&,Instance&,mstack&);
 

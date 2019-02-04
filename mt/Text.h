@@ -9,20 +9,23 @@
 #include "mt.h"
 
 namespace mt {
-    using namespace Support;
-    class Text {
-    private:
-        std::string text;
-    public:
-        Text() = default;
-        Text(const std::string &);
-        std::ostream& visit(std::ostream&) const;
-        void expand(Messages&,mtext&,const mstack&) const;
-        void add(mtext&);
-        std::string get() const;
-        void append(std::string);
-        bool empty() const { return text.empty(); }
-    };
+	using namespace Support;
+	class Text {
+	private:
+		std::string text;
+		void doCount(mtext&,const std::string&,size_t,std::string&) const;
+		void doCountAndValue(Messages&,mtext&,const mstack&) const;
+
+	public:
+		Text() = default;
+		Text(const std::string &);
+		std::ostream& visit(std::ostream&) const;
+		void expand(Messages&,mtext&,const mstack&) const;
+		void add(mtext&);
+		std::string get() const;
+		void append(std::string);
+		bool empty() const { return text.empty(); }
+	};
 
 };
 

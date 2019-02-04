@@ -1,9 +1,7 @@
 // This is a tab-delimited file of tests.
 F showPassed	1
 F showDefines	1
-iFI 001		[@iForIndex(;,g;df;ss,*,$,x,@iEq(*,g,Y,N))]									[YNN]
-iFi_100		[@iForIndex(=,BIM=foo=bar,*,$,,[*:$])]										[[BIM:1][foo:2][bar:3]]
-X
+
 F showPassed	0
 F showDefines	0
 
@@ -23,6 +21,7 @@ F showDefines	0
 !	iExpr
 !	iSet
 !	iLeft
+!	iForIndex
 
 // !	taxonomy
 // !	media

@@ -22,7 +22,11 @@ namespace mt {
     struct Instance {
         const plist* parms = nullptr;
         iteration it = {0,0};
-        Instance(const plist* p,iteration i) : parms(p),it(i) {}
+        bool generated;     //internal generation via e.g. iForX
+        std::string iValue; //substitutes for iForX
+        std::string iCount; //substitutes for iForX
+        Instance(const plist* p,iteration i,bool gen=false) : parms(p),it(i),generated(gen) {}
+        Instance(const Instance&o) : parms(o.parms),it(o.it),generated(o.generated),iValue(o.iValue),iCount(o.iCount) {}
     };
     using Carriage= std::pair<Handler*, Instance>;
     using mstack=std::deque< Carriage >;

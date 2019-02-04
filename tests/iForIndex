@@ -10,12 +10,12 @@ iFi_106		[@iForIndex(=,BIM=foo=bar,*,$,+I,[*])]										[[bar][BIM][foo]]
 iFi_107		[@iForIndex(=,BIM=foo=bar,*,$,+N,[*])]										[[BIM][foo][bar]]
 iFi_108		[@iForIndex(=,01BIM=14foo=23bar,*,$,+N,[*])]								[[01BIM][14foo][23bar]]
 iFi_109		[@iForIndex(;,2004/03/02;2012/02/12;1963/04/09,*,$,+D,[*])]					[[1963/04/09][2004/03/02][2012/02/12]]
-iFi_110		[@iForIndex(=,01A=14B=23C=203D=123E=3F,*,$,+N,[*])]							[[01A][14B][23C][203D][123E][3F]]
+iFi_110		[@iForIndex(=,01A=14B=23C=203D=123E=3F,*,$,+N,[*])]							[[01A][3F][14B][23C][123E][203D]]
 iFi_111		[@iForIndex(=,001A=014B=023C=203D=123E=003F,*,$,+D,[*])]					[[001A][003F][014B][023C][123E][203D]]
 iFi_112		[@iForIndex(=,BIM=foo=bar,*,$,-,[*])]										[[bar][foo][BIM]]
 iFi_113		[@iForIndex(=,BIM=foo=bar,*,$,-C,[*])]										[[foo][bar][BIM]]
 iFi_114		[@iForIndex(=,BIM=foo=bar,*,$,-I,[*])]										[[foo][BIM][bar]]
-iFi_115		[@iForIndex(=,BIM=foo=bar,*,$,-N,[*])]										[[bar][foo][BIM]]
+iFi_115		[@iForIndex(=,BIM=foo=bar,*,$,-N,[*])]										[[BIM][foo][bar]]
 iFi_116		[@iForIndex(=,01BIM=14foo=23bar,*,$,-N,[*])]								[[23bar][14foo][01BIM]]
 iFi_117		[@iForIndex(;,2004/03/02;2012/02/12;1963/04/09;,*,$,-D,[*])]				[[2012/02/12][2004/03/02][1963/04/09]]
 iFi_118		[@iForIndex({,},{cat,dog,pigeon,tree,horse,teddy,snoopy,pig,cow,golf},*,$,+I,[*])]	[[cat][cow][dog][golf][horse][pig][pigeon][snoopy][teddy][tree]]
@@ -23,17 +23,21 @@ iFi_119		[@iForIndex({,},{00990,66,09,003,2,202,198,98,-2020,13},*,$,+N,[*])]		[
 iFi_121		[@iForIndex(;,2004/03;2012/02;1963/04,*,$,+D,[*])]							[[1963/04][2004/03][2012/02]]
 // These tests look at frequencies of an occurence across an array of values.
 setup		[@iSet(~all,dog;dog;cat;giraffe;thing;dog;dinosaur;cat;fry;thing;paper;dog;dog;cat;zebra;giraffe;thing;dog;cat;bar;bar;foo;dog;cat;thing)]		[]
-161_iFi 	[@iForIndex(;,@iGet(~all),*,,,@iExists(~FL@iTrim(*),@iAppend(~FL@iTrim(*),;x),@iSet(~FL@iTrim(*),@iTrim(*))@iAppend(~Array,~FL@iTrim(*);)))]	[]
-161_qa1		[@iGet(~Array)]										[~FLdog;~FLcat;~FLgiraffe;~FLthing;~FLdinosaur;~FLfry;~FLpaper;~FLzebra;~FLbar;~FLfoo;]
-161_qa2		@iForIndex(;,@iGet(~Array),*,,,[*])					[~FLdog][~FLcat][~FLgiraffe][~FLthing][~FLdinosaur][~FLfry][~FLpaper][~FLzebra][~FLbar][~FLfoo]
-161_qa3		[@iGet(~FLdog)]										[dog;x;x;x;x;x;x]
 
-124_iFi 	@iForIndex(;,@iGet(~Array),*,,,[@iIndex(;,@iGet(*),get,0):@iIndex(;,@iUse(*),size)])	[dog:7][cat:5][giraffe:2][thing:4][dinosaur:1][fry:1][paper:1][zebra:1][bar:2][foo:1]
-126_iFi 	[@iForIndex(;,@iUse(~all),*,,,@iExists(~FL@iTrim(*),,@iAppend(~Array,@iTrim(*);))@iAppend(~FL@iTrim(*),x;))]	[]
+# Following need iExists iTrim iAppend
+# •••• COMMENTED OUT ••••
+
+//161_iFi 	[@iForIndex(;,@iGet(~all),*,,,@iExists(~FL@iTrim(*),@iAppend(~FL@iTrim(*),;x),@iSet(~FL@iTrim(*),@iTrim(*))@iAppend(~Array,~FL@iTrim(*);)))]	[]
+//161_qa1		[@iGet(~Array)]										[~FLdog;~FLcat;~FLgiraffe;~FLthing;~FLdinosaur;~FLfry;~FLpaper;~FLzebra;~FLbar;~FLfoo;]
+//161_qa2		@iForIndex(;,@iGet(~Array),*,,,[*])					[~FLdog][~FLcat][~FLgiraffe][~FLthing][~FLdinosaur][~FLfry][~FLpaper][~FLzebra][~FLbar][~FLfoo]
+//161_qa3		[@iGet(~FLdog)]										[dog;x;x;x;x;x;x]
 //
-127_iFi 	[@iForIndex(;,@iGet(~Array),*,,,@iExists(~FQ@iIndex(;,@iGet(~FL*),size),,@iAppend(~AQ,@iIndex(;,@iGet(~FL*),size);))@iAppend(~FQ@iIndex(;,@iUse(~FL*),size),*;))]		[]
+//124_iFi 	@iForIndex(;,@iGet(~Array),*,,,[@iIndex(;,@iGet(*),get,0):@iIndex(;,@iUse(*),size)])	[dog:7][cat:5][giraffe:2][thing:4][dinosaur:1][fry:1][paper:1][zebra:1][bar:2][foo:1]
+//126_iFi 	[@iForIndex(;,@iUse(~all),*,,,@iExists(~FL@iTrim(*),,@iAppend(~Array,@iTrim(*);))@iAppend(~FL@iTrim(*),x;))]	[]
 
-162_qa1		[@iGet(~AQ)]																		[0;7;5;2;4;1;]
-162_qa2		[@iForIndex(;,@iGet(~AQ),*,,+N,@iEq(*,0,,*))]										[12457]
-162_qa3		@iForIndex(;,@iGet(~AQ),*,,+N,@iEq(*,0,@iReset(~FQ*),[@iIndex(;,@iGet(~FQ*))]))		[dinosaur;fry;paper;zebra;foo][giraffe;bar][thing][cat][dog]
-162_iFi 	@iForIndex(;,@iUse(~AQ),*,,+N,@iEq(*,0,,[*:@iIndex({|,|},@iForIndex(;,@iUse(~FQ*),$,,+I,${|,|}))]))	[1:dinosaur,foo,fry,paper,zebra][2:bar,giraffe][4:thing][5:cat][7:dog]
+//127_iFi 	[@iForIndex(;,@iGet(~Array),*,,,@iExists(~FQ@iIndex(;,@iGet(~FL*),size),,@iAppend(~AQ,@iIndex(;,@iGet(~FL*),size);))@iAppend(~FQ@iIndex(;,@iUse(~FL*),size),*;))]		[]
+//
+//162_qa1		[@iGet(~AQ)]																		[0;7;5;2;4;1;]
+//162_qa2		[@iForIndex(;,@iGet(~AQ),*,,+N,@iEq(*,0,,*))]										[12457]
+//162_qa3		@iForIndex(;,@iGet(~AQ),*,,+N,@iEq(*,0,@iReset(~FQ*),[@iIndex(;,@iGet(~FQ*))]))		[dinosaur;fry;paper;zebra;foo][giraffe;bar][thing][cat][dog]
+//162_iFi 	@iForIndex(;,@iUse(~AQ),*,,+N,@iEq(*,0,,[*:@iIndex({|,|},@iForIndex(;,@iUse(~FQ*),$,,+I,${|,|}))]))	[1:dinosaur,foo,fry,paper,zebra][2:bar,giraffe][4:thing][5:cat][7:dog]

@@ -24,27 +24,8 @@ namespace mt {
 		std::string name() const {return _name;}
 		Internal(std::string name,size_t min,size_t max) : _name(name),minParms(min),maxParms(max) {}
 
-		void split1(mtext&,string&,string&,Injection);
-		void split2(mtext&,string&,string&,Injection,string&,Injection);
 		void generate(Support::Messages&,mtext&,mstack&,plist&,const mtext*,string,string);
 		void doSort(vector<std::string>&,std::string);
-
-//		std::string list(vector< TaxVal::scoren >,string,string,string);
-//		std::string list(vector<Node const*>,string,string,string);
-//		void doSort(vector<Node *>&,string,result&);
-//		void sortnodes(vector<Node *>&,bool,char);
-//		bool sorttw(const Node *n1,const Node *n2);
-//		bool sorttierref(const Node *n1,const Node *n2);
-//		bool sortfname(const Node *n1,const Node *n2);
-//		bool sortscratch(const Node *n1,const Node *n2);
-//		bool sortbirth(const Node *n1,const Node *n2);
-//		bool sortdeath(const Node *n1,const Node *n2);
-//		bool sorttitle(const Node *n1,const Node *n2);
-//		bool sorttitlei(const Node *n1,const Node *n2);
-//		bool sortlinkref(const Node *n1,const Node *n2);
-//		bool sortlinkrefi(const Node *n1,const Node *n2);
-//		bool sortshorttitle(const Node *n1,const Node *n2);
-//		bool sortshorttitlei(const Node *n1,const Node *n2);
 
 	};
 	// Utility
