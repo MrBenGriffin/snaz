@@ -7,8 +7,8 @@
 #include <map>
 #include <set>
 
-//We are using STL
-//using namespace std;
+
+#include "Message.h"
 
 namespace Vdb {
     class Connection;
@@ -33,20 +33,17 @@ namespace Support {
 
 		LStore();
 
-		size_t size(const std::string) const;
+		size_t size(std::string) const;
 
-		const listType *get(const std::string) const;
+		const listType *get(std::string) const;
 
-		bool has(const std::string, const std::string) const;
-
-		size_t count(const std::string, const std::string) const;
-
-		void add(const std::string, std::string);
-
-		void uadd(const std::string, std::string);
-
-		void erase(const std::string, const std::string);
-
+		bool has(std::string, std::string) const;
+		size_t count(std::string, std::string) const;
+		void add(std::string, std::string);
+		void uadd(std::string, std::string);
+		void erase(std::string, std::string);
+		void pop(std::string, std::string);
+		bool exists(std::string) const;
 		void clear();
 	};
 
@@ -85,7 +82,7 @@ namespace Support {
 		void erase(std::string);
 
 		void reset(std::string); //remove range..
-		void regex(Storage &, std::string) const;
+		void regex(Messages&, Storage &, std::string) const;
 
 		void merge(const Storage *);
 

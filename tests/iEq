@@ -26,7 +26,7 @@ U mcommas	1	-1	10	⌽commas(⍟(1+))
 
 02b stacked			⌽xv(xx)																[xx]
 
-# iEq non-evaluating requires iSet/iGet
+# iEq non-evaluating (uses iSet/iGet)
 iEqn 001	⌽iSet(A,X)⌽iEq(A,B,⌽iSet(A,Y),-)⌽iGet(A)							-X
 iEqn 002	⌽iSet(A,X)⌽iEq(A,A,⌽iSet(A,Y),-)⌽iGet(A)							Y
 iEqn 003	⌽iSet(A,X)⌽iEq(A,B,-,⌽iSet(A,Y))⌽iGet(A)							Y

@@ -26,6 +26,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/Users/ben/CLionProjects/snaz/support/Fandr.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/support/Fandr.cpp.o"
   "/Users/ben/CLionProjects/snaz/support/Infix.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/support/Infix.cpp.o"
   "/Users/ben/CLionProjects/snaz/support/Message.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/support/Message.cpp.o"
+  "/Users/ben/CLionProjects/snaz/support/Regex.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/support/Regex.cpp.o"
   "/Users/ben/CLionProjects/snaz/support/Storage.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/support/Storage.cpp.o"
   "/Users/ben/CLionProjects/snaz/test.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/test.cpp.o"
   )

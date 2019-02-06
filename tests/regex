@@ -6,48 +6,6 @@
 
 // name		code											expected result
 
-
-# Strings Internals: iLength
-iLen200 	@iLength(UVWXYZ)								6
-iLen201 	@iLength()										0
-iLen202 	@iLength(UVWXYZ,6)								1
-iLen203 	@iLength(UVWXYZ,4)								0
-iLen204 	@iLength({UVWXYZ},6,T)							T
-iLen205 	@iLength({UVWXYZ},4,T,F)						F
-iLen206 	@iLength(ཨཨཨཨ▩)									5
-iLen207 	@iLength(😕ཨཨཨ▩)								5
-iLen208 	@iLength(👍🏽)										2
-iLen209 	@iLength(👍)										1
-
-# Strings Internals: iMid
-iMid340 	[@iMid(UVWXYZ,0,0)]						[]
-iMid341 	[@iMid(,0,1)]							[]
-iMid342 	@iMid(UVWXYZ,0,1)						U
-iMid343 	@iMid(UVWXYZ,1,1)						V
-iMid344 	@iMid(UVWXYZ,-1,2)						UV
-iMid345 	@iMid(UVWXYZ,-4,1)						U
-iMid346 	@iMid(UVWXYZ,-4,2)						UV
-iMid347 	@iMid(UVWXYZ,-4,3)						UVW
-iMid348 	@iMid(UVWXYZ,3,2)						XY
-iMid349 	@iMid(UVWXYZ,3,2,XY,T,F)				T
-iMid350 	@iMid(UVWXYZ,3,2,UV,T,F)				F
-iMid351.1 	@iRight(UV[WX]YZ1234,-2)				[WX]YZ1234
-iMid351.2 	@iLeft([WX]YZ1234,4)					[WX]
-iMid351.3 	@iLeft(@iRight(UV[WX]YZ1234,-2),4)		[WX]
-iMid351 	@iMid(UV[WX]YZ1234,2,4)					[WX]
-iMid352 	[@iMid(▩▤▥▦▧▨,2,1)]					[▥]
-iMid419		@bits(👩🏻‍🌾)									[👩][🏻][🌾]
-iMid420		@bits(👩🏼‍🚒)									[👩][🏼][🚒]
-
-# Strings Internals: iPosition
-iPos750 	[@iPosition(UVWXYZ,LONGP)]										[0]
-iPos751 	[@iPosition(UVWXYZ,UV)]											[1]
-iPos752 	[@iPosition(UVWXYZ,LONGP,0,T,F)]								[T]
-iPos753 	[@iPosition(UVWXYZ,WX,3,T,F)]									[T]
-iPos754 	[@iPosition(UVWXYZ,LONGP,3,T,F)]								[F]
-iPos755 	[@iPosition(UVWXYZ,WU,3,T,F)]									[F]
-iPos756 	[@iPosition(👩🏼‍🚒,🏼,2,T,F)]										[T]
-
 # Strings Internals: iReplace
 iRep 100 	[@iReplace(*,fun,this is *)]					[this is fun]
 iRep 101 	[@iReplace(xx,y,txxy)]							[tyy]

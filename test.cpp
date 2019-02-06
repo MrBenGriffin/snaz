@@ -248,12 +248,13 @@ namespace testing {
 						Support::Messages errs;
 						result expansion(name);
 						driver.expand(expansion.out,errs,name);
-						if(expansion.out.str() == pexpected /*&& !expansion.second.marked()*/) {
+						bool testPassed = expansion.out.str() == pexpected;
+						if(testPassed && !errs.marked() ) {
 							if (showGood) {
 								title(name,2);
 							}
 						} else {
-							if(error_test  && errs.marked() ) {
+							if(error_test && errs.marked() ) {
 								 string message = errs.line(error_index);
 								 if(message == expected) {
 									 if(showGood) {
@@ -265,25 +266,30 @@ namespace testing {
 									 cout << " E returned:\"" << message <<  "\" on line:" << error_index  << endl;
 									 cout << " E expected:\"" << expected << "\"" << endl;
 									 if(errs.marked()) {
-										 cout << "Errors: ";
+										 cout << lred << "Errors: ";
 										 errs.str(cout);
-										 cout << endl;
+										 cout << norm << endl;
 									 }
 								 }
 							} else {
-								ostringstream pstuff;
-								string parsed,returned = expansion.out.str();
-								mt::Driver::visit(structure,pstuff);
-								parsed = pstuff.str();
-								wss(returned,true); wss(parsed,true);
 								title(name,3);
-								cout << lred << " - program:" << blue << program << lred << endl;
+								if(!testPassed) {
+									ostringstream pstuff;
+									string parsed,returned = expansion.out.str();
+									mt::Driver::visit(structure,pstuff);
+									parsed = pstuff.str();
+									wss(returned,true); wss(parsed,true);
+									cout << lred << " - program:" << blue << program << lred << endl;
 
-								cout << " -  parsed:" << blue << parsed << lred << endl;
-								cout << " - returned:" << returned << endl;
-								cout << " - expected:" << expected << endl;
-								cout << norm;
-
+									cout << " -  parsed:" << blue << parsed << lred << endl;
+									cout << " - returned:" << returned << endl;
+									cout << " - expected:" << expected << norm << endl;
+								}
+								if(errs.marked()) {
+									cout << lred << "Errors: ";
+									errs.str(cout);
+									cout << norm << endl;
+								}
 							}
 						}
 					}

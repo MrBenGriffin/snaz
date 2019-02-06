@@ -2,13 +2,14 @@
 // Created by Ben on 2019-01-29.
 //
 
+#include <support/Convert.h>
 #include "InternalsCommon.h"
 #include "Internals.h"
 
 namespace mt {
 
 	InternalsCommon::InternalsCommon(const Internal *thing,Messages& e,mtext &o, Instance &i, mstack &c) :
-			output(&o), instance(&i), context(&c),errs(&e) {
+			owner(thing),output(&o), instance(&i), context(&c),errs(&e) {
 		parms = i.parms;
 		count = parms->size();
 		min = thing->minParms;
@@ -17,8 +18,12 @@ namespace mt {
 
 	std::string InternalsCommon::parm(size_t i) {
 		std::ostringstream result;
-		Driver::expand((*parms)[i - 1],*errs, result, *context);
-		return result.str();
+		if(i > parms->size()) {
+			return "";
+		} else {
+			Driver::expand((*parms)[i - 1],*errs, result, *context);
+			return result.str();
+		}
 	}
 
 	const mtext*	InternalsCommon::praw(size_t i) {
@@ -53,15 +58,25 @@ namespace mt {
 		}
 	}
 
+	//offset is the 1-indexed parameter of the parameter to convert to a number.
+	void InternalsCommon::logic(size_t base,size_t offset) {
+		if(count < offset) {
+			set(Support::tostring(base));
+		} else {
+			size_t test = Support::natural(parm(offset));
+			logic(base == test,offset+1);
+		}
+	}
+
 	//this defaults to outputting basis, unless offset is smaller than count..
 	//offset: 1-indexed parm (where basis was)
 	//eg iLayout(I0,Foo,T,F). =>> logic(Foo,2)
 	void InternalsCommon::logic(std::string& left,size_t offset) {
-		if(count == offset) {
+		if(count < offset) {
 			set(left);
 		} else {
-			std::string right = parm(offset+1);
-			logic(left == right,offset+2);
+			std::string right = parm(offset);
+			logic(left == right,offset+1);
 		}
 	}
 }

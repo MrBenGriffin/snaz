@@ -1,0 +1,62 @@
+# iKV from old BuilderTests
+37 iKV		@iKV(foo,new,A,1)@iKV(foo,exists,T,F)										T
+38 iKV		@iKV(foo,clear)@iKV(foo,exists,T,F)											F
+39 iKV		@iKV(foo,new,A,1)@iKV(foo,get,A)											1
+40 iKV		@iKV(foo,new,A,2)@iKV(foo,get,A)											1
+41 iKV		@iKV(foo,set,A,3)@iKV(foo,get,A)											3
+42 iKV		@iKV(foo,set,A,1)@iKV(foo,get,A)											1
+43 iKV		@iKV(foo,set,A,1)@iKV(foo,use,A)											1
+44 iKV		@iKV(foo,del,A)@iKV(foo,has,A,T,F)											F
+45 iKV		@iKV(foo,set,A,1)@iKV(foo,has,A,T,F)										T
+46 iKV		@iKV(foo,set,A,1)@iKV(foo,set,B,2)@iKV(foo,list,=,;)						B=2;A=1;
+47 iKV		@iKV(foo,array,=,;)															B=2;A=1
+48 iKV		@iKV(foo,clear)@iKV(foo,read,=,;,A=1;B=2;)@iKV(foo,list,=,:)				B=2:A=1:
+49 iKV		@iKV(foo,clear)@iKV(foo,read,=,;,A=1;B=2;)@iKV(foo,keys,;)					B;A
+50 iKV		@iKV(foo,clear)@iKV(foo,read,=,;,A=1;B=2;)@iKV(foo,values,;)				2;1;
+51 iKV		@iKV(bar,read,=,;,Z=7;Y=4;)@iKV(foo,merge,bar)@iKV(foo,list,=,;)			Z=7;B=2;Y=4;A=1;
+52 iKV		@iKV(zoo,read,=,;,Zoo=A;zoo=B;zOo=C;)@iKV(zoo,list,=,;)						zOo=C;zoo=B;Zoo=A;
+53 iKV		@iKV(zoo,get,Zoo)															A
+54 iKV		@iKV(zoo,get,zoo)															B
+55 iKV		@iKV(zoo,get,zOo)															C
+56 iKV		@iKV(zoo,size)																3
+57 iKVRegx	@iKV(zoo,find,=,;,o.)														Zoo=A;zoo=B;
+58 iKVRegx	@iKV(zoo,find,=,;,^z.+$)													zoo=B;zOo=C;
+59 iKV		@iKV(too,set,A,B)@iKV(too,get,A)											B
+60 iKV		@iKV(too,set,A,C)@iKV(too,get,A)											C
+61 iKV		@iKV(too,set,A)@iKV(too,exists)												1
+62 iKV		@iKV(too,size)																1
+63 iKV		@iKV(too,del,A)@iKV(too,exists)												0
+64 iKV		@iKV(xoo,exists)															0
+65 iKV		@iKV(foo,new,A,1)@iKV(foo,exists,T,F)										T
+
+66 iKV		[@iKV(foo,del)@iKV(too,del)@iKV(bar,del)@iKV(zoo,del)]						[]
+iKVTech 01	@iKV(T~x,set,a,bo)@iKV(T~x,get,a)											bo
+b07 entity	@ent(nbsp)																#x00A0
+//F showPassed	1
+
+# iList New tests
+//fn: add,uadd,del,pop,has,count,size,nodes[:max],for[:max]
+//    √   √    √   √       √     √    X           √
+
+iListIni1	[@iSet(ZOO,dog;dog;cat;giraffe;thing;dog;dinosaur;cat;fry;thing;paper;dog;dog;cat;zebra;giraffe;thing;dog;cat;bar;bar;foo;dog;cat;thing)]		[]
+# iList: add  uadd
+iListIni2	[@iForIndex(;,@iGet(ZOO),*,,,@iList(U,uadd,*)@iList(Z,add,*))]				[]
+# iList: size
+iList001	@iList(U,size):@iList(Z,size)												10:25
+# iList: for
+iList002	[@iList(U,for)]																[]
+iList003	[@iList(U,for,*)]															[]
+iList004	[@iList(U,for,*,$)]															[]
+iList005	@iList(U,for,*,,[*])														[bar][cat][dinosaur][dog][foo][fry][giraffe][paper][thing][zebra]
+iList006	@iList(U,for,*,,[*:@iList(Z,count,*)])										[bar:2][cat:5][dinosaur:1][dog:7][foo:1][fry:1][giraffe:2][paper:1][thing:4][zebra:1]
+# iList: pop
+iList007	[@iList(Z,pop,thing)@iList(Z,count,thing)]									[3]
+# iList: del
+iList008	[@iList(Z,del,thing)@iList(Z,count,thing)]									[0]
+# iList: has
+iList009	@iList(Z,has,thing,True,False)												False
+iList010	@iList(Z,has,dog,True,False)												True
+# iList: exists
+iList011	@iList(Z,exists,True,False)													True
+iList012	@iList(P,exists,True,False)													False
+

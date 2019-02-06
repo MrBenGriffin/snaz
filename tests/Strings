@@ -11,6 +11,22 @@ U bxts		1	1	11	[⌽iMid(⍟1,0,1)][⌽iMid(⍟1,1,1)][⌽iMid(⍟1,2,1)]
 tru Recursion	⌽fx(abc)																.[a].[b].[c].
 tru Recursion	⌽fr(abc)																.[a].[b].[c].
 
+# Strings Internals: iTrim
+iTrim000	[@iTrim()]										[]
+iTrim001	@iTrim(X)										X
+iTrim002	[@iTrim(     )]									[]
+iTrim003	@iTrim(   X    )								X
+iTrim004	@iTrim(X    )									X
+iTrim005	@iTrim(   X)									X
+iTrim006	@iTrim(␉X␉)										X
+iTrim007	[@iTrim(␉␉␉)]									[]
+iTrim008	[@iTrim(␉␉)]										[]
+iTrim009	[@iTrim(␉)]										[]
+iTrim010	@iTrim(␉H␍R␉)									H␍R
+iTrim011	@iTrim(␍HR␍)										HR
+iTrim012	@iTrim(␉H␉R␉)									H␉R
+iTrim013	@iTrim(␉H R␉)									H R
+
 # Strings Internals: iLeft
 iLef200 	[@iLeft(UVWXYZ,0)]								[]
 iLef201 	[@iLeft(,0)]									[]
@@ -69,3 +85,43 @@ iRig209 	@iRight(UVWXYZ,3,UVW,T,F)						F
 iRig210 	@iRight(UVWXYZ,3,XYZ,T,F)						T
 iRig211 	@iRight(UVWXYZ,2,YZ)							1
 iRig212 	[@iRight(ཨཨཨཨ▩,1)]								[▩]
+
+# Strings Internals: iLength
+iLen200 	@iLength(UVWXYZ)								6
+iLen201 	@iLength()										0
+iLen202 	@iLength(UVWXYZ,6)								1
+iLen203 	@iLength(UVWXYZ,4)								0
+iLen204 	@iLength({UVWXYZ},6,T)							T
+iLen205 	@iLength({UVWXYZ},4,T,F)						F
+iLen206 	@iLength(ཨཨཨཨ▩)									5
+iLen207 	@iLength(😕ཨཨཨ▩)								5
+iLen208 	@iLength(👍🏽)										2
+iLen209 	@iLength(👍)										1
+
+# Strings Internals: iPosition
+iPos750 	[@iPosition(UVWXYZ,LONGP)]										[0]
+iPos751 	[@iPosition(UVWXYZ,UV)]											[1]
+iPos752 	[@iPosition(UVWXYZ,LONGP,0,T,F)]								[T]
+iPos753 	[@iPosition(UVWXYZ,WX,3,T,F)]									[T]
+iPos754 	[@iPosition(UVWXYZ,LONGP,3,T,F)]								[F]
+iPos755 	[@iPosition(UVWXYZ,WU,3,T,F)]									[F]
+iPos756 	[@iPosition(👩🏼‍🚒,🏼,2,T,F)]										[T]
+
+# Strings Internals: iReplace
+iRep 100 	[@iReplace(*,fun,this is *)]					[this is fun]
+iRep 101 	[@iReplace(xx,y,txxy)]							[tyy]
+iRep 102 	[@iReplace(z,,xzxzx)]							[xxx]
+iRep 103 	[@iReplace(xzxzx)]								[]
+
+# Strings Internals: iRembr
+iRembr0010	@zv(@iRembr(␉H␤R␉))								␉[HR]␉
+iRembr0011	@zp(@iRembr(␉H␤R␉))								␉[HR]␉
+iRembr0012	@zs(@iRembr(␉H␤R␉))								[HR]
+iRembr0013	@zb(@iRembr(␉H␤R␉))								[HR]
+
+# Strings Internals: iRembrp
+iRembrp0010	@zv(␉@iRembrp(␉H␤R␉)␉)							␉[␉␉H␤R␉␉]␉
+iRembrp0011	@zp(␉@iRembrp(␉H␤R␉)␉)							␉[␉H␤R␉]␉
+iRembrp0012	@zs(␉@iRembrp(␉H␤R␉))							[␉␉H␤R␉]
+iRembrp0013	@zb(␉@iRembrp(␉H␤R␉))							[␉H␤R␉]
+

@@ -18,6 +18,7 @@ namespace mt {
 	//Remember to add these to  Definition::initialise() on line 180 of Definition.cpp
 	class Definition;
 	class Content;
+
 	//utility
 	class iEq;
 	class iIndex;
@@ -28,13 +29,31 @@ namespace mt {
 	class iExists;
 	class iSet;
 	class iGet;
+	class iAppend;
+	class iKV;
+	class iList;
+	class iReset;
+	class iSetCache;
+	class iSig;
+	class iUse;
 
 	//string
 	class iLeft;
+	class iLength;
 	class iMid;
+	class iPosition;
+	class iRegex;
+	class iRembr;
+	class iRembrp;
+	class iReplace;
 	class iRight;
+	class iTrim;
 
-	using Handler=std::variant<Content,Definition,iEq,iExpr,iIndex,iForIndex,iSet,iGet,iExists,iLeft,iMid,iRight>;
+	using Handler=std::variant<Content,Definition,
+	iEq,iExpr,iIndex,iForIndex,
+	iSet,iGet,iExists,iAppend,iKV,iList,iReset,iSetCache,iSig,iUse,
+	iLeft,iLength,iMid,iPosition,iRegex,iRembr,iRembrp,iReplace,iRight,iTrim
+	>;
 
 }
 

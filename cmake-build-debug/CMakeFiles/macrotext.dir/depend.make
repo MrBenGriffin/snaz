@@ -34,6 +34,7 @@ CMakeFiles/macrotext.dir/main.cpp.o: parser.tab.hpp
 
 CMakeFiles/macrotext.dir/mt/Content.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/mt/Content.cpp.o: ../support/Storage.h
+CMakeFiles/macrotext.dir/mt/Content.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/mt/Content.cpp.o: ../mt/Content.cpp
 CMakeFiles/macrotext.dir/mt/Content.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/mt/Content.cpp.o: ../mt/Definition.h
@@ -50,6 +51,7 @@ CMakeFiles/macrotext.dir/mt/Content.cpp.o: parser.tab.hpp
 
 CMakeFiles/macrotext.dir/mt/Definition.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/mt/Definition.cpp.o: ../support/Storage.h
+CMakeFiles/macrotext.dir/mt/Definition.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/mt/Definition.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/mt/Definition.cpp.o: ../mt/Definition.cpp
 CMakeFiles/macrotext.dir/mt/Definition.cpp.o: ../mt/Definition.h
@@ -66,6 +68,7 @@ CMakeFiles/macrotext.dir/mt/Definition.cpp.o: parser.tab.hpp
 
 CMakeFiles/macrotext.dir/mt/Driver.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/mt/Driver.cpp.o: ../support/Storage.h
+CMakeFiles/macrotext.dir/mt/Driver.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/mt/Driver.cpp.o: ../mt/Advanced.h
 CMakeFiles/macrotext.dir/mt/Driver.cpp.o: ../mt/Classic.h
 CMakeFiles/macrotext.dir/mt/Driver.cpp.o: ../mt/Content.h
@@ -86,6 +89,7 @@ CMakeFiles/macrotext.dir/mt/Driver.cpp.o: parser.tab.hpp
 
 CMakeFiles/macrotext.dir/mt/Injection.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/mt/Injection.cpp.o: ../support/Storage.h
+CMakeFiles/macrotext.dir/mt/Injection.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/mt/Injection.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/mt/Injection.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/mt/Injection.cpp.o: ../mt/Driver.h
@@ -121,8 +125,10 @@ CMakeFiles/macrotext.dir/mt/Internals.cpp.o: ../mt/mt.h
 CMakeFiles/macrotext.dir/mt/Internals.cpp.o: location.hh
 CMakeFiles/macrotext.dir/mt/Internals.cpp.o: parser.tab.hpp
 
+CMakeFiles/macrotext.dir/mt/InternalsCommon.cpp.o: ../support/Convert.h
 CMakeFiles/macrotext.dir/mt/InternalsCommon.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/mt/InternalsCommon.cpp.o: ../support/Storage.h
+CMakeFiles/macrotext.dir/mt/InternalsCommon.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/mt/InternalsCommon.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/mt/InternalsCommon.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/mt/InternalsCommon.cpp.o: ../mt/Driver.h
@@ -138,6 +144,7 @@ CMakeFiles/macrotext.dir/mt/InternalsCommon.cpp.o: ../mt/mt.h
 CMakeFiles/macrotext.dir/mt/InternalsCommon.cpp.o: location.hh
 CMakeFiles/macrotext.dir/mt/InternalsCommon.cpp.o: parser.tab.hpp
 
+CMakeFiles/macrotext.dir/mt/InternalsStorage.cpp.o: ../support/Convert.h
 CMakeFiles/macrotext.dir/mt/InternalsStorage.cpp.o: ../support/Infix.h
 CMakeFiles/macrotext.dir/mt/InternalsStorage.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/mt/InternalsStorage.cpp.o: ../support/Storage.h
@@ -160,7 +167,9 @@ CMakeFiles/macrotext.dir/mt/InternalsStorage.cpp.o: parser.tab.hpp
 CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o: ../support/Convert.h
 CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o: ../support/Fandr.h
 CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o: ../support/Message.h
+CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o: ../support/Regex.h
 CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o: ../support/Storage.h
+CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o: ../mt/Driver.h
@@ -173,6 +182,7 @@ CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o: ../mt/Text.h
 CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o: ../mt/Wss.h
 CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o: ../mt/declarations.h
 CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o: ../mt/mt.h
+CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o: /usr/local/include/pcre.h
 CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o: location.hh
 CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o: parser.tab.hpp
 
@@ -198,6 +208,7 @@ CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o: parser.tab.hpp
 
 CMakeFiles/macrotext.dir/mt/Macro.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/mt/Macro.cpp.o: ../support/Storage.h
+CMakeFiles/macrotext.dir/mt/Macro.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/mt/Macro.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/mt/Macro.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/mt/Macro.cpp.o: ../mt/Driver.h
@@ -214,6 +225,7 @@ CMakeFiles/macrotext.dir/mt/Macro.cpp.o: parser.tab.hpp
 
 CMakeFiles/macrotext.dir/mt/Text.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/mt/Text.cpp.o: ../support/Storage.h
+CMakeFiles/macrotext.dir/mt/Text.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/mt/Text.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/mt/Text.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/mt/Text.cpp.o: ../mt/Driver.h
@@ -230,6 +242,7 @@ CMakeFiles/macrotext.dir/mt/Text.cpp.o: parser.tab.hpp
 
 CMakeFiles/macrotext.dir/mt/Wss.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/mt/Wss.cpp.o: ../support/Storage.h
+CMakeFiles/macrotext.dir/mt/Wss.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/mt/Wss.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/mt/Wss.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/mt/Wss.cpp.o: ../mt/Driver.h
@@ -258,6 +271,7 @@ CMakeFiles/macrotext.dir/parser.tab.cpp.o: ../mt/Text.h
 CMakeFiles/macrotext.dir/parser.tab.cpp.o: ../mt/Wss.h
 CMakeFiles/macrotext.dir/parser.tab.cpp.o: ../mt/declarations.h
 CMakeFiles/macrotext.dir/parser.tab.cpp.o: ../mt/mt.h
+CMakeFiles/macrotext.dir/parser.tab.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/parser.tab.cpp.o: location.hh
 CMakeFiles/macrotext.dir/parser.tab.cpp.o: parser.tab.cpp
 CMakeFiles/macrotext.dir/parser.tab.cpp.o: parser.tab.hpp
@@ -285,11 +299,22 @@ CMakeFiles/macrotext.dir/support/Infix.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/support/Message.cpp.o: ../support/Message.cpp
 CMakeFiles/macrotext.dir/support/Message.cpp.o: ../support/Message.h
 
+CMakeFiles/macrotext.dir/support/Regex.cpp.o: ../support/Convert.h
+CMakeFiles/macrotext.dir/support/Regex.cpp.o: ../support/Dynamic.h
+CMakeFiles/macrotext.dir/support/Regex.cpp.o: ../support/Message.h
+CMakeFiles/macrotext.dir/support/Regex.cpp.o: ../support/Regex.cpp
+CMakeFiles/macrotext.dir/support/Regex.cpp.o: ../support/Regex.h
+CMakeFiles/macrotext.dir/support/Regex.cpp.o: /usr/local/include/pcre.h
+
+CMakeFiles/macrotext.dir/support/Storage.cpp.o: ../support/Message.h
+CMakeFiles/macrotext.dir/support/Storage.cpp.o: ../support/Regex.h
 CMakeFiles/macrotext.dir/support/Storage.cpp.o: ../support/Storage.cpp
 CMakeFiles/macrotext.dir/support/Storage.cpp.o: ../support/Storage.h
+CMakeFiles/macrotext.dir/support/Storage.cpp.o: /usr/local/include/pcre.h
 
 CMakeFiles/macrotext.dir/test.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/test.cpp.o: ../support/Storage.h
+CMakeFiles/macrotext.dir/test.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/test.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/test.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/test.cpp.o: ../mt/Driver.h

@@ -25,14 +25,13 @@ namespace mt {
     LStore Internal::lStore;
 
 	void Internal::generate(Messages& e,mtext& o,mstack& c,plist& list,const mtext* program,string value,string count) {
-		Instance i(&list,{1,list.size()},true); //set as generated.
-		i.iValue = value;
-		i.iCount = count;
-		Definition macro(*program);
-		Handler hmac({macro});
-		c.push_back({&hmac,i}); //This is done for injections like %(1+).
-		macro.expand(e,o,i,c);
-		c.pop_back();
+		if(program != nullptr) { // from an empty parm..
+			Instance i(&list,{1,list.size()},true); //set as generated.
+			i.iValue = value;
+			i.iCount = count;
+			Definition macro(*program);
+			macro.expand(e,o,i,c);
+		}
 	}
 
 	void Internal::doSort(vector<string>& idx,string sortstr) {

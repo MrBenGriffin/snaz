@@ -35,6 +35,7 @@ CMakeFiles/macrotext.dir/main.cpp.o
 CMakeFiles/macrotext.dir/mt/Content.cpp.o
  ..//support/Message.h
  ..//support/Storage.h
+ ../support/Message.h
  /Users/ben/CLionProjects/snaz/mt/Content.cpp
  /Users/ben/CLionProjects/snaz/mt/Content.h
  /Users/ben/CLionProjects/snaz/mt/Definition.h
@@ -51,6 +52,7 @@ CMakeFiles/macrotext.dir/mt/Content.cpp.o
 CMakeFiles/macrotext.dir/mt/Definition.cpp.o
  ..//support/Message.h
  ..//support/Storage.h
+ ../support/Message.h
  /Users/ben/CLionProjects/snaz/mt/Content.h
  /Users/ben/CLionProjects/snaz/mt/Definition.cpp
  /Users/ben/CLionProjects/snaz/mt/Definition.h
@@ -67,6 +69,7 @@ CMakeFiles/macrotext.dir/mt/Definition.cpp.o
 CMakeFiles/macrotext.dir/mt/Driver.cpp.o
  ..//support/Message.h
  ..//support/Storage.h
+ ../support/Message.h
  /Users/ben/CLionProjects/snaz/mt/Advanced.h
  /Users/ben/CLionProjects/snaz/mt/Classic.h
  /Users/ben/CLionProjects/snaz/mt/Content.h
@@ -87,6 +90,7 @@ CMakeFiles/macrotext.dir/mt/Driver.cpp.o
 CMakeFiles/macrotext.dir/mt/Injection.cpp.o
  ..//support/Message.h
  ..//support/Storage.h
+ ../support/Message.h
  /Users/ben/CLionProjects/snaz/mt/Content.h
  /Users/ben/CLionProjects/snaz/mt/Definition.h
  /Users/ben/CLionProjects/snaz/mt/Driver.h
@@ -122,8 +126,10 @@ CMakeFiles/macrotext.dir/mt/Internals.cpp.o
  location.hh
  parser.tab.hpp
 CMakeFiles/macrotext.dir/mt/InternalsCommon.cpp.o
+ ..//support/Convert.h
  ..//support/Message.h
  ..//support/Storage.h
+ ../support/Message.h
  /Users/ben/CLionProjects/snaz/mt/Content.h
  /Users/ben/CLionProjects/snaz/mt/Definition.h
  /Users/ben/CLionProjects/snaz/mt/Driver.h
@@ -139,6 +145,7 @@ CMakeFiles/macrotext.dir/mt/InternalsCommon.cpp.o
  location.hh
  parser.tab.hpp
 CMakeFiles/macrotext.dir/mt/InternalsStorage.cpp.o
+ ..//support/Convert.h
  ..//support/Infix.h
  ..//support/Message.h
  ..//support/Storage.h
@@ -161,7 +168,9 @@ CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o
  ..//support/Convert.h
  ..//support/Fandr.h
  ..//support/Message.h
+ ..//support/Regex.h
  ..//support/Storage.h
+ ../support/Message.h
  /Users/ben/CLionProjects/snaz/mt/Content.h
  /Users/ben/CLionProjects/snaz/mt/Definition.h
  /Users/ben/CLionProjects/snaz/mt/Driver.h
@@ -174,6 +183,7 @@ CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o
  /Users/ben/CLionProjects/snaz/mt/Wss.h
  /Users/ben/CLionProjects/snaz/mt/declarations.h
  /Users/ben/CLionProjects/snaz/mt/mt.h
+ /usr/local/include/pcre.h
  location.hh
  parser.tab.hpp
 CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o
@@ -199,6 +209,7 @@ CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o
 CMakeFiles/macrotext.dir/mt/Macro.cpp.o
  ..//support/Message.h
  ..//support/Storage.h
+ ../support/Message.h
  /Users/ben/CLionProjects/snaz/mt/Content.h
  /Users/ben/CLionProjects/snaz/mt/Definition.h
  /Users/ben/CLionProjects/snaz/mt/Driver.h
@@ -215,6 +226,7 @@ CMakeFiles/macrotext.dir/mt/Macro.cpp.o
 CMakeFiles/macrotext.dir/mt/Text.cpp.o
  ..//support/Message.h
  ..//support/Storage.h
+ ../support/Message.h
  /Users/ben/CLionProjects/snaz/mt/Content.h
  /Users/ben/CLionProjects/snaz/mt/Definition.h
  /Users/ben/CLionProjects/snaz/mt/Driver.h
@@ -231,6 +243,7 @@ CMakeFiles/macrotext.dir/mt/Text.cpp.o
 CMakeFiles/macrotext.dir/mt/Wss.cpp.o
  ..//support/Message.h
  ..//support/Storage.h
+ ../support/Message.h
  /Users/ben/CLionProjects/snaz/mt/Content.h
  /Users/ben/CLionProjects/snaz/mt/Definition.h
  /Users/ben/CLionProjects/snaz/mt/Driver.h
@@ -259,6 +272,7 @@ CMakeFiles/macrotext.dir/parser.tab.cpp.o
  ../mt/Wss.h
  ../mt/declarations.h
  ../mt/mt.h
+ ../support/Message.h
  /Users/ben/CLionProjects/snaz/cmake-build-debug/location.hh
  /Users/ben/CLionProjects/snaz/cmake-build-debug/parser.tab.cpp
  /Users/ben/CLionProjects/snaz/cmake-build-debug/parser.tab.hpp
@@ -285,12 +299,23 @@ CMakeFiles/macrotext.dir/support/Infix.cpp.o
 CMakeFiles/macrotext.dir/support/Message.cpp.o
  /Users/ben/CLionProjects/snaz/support/Message.cpp
  /Users/ben/CLionProjects/snaz/support/Message.h
+CMakeFiles/macrotext.dir/support/Regex.cpp.o
+ /Users/ben/CLionProjects/snaz/support/Convert.h
+ /Users/ben/CLionProjects/snaz/support/Dynamic.h
+ /Users/ben/CLionProjects/snaz/support/Message.h
+ /Users/ben/CLionProjects/snaz/support/Regex.cpp
+ /Users/ben/CLionProjects/snaz/support/Regex.h
+ /usr/local/include/pcre.h
 CMakeFiles/macrotext.dir/support/Storage.cpp.o
+ /Users/ben/CLionProjects/snaz/support/Message.h
+ /Users/ben/CLionProjects/snaz/support/Regex.h
  /Users/ben/CLionProjects/snaz/support/Storage.cpp
  /Users/ben/CLionProjects/snaz/support/Storage.h
+ /usr/local/include/pcre.h
 CMakeFiles/macrotext.dir/test.cpp.o
  ..//support/Message.h
  ..//support/Storage.h
+ ../support/Message.h
  /Users/ben/CLionProjects/snaz/mt/Content.h
  /Users/ben/CLionProjects/snaz/mt/Definition.h
  /Users/ben/CLionProjects/snaz/mt/Driver.h

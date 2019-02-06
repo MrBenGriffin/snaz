@@ -39,13 +39,9 @@ namespace mt {
 	void iForIndex::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalsCommon my(this,e,o,instance,context);
 		// @iForIndex(DELIMITER,LIST,ITEM-PATTERN,NUM-PATTERN,SORT,EXPANSION)
-		ostringstream bits;
-		string delimiter = my.parm(1);
-		string index_string = my.parm(2);
-		string sortStr = my.parm(5);
 		vector<string> idx;
-		tolist(idx,index_string,delimiter);
-		doSort(idx,sortStr);
+		tolist(idx,my.parm(2),my.parm(1));
+		doSort(idx,my.parm(5));
 		plist parms;
 		for(auto& i : idx) {
 			parms.push_back({Text(i)});

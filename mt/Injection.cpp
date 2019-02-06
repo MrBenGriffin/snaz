@@ -162,11 +162,16 @@ namespace mt {
 										mstack subContext(context.begin() + sValue, context.end());
 										Driver::expand((*parms)[value - 1],errs, result, subContext);
 									}
-								} else {
-									ostringstream estr;
-									estr << " parameter value " << value << " is beyond current range of " << parmCount;
-									errs << Message(warn,estr.str());
 								}
+								// else do nothing. Pop-back of empty parameters causes this.
+//								else {
+//									if(!(parmCount == 0 && value == 1)) {
+//										//This happens due to pop-back of empty parameters
+//										ostringstream estr;
+//										estr << " parameter value " << value << " is beyond current range of " << parmCount;
+//										errs << Message(debug,estr.str());
+//									}
+//								}
 							}
 							break;
 						case It::current: {

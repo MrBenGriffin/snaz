@@ -39,10 +39,10 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = "/Users/ben/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/183.5153.40/CLion.app/Contents/bin/cmake/mac/bin/cmake"
+CMAKE_COMMAND = "/Users/ben/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/183.4886.39/CLion.app/Contents/bin/cmake/mac/bin/cmake"
 
 # The command to remove a file.
-RM = "/Users/ben/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/183.5153.40/CLion.app/Contents/bin/cmake/mac/bin/cmake" -E remove -f
+RM = "/Users/ben/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/183.4886.39/CLion.app/Contents/bin/cmake/mac/bin/cmake" -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
@@ -59,7 +59,7 @@ CMAKE_BINARY_DIR = /Users/ben/CLionProjects/snaz/cmake-build-debug
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	"/Users/ben/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/183.5153.40/CLion.app/Contents/bin/cmake/mac/bin/cmake" -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	"/Users/ben/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/183.4886.39/CLion.app/Contents/bin/cmake/mac/bin/cmake" -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -70,7 +70,7 @@ rebuild_cache/fast: rebuild_cache
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	"/Users/ben/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/183.5153.40/CLion.app/Contents/bin/cmake/mac/bin/cmake" -E echo No\ interactive\ CMake\ dialog\ available.
+	"/Users/ben/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/183.4886.39/CLion.app/Contents/bin/cmake/mac/bin/cmake" -E echo No\ interactive\ CMake\ dialog\ available.
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -717,6 +717,33 @@ support/Message.cpp.s:
 	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Message.cpp.s
 .PHONY : support/Message.cpp.s
 
+support/Regex.o: support/Regex.cpp.o
+
+.PHONY : support/Regex.o
+
+# target to build an object file
+support/Regex.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Regex.cpp.o
+.PHONY : support/Regex.cpp.o
+
+support/Regex.i: support/Regex.cpp.i
+
+.PHONY : support/Regex.i
+
+# target to preprocess a source file
+support/Regex.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Regex.cpp.i
+.PHONY : support/Regex.cpp.i
+
+support/Regex.s: support/Regex.cpp.s
+
+.PHONY : support/Regex.s
+
+# target to generate assembly for a file
+support/Regex.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Regex.cpp.s
+.PHONY : support/Regex.cpp.s
+
 support/Storage.o: support/Storage.cpp.o
 
 .PHONY : support/Storage.o
@@ -846,6 +873,9 @@ help:
 	@echo "... support/Message.o"
 	@echo "... support/Message.i"
 	@echo "... support/Message.s"
+	@echo "... support/Regex.o"
+	@echo "... support/Regex.i"
+	@echo "... support/Regex.s"
 	@echo "... support/Storage.o"
 	@echo "... support/Storage.i"
 	@echo "... support/Storage.s"

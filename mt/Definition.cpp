@@ -80,6 +80,7 @@ namespace mt {
 			plist mt_parms = *instance.parms;
 			if (trimParms) { trim(mt_parms); }
 			modified.parms = &rendered;
+			modified.generated = false;
 			context.push_back({nullptr,modified}); //This is done for injections like %(1+).
 			for (auto &parm : mt_parms) {
 				mtext expanded;
@@ -90,6 +91,7 @@ namespace mt {
 				}
 			}
 			context.pop_back();
+			modified.generated = instance.generated;
 			while (!rendered.empty() && rendered.back().empty()) {
 				rendered.pop_back();
 			}
@@ -98,9 +100,13 @@ namespace mt {
 		Handler handler(*this);
 		context.push_front({&handler,modified});
 		if (iterated) {
+			if(modified.generated) { context.push_back({nullptr,modified}); }
 			iteration* i = &(context.front().second.it);
 			for (i->first = 1; i->first <= i->second; i->first++) {
 				Driver::expand(expansion,e, o, context);
+			}
+			if(modified.generated) {
+				context.pop_back();
 			}
 		} else {
 			Driver::expand(expansion,e, o, context);
@@ -196,10 +202,25 @@ namespace mt {
 		library.emplace("iGet",Handler(std::move(iGet())));
 		library.emplace("iSet",Handler(std::move(iSet())));
 		library.emplace("iExists",Handler(std::move(iExists())));
+		library.emplace("iAppend",Handler(std::move(iAppend())));
+		library.emplace("iKV",Handler(std::move(iKV())));
+		library.emplace("iList",Handler(std::move(iList())));
+		library.emplace("iReset",Handler(std::move(iReset())));
+		library.emplace("iSetCache",Handler(std::move(iSetCache())));
+		library.emplace("iSig",Handler(std::move(iSig())));
+		library.emplace("iUse",Handler(std::move(iUse())));
 
 		library.emplace("iLeft",Handler(std::move(iLeft())));
+		library.emplace("iLength",Handler(std::move(iLength())));
 		library.emplace("iMid",Handler(std::move(iMid())));
+		library.emplace("iPosition",Handler(std::move(iPosition())));
+		library.emplace("iRegex",Handler(std::move(iRegex())));
+		library.emplace("iRembr",Handler(std::move(iRembr())));
+		library.emplace("iRembrp",Handler(std::move(iRembrp())));
+		library.emplace("iReplace",Handler(std::move(iReplace())));
 		library.emplace("iRight",Handler(std::move(iRight())));
+		library.emplace("iTrim",Handler(std::move(iTrim())));
+
 	}
 
 }

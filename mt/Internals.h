@@ -23,6 +23,22 @@ namespace mt {
 		bool inRange(size_t i) const { return (minParms <= i) && (i <= maxParms);}
 		std::string name() const {return _name;}
 		Internal(std::string name,size_t min,size_t max) : _name(name),minParms(min),maxParms(max) {}
+		void tolist(vector<string>& list,string basis,const string& cutter);
+
+//		void tolist(vector<string>& list,string basis,const string& cutter) {
+//			if (!cutter.empty()) {
+//				while (!basis.empty() ) {
+//					string::size_type pos = basis.find(cutter);
+//					if (pos != string::npos) {
+//						list.push_back(basis.substr(0, pos)); //pos says 2
+//						basis = basis.substr(pos+cutter.size(),string::npos);
+//					} else {
+//						list.push_back(basis);
+//						basis.clear();
+//					}
+//				}
+//			}
+//		}
 
 		void generate(Support::Messages&,mtext&,mstack&,plist&,const mtext*,string,string);
 		void doSort(vector<std::string>&,std::string);
@@ -48,6 +64,7 @@ namespace mt {
 		void expand(Support::Messages&,mtext&,Instance&,mstack&);
 	};
 
+	// Storage
 	struct iExists : public Internal {
 		iExists() : Internal("iExists",1,3) {}
 		void expand(Support::Messages&,mtext&,Instance&,mstack&);
@@ -60,18 +77,75 @@ namespace mt {
 		iSet() : Internal("iSet",1,2) {}
 		void expand(Support::Messages&,mtext&,Instance&,mstack&);
 	};
+	struct iAppend : public Internal {
+		iAppend() : Internal("iAppend",1,2) {}
+		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+	};
+	struct iKV : public Internal {
+		iKV() : Internal("iKV",2,5) {}
+		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+	};
+	struct iList : public Internal {
+		iList() : Internal("iList",2,5) {}
+		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+	};
+	struct iReset : public Internal {
+		iReset() : Internal("iReset",1,1) {}
+		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+	};
+	struct iSetCache : public Internal {
+		iSetCache() : Internal("iSetCache",2,2) {}
+		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+	};
+	struct iSig : public Internal {
+		iSig() : Internal("iSig",1,3) {}
+		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+	};
+	struct iUse : public Internal {
+		iUse() : Internal("iUse",1,1) {}
+		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+	};
 
 	// Strings
 	struct iLeft : public Internal {
 		iLeft() : Internal("iLeft",2,6) {}
 		void expand(Support::Messages&,mtext&,Instance&,mstack&);
 	};
+	struct iLength : public Internal {
+		iLength() : Internal("iLength",0,4) {}
+		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+	};
 	struct iMid : public Internal {
 		iMid() : Internal("iMid",3,6) {}
 		void expand(Support::Messages&,mtext&,Instance&,mstack&);
 	};
+	struct iPosition : public Internal {
+		iPosition() : Internal("iPosition",2,5) {}
+		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+	};
+	struct iRegex : public Internal {
+		iRegex() : Internal("iRegex",2,6) {}
+		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+	};
+	struct iRembr : public Internal {
+		iRembr() : Internal("iRembr",0,1) {}
+		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+	};
+	struct iRembrp : public Internal {
+		iRembrp() : Internal("iRembrp",0,1) {}
+		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+	};
+	struct iReplace : public Internal {
+		iReplace() : Internal("iReplace",1,5) {}
+		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+	};
+
 	struct iRight : public Internal {
 		iRight() : Internal("iRight",2,6) {}
+		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+	};
+	struct iTrim : public Internal {
+		iTrim() : Internal("iTrim",0,1) {}
 		void expand(Support::Messages&,mtext&,Instance&,mstack&);
 	};
 

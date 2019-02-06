@@ -3,6 +3,8 @@
 #include <vector>
 #include <iterator>
 #include "Storage.h"
+#include "Regex.h"
+
 namespace Support {
 
 	using namespace std;
@@ -27,6 +29,11 @@ namespace Support {
 			size = it->second.size();
 		}
 		return size;
+	}
+
+	bool LStore::exists(const string name) const {
+		auto it = store.find(name);
+		return it != store.end();
 	}
 
 	const listType *LStore::get(const string name) const {
@@ -88,11 +95,29 @@ namespace Support {
 		store.clear();
 	}
 
+	//remove 1.
+	void LStore::pop(const string name, const string value) {
+		if (name.length() > 0) {
+			auto ppit = store.find(name);
+			if (ppit != store.end()) {
+				auto vit = ppit->second.find(value);
+				if (vit != ppit->second.end()) {
+					ppit->second.erase(vit);
+				}
+			}
+		}
+	}
+
+	//remove all.
 	void LStore::erase(const string name, const string value) {
 		if (name.length() > 0) {
 			auto ppit = store.find(name);
 			if (ppit != store.end()) {
-				ppit->second.erase(ppit->second.find(value));
+				auto& map = ppit->second;
+				auto vit = map.find(value);
+				for(;vit != map.end();vit = map.find(value)) {
+					map.erase(vit);
+				}
 			}
 		}
 	}
@@ -234,6 +259,16 @@ namespace Support {
 			}
 		}
 		erased.insert(name);
+	}
+
+	void Storage::regex(Messages& e,Storage& result, const string basis) const {
+		if(Regex::available(e)) {
+			for (auto item: store) {
+				if (Regex::match(e,basis,item.first)) {
+					result.set(item.first,item.second);
+				}
+			}
+		}
 	}
 
 	void Storage::reset(const string prefix) {

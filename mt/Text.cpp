@@ -76,15 +76,25 @@ namespace mt {
 		while ((curr=text.find(value,start)) != string::npos) {
 			string txt = text.substr (start, curr - start);
 			start = curr + vSize;
-			if(!txt.empty() && !instance.iCount.empty()) {
-				doCount(result,instance.iCount,instance.it.first,txt);
+			if(!txt.empty()) {
+				if (!instance.iCount.empty()) {
+					doCount(result, instance.iCount, current, txt);
+				} else {
+					Text(txt).add(result);
+				}
 			}
 			const mtext& parm = (*instance.parms)[current - 1];
+			const_cast<mstack &>(context).back().second.generated=false;
 			Driver::expand(parm,m,result,const_cast<mstack &>(context));
+			const_cast<mstack &>(context).back().second.generated=true;
 		}
 		string txt = text.substr(start);
-		if(!txt.empty() && !instance.iCount.empty()) {
-			doCount(result,instance.iCount,current,txt);
+		if(!txt.empty()) {
+			if (!instance.iCount.empty()) {
+				doCount(result, instance.iCount, current, txt);
+			} else {
+				Text(txt).add(result);
+			}
 		}
 	}
 }
