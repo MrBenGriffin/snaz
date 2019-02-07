@@ -199,6 +199,17 @@ namespace Support {
 		return val;
 	}
 	// -------------------------------------------------------------------
+	pair<size_t,bool> znatural(const string& text,size_t& i) {
+		bool isnumber = false;
+		size_t val = 0;
+		while(isdigit(text[i]) && (i < text.size()) ) {
+			isnumber = true;
+			val = val * 10 + text[i] - '0';
+			i++;
+		}
+		return pair<size_t,bool>(val,isnumber);
+	}
+
 	// this affects the iterator
 	pair<size_t,bool> znatural(string::const_iterator& in) {
 		bool isnumber = false;

@@ -241,6 +241,7 @@ CMakeFiles/macrotext.dir/mt/Macro.cpp.o: ../mt/mt.h
 CMakeFiles/macrotext.dir/mt/Macro.cpp.o: location.hh
 CMakeFiles/macrotext.dir/mt/Macro.cpp.o: parser.tab.hpp
 
+CMakeFiles/macrotext.dir/mt/Text.cpp.o: ../support/Convert.h
 CMakeFiles/macrotext.dir/mt/Text.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/mt/Text.cpp.o: ../support/Storage.h
 CMakeFiles/macrotext.dir/mt/Text.cpp.o: ../support/Message.h
@@ -331,6 +332,7 @@ CMakeFiles/macrotext.dir/support/Storage.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/support/Storage.cpp.o: ../support/Regex.h
 CMakeFiles/macrotext.dir/support/Storage.cpp.o: ../support/Storage.cpp
 CMakeFiles/macrotext.dir/support/Storage.cpp.o: ../support/Storage.h
+CMakeFiles/macrotext.dir/support/Storage.cpp.o: /usr/local/include/pcre.h
 
 CMakeFiles/macrotext.dir/test.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/test.cpp.o: ../support/Storage.h

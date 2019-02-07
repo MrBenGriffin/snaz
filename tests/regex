@@ -12,17 +12,6 @@ iRep 101 	[@iReplace(xx,y,txxy)]							[tyy]
 iRep 102 	[@iReplace(z,,xzxzx)]							[xxx]
 iRep 103 	[@iReplace(xzxzx)]								[]
 
-# Strings Internals: iRegex
-iRgx_001	@iRegex(s,b,dd)																				dd
-iRgx_002	@iRegex(P,fun,this is P)																	this is fun
-iRgx_003	@iRegex((x+),[\1],txxy)																		t[xx]y
-iRgx_004	@iRegex(xx,y,txxy)																			tyy
-iRgx_005	@iRegex({|(?:[0-9]+:)*([0-9]+):|},{|\1|},12:174:54:505:19:233:134:234:809:)					809
-iRgx_006	@iRegex((?:[0-9]+:)*([0-9]+):|},{|\1|},12:)													12
-iRgx_007	@iRegex({|[0-9:]*:([0-9]+):$|},{|\1|},[])													[]
-iRgx_008	@iRegex(n="(?!prx")[^"]+" v="[^"]+",,n="prx" v="x_";n="key" v="4";)							n="prx" v="x_";n="key" v="4";
-iRgx_009	@entx(&nbsp;)																				&#x00A0;
-
 # Strings Internals: iRembr
 iRembr0010	@zv(@iRembr(␉H␍R␉))								␉[HR]␉
 iRembr0011	@zp(@iRembr(␉H␍R␉))								␉[HR]␉

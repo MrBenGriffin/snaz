@@ -1,14 +1,6 @@
 // This is a tab-delimited file of tests.
 F showPassed	1
-//F showDefines	1
-
-!	definitions
-!	basic_classic
-U ent		1	1	11	⌽iExists(Entities,,⌽iSet(Entities,⎡nbsp;iexcl;cent;pound;curren⎤)⌽iSet(EntCodes,⎡00A0;00A1;00A2;00A3;00A4⎤))⌽iSet(*entid,⌽iIndex(;,⌽iGet(Entities),find,⍟1))⌽iEq(⌽iGet(*entid),-1,⍟1,#x⌽iIndex(;,⌽iGet(EntCodes),get,⌽iGet(*entid)))
-U entx		1	1	11	⌽iRegex(&?([a-z]+);?,&⌽ent(\1);,⍟1)
-b07 entity		⌽ent(nbsp)														#x00A0
-iRgx_009		@entx(&nbsp;)													&#x00A0;
-iRgx_003		@iRegex((x+),[\1],txxy)											t[xx]y
+F showDefines	1
 
 
 F showPassed	0

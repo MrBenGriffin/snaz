@@ -23,8 +23,9 @@ namespace mt {
 		void expand(Messages&,mtext&,mstack&) const;
 		std::ostream& visit(std::ostream&) const;
 
+		//used for expanding injections, etc. not sure if this should generate a copy or not..
 		void inject(Messages&,mtext&,mstack&) const;
-		//used for expanding just injections. not sure if this should generate a copy or not..
+		void subs(mtext&,std::vector<std::string>& ,const std::string&) const;
 
 		explicit Macro(std::string);
 		void add(mtext&);

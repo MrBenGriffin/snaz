@@ -6,6 +6,7 @@
 #define MACROTEXT_TEXT_H
 
 #include <string>
+#include <vector>
 #include "mt.h"
 
 namespace mt {
@@ -26,8 +27,10 @@ namespace mt {
 		std::string get() const;
 		void append(std::string);
 		bool empty() const { return text.empty(); }
+		void subs(mtext&,const vector<string>&,string) const;
 	};
 
 };
 
 #endif //MACROTEXT_TEXT_H
+

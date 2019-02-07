@@ -2,7 +2,10 @@
 // Created by Ben on 2019-01-23.
 //
 
+#include "support/Message.h"
+#include "support/Convert.h"
 #include "mt.h"
+
 namespace mt {
 
 	Text::Text(const std::string &w) : text(w) {}
@@ -44,6 +47,29 @@ namespace mt {
 			mt.pop_back();
 		}
 		mt.emplace_back(std::move(*this));
+	}
+
+
+	void Text::subs(mtext& result,const vector<string>& list,const string prefix) const {
+		size_t start = 0, curr, psize = prefix.size();
+		string valStr;
+		while ((curr=text.find(prefix,start)) != string::npos) {
+			valStr.append(text.substr(start,curr - start)); //number of chars.
+			curr += psize;
+			pair<size_t,bool> idx = Support::znatural(text,curr);
+			if(idx.second) {
+				if(idx.first < list.size()) {
+					valStr.append(list[idx.first]);
+				}
+			} else {
+				valStr.append(prefix);
+			}
+			start += curr;
+		}
+		if(start < text.size()) {
+			valStr.append(text.substr(start));
+		}
+		Text(valStr).add(result);
 	}
 
 	void Text::doCount(mtext& result,const std::string& marker,size_t value,std::string& basis) const {

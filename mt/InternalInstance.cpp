@@ -25,25 +25,23 @@ namespace mt {
 		}
 	}
 
-
 	std::string InternalInstance::parm(size_t i) {
 		std::ostringstream result;
 		if(i > parms->size()) {
 			return "";
 		} else {
-			Driver::expand((*parms)[i - 1],*errs, result, *context);
+			Driver::expand((*parms)[i - 1],*errs,result, *context);
 			return result.str();
 		}
 	}
 
-	const mtext*	InternalInstance::praw(size_t i) {
+	const mtext* InternalInstance::praw(size_t i) {
 		const mtext* m = nullptr;
 		if(parms->size() >= i) {
 			m = &((*parms)[i - 1]);
 		}
 		return m;
 	}
-
 
 	void InternalInstance::expand(size_t i) {
 		Driver::expand((*parms)[i - 1],*errs, *output, *context);

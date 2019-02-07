@@ -19,16 +19,15 @@ namespace mt {
 	using iteration=std::pair<size_t,size_t>;
 	using plist=std::vector<mtext>;
 
-	struct Instance {
+	class Instance {
+	public:
 		const plist *parms = nullptr;
 		iteration it = {0, 0};
 		bool generated;     //internal generation via e.g. iForX
 		std::string iValue; //substitutes for iForX
 		std::string iCount; //substitutes for iForX
-		Instance(const plist *p, iteration i, bool gen = false) : parms(p), it(i), generated(gen) {}
-
-		Instance(const Instance &o) : parms(o.parms), it(o.it), generated(o.generated), iValue(o.iValue),
-									  iCount(o.iCount) {}
+		Instance(const plist *, iteration, bool= false);
+		Instance(const Instance &);
 	};
 
 	using Carriage= std::pair<Handler*, Instance>;

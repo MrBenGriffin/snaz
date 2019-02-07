@@ -32,6 +32,7 @@ namespace Support {
 	bool split(char, const string&, pair<string,string>&);	   //Given a string, split it at the first given character (destroy the character)
 	bool rsplit(char, const string&, pair<string,string>&);	   //Given a string, split it at the last given character (destroy the character)
 
+	pair<size_t,bool> znatural(const string&,size_t&);
 	pair<size_t,bool> znatural(const string&);			//Given a string, returns a natural  0... +BIGINT and a flag saying if it is a number at all.
 	pair<size_t,bool> znatural(string::const_iterator&); //Given a string, returns a natural  0... +BIGINT and a flag saying if it is a number at all.
 	pair<size_t,bool> znatural(string::const_iterator&,string::const_iterator&); //Given a string, returns a natural  0... +BIGINT and a flag saying if it is a number at all.
@@ -41,7 +42,7 @@ namespace Support {
 	size_t	natural(string::const_iterator&);			//Given a const string, returns a natural  1... +BIGINT
 	pair<std::time_t,bool> time_t(const string&);
 	pair<long,bool>  integer(const string&);						//Given a string, returns an integer -BIGINT ... 0 ... +BIGINT and a flag saying if it is a number at all.
-	long				integer(string::const_iterator&);			//Given a const string, returns an integer -BIGINT ... 0 ... +BIGINT
+	long			integer(string::const_iterator&);			//Given a const string, returns an integer -BIGINT ... 0 ... +BIGINT
 	double			real(string::const_iterator&);				//Given a string, returns a double.
 	double			real(const string&);						//Given a const string, returns a double (floating point).
 	size_t	hex(string::const_iterator&,double&); 		//input e.g. x32dda outputs a hex double. error needs NaN returns bytes used

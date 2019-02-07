@@ -69,25 +69,90 @@ namespace mt {
 	void iRegex::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		if(Regex::available(e)) {
 			InternalInstance my(this,e,o,instance,context);
-			e << Message(fatal,"iRegex is not yet implemented.");
 			if(my.count > 2) { //otherwise there's nothing to do.
-				string pattern = my.parm(1);
-//				string substitute = my.praw(2);
+				/**
+				 * Pattern	(p1) :easy. It's going to be the regex pattern to search for.
+				 * Scope	(p3) :could be easy if we put evaluation into the substitute.
+				 * Subst 	(p2) :not easy. we need to look for \1, \2 etc. for substitution points.
+				 */
+				string final;
 				string scope = my.parm(3);
-				string result;
-				if (pattern.length() > 0 && scope.length() > 0) {
-//					Support::Regex::replace(pattern,substitute,scope);
-//					if(!scope.empty()) {
-//						process(&output,titleName,scope,0,true);
-//					}
+				if (!scope.empty()) {
+					int ovc = 30;                // size of ovector
+					int *ov = nullptr;            // size must be a multiple of 3.
+					ov = new int[ovc];            // 30 gives us 10 substitutions \1 etc..
+					size_t count = 0;
+					size_t start = 0;
+					size_t lastEnd = string::npos;
+					const mtext *subst = my.praw(2);
+					string pattern = my.parm(1);
+					size_t base_len = scope.length();
+					mtext result;
+					while (start <= base_len) {
+						int matches = Regex::matcher(e, pattern, scope, (int) start, ov, ovc);
+						if (matches <= 0) {
+							final = scope;
+							break;    //we are finished - either with nothing, or all done.
+						}
+						size_t matchstart = (size_t) ov[0], matchend = (size_t) ov[1];
+						if (matchstart == matchend && matchstart == lastEnd) {
+							matchend = start + 1;
+							if (start + 1 < base_len && scope[start] == '\r' && scope[start + 1] == '\n') {
+								matchend++;
+							}
+							while (matchend < base_len && (scope[matchend] & 0xc0) == 0x80) {
+								matchend++;
+							}
+							if (matchend <= base_len) {
+								Text part(string(scope, start, matchend - start));
+								part.add(result);
+							}
+							start = matchend;
+						} else {
+							Text part(string(scope, start, matchstart - start));
+							part.add(result);
+							vector<string> subs;
+							for (size_t n = 0; n < 10; n++) {
+								string substr;
+								int pos = ov[2 * n],pos2 = ov[2 * n + 1];
+								if (pos >= scope.size()) break;
+								if (pos >= 0) {
+									if(pos2 >= scope.length()) {
+										substr = scope.substr(pos);
+									} else {
+										substr = scope.substr(pos,pos2-pos);
+									}
+								}
+								subs.push_back(substr);
+							}
+//							we have a praw (substitute).
+//							we need to use the subs as injection points on the texts within it.
+//							Regex substitutes are \1 \2 etc..
+							Driver::subs(*subst,result,subs,"\\");
+							start = matchend;
+							lastEnd = matchend;
+							count++;
+						}
+						count++;
+					}
+					if (count != 0 && start < base_len) {
+						Text part(string(scope, start, base_len - start));
+						part.add(result);
+					}
+					delete[] ov;
+					if(!result.empty()) {
+						std::ostringstream expr;
+						Driver::expand(result, e, expr, context);
+						final = expr.str();
+					}
 				}
-				my.logic(result,4); //@iRegex(o,p,foo,fpp?,T,F)
-			}
-
+				my.logic(final,4); //@iRegex(o,p,foo,fpp?,T,F)
+			} //count of 2 or less.
 		} else {
 			e << Message(fatal,"iRegex requires the pcre library which was not found.");
 		}
 	}
+
 	void iRembr::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
 		string result = my.parm(1);

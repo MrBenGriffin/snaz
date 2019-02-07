@@ -159,6 +159,22 @@ namespace mt {
 		}
 	}
 
+	// Do substitutes..
+	void Driver::subs(const mtext& prog,mtext& out,std::vector<std::string>& subs,const std::string& prefix) {
+		for (auto &t : prog) {
+			if (std::holds_alternative<Text>(t)) {
+				std::get<Text>(t).subs(out, subs, prefix);
+			} else {
+				if(std::holds_alternative<Macro>(t)) {
+					std::get<Macro>(t).subs(out,subs,prefix);
+				} else {
+					out.push_back(t);
+				}
+			}
+		}
+	}
+
+
 	std::ostream& Driver::visit(const Token& j, std::ostream& o) {
 		std::visit([&o](auto&& arg){ arg.visit(o);},j);
 		return o;

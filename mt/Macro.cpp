@@ -19,6 +19,16 @@ namespace mt {
 		result.push_back({std::move(ret)});
 	}
 
+	void Macro::subs(mtext& result,std::vector<std::string>& subs,const std::string& prefix) const {
+		Macro ret(name);
+		for(auto& parm : parms) {
+			mtext nParm;
+			Driver::subs(parm,nParm,subs,prefix);
+			ret.parms.push_back(nParm);
+		}
+		result.push_back({std::move(ret)});
+	}
+
 	void Macro::expand(Messages& errs,mtext& result,mstack &context) const {
 		if (Definition::has(name)) {
 			Instance instance(&parms,{0,parms.size()});
