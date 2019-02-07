@@ -312,6 +312,33 @@ mt/Injection.cpp.s:
 	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Injection.cpp.s
 .PHONY : mt/Injection.cpp.s
 
+mt/Instance.o: mt/Instance.cpp.o
+
+.PHONY : mt/Instance.o
+
+# target to build an object file
+mt/Instance.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Instance.cpp.o
+.PHONY : mt/Instance.cpp.o
+
+mt/Instance.i: mt/Instance.cpp.i
+
+.PHONY : mt/Instance.i
+
+# target to preprocess a source file
+mt/Instance.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Instance.cpp.i
+.PHONY : mt/Instance.cpp.i
+
+mt/Instance.s: mt/Instance.cpp.s
+
+.PHONY : mt/Instance.s
+
+# target to generate assembly for a file
+mt/Instance.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Instance.cpp.s
+.PHONY : mt/Instance.cpp.s
+
 mt/Internal.o: mt/Internal.cpp.o
 
 .PHONY : mt/Internal.o
@@ -828,6 +855,9 @@ help:
 	@echo "... mt/Injection.o"
 	@echo "... mt/Injection.i"
 	@echo "... mt/Injection.s"
+	@echo "... mt/Instance.o"
+	@echo "... mt/Instance.i"
+	@echo "... mt/Instance.s"
 	@echo "... mt/Internal.o"
 	@echo "... mt/Internal.i"
 	@echo "... mt/Internal.s"

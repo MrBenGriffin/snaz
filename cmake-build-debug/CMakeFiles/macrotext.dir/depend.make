@@ -20,6 +20,7 @@ CMakeFiles/macrotext.dir/main.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../mt/Driver.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../mt/Injection.h
+CMakeFiles/macrotext.dir/main.cpp.o: ../mt/Instance.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../mt/Internal.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../mt/Macro.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../mt/Text.h
@@ -40,6 +41,7 @@ CMakeFiles/macrotext.dir/mt/Content.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/mt/Content.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/mt/Content.cpp.o: ../mt/Driver.h
 CMakeFiles/macrotext.dir/mt/Content.cpp.o: ../mt/Injection.h
+CMakeFiles/macrotext.dir/mt/Content.cpp.o: ../mt/Instance.h
 CMakeFiles/macrotext.dir/mt/Content.cpp.o: ../mt/Internal.h
 CMakeFiles/macrotext.dir/mt/Content.cpp.o: ../mt/Macro.h
 CMakeFiles/macrotext.dir/mt/Content.cpp.o: ../mt/Text.h
@@ -57,6 +59,7 @@ CMakeFiles/macrotext.dir/mt/Definition.cpp.o: ../mt/Definition.cpp
 CMakeFiles/macrotext.dir/mt/Definition.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/mt/Definition.cpp.o: ../mt/Driver.h
 CMakeFiles/macrotext.dir/mt/Definition.cpp.o: ../mt/Injection.h
+CMakeFiles/macrotext.dir/mt/Definition.cpp.o: ../mt/Instance.h
 CMakeFiles/macrotext.dir/mt/Definition.cpp.o: ../mt/Internal.h
 CMakeFiles/macrotext.dir/mt/Definition.cpp.o: ../mt/InternalInstance.h
 CMakeFiles/macrotext.dir/mt/Definition.cpp.o: ../mt/Internals.h
@@ -78,6 +81,7 @@ CMakeFiles/macrotext.dir/mt/Driver.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/mt/Driver.cpp.o: ../mt/Driver.cpp
 CMakeFiles/macrotext.dir/mt/Driver.cpp.o: ../mt/Driver.h
 CMakeFiles/macrotext.dir/mt/Driver.cpp.o: ../mt/Injection.h
+CMakeFiles/macrotext.dir/mt/Driver.cpp.o: ../mt/Instance.h
 CMakeFiles/macrotext.dir/mt/Driver.cpp.o: ../mt/Internal.h
 CMakeFiles/macrotext.dir/mt/Driver.cpp.o: ../mt/Macro.h
 CMakeFiles/macrotext.dir/mt/Driver.cpp.o: ../mt/Scanner.h
@@ -97,6 +101,7 @@ CMakeFiles/macrotext.dir/mt/Injection.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/mt/Injection.cpp.o: ../mt/Driver.h
 CMakeFiles/macrotext.dir/mt/Injection.cpp.o: ../mt/Injection.cpp
 CMakeFiles/macrotext.dir/mt/Injection.cpp.o: ../mt/Injection.h
+CMakeFiles/macrotext.dir/mt/Injection.cpp.o: ../mt/Instance.h
 CMakeFiles/macrotext.dir/mt/Injection.cpp.o: ../mt/Internal.h
 CMakeFiles/macrotext.dir/mt/Injection.cpp.o: ../mt/Macro.h
 CMakeFiles/macrotext.dir/mt/Injection.cpp.o: ../mt/Text.h
@@ -105,6 +110,10 @@ CMakeFiles/macrotext.dir/mt/Injection.cpp.o: ../mt/declarations.h
 CMakeFiles/macrotext.dir/mt/Injection.cpp.o: ../mt/mt.h
 CMakeFiles/macrotext.dir/mt/Injection.cpp.o: location.hh
 CMakeFiles/macrotext.dir/mt/Injection.cpp.o: parser.tab.hpp
+
+CMakeFiles/macrotext.dir/mt/Instance.cpp.o: ../mt/Instance.cpp
+CMakeFiles/macrotext.dir/mt/Instance.cpp.o: ../mt/Instance.h
+CMakeFiles/macrotext.dir/mt/Instance.cpp.o: ../mt/declarations.h
 
 CMakeFiles/macrotext.dir/mt/Internal.cpp.o: ../support/Comparison.h
 CMakeFiles/macrotext.dir/mt/Internal.cpp.o: ../support/Convert.h
@@ -117,6 +126,7 @@ CMakeFiles/macrotext.dir/mt/Internal.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/mt/Internal.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/mt/Internal.cpp.o: ../mt/Driver.h
 CMakeFiles/macrotext.dir/mt/Internal.cpp.o: ../mt/Injection.h
+CMakeFiles/macrotext.dir/mt/Internal.cpp.o: ../mt/Instance.h
 CMakeFiles/macrotext.dir/mt/Internal.cpp.o: ../mt/Internal.cpp
 CMakeFiles/macrotext.dir/mt/Internal.cpp.o: ../mt/Internal.h
 CMakeFiles/macrotext.dir/mt/Internal.cpp.o: ../mt/InternalInstance.h
@@ -136,6 +146,7 @@ CMakeFiles/macrotext.dir/mt/InternalInstance.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/mt/InternalInstance.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/mt/InternalInstance.cpp.o: ../mt/Driver.h
 CMakeFiles/macrotext.dir/mt/InternalInstance.cpp.o: ../mt/Injection.h
+CMakeFiles/macrotext.dir/mt/InternalInstance.cpp.o: ../mt/Instance.h
 CMakeFiles/macrotext.dir/mt/InternalInstance.cpp.o: ../mt/Internal.h
 CMakeFiles/macrotext.dir/mt/InternalInstance.cpp.o: ../mt/InternalInstance.cpp
 CMakeFiles/macrotext.dir/mt/InternalInstance.cpp.o: ../mt/InternalInstance.h
@@ -156,6 +167,7 @@ CMakeFiles/macrotext.dir/mt/InternalsStorage.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/mt/InternalsStorage.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/mt/InternalsStorage.cpp.o: ../mt/Driver.h
 CMakeFiles/macrotext.dir/mt/InternalsStorage.cpp.o: ../mt/Injection.h
+CMakeFiles/macrotext.dir/mt/InternalsStorage.cpp.o: ../mt/Instance.h
 CMakeFiles/macrotext.dir/mt/InternalsStorage.cpp.o: ../mt/Internal.h
 CMakeFiles/macrotext.dir/mt/InternalsStorage.cpp.o: ../mt/InternalInstance.h
 CMakeFiles/macrotext.dir/mt/InternalsStorage.cpp.o: ../mt/InternalsStorage.cpp
@@ -177,6 +189,7 @@ CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o: ../mt/Driver.h
 CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o: ../mt/Injection.h
+CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o: ../mt/Instance.h
 CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o: ../mt/Internal.h
 CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o: ../mt/InternalInstance.h
 CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o: ../mt/InternalsString.cpp
@@ -198,6 +211,7 @@ CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o: ../mt/Driver.h
 CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o: ../mt/Injection.h
+CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o: ../mt/Instance.h
 CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o: ../mt/Internal.h
 CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o: ../mt/InternalInstance.h
 CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o: ../mt/InternalsUtility.cpp
@@ -216,6 +230,7 @@ CMakeFiles/macrotext.dir/mt/Macro.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/mt/Macro.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/mt/Macro.cpp.o: ../mt/Driver.h
 CMakeFiles/macrotext.dir/mt/Macro.cpp.o: ../mt/Injection.h
+CMakeFiles/macrotext.dir/mt/Macro.cpp.o: ../mt/Instance.h
 CMakeFiles/macrotext.dir/mt/Macro.cpp.o: ../mt/Internal.h
 CMakeFiles/macrotext.dir/mt/Macro.cpp.o: ../mt/Macro.cpp
 CMakeFiles/macrotext.dir/mt/Macro.cpp.o: ../mt/Macro.h
@@ -233,6 +248,7 @@ CMakeFiles/macrotext.dir/mt/Text.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/mt/Text.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/mt/Text.cpp.o: ../mt/Driver.h
 CMakeFiles/macrotext.dir/mt/Text.cpp.o: ../mt/Injection.h
+CMakeFiles/macrotext.dir/mt/Text.cpp.o: ../mt/Instance.h
 CMakeFiles/macrotext.dir/mt/Text.cpp.o: ../mt/Internal.h
 CMakeFiles/macrotext.dir/mt/Text.cpp.o: ../mt/Macro.h
 CMakeFiles/macrotext.dir/mt/Text.cpp.o: ../mt/Text.cpp
@@ -250,6 +266,7 @@ CMakeFiles/macrotext.dir/mt/Wss.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/mt/Wss.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/mt/Wss.cpp.o: ../mt/Driver.h
 CMakeFiles/macrotext.dir/mt/Wss.cpp.o: ../mt/Injection.h
+CMakeFiles/macrotext.dir/mt/Wss.cpp.o: ../mt/Instance.h
 CMakeFiles/macrotext.dir/mt/Wss.cpp.o: ../mt/Internal.h
 CMakeFiles/macrotext.dir/mt/Wss.cpp.o: ../mt/Macro.h
 CMakeFiles/macrotext.dir/mt/Wss.cpp.o: ../mt/Text.h
@@ -268,6 +285,7 @@ CMakeFiles/macrotext.dir/parser.tab.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/parser.tab.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/parser.tab.cpp.o: ../mt/Driver.h
 CMakeFiles/macrotext.dir/parser.tab.cpp.o: ../mt/Injection.h
+CMakeFiles/macrotext.dir/parser.tab.cpp.o: ../mt/Instance.h
 CMakeFiles/macrotext.dir/parser.tab.cpp.o: ../mt/Internal.h
 CMakeFiles/macrotext.dir/parser.tab.cpp.o: ../mt/Macro.h
 CMakeFiles/macrotext.dir/parser.tab.cpp.o: ../mt/Text.h
@@ -321,6 +339,7 @@ CMakeFiles/macrotext.dir/test.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/test.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/test.cpp.o: ../mt/Driver.h
 CMakeFiles/macrotext.dir/test.cpp.o: ../mt/Injection.h
+CMakeFiles/macrotext.dir/test.cpp.o: ../mt/Instance.h
 CMakeFiles/macrotext.dir/test.cpp.o: ../mt/Internal.h
 CMakeFiles/macrotext.dir/test.cpp.o: ../mt/Macro.h
 CMakeFiles/macrotext.dir/test.cpp.o: ../mt/Text.h

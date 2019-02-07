@@ -11,6 +11,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/Users/ben/CLionProjects/snaz/mt/Definition.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/mt/Definition.cpp.o"
   "/Users/ben/CLionProjects/snaz/mt/Driver.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/mt/Driver.cpp.o"
   "/Users/ben/CLionProjects/snaz/mt/Injection.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/mt/Injection.cpp.o"
+  "/Users/ben/CLionProjects/snaz/mt/Instance.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/mt/Instance.cpp.o"
   "/Users/ben/CLionProjects/snaz/mt/Internal.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/mt/Internal.cpp.o"
   "/Users/ben/CLionProjects/snaz/mt/InternalInstance.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/mt/InternalInstance.cpp.o"
   "/Users/ben/CLionProjects/snaz/mt/InternalsStorage.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/mt/InternalsStorage.cpp.o"
