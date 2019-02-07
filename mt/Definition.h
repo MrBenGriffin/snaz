@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 #include "mt.h"
-#include "Internals.h"
+#include "Internal.h"
 
 namespace mt {
 	using namespace Support;

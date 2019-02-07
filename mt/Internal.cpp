@@ -7,13 +7,15 @@
 #include <random>
 #include <variant>
 
-#include "Internals.h"
-#include "InternalsCommon.h"
-#include "Definition.h"
+#include "mt.h"
 #include "support/Infix.h"
 #include "support/Message.h"
 #include "support/Fandr.h"
 #include "support/Comparison.h"
+#include "support/Convert.h"
+
+#include "Internal.h"
+#include "InternalInstance.h"
 
 namespace mt {
     using namespace Support;
@@ -24,14 +26,33 @@ namespace mt {
     Library Internal::cache;
     LStore Internal::lStore;
 
-	void Internal::generate(Messages& e,mtext& o,mstack& c,plist& list,const mtext* program,string value,string count) {
-		if(program != nullptr) { // from an empty parm..
-			Instance i(&list,{1,list.size()},true); //set as generated.
-			i.iValue = value;
-			i.iCount = count;
-			Definition macro(*program);
-			macro.expand(e,o,i,c);
+//	void Internal::expand(Support::Messages& e,mtext& o,Instance& instance,mstack& context) {
+//		InternalInstance inst(this,e,o,instance,context);
+//		work(inst);
+//	}
+
+	plist Internal::toParms(string basis,string cutter,string sort) {
+		vector<string> list;
+		Support::tolist(list,basis,cutter);
+		doSort(list,sort);
+		plist result;
+		for(auto& i : list) {
+			result.push_back({Text(i)});
 		}
+		return result;
+	}
+
+	plist Internal::toParms(const listType* orig,string sort) {
+		vector<string> list;
+		for(auto& i : *orig) {
+			list.push_back(i);
+		}
+		doSort(list,sort);
+		plist result;
+		for(auto& i : list) {
+			result.push_back({Text(i)});
+		}
+		return result;
 	}
 
 	void Internal::doSort(vector<string>& idx,string sortstr) {

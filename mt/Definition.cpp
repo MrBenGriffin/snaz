@@ -7,6 +7,7 @@
 #include <utility>
 #include <variant>
 #include "mt.h"
+#include "Internal.h"
 #include "Internals.h"
 
 namespace mt {

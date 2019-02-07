@@ -115,11 +115,6 @@ d07atags		@wTr(@wa(class,test),@wTd(,{Hello, you.}))								<tr class="test"><td
 d07awTr			@wTr(@wa(A,X),B)														<tr A="X">B</tr>
 d07awTd			@wTd(@wa(A,X),B)														<td A="X">B</td>
 
-# (A) Recursive User Macros -- Needs INTERNALS
-// tru Recursion	@fx(abc)																.[a].[b].[c].
-// tru Recursion	@fr(abc)																.[a].[b].[c].
-// b07 entity		@ent(nbsp)																#x00A0
-
 # nested fat bracket macro tests
 U e		0	1	11	@a❪~%1❫
 e01 empty		@e()																	[~]
@@ -171,9 +166,15 @@ bar 01			@bar(A,B)																(bar:(foo:A:B:A):(foo:B,A:A:B,A))
 # Testing Injection Iterations.
 U iter		0	-1	11	[%(i)]
 U uiter	1	-1	10	@iter(%(1+))
+U uitep	1	-1	10	@iter(@iEq(%1,X,%(1+),%(2+)))
+U uiteq	1	-1	10	@iEq(%1,X,@iter(%(1+)),(%1)@iter(%(2+)))
 
 010iter			@iter(X,Y,Z)							[X][Y][Z]
 020uiter		@uiter(X,Y,Z)							[X][Y][Z]
+030uitep		@uitep(X,Y,Z)							[X][Y][Z]
+031uitep		@uitep(A,Y,Z)							[Y][Z]
+032uiteq		@uiteq(A,Y,Z)							(A)[Y][Z]
+033uiteq		@uiteq(X,Y,Z)							[X][Y][Z]
 
 # Testing Stacks.
 stacked001		@xv()																[xz;xy;xx;xw;xv;stacked001;]

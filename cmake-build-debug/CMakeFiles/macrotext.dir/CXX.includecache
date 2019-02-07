@@ -18,9 +18,21 @@ sys/stat.h
 ctime
 -
 
-..//support/Fandr.h
-string
+..//support/Infix.h
+map
 -
+vector
+-
+sstream
+-
+cmath
+-
+cfloat
+-
+unordered_map
+-
+Message.h
+../support/Message.h
 
 ..//support/Message.h
 utility
@@ -31,16 +43,6 @@ deque
 -
 ostream
 -
-
-..//support/Regex.h
-string
--
-map
--
-pcre.h
--
-Message.h
-../support/Message.h
 
 ..//support/Storage.h
 string
@@ -79,8 +81,8 @@ vector
 -
 mt.h
 /Users/ben/CLionProjects/snaz/mt/mt.h
-Internals.h
-/Users/ben/CLionProjects/snaz/mt/Internals.h
+Internal.h
+/Users/ben/CLionProjects/snaz/mt/Internal.h
 
 /Users/ben/CLionProjects/snaz/mt/Driver.h
 variant
@@ -118,7 +120,7 @@ string
 mt.h
 /Users/ben/CLionProjects/snaz/mt/mt.h
 
-/Users/ben/CLionProjects/snaz/mt/Internals.h
+/Users/ben/CLionProjects/snaz/mt/Internal.h
 Definition.h
 /Users/ben/CLionProjects/snaz/mt/Definition.h
 support/Storage.h
@@ -126,25 +128,21 @@ support/Storage.h
 mt.h
 /Users/ben/CLionProjects/snaz/mt/mt.h
 
-/Users/ben/CLionProjects/snaz/mt/InternalsCommon.h
-Definition.h
-/Users/ben/CLionProjects/snaz/mt/Definition.h
+/Users/ben/CLionProjects/snaz/mt/InternalInstance.h
 mt.h
 /Users/ben/CLionProjects/snaz/mt/mt.h
 
-/Users/ben/CLionProjects/snaz/mt/InternalsString.cpp
-Internals.h
-/Users/ben/CLionProjects/snaz/mt/Internals.h
-InternalsCommon.h
-/Users/ben/CLionProjects/snaz/mt/InternalsCommon.h
-support/Fandr.h
-/Users/ben/CLionProjects/snaz/mt/support/Fandr.h
-support/Convert.h
-/Users/ben/CLionProjects/snaz/mt/support/Convert.h
+/Users/ben/CLionProjects/snaz/mt/InternalsUtility.cpp
+Internal.h
+/Users/ben/CLionProjects/snaz/mt/Internal.h
+InternalInstance.h
+/Users/ben/CLionProjects/snaz/mt/InternalInstance.h
+support/Infix.h
+/Users/ben/CLionProjects/snaz/mt/support/Infix.h
 support/Message.h
 /Users/ben/CLionProjects/snaz/mt/support/Message.h
-support/Regex.h
-/Users/ben/CLionProjects/snaz/mt/support/Regex.h
+support/Convert.h
+/Users/ben/CLionProjects/snaz/mt/support/Convert.h
 
 /Users/ben/CLionProjects/snaz/mt/Macro.h
 string
@@ -193,12 +191,6 @@ Driver.h
 /Users/ben/CLionProjects/snaz/mt/Driver.h
 Definition.h
 /Users/ben/CLionProjects/snaz/mt/Definition.h
-Internals.h
-/Users/ben/CLionProjects/snaz/mt/Internals.h
-
-/usr/local/include/pcre.h
-stdlib.h
--
 
 location.hh
 algorithm

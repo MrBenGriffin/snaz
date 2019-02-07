@@ -37,9 +37,9 @@ namespace mt {
 #include "Injection.h"
 #include "Macro.h"
 #include "Content.h"
+
 #include "Driver.h"
 #include "Definition.h"
-#include "Internals.h"
 
 
 #endif //MACROTEXT_MT_H

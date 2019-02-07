@@ -1,5 +1,5 @@
-#include "Internals.h"
-#include "InternalsCommon.h"
+#include "Internal.h"
+#include "InternalInstance.h"
 #include "support/Fandr.h"
 #include "support/Convert.h"
 #include "support/Message.h"
@@ -9,7 +9,7 @@ namespace mt {
 	using namespace Support;
 
 	void iLeft::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
-		InternalsCommon my(this,e,o,instance,context);
+		InternalInstance my(this,e,o,instance,context);
 		string string_to_cut = my.parm(1);
 		string chars_to_keep = my.parm(2);
 		string result;
@@ -25,7 +25,7 @@ namespace mt {
 	}
 
 	void iLength::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
-		InternalsCommon my(this,e,o,instance,context);
+		InternalInstance my(this,e,o,instance,context);
 		size_t value=0;
 		if(Support::length(my.parm(1),value)) {
 			my.logic(value,2); // @iLength(text,?,T,F)
@@ -35,7 +35,7 @@ namespace mt {
 	}
 
 	void iMid::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
-		InternalsCommon my(this,e,o,instance,context);
+		InternalInstance my(this,e,o,instance,context);
 		string string_to_cut = my.parm(1);
 		auto start = integer(my.parm(2));
 		auto keep = integer(my.parm(3));
@@ -57,7 +57,7 @@ namespace mt {
 	}
 
 	void iPosition::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
-		InternalsCommon my(this,e,o,instance,context);
+		InternalInstance my(this,e,o,instance,context);
 		size_t value=0;
 		if(Support::position(my.parm(2),my.parm(1),value)) {
 			my.logic(value+1,3); //iPosition(foo,o,?,T,F)
@@ -68,39 +68,39 @@ namespace mt {
 
 	void iRegex::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		if(Regex::available(e)) {
-/*
-			InternalsCommon my(this,e,o,instance,context);
+			InternalInstance my(this,e,o,instance,context);
+			e << Message(fatal,"iRegex is not yet implemented.");
 			if(my.count > 2) { //otherwise there's nothing to do.
 				string pattern = my.parm(1);
-				string substitute = my.praw(2);
+//				string substitute = my.praw(2);
 				string scope = my.parm(3);
 				string result;
 				if (pattern.length() > 0 && scope.length() > 0) {
-//					String::Regex::replace(pattern,substitute,scope);
+//					Support::Regex::replace(pattern,substitute,scope);
 //					if(!scope.empty()) {
 //						process(&output,titleName,scope,0,true);
 //					}
 				}
 				my.logic(result,4); //@iRegex(o,p,foo,fpp?,T,F)
 			}
-*/
+
 		} else {
 			e << Message(fatal,"iRegex requires the pcre library which was not found.");
 		}
 	}
 	void iRembr::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
-		InternalsCommon my(this,e,o,instance,context);
+		InternalInstance my(this,e,o,instance,context);
 		string result = my.parm(1);
 		tabstrip(result); 	//should we strip out crlf also?!
 		fandr(result,"\n"); //Should this be here?!
 		my.set(result);
 	}
 	void iRembrp::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
-		InternalsCommon my(this,e,o,instance,context);
+		InternalInstance my(this,e,o,instance,context);
 		my.set(my.parm(1));
 	}
 	void iReplace::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
-		InternalsCommon my(this,e,o,instance,context);
+		InternalInstance my(this,e,o,instance,context);
 		if(my.count > 2) { //otherwise there's nothing to do. It's legal, but nothing to do this time.
 			string search = my.parm(1);
 			string replace = my.parm(2);
@@ -113,7 +113,7 @@ namespace mt {
 	}
 
 	void iRight::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
-		InternalsCommon my(this,e,o,instance,context);
+		InternalInstance my(this,e,o,instance,context);
 		string string_to_cut = my.parm(1);
 		string chars_to_keep = my.parm(2);
 		string result;
@@ -129,7 +129,7 @@ namespace mt {
 	}
 
 	void iTrim::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
-		InternalsCommon my(this,e,o,instance,context);
+		InternalInstance my(this,e,o,instance,context);
 		string stringToTrim = my.parm(1);
 		Support::trim(stringToTrim);
 		my.set(stringToTrim);

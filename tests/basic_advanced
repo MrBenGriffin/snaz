@@ -115,11 +115,6 @@ d07atags		⌽wTr(⌽wa(class,test),⌽wTd(,⎡Hello, you.⎤))								<tr class=
 d07awTr			⌽wTr(⌽wa(A,X),B)														<tr A="X">B</tr>
 d07awTd			⌽wTd(⌽wa(A,X),B)														<td A="X">B</td>
 
-# (A) Recursive User Macros -- Needs INTERNALS
-tru Recursion	⌽fx(abc)																.[a].[b].[c].
-tru Recursion	⌽fr(abc)																.[a].[b].[c].
-b07 entity		⌽ent(nbsp)																#x00A0
-
 # nested fat bracket macro tests
 U e		0	1	11	⌽a❪~⍟1❫
 e01 empty		⌽e()																	[~]

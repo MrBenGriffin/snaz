@@ -8,7 +8,7 @@
 #include "support/Fandr.h"
 #include "mt/Driver.h"
 #include "mt/Definition.h"
-#include "mt/Internals.h"
+#include "mt/Internal.h"
 
 using namespace std;
 

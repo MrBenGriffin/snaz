@@ -39,10 +39,10 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = "/Users/ben/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/183.4886.39/CLion.app/Contents/bin/cmake/mac/bin/cmake"
+CMAKE_COMMAND = "/Users/ben/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/183.5153.40/CLion.app/Contents/bin/cmake/mac/bin/cmake"
 
 # The command to remove a file.
-RM = "/Users/ben/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/183.4886.39/CLion.app/Contents/bin/cmake/mac/bin/cmake" -E remove -f
+RM = "/Users/ben/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/183.5153.40/CLion.app/Contents/bin/cmake/mac/bin/cmake" -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
@@ -59,7 +59,7 @@ CMAKE_BINARY_DIR = /Users/ben/CLionProjects/snaz/cmake-build-debug
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	"/Users/ben/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/183.4886.39/CLion.app/Contents/bin/cmake/mac/bin/cmake" -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	"/Users/ben/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/183.5153.40/CLion.app/Contents/bin/cmake/mac/bin/cmake" -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -70,7 +70,7 @@ rebuild_cache/fast: rebuild_cache
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	"/Users/ben/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/183.4886.39/CLion.app/Contents/bin/cmake/mac/bin/cmake" -E echo No\ interactive\ CMake\ dialog\ available.
+	"/Users/ben/Library/Application Support/JetBrains/Toolbox/apps/CLion/ch-0/183.5153.40/CLion.app/Contents/bin/cmake/mac/bin/cmake" -E echo No\ interactive\ CMake\ dialog\ available.
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -312,59 +312,59 @@ mt/Injection.cpp.s:
 	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Injection.cpp.s
 .PHONY : mt/Injection.cpp.s
 
-mt/Internals.o: mt/Internals.cpp.o
+mt/Internal.o: mt/Internal.cpp.o
 
-.PHONY : mt/Internals.o
-
-# target to build an object file
-mt/Internals.cpp.o:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Internals.cpp.o
-.PHONY : mt/Internals.cpp.o
-
-mt/Internals.i: mt/Internals.cpp.i
-
-.PHONY : mt/Internals.i
-
-# target to preprocess a source file
-mt/Internals.cpp.i:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Internals.cpp.i
-.PHONY : mt/Internals.cpp.i
-
-mt/Internals.s: mt/Internals.cpp.s
-
-.PHONY : mt/Internals.s
-
-# target to generate assembly for a file
-mt/Internals.cpp.s:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Internals.cpp.s
-.PHONY : mt/Internals.cpp.s
-
-mt/InternalsCommon.o: mt/InternalsCommon.cpp.o
-
-.PHONY : mt/InternalsCommon.o
+.PHONY : mt/Internal.o
 
 # target to build an object file
-mt/InternalsCommon.cpp.o:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalsCommon.cpp.o
-.PHONY : mt/InternalsCommon.cpp.o
+mt/Internal.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Internal.cpp.o
+.PHONY : mt/Internal.cpp.o
 
-mt/InternalsCommon.i: mt/InternalsCommon.cpp.i
+mt/Internal.i: mt/Internal.cpp.i
 
-.PHONY : mt/InternalsCommon.i
+.PHONY : mt/Internal.i
 
 # target to preprocess a source file
-mt/InternalsCommon.cpp.i:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalsCommon.cpp.i
-.PHONY : mt/InternalsCommon.cpp.i
+mt/Internal.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Internal.cpp.i
+.PHONY : mt/Internal.cpp.i
 
-mt/InternalsCommon.s: mt/InternalsCommon.cpp.s
+mt/Internal.s: mt/Internal.cpp.s
 
-.PHONY : mt/InternalsCommon.s
+.PHONY : mt/Internal.s
 
 # target to generate assembly for a file
-mt/InternalsCommon.cpp.s:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalsCommon.cpp.s
-.PHONY : mt/InternalsCommon.cpp.s
+mt/Internal.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Internal.cpp.s
+.PHONY : mt/Internal.cpp.s
+
+mt/InternalInstance.o: mt/InternalInstance.cpp.o
+
+.PHONY : mt/InternalInstance.o
+
+# target to build an object file
+mt/InternalInstance.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalInstance.cpp.o
+.PHONY : mt/InternalInstance.cpp.o
+
+mt/InternalInstance.i: mt/InternalInstance.cpp.i
+
+.PHONY : mt/InternalInstance.i
+
+# target to preprocess a source file
+mt/InternalInstance.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalInstance.cpp.i
+.PHONY : mt/InternalInstance.cpp.i
+
+mt/InternalInstance.s: mt/InternalInstance.cpp.s
+
+.PHONY : mt/InternalInstance.s
+
+# target to generate assembly for a file
+mt/InternalInstance.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalInstance.cpp.s
+.PHONY : mt/InternalInstance.cpp.s
 
 mt/InternalsStorage.o: mt/InternalsStorage.cpp.o
 
@@ -828,12 +828,12 @@ help:
 	@echo "... mt/Injection.o"
 	@echo "... mt/Injection.i"
 	@echo "... mt/Injection.s"
-	@echo "... mt/Internals.o"
-	@echo "... mt/Internals.i"
-	@echo "... mt/Internals.s"
-	@echo "... mt/InternalsCommon.o"
-	@echo "... mt/InternalsCommon.i"
-	@echo "... mt/InternalsCommon.s"
+	@echo "... mt/Internal.o"
+	@echo "... mt/Internal.i"
+	@echo "... mt/Internal.s"
+	@echo "... mt/InternalInstance.o"
+	@echo "... mt/InternalInstance.i"
+	@echo "... mt/InternalInstance.s"
 	@echo "... mt/InternalsStorage.o"
 	@echo "... mt/InternalsStorage.i"
 	@echo "... mt/InternalsStorage.s"

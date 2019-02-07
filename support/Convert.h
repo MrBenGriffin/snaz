@@ -46,7 +46,7 @@ namespace Support {
 	double			real(const string&);						//Given a const string, returns a double (floating point).
 	size_t	hex(string::const_iterator&,double&); 		//input e.g. x32dda outputs a hex double. error needs NaN returns bytes used
 	void			tolist(vector<size_t>&,const string &); //given a comma delimited set of naturals, returns a vector of naturals
-	void      tolist(vector<string>&,string,const string&); //given a cutter(string) delimited set of strings, return a vector of strings.
+	void 			tolist(vector<string>&,string,const string&); //given a cutter(string) delimited set of strings, return a vector of strings.
 	void			tolower(string&);							//Given an mixed case string, return it in lower case. e.g. "ThIs" => "this"
 	void			toupper(string&);							//Given an mixed case string, return it in lower case. e.g. "ThIs" => "this"
 	bool			isint(const string&);

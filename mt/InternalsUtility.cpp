@@ -1,5 +1,5 @@
-#include "Internals.h"
-#include "InternalsCommon.h"
+#include "Internal.h"
+#include "InternalInstance.h"
 #include "support/Infix.h"
 #include "support/Message.h"
 #include "support/Convert.h"
@@ -8,14 +8,14 @@ namespace mt {
 	using namespace Support;
 
 	void iEq::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
-		InternalsCommon my(this,e,o,instance,context);
+		InternalInstance my(this,e,o,instance,context);
 		std::string left =  my.parm(1);
 		std::string right = my.count > 1 ? my.parm(2): "";
 		my.logic(left == right,3);
 	}
 
 	void iExpr::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
-		InternalsCommon my(this,e,o,instance,context);
+		InternalInstance my(this,e,o,instance,context);
 		Infix::Evaluate expression;
 		auto expr=my.parm(1);
 		expression.set_expression(expr);
@@ -37,20 +37,13 @@ namespace mt {
 	}
 
 	void iForIndex::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
-		InternalsCommon my(this,e,o,instance,context);
-		// @iForIndex(DELIMITER,LIST,ITEM-PATTERN,NUM-PATTERN,SORT,EXPANSION)
-		vector<string> idx;
-		tolist(idx,my.parm(2),my.parm(1));
-		doSort(idx,my.parm(5));
-		plist parms;
-		for(auto& i : idx) {
-			parms.push_back({Text(i)});
-		}
-		generate(e,o,context,parms,my.praw(6),my.parm(3),my.parm(4));
+		InternalInstance my(this,e,o,instance,context);
+		plist parms=toParms(my.parm(2),my.parm(1),my.parm(5));
+		my.generate(parms,my.praw(6),my.parm(3),my.parm(4));
 	}
 
 	void iIndex::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
-		InternalsCommon my(this,e,o,instance,context);
+		InternalInstance my(this,e,o,instance,context);
 		enum optype {resize,ifempty,normalise,get,size,set,push,erase,find,back,append,drop,reverse,uappend,upush,pop,retrieve,remove,contains} op = normalise;
 		string result,delimiter = my.parm(1);
 		if (delimiter.size() == 1) {

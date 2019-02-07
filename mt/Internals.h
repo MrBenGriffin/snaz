@@ -1,154 +1,123 @@
 //
-// Created by Ben on 2019-01-24.
+// Created by Ben Griffin on 2019-02-07.
 //
 
 #ifndef MACROTEXT_INTERNALS_H
 #define MACROTEXT_INTERNALS_H
 
-
 #include "Definition.h"
 #include "support/Storage.h"
 #include "mt.h"
+#include "Internal.h"
+#include "InternalInstance.h"
 
 namespace mt {
-
-	struct Internal {
-		static Storage storage;
-		static Library library;
-		static Library cache;
-		static LStore lStore;
-
-		std::string _name;
-		size_t minParms {0}, maxParms {0};
-		bool inRange(size_t i) const { return (minParms <= i) && (i <= maxParms);}
-		std::string name() const {return _name;}
-		Internal(std::string name,size_t min,size_t max) : _name(name),minParms(min),maxParms(max) {}
-		void tolist(vector<string>& list,string basis,const string& cutter);
-
-//		void tolist(vector<string>& list,string basis,const string& cutter) {
-//			if (!cutter.empty()) {
-//				while (!basis.empty() ) {
-//					string::size_type pos = basis.find(cutter);
-//					if (pos != string::npos) {
-//						list.push_back(basis.substr(0, pos)); //pos says 2
-//						basis = basis.substr(pos+cutter.size(),string::npos);
-//					} else {
-//						list.push_back(basis);
-//						basis.clear();
-//					}
-//				}
-//			}
-//		}
-
-		void generate(Support::Messages&,mtext&,mstack&,plist&,const mtext*,string,string);
-		void doSort(vector<std::string>&,std::string);
-
-	};
 	// Utility
-	struct iEq : public Internal {
+	class iEq : public Internal {
 		iEq() : Internal("iEq",0,4) {}
-		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+		virtual void work(InternalInstance&);
 	};
-	struct iExpr : public Internal {
+	class iExpr : public Internal {
 		iExpr() : Internal("iExpr",1,INT_MAX) {}
-		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+		virtual void work(InternalInstance&);
 	};
 
-	struct iIndex : public Internal {
+	class iIndex : public Internal {
 		iIndex() : Internal("iIndex",1,6) {}
-		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+		virtual void work(InternalInstance&);
 	};
 
-	struct iForIndex : public Internal {
+	class iForIndex : public Internal {
 		iForIndex() : Internal("iForIndex",1,6) {}
-		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+		virtual void work(InternalInstance&);
 	};
 
 	// Storage
-	struct iExists : public Internal {
+	class iExists : public Internal {
 		iExists() : Internal("iExists",1,3) {}
-		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+		virtual void work(InternalInstance&);
 	};
-	struct iGet : public Internal {
+	class iGet : public Internal {
 		iGet() : Internal("iGet",1,4) {}
-		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+		virtual void work(InternalInstance&);
 	};
-	struct iSet : public Internal {
+	class iSet : public Internal {
 		iSet() : Internal("iSet",1,2) {}
-		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+		virtual void work(InternalInstance&);
 	};
-	struct iAppend : public Internal {
+	class iAppend : public Internal {
 		iAppend() : Internal("iAppend",1,2) {}
-		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+		virtual void work(InternalInstance&);
 	};
-	struct iKV : public Internal {
+	class iKV : public Internal {
 		iKV() : Internal("iKV",2,5) {}
-		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+		virtual void work(InternalInstance&);
 	};
-	struct iList : public Internal {
+	class iList : public Internal {
 		iList() : Internal("iList",2,5) {}
-		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+		virtual void work(InternalInstance&);
 	};
-	struct iReset : public Internal {
+	class iReset : public Internal {
 		iReset() : Internal("iReset",1,1) {}
-		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+		virtual void work(InternalInstance&);
 	};
-	struct iSetCache : public Internal {
+	class iSetCache : public Internal {
 		iSetCache() : Internal("iSetCache",2,2) {}
-		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+		virtual void work(InternalInstance&);
 	};
-	struct iSig : public Internal {
+	class iSig : public Internal {
 		iSig() : Internal("iSig",1,3) {}
-		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+		virtual void work(InternalInstance&);
 	};
-	struct iUse : public Internal {
+	class iUse : public Internal {
 		iUse() : Internal("iUse",1,1) {}
-		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+		virtual void work(InternalInstance&);
 	};
 
 	// Strings
-	struct iLeft : public Internal {
+	class iLeft : public Internal {
 		iLeft() : Internal("iLeft",2,6) {}
-		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+		virtual void work(InternalInstance&);
 	};
-	struct iLength : public Internal {
+	class iLength : public Internal {
 		iLength() : Internal("iLength",0,4) {}
-		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+		virtual void work(InternalInstance&);
 	};
-	struct iMid : public Internal {
+	class iMid : public Internal {
 		iMid() : Internal("iMid",3,6) {}
-		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+		virtual void work(InternalInstance&);
 	};
-	struct iPosition : public Internal {
+	class iPosition : public Internal {
 		iPosition() : Internal("iPosition",2,5) {}
-		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+		virtual void work(InternalInstance&);
 	};
-	struct iRegex : public Internal {
+	class iRegex : public Internal {
 		iRegex() : Internal("iRegex",2,6) {}
-		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+		virtual void work(InternalInstance&);
 	};
-	struct iRembr : public Internal {
+	class iRembr : public Internal {
 		iRembr() : Internal("iRembr",0,1) {}
-		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+		virtual void work(InternalInstance&);
 	};
-	struct iRembrp : public Internal {
+	class iRembrp : public Internal {
 		iRembrp() : Internal("iRembrp",0,1) {}
-		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+		virtual void work(InternalInstance&);
 	};
-	struct iReplace : public Internal {
+	class iReplace : public Internal {
 		iReplace() : Internal("iReplace",1,5) {}
-		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+		virtual void work(InternalInstance&);
 	};
 
-	struct iRight : public Internal {
+	class iRight : public Internal {
 		iRight() : Internal("iRight",2,6) {}
-		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+		virtual void work(InternalInstance&);
 	};
-	struct iTrim : public Internal {
+	class iTrim : public Internal {
 		iTrim() : Internal("iTrim",0,1) {}
-		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+		virtual void work(InternalInstance&);
 	};
 
-}
+};
+
 
 #endif //MACROTEXT_INTERNALS_H

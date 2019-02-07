@@ -11,8 +11,8 @@
 namespace mt {
 	using namespace Support;
 	class Text {
+	friend class Internals;
 	private:
-		friend class Internals
 		std::string text;
 		void doCount(mtext&,const std::string&,size_t,std::string&) const;
 		void doCountAndValue(Messages&,mtext&,const mstack&) const;

@@ -150,7 +150,11 @@ namespace mt {
 			if (std::holds_alternative<Injection>(i)) {
 				std::visit([&e,&x,&c](auto&& arg){ arg.expand(e,x,c);},i);
 			} else {
-				x.push_back(i);
+				if(std::holds_alternative<Macro>(i)) {
+					std::get<Macro>(i).inject(e,x,c);
+				} else {
+					x.push_back(i);
+				}
 			}
 		}
 	}

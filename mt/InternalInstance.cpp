@@ -3,20 +3,30 @@
 //
 
 #include <support/Convert.h>
-#include "InternalsCommon.h"
-#include "Internals.h"
+#include "InternalInstance.h"
 
 namespace mt {
 
-	InternalsCommon::InternalsCommon(const Internal *thing,Messages& e,mtext &o, Instance &i, mstack &c) :
-			owner(thing),output(&o), instance(&i), context(&c),errs(&e) {
+	InternalInstance::InternalInstance(const Internal *thing,Messages& e,mtext &o, Instance &i, mstack &c) :
+		owner(thing),output(&o), instance(&i), context(&c), errs(&e) {
 		parms = i.parms;
 		count = parms->size();
 		min = thing->minParms;
 		max = thing->maxParms;
 	}
 
-	std::string InternalsCommon::parm(size_t i) {
+	void InternalInstance::generate(plist& list,const mtext* program,string value,string count) {
+		if(program != nullptr) { // from an empty parm..
+			Instance i(&list,{1,list.size()},true); //set as generated.
+			i.iValue = value;
+			i.iCount = count;
+			Definition macro(*program);
+			macro.expand(*errs,*output,i,*context);
+		}
+	}
+
+
+	std::string InternalInstance::parm(size_t i) {
 		std::ostringstream result;
 		if(i > parms->size()) {
 			return "";
@@ -26,7 +36,7 @@ namespace mt {
 		}
 	}
 
-	const mtext*	InternalsCommon::praw(size_t i) {
+	const mtext*	InternalInstance::praw(size_t i) {
 		const mtext* m = nullptr;
 		if(parms->size() >= i) {
 			m = &((*parms)[i - 1]);
@@ -35,16 +45,16 @@ namespace mt {
 	}
 
 
-	void InternalsCommon::expand(size_t i) {
+	void InternalInstance::expand(size_t i) {
 		Driver::expand((*parms)[i - 1],*errs, *output, *context);
 	}
 
-	void InternalsCommon::set(std::string str) {
+	void InternalInstance::set(std::string str) {
 		output->emplace_back(Text(str));
 	}
 
 	//offset points at the position of the TRUE parm.
-	void InternalsCommon::logic(bool equals,size_t offset) {
+	void InternalInstance::logic(bool equals,size_t offset) {
 		if(count >= offset) {
 			if (equals) {
 				expand(offset);
@@ -59,7 +69,7 @@ namespace mt {
 	}
 
 	//offset is the 1-indexed parameter of the parameter to convert to a number.
-	void InternalsCommon::logic(size_t base,size_t offset) {
+	void InternalInstance::logic(size_t base,size_t offset) {
 		if(count < offset) {
 			set(Support::tostring(base));
 		} else {
@@ -71,7 +81,7 @@ namespace mt {
 	//this defaults to outputting basis, unless offset is smaller than count..
 	//offset: 1-indexed parm (where basis was)
 	//eg iLayout(I0,Foo,T,F). =>> logic(Foo,2)
-	void InternalsCommon::logic(std::string& left,size_t offset) {
+	void InternalInstance::logic(std::string& left,size_t offset) {
 		if(count < offset) {
 			set(left);
 		} else {

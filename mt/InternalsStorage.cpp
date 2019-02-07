@@ -4,24 +4,24 @@
 
 #include <iostream>
 
-#include "Internals.h"
-#include "InternalsCommon.h"
 #include "support/Infix.h"
 #include "support/Message.h"
 #include "support/Convert.h"
+#include "Internal.h"
+#include "InternalInstance.h"
 
 namespace mt {
 	using namespace Support;
 
 	void iExists::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
-		InternalsCommon my(this,e,o,instance,context);
+		InternalInstance my(this,e,o,instance,context);
 		string key = my.parm(1);
 		auto sr = storage.find(key);
 		my.logic(sr.found,2); //@iExists(A,T,F)=1
 	}
 
 	void iGet::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
-		InternalsCommon my(this,e,o,instance,context);
+		InternalInstance my(this,e,o,instance,context);
 		string key = my.parm(1);
 		auto sr = storage.find(key);
 		if(sr.found) {
@@ -30,7 +30,7 @@ namespace mt {
 	}
 
 	void iSet::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
-		InternalsCommon my(this,e,o,instance,context);
+		InternalInstance my(this,e,o,instance,context);
 		string key = my.parm(1);
 		string value;
 		if(my.count == 2) {
@@ -41,7 +41,7 @@ namespace mt {
 
 
 	void iAppend::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
-		InternalsCommon my(this,e,o,instance,context);
+		InternalInstance my(this,e,o,instance,context);
 		string key = my.parm(1);
 		if(my.count == 2) {
 			string value = my.parm(2);
@@ -50,14 +50,14 @@ namespace mt {
 	}
 
 	void iReset::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
-		InternalsCommon my(this,e,o,instance,context);
+		InternalInstance my(this,e,o,instance,context);
 		string key = my.parm(1);
 		storage.erase(key);
 	}
 
 
 	void iSetCache::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
-		InternalsCommon my(this,e,o,instance,context);
+		InternalInstance my(this,e,o,instance,context);
 		e << Message(fatal,"iSetCache is not yet implemented. It requires Node support.");
 		if (my.count == 2) {
 			string key = my.parm(1);
@@ -72,21 +72,21 @@ namespace mt {
 	}
 
 	void iSig::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
-		InternalsCommon my(this,e,o,instance,context);
+		InternalInstance my(this,e,o,instance,context);
 		string key = my.parm(1);
 		auto sr = storage.find(key);
 		my.logic(sr.found && !sr.result.empty(),2); //@iSig(A,T,F)=2
 	}
 
 	void iUse::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
-		InternalsCommon my(this,e,o,instance,context);
+		InternalInstance my(this,e,o,instance,context);
 		string key = my.parm(1);
 		auto sr = storage.take(key);
 		my.set(sr.result);
 	}
 
 	void iKV::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
-		InternalsCommon my(this,e,o,instance,context);
+		InternalInstance my(this,e,o,instance,context);
 		string p1, p2, basis;
 		string repo_name = my.parm(1);
 		if (!repo_name.empty()) {
@@ -238,7 +238,7 @@ namespace mt {
 	}
 
 	void iList::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
-		InternalsCommon my(this,e,o,instance,context);
+		InternalInstance my(this,e,o,instance,context);
 		//fn: add,delete,pop,unique_add,has,count,size,nodes[:max],for[:max]
 		string name = my.parm(1);
 		if (!name.empty()) {
@@ -302,18 +302,8 @@ namespace mt {
 						//@iList(foo,for,*,i,[*])
 						const listType* list = lStore.get(name);
 						if(list) {
-							vector<string> values;
-							for(auto& i : *list) {
-								values.push_back(i);
-							}
-							doSort(values,my.parm(4));
-							maxItems = maxItems < values.size() ? maxItems: values.size();
-							values.resize(maxItems);
-							plist parms;
-							for(auto& i : values) {
-								parms.push_back({Text(i)});
-							}
-							generate(e,o,context,parms,my.praw(5),my.parm(3),my.parm(4));
+							plist parms = toParms(list,my.parm(4));
+							my.generate(parms,my.praw(5),my.parm(3),my.parm(4));
 						}
 					} break;
 				}
