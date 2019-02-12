@@ -2,9 +2,12 @@
 F showPassed	1
 F showDefines	1
 
-
-F showPassed	0
+U zp01		0	1	01	[@fo(]
+U zp02		0	1	01	[@fo(@bob(,),wibble
+U zp03		0	1	01	[@@fp({|)@doe
+X
 F showDefines	0
+F showPassed	0
 
 
 // name		code										expected result
@@ -14,6 +17,7 @@ F showDefines	0
 //-- included files
 !	syntax
 !	definitions
+!	iConsole
 !	basic_advanced
 !	basic_classic
 !	basicmixed

@@ -7,11 +7,10 @@
 
 
 #include "Definition.h"
-#include "support/Storage.h"
 #include "mt.h"
+#include "support/Storage.h"
 
 namespace mt {
-
 	class Internal {
 	public:
 		bool inRange(size_t i) const { return (minParms <= i) && (i <= maxParms);}
@@ -23,12 +22,13 @@ namespace mt {
 		static Library cache;
 		static LStore lStore;
 		std::string _name;
-		Internal(std::string name,size_t min,size_t max) : _name(name),minParms(min),maxParms(max) {}
+		Internal(std::string name,size_t min,size_t max) : _name(std::move(name)),minParms(min),maxParms(max) {}
 		plist toParms(string,string,string);
 		plist toParms(const listType*,string);
 		void doSort(vector<std::string>&,std::string);
+		void doTrace(Support::Messages&,mstack&);
 	};
-	// Utility
+
 	struct iEq : public Internal {
 		iEq() : Internal("iEq",0,4) {}
 		void expand(Support::Messages&,mtext&,Instance&,mstack&);
@@ -45,6 +45,47 @@ namespace mt {
 
 	struct iForIndex : public Internal {
 		iForIndex() : Internal("iForIndex",1,6) {}
+		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+	};
+
+	struct iConsole : public Internal {
+		iConsole() : Internal("iConsole",1,2) {}
+		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+	};
+	struct iDate : public Internal {
+		iDate() : Internal("iDate",0,5) {}
+		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+	};
+	struct iEval : public Internal {
+		iEval() : Internal("iEval",1,INT_MAX) {}
+		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+	};
+	struct iFile : public Internal {
+		iFile() : Internal("iFile",1,6) {}
+		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+	};
+	struct iField : public Internal {
+		iField() : Internal("iField",1,1) {}
+		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+	};
+	struct iForSubs : public Internal {
+		iForSubs() : Internal("iForSubs",5,5) {}
+		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+	};
+	struct iForQuery : public Internal {
+		iForQuery() : Internal("iForQuery",2,2) {}
+		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+	};
+	struct iMath : public Internal {
+		iMath() : Internal("iMath",2,7) {}
+		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+	};
+	struct iNull : public Internal {
+		iNull() : Internal("iNull",0,INT_MAX) {}
+		void expand(Support::Messages&,mtext&,Instance&,mstack&);
+	};
+	struct iTiming : public Internal {
+		iTiming() : Internal("iTiming",0,2) {}
 		void expand(Support::Messages&,mtext&,Instance&,mstack&);
 	};
 

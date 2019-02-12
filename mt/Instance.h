@@ -18,6 +18,7 @@ namespace mt {
 	using parse_result=std::pair<mtext, bool>;
 	using iteration=std::pair<size_t,size_t>;
 	using plist=std::vector<mtext>;
+	using pos=std::pair<size_t,size_t>;
 
 	class Instance {
 	public:

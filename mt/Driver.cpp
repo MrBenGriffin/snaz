@@ -9,43 +9,67 @@
 #include "Definition.h"
 #include "Advanced.h"
 #include "Classic.h"
-
+#include "Internal.h"
+#include "support/Fandr.h"
 
 namespace mt {
 
+	using namespace Support;
 	mstack	Driver::empty_stack {};
 	int 	Driver::accept = 0;
 
-	Driver::Driver(std::istream &stream,bool advanced) :
+	Driver::Driver(Messages& errs,std::istream &stream,bool advanced) :
 		iterated(false) {
 		if (stream.good() && !stream.eof()) {
+			source = &stream; //only used for parse errors..
 			if(advanced) {
-				scanner = new Advanced(&stream);
+				scanner = new Advanced(errs,&stream);
 			} else {
-				scanner = new Classic(&stream);
+				scanner = new Classic(errs,&stream);
 			}
-			parser = new Parser(scanner,(*this));
 		}
 	}
 
-	mtext Driver::parse(bool strip) {
+	void Driver::parseError(Support::Messages &errs) {
+		vector<std::string> lines;
+		auto* prog = dynamic_cast<const std::istringstream*>(source);
+		string line = prog->str();
+		Support::fandr(line, "\n"  , "␤");
+		size_t c1 = position.first;
+		size_t c2 = position.second;
+		std::string marker(c1-2,'.');
+		marker.push_back('^');
+		if((c2-c1) > 2) {
+			marker.append(std::string(c2-c1-1,'.'));
+		}
+		if((c2-c1) > 0) {
+			marker.push_back('^');
+		}
+		errs << Message(syntax,line);
+		errs << Message(syntax,marker);
+	}
+
+	mtext Driver::parse(Messages& errs,bool strip) {
 		scanner->stripped=strip;
 		scanner->defining=false;
+		parser = new Parser(errs,scanner,(*this));
 		if (parser->parse() != accept) {
-			std::cout << "Parse failed!!" << std::endl;
+			parseError(errs);
 		}
+		delete parser; parser= nullptr;
 		return final;
 	}
 
-	parse_result Driver::define(bool strip) {
+	parse_result Driver::define(Messages& errs,bool strip) {
 		scanner->stripped=strip;
 		scanner->defining=true;
+		parser = new Parser(errs,scanner,(*this));
 		if (parser->parse() != accept) {
-			std::cout << "Define failed!!" << std::endl;
+			parseError(errs);
 		}
+		delete parser; parser= nullptr;
 		return {final,iterated};
 	}
-
 
 	/*
 	 * Because we are parsing, we want to try and keep strings in a lump, rather than have lots of them

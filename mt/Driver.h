@@ -20,19 +20,21 @@
 
 #include "mt.h"
 #include "parser.tab.hpp"
+#include "support/Message.h"
 
 namespace mt {
 	using namespace Support;
+
 	class Driver {
 
 	public:
 
-		Driver(std::istream &stream, bool);
+		Driver(Messages&,std::istream &stream, bool);
 
 		virtual ~Driver();
 
-		mtext parse(bool);
-		parse_result define(bool);
+		mtext parse(Messages&,bool);
+		parse_result define(Messages&,bool);
 		void expand(std::ostream&,Messages&,const std::string &);
 
 		void new_macro( const std::string & );
@@ -41,6 +43,7 @@ namespace mt {
 		void inject( const std::string &);
 		void add_parm();
 		void store_macro();
+		void setPos(pos& p) {position = std::move(p);}
 
 		static std::ostream& visit(const Token&, std::ostream&);
 		static std::ostream& visit(const mtext&, std::ostream&);
@@ -51,16 +54,19 @@ namespace mt {
 
 
 	private:
+		const std::istream*			source; //only used for parse errors..
 		static int					accept;
+		pos 						position;
 		static mstack				empty_stack;
 		bool						iterated;
 		mtext						final;
 		mtext						parm;
 		std::forward_list<Macro>	macro_stack;
 
-//		void parse_helper( std::istream &stream, bool, bool, bool );
 		Parser  *parser   = nullptr;
 		Scanner *scanner  = nullptr;
+
+		void parseError(Messages&);
 
 	};
 

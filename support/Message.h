@@ -13,17 +13,15 @@
 namespace Support {
 	using namespace std;
 
-	enum channel { fatal, error, syntax, range, parms, warn, info, debug, usage, scope, endsc, trace, code };
+	enum channel { fatal, error, syntax, range, parms, warn, info, debug, usage, scope, endsc, trace, code, timing };
 
 	// Message is a single message.
 	class Message {
-		size_t lineNum;
-		size_t charNum;
 	public:
 		channel ch;
 		string content;
 		Message(channel,string);
-		void str(ostream&);
+		void str(ostream&) const;
 	};
 
 	// Messages are a deque of messages.

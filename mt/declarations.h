@@ -24,6 +24,16 @@ namespace mt {
 	class iIndex;
 	class iForIndex;
 	class iExpr;
+	class iConsole;
+	class iDate;
+	class iEval;
+	class iFile;
+	class iField;
+	class iForSubs;
+	class iForQuery;
+	class iMath;
+	class iNull;
+	class iTiming;
 
 	//storage
 	class iExists;
@@ -50,7 +60,7 @@ namespace mt {
 	class iTrim;
 
 	using Handler=std::variant<Content,Definition,
-	iEq,iExpr,iIndex,iForIndex,
+	iEq,iExpr,iIndex,iForIndex,iConsole,iDate,iEval,iFile,iField,iForSubs,iForQuery,iMath,iNull,iTiming,
 	iSet,iGet,iExists,iAppend,iKV,iList,iReset,iSetCache,iSig,iUse,
 	iLeft,iLength,iMid,iPosition,iRegex,iRembr,iRembrp,iReplace,iRight,iTrim
 	>;

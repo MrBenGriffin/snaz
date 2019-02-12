@@ -2,17 +2,23 @@
 /* C++ string header, for string ops below */
 #include <string>
 #include <iostream>
+#include <sstream>
+#include <support/Message.h>
 
 /* Implementation of yyFlexScanner */ 
 #include "parser.tab.hpp"
+
 #include "mt/Scanner.h"
 namespace mt {
 	class Advanced : public Scanner, public aFlexLexer {
 	public:
-		Advanced(std::istream *in) : Scanner(),aFlexLexer(in) {}
+		Advanced(Support::Messages& m,std::istream *in) : Scanner(m),aFlexLexer(in) {}
 		virtual ~Advanced() = default;
 		using aFlexLexer::yylex;
 		virtual int yylex(mt::Parser::semantic_type *const,mt::Parser::location_type *);
+		virtual void LexerError(const char* msg) {
+        	std::string err(msg); errs << Support::Message(Support::syntax,err);
+        }
 	private:
 		mt::Parser::semantic_type *yylval = nullptr;
 	};
@@ -265,6 +271,11 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 
 }
 
-.	std::cout << "Bad input character " << yytext << " at line " << yylineno << std::endl;
+.	{
+		std::ostringstream eStream;
+		eStream << "Bad input character " << yytext;
+		errs << Support::Message(Support::syntax,eStream.str());
+	}
 
 %%
+

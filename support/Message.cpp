@@ -7,9 +7,9 @@
 
 namespace Support {
 
-	Message::Message(channel c,string s):  lineNum(SIZE_MAX),ch(c),content(s) {}
+	Message::Message(channel c,string s): ch(c),content(s) {}
 
-	void Message::str(ostream& log) {
+	void Message::str(ostream& log) const {
 		switch (ch) { //syntax
 			case fatal:  log << "fatal"; break;
 			case error:  log << "error"; break;
@@ -24,21 +24,19 @@ namespace Support {
 			case usage:	 log << "using"; break;
 			case trace:  log << "trace"; break;
 			case code:   log << "-raw-"; break;
+			case timing: log << "time"; break;
 		}
-		log << ": ";
-		if (lineNum != SIZE_MAX) {
-			log << " at Line No." << lineNum << ", Character Pos. " << charNum << ". ";
-		}
-		log << content << endl;
+		log << ": " << content << flush;
 	}
 
 	string Messages::line(size_t line_number) const {
-		if (_marked && (line_number > 0) && (line_number <= list.size())) {
-			return list[line_number-1].content;
+		if ((line_number > 0) && (line_number <= list.size())) {
+			ostringstream re;
+			list[line_number-1].str(re);
+			return re.str();
 		}
 		return "";
 	}
-
 
 	void Messages::enscope(string s) {
 		list.push_front(std::move(Message(scope,s)));
@@ -59,6 +57,7 @@ namespace Support {
 		if (_marked) {
 			for (auto& m : list) {
 				m.str(o);
+				o << endl;
 			}
 		}
 	}

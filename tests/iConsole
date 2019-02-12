@@ -1,27 +1,36 @@
-# iConsole
+#iConsole
 
-U c		1	2	011	⌽iConsole(⍟1,⍟2)
-U d		1	1	011	⌽c(T,⍟1)
+U con			1	2	11	⌽iConsole(⍟1,⍟2)
+U cdog			1	1	11	⌽con(T,⍟1)
 
-iConsole 001	[@iConsole(woot)]													[]
-iConsole B02	[@iConsole(B,woot)]													[]
-iConsole S03	[@iConsole(S,woot)]													[]
-iConsole N04	[@iConsole(N,woot)]													[]
-iConsole I05	[@iConsole(I,woot)]													[]
-iConsole W06	[@iConsole(W,woot)]													[]
-iConsole E07	[@iConsole(E,woot)]													[]
-iConsole X08	[@iConsole(X,woot)]													[]
-iConsole T08	[@iConsole(T,woot)]													[]
-iConsole n001	[@c(woot)]															[]
-iConsole nB02	[@c(B,woot)]														[]
-iConsole nS03	[@c(S,woot)]														[]
-iConsole nN04	[@c(N,woot)]														[]
-iConsole nI05	[@c(I,woot)]														[]
-iConsole nW06	[@c(W,woot)]														[]
-iConsole nE07	[@c(E,woot)]														[]
-iConsole nX08	[@c(X,woot)]														[]
-iConsole nT08	[@c(T,woot)]														[]
-iConsole nT09	[@d(woot)]															[]
+Range 001		@iEq(T,F,W,B,C)									!1!range: Range Error in ‘iEq’; 5 parameters found. But this macro requires from 0 to 4 parameters.
+iConsole 001	[@iConsole(woot)]								!1!info: woot
+iConsole B02	[@iConsole(B,woot)]								!2?time:[ ]+\d+\.\d*(µs|ms|s)[ ]+
+iConsole S03	[@iConsole(S,woot)]								!1!info: woot
+iConsole N04	[@iConsole(N,woot)]								!2?time:[ ]+\d+\.\d*(µs|ms|s)[ ]+
+iConsole I05	[@iConsole(I,woot)]								!1!info: woot
+iConsole W06	[@iConsole(W,woot)]								!1!warn: woot
+iConsole E07	[@iConsole(E,woot)]								!1!error: woot
+iConsole X08	[@iConsole(X,woot)]								!1!error: woot
+iConsole T08	[@iConsole(T,woot)]								!2!trace: iConsole T08
 
-~c
-~d
+#Console in macros.
+iConsole n001	[@con(I,woot)]									!1!info: woot
+iConsole nB02	[@con(B,woot)]									!2?time:[ ]+\d+\.\d*(µs|ms|s)[ ]+
+iConsole nS03	[@con(S,woot)]									!1!info: woot
+iConsole nN04	[@con(N,woot)]									!2?time:[ ]+\d+\.\d*(µs|ms|s)[ ]+
+iConsole nI05	[@con(I,woot)]									!1!info: woot
+
+iConsole nW06	[@con(W,woot)]									!1!warn: woot
+iConsole nE07	[@con(E,woot)]									!1!error: woot
+iConsole nX08	[@con(X,woot)]									!1!error: woot
+
+#Trace lines.
+iConsole nT08	[@con(T,woot)]									!2!trace: con
+iConsole nT91	[@cdog(woot)]									!1!<<<<<: woot
+iConsole nT92	[@cdog(woot)]									!2!trace: con
+iConsole nT93	[@cdog(woot)]									!3!trace: cdog
+
+~con
+~cdog
+

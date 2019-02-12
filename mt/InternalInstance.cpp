@@ -13,6 +13,16 @@ namespace mt {
 		count = parms->size();
 		min = thing->minParms;
 		max = thing->maxParms;
+		if(!thing->inRange(count)) {
+			ostringstream err;
+			err << "Range Error in ‘" << thing->name() << "’; " << count << " parameters found. But this macro requires";
+			if (max == INT_MAX) {
+				err << " at least " << min << " parameters.";
+			} else {
+				err << " from " << min << " to " << max << " parameters.";
+			}
+			e << Message(range,err.str());
+		}
 	}
 
 	void InternalInstance::generate(plist& list,const mtext* program,string value,string count) {

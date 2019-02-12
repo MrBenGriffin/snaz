@@ -87,7 +87,7 @@ namespace Support {
 						auto pos = i - expr.begin();
 						ostringstream msg;
 						msg << "Unknown character '" << err << "' in expression at offset " << pos;
-						errs << Message(error,msg.str());
+						errs << Message(syntax,msg.str());
 						i++;
 					}
 				}
@@ -105,7 +105,7 @@ namespace Support {
 							}
 							//need to test the below with eg "4-3)"
 							if( ssig !='(' ) {
-								errs << Message(error,"Error. Unbalanced bracket.");
+								errs << Message(syntax,"Error. Unbalanced bracket.");
 							} else {
 								if( !opstack.empty() && opstack.back()->sig() == 'f') {
 									evalstack(errs); //was a function declaration. so do it.

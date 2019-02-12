@@ -26,10 +26,6 @@ namespace mt {
     Library Internal::cache;
     LStore Internal::lStore;
 
-//	void Internal::expand(Support::Messages& e,mtext& o,Instance& instance,mstack& context) {
-//		InternalInstance inst(this,e,o,instance,context);
-//		work(inst);
-//	}
 
 	plist Internal::toParms(string basis,string cutter,string sort) {
 		vector<string> list;
@@ -53,6 +49,15 @@ namespace mt {
 			result.push_back({Text(i)});
 		}
 		return result;
+	}
+
+	void Internal::doTrace(Support::Messages& e,mstack& context) {
+		for (auto& i : context) {
+			if(i.first != nullptr) {
+				std::string name = std::visit([](auto&& arg) -> std::string { return arg.name();},*(i.first));
+				e << Message(trace,name);
+			}
+		}
 	}
 
 	void Internal::doSort(vector<string>& idx,string sortstr) {

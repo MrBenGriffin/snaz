@@ -29,6 +29,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/macrotext.dir/support/Comparison.cpp.o"
   "CMakeFiles/macrotext.dir/support/Regex.cpp.o"
   "CMakeFiles/macrotext.dir/mt/Instance.cpp.o"
+  "CMakeFiles/macrotext.dir/support/Timing.cpp.o"
   "macrotext.pdb"
   "macrotext"
 )

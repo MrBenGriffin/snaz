@@ -4,11 +4,12 @@
 
 #include <iostream>
 
+#include "Internal.h"
+#include "InternalInstance.h"
+
 #include "support/Infix.h"
 #include "support/Message.h"
 #include "support/Convert.h"
-#include "Internal.h"
-#include "InternalInstance.h"
 
 namespace mt {
 	using namespace Support;

@@ -11,11 +11,12 @@
 #include "Scanner.h"
 #include "parser.tab.hpp"
 #include "location.hh"
+#include "support/Message.h"
 
 namespace mt {
 	class Classic : public Scanner, public cFlexLexer {
 	public:
-		Classic(std::istream *in) : Scanner(),cFlexLexer(in) {}
+		Classic(Support::Messages& e,std::istream *in) : Scanner(e),cFlexLexer(in) {}
 		virtual ~Classic() = default;
 		using cFlexLexer::yylex;
 		virtual int yylex(mt::Parser::semantic_type *const,mt::Parser::location_type *);

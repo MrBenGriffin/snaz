@@ -13,10 +13,10 @@
 namespace mt {
 
 	std::unordered_map<std::string, Handler> Definition::library;
-	Definition Definition::empty("__empty", "", false, false, false);
+//	Definition Definition::empty(Messages(),"__empty", "", false, false, false);
 
 	Definition::Definition(
-			std::string name_i, std::string expansion_i,
+			Messages& errs,std::string name_i, std::string expansion_i,
 			long min, long max, bool strip, bool trimParms_i, bool preExpand_i)
 			: counter(0), _name(std::move(name_i)), trimParms(trimParms_i), preExpand(preExpand_i) {
 		minParms = min == -1 ? 0 : min;
@@ -27,8 +27,8 @@ namespace mt {
 		} else {
 			std::istringstream code(expansion_i);
 			bool advanced = test_adv(expansion_i);
-			Driver driver(code,advanced);
-			parse_result result = driver.define(strip);
+			Driver driver(errs,code,advanced);
+			parse_result result = driver.define(errs,strip);
 			expansion = result.first;
 			iterated = result.second;
 		}
@@ -199,6 +199,17 @@ namespace mt {
 		library.emplace("iExpr",Handler(std::move(iExpr())));
 		library.emplace("iIndex",Handler(std::move(iIndex())));
 		library.emplace("iForIndex",Handler(std::move(iForIndex())));
+
+		library.emplace("iConsole",Handler(std::move(iConsole())));
+		library.emplace("iDate",Handler(std::move(iDate())));
+		library.emplace("iEval",Handler(std::move(iEval())));
+		library.emplace("iFile",Handler(std::move(iFile())));
+		library.emplace("iField",Handler(std::move(iField())));
+		library.emplace("iForSubs",Handler(std::move(iForSubs())));
+		library.emplace("iForQuery",Handler(std::move(iForQuery())));
+		library.emplace("iMath",Handler(std::move(iMath())));
+		library.emplace("iNull",Handler(std::move(iNull())));
+		library.emplace("iTiming",Handler(std::move(iTiming())));
 
 		library.emplace("iGet",Handler(std::move(iGet())));
 		library.emplace("iSet",Handler(std::move(iSet())));

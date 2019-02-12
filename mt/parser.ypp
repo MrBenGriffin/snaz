@@ -6,22 +6,27 @@
 %define parse.trace
 
 %code requires{
-
+  namespace Support {
+      class Messages;
+  }
   namespace mt {
       class Driver;
       class Scanner;
    }
 }
 
+%parse-param { Support::Messages& errs  }
 %parse-param { Scanner* scanner }
-%parse-param { Driver   &driver  }
+%parse-param { Driver& driver  }
 
 %code{
    #include <iostream>
    #include <cstdlib>
    #include <fstream>
+   #include "location.hh"
    #include "mt/Driver.h"
    #include "mt/Scanner.h"
+   #include "support/Message.h"
 
 #undef yylex
 #define yylex scanner->yylex
@@ -82,6 +87,9 @@ pitem
 
 %%
 void mt::Parser::error( const location_type &l, const std::string &err_message ) {
-   std::cerr << "Error: ";
-   std::cerr << err_message << " at " << l << "\n";
+  /**	mt::pos p({{l.begin.line,l.begin.column},{l.end.line,l.end.column}}); **/
+	mt::pos p({l.begin.column,l.end.column});
+	driver.setPos(p);
+	errs << Message(syntax,err_message);
 }
+

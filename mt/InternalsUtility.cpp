@@ -3,6 +3,7 @@
 #include "support/Infix.h"
 #include "support/Message.h"
 #include "support/Convert.h"
+#include "support/Timing.h"
 
 namespace mt {
 	using namespace Support;
@@ -13,7 +14,6 @@ namespace mt {
 		std::string right = my.count > 1 ? my.parm(2): "";
 		my.logic(left == right,3);
 	}
-
 	void iExpr::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
 		Infix::Evaluate expression;
@@ -35,13 +35,11 @@ namespace mt {
 		std::ostringstream ost; ost << value;
 		my.set(ost.str());
 	}
-
 	void iForIndex::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
 		plist parms=toParms(my.parm(2),my.parm(1),my.parm(5));
 		my.generate(parms,my.praw(6),my.parm(3),my.parm(4));
 	}
-
 	void iIndex::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
 		enum optype {resize,ifempty,normalise,get,size,set,push,erase,find,back,append,drop,reverse,uappend,upush,pop,retrieve,remove,contains} op = normalise;
@@ -225,8 +223,113 @@ namespace mt {
 		}
 		my.set(result);
 	}
+	void iConsole::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
+		InternalInstance my(this,e,o,instance,context);
+//		enum channel { fatal, error, syntax, range, parms, warn, info, debug, usage, timing, trace, code };
+		channel type = info;
+		string message;
+		if(my.count == 2) {
+			std::string infoStr =  my.parm(1);
+			message =  my.parm(2);
+			if(!infoStr.empty()) {
+				char hint = infoStr[0];
+				hint = (char) tolower(hint);
+				switch (hint) {
+					case 'f': type=fatal; break;
+					case 'x':
+					case 'e': type=error; break;
+					case 'w': type=warn; break;
+					case 'g': type=syntax; break;
+					case 'r': type=range; break;
+					case 'd': type=debug; break;
+					case 'u': type=usage; break;
+					case 'p': type=code; break;
+					case 't': doTrace(e,context); e.enscope(message); return;
+					case 'b': Timing::getTiming(e,'b'); e.enscope(message); return;
+					case 'n': Timing::getTiming(e,'n'); e.enscope(message); return;
+					case 'c': Timing::getTiming(e,'c',message); return;
+					default: break;
+				}
+			}
+		} else {
+			message =  my.parm(1);
+		}
+		e << Message(type,message);
+	}
+	void iDate::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
+		InternalInstance my(this,e,o,instance,context);
+		e << Message(error,_name + " is not yet implemented.");
+		std::string left =  my.parm(1);
+		my.logic(false,1);
+	}
 
+	void iEval::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
+		InternalInstance my(this,e,o,instance,context);
+		std::stringstream code;
+		bool advanced = false;
+		for(auto i=1; i <= my.count; i++) {
+			string parm = my.parm(i);
+			advanced = advanced || Definition::test_adv(parm);
+			code << parm;
+			if (i != my.count) {
+				code << ",";
+			}
+		}
+		mt::Driver driver(e,code,advanced);
+		mt::mtext structure = driver.parse(e,false); //no strip
+		ostringstream result;
+		driver.expand(result,e,"iEval Instance");
+		my.set(result.str());
+	}
 
+	void iFile::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
+		InternalInstance my(this,e,o,instance,context);
+		e << Message(error,_name + " is not yet implemented.");
+		std::string left =  my.parm(1);
+		my.logic(false,1);
+	}
+
+	void iField::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
+		InternalInstance my(this,e,o,instance,context);
+		e << Message(error,_name + " is not yet implemented.");
+		std::string left =  my.parm(1);
+		my.logic(false,1);
+	}
+
+	void iForSubs::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
+		InternalInstance my(this,e,o,instance,context);
+		e << Message(error,_name + " is not yet implemented.");
+		std::string left =  my.parm(1);
+		my.logic(false,1);
+	}
+
+	void iForQuery::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
+		InternalInstance my(this,e,o,instance,context);
+		e << Message(error,_name + " is not yet implemented.");
+		std::string left =  my.parm(1);
+		my.logic(false,1);
+	}
+
+	void iMath::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
+		InternalInstance my(this,e,o,instance,context);
+		e << Message(error,_name + " is not yet implemented.");
+		std::string left =  my.parm(1);
+		my.logic(false,1);
+	}
+
+	void iNull::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
+		InternalInstance my(this,e,o,instance,context);
+		e << Message(error,_name + " is not yet implemented.");
+		std::string left =  my.parm(1);
+		my.logic(false,1);
+	}
+
+	void iTiming::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
+		InternalInstance my(this,e,o,instance,context);
+		e << Message(error,_name + " is not yet implemented.");
+		std::string left =  my.parm(1);
+		my.logic(false,1);
+	}
 
 }
 

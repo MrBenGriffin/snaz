@@ -3,12 +3,14 @@
 
 CMakeFiles/macrotext.dir/advanced.yy.cpp.o
  ..//mt/Scanner.h
+ ..//support/Message.h
  /Users/ben/CLionProjects/snaz/cmake-build-debug/advanced.yy.cpp
  /Users/ben/CLionProjects/snaz/cmake-build-debug/location.hh
  /Users/ben/CLionProjects/snaz/cmake-build-debug/parser.tab.hpp
  /usr/local/include/FlexLexer.h
 CMakeFiles/macrotext.dir/classic.yy.cpp.o
  ..//mt/Scanner.h
+ ..//support/Message.h
  /Users/ben/CLionProjects/snaz/cmake-build-debug/classic.yy.cpp
  /Users/ben/CLionProjects/snaz/cmake-build-debug/location.hh
  /Users/ben/CLionProjects/snaz/cmake-build-debug/parser.tab.hpp
@@ -30,6 +32,7 @@ CMakeFiles/macrotext.dir/main.cpp.o
  /Users/ben/CLionProjects/snaz/mt/mt.h
  /Users/ben/CLionProjects/snaz/support/Infix.h
  /Users/ben/CLionProjects/snaz/support/Message.h
+ /Users/ben/CLionProjects/snaz/support/Timing.h
  /Users/ben/CLionProjects/snaz/test.h
  location.hh
  parser.tab.hpp
@@ -62,7 +65,6 @@ CMakeFiles/macrotext.dir/mt/Definition.cpp.o
  /Users/ben/CLionProjects/snaz/mt/Injection.h
  /Users/ben/CLionProjects/snaz/mt/Instance.h
  /Users/ben/CLionProjects/snaz/mt/Internal.h
- /Users/ben/CLionProjects/snaz/mt/InternalInstance.h
  /Users/ben/CLionProjects/snaz/mt/Internals.h
  /Users/ben/CLionProjects/snaz/mt/Macro.h
  /Users/ben/CLionProjects/snaz/mt/Text.h
@@ -72,6 +74,7 @@ CMakeFiles/macrotext.dir/mt/Definition.cpp.o
  location.hh
  parser.tab.hpp
 CMakeFiles/macrotext.dir/mt/Driver.cpp.o
+ ..//support/Fandr.h
  ..//support/Message.h
  ..//support/Storage.h
  ../support/Message.h
@@ -207,6 +210,7 @@ CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o
  ..//support/Infix.h
  ..//support/Message.h
  ..//support/Storage.h
+ ..//support/Timing.h
  ../support/Message.h
  /Users/ben/CLionProjects/snaz/mt/Content.h
  /Users/ben/CLionProjects/snaz/mt/Definition.h
@@ -334,10 +338,13 @@ CMakeFiles/macrotext.dir/support/Storage.cpp.o
  /Users/ben/CLionProjects/snaz/support/Storage.cpp
  /Users/ben/CLionProjects/snaz/support/Storage.h
  /usr/local/include/pcre.h
+CMakeFiles/macrotext.dir/support/Timing.cpp.o
+ /Users/ben/CLionProjects/snaz/support/Message.h
+ /Users/ben/CLionProjects/snaz/support/Timing.cpp
+ /Users/ben/CLionProjects/snaz/support/Timing.h
 CMakeFiles/macrotext.dir/test.cpp.o
  ..//support/Message.h
  ..//support/Storage.h
- ../support/Message.h
  /Users/ben/CLionProjects/snaz/mt/Content.h
  /Users/ben/CLionProjects/snaz/mt/Definition.h
  /Users/ben/CLionProjects/snaz/mt/Driver.h
@@ -351,7 +358,10 @@ CMakeFiles/macrotext.dir/test.cpp.o
  /Users/ben/CLionProjects/snaz/mt/mt.h
  /Users/ben/CLionProjects/snaz/support/Convert.h
  /Users/ben/CLionProjects/snaz/support/Fandr.h
+ /Users/ben/CLionProjects/snaz/support/Message.h
+ /Users/ben/CLionProjects/snaz/support/Regex.h
  /Users/ben/CLionProjects/snaz/test.cpp
  /Users/ben/CLionProjects/snaz/test.h
+ /usr/local/include/pcre.h
  location.hh
  parser.tab.hpp

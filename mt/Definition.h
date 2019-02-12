@@ -21,7 +21,7 @@ namespace mt {
     private:
         size_t minParms, maxParms;
         std::string _name;
-        static Definition empty;
+ //       static Definition empty;
         static std::unordered_map<std::string, Handler> library;
 
         static void trim(plist&);
@@ -39,8 +39,8 @@ namespace mt {
 
         std::ostream &visit(std::ostream &);
 
-        Definition(std::string, std::string, long = 0, long = -1, bool= true, bool= true, bool= false);
-		Definition(const mtext, long = 0, long = -1, bool= true, bool= true, bool= false);
+        Definition(Messages&,std::string, std::string, long = 0, long = -1, bool= true, bool= true, bool= false);
+		Definition(mtext, long = 0, long = -1, bool= true, bool= true, bool= false);
 
         void expand(Messages&,mtext&,Instance&,mstack&);
 

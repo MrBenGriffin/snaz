@@ -4,6 +4,7 @@
 #include <cstdlib>
 
 #include "test.h"
+#include "support/Regex.h"
 #include "support/Convert.h"
 #include "support/Fandr.h"
 #include "mt/Driver.h"
@@ -158,6 +159,7 @@ namespace testing {
 						//Parse		code    expected
 						//P			2		1
 						string code,pcode,expected;
+						Support::Messages errs;
 						unsigned define;
 						infile >> ws >> define  >> ws;
 						do getline(infile, code ,'\t'); while (!infile.eof() && code.empty());
@@ -167,14 +169,19 @@ namespace testing {
 						wss(pcode,false);
 						bool advanced = mt::Definition::test_adv(code);
 						std::istringstream cStream(code);
-						mt::Driver driver(cStream,advanced);
+						mt::Driver driver(errs,cStream,advanced);
 						result expansion(name);
 						if(define) {
-							mt::Definition macro(name,pcode,0,-1,false,false,false);
+							mt::Definition macro(errs,name,pcode,0,-1,false,false,false);
 							macro.visit(expansion.out);
 						} else {
-							mt::mtext structure = driver.parse(false); 	//bool advanced, bool strip
+							mt::mtext structure = driver.parse(errs,false); 	//bool advanced, bool strip
 							mt::Driver::visit(structure,expansion.out);
+						}
+						if(errs.marked()) {
+							cout << lred << "Parse Errors" << endl;
+							errs.str(cout);
+							cout << norm << endl;
 						}
 						string visited=expansion.out.str();
 						wss(pcode,true);
@@ -193,6 +200,7 @@ namespace testing {
 						//U	a	0	1	11	[%1]
 						//U	b	0	1	11	⌽a(⍟1)
 						//U	macroname	1	4	11 expansion (11 = strip,pstrip,preParse)
+						Support::Messages errs;
 						string expansion,bools;
 						signed long min,max;
 						infile >> ws;
@@ -204,8 +212,14 @@ namespace testing {
 						}
 						getline(infile,expansion);
 						wss(expansion,false);
-						mt::Definition macro(name,expansion,min,max,bools[0]=='1',bools[1]=='1',bools[2]=='1');
-						mt::Definition::add(macro);
+						mt::Definition macro(errs,name,expansion,min,max,bools[0]=='1',bools[1]=='1',bools[2]=='1');
+						if(!errs.marked()) {
+							mt::Definition::add(macro);
+						} else {
+							cout << lred << "Definition Parse Error while defining " << name << endl;
+							errs.str(cout);
+							cout << norm << endl;
+						}
 						if(showDefines) {
 							cout << "Defined " << name << ":" ;
 							std::ostringstream result;
@@ -218,6 +232,7 @@ namespace testing {
 
 					default: {
 						bool error_test = false;
+						bool regex_test = false;
 						size_t error_index = 0;
 						getline(infile, name ,'\t');
 						name = c + name;
@@ -229,48 +244,32 @@ namespace testing {
 						if(!expected.empty() && expected[0] == '!') {
 							expected.erase(0,1);
 							error_test = true;
-							auto num = expected.find('!');
+							auto num = expected.find_first_of("!?");
 							if(num != string::npos) {
 								string digits(expected.substr(0,num));
 								error_index = Support::natural(digits);
+								regex_test = expected[num]=='?';
 								expected.erase(0,num+1);
 							}
 						}
 
+						Support::Messages errs;
 						pprogram = program;
 						wss(pprogram,false);
 						std::istringstream code(pprogram);
 						bool advanced = mt::Definition::test_adv(pprogram);
-						mt::Driver driver(code,advanced);
-						mt::mtext structure = driver.parse(false); //bool advanced, bool strip
+						mt::Driver driver(errs,code,advanced);
+						mt::mtext structure = driver.parse(errs,false); //bool advanced, bool strip
 						pexpected = expected;
 						wss(pexpected,false);
-						Support::Messages errs;
 						result expansion(name);
 						driver.expand(expansion.out,errs,name);
-						bool testPassed = expansion.out.str() == pexpected;
-						if(testPassed && !errs.marked() ) {
-							if (showGood) {
-								title(name,2);
-							}
-						} else {
-							if(error_test && errs.marked() ) {
-								 string message = errs.line(error_index);
-								 if(message == expected) {
-									 if(showGood) {
-										 title(name,2);
-									 }
-								 } else {
-									 title(name,3);
-									 cout << " E program:"  << program << endl;
-									 cout << " E returned:\"" << message <<  "\" on line:" << error_index  << endl;
-									 cout << " E expected:\"" << expected << "\"" << endl;
-									 if(errs.marked()) {
-										 cout << lred << "Errors: ";
-										 errs.str(cout);
-										 cout << norm << endl;
-									 }
-								 }
+						if(!error_test) {
+							bool testPassed = expansion.out.str() == pexpected;
+							if(testPassed && !errs.marked() ) {
+								if (showGood) {
+									title(name,2);
+								}
 							} else {
 								title(name,3);
 								if(!testPassed) {
@@ -285,6 +284,40 @@ namespace testing {
 									cout << " - returned:" << returned << endl;
 									cout << " - expected:" << expected << norm << endl;
 								}
+								if(errs.marked()) {
+									cout << lred << "Errors: ";
+									errs.str(cout);
+									cout << norm << endl;
+								}
+							}
+						} else {
+							bool matched = false;
+							string message = errs.line(error_index);
+							if(regex_test) {
+								Support::Messages discard;
+								if(Support::Regex::available(discard)) {
+									matched= Support::Regex::fullMatch(discard,expected,message); //match entire string using pcre
+									if(discard.marked()) {
+										cout << " E Error in Test Regex:"  << expected << endl;
+										cout << lred << "Regex Errors: ";
+										errs.str(cout);
+										cout << norm << endl;
+									}
+								} else {
+									cout << "E regex not available for test" << endl;
+								}
+							} else {
+								matched= (message == expected);
+							}
+							if(matched) {
+								if(showGood) {
+									title(name,2);
+								}
+							} else {
+								title(name,3);
+								cout << " E program:"  << program << endl;
+								cout << " E returned:\"" << message <<  "\" on line:" << error_index  << endl;
+								cout << " E expected:\"" << expected << "\"" << endl;
 								if(errs.marked()) {
 									cout << lred << "Errors: ";
 									errs.str(cout);
