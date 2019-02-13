@@ -85,7 +85,7 @@ namespace mt {
 		void expand(Support::Messages&,mtext&,Instance&,mstack&);
 	};
 	struct iTiming : public Internal {
-		iTiming() : Internal("iTiming",0,2) {}
+		iTiming() : Internal("iTiming",0,3) {}
 		void expand(Support::Messages&,mtext&,Instance&,mstack&);
 	};
 

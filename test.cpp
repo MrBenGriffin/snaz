@@ -241,15 +241,22 @@ namespace testing {
 						getline(infile, expected);
 						expected.erase(0, expected.find_first_not_of('\t'));
 
-						if(!expected.empty() && expected[0] == '!') {
-							expected.erase(0,1);
-							error_test = true;
-							auto num = expected.find_first_of("!?");
-							if(num != string::npos) {
-								string digits(expected.substr(0,num));
-								error_index = Support::natural(digits);
-								regex_test = expected[num]=='?';
-								expected.erase(0,num+1);
+						if(!expected.empty()) {
+							if(expected[0] == '!') {
+								expected.erase(0, 1);
+								error_test = true;
+								auto num = expected.find_first_of("!?");
+								if (num != string::npos) {
+									string digits(expected.substr(0, num));
+									error_index = Support::natural(digits);
+									regex_test = expected[num] == '?';
+									expected.erase(0, num + 1);
+								}
+							} else {
+								if(expected[0] == '?') {
+									expected.erase(0, 1);
+									regex_test = true;
+								}
 							}
 						}
 
@@ -265,7 +272,24 @@ namespace testing {
 						result expansion(name);
 						driver.expand(expansion.out,errs,name);
 						if(!error_test) {
-							bool testPassed = expansion.out.str() == pexpected;
+							bool testPassed = false;
+							if(regex_test) {
+								Support::Messages discard;
+								if (Support::Regex::available(discard)) {
+									testPassed = Support::Regex::fullMatch(discard, pexpected,
+																		expansion.out.str()); //match entire string using pcre
+									if (discard.marked()) {
+										cout << " E Error in Test Regex:" << expected << endl;
+										cout << lred << "Regex Errors: ";
+										errs.str(cout);
+										cout << norm << endl;
+									}
+								} else {
+									cout << "E regex not available for test" << endl;
+								}
+							} else {
+								testPassed = expansion.out.str() == pexpected;
+							}
 							if(testPassed && !errs.marked() ) {
 								if (showGood) {
 									title(name,2);
@@ -296,7 +320,7 @@ namespace testing {
 							if(regex_test) {
 								Support::Messages discard;
 								if(Support::Regex::available(discard)) {
-									matched= Support::Regex::fullMatch(discard,expected,message); //match entire string using pcre
+									matched= Support::Regex::fullMatch(discard,pexpected,message); //match entire string using pcre
 									if(discard.marked()) {
 										cout << " E Error in Test Regex:"  << expected << endl;
 										cout << lred << "Regex Errors: ";
@@ -307,7 +331,7 @@ namespace testing {
 									cout << "E regex not available for test" << endl;
 								}
 							} else {
-								matched= (message == expected);
+								matched= (message == pexpected);
 							}
 							if(matched) {
 								if(showGood) {

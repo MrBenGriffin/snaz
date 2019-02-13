@@ -326,10 +326,31 @@ namespace mt {
 
 	void iTiming::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
-		e << Message(error,_name + " is not yet implemented.");
-		std::string left =  my.parm(1);
-		my.logic(false,1);
+		std::string timer = my.parm(1);
+		ostringstream result;
+		size_t sz = timer.size();
+		std::string p2 = my.count > 1 ? my.parm(2) : "";
+		if(sz == 1) { //This isn't a get custom.
+			char c = tolower(timer[0]);
+			switch(c) {
+				case 'l': {
+					if (my.count == 3) {
+						Timing::getTiming(result,c,p2,Timing::unit(my.parm(3),none));
+					} else {
+						Timing::getTiming(result,c,"",Timing::unit(p2,none));
+					}
+				} break;
+				case 'n':
+				case 'b': Timing::getTiming(result,c,"",Timing::unit(p2,none)); break;
+				case 'c': if(!p2.empty()) Timing::setTiming(c,p2); break;
+				default : Timing::getTiming(result,'c',timer,Timing::unit(p2,none));
+			}
+		} else {
+			Timing::getTiming(result,'c',timer,Timing::unit(p2,none));
+		}
+		my.set(result.str());
 	}
 
 }
 
+//std::string format  = my.count > 2 ? my.parm(3) : my.count > 1 ? my.parm(2) : "none";
