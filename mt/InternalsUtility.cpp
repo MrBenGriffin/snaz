@@ -284,9 +284,24 @@ namespace mt {
 
 	void iFile::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
-		e << Message(error,_name + " is not yet implemented.");
-		std::string left =  my.parm(1);
-		my.logic(false,1);
+//		Path base = bld->basedir(Build::Final);
+//		File file(base,parm(1));
+//		if(file.makeRelativeTo(base)) {
+//			file.makeAbsoluteFrom(base);
+//			if(file.exists()) {
+//				string expansion = file.readFile();
+//				string macName = macroName + ":" + String::Digest::hash(expansion,output.second);
+//				process(&output,macName,expansion);
+//			} else {
+//				output << message(error,"File "+ file.output(true) +" was not found.");
+//			}
+//		} else {
+//			output << message(error,"File "+ file.output(true) +" is not in a place to be found.");
+//		}
+
+//		e << Message(error,_name + " is not yet implemented.");
+//		std::string left =  my.parm(1);
+//		my.logic(false,1);
 	}
 
 	void iField::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
@@ -352,5 +367,3 @@ namespace mt {
 	}
 
 }
-
-//std::string format  = my.count > 2 ? my.parm(3) : my.count > 1 ? my.parm(2) : "none";

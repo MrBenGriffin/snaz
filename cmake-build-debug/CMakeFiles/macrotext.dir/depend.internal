@@ -30,8 +30,11 @@ CMakeFiles/macrotext.dir/main.cpp.o
  /Users/ben/CLionProjects/snaz/mt/Wss.h
  /Users/ben/CLionProjects/snaz/mt/declarations.h
  /Users/ben/CLionProjects/snaz/mt/mt.h
+ /Users/ben/CLionProjects/snaz/support/Env.h
+ /Users/ben/CLionProjects/snaz/support/File.h
  /Users/ben/CLionProjects/snaz/support/Infix.h
  /Users/ben/CLionProjects/snaz/support/Message.h
+ /Users/ben/CLionProjects/snaz/support/Storage.h
  /Users/ben/CLionProjects/snaz/support/Timing.h
  /Users/ben/CLionProjects/snaz/test.h
  location.hh
@@ -309,14 +312,50 @@ CMakeFiles/macrotext.dir/support/Comparison.cpp.o
 CMakeFiles/macrotext.dir/support/Convert.cpp.o
  /Users/ben/CLionProjects/snaz/support/Convert.cpp
  /Users/ben/CLionProjects/snaz/support/Convert.h
+CMakeFiles/macrotext.dir/support/Date.cpp.o
+ /Users/ben/CLionProjects/snaz/support/Date.cpp
+ /Users/ben/CLionProjects/snaz/support/Date.h
 CMakeFiles/macrotext.dir/support/Encode.cpp.o
  /Users/ben/CLionProjects/snaz/support/Encode.cpp
  /Users/ben/CLionProjects/snaz/support/Encode.h
  /Users/ben/CLionProjects/snaz/support/Fandr.h
+CMakeFiles/macrotext.dir/support/Env.cpp.o
+ ..//mt/Definition.h
+ ..//support/Message.h
+ ..//support/Storage.h
+ ../mt/Content.h
+ ../mt/Definition.h
+ ../mt/Driver.h
+ ../mt/Injection.h
+ ../mt/Instance.h
+ ../mt/Internal.h
+ ../mt/Macro.h
+ ../mt/Text.h
+ ../mt/Wss.h
+ ../mt/declarations.h
+ ../mt/mt.h
+ /Users/ben/CLionProjects/snaz/support/Convert.h
+ /Users/ben/CLionProjects/snaz/support/Env.cpp
+ /Users/ben/CLionProjects/snaz/support/Env.h
+ /Users/ben/CLionProjects/snaz/support/Fandr.h
+ /Users/ben/CLionProjects/snaz/support/File.h
+ /Users/ben/CLionProjects/snaz/support/Infix.h
+ /Users/ben/CLionProjects/snaz/support/Message.h
+ /Users/ben/CLionProjects/snaz/support/Storage.h
+ /Users/ben/CLionProjects/snaz/support/Timing.h
+ location.hh
+ parser.tab.hpp
 CMakeFiles/macrotext.dir/support/Fandr.cpp.o
  /Users/ben/CLionProjects/snaz/support/Convert.h
  /Users/ben/CLionProjects/snaz/support/Fandr.cpp
  /Users/ben/CLionProjects/snaz/support/Fandr.h
+CMakeFiles/macrotext.dir/support/File.cpp.o
+ /Users/ben/CLionProjects/snaz/support/Date.h
+ /Users/ben/CLionProjects/snaz/support/File.cpp
+ /Users/ben/CLionProjects/snaz/support/File.h
+ /Users/ben/CLionProjects/snaz/support/Message.h
+ /Users/ben/CLionProjects/snaz/support/Regex.h
+ /usr/local/include/pcre.h
 CMakeFiles/macrotext.dir/support/Infix.cpp.o
  /Users/ben/CLionProjects/snaz/support/Convert.h
  /Users/ben/CLionProjects/snaz/support/Infix.cpp

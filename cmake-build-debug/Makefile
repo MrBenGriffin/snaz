@@ -636,6 +636,33 @@ support/Convert.cpp.s:
 	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Convert.cpp.s
 .PHONY : support/Convert.cpp.s
 
+support/Date.o: support/Date.cpp.o
+
+.PHONY : support/Date.o
+
+# target to build an object file
+support/Date.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Date.cpp.o
+.PHONY : support/Date.cpp.o
+
+support/Date.i: support/Date.cpp.i
+
+.PHONY : support/Date.i
+
+# target to preprocess a source file
+support/Date.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Date.cpp.i
+.PHONY : support/Date.cpp.i
+
+support/Date.s: support/Date.cpp.s
+
+.PHONY : support/Date.s
+
+# target to generate assembly for a file
+support/Date.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Date.cpp.s
+.PHONY : support/Date.cpp.s
+
 support/Encode.o: support/Encode.cpp.o
 
 .PHONY : support/Encode.o
@@ -663,6 +690,33 @@ support/Encode.cpp.s:
 	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Encode.cpp.s
 .PHONY : support/Encode.cpp.s
 
+support/Env.o: support/Env.cpp.o
+
+.PHONY : support/Env.o
+
+# target to build an object file
+support/Env.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Env.cpp.o
+.PHONY : support/Env.cpp.o
+
+support/Env.i: support/Env.cpp.i
+
+.PHONY : support/Env.i
+
+# target to preprocess a source file
+support/Env.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Env.cpp.i
+.PHONY : support/Env.cpp.i
+
+support/Env.s: support/Env.cpp.s
+
+.PHONY : support/Env.s
+
+# target to generate assembly for a file
+support/Env.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Env.cpp.s
+.PHONY : support/Env.cpp.s
+
 support/Fandr.o: support/Fandr.cpp.o
 
 .PHONY : support/Fandr.o
@@ -689,6 +743,33 @@ support/Fandr.s: support/Fandr.cpp.s
 support/Fandr.cpp.s:
 	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Fandr.cpp.s
 .PHONY : support/Fandr.cpp.s
+
+support/File.o: support/File.cpp.o
+
+.PHONY : support/File.o
+
+# target to build an object file
+support/File.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/File.cpp.o
+.PHONY : support/File.cpp.o
+
+support/File.i: support/File.cpp.i
+
+.PHONY : support/File.i
+
+# target to preprocess a source file
+support/File.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/File.cpp.i
+.PHONY : support/File.cpp.i
+
+support/File.s: support/File.cpp.s
+
+.PHONY : support/File.s
+
+# target to generate assembly for a file
+support/File.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/File.cpp.s
+.PHONY : support/File.cpp.s
 
 support/Infix.o: support/Infix.cpp.o
 
@@ -918,12 +999,21 @@ help:
 	@echo "... support/Convert.o"
 	@echo "... support/Convert.i"
 	@echo "... support/Convert.s"
+	@echo "... support/Date.o"
+	@echo "... support/Date.i"
+	@echo "... support/Date.s"
 	@echo "... support/Encode.o"
 	@echo "... support/Encode.i"
 	@echo "... support/Encode.s"
+	@echo "... support/Env.o"
+	@echo "... support/Env.i"
+	@echo "... support/Env.s"
 	@echo "... support/Fandr.o"
 	@echo "... support/Fandr.i"
 	@echo "... support/Fandr.s"
+	@echo "... support/File.o"
+	@echo "... support/File.i"
+	@echo "... support/File.s"
 	@echo "... support/Infix.o"
 	@echo "... support/Infix.i"
 	@echo "... support/Infix.s"

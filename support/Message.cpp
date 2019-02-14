@@ -29,6 +29,14 @@ namespace Support {
 		log << ": " << content << flush;
 	}
 
+	Messages::format Messages::Format = Messages::Html;
+	size_t Messages::Verbosity = 3;
+	bool Messages::Deferred = true;
+
+	void Messages::startup(bool useMarkup) {
+		Format =  useMarkup ? Html : Console;
+	}
+
 	string Messages::line(size_t line_number) const {
 		if ((line_number > 0) && (line_number <= list.size())) {
 			ostringstream re;

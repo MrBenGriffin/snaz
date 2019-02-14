@@ -67,15 +67,6 @@ iMath 644	@iMath(f,123.1)						123
 iNull 001		[@iNull(A,X)]													[]
 iNull 002		[@iNull(@iEval({|@iSet(foo,bar)@b=rok()|}))@iGet(foo)]			[bar]
 
-# iTiming
-iTiming 0030	[@iNull(@iTiming(L))]											[]
-iTiming 0031	@iTiming(L)														0.000000000000
-iTiming 0032	@iTiming(L)														0.000000000000
-iTiming 0033	@iTiming(L)														0.000000000000
-iTiming 0034	@iTiming(L)														0.000000000000
-//iTiming 004	@iTiming(A)														1.530000000000
-//iTiming 005	@iTiming(C)														1.530000000000
-
 # iExpr
 iExpr 001		@iExpr(p1*p2+(p1-p2),4.0,5.5)									20.5
 iExpr 002		@iExpr(floor(p1*p2+(p1-p2)),4.0,5.5)							20

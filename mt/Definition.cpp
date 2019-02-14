@@ -194,7 +194,7 @@ namespace mt {
 		}
 	}
 
-	void Definition::initialise() {
+	void Definition::startup() {
 		library.emplace("iEq",Handler(std::move(iEq())));
 		library.emplace("iExpr",Handler(std::move(iExpr())));
 		library.emplace("iIndex",Handler(std::move(iIndex())));

@@ -27,10 +27,19 @@ namespace Support {
 	// Messages are a deque of messages.
 	class Messages {
 	private:
+		enum format { Console, Html };
+		static format Format;
+		static size_t Verbosity;
+		static bool Deferred;
 		bool _suppressed;
 		bool _marked;
 		deque<Message> list;
 	public:
+		static void setVerbosity(size_t v) { Verbosity = v;}
+		static size_t verbosity() { return Verbosity;}
+		static void startup(bool);
+		static void defer(bool defer) { Deferred = defer; }
+
 		Messages() : _suppressed(false),_marked(false) {}
 		bool marked() const { return _marked; }
 		bool suppressed() const { return _suppressed; }

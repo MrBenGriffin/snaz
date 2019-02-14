@@ -16,7 +16,7 @@ namespace mt {
 
     class Definition {
     public:
-        static void initialise();
+        static void startup();
 
     private:
         size_t minParms, maxParms;

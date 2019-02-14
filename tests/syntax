@@ -1,5 +1,4 @@
 // Syntax.
-F showPassed	0
 
 # Advanced: Injections outside of a definition.
 P	1	⍟(i)q			⁅i⁆“q”

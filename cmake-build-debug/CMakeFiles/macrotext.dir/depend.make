@@ -29,8 +29,11 @@ CMakeFiles/macrotext.dir/main.cpp.o: ../mt/Text.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../mt/Wss.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../mt/declarations.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../mt/mt.h
+CMakeFiles/macrotext.dir/main.cpp.o: ../support/Env.h
+CMakeFiles/macrotext.dir/main.cpp.o: ../support/File.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../support/Infix.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../support/Message.h
+CMakeFiles/macrotext.dir/main.cpp.o: ../support/Storage.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../support/Timing.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../test.h
 CMakeFiles/macrotext.dir/main.cpp.o: location.hh
@@ -309,13 +312,49 @@ CMakeFiles/macrotext.dir/support/Comparison.cpp.o: ../support/Convert.h
 CMakeFiles/macrotext.dir/support/Convert.cpp.o: ../support/Convert.cpp
 CMakeFiles/macrotext.dir/support/Convert.cpp.o: ../support/Convert.h
 
+CMakeFiles/macrotext.dir/support/Date.cpp.o: ../support/Date.cpp
+CMakeFiles/macrotext.dir/support/Date.cpp.o: ../support/Date.h
+
 CMakeFiles/macrotext.dir/support/Encode.cpp.o: ../support/Encode.cpp
 CMakeFiles/macrotext.dir/support/Encode.cpp.o: ../support/Encode.h
 CMakeFiles/macrotext.dir/support/Encode.cpp.o: ../support/Fandr.h
 
+CMakeFiles/macrotext.dir/support/Env.cpp.o: ../mt/Definition.h
+CMakeFiles/macrotext.dir/support/Env.cpp.o: ../support/Message.h
+CMakeFiles/macrotext.dir/support/Env.cpp.o: ../support/Storage.h
+CMakeFiles/macrotext.dir/support/Env.cpp.o: ../mt/Content.h
+CMakeFiles/macrotext.dir/support/Env.cpp.o: ../mt/Definition.h
+CMakeFiles/macrotext.dir/support/Env.cpp.o: ../mt/Driver.h
+CMakeFiles/macrotext.dir/support/Env.cpp.o: ../mt/Injection.h
+CMakeFiles/macrotext.dir/support/Env.cpp.o: ../mt/Instance.h
+CMakeFiles/macrotext.dir/support/Env.cpp.o: ../mt/Internal.h
+CMakeFiles/macrotext.dir/support/Env.cpp.o: ../mt/Macro.h
+CMakeFiles/macrotext.dir/support/Env.cpp.o: ../mt/Text.h
+CMakeFiles/macrotext.dir/support/Env.cpp.o: ../mt/Wss.h
+CMakeFiles/macrotext.dir/support/Env.cpp.o: ../mt/declarations.h
+CMakeFiles/macrotext.dir/support/Env.cpp.o: ../mt/mt.h
+CMakeFiles/macrotext.dir/support/Env.cpp.o: ../support/Convert.h
+CMakeFiles/macrotext.dir/support/Env.cpp.o: ../support/Env.cpp
+CMakeFiles/macrotext.dir/support/Env.cpp.o: ../support/Env.h
+CMakeFiles/macrotext.dir/support/Env.cpp.o: ../support/Fandr.h
+CMakeFiles/macrotext.dir/support/Env.cpp.o: ../support/File.h
+CMakeFiles/macrotext.dir/support/Env.cpp.o: ../support/Infix.h
+CMakeFiles/macrotext.dir/support/Env.cpp.o: ../support/Message.h
+CMakeFiles/macrotext.dir/support/Env.cpp.o: ../support/Storage.h
+CMakeFiles/macrotext.dir/support/Env.cpp.o: ../support/Timing.h
+CMakeFiles/macrotext.dir/support/Env.cpp.o: location.hh
+CMakeFiles/macrotext.dir/support/Env.cpp.o: parser.tab.hpp
+
 CMakeFiles/macrotext.dir/support/Fandr.cpp.o: ../support/Convert.h
 CMakeFiles/macrotext.dir/support/Fandr.cpp.o: ../support/Fandr.cpp
 CMakeFiles/macrotext.dir/support/Fandr.cpp.o: ../support/Fandr.h
+
+CMakeFiles/macrotext.dir/support/File.cpp.o: ../support/Date.h
+CMakeFiles/macrotext.dir/support/File.cpp.o: ../support/File.cpp
+CMakeFiles/macrotext.dir/support/File.cpp.o: ../support/File.h
+CMakeFiles/macrotext.dir/support/File.cpp.o: ../support/Message.h
+CMakeFiles/macrotext.dir/support/File.cpp.o: ../support/Regex.h
+CMakeFiles/macrotext.dir/support/File.cpp.o: /usr/local/include/pcre.h
 
 CMakeFiles/macrotext.dir/support/Infix.cpp.o: ../support/Convert.h
 CMakeFiles/macrotext.dir/support/Infix.cpp.o: ../support/Infix.cpp

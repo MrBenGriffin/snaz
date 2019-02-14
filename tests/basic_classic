@@ -6,7 +6,7 @@
 //F showPassed	0
 // name		code															expected result
 # Stripping stuff
-F showPassed	0
+
 strips0001		H␍R															H␍R
 strips0002		␉H␍R␉														␉H␍R␉
 strips0010		@zv(␉H␍R␉)													␉[␉H␍R␉]␉

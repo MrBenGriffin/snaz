@@ -1,0 +1,148 @@
+//
+// Created by Ben on 2019-02-13.
+//
+
+#ifndef MACROTEXT_FILE_H
+#define MACROTEXT_FILE_H
+
+#include <string>
+#include <vector>
+#include <stack>
+
+#include "Message.h"
+
+namespace Support {
+
+	using namespace std;
+
+	class File;
+	class Device {
+	protected:
+		string	device;				//eg C:
+		string	root_separator;
+
+	public:
+		Device();
+
+		explicit Device(const string&);
+		Device(const Device &);
+		virtual ~Device();
+
+		virtual void init();
+		virtual void clear();
+
+		void setRootSeparator(const string &);
+		const string getRootSeparator() const;
+		void setDevice(const string &);
+		const string getDevice() const;
+		const string getDeviceName(bool=false) const;
+		virtual const string output(bool) const;
+	};
+
+	class Path : public Device {
+	private:
+		string generateTempName(const string &) const;
+	protected:
+		static std::stack<string> wdstack;
+		vector<string> path;
+		string	directory_separator;
+
+	protected:
+		int getSizeA() const;
+
+	public:
+		Path();
+		Path(const Path&);
+
+		explicit Path(string);
+		Path(string,string);
+
+		~Path() override;
+
+		void clear() override;
+		Path& operator=(const Path&);
+		void listFiles(Messages &,vector<File *> *,bool,string) const;
+		void listFilesA(Messages&,vector<File *> *,string) const;
+		void setDirectorySeparator(string separator);
+		const string getDirectorySeparator() const;
+		void setPath(string);
+		void addPath(string);
+		const string getPath() const;
+		const string getPath(size_t) const;
+		const string getEndPath() const;
+		const int getPathCount() const;
+		void cd(string,bool=false);
+		bool match(Messages&,const string&,const string&) const;
+		const string output(bool) const override;
+
+		virtual bool exists() const;
+		bool makeDir(Messages&,bool=false) const;
+		bool removeDir(Messages&,bool= false, bool= false) const;
+		bool moveTo(Messages&,const Path &) const ;
+		bool copyTo(const Path&,  Messages&, bool=false,bool=false) const;
+		bool mergeTo(const Path&, Messages&, bool=true,bool=false) const;
+
+		void listDirs(vector<Path *>*, bool=false) const;
+
+		bool makeRelativeTo(const Path&);
+		bool makeAbsoluteFrom(const Path&);
+
+		bool makeRelative(vector<Path *> *);
+		bool makeAbsolute(vector<Path *> *);
+		bool makeTempDir(Messages&,string="TEMP");
+
+		static std::string wd();
+		static void cwd(std::string);
+		static void push_wd(std::string);
+		static void pop_wd();
+	};
+	class File : public Path {
+	protected:
+		string base;
+		char extension_separator;
+		string extension;
+
+	protected:
+		void init() override;
+
+	public:
+		File();
+		File(const File &);
+
+		explicit File(Path);
+		File(Path,string);
+
+		explicit File(string);
+		File(string,string);
+		File(string,string,string);
+		File(string,string,string,string);
+		~File() override;
+		void clear() override;
+		File &operator=(File);
+		void setExtensionSeparator(char);
+		const char getExtensionSeparator() const;
+		void setBase(string);
+		const string getBase() const;
+		void setExtension(string);
+		const string getExtension() const;
+		void setFileName(string,bool=false);
+		const string getFileName() const;
+		const string getDir() const;
+		const string output(bool) const override;
+		bool exists() const override;
+		bool moveTo(Messages&,File) const;
+		bool moveTo(Messages&,Path) const;
+		bool removeFile() const;
+		size_t getSize() const;
+		time_t getCreateDate() const;
+		time_t getModDate() const;
+		bool copyTo(File, Messages&, bool = false) const;
+		bool copyTo(Path, Messages&, bool = false) const;
+		string readFile() const;
+
+	};
+
+}	// namespace Support
+
+
+#endif //MACROTEXT_FILE_H

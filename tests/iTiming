@@ -1,0 +1,12 @@
+# iTiming
+iTiming 0030	[@iTiming(C,foo)]												[]
+iTiming 0031	@iTiming(foo,ms)												?\s+\d+\.\d+ms
+iTiming 0032	@iTiming(L)														?\d+\.\d+
+iTiming 0033	@iTiming(L)														?\d+\.\d+
+iTiming 0034	@iTiming(N)														?\d+\.\d+
+iTiming 004		@iTiming(A)														?\d+\.\d+
+iTiming 005		[@iTiming(C)]													[]
+iTiming 0061	@iTiming(L,foo,all)												?\s+\d+m\s+\d+s\s+\d+ms\s+\d+µs\s+\d+ns
+iTiming 0062	@iTiming(L,foo,all)												?\s+\d+m\s+\d+s\s+\d+ms\s+\d+µs\s+\d+ns
+iTiming 0062	@iTiming(foo,all)												?\s+\d+m\s+\d+s\s+\d+ms\s+\d+µs\s+\d+ns
+
