@@ -4,6 +4,7 @@
 #include "support/Message.h"
 #include "support/Convert.h"
 #include "support/Timing.h"
+#include "support/Env.h"
 
 namespace mt {
 	using namespace Support;
@@ -284,24 +285,25 @@ namespace mt {
 
 	void iFile::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
-//		Path base = bld->basedir(Build::Final);
-//		File file(base,parm(1));
-//		if(file.makeRelativeTo(base)) {
-//			file.makeAbsoluteFrom(base);
-//			if(file.exists()) {
-//				string expansion = file.readFile();
-//				string macName = macroName + ":" + String::Digest::hash(expansion,output.second);
-//				process(&output,macName,expansion);
-//			} else {
-//				output << message(error,"File "+ file.output(true) +" was not found.");
-//			}
-//		} else {
-//			output << message(error,"File "+ file.output(true) +" is not in a place to be found.");
-//		}
-
-//		e << Message(error,_name + " is not yet implemented.");
-//		std::string left =  my.parm(1);
-//		my.logic(false,1);
+		Path base = Env::e().basedir(Build);
+		std::string filename = my.parm(1);
+		File file(base,filename);
+		if(file.makeRelativeTo(base)) {
+			file.makeAbsoluteFrom(base);
+			if(file.exists()) {
+				string program = file.readFile();
+				std::istringstream code(program);
+				mt::Driver driver(e,code,Definition::test_adv(program));
+				mt::mtext structure = driver.parse(e,false); //bool advanced, bool strip
+				ostringstream result;
+				driver.expand(result,e,file.output(false));
+				my.set(result.str());
+			} else {
+				e << Message(error,"File "+ file.output(true) +" was not found.");
+			}
+		} else {
+			e << Message(error,"File "+ file.output(true) +" is not in a place to be found.");
+		}
 	}
 
 	void iField::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {

@@ -1,0 +1,4 @@
+#iFile
+iFile 001	[@iFile(test.txt)]															[hello world]
+iFile 002	[@iFile(tost.txt)]															!1?error:\sFile\s[/\w]+\.txt\swas\snot\sfound.
+iFile 003	[@iFile(tost.txt)]															!1!error: File /Users/ben/CLionProjects/snaz/tests/tost.txt was not found.

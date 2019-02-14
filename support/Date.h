@@ -17,7 +17,7 @@ namespace Support {
 		void normalise(struct tm*&);
 
 	protected:
-		time_t tt;
+		::time_t tt;
 		struct tm* local;
 		struct tm* utc;
 

@@ -324,7 +324,7 @@ namespace testing {
 									if(discard.marked()) {
 										cout << " E Error in Test Regex:"  << expected << endl;
 										cout << lred << "Regex Errors: ";
-										errs.str(cout);
+										discard.str(cout);
 										cout << norm << endl;
 									}
 								} else {

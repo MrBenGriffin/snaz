@@ -33,8 +33,8 @@ namespace Support {
 	using namespace std;
 
 	std::stack<string> Path::wdstack;
-
-	Device::Device() { init(); }
+/**
+ * Device::Device() { init(); }
 	Device::Device(const string &newdevice) : device(newdevice) { init(); }
 	Device::Device(const Device &newdevice) {
 		init();
@@ -88,7 +88,7 @@ namespace Support {
 	const string Device::output(bool abs=false) const {
 		return getDeviceName(abs);
 	}
-
+**/
 	bool Path::match(Messages& e,const string &text, const string &pattern) const {
 		bool retval = false;
 		if ( Regex::available(e) ) {
@@ -136,38 +136,27 @@ namespace Support {
 		if (chdir(wdptr) != 0) { /* report an error here. */ }
 	}
 
-	Path::Path() : Device(), path(), directory_separator("/") {
+	Path::Path() : path(), directory_separator("/") {
 	}
 
-	Path::Path(const Path &newpath) : Device(newpath), path(), directory_separator("/") {
+	Path::Path(const Path &newpath) {
 		*this = newpath;
 	}
 
-	Path::Path(const string newpath) : Device(), path(), directory_separator("/") {
+	Path::Path(const string newpath) : path(), directory_separator("/") {
 		setPath(newpath);
-	}
-
-	Path::Path(const string newdevice, const string newpath) : Device(newdevice), path(), directory_separator("/") {
-		setPath(newpath);
-	}
-
-	Path::~Path() {
-		clear();
 	}
 
 	void Path::clear() {
-		Device::clear();
 		path.clear();
 	}
 
 	Path &Path::operator=(const Path &newpath) {
 		clear();
-		device = newpath.device;
 		for (auto it : newpath.path) {
 			path.push_back(it);
 		}
 		directory_separator = newpath.directory_separator;
-		root_separator = newpath.root_separator;
 		return *this;
 	}
 
@@ -195,7 +184,7 @@ namespace Support {
 			}
 				// if a root separator is the first character
 			else if (next == 0) {
-				cd(root_separator);
+				cd("/");
 			}
 			start = next + 1;
 			next = newpath.find(directory_separator, start);
@@ -231,11 +220,8 @@ namespace Support {
 
 	void Path::cd(const string newpath, bool append) {
 		if (!newpath.empty()) {
-			if (newpath == root_separator) {
+			if (newpath == "/") {
 				clear();
-				if (device.empty()) {
-					device = root_separator;
-				}
 			} else {
 				size_t dsep = newpath.find(directory_separator, 0);
 				if (dsep < newpath.size()) {
@@ -330,7 +316,7 @@ namespace Support {
 
 
 	const string Path::output(bool abs) const {
-		string retval = Device::output(abs);
+		string retval = abs ? "/" : "";
 		retval.append(getPath());
 		return retval;
 	}
@@ -355,7 +341,7 @@ namespace Support {
 			return true;
 		else if ((errno == ENOENT) && recursive) {    // If not exists and recursive
 			Path path1 = *this;
-			path1.cd(root_separator);
+			path1.cd("/");
 			for (size_t i = 0; i < this->getPathCount() - 1; i++) {
 				path1.cd(this->getPath(i));
 				if (!path1.makeDir(e,false))
@@ -622,7 +608,6 @@ namespace Support {
 	// Makes the path relative to a specified path.
 	//-------------------------------------------------------------------------
 	bool Path::makeRelativeTo(const Path &newpath) {
-		if (device == newpath.device) {
 			// relative path must be a subset of the current path
 			if (path.size() < newpath.path.size())
 				return false;
@@ -634,23 +619,16 @@ namespace Support {
 			}
 			// Removes the relative path elements
 			path.erase(path.begin(), path.begin() + count);
-			device = "";
 			return true;
-		}
-		return false;
 	}
 
 	//-------------------------------------------------------------------------
 	// Makes the current path absolute using a specified path
 	//-------------------------------------------------------------------------
-	bool Path::makeAbsoluteFrom(const Path &newpath) {
-		string oldpath = getPath();
-		clear();
-		device = newpath.device;
-		cd(newpath.getPath() + oldpath);
+	bool Path::makeAbsoluteFrom(const Path &newPath) {
+		path = newPath.path;
 		return true;
 	}
-
 
 	//-------------------------------------------------------------------------
 	// Make all the specified paths relative to the current path
@@ -662,7 +640,6 @@ namespace Support {
 		}
 		return true;
 	}
-
 
 	//-------------------------------------------------------------------------
 	// Make all the specified paths absolute to the current path
@@ -702,16 +679,13 @@ namespace Support {
 	//-------------------------------------------------------------------------
 	// Basic Constructor
 	//-------------------------------------------------------------------------
-	File::File() : Path() {
-		init();
+	File::File() : Path(),extension_separator('.') {
 	}
-
 
 	//-------------------------------------------------------------------------
 	// Constructs a new File given a specified File
 	//-------------------------------------------------------------------------
 	File::File(const File &newfile) : Path(newfile) {
-		init();
 		base = newfile.base;
 		extension_separator = newfile.extension_separator;
 		extension = newfile.extension;
@@ -721,16 +695,14 @@ namespace Support {
 	//-------------------------------------------------------------------------
 	//  Constructs a new File given a Path
 	//-------------------------------------------------------------------------
-	File::File(const Path newpath) : Path(newpath) {
-		init();
+	File::File(const Path newpath) : Path(newpath),extension_separator('.') {
 	}
 
 
 	//-------------------------------------------------------------------------
 	// Constructs a new File given a Path and a filename
 	//-------------------------------------------------------------------------
-	File::File(const Path newpath, const string newfilename) : Path(newpath) {
-		init();
+	File::File(const Path newpath, const string newfilename) : Path(newpath),extension_separator('.') {
 		setFileName(newfilename);
 	}
 
@@ -738,8 +710,7 @@ namespace Support {
 	//-------------------------------------------------------------------------
 	// Constructs a new File given a filename
 	//-------------------------------------------------------------------------
-	File::File(const string newfilename) {
-		init();
+	File::File(const string newfilename) : Path(),extension_separator('.') {
 		setFileName(newfilename);
 	}
 
@@ -747,8 +718,7 @@ namespace Support {
 	//-------------------------------------------------------------------------
 	// Constructs a new File given a path and filename
 	//-------------------------------------------------------------------------
-	File::File(const string newpath, const string newfilename) : Path(newpath) {
-		init();
+	File::File(const string newpath, const string newfilename) : Path(newpath),extension_separator('.') {
 		setFileName(newfilename);
 	}
 
@@ -756,37 +726,19 @@ namespace Support {
 	//-------------------------------------------------------------------------
 	// Constructs a new File given a device, path, filename
 	//-------------------------------------------------------------------------
-	File::File(const string newdevice, const string newpath, const string newfilename) : Path(newdevice, newpath) {
-		init();
-		setFileName(newfilename);
-	}
-
+//	File::File(const string newdevice, const string newpath, const string newfilename) : Path(newdevice, newpath),extension_separator('.') {
+//		setFileName(newfilename);
+//	}
+//
 
 	//-------------------------------------------------------------------------
 	// Construct a new File given a device, path, base, extension
 	//-------------------------------------------------------------------------
-	File::File(const string newdevice, const string newpath, const string newbase, const string newextension) : Path(
-			newdevice, newpath) {
-		init();
-		setBase(newbase);
-		setExtension(newextension);
-	}
-
-
-	//-------------------------------------------------------------------------
-	// Destructor
-	//-------------------------------------------------------------------------
-	File::~File() {
-		clear();
-	}
-
-
-	//-------------------------------------------------------------------------
-	// Initialise the OS default
-	//-------------------------------------------------------------------------
-	void File::init() {
-		setExtensionSeparator('.');
-	}
+//	File::File(const string newdevice, const string newpath, const string newbase, const string newextension) : Path(
+//			newdevice, newpath),extension_separator('.') {
+//		setBase(newbase);
+//		setExtension(newextension);
+//	}
 
 
 	//-------------------------------------------------------------------------
@@ -920,13 +872,13 @@ namespace Support {
 	bool File::exists() const {
 		bool existence = false;
 		struct stat buf{};
-		int result = stat(output(false).c_str(), &buf);
-		if (result == 0 && (buf.st_mode & S_IFREG))
+		string fileToTest = output(true);
+		int result = stat(fileToTest.c_str(), &buf);
+		if (result == 0 && (buf.st_mode & S_IFREG))  {
 			existence = true;
+		}
 		return existence;
 	}
-
-
 	//-------------------------------------------------------------------------
 	// Moves the current File to the specified File
 	//-------------------------------------------------------------------------
@@ -982,9 +934,10 @@ namespace Support {
 	size_t File::getSize() const {
 		size_t result;
 		struct stat buf{};
-		result = stat(output().c_str(), &buf);
-		if (result == 0 && buf.st_mode & S_IFREG)
+		result = stat(output(true).c_str(), &buf);
+		if (result == 0 && buf.st_mode & S_IFREG) {
 			return (size_t) buf.st_size; //64 bit to 32 bit conversion...
+		}
 		return 0;
 	}
 
@@ -1109,7 +1062,7 @@ namespace Support {
 		if (exists()) {
 			size_t size = getSize();
 			if (size > 0) {
-				FILE *in = fopen(output().c_str(), "rb");
+				FILE *in = fopen(output(true).c_str(), "rb");
 				if (in) {
 					auto *tbuf = new char[size + 1];
 					fread(tbuf, 1, size, in);

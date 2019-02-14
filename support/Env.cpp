@@ -7,7 +7,11 @@
 #include <cstring>
 #include <sstream>
 #include <clocale>
-
+#if __has_include(<filesystem>)
+#include <filesystem>
+#else
+#include <unistd.h>
+#endif
 #include "Env.h"
 #include "Fandr.h"
 #include "Infix.h"
@@ -30,12 +34,25 @@ namespace Support {
 		FullBuild 	= true;
 		AllTechs 	= true;
 		AllLangs 	= true;
-		SiteRootDir = "";
+		if (!get("RS_PATH",SiteRootDir))  {
+			SiteRootDir=wd();
+		}
+		if (SiteRootDir.back() != '/') {
+			SiteRootDir.push_back('/');
+		}
 		RemoteUser	= "AnonymousUser";
 		NodeSet 	= Branch;
 
 	}
 
+	string Env::wd() {
+		char buff[PATH_MAX];
+		getcwd( buff, PATH_MAX );
+		std::string cwd( buff );
+		return cwd;
+	}
+
+//void foo() {
 //void foo() {
 //	if (! (fullBuild && all_techs && all_lang) ) {
 //		tmpdirname = generateTempName("PARTIAL_BUILD"); //
@@ -54,10 +71,14 @@ namespace Support {
 
 	void Env::basedir(string& base,buildspace space,bool addslash,bool full) {	//returns e.g.  /home/web/site/collins/buildlog/BUILDxxxx/ OR /home/web/site/collins/approve/
 		string dirbit,extrabit;
-		if ( IsFinal ) {
-			dirbit = FinalDir;
+		if(Testing) {
+			dirbit = TestsDir;
 		} else {
-			dirbit = DraftDir;
+			if ( IsFinal ) {
+				dirbit = FinalDir;
+			} else {
+				dirbit = DraftDir;
+			}
 		}
 		switch (space) {
 			case Build:		break;
@@ -271,6 +292,7 @@ namespace Support {
 				//			*Logger::log << warn << "Parameter (" << parameter << ") is unknown. Parameters should be prefixed with a '-'" << Log::end; //cannot use Logger here
 			}
 		}
+//		TODO:: get the from id stuff..
 //		for (unsigned long &i : nodelist) {
 //			if (i != 0) { fromID.insert(fromID.begin(), i); }
 //		}

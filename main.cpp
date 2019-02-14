@@ -10,8 +10,9 @@
 #include "mt/mt.h"
 
 int main( const int argc, const char **argv ) {
-	Support::Env::e().startup(argc,argv);
-
+	Support::Env& env = Support::Env::e();
+	env.startup(argc,argv);
+	env.setTesting(true);
 	testing::group tests("tests/");        // Set the working directory from the Run|Edit Configurations... menu.
 	tests.load("main",false); 			  // Boolean turns on/off success reports.
 	Support::Infix::Evaluate::shutdown();

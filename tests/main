@@ -1,7 +1,12 @@
 // This is a tab-delimited file of tests.
 F showPassed	1
 F showDefines	1
+iFile 002	[@iFile(tost.txt)]															!1?error:\sFile\s[\/\w]+\.txt\swas\snot\sfound\.
+iFile 012	[@iFile(tost.txt)]															!1?error:\sFile\s[\/\w]+\.txt\swas\snot\sfound\.
+iFile 003	[@iFile(tost.txt)]															!1?error: File [\/\w]+\.txt was\snot found\.
+iFile 004	[@iFile(tost.txt)]															!1?error: File [\/\w]+\.txt was not found\.$
 
+X
 //iConsole B02	[@iConsole(B,woot)]								!2?time:[ ]+\d+\.\d*[µm]?s[ ]+
 
 F showDefines	0
@@ -21,6 +26,7 @@ F showPassed	0
 !	basicmixed
 !	injections
 !	iEq
+!	iFile
 !	iKv
 !	iExpr
 !	iSet

@@ -209,11 +209,14 @@ CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o: location.hh
 CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o: parser.tab.hpp
 
 CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o: ../support/Convert.h
+CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o: ../support/Env.h
 CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o: ../support/Infix.h
 CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o: ../support/Storage.h
 CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o: ../support/Timing.h
+CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o: ../support/File.h
 CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o: ../support/Message.h
+CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o: ../support/Storage.h
 CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o: ../mt/Driver.h

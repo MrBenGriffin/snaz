@@ -19,6 +19,7 @@ namespace Support {
 	class Env {
 	private:
 		static constexpr auto LogsDir 		= "logs";
+		static constexpr auto TestsDir 		= "tests";
 		static constexpr auto FinalDir 		= "final";
 		static constexpr auto DraftDir 		= "draft";
 		static constexpr auto ScriptsDir 	= "scripts";
@@ -26,7 +27,10 @@ namespace Support {
 		static constexpr auto ReleaseDir 	= "release";
 		static constexpr auto IncludeDir 	= "include";
 
+
 		Storage storage;
+
+		string wd();
 
 		Env(); // Disallow instantiation outside of the class.
 		bool Testing;
@@ -65,6 +69,7 @@ namespace Support {
 //		string scriptsDir() const 	{ return ScriptsDir; }
 		Path basedir(buildspace);
 		void basedir(string&,buildspace,bool,bool);
+		void setTesting(bool flag) { Testing = flag; }
 //		Path root(string append = "");
 	};
 

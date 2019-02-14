@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include <stack>
+#include <ctime>
 
 #include "Message.h"
 
@@ -16,30 +17,31 @@ namespace Support {
 	using namespace std;
 
 	class File;
-	class Device {
-	protected:
-		string	device;				//eg C:
-		string	root_separator;
 
-	public:
-		Device();
+//	class Device {
+//	protected:
+//		string	device;				//eg C:
+//		string	root_separator;
+//
+//	public:
+//		Device();
+//
+//		explicit Device(const string&);
+//		Device(const Device &);
+//		virtual ~Device();
+//
+//		virtual void init();
+//		virtual void clear();
+//
+//		void setRootSeparator(const string &);
+//		const string getRootSeparator() const;
+//		void setDevice(const string &);
+//		const string getDevice() const;
+//		const string getDeviceName(bool=false) const;
+//		virtual const string output(bool) const;
+//	};
 
-		explicit Device(const string&);
-		Device(const Device &);
-		virtual ~Device();
-
-		virtual void init();
-		virtual void clear();
-
-		void setRootSeparator(const string &);
-		const string getRootSeparator() const;
-		void setDevice(const string &);
-		const string getDevice() const;
-		const string getDeviceName(bool=false) const;
-		virtual const string output(bool) const;
-	};
-
-	class Path : public Device {
+	class Path {
 	private:
 		string generateTempName(const string &) const;
 	protected:
@@ -57,9 +59,9 @@ namespace Support {
 		explicit Path(string);
 		Path(string,string);
 
-		~Path() override;
+		~Path() = default;
 
-		void clear() override;
+		virtual void clear();
 		Path& operator=(const Path&);
 		void listFiles(Messages &,vector<File *> *,bool,string) const;
 		void listFilesA(Messages&,vector<File *> *,string) const;
@@ -73,7 +75,7 @@ namespace Support {
 		const int getPathCount() const;
 		void cd(string,bool=false);
 		bool match(Messages&,const string&,const string&) const;
-		const string output(bool) const override;
+		virtual const string output(bool) const;
 
 		virtual bool exists() const;
 		bool makeDir(Messages&,bool=false) const;
@@ -102,9 +104,6 @@ namespace Support {
 		char extension_separator;
 		string extension;
 
-	protected:
-		void init() override;
-
 	public:
 		File();
 		File(const File &);
@@ -114,9 +113,9 @@ namespace Support {
 
 		explicit File(string);
 		File(string,string);
-		File(string,string,string);
-		File(string,string,string,string);
-		~File() override;
+//		File(string,string,string);
+//		File(string,string,string,string);
+		~File()= default;
 		void clear() override;
 		File &operator=(File);
 		void setExtensionSeparator(char);
@@ -134,8 +133,8 @@ namespace Support {
 		bool moveTo(Messages&,Path) const;
 		bool removeFile() const;
 		size_t getSize() const;
-		time_t getCreateDate() const;
-		time_t getModDate() const;
+		::time_t getCreateDate() const;
+		::time_t getModDate() const;
 		bool copyTo(File, Messages&, bool = false) const;
 		bool copyTo(Path, Messages&, bool = false) const;
 		string readFile() const;
