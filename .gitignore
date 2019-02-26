@@ -1,17 +1,3 @@
-	.DS_Store
-	.idea/workspace.xml
-	cmake-build-debug/CMakeFiles/macrotext.dir/advanced.yy.cpp.o
-	cmake-build-debug/CMakeFiles/macrotext.dir/classic.yy.cpp.o
-	cmake-build-debug/CMakeFiles/macrotext.dir/main.cpp.o
-	cmake-build-debug/CMakeFiles/macrotext.dir/mt/
-	cmake-build-debug/CMakeFiles/macrotext.dir/parser.tab.cpp.o
-	cmake-build-debug/CMakeFiles/macrotext.dir/storage.cpp.o
-	cmake-build-debug/CMakeFiles/macrotext.dir/support/
-	cmake-build-debug/CMakeFiles/macrotext.dir/test.cpp.o
-	cmake-build-debug/advanced.yy.cpp
-	cmake-build-debug/classic.yy.cpp
-	cmake-build-debug/macrotext
-	cmake-build-debug/macrotext.cbp
-	cmake-build-debug/parser.tab.cpp
-	cmake-build-debug/parser.tab.hpp
-
+.DS_Store
+.idea/workspace.xml
+cmake-build-debug/*
