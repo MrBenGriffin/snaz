@@ -1,0 +1,76 @@
+
+# Unimplemented utility
+iDate					@iDate(1)								!1!error: iDate is not yet implemented.
+iField					@iField(2)								!1!error: iField is not yet implemented.
+iForSubs				@iForSubs(1,2,3,4,5)					!1!error: iForSubs is not yet implemented.
+iForQuery				@iForQuery(1,2)							!1!error: iForQuery is not yet implemented.
+iMath					@iMath(1,2)								!1!error: iMath is not yet implemented.
+iNull					@iNull(1)								!1!error: iNull is not yet implemented.
+
+# Unimplemented storage
+iSetCache				@iSetCache(1,2)							!1!fatal: iSetCache is not yet implemented. It requires Node support.
+
+
+# Unimplemented Encoder
+iBase64					@iBase64(1,2)							!1!error: iBase64 is not yet implemented.
+iDecode					@iDecode(1)								!1!error: iDecode is not yet implemented.
+iEncode					@iEncode(1)								!1!error: iEncode is not yet implemented.
+iHex					@iHex(1,2)								!1!error: iHex is not yet implemented.
+iUnHex					@iUnHex(1,2)							!1!error: iUnHex is not yet implemented.
+iUpper					@iUpper(1,2)							!1!error: iUpper is not yet implemented.
+iLower					@iLower(1,2)							!1!error: iLower is not yet implemented.
+iUrlEncode				@iUrlEncode(1,2)						!1!error: iUrlEncode is not yet implemented.
+iDigest					@iDigest(1,2)							!1!error: iDigest is not yet implemented.
+
+# Unimplemented NodeTree
+iNumChildren			@iNumChildren(1,2)						!1!error: iNumChildren is not yet implemented.
+iNumGen					@iNumGen(1,2)							!1!error: iNumGen is not yet implemented.
+iNumGens				@iNumGens(1,2)							!1!error: iNumGens is not yet implemented.
+iNumPage				@iNumPage(1,2)							!1!error: iNumPage is not yet implemented.
+iNumPages				@iNumPages(1,2)							!1!error: iNumPages is not yet implemented.
+iNumSib					@iNumSib(1,2)							!1!error: iNumSib is not yet implemented.
+iEqFamily				@iEqFamily(1,2)							!1!error: iEqFamily is not yet implemented.
+iEqNode					@iEqNode(1,2)							!1!error: iEqNode is not yet implemented.
+iEqSibs					@iEqSibs(1,2)							!1!error: iEqSibs is not yet implemented.
+iExistNode				@iExistNode(1,2)						!1!error: iExistNode is not yet implemented.
+iForAncestry			@iForAncestry(1,2,3,4,5)				!1!error: iForAncestry is not yet implemented.
+iForNodes				@iForNodes(1,2,3,4,5)					!1!error: iForNodes is not yet implemented.
+iForPeers				@iForPeers(1,2,3,4,5,6)					!1!error: iForPeers is not yet implemented.
+iForSibs				@iForSibs(1,2,3,4)							!1!error: iForSibs is not yet implemented.
+iSize					@iSize(1,2)								!1!error: iSize is not yet implemented.
+
+# Unimplemented Build
+iTech					@iTech(1,2)								!1!error: iTech is not yet implemented.
+iPreview				@iPreview(1,2)							!1!error: iPreview is not yet implemented.
+iLang					@iLang(1,2)								!1!error: iLang is not yet implemented.
+iLangID					@iLangID(1,2)							!1!error: iLangID is not yet implemented.
+iFullBuild				@iFullBuild(1,2)						!1!error: iFullBuild is not yet implemented.
+
+# Unimplemented Node
+iTitle					@iTitle(1,2)							!1!error: iTitle is not yet implemented.
+iTeam					@iTeam(1,2)								!1!error: iTeam is not yet implemented.
+iSuffix					@iSuffix(1,2)							!1!error: iSuffix is not yet implemented.
+iShortTitle				@iShortTitle(1,2)						!1!error: iShortTitle is not yet implemented.
+iSegmentName			@iSegmentName(1,2)						!1!error: iSegmentName is not yet implemented.
+iLayout					@iLayout(1,2)							!1!error: iLayout is not yet implemented.
+iLayoutName				@iLayoutName(1,2)						!1!error: iLayoutName is not yet implemented.
+iLink					@iLink(1)								!1!error: iLink is not yet implemented.
+iLinkRef				@iLinkRef(1,2)							!1!error: iLinkRef is not yet implemented.
+iID						@iID(1,2)								!1!error: iID is not yet implemented.
+iBirth					@iBirth(1,2)							!1!error: iBirth is not yet implemented.
+iContent				@iContent(1,2)							!1!error: iContent is not yet implemented.
+iDeath					@iDeath(1,2)							!1!error: iDeath is not yet implemented.
+iExistContent			@iExistContent(1,2)						!1!error: iExistContent is not yet implemented.
+iTW						@iTW(1,2)								!1!error: iTW is not yet implemented.
+
+# Unimplemented Media
+iMedia					@iMedia(1,2)							!1!error: iMedia is not yet implemented.
+iEmbed					@iEmbed(1,2)							!1!error: iEmbed is not yet implemented.
+iExistMedia				@iExistMedia(1,2)						!1!error: iExistMedia is not yet implemented.
+
+# Unimplemented Taxonomy
+iTax					@iTax(1,2)								!1!error: iTax is not yet implemented.
+iForTax					@iForTax(1,2,3,4)						!1!error: iForTax is not yet implemented.
+iForTaxNodes			@iForTaxNodes(1,2,3,4,5)				!1!error: iForTaxNodes is not yet implemented.
+iExistSimilar			@iExistSimilar(1,2)						!1!error: iExistSimilar is not yet implemented.
+iForSimilar				@iForSimilar(1,2,3,4,5,6)				!1!error: iForSimilar is not yet implemented.

@@ -195,11 +195,11 @@ namespace mt {
 	}
 
 	void Definition::startup() {
+//•------------  Utility macros
 		library.emplace("iEq",Handler(std::move(iEq())));
-		library.emplace("iExpr",Handler(std::move(iExpr())));
 		library.emplace("iIndex",Handler(std::move(iIndex())));
 		library.emplace("iForIndex",Handler(std::move(iForIndex())));
-
+		library.emplace("iExpr",Handler(std::move(iExpr())));
 		library.emplace("iConsole",Handler(std::move(iConsole())));
 		library.emplace("iDate",Handler(std::move(iDate())));
 		library.emplace("iEval",Handler(std::move(iEval())));
@@ -211,9 +211,10 @@ namespace mt {
 		library.emplace("iNull",Handler(std::move(iNull())));
 		library.emplace("iTiming",Handler(std::move(iTiming())));
 
-		library.emplace("iGet",Handler(std::move(iGet())));
-		library.emplace("iSet",Handler(std::move(iSet())));
+//•------------  Storage macros
 		library.emplace("iExists",Handler(std::move(iExists())));
+		library.emplace("iSet",Handler(std::move(iSet())));
+		library.emplace("iGet",Handler(std::move(iGet())));
 		library.emplace("iAppend",Handler(std::move(iAppend())));
 		library.emplace("iKV",Handler(std::move(iKV())));
 		library.emplace("iList",Handler(std::move(iList())));
@@ -222,6 +223,7 @@ namespace mt {
 		library.emplace("iSig",Handler(std::move(iSig())));
 		library.emplace("iUse",Handler(std::move(iUse())));
 
+//•------------  String macros
 		library.emplace("iLeft",Handler(std::move(iLeft())));
 		library.emplace("iLength",Handler(std::move(iLength())));
 		library.emplace("iMid",Handler(std::move(iMid())));
@@ -232,6 +234,70 @@ namespace mt {
 		library.emplace("iReplace",Handler(std::move(iReplace())));
 		library.emplace("iRight",Handler(std::move(iRight())));
 		library.emplace("iTrim",Handler(std::move(iTrim())));
+
+//•------------ Encoder macros
+		library.emplace("iBase64",Handler(std::move(iBase64())));
+		library.emplace("iDecode",Handler(std::move(iDecode())));
+		library.emplace("iEncode",Handler(std::move(iEncode())));
+		library.emplace("iHex",Handler(std::move(iHex())));
+		library.emplace("iUnHex",Handler(std::move(iUnHex())));
+		library.emplace("iUpper",Handler(std::move(iUpper())));
+		library.emplace("iLower",Handler(std::move(iLower())));
+		library.emplace("iUrlEncode",Handler(std::move(iUrlEncode())));
+		library.emplace("iDigest",Handler(std::move(iDigest())));
+
+//•------------ NodeTree
+		library.emplace("iNumChildren",Handler(std::move(iNumChildren())));
+		library.emplace("iNumGen",Handler(std::move(iNumGen())));
+		library.emplace("iNumGens",Handler(std::move(iNumGens())));
+		library.emplace("iNumPage",Handler(std::move(iNumPage())));
+		library.emplace("iNumPages",Handler(std::move(iNumPages())));
+		library.emplace("iNumSib",Handler(std::move(iNumSib())));
+		library.emplace("iEqFamily",Handler(std::move(iEqFamily())));
+		library.emplace("iEqNode",Handler(std::move(iEqNode())));
+		library.emplace("iEqSibs",Handler(std::move(iEqSibs())));
+		library.emplace("iExistNode",Handler(std::move(iExistNode())));
+		library.emplace("iForAncestry",Handler(std::move(iForAncestry())));
+		library.emplace("iForNodes",Handler(std::move(iForNodes())));
+		library.emplace("iForPeers",Handler(std::move(iForPeers())));
+		library.emplace("iForSibs",Handler(std::move(iForSibs())));
+		library.emplace("iSize",Handler(std::move(iSize())));
+
+//•------------ BuildAccessors
+		library.emplace("iTech",Handler(std::move(iTech())));
+		library.emplace("iPreview",Handler(std::move(iPreview())));
+		library.emplace("iLang",Handler(std::move(iLang())));
+		library.emplace("iLangID",Handler(std::move(iLangID())));
+		library.emplace("iFullBuild",Handler(std::move(iFullBuild())));
+
+//•------------ NodeAccessors
+		library.emplace("iTitle",Handler(std::move(iTitle())));
+		library.emplace("iTeam",Handler(std::move(iTeam())));
+		library.emplace("iSuffix",Handler(std::move(iSuffix())));
+		library.emplace("iShortTitle",Handler(std::move(iShortTitle())));
+		library.emplace("iSegmentName",Handler(std::move(iSegmentName())));
+		library.emplace("iLayout",Handler(std::move(iLayout())));
+		library.emplace("iLayoutName",Handler(std::move(iLayoutName())));
+		library.emplace("iLink",Handler(std::move(iLink())));
+		library.emplace("iLinkRef",Handler(std::move(iLinkRef())));
+		library.emplace("iID",Handler(std::move(iID())));
+		library.emplace("iBirth",Handler(std::move(iBirth())));
+		library.emplace("iContent",Handler(std::move(iContent())));
+		library.emplace("iDeath",Handler(std::move(iDeath())));
+		library.emplace("iExistContent",Handler(std::move(iExistContent())));
+		library.emplace("iTW",Handler(std::move(iTW())));
+
+//•------------ Media
+		library.emplace("iMedia",Handler(std::move(iMedia())));
+		library.emplace("iEmbed",Handler(std::move(iEmbed())));
+		library.emplace("iExistMedia",Handler(std::move(iExistMedia())));
+
+//•------------ Taxonomy
+		library.emplace("iTax",Handler(std::move(iTax())));
+		library.emplace("iForTax",Handler(std::move(iForTax())));
+		library.emplace("iForTaxNodes",Handler(std::move(iForTaxNodes())));
+		library.emplace("iExistSimilar",Handler(std::move(iExistSimilar())));
+		library.emplace("iForSimilar",Handler(std::move(iForSimilar())));
 
 	}
 

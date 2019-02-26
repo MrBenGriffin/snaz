@@ -1,8 +1,8 @@
 // This is a tab-delimited file of tests.
 F showPassed	1
 F showDefines	0
-//iConsole B02	[@iConsole(B,woot)]								!2?time:[ ]+\d+\.\d*[µm]?s[ ]+
-
+!	unimplemented
+X
 F showDefines	0
 F showPassed	0
 
@@ -29,10 +29,10 @@ F showPassed	0
 !	iForIndex
 !	iTiming
 
+// !	utility
 // !	taxonomy
 // !	media
 // !	regex
-// !	iKV
 // !	utility
 // !	nodetree
 // !	nodeaccessors

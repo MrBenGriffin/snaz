@@ -19,7 +19,7 @@ namespace mt {
 	class Definition;
 	class Content;
 
-	//utility
+//•------------  Utility macros
 	class iEq;
 	class iIndex;
 	class iForIndex;
@@ -35,7 +35,7 @@ namespace mt {
 	class iNull;
 	class iTiming;
 
-	//storage
+//•------------  Storage macros
 	class iExists;
 	class iSet;
 	class iGet;
@@ -47,7 +47,7 @@ namespace mt {
 	class iSig;
 	class iUse;
 
-	//string
+//•------------  String macros
 	class iLeft;
 	class iLength;
 	class iMid;
@@ -59,7 +59,7 @@ namespace mt {
 	class iRight;
 	class iTrim;
 
-//•------------ Encoder/Decoder macros
+//•------------ Encoder macros
 	class iBase64;
 	class iDecode;
 	class iEncode;
@@ -86,12 +86,14 @@ namespace mt {
 	class iForPeers;
 	class iForSibs;
 	class iSize;
+
 //•------------ BuildAccessors
 	class iTech;
 	class iPreview;
 	class iLang;
 	class iLangID;
 	class iFullBuild;
+
 //•------------ NodeAccessors
 	class iTitle;
 	class iTeam;
@@ -108,10 +110,12 @@ namespace mt {
 	class iDeath;
 	class iExistContent;
 	class iTW;
+
 //•------------ Media
 	class iMedia;
 	class iEmbed;
 	class iExistMedia;
+
 //•------------ Taxonomy
 	class iTax;
 	class iForTax;
@@ -119,7 +123,8 @@ namespace mt {
 	class iExistSimilar;
 	class iForSimilar;
 
-	using Handler=std::variant<Content,Definition,
+	using Handler=std::variant<
+	        Content,Definition,
 			//•------------ Utility
 			iEq,iExpr,iIndex,iForIndex,iConsole,iDate,iEval,iFile,iField,iForSubs,iForQuery,iMath,iNull,iTiming,
 			//•------------ Storage

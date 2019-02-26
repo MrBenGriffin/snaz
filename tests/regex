@@ -6,21 +6,4 @@
 
 // name		code											expected result
 
-# Strings Internals: iReplace
-iRep 100 	[@iReplace(*,fun,this is *)]					[this is fun]
-iRep 101 	[@iReplace(xx,y,txxy)]							[tyy]
-iRep 102 	[@iReplace(z,,xzxzx)]							[xxx]
-iRep 103 	[@iReplace(xzxzx)]								[]
-
-# Strings Internals: iRembr
-iRembr0010	@zv(@iRembr(␉H␍R␉))								␉[HR]␉
-iRembr0011	@zp(@iRembr(␉H␍R␉))								␉[HR]␉
-iRembr0012	@zs(@iRembr(␉H␍R␉))								[HR]
-iRembr0013	@zb(@iRembr(␉H␍R␉))								[HR]
-
-# Strings Internals: iRembrp
-iRembrp0010	@zv(␉@iRembrp(␉H␍R␉))							␉[␉␉H␍R␉]␉
-iRembrp0011	@zp(␉@iRembrp(␉H␍R␉))							␉[HR]␉
-iRembrp0012	@zs(␉@iRembrp(␉H␍R␉))							[␉␉H␍R␉]
-iRembrp0013	@zb(␉@iRembrp(␉H␍R␉))							[HR]
 

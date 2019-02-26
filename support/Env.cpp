@@ -52,17 +52,6 @@ namespace Support {
 		return cwd;
 	}
 
-//void foo() {
-//void foo() {
-//	if (! (fullBuild && all_techs && all_lang) ) {
-//		tmpdirname = generateTempName("PARTIAL_BUILD"); //
-//		tmpmediadirname = generateTempName("PARTIAL_MEDIA"); //
-//	} else {
-//		tmpdirname = generateTempName("FULL_BUILD"); //
-//		tmpmediadirname = generateTempName("FULL_MEDIA"); //
-//	}
-//}
-
 	Path Env::basedir(buildspace space) {
 		string directory;
 		basedir(directory,space,true,true);

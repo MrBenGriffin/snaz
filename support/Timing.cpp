@@ -17,7 +17,6 @@ namespace Support {
 		{"µs",µs},{"ms",ms},{"ns",ns},{"s",s},{"m",m},{"h",h},{"natural",nat},{"all",all},{"none",none}
 	};
 
-
 	timestamp Timing::nBasetime;	//used for timing.
 	timestamp Timing::bBasetime;	//used for timing.
 	timestamp Timing::lBasetime;	//used for timing.
