@@ -1,0 +1,3 @@
+
+iNull 001		[@iNull(A,X)]													[]
+iNull 002		[@iNull(@iEval({|@iSet(foo,bar)@b=rok()|}))@iGet(foo)]			!1!syntax: Bad input character @

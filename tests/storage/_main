@@ -4,6 +4,7 @@
 // All other lines are tab-delimited name,macrotext,expected result
 
 // STORAGE INTERNALS TESTS
+!	storage/iSet
 
 # Random Storage
 sto 001		@iSet(x,trot)@iGet(x)														trot

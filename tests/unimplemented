@@ -32,7 +32,7 @@ iExistNode				@iExistNode(1,2)						!1!error: iExistNode is not yet implemented.
 iForAncestry			@iForAncestry(1,2,3,4,5)				!1!error: iForAncestry is not yet implemented.
 iForNodes				@iForNodes(1,2,3,4,5)					!1!error: iForNodes is not yet implemented.
 iForPeers				@iForPeers(1,2,3,4,5,6)					!1!error: iForPeers is not yet implemented.
-iForSibs				@iForSibs(1,2,3,4)							!1!error: iForSibs is not yet implemented.
+iForSibs				@iForSibs(1,2,3,4)						!1!error: iForSibs is not yet implemented.
 iSize					@iSize(1,2)								!1!error: iSize is not yet implemented.
 
 # Unimplemented Build

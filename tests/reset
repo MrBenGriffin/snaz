@@ -1,4 +1,0 @@
-// This is a tab-delimited file of tests.
-# TESTS ARE DONE
-cleanup		[@iReset(BX)@iReset(foo)@iReset(bar)]		[]
-

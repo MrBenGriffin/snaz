@@ -1,0 +1,4 @@
+# iEval from builderTests
+iEvalInt		@iEval({|@iEq(A,B,T,F)|})									F
+EvalAdv			⌽iEval(=@iExpr(p1*(p1+p2),4.0,5.0)=)						=36=
+
