@@ -1,15 +1,11 @@
 
-# Unimplemented utility
-iDate					@iDate(1)								!1!error: iDate is not yet implemented.
+# Unimplemented Utility
 iField					@iField(2)								!1!error: iField is not yet implemented.
 iForSubs				@iForSubs(1,2,3,4,5)					!1!error: iForSubs is not yet implemented.
 iForQuery				@iForQuery(1,2)							!1!error: iForQuery is not yet implemented.
-iMath					@iMath(1,2)								!1!error: iMath is not yet implemented.
-iNull					@iNull(1)								!1!error: iNull is not yet implemented.
 
-# Unimplemented storage
+# Unimplemented Storage
 iSetCache				@iSetCache(1,2)							!1!fatal: iSetCache is not yet implemented. It requires Node support.
-
 
 # Unimplemented Encoder
 iBase64					@iBase64(1,2)							!1!error: iBase64 is not yet implemented.

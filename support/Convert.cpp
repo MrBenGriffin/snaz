@@ -125,6 +125,35 @@ namespace Support {
 			}
 		}
 	}
+
+	//---------------------------------------------------------------------------
+	string tostring(long double answer,string extra) {
+		char format = 'd';  //natural
+		size_t dp = 12;		//default number of decimal points.
+		if (!extra.empty() && !isdigit(extra[0])) {
+			format = extra[0];
+			extra.erase(0,1);
+		}
+		if (!extra.empty()) {
+			dp = natural(extra);
+		}
+		if (isfinite(answer)) { //ie not a nan or infinite.
+			ostringstream ans;
+			switch(format) {
+				case('i'): ans << static_cast<long long>(answer); break;
+				case('f'): ans << fixed << setprecision(dp) << answer; break;
+				case('x'): ans << std::hex << static_cast<long long>(answer); break;
+				default: ans << std::fixed << setprecision(dp) <<  answer; break;
+			}
+			return ans.str();
+		} else {
+			if(isnan(answer)) {
+				return "NAN";
+			} else { // isinf()
+				return "INF";
+			}
+		}
+	}
 	//---------------------------------------------------------------------------
 	string tostring(double i,size_t precision) {
 		ostringstream ost;
@@ -341,6 +370,8 @@ namespace Support {
 	}
 	//---------------------------------------------------------------------------
 	double real(const string& s) {
+		if(s == "INF") return +INFINITY;
+		if(s == "NAN") return NAN;
 		string::const_iterator i = s.begin();
 		return real( i );
 	}

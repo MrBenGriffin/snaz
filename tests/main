@@ -1,8 +1,7 @@
 // This is a tab-delimited file of tests.
 F showPassed	1
 F showDefines	0
-!	unimplemented
-X
+
 F showDefines	0
 F showPassed	0
 
@@ -12,6 +11,7 @@ F showPassed	0
 //!	b0rked
 
 //-- included files
+!	unimplemented
 !	syntax
 !	definitions
 !	iConsole
@@ -28,6 +28,8 @@ F showPassed	0
 !	storage
 !	iForIndex
 !	iTiming
+!	iDate
+!	iMath
 
 // !	utility
 // !	taxonomy

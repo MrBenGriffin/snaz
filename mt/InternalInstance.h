@@ -34,6 +34,8 @@ namespace mt {
 		void            logic(bool,size_t);
 		void            logic(size_t,size_t);
 		void            logic(std::string&,size_t);
+		void            logic(long double,std::string,size_t);
+
 	};
 
 }

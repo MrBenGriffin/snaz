@@ -4,6 +4,7 @@
 
 #include <support/Convert.h>
 #include "InternalInstance.h"
+//#include <cmath> //for nan test.
 
 namespace mt {
 
@@ -74,7 +75,7 @@ namespace mt {
 	}
 
 	//offset points at the position of the TRUE parm.
-	void InternalInstance::logic(bool equals,size_t offset) {
+	void InternalInstance::logic(bool equals,size_t offset)  {
 		if(count >= offset) {
 			if (equals) {
 				expand(offset);
@@ -89,7 +90,7 @@ namespace mt {
 	}
 
 	//offset is the 1-indexed parameter of the parameter to convert to a number.
-	void InternalInstance::logic(size_t base,size_t offset) {
+	void InternalInstance::logic(size_t base,size_t offset)  {
 		if(count < offset) {
 			set(Support::tostring(base));
 		} else {
@@ -98,10 +99,22 @@ namespace mt {
 		}
 	}
 
+	void InternalInstance::logic(long double base,std::string format,size_t offset)  {
+		if(count < offset) {
+			set(Support::tostring(base,format));
+		} else {
+			auto l = Support::tostring(base,format);
+			auto rs = parm(offset);      			//as a string..
+			auto rd = Support::real(rs); 			//as a double..
+			auto r = Support::tostring(rd,format);  //using the format..
+			logic( l == r, offset + 1); //this means that we are looking for a precise -string- value in the test.
+		}
+	}
+
 	//this defaults to outputting basis, unless offset is smaller than count..
 	//offset: 1-indexed parm (where basis was)
 	//eg iLayout(I0,Foo,T,F). =>> logic(Foo,2)
-	void InternalInstance::logic(std::string& left,size_t offset) {
+	void InternalInstance::logic(std::string& left,size_t offset)  {
 		if(count < offset) {
 			set(left);
 		} else {

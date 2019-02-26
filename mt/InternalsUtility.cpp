@@ -6,6 +6,8 @@
 #include "support/Timing.h"
 #include "support/Env.h"
 
+#include <iomanip>
+
 namespace mt {
 	using namespace Support;
 
@@ -259,11 +261,31 @@ namespace mt {
 	}
 	void iDate::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
-		e << Message(error,_name + " is not yet implemented.");
-		std::string left =  my.parm(1);
-		my.logic(false,1);
+		ostringstream calculation;
+		string stime = my.parm(1);
+		string format;
+		::time_t tt;
+		if ( stime.empty() ) {
+			tt = chrono::system_clock::to_time_t(chrono::system_clock::now());
+		} else {
+			std::tm tm = {};
+			std::stringstream ss(stime);
+			if(stime.find('-') != string::npos) {
+				ss >> std::get_time(&tm,"%Y-%m-%d %T");
+			} else {
+				ss >> std::get_time(&tm,"%Y %m %d %T");
+			}
+			tt = std::mktime(&tm);
+		}
+		if (my.count > 1) {
+			format = my.parm(2);
+		}
+		if (format.empty()) {
+			format = "%F %T";
+		}
+		calculation << put_time(gmtime(&tt),format.c_str());
+		my.set(calculation.str());
 	}
-
 	void iEval::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
 		std::stringstream code;
@@ -282,7 +304,6 @@ namespace mt {
 		driver.expand(result,e,"iEval Instance");
 		my.set(result.str());
 	}
-
 	void iFile::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		//second parameter is 'true' or 'false' - (default = false) and represents whether
 		//or not to treat the file as macrotext.
@@ -312,14 +333,12 @@ namespace mt {
 			e << Message(error,"File "+ file.output(true) +" is not in a place to be found.");
 		}
 	}
-
 	void iField::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
 		e << Message(error,_name + " is not yet implemented.");
 		std::string left =  my.parm(1);
 		my.logic(false,1);
 	}
-
 	void iForSubs::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
 		e << Message(error,_name + " is not yet implemented.");
@@ -336,18 +355,146 @@ namespace mt {
 
 	void iMath::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
-		e << Message(error,_name + " is not yet implemented.");
-		std::string left =  my.parm(1);
-		my.logic(false,1);
+		ostringstream msg;
+		long double nan = numeric_limits<long double>::signaling_NaN();
+		auto x = 0.0;
+		auto y = 0.0;
+		string operation = my.parm(1);
+		string operandx = my.parm(2);
+		string operandy;
+		Support::trim(operation); //strip spaces, tabs, newlines..
+		if(operation.empty()) {
+			msg << "Incorrect function parameter (" << operation << ")";
+			msg << "Use one of +,-,{*,x},/,{M,m},{&lt;,f},{&gt;,c},=,|,&,U,N,R";
+			msg << " optionally followed by formatting flag 'i','f','x'";
+			e << Message(error,msg.str());
+			return;
+		}
+		string::const_iterator a = operandx.begin();
+		if ((*a == 'x') || (*a == 'X')) {
+			auto cc = Support::hex(++a,x);
+			if ( cc + 1 != operandx.size() ) x = nan;
+		} else {
+			x = Support::real(a);
+		}
+		if(my.count > 2) {
+			operandy = my.parm(3);
+			string::const_iterator a = operandy.begin();
+			if ((*a == 'x') || (*a == 'X')) {
+				auto cc = Support::hex(++a,y);
+				if ( cc + 1 != operandy.size() ) y = nan;
+			} else {
+				y = Support::real(a);
+			}
+		}
+		long double answer = nan;
+		if ( x != x || y != y ) { //standard nan test, apparently.
+			answer = nan;
+		} else {
+			switch (operation[0]) {
+				case '+':
+					answer = x + y;
+					break;
+				case '-':
+					answer = x - y;
+					break;
+				case '*':
+				case 'x':
+					answer = x * y;
+					break;
+				case '/':
+					answer = x / y;
+					break;
+				case 'R':
+					answer = drand48() * (y - x) + x;
+					break;  //iMath(R,3,6) a value between 3 and 6)
+
+				case 'M':            //Mod
+				case 'm':
+					answer = static_cast<int>(x) % static_cast<int>(y);
+					break;
+				case 'L':    //lessthan
+				case '<':
+					if (x < y) answer = 1;
+					else answer = 0;
+					break;
+				case 'G':    //greaterthan
+				case '>':
+					if (x > y) answer = 1;
+					else answer = 0;
+					break;
+				case '=':
+					if (x == y) answer = 1;
+					else answer = 0;
+					break;
+				case '|':
+					if (x || y) answer = 1;
+					else answer = 0;
+					break;
+				case 'A':
+					if (x && y) answer = 1;
+					else answer = 0;
+					break;
+				case 'U':
+					answer = (static_cast<int>(x) | static_cast<int>(y));
+					break; //answer = 1; else answer = 0; break;
+				case 'N':
+					answer = (static_cast<int>(x) & static_cast<int>(y));
+					break; //answer = 1; else answer = 0; break;
+				case 'f': { //Floor / minimum
+					if (my.count < 3 || operandy.empty() || y == nan) {
+						answer = floor(x);
+					} else {
+						if (x > y) answer = y; else answer = x;
+					}
+				} break;
+				case 'c': { //Ceiling / maximum
+					if (my.count < 3 || operandy.empty() || y == nan) {
+						answer = ceil(x);
+					} else {
+						if (x < y) answer = y; else answer = x;
+					}
+				} break;
+				case '&': {
+					if ((operation.compare("&amp;") == 0)) {
+						if (x && y) { answer = 1; } else { answer = 0; }
+					}
+					if ((operation.compare("&lt;") == 0)) {
+						if (x < y) { answer = 1; } else { answer = 0; }
+					}
+					if ((operation.compare("&gt;") == 0)) {
+						if (x > y) { answer = 1; } else { answer = 0; }
+					}
+				} break;
+				default: {
+					msg << "Incorrect function parameter (" << operation << "); ";
+					msg << "Use one of +,-,{*,x},/,{M,m},{&lt;,f},{&gt;,c},=,|,&,U,N,R";
+					msg << " optionally followed by formatting flag 'i','f','x'. ";
+					msg << "f may be appended with the number of required decimal points.";
+					e << Message(error,msg.str());
+					return;
+				} break;
+			}
+		}
+		if(!operation.empty()) { //now is a formatter
+			operation.erase(0,1);
+		}
+		if(operation.empty()) { //now is a formatter
+			operation = "f0";
+		}
+		if (my.count > 3) {
+			my.logic(answer,operation,4); //@iMath(*,2,5,[10,T,F]) (offset points at value before T)
+		} else {
+			my.set(Support::tostring(answer,operation)); //@iMath(*,2,5)
+		}
 	}
 
 	void iNull::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
-		e << Message(error,_name + " is not yet implemented.");
-		std::string left =  my.parm(1);
-		my.logic(false,1);
+		for (size_t i=1; i <= my.count; i++) {
+			auto unused = my.parm(i);
+		}
 	}
-
 	void iTiming::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
 		std::string timer = my.parm(1);

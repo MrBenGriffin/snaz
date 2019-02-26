@@ -1,0 +1,72 @@
+# iMath
+iMath 001	@iMath(*,2,3)													6
+iMath 002	@iMath(/f,2,3)													0.666666666667
+#iMath inf/nan tests. NAN/INF
+iMath 003	@iMath(/f,1,0)													INF
+iMath 004	@iMath(/f,0,0)													NAN
+iMath 600	@iMath(/,1,0)													INF
+iMath 601	@iMath(+,x34,0,NAN,T,F)				F
+iMath 602	@iMath(+,x34,0,NAN,T,F)				F
+iMath 603	@iMath(+,xcs,0,NAN,T,F)				T
+iMath 604	@iMath(+,xc,0,NAN,T,F)				F
+iMath 605	@iMath(+,132,0,NAN,T,F)				F
+iMath 606	@iMath(+,abc,0,NAN,T,F)				T
+iMath 608	@iMath(/,100,0,INF,T,F)				T
+iMath 609	@iMath(+,abc,0,INF,T,F)				F
+
+#iMath format tests.
+iMath 608	@iMath(+,3,2)						5
+iMath 609	@iMath(+i,3.2,2.1)					5
+iMath 610	@iMath(+x,9,2)						b
+iMath 611	@iMath(+f,9.02,2.17)				11.190000000000
+iMath 611a	@iMath(+f2,9.02,2.17)				11.19
+iMath 612	@iMath(/f,9.02,2.17)				4.156682027650
+iMath 613	@iMath(+,9.02,2.17)					11
+iMath 614	@iMath(+,xc,2)						14
+#iMath operation tests.
+iMath 616	@iMath(-,3,2)						1
+iMath 617	@iMath(*,3,2)						6
+iMath 618	@iMath(x,3,2)						6
+iMath 619	@iMath(/,6,2)						3
+iMath 620	@iMath(M,11,3)						2
+iMath 621	@iMath(m,11,3)						2
+iMath 622	@iMath(L,6,2)						0
+iMath 623	@iMath(L,6,2,1,T,F)					F
+iMath 624	@iMath(G,6,2,1,T,F)					T
+iMath 625	@iMath(=,15,xf)						1
+iMath 626	@iMath(|,0,1)						1
+iMath 627	@iMath(|,0,0)						0
+iMath 628	@iMath(|,1,1)						1
+iMath 629	@iMath(A,0,1)						0
+iMath 630	@iMath(A,0,0)						0
+iMath 631	@iMath(A,1,1)						1
+iMath 632	@iMath(U,6,3)						7
+iMath 633	@iMath(N,6,3)						2
+iMath 634	@iMath(f,122,23)					23
+iMath 635	@iMath(c,23,122)					122
+iMath 636	@iMath(f,122,123)					122
+iMath 637	@iMath(c,123,122)					123
+iMath 638	@iMath(L,5,8,1,T,F)					T
+iMath 639a	@iMath(Rf,0,1)						?0.\d+
+iMath 639b	@iMath(Rf,0,1)						?0.\d+
+iMath r61	@iMath(R,10,99)						?\d\d
+iMath r62	@iMath(R,10,99)						?\d\d
+iMath r63	@iMath(R,10,99)						?\d\d
+iMath r64	@iMath(R,10,99)						?\d\d
+iMath r65	@iMath(R,10,99)						?\d\d
+iMath r66	@iMath(R,10,99)						?\d\d
+iMathRx1	@iMath(Rx,100,256)					?[a-f0-9]+
+iMathRx2	@iMath(Rx,100,256)					?[a-f0-9]+
+iMathRx3	@iMath(Rx,100,256)					?[a-f0-9]+
+iMathRx4	@iMath(Rx,100,256)					?[a-f0-9]+
+iMathRx5	@iMath(Rx,100,256)					?[a-f0-9]+
+iMathRx6	@iMath(Rx,100,256)					?[a-f0-9]+
+iMathRx7	@iMath(Rx,100,256)					?[a-f0-9]+
+iMathRx8	@iMath(Rx,100,256)					?[a-f0-9]+
+iMathRx9	@iMath(Rx,100,256)					?[a-f0-9]+
+iMath 643	@iMath(c,123.1)						124
+iMath 644	@iMath(f,123.1)						123
+#extended tests.
+iMath 611a	@iMath(+f2,9.02,2.1701)				11.19
+iMath 611b	@iMath(+2,9.02,2.1701)				11.19
+iMath 611c	@iMath(+2,9.02,2.1701,11.19,T,F)	T

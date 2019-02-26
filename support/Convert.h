@@ -26,8 +26,9 @@ namespace Support {
 	string tostring(int);
 	string tostring(size_t);
 	string tostring(double,size_t=0);
+	string tostring(long double,string);
 	void tostring(string&,int);			//Given an integer, return a string. e.g. 3 => "3"
-	void tostring(string&,size_t);	//Given a natural, return a string. e.g. 3 => "3"
+	void tostring(string&,size_t);		//Given a natural, return a string. e.g. 3 => "3"
 	pair<string,string> split(char, const string&);	   //Given a string, split it at the first given character (destroy the character)
 	bool split(char, const string&, pair<string,string>&);	   //Given a string, split it at the first given character (destroy the character)
 	bool rsplit(char, const string&, pair<string,string>&);	   //Given a string, split it at the last given character (destroy the character)
