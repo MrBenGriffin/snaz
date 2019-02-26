@@ -21,7 +21,7 @@ namespace Support {
 	bool Regex::loaded = false;
 	void* Regex::pcre_lib_handle = nullptr;
 
-	int Regex::re_options = ( PCRE_EXTENDED | PCRE_UTF8 | PCRE_NO_UTF8_CHECK ) & 0x1FFFFFF;
+	int Regex::re_options = ( PCRE_UTF8 | PCRE_NO_UTF8_CHECK ) & 0x1FFFFFF; // PCRE_EXTENDED will see spaces as comments.
 	int Regex::mt_options = 0 & 0x1FFFFFF;
 	pcre* (*Regex::pcre_compile)(const char*, int, const char**, int*, const unsigned char*) = nullptr;
 	int (*Regex::pcre_exec)(const pcre*,const pcre_extra*,PCRE_SPTR,int,int,int,int*,int) = nullptr;

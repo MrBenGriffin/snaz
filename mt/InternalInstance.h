@@ -26,6 +26,7 @@ namespace mt {
 
 		void generate(plist&,const mtext*,string,string);
 
+		bool     		boolParm(size_t,bool=false); //a boolean value (with a default).
 		std::string     parm(size_t);
 		const mtext*    praw(size_t);
 		void            expand(size_t);

@@ -35,6 +35,18 @@ namespace mt {
 		}
 	}
 
+	bool InternalInstance::boolParm(size_t i,bool _default) {
+		if(i > parms->size()) {
+			return _default;
+		} else {
+			std::ostringstream result;
+			Driver::expand((*parms)[i - 1],*errs,result, *context);
+			std::string val = result.str();
+			return val == "true" || val == "1";
+		}
+	}
+
+
 	std::string InternalInstance::parm(size_t i) {
 		std::ostringstream result;
 		if(i > parms->size()) {

@@ -284,6 +284,8 @@ namespace mt {
 	}
 
 	void iFile::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
+		//second parameter is 'true' or 'false' - (default = false) and represents whether
+		//or not to treat the file as macrotext.
 		InternalInstance my(this,e,o,instance,context);
 		Path base = Env::e().basedir(Build);
 		std::string filename = my.parm(1);
@@ -291,13 +293,18 @@ namespace mt {
 		if(file.makeRelativeTo(base)) {
 			file.makeAbsoluteFrom(base);
 			if(file.exists()) {
-				string program = file.readFile();
-				std::istringstream code(program);
-				mt::Driver driver(e,code,Definition::test_adv(program));
-				mt::mtext structure = driver.parse(e,false); //bool advanced, bool strip
-				ostringstream result;
-				driver.expand(result,e,file.output(false));
-				my.set(result.str());
+				string contents = file.readFile();
+				bool evaluate = my.boolParm(2);
+				if(evaluate) {
+					std::istringstream code(contents);
+					mt::Driver driver(e,code,Definition::test_adv(contents));
+					mt::mtext structure = driver.parse(e,false); //bool advanced, bool strip
+					ostringstream result;
+					driver.expand(result,e,file.output(false));
+					my.set(result.str());
+				} else {
+					my.set(contents);
+				}
 			} else {
 				e << Message(error,"File "+ file.output(true) +" was not found.");
 			}

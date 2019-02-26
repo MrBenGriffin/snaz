@@ -61,7 +61,7 @@ namespace mt {
 		void expand(Support::Messages&,mtext&,Instance&,mstack&);
 	};
 	struct iFile : public Internal {
-		iFile() : Internal("iFile",1,6) {}
+		iFile() : Internal("iFile",1,2) {}
 		void expand(Support::Messages&,mtext&,Instance&,mstack&);
 	};
 	struct iField : public Internal {

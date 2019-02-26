@@ -132,6 +132,12 @@ iRgx_0013		@iRegex((x+),[\1],txxy)											t[xx]y
 iRgx_0011		@iRegex((\d+)([;]?),[\1@iRembr(\2)],A:44;B:554;C:1)			A:[44;]B:[554;]C:[1]
 iRgx_0012		@iRegex((\d+)([;]?),[\1@iEq(\2,;,+,-)],A:44;B:554;C:1)		A:[44+]B:[554+]C:[1-]
 
+//iRgNoX :Ensure PCRE_EXTENDED is OFF (otherwise spaces are ignored).
+iRgNoX_001	@iRegex([\/\w]+\.txt,X,/Users/ben/snaz/tests/tost.txt)					X
+iRgNoX_002	@iRegex(A B,X,A B)														X
+iRgNoX_003	@iRegex(A B,X,A BY)														XY
+iRgNoX_004	@iRegex(A B,X,A B)														X
+
 iRgx_001	@iRegex(s,b,dd)																				dd
 iRgx_002	@iRegex(P,fun,this is P)																	this is fun
 iRgx_003	@iRegex((x+),[\1],txxy)																		t[xx]y
@@ -139,5 +145,6 @@ iRgx_004	@iRegex(xx,y,txxy)																			tyy
 iRgx_005	@iRegex({|(?:[0-9]+:)*([0-9]+):|},{|\1|},12:174:54:505:19:233:134:234:809:)					809
 iRgx_006	@iRegex((?:[0-9]+:)*([0-9]+):|},{|\1|},12:)													12
 iRgx_007	@iRegex({|[0-9:]*:([0-9]+):$|},{|\1|},[])													[]
-iRgx_008	@iRegex(n="(?!prx")[^"]+" v="[^"]+",,n="prx" v="x_";n="key" v="4";)							n="prx" v="x_";n="key" v="4";
+//iRgx_008: delete all list items that have names that aren't exactly prx
+iRgx_008	@iRegex(n="(?!prx")[^"]+" v="[^"]+";,,n="prx" v="x_";n="key" v="4";n="xrp" v="5";)			n="prx" v="x_";
 iRgx_009	@entx(&nbsp;)																				&#x00A0;
