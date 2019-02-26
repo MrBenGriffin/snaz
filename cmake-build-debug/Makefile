@@ -393,6 +393,141 @@ mt/InternalInstance.cpp.s:
 	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalInstance.cpp.s
 .PHONY : mt/InternalInstance.cpp.s
 
+mt/InternalsBuild.o: mt/InternalsBuild.cpp.o
+
+.PHONY : mt/InternalsBuild.o
+
+# target to build an object file
+mt/InternalsBuild.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalsBuild.cpp.o
+.PHONY : mt/InternalsBuild.cpp.o
+
+mt/InternalsBuild.i: mt/InternalsBuild.cpp.i
+
+.PHONY : mt/InternalsBuild.i
+
+# target to preprocess a source file
+mt/InternalsBuild.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalsBuild.cpp.i
+.PHONY : mt/InternalsBuild.cpp.i
+
+mt/InternalsBuild.s: mt/InternalsBuild.cpp.s
+
+.PHONY : mt/InternalsBuild.s
+
+# target to generate assembly for a file
+mt/InternalsBuild.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalsBuild.cpp.s
+.PHONY : mt/InternalsBuild.cpp.s
+
+mt/InternalsEncoder.o: mt/InternalsEncoder.cpp.o
+
+.PHONY : mt/InternalsEncoder.o
+
+# target to build an object file
+mt/InternalsEncoder.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalsEncoder.cpp.o
+.PHONY : mt/InternalsEncoder.cpp.o
+
+mt/InternalsEncoder.i: mt/InternalsEncoder.cpp.i
+
+.PHONY : mt/InternalsEncoder.i
+
+# target to preprocess a source file
+mt/InternalsEncoder.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalsEncoder.cpp.i
+.PHONY : mt/InternalsEncoder.cpp.i
+
+mt/InternalsEncoder.s: mt/InternalsEncoder.cpp.s
+
+.PHONY : mt/InternalsEncoder.s
+
+# target to generate assembly for a file
+mt/InternalsEncoder.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalsEncoder.cpp.s
+.PHONY : mt/InternalsEncoder.cpp.s
+
+mt/InternalsMedia.o: mt/InternalsMedia.cpp.o
+
+.PHONY : mt/InternalsMedia.o
+
+# target to build an object file
+mt/InternalsMedia.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalsMedia.cpp.o
+.PHONY : mt/InternalsMedia.cpp.o
+
+mt/InternalsMedia.i: mt/InternalsMedia.cpp.i
+
+.PHONY : mt/InternalsMedia.i
+
+# target to preprocess a source file
+mt/InternalsMedia.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalsMedia.cpp.i
+.PHONY : mt/InternalsMedia.cpp.i
+
+mt/InternalsMedia.s: mt/InternalsMedia.cpp.s
+
+.PHONY : mt/InternalsMedia.s
+
+# target to generate assembly for a file
+mt/InternalsMedia.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalsMedia.cpp.s
+.PHONY : mt/InternalsMedia.cpp.s
+
+mt/InternalsNode.o: mt/InternalsNode.cpp.o
+
+.PHONY : mt/InternalsNode.o
+
+# target to build an object file
+mt/InternalsNode.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalsNode.cpp.o
+.PHONY : mt/InternalsNode.cpp.o
+
+mt/InternalsNode.i: mt/InternalsNode.cpp.i
+
+.PHONY : mt/InternalsNode.i
+
+# target to preprocess a source file
+mt/InternalsNode.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalsNode.cpp.i
+.PHONY : mt/InternalsNode.cpp.i
+
+mt/InternalsNode.s: mt/InternalsNode.cpp.s
+
+.PHONY : mt/InternalsNode.s
+
+# target to generate assembly for a file
+mt/InternalsNode.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalsNode.cpp.s
+.PHONY : mt/InternalsNode.cpp.s
+
+mt/InternalsNodeTree.o: mt/InternalsNodeTree.cpp.o
+
+.PHONY : mt/InternalsNodeTree.o
+
+# target to build an object file
+mt/InternalsNodeTree.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalsNodeTree.cpp.o
+.PHONY : mt/InternalsNodeTree.cpp.o
+
+mt/InternalsNodeTree.i: mt/InternalsNodeTree.cpp.i
+
+.PHONY : mt/InternalsNodeTree.i
+
+# target to preprocess a source file
+mt/InternalsNodeTree.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalsNodeTree.cpp.i
+.PHONY : mt/InternalsNodeTree.cpp.i
+
+mt/InternalsNodeTree.s: mt/InternalsNodeTree.cpp.s
+
+.PHONY : mt/InternalsNodeTree.s
+
+# target to generate assembly for a file
+mt/InternalsNodeTree.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalsNodeTree.cpp.s
+.PHONY : mt/InternalsNodeTree.cpp.s
+
 mt/InternalsStorage.o: mt/InternalsStorage.cpp.o
 
 .PHONY : mt/InternalsStorage.o
@@ -446,6 +581,33 @@ mt/InternalsString.s: mt/InternalsString.cpp.s
 mt/InternalsString.cpp.s:
 	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalsString.cpp.s
 .PHONY : mt/InternalsString.cpp.s
+
+mt/InternalsTaxonomy.o: mt/InternalsTaxonomy.cpp.o
+
+.PHONY : mt/InternalsTaxonomy.o
+
+# target to build an object file
+mt/InternalsTaxonomy.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalsTaxonomy.cpp.o
+.PHONY : mt/InternalsTaxonomy.cpp.o
+
+mt/InternalsTaxonomy.i: mt/InternalsTaxonomy.cpp.i
+
+.PHONY : mt/InternalsTaxonomy.i
+
+# target to preprocess a source file
+mt/InternalsTaxonomy.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalsTaxonomy.cpp.i
+.PHONY : mt/InternalsTaxonomy.cpp.i
+
+mt/InternalsTaxonomy.s: mt/InternalsTaxonomy.cpp.s
+
+.PHONY : mt/InternalsTaxonomy.s
+
+# target to generate assembly for a file
+mt/InternalsTaxonomy.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/InternalsTaxonomy.cpp.s
+.PHONY : mt/InternalsTaxonomy.cpp.s
 
 mt/InternalsUtility.o: mt/InternalsUtility.cpp.o
 
@@ -972,12 +1134,30 @@ help:
 	@echo "... mt/InternalInstance.o"
 	@echo "... mt/InternalInstance.i"
 	@echo "... mt/InternalInstance.s"
+	@echo "... mt/InternalsBuild.o"
+	@echo "... mt/InternalsBuild.i"
+	@echo "... mt/InternalsBuild.s"
+	@echo "... mt/InternalsEncoder.o"
+	@echo "... mt/InternalsEncoder.i"
+	@echo "... mt/InternalsEncoder.s"
+	@echo "... mt/InternalsMedia.o"
+	@echo "... mt/InternalsMedia.i"
+	@echo "... mt/InternalsMedia.s"
+	@echo "... mt/InternalsNode.o"
+	@echo "... mt/InternalsNode.i"
+	@echo "... mt/InternalsNode.s"
+	@echo "... mt/InternalsNodeTree.o"
+	@echo "... mt/InternalsNodeTree.i"
+	@echo "... mt/InternalsNodeTree.s"
 	@echo "... mt/InternalsStorage.o"
 	@echo "... mt/InternalsStorage.i"
 	@echo "... mt/InternalsStorage.s"
 	@echo "... mt/InternalsString.o"
 	@echo "... mt/InternalsString.i"
 	@echo "... mt/InternalsString.s"
+	@echo "... mt/InternalsTaxonomy.o"
+	@echo "... mt/InternalsTaxonomy.i"
+	@echo "... mt/InternalsTaxonomy.s"
 	@echo "... mt/InternalsUtility.o"
 	@echo "... mt/InternalsUtility.i"
 	@echo "... mt/InternalsUtility.s"

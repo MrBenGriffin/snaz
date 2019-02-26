@@ -1,4 +1,4 @@
 #iFile
-iFile 001	[@iFile(test.txt)]															[hello @iRegex(w,W,world)]
-iFile 001	[@iFile(test.txt,true)]														[hello World]
-iFile 002	[@iFile(tost.txt)]															!1?error: File [\/\w]+\.txt was not found.
+iFile 001	[@iFile(test.txt)]				[hello @iRegex(w,W,world)]
+iFile 002	[@iFile(test.txt,true)]			[hello World]
+iFile 003	[@iFile(tost.txt)]				!1?error: File [\/\w]+\.txt was not found.

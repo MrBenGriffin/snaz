@@ -33,6 +33,12 @@ file(REMOVE_RECURSE
   "CMakeFiles/macrotext.dir/support/File.cpp.o"
   "CMakeFiles/macrotext.dir/support/Date.cpp.o"
   "CMakeFiles/macrotext.dir/support/Env.cpp.o"
+  "CMakeFiles/macrotext.dir/mt/InternalsEncoder.cpp.o"
+  "CMakeFiles/macrotext.dir/mt/InternalsNodeTree.cpp.o"
+  "CMakeFiles/macrotext.dir/mt/InternalsBuild.cpp.o"
+  "CMakeFiles/macrotext.dir/mt/InternalsNode.cpp.o"
+  "CMakeFiles/macrotext.dir/mt/InternalsMedia.cpp.o"
+  "CMakeFiles/macrotext.dir/mt/InternalsTaxonomy.cpp.o"
   "macrotext.pdb"
   "macrotext"
 )
