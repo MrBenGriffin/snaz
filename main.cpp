@@ -12,6 +12,10 @@
 
 #include "mt/mt.h"
 
+// Currently using the following environment variables...
+// LIBMYSQLCRSO=/usr/local/mysql/lib/libmysqlclient.dylib
+// SQL_CONFIG_FILE=/Users/ben/Desktop/my.cnf
+
 int main( const int argc, const char **argv ) {
 	Support::Env& env = Support::Env::e();
 	env.startup(argc,argv);
@@ -25,3 +29,4 @@ int main( const int argc, const char **argv ) {
 	log.str(std::cout);
 	return( EXIT_SUCCESS );
 }
+

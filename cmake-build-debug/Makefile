@@ -717,6 +717,114 @@ mt/Wss.cpp.s:
 	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Wss.cpp.s
 .PHONY : mt/Wss.cpp.s
 
+node/Node.o: node/Node.cpp.o
+
+.PHONY : node/Node.o
+
+# target to build an object file
+node/Node.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/node/Node.cpp.o
+.PHONY : node/Node.cpp.o
+
+node/Node.i: node/Node.cpp.i
+
+.PHONY : node/Node.i
+
+# target to preprocess a source file
+node/Node.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/node/Node.cpp.i
+.PHONY : node/Node.cpp.i
+
+node/Node.s: node/Node.cpp.s
+
+.PHONY : node/Node.s
+
+# target to generate assembly for a file
+node/Node.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/node/Node.cpp.s
+.PHONY : node/Node.cpp.s
+
+node/NodeFilename.o: node/NodeFilename.cpp.o
+
+.PHONY : node/NodeFilename.o
+
+# target to build an object file
+node/NodeFilename.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/node/NodeFilename.cpp.o
+.PHONY : node/NodeFilename.cpp.o
+
+node/NodeFilename.i: node/NodeFilename.cpp.i
+
+.PHONY : node/NodeFilename.i
+
+# target to preprocess a source file
+node/NodeFilename.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/node/NodeFilename.cpp.i
+.PHONY : node/NodeFilename.cpp.i
+
+node/NodeFilename.s: node/NodeFilename.cpp.s
+
+.PHONY : node/NodeFilename.s
+
+# target to generate assembly for a file
+node/NodeFilename.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/node/NodeFilename.cpp.s
+.PHONY : node/NodeFilename.cpp.s
+
+node/NodeLocator.o: node/NodeLocator.cpp.o
+
+.PHONY : node/NodeLocator.o
+
+# target to build an object file
+node/NodeLocator.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/node/NodeLocator.cpp.o
+.PHONY : node/NodeLocator.cpp.o
+
+node/NodeLocator.i: node/NodeLocator.cpp.i
+
+.PHONY : node/NodeLocator.i
+
+# target to preprocess a source file
+node/NodeLocator.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/node/NodeLocator.cpp.i
+.PHONY : node/NodeLocator.cpp.i
+
+node/NodeLocator.s: node/NodeLocator.cpp.s
+
+.PHONY : node/NodeLocator.s
+
+# target to generate assembly for a file
+node/NodeLocator.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/node/NodeLocator.cpp.s
+.PHONY : node/NodeLocator.cpp.s
+
+node/NodeVal.o: node/NodeVal.cpp.o
+
+.PHONY : node/NodeVal.o
+
+# target to build an object file
+node/NodeVal.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/node/NodeVal.cpp.o
+.PHONY : node/NodeVal.cpp.o
+
+node/NodeVal.i: node/NodeVal.cpp.i
+
+.PHONY : node/NodeVal.i
+
+# target to preprocess a source file
+node/NodeVal.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/node/NodeVal.cpp.i
+.PHONY : node/NodeVal.cpp.i
+
+node/NodeVal.s: node/NodeVal.cpp.s
+
+.PHONY : node/NodeVal.s
+
+# target to generate assembly for a file
+node/NodeVal.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/node/NodeVal.cpp.s
+.PHONY : node/NodeVal.cpp.s
+
 parser.tab.o: parser.tab.cpp.o
 
 .PHONY : parser.tab.o
@@ -1332,6 +1440,18 @@ help:
 	@echo "... mt/Wss.o"
 	@echo "... mt/Wss.i"
 	@echo "... mt/Wss.s"
+	@echo "... node/Node.o"
+	@echo "... node/Node.i"
+	@echo "... node/Node.s"
+	@echo "... node/NodeFilename.o"
+	@echo "... node/NodeFilename.i"
+	@echo "... node/NodeFilename.s"
+	@echo "... node/NodeLocator.o"
+	@echo "... node/NodeLocator.i"
+	@echo "... node/NodeLocator.s"
+	@echo "... node/NodeVal.o"
+	@echo "... node/NodeVal.i"
+	@echo "... node/NodeVal.s"
 	@echo "... parser.tab.o"
 	@echo "... parser.tab.i"
 	@echo "... parser.tab.s"

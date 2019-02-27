@@ -70,6 +70,7 @@ namespace Support {
 		Path basedir(buildspace);
 		void basedir(string&,buildspace,bool,bool);
 		void setTesting(bool flag) { Testing = flag; }
+		size_t techID() { return TechnologyID; }
 //		Path root(string append = "");
 	};
 

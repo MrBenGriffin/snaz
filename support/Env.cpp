@@ -19,6 +19,7 @@
 #include "Timing.h"
 #include "Message.h"
 #include "mt/Definition.h"
+#include "node/NodeLocator.h"
 
 namespace Support {
 	using namespace std;
@@ -201,7 +202,7 @@ namespace Support {
 					case 'D': {
 //						Messages::setdebug(true);
 //						showMediaReqs = true;
-//						showPaths = true;
+						NodeLocator::showPaths = true;
 //						showTemplate = true;
 //						showQueries = true;
 //						showProfile = true; //NOW used to show min/max macro parameter warnings.
@@ -243,7 +244,7 @@ namespace Support {
 						tolist(nodelist,parameter.substr(2));
 						break;
 					case 'p':
-//						showPaths = true;
+						NodeLocator::showPaths = true;
 						break;
 					case 'P':
 						IsFinal = false;
@@ -278,7 +279,7 @@ namespace Support {
 				}
 			} else {
 				//report arg didn't start with a -
-				//			*Logger::log << warn << "Parameter (" << parameter << ") is unknown. Parameters should be prefixed with a '-'" << Log::end; //cannot use Logger here
+				//			*Logger::log << warn << "Parameter (" << parameter << ") is unknown. Parameters should be prefixed with a '-'" ); //cannot use Logger here
 			}
 		}
 //		TODO:: get the from id stuff..

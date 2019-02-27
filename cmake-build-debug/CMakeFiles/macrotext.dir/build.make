@@ -620,6 +620,58 @@ CMakeFiles/macrotext.dir/support/db/MySQLQuery.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/db/MySQLQuery.cpp.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/db/MySQLQuery.cpp -o CMakeFiles/macrotext.dir/support/db/MySQLQuery.cpp.s
 
+CMakeFiles/macrotext.dir/node/Node.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/node/Node.cpp.o: ../node/Node.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_46) "Building CXX object CMakeFiles/macrotext.dir/node/Node.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/node/Node.cpp.o -c /Users/ben/CLionProjects/snaz/node/Node.cpp
+
+CMakeFiles/macrotext.dir/node/Node.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/node/Node.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/node/Node.cpp > CMakeFiles/macrotext.dir/node/Node.cpp.i
+
+CMakeFiles/macrotext.dir/node/Node.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/node/Node.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/node/Node.cpp -o CMakeFiles/macrotext.dir/node/Node.cpp.s
+
+CMakeFiles/macrotext.dir/node/NodeFilename.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/node/NodeFilename.cpp.o: ../node/NodeFilename.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_47) "Building CXX object CMakeFiles/macrotext.dir/node/NodeFilename.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/node/NodeFilename.cpp.o -c /Users/ben/CLionProjects/snaz/node/NodeFilename.cpp
+
+CMakeFiles/macrotext.dir/node/NodeFilename.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/node/NodeFilename.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/node/NodeFilename.cpp > CMakeFiles/macrotext.dir/node/NodeFilename.cpp.i
+
+CMakeFiles/macrotext.dir/node/NodeFilename.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/node/NodeFilename.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/node/NodeFilename.cpp -o CMakeFiles/macrotext.dir/node/NodeFilename.cpp.s
+
+CMakeFiles/macrotext.dir/node/NodeLocator.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/node/NodeLocator.cpp.o: ../node/NodeLocator.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_48) "Building CXX object CMakeFiles/macrotext.dir/node/NodeLocator.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/node/NodeLocator.cpp.o -c /Users/ben/CLionProjects/snaz/node/NodeLocator.cpp
+
+CMakeFiles/macrotext.dir/node/NodeLocator.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/node/NodeLocator.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/node/NodeLocator.cpp > CMakeFiles/macrotext.dir/node/NodeLocator.cpp.i
+
+CMakeFiles/macrotext.dir/node/NodeLocator.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/node/NodeLocator.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/node/NodeLocator.cpp -o CMakeFiles/macrotext.dir/node/NodeLocator.cpp.s
+
+CMakeFiles/macrotext.dir/node/NodeVal.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/node/NodeVal.cpp.o: ../node/NodeVal.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_49) "Building CXX object CMakeFiles/macrotext.dir/node/NodeVal.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/node/NodeVal.cpp.o -c /Users/ben/CLionProjects/snaz/node/NodeVal.cpp
+
+CMakeFiles/macrotext.dir/node/NodeVal.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/node/NodeVal.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/node/NodeVal.cpp > CMakeFiles/macrotext.dir/node/NodeVal.cpp.i
+
+CMakeFiles/macrotext.dir/node/NodeVal.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/node/NodeVal.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/node/NodeVal.cpp -o CMakeFiles/macrotext.dir/node/NodeVal.cpp.s
+
 # Object files for target macrotext
 macrotext_OBJECTS = \
 "CMakeFiles/macrotext.dir/parser.tab.cpp.o" \
@@ -663,7 +715,11 @@ macrotext_OBJECTS = \
 "CMakeFiles/macrotext.dir/support/db/Connection.cpp.o" \
 "CMakeFiles/macrotext.dir/support/db/Query.cpp.o" \
 "CMakeFiles/macrotext.dir/support/db/MySQLConnection.cpp.o" \
-"CMakeFiles/macrotext.dir/support/db/MySQLQuery.cpp.o"
+"CMakeFiles/macrotext.dir/support/db/MySQLQuery.cpp.o" \
+"CMakeFiles/macrotext.dir/node/Node.cpp.o" \
+"CMakeFiles/macrotext.dir/node/NodeFilename.cpp.o" \
+"CMakeFiles/macrotext.dir/node/NodeLocator.cpp.o" \
+"CMakeFiles/macrotext.dir/node/NodeVal.cpp.o"
 
 # External object files for target macrotext
 macrotext_EXTERNAL_OBJECTS =
@@ -710,9 +766,13 @@ macrotext: CMakeFiles/macrotext.dir/support/db/Connection.cpp.o
 macrotext: CMakeFiles/macrotext.dir/support/db/Query.cpp.o
 macrotext: CMakeFiles/macrotext.dir/support/db/MySQLConnection.cpp.o
 macrotext: CMakeFiles/macrotext.dir/support/db/MySQLQuery.cpp.o
+macrotext: CMakeFiles/macrotext.dir/node/Node.cpp.o
+macrotext: CMakeFiles/macrotext.dir/node/NodeFilename.cpp.o
+macrotext: CMakeFiles/macrotext.dir/node/NodeLocator.cpp.o
+macrotext: CMakeFiles/macrotext.dir/node/NodeVal.cpp.o
 macrotext: CMakeFiles/macrotext.dir/build.make
 macrotext: CMakeFiles/macrotext.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_46) "Linking CXX executable macrotext"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_50) "Linking CXX executable macrotext"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/macrotext.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

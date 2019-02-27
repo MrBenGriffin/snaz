@@ -45,6 +45,10 @@ file(REMOVE_RECURSE
   "CMakeFiles/macrotext.dir/support/db/Query.cpp.o"
   "CMakeFiles/macrotext.dir/support/db/MySQLConnection.cpp.o"
   "CMakeFiles/macrotext.dir/support/db/MySQLQuery.cpp.o"
+  "CMakeFiles/macrotext.dir/node/Node.cpp.o"
+  "CMakeFiles/macrotext.dir/node/NodeFilename.cpp.o"
+  "CMakeFiles/macrotext.dir/node/NodeLocator.cpp.o"
+  "CMakeFiles/macrotext.dir/node/NodeVal.cpp.o"
   "macrotext.pdb"
   "macrotext"
 )

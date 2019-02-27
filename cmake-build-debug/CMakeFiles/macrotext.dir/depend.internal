@@ -37,7 +37,6 @@ CMakeFiles/macrotext.dir/main.cpp.o
  /Users/ben/CLionProjects/snaz/support/Storage.h
  /Users/ben/CLionProjects/snaz/support/Timing.h
  /Users/ben/CLionProjects/snaz/support/db/Connection.h
- /Users/ben/CLionProjects/snaz/support/db/Service.h
  /Users/ben/CLionProjects/snaz/support/db/ServiceFactory.h
  /Users/ben/CLionProjects/snaz/test.h
  location.hh
@@ -405,6 +404,24 @@ CMakeFiles/macrotext.dir/mt/Wss.cpp.o
  /Users/ben/CLionProjects/snaz/mt/mt.h
  location.hh
  parser.tab.hpp
+CMakeFiles/macrotext.dir/node/Node.cpp.o
+ ..//support/Message.h
+ /Users/ben/CLionProjects/snaz/node/Node.cpp
+ /Users/ben/CLionProjects/snaz/node/Node.h
+ /Users/ben/CLionProjects/snaz/node/nodefilename.h
+CMakeFiles/macrotext.dir/node/NodeFilename.cpp.o
+ ..//support/Message.h
+ /Users/ben/CLionProjects/snaz/node/BadNodeLocatorPath.h
+ /Users/ben/CLionProjects/snaz/node/Node.h
+ /Users/ben/CLionProjects/snaz/node/NodeFilename.cpp
+ /Users/ben/CLionProjects/snaz/node/NodeFilename.h
+ /Users/ben/CLionProjects/snaz/node/nodefilename.h
+CMakeFiles/macrotext.dir/node/NodeLocator.cpp.o
+ ..//support/Message.h
+ /Users/ben/CLionProjects/snaz/node/Node.h
+ /Users/ben/CLionProjects/snaz/node/NodeLocator.cpp
+ /Users/ben/CLionProjects/snaz/node/NodeLocator.h
+ /Users/ben/CLionProjects/snaz/node/nodefilename.h
 CMakeFiles/macrotext.dir/parser.tab.cpp.o
  ..//mt/Driver.h
  ..//mt/Scanner.h
@@ -441,6 +458,7 @@ CMakeFiles/macrotext.dir/support/Encode.cpp.o
  /Users/ben/CLionProjects/snaz/support/Fandr.h
 CMakeFiles/macrotext.dir/support/Env.cpp.o
  ..//mt/Definition.h
+ ..//node/NodeLocator.h
  ..//support/Message.h
  ..//support/Storage.h
  ../mt/Content.h
@@ -454,6 +472,8 @@ CMakeFiles/macrotext.dir/support/Env.cpp.o
  ../mt/Wss.h
  ../mt/declarations.h
  ../mt/mt.h
+ ../node/Node.h
+ ../node/nodefilename.h
  /Users/ben/CLionProjects/snaz/support/Convert.h
  /Users/ben/CLionProjects/snaz/support/Env.cpp
  /Users/ben/CLionProjects/snaz/support/Env.h

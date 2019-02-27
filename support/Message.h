@@ -36,7 +36,6 @@ namespace Support {
 		deque<Message> list;
 	public:
 		static void setVerbosity(size_t v) { Verbosity = v;}
-		static size_t verbosity() { return Verbosity;}
 		static void startup(bool);
 		static void defer(bool defer) { Deferred = defer; }
 
@@ -46,6 +45,7 @@ namespace Support {
 		void suppress(bool s=true) { _suppressed=s; }
 		void prefix(Message);
 		void enscope(string);
+		size_t verbosity() { return Verbosity;}
 		string line(size_t) const;
 
 		Messages& operator<< (Message);

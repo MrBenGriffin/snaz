@@ -36,7 +36,6 @@ CMakeFiles/macrotext.dir/main.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../support/Storage.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../support/Timing.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../support/db/Connection.h
-CMakeFiles/macrotext.dir/main.cpp.o: ../support/db/Service.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../support/db/ServiceFactory.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../test.h
 CMakeFiles/macrotext.dir/main.cpp.o: location.hh
@@ -405,6 +404,24 @@ CMakeFiles/macrotext.dir/mt/Wss.cpp.o: ../mt/mt.h
 CMakeFiles/macrotext.dir/mt/Wss.cpp.o: location.hh
 CMakeFiles/macrotext.dir/mt/Wss.cpp.o: parser.tab.hpp
 
+CMakeFiles/macrotext.dir/node/Node.cpp.o: ../support/Message.h
+CMakeFiles/macrotext.dir/node/Node.cpp.o: ../node/Node.cpp
+CMakeFiles/macrotext.dir/node/Node.cpp.o: ../node/Node.h
+CMakeFiles/macrotext.dir/node/Node.cpp.o: ../node/nodefilename.h
+
+CMakeFiles/macrotext.dir/node/NodeFilename.cpp.o: ../support/Message.h
+CMakeFiles/macrotext.dir/node/NodeFilename.cpp.o: ../node/BadNodeLocatorPath.h
+CMakeFiles/macrotext.dir/node/NodeFilename.cpp.o: ../node/Node.h
+CMakeFiles/macrotext.dir/node/NodeFilename.cpp.o: ../node/NodeFilename.cpp
+CMakeFiles/macrotext.dir/node/NodeFilename.cpp.o: ../node/NodeFilename.h
+CMakeFiles/macrotext.dir/node/NodeFilename.cpp.o: ../node/nodefilename.h
+
+CMakeFiles/macrotext.dir/node/NodeLocator.cpp.o: ../support/Message.h
+CMakeFiles/macrotext.dir/node/NodeLocator.cpp.o: ../node/Node.h
+CMakeFiles/macrotext.dir/node/NodeLocator.cpp.o: ../node/NodeLocator.cpp
+CMakeFiles/macrotext.dir/node/NodeLocator.cpp.o: ../node/NodeLocator.h
+CMakeFiles/macrotext.dir/node/NodeLocator.cpp.o: ../node/nodefilename.h
+
 CMakeFiles/macrotext.dir/parser.tab.cpp.o: ../mt/Driver.h
 CMakeFiles/macrotext.dir/parser.tab.cpp.o: ../mt/Scanner.h
 CMakeFiles/macrotext.dir/parser.tab.cpp.o: ../support/Message.h
@@ -440,6 +457,7 @@ CMakeFiles/macrotext.dir/support/Encode.cpp.o: ../support/Encode.h
 CMakeFiles/macrotext.dir/support/Encode.cpp.o: ../support/Fandr.h
 
 CMakeFiles/macrotext.dir/support/Env.cpp.o: ../mt/Definition.h
+CMakeFiles/macrotext.dir/support/Env.cpp.o: ../node/NodeLocator.h
 CMakeFiles/macrotext.dir/support/Env.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/support/Env.cpp.o: ../support/Storage.h
 CMakeFiles/macrotext.dir/support/Env.cpp.o: ../mt/Content.h
@@ -453,6 +471,8 @@ CMakeFiles/macrotext.dir/support/Env.cpp.o: ../mt/Text.h
 CMakeFiles/macrotext.dir/support/Env.cpp.o: ../mt/Wss.h
 CMakeFiles/macrotext.dir/support/Env.cpp.o: ../mt/declarations.h
 CMakeFiles/macrotext.dir/support/Env.cpp.o: ../mt/mt.h
+CMakeFiles/macrotext.dir/support/Env.cpp.o: ../node/Node.h
+CMakeFiles/macrotext.dir/support/Env.cpp.o: ../node/nodefilename.h
 CMakeFiles/macrotext.dir/support/Env.cpp.o: ../support/Convert.h
 CMakeFiles/macrotext.dir/support/Env.cpp.o: ../support/Env.cpp
 CMakeFiles/macrotext.dir/support/Env.cpp.o: ../support/Env.h

@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="macrotext" type="CMakeRunConfiguration" factoryName="Application" WORKING_DIR="file://$PROJECT_DIR$" PASS_PARENT_ENVS_2="true" PROJECT_NAME="macrotext" TARGET_NAME="macrotext" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="macrotext" RUN_TARGET_NAME="macrotext">
+    <envs>
+      <env name="LIBMYSQLCRSO" value="/usr/local/mysql/lib/libmysqlclient.dylib" />
+      <env name="SQL_CONFIG_FILE" value="$USER_HOME$/Desktop/my.cnf" />
+    </envs>
+    <method v="2">
+      <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+    </method>
+  </configuration>
+</component>
