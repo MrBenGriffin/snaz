@@ -286,7 +286,7 @@ namespace Support {
 //		for (unsigned long &i : nodelist) {
 //			if (i != 0) { fromID.insert(fromID.begin(), i); }
 //		}
-		Messages::defer( NodeSet == Singles && (Messages::verbosity() < 2) );
+		Messages::defer( NodeSet == Singles && (Messages::verboseness() < 2) );
 	}
 
 }

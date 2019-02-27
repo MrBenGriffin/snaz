@@ -38,6 +38,7 @@ namespace Support {
 		static void setVerbosity(size_t v) { Verbosity = v;}
 		static void startup(bool);
 		static void defer(bool defer) { Deferred = defer; }
+		static size_t verboseness() { return Verbosity;}
 
 		Messages() : _suppressed(false),_marked(false) {}
 		bool marked() const { return _marked; }

@@ -10,7 +10,7 @@
 #include <fstream>
 #include <sstream>
 
-//#include "nodeval.h"
+#include "NodeVal.h"
 #include "NodeFilename.h"
 #include "support/Message.h"
 #include "support/db/Connection.h"
