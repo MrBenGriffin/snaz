@@ -542,6 +542,84 @@ CMakeFiles/macrotext.dir/mt/InternalsTaxonomy.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/mt/InternalsTaxonomy.cpp.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/mt/InternalsTaxonomy.cpp -o CMakeFiles/macrotext.dir/mt/InternalsTaxonomy.cpp.s
 
+CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.o: ../support/db/ServiceFactory.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_40) "Building CXX object CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.o -c /Users/ben/CLionProjects/snaz/support/db/ServiceFactory.cpp
+
+CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/db/ServiceFactory.cpp > CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.i
+
+CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/db/ServiceFactory.cpp -o CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.s
+
+CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.o: ../support/db/MySQLService.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_41) "Building CXX object CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.o -c /Users/ben/CLionProjects/snaz/support/db/MySQLService.cpp
+
+CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/db/MySQLService.cpp > CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.i
+
+CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/db/MySQLService.cpp -o CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.s
+
+CMakeFiles/macrotext.dir/support/db/Connection.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/support/db/Connection.cpp.o: ../support/db/Connection.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_42) "Building CXX object CMakeFiles/macrotext.dir/support/db/Connection.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/db/Connection.cpp.o -c /Users/ben/CLionProjects/snaz/support/db/Connection.cpp
+
+CMakeFiles/macrotext.dir/support/db/Connection.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/db/Connection.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/db/Connection.cpp > CMakeFiles/macrotext.dir/support/db/Connection.cpp.i
+
+CMakeFiles/macrotext.dir/support/db/Connection.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/db/Connection.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/db/Connection.cpp -o CMakeFiles/macrotext.dir/support/db/Connection.cpp.s
+
+CMakeFiles/macrotext.dir/support/db/Query.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/support/db/Query.cpp.o: ../support/db/Query.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_43) "Building CXX object CMakeFiles/macrotext.dir/support/db/Query.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/db/Query.cpp.o -c /Users/ben/CLionProjects/snaz/support/db/Query.cpp
+
+CMakeFiles/macrotext.dir/support/db/Query.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/db/Query.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/db/Query.cpp > CMakeFiles/macrotext.dir/support/db/Query.cpp.i
+
+CMakeFiles/macrotext.dir/support/db/Query.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/db/Query.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/db/Query.cpp -o CMakeFiles/macrotext.dir/support/db/Query.cpp.s
+
+CMakeFiles/macrotext.dir/support/db/MySQLConnection.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/support/db/MySQLConnection.cpp.o: ../support/db/MySQLConnection.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_44) "Building CXX object CMakeFiles/macrotext.dir/support/db/MySQLConnection.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/db/MySQLConnection.cpp.o -c /Users/ben/CLionProjects/snaz/support/db/MySQLConnection.cpp
+
+CMakeFiles/macrotext.dir/support/db/MySQLConnection.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/db/MySQLConnection.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/db/MySQLConnection.cpp > CMakeFiles/macrotext.dir/support/db/MySQLConnection.cpp.i
+
+CMakeFiles/macrotext.dir/support/db/MySQLConnection.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/db/MySQLConnection.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/db/MySQLConnection.cpp -o CMakeFiles/macrotext.dir/support/db/MySQLConnection.cpp.s
+
+CMakeFiles/macrotext.dir/support/db/MySQLQuery.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/support/db/MySQLQuery.cpp.o: ../support/db/MySQLQuery.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_45) "Building CXX object CMakeFiles/macrotext.dir/support/db/MySQLQuery.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/db/MySQLQuery.cpp.o -c /Users/ben/CLionProjects/snaz/support/db/MySQLQuery.cpp
+
+CMakeFiles/macrotext.dir/support/db/MySQLQuery.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/db/MySQLQuery.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/db/MySQLQuery.cpp > CMakeFiles/macrotext.dir/support/db/MySQLQuery.cpp.i
+
+CMakeFiles/macrotext.dir/support/db/MySQLQuery.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/db/MySQLQuery.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/db/MySQLQuery.cpp -o CMakeFiles/macrotext.dir/support/db/MySQLQuery.cpp.s
+
 # Object files for target macrotext
 macrotext_OBJECTS = \
 "CMakeFiles/macrotext.dir/parser.tab.cpp.o" \
@@ -579,7 +657,13 @@ macrotext_OBJECTS = \
 "CMakeFiles/macrotext.dir/mt/InternalsBuild.cpp.o" \
 "CMakeFiles/macrotext.dir/mt/InternalsNode.cpp.o" \
 "CMakeFiles/macrotext.dir/mt/InternalsMedia.cpp.o" \
-"CMakeFiles/macrotext.dir/mt/InternalsTaxonomy.cpp.o"
+"CMakeFiles/macrotext.dir/mt/InternalsTaxonomy.cpp.o" \
+"CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.o" \
+"CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.o" \
+"CMakeFiles/macrotext.dir/support/db/Connection.cpp.o" \
+"CMakeFiles/macrotext.dir/support/db/Query.cpp.o" \
+"CMakeFiles/macrotext.dir/support/db/MySQLConnection.cpp.o" \
+"CMakeFiles/macrotext.dir/support/db/MySQLQuery.cpp.o"
 
 # External object files for target macrotext
 macrotext_EXTERNAL_OBJECTS =
@@ -620,9 +704,15 @@ macrotext: CMakeFiles/macrotext.dir/mt/InternalsBuild.cpp.o
 macrotext: CMakeFiles/macrotext.dir/mt/InternalsNode.cpp.o
 macrotext: CMakeFiles/macrotext.dir/mt/InternalsMedia.cpp.o
 macrotext: CMakeFiles/macrotext.dir/mt/InternalsTaxonomy.cpp.o
+macrotext: CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.o
+macrotext: CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.o
+macrotext: CMakeFiles/macrotext.dir/support/db/Connection.cpp.o
+macrotext: CMakeFiles/macrotext.dir/support/db/Query.cpp.o
+macrotext: CMakeFiles/macrotext.dir/support/db/MySQLConnection.cpp.o
+macrotext: CMakeFiles/macrotext.dir/support/db/MySQLQuery.cpp.o
 macrotext: CMakeFiles/macrotext.dir/build.make
 macrotext: CMakeFiles/macrotext.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_40) "Linking CXX executable macrotext"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_46) "Linking CXX executable macrotext"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/macrotext.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

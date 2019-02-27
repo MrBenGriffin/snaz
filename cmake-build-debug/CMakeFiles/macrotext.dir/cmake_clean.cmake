@@ -39,6 +39,12 @@ file(REMOVE_RECURSE
   "CMakeFiles/macrotext.dir/mt/InternalsNode.cpp.o"
   "CMakeFiles/macrotext.dir/mt/InternalsMedia.cpp.o"
   "CMakeFiles/macrotext.dir/mt/InternalsTaxonomy.cpp.o"
+  "CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.o"
+  "CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.o"
+  "CMakeFiles/macrotext.dir/support/db/Connection.cpp.o"
+  "CMakeFiles/macrotext.dir/support/db/Query.cpp.o"
+  "CMakeFiles/macrotext.dir/support/db/MySQLConnection.cpp.o"
+  "CMakeFiles/macrotext.dir/support/db/MySQLQuery.cpp.o"
   "macrotext.pdb"
   "macrotext"
 )

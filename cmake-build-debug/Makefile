@@ -1068,6 +1068,168 @@ support/Timing.cpp.s:
 	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/Timing.cpp.s
 .PHONY : support/Timing.cpp.s
 
+support/db/Connection.o: support/db/Connection.cpp.o
+
+.PHONY : support/db/Connection.o
+
+# target to build an object file
+support/db/Connection.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/db/Connection.cpp.o
+.PHONY : support/db/Connection.cpp.o
+
+support/db/Connection.i: support/db/Connection.cpp.i
+
+.PHONY : support/db/Connection.i
+
+# target to preprocess a source file
+support/db/Connection.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/db/Connection.cpp.i
+.PHONY : support/db/Connection.cpp.i
+
+support/db/Connection.s: support/db/Connection.cpp.s
+
+.PHONY : support/db/Connection.s
+
+# target to generate assembly for a file
+support/db/Connection.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/db/Connection.cpp.s
+.PHONY : support/db/Connection.cpp.s
+
+support/db/MySQLConnection.o: support/db/MySQLConnection.cpp.o
+
+.PHONY : support/db/MySQLConnection.o
+
+# target to build an object file
+support/db/MySQLConnection.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/db/MySQLConnection.cpp.o
+.PHONY : support/db/MySQLConnection.cpp.o
+
+support/db/MySQLConnection.i: support/db/MySQLConnection.cpp.i
+
+.PHONY : support/db/MySQLConnection.i
+
+# target to preprocess a source file
+support/db/MySQLConnection.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/db/MySQLConnection.cpp.i
+.PHONY : support/db/MySQLConnection.cpp.i
+
+support/db/MySQLConnection.s: support/db/MySQLConnection.cpp.s
+
+.PHONY : support/db/MySQLConnection.s
+
+# target to generate assembly for a file
+support/db/MySQLConnection.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/db/MySQLConnection.cpp.s
+.PHONY : support/db/MySQLConnection.cpp.s
+
+support/db/MySQLQuery.o: support/db/MySQLQuery.cpp.o
+
+.PHONY : support/db/MySQLQuery.o
+
+# target to build an object file
+support/db/MySQLQuery.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/db/MySQLQuery.cpp.o
+.PHONY : support/db/MySQLQuery.cpp.o
+
+support/db/MySQLQuery.i: support/db/MySQLQuery.cpp.i
+
+.PHONY : support/db/MySQLQuery.i
+
+# target to preprocess a source file
+support/db/MySQLQuery.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/db/MySQLQuery.cpp.i
+.PHONY : support/db/MySQLQuery.cpp.i
+
+support/db/MySQLQuery.s: support/db/MySQLQuery.cpp.s
+
+.PHONY : support/db/MySQLQuery.s
+
+# target to generate assembly for a file
+support/db/MySQLQuery.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/db/MySQLQuery.cpp.s
+.PHONY : support/db/MySQLQuery.cpp.s
+
+support/db/MySQLService.o: support/db/MySQLService.cpp.o
+
+.PHONY : support/db/MySQLService.o
+
+# target to build an object file
+support/db/MySQLService.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.o
+.PHONY : support/db/MySQLService.cpp.o
+
+support/db/MySQLService.i: support/db/MySQLService.cpp.i
+
+.PHONY : support/db/MySQLService.i
+
+# target to preprocess a source file
+support/db/MySQLService.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.i
+.PHONY : support/db/MySQLService.cpp.i
+
+support/db/MySQLService.s: support/db/MySQLService.cpp.s
+
+.PHONY : support/db/MySQLService.s
+
+# target to generate assembly for a file
+support/db/MySQLService.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.s
+.PHONY : support/db/MySQLService.cpp.s
+
+support/db/Query.o: support/db/Query.cpp.o
+
+.PHONY : support/db/Query.o
+
+# target to build an object file
+support/db/Query.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/db/Query.cpp.o
+.PHONY : support/db/Query.cpp.o
+
+support/db/Query.i: support/db/Query.cpp.i
+
+.PHONY : support/db/Query.i
+
+# target to preprocess a source file
+support/db/Query.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/db/Query.cpp.i
+.PHONY : support/db/Query.cpp.i
+
+support/db/Query.s: support/db/Query.cpp.s
+
+.PHONY : support/db/Query.s
+
+# target to generate assembly for a file
+support/db/Query.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/db/Query.cpp.s
+.PHONY : support/db/Query.cpp.s
+
+support/db/ServiceFactory.o: support/db/ServiceFactory.cpp.o
+
+.PHONY : support/db/ServiceFactory.o
+
+# target to build an object file
+support/db/ServiceFactory.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.o
+.PHONY : support/db/ServiceFactory.cpp.o
+
+support/db/ServiceFactory.i: support/db/ServiceFactory.cpp.i
+
+.PHONY : support/db/ServiceFactory.i
+
+# target to preprocess a source file
+support/db/ServiceFactory.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.i
+.PHONY : support/db/ServiceFactory.cpp.i
+
+support/db/ServiceFactory.s: support/db/ServiceFactory.cpp.s
+
+.PHONY : support/db/ServiceFactory.s
+
+# target to generate assembly for a file
+support/db/ServiceFactory.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.s
+.PHONY : support/db/ServiceFactory.cpp.s
+
 test.o: test.cpp.o
 
 .PHONY : test.o
@@ -1209,6 +1371,24 @@ help:
 	@echo "... support/Timing.o"
 	@echo "... support/Timing.i"
 	@echo "... support/Timing.s"
+	@echo "... support/db/Connection.o"
+	@echo "... support/db/Connection.i"
+	@echo "... support/db/Connection.s"
+	@echo "... support/db/MySQLConnection.o"
+	@echo "... support/db/MySQLConnection.i"
+	@echo "... support/db/MySQLConnection.s"
+	@echo "... support/db/MySQLQuery.o"
+	@echo "... support/db/MySQLQuery.i"
+	@echo "... support/db/MySQLQuery.s"
+	@echo "... support/db/MySQLService.o"
+	@echo "... support/db/MySQLService.i"
+	@echo "... support/db/MySQLService.s"
+	@echo "... support/db/Query.o"
+	@echo "... support/db/Query.i"
+	@echo "... support/db/Query.s"
+	@echo "... support/db/ServiceFactory.o"
+	@echo "... support/db/ServiceFactory.i"
+	@echo "... support/db/ServiceFactory.s"
 	@echo "... test.o"
 	@echo "... test.i"
 	@echo "... test.s"

@@ -35,52 +35,38 @@ namespace Support {
 	}
 
 	bool Regex::startup(Messages& e) {
-		const char *err = nullptr; //necessary IFF script uses pcre.
+		bool err = false; //necessary IFF script uses pcre.
 		if ( ! loadattempted ) {
 			loadattempted = true;
 			loaded = false;
 			string pcrelib = SO(libpcre); //directory
 			pcre_lib_handle = dlopen(pcrelib.c_str(),RTLD_GLOBAL | RTLD_NOW);
 			err = dlerr(e);
-			if (err == nullptr && pcre_lib_handle != nullptr ) {
+			if (!err && pcre_lib_handle != nullptr ) {
 				pcre_compile = (pcre* (*)(const char*, int, const char**, int*,const unsigned char*)) dlsym(pcre_lib_handle,"pcre_compile"); err = dlerr(e);
-				if (err == nullptr) {
+				if (!err) {
 					pcre_exec = (int (*)(const pcre*,const pcre_extra*,PCRE_SPTR,int,int,int,int*,int)) dlsym(pcre_lib_handle,"pcre_exec"); err = dlerr(e);
 				}
-				if (err == nullptr) {
+				if (!err) {
 					pcre_config = (int (*)(int,void *)) dlsym(pcre_lib_handle,"pcre_config");  err = dlerr(e);
 				}
-				if ( err == nullptr) {
-					if ( pcre_config != nullptr && pcre_compile != nullptr && pcre_exec!=nullptr) {
-						int locr = 0;
-						int dobo = pcre_config(PCRE_CONFIG_UTF8, &locr);
-						if (locr != 1 || dobo != 0) { //dobo means that the flag is not supported...
-							e << Message(debug,"Regex::startup() The pcre library was loaded, but utf-8 appears not to be supported.");
-						}
-						loaded = true;
+				if ( !err && pcre_config != nullptr && pcre_compile != nullptr && pcre_exec!=nullptr) {
+					int locr = 0;
+					int dobo = pcre_config(PCRE_CONFIG_UTF8, &locr);
+					if (locr != 1 || dobo != 0) { //dobo means that the flag is not supported...
+						e << Message(debug,"Regex::startup() The pcre library was loaded, but utf-8 appears not to be supported.");
 					}
+					loaded = true;
 				}
 			}
 		}
 		return loaded;
 	}
 
-	const char* Regex::dlerr(Messages& e) {
-		const char *err = dlerror();
-		if (err != nullptr) {
-			string msg = err;
-			ostringstream errs;
-			errs << "Regex::startup() dlsym reported '" << err << "'.";
-			e << Message(debug,errs.str());
-		}
-		return err;
-	}
-
-
 	bool Regex::shutdown() {											 //necessary IFF script uses pcre.
 		if ( pcre_lib_handle != nullptr ) {
 			dlclose(pcre_lib_handle);
-//			free(pcre_lib_handle);
+//			pcre_free(pcre_lib_handle);
 		}
 		return true;
 	}

@@ -32,7 +32,7 @@ namespace Support {
 		static int mt_options;
 		static bool compile(Messages&,const string &, pcre*& );
 		static void reportError(Messages&,int);
-		static const char* dlerr(Messages& e);
+//		static const char* dlerr(Messages& e);
 
 		//The pcre API that we use.
 		static pcre* (*pcre_compile)(const char*, int, const char**, int*,const unsigned char*);

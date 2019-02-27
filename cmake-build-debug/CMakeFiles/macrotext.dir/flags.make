@@ -6,5 +6,5 @@ CXX_FLAGS = -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/Ma
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/Users/ben/CLionProjects/snaz -I/Users/ben/CLionProjects/snaz/cmake-build-debug -I/usr/local/include 
+CXX_INCLUDES = -I/Users/ben/CLionProjects/snaz -I/Users/ben/CLionProjects/snaz/cmake-build-debug -I/usr/local/include -I/usr/local/mysql/include 
 
