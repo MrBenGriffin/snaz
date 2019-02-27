@@ -28,8 +28,7 @@ namespace Support {
 			if (!env.get("LIBZIPSO", ziplib)) ziplib = SO(libz);
 			if (!env.get("LIBMYSQLCRSO", mysqllib)) mysqllib = SO(libmysqlclient);
 
-			zip_lib_handle = dlopen(ziplib.c_str(),
-									RTLD_LAZY | RTLD_GLOBAL);  //dlopen MUST have one of RTLD_LAZY,RTLD_NOW
+			zip_lib_handle = dlopen(ziplib.c_str(),RTLD_LAZY | RTLD_GLOBAL);  //dlopen MUST have one of RTLD_LAZY,RTLD_NOW
 			err = dlerr(errs);
 			if (!err && zip_lib_handle != nullptr) {
 				mysql_lib_handle = dlopen(mysqllib.c_str(), RTLD_LAZY);

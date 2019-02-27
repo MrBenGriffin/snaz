@@ -221,6 +221,9 @@ FLEX_INCLUDE_DIR:PATH=/usr/local/include
 //Path to the fl library
 FL_LIBRARY:FILEPATH=/usr/local/lib/libfl.dylib
 
+//Path to a library.
+MYSQLCLIENT:FILEPATH=MYSQLCLIENT-NOTFOUND
+
 //Path to a program.
 ProcessorCount_cmd_sysctl:FILEPATH=/usr/sbin/sysctl
 

@@ -4,6 +4,7 @@
 
 #include "ServiceFactory.h"
 #include "Service.h"
+#include "Connection.h"
 #include "MySQLService.h"
 
 namespace Support {
@@ -35,10 +36,22 @@ namespace Support {
 			return retval;
 		}
 
+		Connection* ServiceFactory::getConnection(Messages& errs,const std::string& service_name) {
+			auto* service = getService(errs,service_name);
+			if(service) {
+				auto* conn = service->instance(errs);
+				conn->connect(errs);
+				return conn;
+			}
+			return nullptr;
+		}
+
 		ServiceFactory::~ServiceFactory() {
+			//automatically called at exit()
 			for(auto& i : serviceMap) {
 				delete i.second;
 			}
+			serviceMap.clear();
 		}
 
 	}

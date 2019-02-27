@@ -36,6 +36,9 @@ CMakeFiles/macrotext.dir/main.cpp.o
  /Users/ben/CLionProjects/snaz/support/Message.h
  /Users/ben/CLionProjects/snaz/support/Storage.h
  /Users/ben/CLionProjects/snaz/support/Timing.h
+ /Users/ben/CLionProjects/snaz/support/db/Connection.h
+ /Users/ben/CLionProjects/snaz/support/db/Service.h
+ /Users/ben/CLionProjects/snaz/support/db/ServiceFactory.h
  /Users/ben/CLionProjects/snaz/test.h
  location.hh
  parser.tab.hpp
@@ -590,6 +593,7 @@ CMakeFiles/macrotext.dir/support/db/Query.cpp.o
  /Users/ben/CLionProjects/snaz/support/db/Query.h
 CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.o
  ..//support/Message.h
+ /Users/ben/CLionProjects/snaz/support/db/Connection.h
  /Users/ben/CLionProjects/snaz/support/db/MySQLService.h
  /Users/ben/CLionProjects/snaz/support/db/Service.h
  /Users/ben/CLionProjects/snaz/support/db/ServiceFactory.cpp

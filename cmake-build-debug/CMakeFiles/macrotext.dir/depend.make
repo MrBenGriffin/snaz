@@ -35,6 +35,9 @@ CMakeFiles/macrotext.dir/main.cpp.o: ../support/Infix.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../support/Storage.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../support/Timing.h
+CMakeFiles/macrotext.dir/main.cpp.o: ../support/db/Connection.h
+CMakeFiles/macrotext.dir/main.cpp.o: ../support/db/Service.h
+CMakeFiles/macrotext.dir/main.cpp.o: ../support/db/ServiceFactory.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../test.h
 CMakeFiles/macrotext.dir/main.cpp.o: location.hh
 CMakeFiles/macrotext.dir/main.cpp.o: parser.tab.hpp
@@ -589,6 +592,7 @@ CMakeFiles/macrotext.dir/support/db/Query.cpp.o: ../support/db/Query.cpp
 CMakeFiles/macrotext.dir/support/db/Query.cpp.o: ../support/db/Query.h
 
 CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.o: ../support/Message.h
+CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.o: ../support/db/Connection.h
 CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.o: ../support/db/MySQLService.h
 CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.o: ../support/db/Service.h
 CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.o: ../support/db/ServiceFactory.cpp

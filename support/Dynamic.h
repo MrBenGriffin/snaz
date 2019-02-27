@@ -23,7 +23,7 @@ namespace Support {
 			string msg = err;
 			ostringstream errs;
 			errs << "Dynamic library load report: '" << err << "'.";
-			e << Message(debug, errs.str());
+			e << Message(fatal, errs.str());
 			return true;
 		}
 		return false;

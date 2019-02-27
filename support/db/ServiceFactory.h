@@ -13,6 +13,7 @@
 namespace Support {
 	namespace Db {
 		class Service;
+		class Connection;
 		class ServiceFactory {
 		private:
 			std::map<std::string, Service*> serviceMap;
@@ -23,6 +24,7 @@ namespace Support {
 		public:
 			static ServiceFactory& sf();
 			Service* getService(Messages&,const std::string&);
+			Connection* getConnection(Messages&,const std::string&);
 		};
 	}
 }
