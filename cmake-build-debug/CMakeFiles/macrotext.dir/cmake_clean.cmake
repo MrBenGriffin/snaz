@@ -49,6 +49,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/macrotext.dir/node/NodeFilename.cpp.o"
   "CMakeFiles/macrotext.dir/node/NodeLocator.cpp.o"
   "CMakeFiles/macrotext.dir/node/NodeVal.cpp.o"
+  "CMakeFiles/macrotext.dir/node/Build.cpp.o"
   "macrotext.pdb"
   "macrotext"
 )

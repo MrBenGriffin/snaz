@@ -20,6 +20,7 @@
 #include "Message.h"
 #include "mt/Definition.h"
 #include "node/NodeLocator.h"
+#include "db/ServiceFactory.h"
 
 namespace Support {
 	using namespace std;
@@ -29,12 +30,12 @@ namespace Support {
 		return singleton;
 	}
 
-	Env::Env() {
+	Env::Env() : mysql(nullptr) {
 		MayBuild	= false;
 		IsFinal 	= true;
 		FullBuild 	= true;
 		AllTechs 	= true;
-		AllLangs 	= true;
+//		AllLangs 	= true;
 		if (!get("RS_PATH",SiteRootDir))  {
 			SiteRootDir=wd();
 		}
@@ -43,7 +44,6 @@ namespace Support {
 		}
 		RemoteUser	= "AnonymousUser";
 		NodeSet 	= Branch;
-
 	}
 
 	string Env::wd() {
@@ -156,22 +156,8 @@ namespace Support {
 		}
 	}
 
-	void Env::startup(const int argc,const char **argv) {
-		setlocale(LC_ALL, "en_UK.UTF-8");
-		mt::Definition::startup(); // Set the internals.
-		Messages::startup(area() != Console);
-		Infix::Evaluate::startup();
-		Timing::startup();
-		vector<size_t>	nodelist;
-		if (get("REMOTE_USER",RemoteUser)) {
-			if (RemoteUser != "AnonymousUser" || area() == Console) MayBuild = true;
-		}
-
-//		bool ParseAdvanced;
-//		bool ParseLegacy;
-//		bool ParseOnly;
-//		bool ForceDeleteLock;
-
+	void Env::doArgs(Messages& log,int argc,const char** argv) {
+		Timing& timer = Timing::t(); //auto startup at instantiation.
 		for(int i = 1; i < argc; i++) {
 			string parameter(argv[i]);
 			string::const_iterator argi = parameter.begin();
@@ -183,7 +169,7 @@ namespace Support {
 						IsFinal = false;
 						break;
 					case 'A':
-//--??						showTiming = true;
+						timer.showTiming = true;
 						break;
 					case 'b':
 //--??							showTemplate = true;
@@ -227,7 +213,7 @@ namespace Support {
 //						showMediaReqs = true;
 						break;
 					case 'L':
-						LanguageID = natural(argi);
+//						LanguageID = natural(argi);
 						LanguageCount = 1;
 						break;
 					case 'M': {
@@ -278,15 +264,35 @@ namespace Support {
 						break;
 				}
 			} else {
-				//report arg didn't start with a -
-				//			*Logger::log << warn << "Parameter (" << parameter << ") is unknown. Parameters should be prefixed with a '-'" ); //cannot use Logger here
+				log << Message(warn,"Parameter (" + parameter + ") is unknown. Parameters should be prefixed with a '-'");
 			}
 		}
-//		TODO:: get the from id stuff..
-//		for (unsigned long &i : nodelist) {
-//			if (i != 0) { fromID.insert(fromID.begin(), i); }
-//		}
+	}
+
+	Messages Env::startup(int argc,const char **argv) {
+		setlocale(LC_ALL, "en_UK.UTF-8");
+		mt::Definition::startup(); // Set the internals.
+		Messages::startup(area() != Console);
+		Messages log;
+		Infix::Evaluate::startup();
+		if (get("REMOTE_USER",RemoteUser)) {
+			if (RemoteUser != "AnonymousUser" || area() == Console) MayBuild = true;
+		}
+		doArgs(log,argc,argv);
+		string config_path;
+		if(get("SQL_CONFIG_FILE",config_path)) {
+			mysql = Db::ServiceFactory::sf().getConnection(log,"mysql",config_path);
+		} else {
+			log << Message(fatal,"The environment variable `SQL_CONFIG_FILE` must be set.");
+		}
+
+//		bool ParseAdvanced;
+//		bool ParseLegacy;
+//		bool ParseOnly;
+//		bool ForceDeleteLock;
+
 		Messages::defer( NodeSet == Singles && (Messages::verboseness() < 2) );
+		return log;
 	}
 
 }

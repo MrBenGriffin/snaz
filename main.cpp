@@ -18,11 +18,8 @@
 
 int main( const int argc, const char **argv ) {
 	Support::Env& env = Support::Env::e();
-	env.startup(argc,argv);
+	Support::Messages log = std::move(env.startup(argc,argv));
 	env.setTesting(true);
-	Support::Messages log;
-	auto* mysql = Support::Db::ServiceFactory::sf().getConnection(log,"mysql");
-//	mysql->exec(log,"insert into bldvar(name,value) values ('foo','bar')");
 	testing::group tests("tests/");       // Set the working directory from the Run|Edit Configurations... menu.
 	tests.load("main",false); 			  // Boolean turns on/off success reports.
 	Support::Infix::Evaluate::shutdown();

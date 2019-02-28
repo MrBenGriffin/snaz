@@ -24,7 +24,13 @@ namespace Support {
 		public:
 			static ServiceFactory& sf();
 			Service* getService(Messages&,const std::string&);
-			Connection* getConnection(Messages&,const std::string&);
+			Connection* getConnection(Messages&,const std::string&,const std::string&);
+//			if(Env::e().get("SQL_CONFIG_FILE",configFile)) {
+//				retval = open(errs, configFilePath );
+//			} else {
+//				errs << Message(fatal,"SQL config file at SQL_CONFIG_FILE not found");
+//			}
+
 		};
 	}
 }

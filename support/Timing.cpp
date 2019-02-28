@@ -13,15 +13,28 @@
 namespace Support {
 	using namespace std;
 
-	const std::unordered_map<std::string,Support::units> Timing::unitMap={
-		{"µs",µs},{"ms",ms},{"ns",ns},{"s",s},{"m",m},{"h",h},{"natural",nat},{"all",all},{"none",none}
-	};
 
-	timestamp Timing::nBasetime;	//used for timing.
-	timestamp Timing::bBasetime;	//used for timing.
-	timestamp Timing::lBasetime;	//used for timing.
-	unordered_map<string,timestamp> Timing::userTimes;
-	unordered_map<string,timestamp> Timing::lapTimes;
+	Timing &Timing::t() {
+		static Timing singleton;
+		return singleton;
+	}
+
+	Timing::Timing() : showTiming(false) {
+		unitMap = {
+				{"µs",      µs},
+				{"ms",      ms},
+				{"ns",      ns},
+				{"s",       s},
+				{"m",       m},
+				{"h",       h},
+				{"natural", nat},
+				{"all",     all},
+				{"none",    none}
+		};
+		bBasetime=timer_start();
+		nBasetime=timer_start();
+		lBasetime=bBasetime;
+	}
 
 	units Timing::unit(const string& base,units Default) {
 		auto iUnit = Timing::unitMap.find(base);
@@ -129,12 +142,6 @@ namespace Support {
 				}
 			} break;
 		}
-	}
-
-	void Timing::startup() {
-		bBasetime=timer_start();
-		nBasetime=timer_start();
-		lBasetime=bBasetime;
 	}
 
 	void Timing::str(ostream& ostr,timecount t,units style) {

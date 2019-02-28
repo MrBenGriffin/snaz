@@ -248,9 +248,9 @@ namespace mt {
 					case 'u': type=usage; break;
 					case 'p': type=code; break;
 					case 't': doTrace(e,context); e.enscope(message); return;
-					case 'b': Timing::getTiming(e,'b'); e.enscope(message); return;
-					case 'n': Timing::getTiming(e,'n'); e.enscope(message); return;
-					case 'c': Timing::getTiming(e,'c',message); return;
+					case 'b': Timing::t().getTiming(e,'b'); e.enscope(message); return;
+					case 'n': Timing::t().getTiming(e,'n'); e.enscope(message); return;
+					case 'c': Timing::t().getTiming(e,'c',message); return;
 					default: break;
 				}
 			}
@@ -497,27 +497,28 @@ namespace mt {
 	}
 	void iTiming::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
-		std::string timer = my.parm(1);
+		Timing& timer = Timing::t();
+		std::string timerParm = my.parm(1);
 		ostringstream result;
-		size_t sz = timer.size();
+		size_t sz = timerParm.size();
 		std::string p2 = my.count > 1 ? my.parm(2) : "";
 		if(sz == 1) { //This isn't a get custom.
-			char c = tolower(timer[0]);
+			char c = tolower(timerParm[0]);
 			switch(c) {
 				case 'l': {
 					if (my.count == 3) {
-						Timing::getTiming(result,c,p2,Timing::unit(my.parm(3),none));
+						timer.getTiming(result,c,p2,timer.unit(my.parm(3),none));
 					} else {
-						Timing::getTiming(result,c,"",Timing::unit(p2,none));
+						timer.getTiming(result,c,"",timer.unit(p2,none));
 					}
 				} break;
 				case 'n':
-				case 'b': Timing::getTiming(result,c,"",Timing::unit(p2,none)); break;
-				case 'c': if(!p2.empty()) Timing::setTiming(c,p2); break;
-				default : Timing::getTiming(result,'c',timer,Timing::unit(p2,none));
+				case 'b': timer.getTiming(result,c,"",timer.unit(p2,none)); break;
+				case 'c': if(!p2.empty()) timer.setTiming(c,p2); break;
+				default : timer.getTiming(result,'c',timerParm,timer.unit(p2,none));
 			}
 		} else {
-			Timing::getTiming(result,'c',timer,Timing::unit(p2,none));
+			timer.getTiming(result,'c',timerParm,timer.unit(p2,none));
 		}
 		my.set(result.str());
 	}

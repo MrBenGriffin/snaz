@@ -22,18 +22,6 @@ namespace Support {
 			tft_map.clear();
 		}
 
-		//syntactic sugar.
-		bool Connection::connect(Messages& errs) {
-			bool retval=false;
-			string configFile;
-			if(Env::e().get("SQL_CONFIG_FILE",configFile)) {
-				retval = open(errs, configFile );
-			} else {
-				errs << Message(fatal,"SQL config file at SQL_CONFIG_FILE not found");
-			}
-			return retval;
-		}
-
 		void Connection::lock(Messages& errs,string tablelist) {
 			Query* q= nullptr;
 			string locker = "lock tables " + tablelist;

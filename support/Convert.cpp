@@ -309,6 +309,17 @@ namespace Support {
 			ist >> comma;
 		}
 	}
+	//-----------------------------------------------------------------------------
+	void tolist(deque<size_t>& ilist,const string &s) {
+		ilist.clear();
+		size_t i;
+		char comma;
+		istringstream ist(s);
+		while (ist >> i) {
+			ilist.push_back(i);
+			ist >> comma;
+		}
+	}
 	//---------------------------------------------------------------------------
 	string tostring(string::const_iterator& i,const char x) {
 		string result;

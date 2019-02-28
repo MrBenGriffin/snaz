@@ -14,12 +14,12 @@ using namespace std;
 using namespace Support;
 
 struct BadNodeLocatorPath {
-	BadNodeLocatorPath(Messages* errs,string::const_iterator start,string::const_iterator pos,string::const_iterator end) {
-		if(!errs->suppressed()) {
+	BadNodeLocatorPath(Messages& errs,string::const_iterator start,string::const_iterator pos,string::const_iterator end) {
+		if(!errs.suppressed()) {
 			size_t pt = pos - start;
 			ostringstream errStr;
 			errStr << "NodeLocator Error at character position " << pt << " in path '" << string(start,end) << "'";
-			(*errs) << Message(error,errStr.str());
+			errs << Message(error,errStr.str());
 		}
 	}
 };

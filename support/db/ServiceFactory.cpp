@@ -36,11 +36,11 @@ namespace Support {
 			return retval;
 		}
 
-		Connection* ServiceFactory::getConnection(Messages& errs,const std::string& service_name) {
+		Connection* ServiceFactory::getConnection(Messages& errs,const std::string& service_name,const std::string& file_path) {
 			auto* service = getService(errs,service_name);
 			if(service) {
 				auto* conn = service->instance(errs);
-				conn->connect(errs);
+				conn->open(errs,file_path);
 				return conn;
 			}
 			return nullptr;

@@ -333,6 +333,7 @@ CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o: ../support/Timing.h
 CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o: ../support/File.h
 CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o: ../support/Storage.h
+CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o: ../support/db/Connection.h
 CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o: ../mt/Driver.h
@@ -404,23 +405,45 @@ CMakeFiles/macrotext.dir/mt/Wss.cpp.o: ../mt/mt.h
 CMakeFiles/macrotext.dir/mt/Wss.cpp.o: location.hh
 CMakeFiles/macrotext.dir/mt/Wss.cpp.o: parser.tab.hpp
 
+CMakeFiles/macrotext.dir/node/Node.cpp.o: ../support/Convert.h
+CMakeFiles/macrotext.dir/node/Node.cpp.o: ../support/Env.h
+CMakeFiles/macrotext.dir/node/Node.cpp.o: ../support/File.h
 CMakeFiles/macrotext.dir/node/Node.cpp.o: ../support/Message.h
+CMakeFiles/macrotext.dir/node/Node.cpp.o: ../support/Regex.h
+CMakeFiles/macrotext.dir/node/Node.cpp.o: ../support/Timing.h
+CMakeFiles/macrotext.dir/node/Node.cpp.o: ../support/db/Connection.h
+CMakeFiles/macrotext.dir/node/Node.cpp.o: ../support/db/Query.h
+CMakeFiles/macrotext.dir/node/Node.cpp.o: ../support/File.h
+CMakeFiles/macrotext.dir/node/Node.cpp.o: ../support/Message.h
+CMakeFiles/macrotext.dir/node/Node.cpp.o: ../support/Storage.h
+CMakeFiles/macrotext.dir/node/Node.cpp.o: ../support/db/Connection.h
 CMakeFiles/macrotext.dir/node/Node.cpp.o: ../node/Node.cpp
 CMakeFiles/macrotext.dir/node/Node.cpp.o: ../node/Node.h
-CMakeFiles/macrotext.dir/node/Node.cpp.o: ../node/nodefilename.h
+CMakeFiles/macrotext.dir/node/Node.cpp.o: ../node/NodeFilename.h
+CMakeFiles/macrotext.dir/node/Node.cpp.o: ../node/NodeLocator.h
+CMakeFiles/macrotext.dir/node/Node.cpp.o: ../node/NodeVal.h
+CMakeFiles/macrotext.dir/node/Node.cpp.o: /usr/local/include/pcre.h
 
 CMakeFiles/macrotext.dir/node/NodeFilename.cpp.o: ../support/Message.h
+CMakeFiles/macrotext.dir/node/NodeFilename.cpp.o: ../support/db/Connection.h
 CMakeFiles/macrotext.dir/node/NodeFilename.cpp.o: ../node/BadNodeLocatorPath.h
 CMakeFiles/macrotext.dir/node/NodeFilename.cpp.o: ../node/Node.h
 CMakeFiles/macrotext.dir/node/NodeFilename.cpp.o: ../node/NodeFilename.cpp
 CMakeFiles/macrotext.dir/node/NodeFilename.cpp.o: ../node/NodeFilename.h
-CMakeFiles/macrotext.dir/node/NodeFilename.cpp.o: ../node/nodefilename.h
+CMakeFiles/macrotext.dir/node/NodeFilename.cpp.o: ../node/NodeVal.h
 
+CMakeFiles/macrotext.dir/node/NodeLocator.cpp.o: ../support/Convert.h
 CMakeFiles/macrotext.dir/node/NodeLocator.cpp.o: ../support/Message.h
+CMakeFiles/macrotext.dir/node/NodeLocator.cpp.o: ../support/db/Connection.h
+CMakeFiles/macrotext.dir/node/NodeLocator.cpp.o: ../node/BadNodeLocatorPath.h
 CMakeFiles/macrotext.dir/node/NodeLocator.cpp.o: ../node/Node.h
+CMakeFiles/macrotext.dir/node/NodeLocator.cpp.o: ../node/NodeFilename.h
 CMakeFiles/macrotext.dir/node/NodeLocator.cpp.o: ../node/NodeLocator.cpp
 CMakeFiles/macrotext.dir/node/NodeLocator.cpp.o: ../node/NodeLocator.h
-CMakeFiles/macrotext.dir/node/NodeLocator.cpp.o: ../node/nodefilename.h
+CMakeFiles/macrotext.dir/node/NodeLocator.cpp.o: ../node/NodeVal.h
+
+CMakeFiles/macrotext.dir/node/NodeVal.cpp.o: ../node/NodeVal.cpp
+CMakeFiles/macrotext.dir/node/NodeVal.cpp.o: ../node/NodeVal.h
 
 CMakeFiles/macrotext.dir/parser.tab.cpp.o: ../mt/Driver.h
 CMakeFiles/macrotext.dir/parser.tab.cpp.o: ../mt/Scanner.h
@@ -460,6 +483,7 @@ CMakeFiles/macrotext.dir/support/Env.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/support/Env.cpp.o: ../node/NodeLocator.h
 CMakeFiles/macrotext.dir/support/Env.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/support/Env.cpp.o: ../support/Storage.h
+CMakeFiles/macrotext.dir/support/Env.cpp.o: ../support/db/Connection.h
 CMakeFiles/macrotext.dir/support/Env.cpp.o: ../mt/Content.h
 CMakeFiles/macrotext.dir/support/Env.cpp.o: ../mt/Definition.h
 CMakeFiles/macrotext.dir/support/Env.cpp.o: ../mt/Driver.h
@@ -472,7 +496,8 @@ CMakeFiles/macrotext.dir/support/Env.cpp.o: ../mt/Wss.h
 CMakeFiles/macrotext.dir/support/Env.cpp.o: ../mt/declarations.h
 CMakeFiles/macrotext.dir/support/Env.cpp.o: ../mt/mt.h
 CMakeFiles/macrotext.dir/support/Env.cpp.o: ../node/Node.h
-CMakeFiles/macrotext.dir/support/Env.cpp.o: ../node/nodefilename.h
+CMakeFiles/macrotext.dir/support/Env.cpp.o: ../node/NodeFilename.h
+CMakeFiles/macrotext.dir/support/Env.cpp.o: ../node/NodeVal.h
 CMakeFiles/macrotext.dir/support/Env.cpp.o: ../support/Convert.h
 CMakeFiles/macrotext.dir/support/Env.cpp.o: ../support/Env.cpp
 CMakeFiles/macrotext.dir/support/Env.cpp.o: ../support/Env.h
@@ -482,6 +507,8 @@ CMakeFiles/macrotext.dir/support/Env.cpp.o: ../support/Infix.h
 CMakeFiles/macrotext.dir/support/Env.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/support/Env.cpp.o: ../support/Storage.h
 CMakeFiles/macrotext.dir/support/Env.cpp.o: ../support/Timing.h
+CMakeFiles/macrotext.dir/support/Env.cpp.o: ../support/db/Connection.h
+CMakeFiles/macrotext.dir/support/Env.cpp.o: ../support/db/ServiceFactory.h
 CMakeFiles/macrotext.dir/support/Env.cpp.o: location.hh
 CMakeFiles/macrotext.dir/support/Env.cpp.o: parser.tab.hpp
 
@@ -526,6 +553,7 @@ CMakeFiles/macrotext.dir/support/db/Connection.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/support/db/Connection.cpp.o: ../support/File.h
 CMakeFiles/macrotext.dir/support/db/Connection.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/support/db/Connection.cpp.o: ../support/Storage.h
+CMakeFiles/macrotext.dir/support/db/Connection.cpp.o: ../support/db/Connection.h
 CMakeFiles/macrotext.dir/support/db/Connection.cpp.o: ../support/db/Connection.cpp
 CMakeFiles/macrotext.dir/support/db/Connection.cpp.o: ../support/db/Connection.h
 CMakeFiles/macrotext.dir/support/db/Connection.cpp.o: ../support/db/Query.h
@@ -584,6 +612,7 @@ CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.o: ../support/File.h
 CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.o: ../support/Storage.h
 CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.o: ../support/db/Connection.h
+CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.o: ../support/db/Connection.h
 CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.o: ../support/db/MySQLConnection.h
 CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.o: ../support/db/MySQLService.cpp
 CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.o: ../support/db/MySQLService.h
@@ -607,6 +636,7 @@ CMakeFiles/macrotext.dir/support/db/Query.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/support/db/Query.cpp.o: ../support/File.h
 CMakeFiles/macrotext.dir/support/db/Query.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/support/db/Query.cpp.o: ../support/Storage.h
+CMakeFiles/macrotext.dir/support/db/Query.cpp.o: ../support/db/Connection.h
 CMakeFiles/macrotext.dir/support/db/Query.cpp.o: ../support/db/Connection.h
 CMakeFiles/macrotext.dir/support/db/Query.cpp.o: ../support/db/Query.cpp
 CMakeFiles/macrotext.dir/support/db/Query.cpp.o: ../support/db/Query.h

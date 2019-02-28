@@ -12,19 +12,13 @@ using namespace Support;
 
 //-----------------------------------------------------------------------------
 //This discards the processed output. (e.g. in nodelocation)
-void NodeLocator::processinput(string::const_iterator& in,string::const_iterator& out) {
+void NodeLocator::processinput(Messages& errs,string::const_iterator& in,string::const_iterator& out) {
 	bool done = in >= out;	// 'are we finished?' flag
 	while(!done) 	{
 		unsigned char fni = *in;
 		while(in < out && fns[fni] == nullptr) in++;
-		done = (this->*(fns[fni]))();
+		done = (this->*(fns[fni]))(errs);
 	}
-}
-
-//-----------------------------------------------------------------------------
-// the null function
-bool NodeLocator::dostop() {
-	return true;	// termination condition reached
 }
 
 //-----------------------------------------------------------------------------
@@ -54,7 +48,7 @@ bool NodeLocator::dostop() {
 /////////////////////////////////////////////////////////////
 // Node Locator Methods //
 /////////////////////////////////////////////////////////////
-string NodeLocator::loc_path;
+//string NodeLocator::loc_path;
 
 // set the default response to be 'illegal character', which throws an exception.
 NodeLocator::NodeLocator() :  pageNum(0),find(nullptr),from(nullptr),root(nullptr) {
@@ -89,8 +83,7 @@ void NodeLocator::setdirty() {
 }
 
 // return the Node described by path from 'from'
-Node* NodeLocator::locate(Messages& _errs,Node *fromref, string::const_iterator pin,string::const_iterator pout) {
-	errs = &_errs; //load up current message context.
+Node* NodeLocator::locate(Messages& errs,Node *fromref, string::const_iterator pin,string::const_iterator pout) {
 	message.str("");
 	pageNum = 0;  start=pin; in = pin;  out = pout;
 	if( (in < out) && (*in == '/') ) {
@@ -101,29 +94,29 @@ Node* NodeLocator::locate(Messages& _errs,Node *fromref, string::const_iterator 
 		from = fromref;
 	}
 	try {
-		processinput(in,out);
+		processinput(errs,in,out);
 	}
 	catch(BadNodeLocatorPath& e) {
 		find = nullptr; pin = pout;
 	}
 	catch( std::exception& e ) {
 		message << "Location error at " << e.what() <<  " with location text:" << string(pin,pout);
-		*errs << Message(error,message.str());
+		errs << Message(error,message.str());
 		find = nullptr;
 		pin = pout;
 	}
 	catch(...) {
 		message << "Unknown Location error in " << string(pin,pout);
-		*errs << Message(error,message.str());
+		errs << Message(error,message.str());
 		find = nullptr;
 		pin = pout;
 	}
-	if (showPaths) { *errs << Message(info,message.str()); }
+	if (showPaths) { errs << Message(info,message.str()); }
 	return find;
 }
 
 // continue to the next path section
-bool NodeLocator::nextPathSection() {
+bool NodeLocator::nextPathSection(Messages& errs) {
 	if(in >= out) {
 		return true; // Finished path!
 	} else {
@@ -144,34 +137,34 @@ bool NodeLocator::nextPathSection() {
 }
 
 // Content - switch over to global Content Nodetree (the default)
-bool NodeLocator::doContent() {
+bool NodeLocator::doContent(Messages& errs) {
 	if (showPaths) message << "C" ;
 	in++;
 	from = Node::rootc;
-	find = Node::rootc->nodebypath( in, out );
+	find = Node::rootc->nodebypath(errs, in, out );
 	return find != nullptr;
 }
 
 // Taxonomy - switch over to global Taxonomy Nodetree
-bool NodeLocator::doTaxonomy() {
+bool NodeLocator::doTaxonomy(Messages& errs) {
 	if (showPaths) message << "T" ;
 	in++;
 	from = Node::roott;
-	find = Node::roott->nodebypath( in, out );
+	find = Node::roott->nodebypath(errs, in, out );
 	return find != nullptr;
 }
 
 // Content - switch over to global Suffix Nodetree
-bool NodeLocator::doSuffix() {
+bool NodeLocator::doSuffix(Messages& errs) {
 	if (showPaths) message << "S" ;
 	in++;
 	from = Node::roots;
-	find = Node::roots->nodebypath( in, out );
+	find = Node::roots->nodebypath(errs, in, out );
 	return find != nullptr;
 }
 
 // next peer according to specified criteria
-bool NodeLocator::doPeerNext() {
+bool NodeLocator::doPeerNext(Messages& errs) {
 	if (showPaths) message << "F" ;
 	in++;	// F
 	// compulsary brackets
@@ -197,17 +190,17 @@ bool NodeLocator::doPeerNext() {
 	rootString.erase(rootString.size()-1);
 	NodeLocator rootLocator;
 	rootLocator.setroot(root);
-	NodeLocator::loc_path=rootString;
-	Node* lRoot = rootLocator.locate(from, rootString.begin(), rootString.end() );
-	find = from->nodenext(lRoot);
+//	NodeLocator::loc_path=rootString;
+	Node* lRoot = rootLocator.locate(errs, from, rootString.begin(), rootString.end());
+	find = from->nodenext(errs,lRoot);
 	if( find == nullptr)
 		return true;
 	else
-		return nextPathSection();
+		return nextPathSection(errs);
 }
 
 // next peer according to specified criteria
-bool NodeLocator::doPeerLast() {
+bool NodeLocator::doPeerLast(Messages& errs) {
 	if (showPaths) message << "B" ;
 	in++;	// B
 	// compulsary brackets
@@ -233,31 +226,31 @@ bool NodeLocator::doPeerLast() {
 	rootString.erase(rootString.size()-1);
 	NodeLocator rootLocator;
 	rootLocator.setroot(root);
-	NodeLocator::loc_path=rootString;
-	Node *lRoot = rootLocator.locate(from, rootString.begin(), rootString.end() );
-	find = from->nodelast(lRoot);
+//	NodeLocator::loc_path=rootString;
+	Node *lRoot = rootLocator.locate(errs, from, rootString.begin(), rootString.end());
+	find = from->nodelast(errs,lRoot);
 	if( find == nullptr)
 		return true;
 	else
-		return nextPathSection();
+		return nextPathSection(errs);
 }
 
 // recommended root (RR) (traversal of the entire tree)
 // this does a depth-first traversal rewritten without recursion!
-bool NodeLocator::doRR() {
+bool NodeLocator::doRR(Messages& errs) {
 	in++;	// R
 	if(in == out) {
-		find = from->nodebytw(+1);
+		find = from->nodebytw(errs,+1);
 	} else {
 		switch ( *in ) {
 			case '-':
 				if (showPaths) message << "R-" ;
 				in++;
-				find = from->nodebytw(-1);
+				find = from->nodebytw(errs,-1);
 				break;
 			case '+':
 				if (showPaths) message << "R+" ;
-				find = from->nodebytw(+1);
+				find = from->nodebytw(errs,+1);
 				in++;
 				break;
 			case 'L': { //find first node with matching layout in descendents of current node (depth first traversal).
@@ -281,11 +274,11 @@ bool NodeLocator::doRR() {
 					}
 				}
 				//at this point we have some sort of layout.
-				find = from->nodebytw(+1); //next node..
+				find = from->nodebytw(errs,+1); //next node..
 				if (showPaths) message << "(" << find->id() << "; " << find->layout() << ")";
 				if (next) { //carry on..
 					while (find->id() != from->id() && find->layout() != layout) {
-						find = find->nodebytw(+1); //next node..
+						find = find->nodebytw(errs,+1); //next node..
 						if (showPaths) message << "(" << find->id() << "; " << find->layout() << ")";
 					}
 					//at this point either find = from or find has a layout..
@@ -297,7 +290,7 @@ bool NodeLocator::doRR() {
 					}
 				} else {
 					while (find->tier() > from->tier() && find->layout() != layout) {
-						find = find->nodebytw(+1); //next node..
+						find = find->nodebytw(errs,+1); //next node..
 						if (showPaths) message << "(" << find->id() << "; " << find->layout() << ")";
 					}
 					if(find->tier() <= from->tier()) {
@@ -314,11 +307,11 @@ bool NodeLocator::doRR() {
 		}
 	}
 	if(find == nullptr)  return true;
-	return nextPathSection();
+	return nextPathSection(errs);
 }
 
 // ID
-bool NodeLocator::doID() {
+bool NodeLocator::doID(Messages& errs) {
 	pair<size_t,bool> id= znatural(in);
 	if (!id.second) {
 		throw BadNodeLocatorPath(errs,start,in,out);
@@ -326,7 +319,7 @@ bool NodeLocator::doID() {
 		if (showPaths) message << "id(" << id.first << ")";
 		find = from->nodebyid(id.first);
 		if (find != nullptr) {
-			return nextPathSection();
+			return nextPathSection(errs);
 		} else {
 			return true;
 		}
@@ -334,14 +327,14 @@ bool NodeLocator::doID() {
 }
 
 // mainNode
-bool NodeLocator::doMainNode() {
+bool NodeLocator::doMainNode(Messages& errs) {
 	find = nullptr;
 	if (showPaths) message << "m";
 	in++;
 	setdirty();
-	if(!bld->node_stack.empty()) {
-		find = bld->node_stack.front();
-		return nextPathSection();
+	if(!Node::node_stack.empty()) {
+		find = Node::node_stack.front();
+		return nextPathSection(errs);
 	} else {
 		return true;
 	}
@@ -349,7 +342,7 @@ bool NodeLocator::doMainNode() {
 
 
 // parent
-bool NodeLocator::doParent() {
+bool NodeLocator::doParent(Messages& errs) {
 	if (showPaths) message << "^";
 	if(from == root) {
 		find = nullptr;
@@ -362,11 +355,11 @@ bool NodeLocator::doParent() {
 	in++;
 	find = from->parent();
 	if( find == nullptr)  return true;
-	return nextPathSection();
+	return nextPathSection(errs);
 }
 
 // i-th sibling to right of me or me (with +0)
-bool NodeLocator::doSiblingRight() {
+bool NodeLocator::doSiblingRight(Messages& errs) {
 	if (showPaths) message << "+";
 	in++;	// +
 	if(from == root) {
@@ -384,7 +377,7 @@ bool NodeLocator::doSiblingRight() {
 				find = from;
 			} else {
 				Node *pn = from->parent();
-				pair<size_t,bool> offset=String::znatural(in);
+				pair<size_t,bool> offset= znatural(in);
 				if (!offset.second) {
 					throw BadNodeLocatorPath(errs,start,in,out);
 				} else {
@@ -394,17 +387,17 @@ bool NodeLocator::doSiblingRight() {
 						find = nullptr;
 						return true;
 					}
-					find = (pn->child((size_t)sibnum));
+					find = pn->child(errs,(size_t)sibnum);
 					if( find == nullptr) { return true; }
 				}
 			}
 		}
 	}
-	return nextPathSection();
+	return nextPathSection(errs);
 }
 
 // i-th sibling to left of me
-bool NodeLocator::doSiblingLeft() {
+bool NodeLocator::doSiblingLeft(Messages& errs) {
 	if (showPaths) message << "-";
 	in++;
 	if(from == root) {
@@ -427,15 +420,15 @@ bool NodeLocator::doSiblingLeft() {
 				find = nullptr;
 				return true;
 			}
-			find = (pn->child((size_t)sibnum));
+			find = pn->child(errs,(size_t)sibnum);
 			if( find == nullptr) { return true; }
 		}
 	}
-	return nextPathSection();
+	return nextPathSection(errs);
 }
 
 // i-th child from left
-bool NodeLocator::doChildLeft() {
+bool NodeLocator::doChildLeft(Messages& errs) {
 	if (showPaths) message << "0";
 	if (from == nullptr) from = root;
 	in++;
@@ -455,7 +448,7 @@ bool NodeLocator::doChildLeft() {
 							find = nullptr;
 							return true; //RANGE error
 						}
-						find = (from->child(sibnum.first - 1 ));
+						find = (from->child(errs,sibnum.first - 1));
 						if( find == nullptr)  { return true;}
 						if (showPaths) { message << "={" << find->id() << "}"; }
 					}
@@ -474,7 +467,7 @@ bool NodeLocator::doChildLeft() {
 						find = nullptr; // not found yet
 						size_t kids = from->getNumchildren();
 						for (size_t i =0; i < kids; i++) {
-							Node* cn = from->child(i);
+							Node* cn = from->child(errs,i);
 							if (cn->layout() == ilayout.first) {
 								find = cn;
 								break;
@@ -493,11 +486,11 @@ bool NodeLocator::doChildLeft() {
 			}
 		}
 	}
-	return nextPathSection();
+	return nextPathSection(errs);
 }
 
 // i-th child from right
-bool NodeLocator::doChildRight() {
+bool NodeLocator::doChildRight(Messages& errs) {
 	if (showPaths) message << "N-";
 	in++;
 	if(in == out || *in != '-') {
@@ -514,14 +507,14 @@ bool NodeLocator::doChildRight() {
 			find = nullptr;
 			return true;
 		}
-		find = (from->child(sibnum-1));
+		find = from->child(errs,sibnum-1);
 		if( find == nullptr) { return true;}
 	}
-	return nextPathSection();
+	return nextPathSection(errs);
 }
 
 // page
-bool NodeLocator::doPage() {
+bool NodeLocator::doPage(Messages& errs) {
 	in++;
 	find = from;
 	pair<size_t,bool> page= znatural(in);
@@ -542,24 +535,24 @@ bool NodeLocator::doPage() {
 }
 
 // link ref
-bool NodeLocator::doLinkRef() {
+bool NodeLocator::doLinkRef(Messages& errs) {
 	in++;       // skip '!'
 	string::const_iterator inx = in;
 	while (in != out && *in != ':' && *in != '/' ) in++;
 	string linkref(inx,in);
 	if (showPaths) message << "!" << linkref;
-	Node* result = root->nodebylinkref(linkref);
+	Node* result = root->nodebylinkref(errs,linkref);
 	if (result != nullptr ) {
 		find = result;
 	} else {
 		find = nullptr;
 		return true;
 	}
-	return nextPathSection();
+	return nextPathSection(errs);
 }
 
 // Ancestor at tier n
-bool NodeLocator::doAncestorAbsolute() {
+bool NodeLocator::doAncestorAbsolute(Messages& errs) {
 	if(from == root) {	// root illegal here
 		if (showPaths) message << "(/A illegal!)";
 		find = nullptr;
@@ -600,11 +593,11 @@ bool NodeLocator::doAncestorAbsolute() {
 		}
 	}
 	if( find == nullptr)  return true;
-	return nextPathSection();
+	return nextPathSection(errs);
 }
 
 // Ancestor up n tiers
-bool NodeLocator::doAncestorRelative() {
+bool NodeLocator::doAncestorRelative(Messages& errs) {
 	if(from == root) { // root illegal here
 		if (showPaths) message << "(/^ illegal!)";
 		find = nullptr;
@@ -644,16 +637,16 @@ bool NodeLocator::doAncestorRelative() {
 			}
 		}
 	}
-	return nextPathSection();
+	return nextPathSection(errs);
 }
 
-bool NodeLocator::doStackFromInside() {
+bool NodeLocator::doStackFromInside(Messages& errs) {
 	in++;       // skip 'I'
 	pair<size_t,bool> offset= znatural(in);
 	if (!offset.second) {
 		throw BadNodeLocatorPath(errs,start,in,out);
 	} else {
-		size_t stsize = 	bld->node_stack.size();
+		size_t stsize = Node::node_stack.size();
 		if (offset.first!=0) {
 			setdirty();
 			//			dirtmsg << "I-Stack must be 0 Path:"+NodeLocator::loc_path;
@@ -662,11 +655,11 @@ bool NodeLocator::doStackFromInside() {
 		Node* result = nullptr;
 		if (stsize < 2) { //we are in template.
 			if ((size_t)offset.first < stsize) {
-				result = bld->node_stack[stsize-((size_t)offset.first+1)]; //offset=0, size=1; 1-(0+1) = 0;
+				result = Node::node_stack[stsize-((size_t)offset.first+1)]; //offset=0, size=1; 1-(0+1) = 0;
 			}
 		} else {
 			if ((size_t)offset.first < (stsize-1)) {
-				result = bld->node_stack[stsize-((size_t)offset.first+1)]; //offset=0, size=1; 1-(0+1) = 0;
+				result = Node::node_stack[stsize-((size_t)offset.first+1)]; //offset=0, size=1; 1-(0+1) = 0;
 			}
 		}
 		if (result != nullptr ) {
@@ -676,26 +669,26 @@ bool NodeLocator::doStackFromInside() {
 			return true;
 		}
 	}
-	return nextPathSection();
+	return nextPathSection(errs);
 }
 
-bool NodeLocator::doStackFromOutside() {
+bool NodeLocator::doStackFromOutside(Messages& errs) {
 	in++;       // skip 'O'
 	pair<size_t,bool> offset= znatural(in);
 	if (!offset.second) {
 		throw BadNodeLocatorPath(errs,start,in,out);
 	} else {
-		size_t stsize = 	bld->node_stack.size();
+		size_t stsize = Node::node_stack.size();
 		setdirty();
 		if (showPaths) message << "O" << (size_t)offset.first;
 		Node* result = nullptr;
 		if (stsize < 2) { //we are in template.
 			if (offset.first < stsize) {
-				result = bld->node_stack[offset.first];
+				result = Node::node_stack[offset.first];
 			}
 		} else {
 			if (1+offset.first < stsize) {
-				result = bld->node_stack[1+offset.first];
+				result = Node::node_stack[1+offset.first];
 			}
 		}
 		if (result != nullptr ) {
@@ -705,11 +698,11 @@ bool NodeLocator::doStackFromOutside() {
 			return true;
 		}
 	}
-	return nextPathSection();
+	return nextPathSection(errs);
 }
 
 // illegal character
-bool NodeLocator::doIllegalCharacter() {
+bool NodeLocator::doIllegalCharacter(Messages& errs) {
 	if (showPaths) message << "(illegal character)" ;
 	find = nullptr;
 	return true;

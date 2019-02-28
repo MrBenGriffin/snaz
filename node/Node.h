@@ -26,12 +26,6 @@ class Node;
 class NodeVal;
 class FileTemplate;
 
-using refmaptype = unordered_map<string, size_t>;
-using idmaptype = unordered_map<size_t, Node* >;
-using rfmaptype = unordered_map<string, Node* >;
-using intintvectmap = unordered_map<size_t, vector<size_t> >;
-using templatemap = unordered_map<size_t, pair< string , FileTemplate >> ;
-
 class Node {					// build the tree..
 private:
 	static string kRootFilename;
@@ -42,12 +36,12 @@ private:
 	void outputtofile(size_t page, string& out);
 
 protected:
-	Node *nodeparent;	  // parent
-	size_t nodeid;        // unique id
+	Node *nodeparent;	  		// parent
+	size_t nodeid;        		// unique id
 	size_t nodetw;				// treewalk value
 	size_t nodetier;			// tier of Node
-	size_t nodesiblingnum;			// my number from 1 to n (NOT a zero prefixed array!)
-	vector< Node* > children;		// list of children
+	size_t nodesiblingnum;		// my number from 1 to n (NOT a zero prefixed array!)
+	vector< Node* > children;	// list of children
 	string idstr;
 
 //reference to tree-type values (content,tax,suffix, etc)
@@ -55,15 +49,6 @@ protected:
 	void  addPeers(vector<Node *>&,size_t);
 
 public:
-	static templatemap		templateList;
-	static intintvectmap	layoutList;				//Stores a layout-id -> template-list structure
-	static deque< Node* > 	node_stack;				//current node - used to pass to built-in functions
-
-	static Node* roott;
-	static Node* rootc;
-	static Node* roots;
-
-	static 	refmaptype tax_fields;								//A quick reference to the fields by name (as in iTax)
 	enum kind { page, tax, file };
 	NodeLocator* locator;
 
@@ -76,18 +61,12 @@ public:
 
 	size_t getNumchildren();		//accessor
 
-//Setup
-	static void inittaxfields();
-	static void loadLayouts(Messages&,Connection&);
-
 //Generation
 	void gettextoutput(Messages&);
 	void generateoutput(int);
 	void generatebranch(int);
 
 //Nodetree navigation
-	static Node* current(kind = page);
-	static Node* node(size_t,Node::kind = Node::page); //by id.
 	Node* parent()				{ return nodeparent; }
 	Node* child(Messages&,size_t);
 	Node* nodelast(Messages&,Node*);
@@ -160,12 +139,6 @@ public:
 
 	string suffix() const		{ return v->getsval(0); }
 	string script() const		{ return v->getsval(1); }
-};
-
-struct FileTemplate {
-	string str;
-	string suffix;
-	string br;
 };
 
 

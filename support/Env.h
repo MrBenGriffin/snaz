@@ -9,12 +9,18 @@
 
 #include "File.h"
 #include "Storage.h"
+#include "db/Connection.h"
 
 namespace Support {
 	using 	namespace std;
 	enum	buildspace {Build,Temporary,Scripts,Media,Tests};	//Buildspace indicates what directory area is relevant
 	enum 	buildarea  {Editorial,Final,Draft,Console,Release,Staging};
 	enum    buildnodes {Branch,Descendants,Singles,None};
+
+	struct tech {
+		size_t id;
+		string name;
+	};
 
 	class Env {
 	private:
@@ -27,6 +33,7 @@ namespace Support {
 		static constexpr auto ReleaseDir 	= "release";
 		static constexpr auto IncludeDir 	= "include";
 
+		Db::Connection*	mysql;
 
 		Storage storage;
 
@@ -38,14 +45,17 @@ namespace Support {
 		bool MayBuild;
 		bool FullBuild;
 		bool AllTechs;
-		bool AllLangs;
+//		bool AllLangs;
+
+		deque<tech>   technologies; //queue holding all information about the build
+		deque<size_t> nodelist;     //things to build.
 
 		bool ParseAdvanced;
 		bool ParseLegacy;
 		bool ParseOnly;
 		bool ForceDeleteLock;
 
-		size_t LanguageID;
+//		size_t LanguageID;
 		size_t TechnologyID;
 		size_t TechnologyCount;
 		size_t LanguageCount;
@@ -56,10 +66,11 @@ namespace Support {
 
 
 		buildnodes NodeSet;
+		void doArgs(Messages&,int,const char**);
 
 	public:
 		static Env& e();
-		void   startup(const int=0,const char** = nullptr);
+		Messages startup(int=0,const char** = nullptr);
 		bool   get(string,string&,string="");
 		buildarea area();
 
@@ -70,7 +81,7 @@ namespace Support {
 		Path basedir(buildspace);
 		void basedir(string&,buildspace,bool,bool);
 		void setTesting(bool flag) { Testing = flag; }
-		size_t techID() { return TechnologyID; }
+		tech& technology()  { return technologies.front(); }  //returns currently built technology.
 //		Path root(string append = "");
 	};
 

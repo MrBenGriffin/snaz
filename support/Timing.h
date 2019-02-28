@@ -20,27 +20,28 @@ namespace Support {
 	enum units { µs, ms, ns, s, m, h, nat, all, none};
 
 	class Timing {
+		Timing(); //hide singleton from being publicly instantiable
 
-		static timestamp nBasetime;    //used for timing nodes.
-		static timestamp bBasetime;    //used for timing builds.
-		static timestamp lBasetime;    //used for loop timing.
-		static std::unordered_map<std::string, timestamp> userTimes;
-		static std::unordered_map<std::string, timestamp> lapTimes;
+		std::unordered_map<std::string,units> unitMap;
+		timestamp nBasetime;    //used for timing nodes.
+		timestamp bBasetime;    //used for timing builds.
+		timestamp lBasetime;    //used for loop timing.
+		std::unordered_map<std::string, timestamp> userTimes;
+		std::unordered_map<std::string, timestamp> lapTimes;
 
 	public:
-		static const std::unordered_map<std::string,Support::units> unitMap;
-
-		static units unit(const string&,units=nat);
-		static timestamp timer_start();
-		static timecount timer_diff(const timestamp &);
-		static long long nanos(const timecount &);
-		static long double seconds(const timecount &);
-		static void startup();
-		static void setTiming(char,std::string= "unknown");
-		static void str(std::ostream&,timecount,units=nat);
-		static void getTiming(std::ostream&,char,std::string= "unknown",units=nat);
-		static void getTiming(Messages&,char,std::string= "unknown",units=nat);
-		static bool smaller(const timecount &, const timecount &);
+		static Timing& t();
+		bool showTiming;    		//for profiling.
+		units unit(const string&,units=nat);
+		timestamp timer_start();
+		timecount timer_diff(const timestamp &);
+		long long nanos(const timecount &);
+		long double seconds(const timecount &);
+		void setTiming(char,std::string= "unknown");
+		void str(std::ostream&,timecount,units=nat);
+		void getTiming(std::ostream&,char,std::string= "unknown",units=nat);
+		void getTiming(Messages&,char,std::string= "unknown",units=nat);
+		bool smaller(const timecount &, const timecount &);
 
 	};
 }

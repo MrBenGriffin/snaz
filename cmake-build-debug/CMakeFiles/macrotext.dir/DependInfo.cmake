@@ -26,6 +26,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/Users/ben/CLionProjects/snaz/mt/Macro.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/mt/Macro.cpp.o"
   "/Users/ben/CLionProjects/snaz/mt/Text.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/mt/Text.cpp.o"
   "/Users/ben/CLionProjects/snaz/mt/Wss.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/mt/Wss.cpp.o"
+  "/Users/ben/CLionProjects/snaz/node/Build.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/node/Build.cpp.o"
   "/Users/ben/CLionProjects/snaz/node/Node.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/node/Node.cpp.o"
   "/Users/ben/CLionProjects/snaz/node/NodeFilename.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/node/NodeFilename.cpp.o"
   "/Users/ben/CLionProjects/snaz/node/NodeLocator.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/node/NodeLocator.cpp.o"

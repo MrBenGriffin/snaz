@@ -31,7 +31,6 @@ namespace Support {
 			bool simple_query(Messages&,std::ostringstream&);
 			bool exec(Messages&,const std::string&);
 			bool field_type(Messages&,const std::string&, const std::string&, std::string&, bool=false);
-			bool connect(Messages&);
 			void lock(Messages&,std::string);
 			void unlock(Messages&);
 			virtual bool get_field_types(Messages&,const std::string&,FieldTypeMap&)=0;

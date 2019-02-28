@@ -717,6 +717,33 @@ mt/Wss.cpp.s:
 	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Wss.cpp.s
 .PHONY : mt/Wss.cpp.s
 
+node/Build.o: node/Build.cpp.o
+
+.PHONY : node/Build.o
+
+# target to build an object file
+node/Build.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/node/Build.cpp.o
+.PHONY : node/Build.cpp.o
+
+node/Build.i: node/Build.cpp.i
+
+.PHONY : node/Build.i
+
+# target to preprocess a source file
+node/Build.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/node/Build.cpp.i
+.PHONY : node/Build.cpp.i
+
+node/Build.s: node/Build.cpp.s
+
+.PHONY : node/Build.s
+
+# target to generate assembly for a file
+node/Build.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/node/Build.cpp.s
+.PHONY : node/Build.cpp.s
+
 node/Node.o: node/Node.cpp.o
 
 .PHONY : node/Node.o
@@ -1440,6 +1467,9 @@ help:
 	@echo "... mt/Wss.o"
 	@echo "... mt/Wss.i"
 	@echo "... mt/Wss.s"
+	@echo "... node/Build.o"
+	@echo "... node/Build.i"
+	@echo "... node/Build.s"
 	@echo "... node/Node.o"
 	@echo "... node/Node.i"
 	@echo "... node/Node.s"

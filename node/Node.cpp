@@ -15,46 +15,8 @@
 using namespace Support;
 using namespace Support::Db;
 
-refmaptype Node::tax_fields;					//A quick reference to the fields by name (as in iTax)
-
-deque< Node* > 	Node::node_stack;				//current node - used to pass to built-in functions
-Node* Node::roott = nullptr;
-Node* Node::rootc = nullptr;
-Node* Node::roots = nullptr;
 string Node::kRootFilename="index";
-intintvectmap Node::layoutList;
 
-//-------------------------------------------------------------------
-//return current node (I0)
-Node* Node::current(kind tree) {
-	if (tree == page && !node_stack.empty()) {
-		return node_stack.back();
-	} else {
-		switch(tree) {
-			case page:	return rootc;
-			case tax: 	return roott;
-			case file:	return roots;
-		}
-	}
-}
-Node* Node::node(size_t id,kind tree) {
-	Node* n = current(tree);
-	return n->nodebyid(id);
-}
-
-//-----------------------------------------------------------------
-void Node::inittaxfields() {
-	tax_fields.insert(refmaptype::value_type("id",0));
-	tax_fields.insert(refmaptype::value_type("scope",1));
-	tax_fields.insert(refmaptype::value_type("linkref",2));
-	tax_fields.insert(refmaptype::value_type("tier",3));
-	tax_fields.insert(refmaptype::value_type("team",4));
-	tax_fields.insert(refmaptype::value_type("title",5));
-	tax_fields.insert(refmaptype::value_type("shorttitle",6));
-	tax_fields.insert(refmaptype::value_type("classcode",7));
-	tax_fields.insert(refmaptype::value_type("synonyms",8));
-	tax_fields.insert(refmaptype::value_type("article",9)); //descr
-}
 
 //-------------------------------------------------------------------
 Node::Node() {
@@ -72,9 +34,9 @@ Node::Node() {
 Node::Node(NodeLocator* loc, NodeVal* x,string ids,size_t newid,size_t newtw,size_t newtier) {
 	nodeid 			= newid;
 	nodetw			= newtw;
-	idstr				= ids;
-	nodetier 	  = newtier;
-	nodeparent	= nullptr; // filled during addchild
+	idstr			= ids;
+	nodetier 	  	= newtier;
+	nodeparent		= nullptr; // filled during addchild
 	nodesiblingnum	= 0;
 	v				= x;    // assign NodeVal
 	locator			= loc;
@@ -287,7 +249,7 @@ Node* Node::nodebypath(Messages& errs,const string& path) {
 			}
 		}
 	}
-	NodeLocator::loc_path=path;
+//	NodeLocator::loc_path=path;
 	result =  locator->locate(errs,this,path.begin(),path.end());
 	if (result == nullptr) {
 		errs << Message(error,"Path: " + path + " did not find a node.");
@@ -300,7 +262,7 @@ Node* Node::nodebypath(Messages& errs,const string& path) {
 Node* Node::nodebypath(Messages& errs,string::const_iterator in, string::const_iterator out) {
 	Node* result = nullptr;
 	if ( (out - in) > 0) { 	// If specified startnode, use it
-		NodeLocator::loc_path=string(in,out);
+//		NodeLocator::loc_path=string(in,out);
 		result =  locator->locate(errs,this,in,out);
 	}
 	return result;
@@ -362,6 +324,7 @@ void Node::setLayouts(Messages& errs) {
 // It should probably be part of nodeval
 void Node::Layout(Messages& errs) {
 	if (errs.verbosity() > 6 ) errs << Message(info,"Loading template list for node " + idstr );
+	Env& env = Env::e();
 	if( nodeid != 0 ) {  //don't do anything for root
 		vector<size_t> templateids;
 		if (errs.verbosity() > 6 ) {
@@ -374,8 +337,7 @@ void Node::Layout(Messages& errs) {
 			templateids = nmi->second; // My order
 		} else {
 			ostringstream text;
-			//TODO change techID from env to the current Tech!!!
-			text << "Found a Layout " << layout() << " at Node " + idstr + " for Technology " << Env::e().techID() << " with a null templatelist.";
+			text << "Found a Layout " << layout() << " at Node " + idstr + " for Technology " << env.technology().name << " with a null template list.";
 			errs << Message(error,text.str());
 			return;
 		}
@@ -426,68 +388,6 @@ void Node::Layout(Messages& errs) {
 			if (errs.verbosity() > 6 ) errs << Message(info,"Node " + idstr + " Finished adding pages. " );
 			delete nfilename;
 		}
-	}
-}
-
-void Node::loadLayouts(Messages& errs,Connection& dbc) {
-	if (errs.verbosity() > 3) errs << Message(info,"Loading layouts and templates.");
-	if (bld->showTiming) { Logger::setTimer("loadLayouts"); }
-	if (dbc.dbselected() && dbc.table_exists(errs,"bldlayout") && dbc.table_exists(errs,"bldlayouttechs") && dbc.table_exists(errs,"bldtemplate")) {
-		ostringstream qstr;
-		dbc.lock(errs, "bldlayout l read,bldlayouttechs x read,bldtemplate t read" ); //everyone can read only..
-		qstr << "select layout,templatelist,name from bldlayout l, bldlayouttechs x where x.layout=l.id and technology=" << bld->Tech;
-		auto* q = dbc.query(errs,qstr.str());
-		if ( q->execute(errs) ) {
-			string f_layout_id,f_templatelist,f_name;
-			size_t layoutcount = 0;
-			while(q->nextrow()) {
-				q->readfield(errs,"layout",f_layout_id);			//discarding bool.
-				q->readfield(errs,"templatelist",f_templatelist);	//discarding bool.
-				q->readfield(errs,"name",f_name);					//discarding bool.
-				vector<size_t> templatelist;
-				size_t id = natural(f_layout_id);
-				tolist( templatelist,f_templatelist);
-				layoutList.insert(intintvectmap::value_type(id, templatelist));
-				bld->LayoutRefs.insert(reftointmap::value_type(f_name, id));
-				bld->LayoutNames.insert(uintstringmaptype::value_type(id,f_name));
-				layoutcount++;
-			}
-			layouts = layoutcount;
-			if (errs.verbosity() > 3) {
-				*Logger::log << Log::info << layoutcount << " layouts imported. " << Log::end;
-			}
-			qstr.str("");
-			qstr << "select distinct(t.id) as id,t.templatemacro,t.suffix,t.break,t.comment from bldtemplate t,bldlayouttechs x where ";
-			qstr <<  "find_in_set(t.id,x.templatelist) != 0 and x.technology=" << bld->Tech;
-			q->setquery(qstr.str());
-			if ( q->execute() ) {
-				layoutcount = 0;
-				string f_id,f_comment;
-				while(q->nextrow()) {
-					filetemplate n;
-					q->readfield("id",f_id);				//discarding bool.
-					q->readfield("templatemacro",n.str);	//discarding bool.
-					q->readfield("suffix",n.suffix);		//discarding bool.
-					q->readfield("break",n.br);				//discarding bool.
-					q->readfield("comment",f_comment);		//discarding bool.
-					size_t id = String::natural(f_id);
-					bld->TemplateList.insert(templatemap::value_type(id, pair<string, filetemplate >(f_comment,n)));
-					layoutcount++;
-				}
-				bld->Template = layoutcount;
-				if (errs.verbosity() > 3)
-					*Logger::log << Log::info << layoutcount << " templates imported. " << Log::end;
-			} else {
-				*Logger::log << Log::error << "Build::loadLayouts: DB Error while loading templates." << Log::end;
-			}
-		} else {
-			*Logger::log << Log::error << "Build::loadLayouts: DB Error while loading layouts." << Log::end;
-		}
-		bld->unlocktables();
-	}
-	if (showTiming) { *Logger::log << Log::timing << Log::Ctime << "loadLayouts" << "loadLayouts()" << Log::end; }
-	if (errs.verbosity() > 3) {
-		*Logger::log << O << Log::info << "Layouts and templates loaded." << Log::end;
 	}
 }
 
