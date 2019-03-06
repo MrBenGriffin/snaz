@@ -20,7 +20,7 @@ namespace Support {
 	enum units { µs, ms, ns, s, m, h, nat, all, none};
 
 	class Timing {
-
+		static bool _show;    //show timing in logs..
 		static timestamp nBasetime;    //used for timing nodes.
 		static timestamp bBasetime;    //used for timing builds.
 		static timestamp lBasetime;    //used for loop timing.
@@ -36,10 +36,12 @@ namespace Support {
 		static long long nanos(const timecount &);
 		static long double seconds(const timecount &);
 		static void startup();
-		static void setTiming(char,std::string= "unknown");
+		static void set(char,std::string= "unknown");
+		static void setShow(bool Show = true) { _show = Show; }
+		static bool show() { return _show; }
 		static void str(std::ostream&,timecount,units=nat);
-		static void getTiming(std::ostream&,char,std::string= "unknown",units=nat);
-		static void getTiming(Messages&,char,std::string= "unknown",units=nat);
+		static void get(std::ostream&,char,std::string= "unknown",units=nat);
+		static void get(Messages&,char,std::string= "unknown",units=nat);
 		static bool smaller(const timecount &, const timecount &);
 
 	};

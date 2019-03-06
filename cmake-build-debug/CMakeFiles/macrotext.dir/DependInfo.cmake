@@ -4,6 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
+  "/Users/ben/CLionProjects/snaz/Build.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/Build.cpp.o"
   "/Users/ben/CLionProjects/snaz/cmake-build-debug/advanced.yy.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/advanced.yy.cpp.o"
   "/Users/ben/CLionProjects/snaz/cmake-build-debug/classic.yy.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/classic.yy.cpp.o"
   "/Users/ben/CLionProjects/snaz/main.cpp" "/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles/macrotext.dir/main.cpp.o"

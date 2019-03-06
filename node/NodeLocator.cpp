@@ -148,7 +148,7 @@ bool NodeLocator::doContent() {
 	if (showPaths) message << "C" ;
 	in++;
 	from = Node::rootc;
-	find = Node::rootc->nodebypath( in, out );
+	find = Node::rootc->nodebypath(*errs, in, out );
 	return find != nullptr;
 }
 
@@ -157,7 +157,7 @@ bool NodeLocator::doTaxonomy() {
 	if (showPaths) message << "T" ;
 	in++;
 	from = Node::roott;
-	find = Node::roott->nodebypath( in, out );
+	find = Node::roott->nodebypath(*errs, in, out );
 	return find != nullptr;
 }
 
@@ -166,7 +166,7 @@ bool NodeLocator::doSuffix() {
 	if (showPaths) message << "S" ;
 	in++;
 	from = Node::roots;
-	find = Node::roots->nodebypath( in, out );
+	find = Node::roots->nodebypath(*errs, in, out );
 	return find != nullptr;
 }
 
@@ -198,8 +198,8 @@ bool NodeLocator::doPeerNext() {
 	NodeLocator rootLocator;
 	rootLocator.setroot(root);
 	NodeLocator::loc_path=rootString;
-	Node* lRoot = rootLocator.locate(from, rootString.begin(), rootString.end() );
-	find = from->nodenext(lRoot);
+	Node* lRoot = rootLocator.locate(*errs, from, rootString.begin(), rootString.end() );
+	find = from->nodenext(*errs,lRoot);
 	if( find == nullptr)
 		return true;
 	else
@@ -234,8 +234,8 @@ bool NodeLocator::doPeerLast() {
 	NodeLocator rootLocator;
 	rootLocator.setroot(root);
 	NodeLocator::loc_path=rootString;
-	Node *lRoot = rootLocator.locate(from, rootString.begin(), rootString.end() );
-	find = from->nodelast(lRoot);
+	Node *lRoot = rootLocator.locate(*errs, from, rootString.begin(), rootString.end() );
+	find = from->nodelast(*errs, lRoot);
 	if( find == nullptr)
 		return true;
 	else
@@ -247,17 +247,17 @@ bool NodeLocator::doPeerLast() {
 bool NodeLocator::doRR() {
 	in++;	// R
 	if(in == out) {
-		find = from->nodebytw(+1);
+		find = from->nodebytw(*errs, +1);
 	} else {
 		switch ( *in ) {
 			case '-':
 				if (showPaths) message << "R-" ;
 				in++;
-				find = from->nodebytw(-1);
+				find = from->nodebytw(*errs, -1);
 				break;
 			case '+':
 				if (showPaths) message << "R+" ;
-				find = from->nodebytw(+1);
+				find = from->nodebytw(*errs, +1);
 				in++;
 				break;
 			case 'L': { //find first node with matching layout in descendents of current node (depth first traversal).
@@ -281,11 +281,11 @@ bool NodeLocator::doRR() {
 					}
 				}
 				//at this point we have some sort of layout.
-				find = from->nodebytw(+1); //next node..
+				find = from->nodebytw(*errs, +1); //next node..
 				if (showPaths) message << "(" << find->id() << "; " << find->layout() << ")";
 				if (next) { //carry on..
 					while (find->id() != from->id() && find->layout() != layout) {
-						find = find->nodebytw(+1); //next node..
+						find = find->nodebytw(*errs, +1); //next node..
 						if (showPaths) message << "(" << find->id() << "; " << find->layout() << ")";
 					}
 					//at this point either find = from or find has a layout..
@@ -297,7 +297,7 @@ bool NodeLocator::doRR() {
 					}
 				} else {
 					while (find->tier() > from->tier() && find->layout() != layout) {
-						find = find->nodebytw(+1); //next node..
+						find = find->nodebytw(*errs, +1); //next node..
 						if (showPaths) message << "(" << find->id() << "; " << find->layout() << ")";
 					}
 					if(find->tier() <= from->tier()) {
@@ -339,8 +339,8 @@ bool NodeLocator::doMainNode() {
 	if (showPaths) message << "m";
 	in++;
 	setdirty();
-	if(!bld->node_stack.empty()) {
-		find = bld->node_stack.front();
+	if(!Node::nodeStack.empty()) {
+		find = Node::nodeStack.front();
 		return nextPathSection();
 	} else {
 		return true;
@@ -384,7 +384,7 @@ bool NodeLocator::doSiblingRight() {
 				find = from;
 			} else {
 				Node *pn = from->parent();
-				pair<size_t,bool> offset=String::znatural(in);
+				pair<size_t,bool> offset= znatural(in);
 				if (!offset.second) {
 					throw BadNodeLocatorPath(errs,start,in,out);
 				} else {
@@ -394,7 +394,7 @@ bool NodeLocator::doSiblingRight() {
 						find = nullptr;
 						return true;
 					}
-					find = (pn->child((size_t)sibnum));
+					find = (pn->child(*errs, (size_t)sibnum));
 					if( find == nullptr) { return true; }
 				}
 			}
@@ -427,7 +427,7 @@ bool NodeLocator::doSiblingLeft() {
 				find = nullptr;
 				return true;
 			}
-			find = (pn->child((size_t)sibnum));
+			find = (pn->child(*errs, (size_t)sibnum));
 			if( find == nullptr) { return true; }
 		}
 	}
@@ -455,7 +455,7 @@ bool NodeLocator::doChildLeft() {
 							find = nullptr;
 							return true; //RANGE error
 						}
-						find = (from->child(sibnum.first - 1 ));
+						find = (from->child(*errs, sibnum.first - 1 ));
 						if( find == nullptr)  { return true;}
 						if (showPaths) { message << "={" << find->id() << "}"; }
 					}
@@ -474,7 +474,7 @@ bool NodeLocator::doChildLeft() {
 						find = nullptr; // not found yet
 						size_t kids = from->getNumchildren();
 						for (size_t i =0; i < kids; i++) {
-							Node* cn = from->child(i);
+							Node* cn = from->child(*errs, i);
 							if (cn->layout() == ilayout.first) {
 								find = cn;
 								break;
@@ -514,7 +514,7 @@ bool NodeLocator::doChildRight() {
 			find = nullptr;
 			return true;
 		}
-		find = (from->child(sibnum-1));
+		find = (from->child(*errs,sibnum-1));
 		if( find == nullptr) { return true;}
 	}
 	return nextPathSection();
@@ -548,7 +548,7 @@ bool NodeLocator::doLinkRef() {
 	while (in != out && *in != ':' && *in != '/' ) in++;
 	string linkref(inx,in);
 	if (showPaths) message << "!" << linkref;
-	Node* result = root->nodebylinkref(linkref);
+	Node* result = root->nodebylinkref(*errs,linkref);
 	if (result != nullptr ) {
 		find = result;
 	} else {
@@ -653,7 +653,7 @@ bool NodeLocator::doStackFromInside() {
 	if (!offset.second) {
 		throw BadNodeLocatorPath(errs,start,in,out);
 	} else {
-		size_t stsize = 	bld->node_stack.size();
+		size_t stsize = 	Node::nodeStack.size();
 		if (offset.first!=0) {
 			setdirty();
 			//			dirtmsg << "I-Stack must be 0 Path:"+NodeLocator::loc_path;
@@ -662,11 +662,11 @@ bool NodeLocator::doStackFromInside() {
 		Node* result = nullptr;
 		if (stsize < 2) { //we are in template.
 			if ((size_t)offset.first < stsize) {
-				result = bld->node_stack[stsize-((size_t)offset.first+1)]; //offset=0, size=1; 1-(0+1) = 0;
+				result = Node::nodeStack[stsize-((size_t)offset.first+1)]; //offset=0, size=1; 1-(0+1) = 0;
 			}
 		} else {
 			if ((size_t)offset.first < (stsize-1)) {
-				result = bld->node_stack[stsize-((size_t)offset.first+1)]; //offset=0, size=1; 1-(0+1) = 0;
+				result = Node::nodeStack[stsize-((size_t)offset.first+1)]; //offset=0, size=1; 1-(0+1) = 0;
 			}
 		}
 		if (result != nullptr ) {
@@ -685,17 +685,17 @@ bool NodeLocator::doStackFromOutside() {
 	if (!offset.second) {
 		throw BadNodeLocatorPath(errs,start,in,out);
 	} else {
-		size_t stsize = 	bld->node_stack.size();
+		size_t stsize = 	Node::nodeStack.size();
 		setdirty();
 		if (showPaths) message << "O" << (size_t)offset.first;
 		Node* result = nullptr;
 		if (stsize < 2) { //we are in template.
 			if (offset.first < stsize) {
-				result = bld->node_stack[offset.first];
+				result = Node::nodeStack[offset.first];
 			}
 		} else {
 			if (1+offset.first < stsize) {
-				result = bld->node_stack[1+offset.first];
+				result = Node::nodeStack[1+offset.first];
 			}
 		}
 		if (result != nullptr ) {

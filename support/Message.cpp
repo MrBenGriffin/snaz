@@ -24,7 +24,9 @@ namespace Support {
 			case usage:	 log << "using"; break;
 			case trace:  log << "trace"; break;
 			case code:   log << "-raw-"; break;
-			case timing: log << "time"; break;
+			case timing: log << "time:"; break;
+			case even: 	 log << "-line"; break;
+			case struc:  log << "....."; break;
 		}
 		log << ": " << content << flush;
 	}

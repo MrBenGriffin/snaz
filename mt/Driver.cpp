@@ -134,6 +134,17 @@ namespace mt {
 		parm.clear();
 	}
 
+
+	std::string Driver::expand(Messages& e,std::string& program,std::string name) {
+		bool advanced = Definition::test_adv(program);
+		std::istringstream code(program);
+		Driver driver(e,code,advanced);
+		mtext structure = driver.parse(e,false); //no strip
+		ostringstream result;
+		driver.expand(result,e,name);
+		return result.str();
+	}
+
 	void Driver::expand(std::ostream& o,Messages& e,const std::string &title) {
 		mtext result;
 		mstack context;

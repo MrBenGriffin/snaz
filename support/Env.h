@@ -12,8 +12,8 @@
 
 namespace Support {
 	using 	namespace std;
-	enum	buildspace {Build,Temporary,Scripts,Media,Tests};	//Buildspace indicates what directory area is relevant
-	enum 	buildarea  {Editorial,Final,Draft,Console,Release,Staging};
+	enum	buildspace {Built,Temporary,Scripts,Media,Tests};	//Buildspace indicates what directory area is relevant
+	enum 	buildArea  {Editorial,Final,Draft,Console,Release,Staging,Testing};
 	enum    buildnodes {Branch,Descendants,Singles,None};
 
 	class Env {
@@ -33,7 +33,6 @@ namespace Support {
 		string wd();
 
 		Env(); // Disallow instantiation outside of the class.
-		bool Testing;
 		bool IsFinal; //is this draft or final.
 		bool MayBuild;
 		bool FullBuild;
@@ -44,11 +43,6 @@ namespace Support {
 		bool ParseLegacy;
 		bool ParseOnly;
 		bool ForceDeleteLock;
-
-		size_t LanguageID;
-		size_t TechnologyID;
-		size_t TechnologyCount;
-		size_t LanguageCount;
 
 		string SiteRootDir;
 		string RemoteUser;
@@ -61,7 +55,7 @@ namespace Support {
 		static Env& e();
 		void   startup(const int=0,const char** = nullptr);
 		bool   get(string,string&,string="");
-		buildarea area();
+		buildArea area();
 
 //		string logsDir()  	const 	{ return LogsDir; }
 //		string finalDir() 	const 	{ return FinalDir; }
@@ -69,8 +63,7 @@ namespace Support {
 //		string scriptsDir() const 	{ return ScriptsDir; }
 		Path basedir(buildspace);
 		void basedir(string&,buildspace,bool,bool);
-		void setTesting(bool flag) { Testing = flag; }
-		size_t techID() { return TechnologyID; }
+		std::string baseUrl(buildArea);
 //		Path root(string append = "");
 	};
 

@@ -1,9 +1,11 @@
 
-
+#include <sstream>
 #include <utility>
 #include "Node.h"
 #include "NodeLocator.h"
 #include "NodeVal.h"
+
+#include "mt/Driver.h"
 
 #include "support/File.h"
 #include "support/Regex.h"
@@ -12,23 +14,31 @@
 #include "support/Timing.h"
 #include "support/db/Query.h"
 
+#include "Build.h"
+
 using namespace Support;
 using namespace Support::Db;
+using namespace mt;
 
-refmaptype Node::tax_fields;					//A quick reference to the fields by name (as in iTax)
+refMap 			Node::tax_fields;				//A quick reference to the fields by name (as in iTax)
+idTemplateMap	Node::templateList;
+idIdListMap		Node::layoutList;				//Stores a layout-id -> template-list structure
+refMap			Node::layoutRefs;				//Layout names -> ids
+invRefMap		Node::layoutNames;				//Layout ids->names
+deque< Node* > 	Node::nodeStack;				//current node - used to pass to built-in functions
+Node* 			Node::roott = nullptr;
+Node* 			Node::rootc = nullptr;
+Node* 			Node::roots = nullptr;
+std::string 	Node::kRootFilename="index";
+std::string		Node::finalSuffix="A2"; 		//final suffix. All suffixes end up with an A2 suffix
+bool 			Node::_showTemplates=false;   //show templates in logs..
 
-deque< Node* > 	Node::node_stack;				//current node - used to pass to built-in functions
-Node* Node::roott = nullptr;
-Node* Node::rootc = nullptr;
-Node* Node::roots = nullptr;
-string Node::kRootFilename="index";
-intintvectmap Node::layoutList;
 
 //-------------------------------------------------------------------
 //return current node (I0)
 Node* Node::current(kind tree) {
-	if (tree == page && !node_stack.empty()) {
-		return node_stack.back();
+	if (tree == page && !nodeStack.empty()) {
+		return nodeStack.back();
 	} else {
 		switch(tree) {
 			case page:	return rootc;
@@ -44,16 +54,16 @@ Node* Node::node(size_t id,kind tree) {
 
 //-----------------------------------------------------------------
 void Node::inittaxfields() {
-	tax_fields.insert(refmaptype::value_type("id",0));
-	tax_fields.insert(refmaptype::value_type("scope",1));
-	tax_fields.insert(refmaptype::value_type("linkref",2));
-	tax_fields.insert(refmaptype::value_type("tier",3));
-	tax_fields.insert(refmaptype::value_type("team",4));
-	tax_fields.insert(refmaptype::value_type("title",5));
-	tax_fields.insert(refmaptype::value_type("shorttitle",6));
-	tax_fields.insert(refmaptype::value_type("classcode",7));
-	tax_fields.insert(refmaptype::value_type("synonyms",8));
-	tax_fields.insert(refmaptype::value_type("article",9)); //descr
+	tax_fields.insert({"id",0});
+	tax_fields.insert({"scope",1});
+	tax_fields.insert({"linkref",2});
+	tax_fields.insert({"tier",3});
+	tax_fields.insert({"team",4});
+	tax_fields.insert({"title",5});
+	tax_fields.insert({"shorttitle",6});
+	tax_fields.insert({"classcode",7});
+	tax_fields.insert({"synonyms",8});
+	tax_fields.insert({"article",9}); //descr
 }
 
 //-------------------------------------------------------------------
@@ -72,9 +82,9 @@ Node::Node() {
 Node::Node(NodeLocator* loc, NodeVal* x,string ids,size_t newid,size_t newtw,size_t newtier) {
 	nodeid 			= newid;
 	nodetw			= newtw;
-	idstr				= ids;
-	nodetier 	  = newtier;
-	nodeparent	= nullptr; // filled during addchild
+	idstr			= ids;
+	nodetier 	  	= newtier;
+	nodeparent		= nullptr; // filled during addchild
 	nodesiblingnum	= 0;
 	v				= x;    // assign NodeVal
 	locator			= loc;
@@ -355,12 +365,13 @@ void Node::setLayouts(Messages& errs) {
 	if (errs.verbosity() > 5 ) {
 		errs << Message(info,"Layouts are set");
 	}
-//	bld->_Root = "/"; //.clear();
+//	_Root = "/"; //.clear();
 }
 //-------------------------------------------------------------------
 // load template list for the (content) node
 // It should probably be part of nodeval
 void Node::Layout(Messages& errs) {
+	Build build = Build::b();
 	if (errs.verbosity() > 6 ) errs << Message(info,"Loading template list for node " + idstr );
 	if( nodeid != 0 ) {  //don't do anything for root
 		vector<size_t> templateids;
@@ -374,8 +385,7 @@ void Node::Layout(Messages& errs) {
 			templateids = nmi->second; // My order
 		} else {
 			ostringstream text;
-			//TODO change techID from env to the current Tech!!!
-			text << "Found a Layout " << layout() << " at Node " + idstr + " for Technology " << Env::e().techID() << " with a null templatelist.";
+			text << "Found a Layout " << layout() << " at Node " + idstr + " for Technology " << build.currentTech() << " with a null templatelist.";
 			errs << Message(error,text.str());
 			return;
 		}
@@ -430,16 +440,18 @@ void Node::Layout(Messages& errs) {
 }
 
 void Node::loadLayouts(Messages& errs,Connection& dbc) {
+	ostringstream text;
+	Env& env =Env::e();
+	Build& build = Build::b();
 	if (errs.verbosity() > 3) errs << Message(info,"Loading layouts and templates.");
-	if (bld->showTiming) { Logger::setTimer("loadLayouts"); }
+	if (Timing::show()) { Timing::set('c',"loadLayouts"); }
 	if (dbc.dbselected() && dbc.table_exists(errs,"bldlayout") && dbc.table_exists(errs,"bldlayouttechs") && dbc.table_exists(errs,"bldtemplate")) {
 		ostringstream qstr;
 		dbc.lock(errs, "bldlayout l read,bldlayouttechs x read,bldtemplate t read" ); //everyone can read only..
-		qstr << "select layout,templatelist,name from bldlayout l, bldlayouttechs x where x.layout=l.id and technology=" << bld->Tech;
+		qstr << "select layout,templatelist,name from bldlayout l, bldlayouttechs x where x.layout=l.id and technology=" << build.currentTech();
 		auto* q = dbc.query(errs,qstr.str());
 		if ( q->execute(errs) ) {
 			string f_layout_id,f_templatelist,f_name;
-			size_t layoutcount = 0;
 			while(q->nextrow()) {
 				q->readfield(errs,"layout",f_layout_id);			//discarding bool.
 				q->readfield(errs,"templatelist",f_templatelist);	//discarding bool.
@@ -447,101 +459,109 @@ void Node::loadLayouts(Messages& errs,Connection& dbc) {
 				vector<size_t> templatelist;
 				size_t id = natural(f_layout_id);
 				tolist( templatelist,f_templatelist);
-				layoutList.insert(intintvectmap::value_type(id, templatelist));
-				bld->LayoutRefs.insert(reftointmap::value_type(f_name, id));
-				bld->LayoutNames.insert(uintstringmaptype::value_type(id,f_name));
-				layoutcount++;
+				layoutList.insert({id, templatelist});
+				layoutRefs.insert({f_name, id});
+				layoutNames.insert({id,f_name});
 			}
-			layouts = layoutcount;
 			if (errs.verbosity() > 3) {
-				*Logger::log << Log::info << layoutcount << " layouts imported. " << Log::end;
+				text <<  layoutRefs.size() << " layouts imported.";
+				errs << Message(info,text.str()); text.str("");
 			}
 			qstr.str("");
 			qstr << "select distinct(t.id) as id,t.templatemacro,t.suffix,t.break,t.comment from bldtemplate t,bldlayouttechs x where ";
-			qstr <<  "find_in_set(t.id,x.templatelist) != 0 and x.technology=" << bld->Tech;
+			qstr <<  "find_in_set(t.id,x.templatelist) != 0 and x.technology="  << build.currentTech();
 			q->setquery(qstr.str());
-			if ( q->execute() ) {
-				layoutcount = 0;
+			if ( q->execute(errs) ) {
 				string f_id,f_comment;
 				while(q->nextrow()) {
-					filetemplate n;
-					q->readfield("id",f_id);				//discarding bool.
-					q->readfield("templatemacro",n.str);	//discarding bool.
-					q->readfield("suffix",n.suffix);		//discarding bool.
-					q->readfield("break",n.br);				//discarding bool.
-					q->readfield("comment",f_comment);		//discarding bool.
-					size_t id = String::natural(f_id);
-					bld->TemplateList.insert(templatemap::value_type(id, pair<string, filetemplate >(f_comment,n)));
-					layoutcount++;
+					FileTemplate n;
+					q->readfield(errs,"id",f_id);				//discarding bool.
+					q->readfield(errs,"templatemacro",n.str);	//discarding bool.
+					q->readfield(errs,"suffix",n.suffix);		//discarding bool.
+					q->readfield(errs,"break",n.br);				//discarding bool.
+					q->readfield(errs,"comment",f_comment);		//discarding bool.
+					size_t id = natural(f_id);
+					templateList.insert({id, pair<string, FileTemplate >(f_comment,n)});
 				}
-				bld->Template = layoutcount;
-				if (errs.verbosity() > 3)
-					*Logger::log << Log::info << layoutcount << " templates imported. " << Log::end;
+				if (errs.verbosity() > 3) {
+					text << templateList.size() << " templates imported. ";
+					errs << Message(info,text.str()); text.str("");
+				}
 			} else {
-				*Logger::log << Log::error << "Build::loadLayouts: DB Error while loading templates." << Log::end;
+				errs << Message(error,"Build::loadLayouts: DB Error while loading templates.");
 			}
 		} else {
-			*Logger::log << Log::error << "Build::loadLayouts: DB Error while loading layouts." << Log::end;
+			errs << Message(error,"Build::loadLayouts: DB Error while loading templates.");
 		}
-		bld->unlocktables();
+		dbc.unlock(errs);
 	}
-	if (showTiming) { *Logger::log << Log::timing << Log::Ctime << "loadLayouts" << "loadLayouts()" << Log::end; }
+	if (Timing::show()) {
+		text << "loadLayouts() took ";
+		Timing::get(text,'c',"loadLayouts");
+		errs << Message(timing,text.str()); text.str("");
+	}
 	if (errs.verbosity() > 3) {
-		*Logger::log << O << Log::info << "Layouts and templates loaded." << Log::end;
+		errs << Message(info,"Layouts and templates loaded.");
 	}
 }
 
 //-------------------------------------------------------------------
 void Node::addpage(Messages& errs,NodeFilename* filename) {
+	ostringstream text;
+	Build& build = Build::b();
 	if ( this == rootc ) {
 		return;
 	} else {
 		size_t page = numpages(); //current page we are creating..
 		if (errs.verbosity() > 6 ) {
-			ostringstream text;
 			text << "Node " << idstr << " currently on page " << page << " page of " << (size_t)templateCount();
 			errs << Message(info,text.str());
+			text.str("");
 		}
 		string emptyname;
 
 		if(page >= templateCount()) {
-			ostringstream text;
 			text << " Attempt to create pages for too few templates; " << page << " requested; " << (size_t)templateCount() << " defined. Will leave it empty";
 			errs << Message(warn,text.str());
 			return;
 		}
 		filename->setPageName(basefilename(), page);
 		filename->getFullName(Filename(page), emptyname);
-		filetemplate curtemplate;
+		FileTemplate curtemplate;
 		size_t tid = Template(page);
 		if (errs.verbosity() > 6 ) {
 			ostringstream text; text << "Node " << idstr << " page " << page << " has template ID " << tid;
 			errs << Message(info,text.str() );
+			text.str("");
 		}
 
-		templatemap::const_iterator nmi = bld->TemplateList.find(tid);
-		if (nmi != bld->TemplateList.end()) {
+		auto nmi = templateList.find(tid);
+		if (nmi != templateList.end()) {
 			curtemplate = nmi->second.second; // My order
-			string suff;
-			bld->node_stack.push_back(this); //tid
+			nodeStack.push_back(this); //tid
 			ostringstream tname;  tname << "Suffix " << tid;
-			suff = macro::process(Logger::log,tname.str(),curtemplate.suffix); //name must be unique...
-			bld->node_stack.pop_back();
+			ostringstream result;
+			string suff = Driver::expand(errs,curtemplate.suffix,tname.str());
+			nodeStack.pop_back();
 			Suffix(page,suff);        //Now we need to deal with it as macrotext..
-			if (errs.verbosity() > 6 ) errs << Message(info, "Node " + idstr + " page " << page << " has suffix " << suff );
-			if ( bld->roots == nullptr ) {
+			if (errs.verbosity() > 6 ) {
+				text << "Node " << idstr << " page " << page << " has suffix " << suff;
+				errs << Message(info,text.str());
+				text.str("");
+			}
+			if ( roots == nullptr ) {
 				errs << Message(error, "Suffix Root is nullptr!" );
 			} else {
 				//This has set up the suffixes..
 				//We need to find the ancestor suffix so that any links we create can deal with the post-processed versions!
-				Node *x = bld->roots->nodebylinkref(suff);
+				Node *x = roots->nodebylinkref(errs, suff);
 
 				if (x == nullptr)  {
 					string fname = Filename(page);
 					filename->getFullName(fname, suff);
 					SetFfilename(page,fname);
 				} else {
-					Node *vx = x->nodebypath(bld->finalsuffix.begin(),bld->finalsuffix.end());
+					Node *vx = x->nodebypath(errs,finalSuffix.begin(),finalSuffix.end());
 					if ( vx == nullptr) {
 						errs << Message(error, "Error of some sort in suffix table" );
 					} else {
@@ -549,107 +569,119 @@ void Node::addpage(Messages& errs,NodeFilename* filename) {
 					}
 					string fname = Filename(page);
 					filename->getFullName(fname, suff);	//This now works!  Amazing.
-					if (errs.verbosity() > 6 ) errs << Message(info, "Node " + idstr + " page " << page << " is set with filename " << fname );
+					if (errs.verbosity() > 6 ) {
+						text << "Node " + idstr + " page " << page << " is set with filename " << fname;
+						errs << Message(info,text.str()); text.str("");
+					}
 					SetFfilename(page,fname);
 				}
 			}
 			incPageCount();
 		} else {
-			errs << Message(error, "Template " << tid << " at Node " << id() << ",Technology " << bld->Tech << " referenced but does not exist." );
+			Env env = Env::e();
+			text << "Template " << tid << " at Node " << id() << ",Technology " << build.currentTech() << " referenced but does not exist.";
+			errs << Message(error,text.str()); text.str("");
 		}
 	}
 	if (errs.verbosity() > 6 ) errs << Message(info, "Node " + idstr + " Finished adding page " );
 }
+
 //-------------------------------------------------------------------
 //This is the beginning of the node build.
 void Node::gettextoutput(Messages& errs) {
+	Env env = Env::e();
+	Build build = Build::b();
 	string in_s,baseurl_a,baseurl_s,langtech_s;
-	Timing::setTiming('N');
-	Env::get("LTPATH",langtech_s);
-	bool inteam = false;
-	auto it = bld->Teams.find(team());
-	if ( it != bld->Teams.end() ) inteam = true;
+	Timing::set('N');
+	env.get("LTPATH",langtech_s);
+	bool inTeam = build.inUserTeams(team());
 	if (errs.verbosity() > 0) {
 		ostringstream line_oss;
-		if (inteam) {
-			bld->baseurl(baseurl_a,Build::Editorial);
+		if (inTeam) {
+			baseurl_a = env.baseUrl(Editorial);
 			if ( Regex::available(errs) ) {
+				string editor;
 				const string pattern = "^([^0]*)0([^0]*)0([^0]*)$";
-				string nodepath = bld->nodepath;
-				ostringstream sub;
-				sub << "\\1" << this->id() << "\\2" << bld->lng << "\\3";
-				Regex::replace(pattern,sub.str(),nodepath);
-				line_oss << nodepath;
+				env.get("RS_BUILDNODEPATH",editor,"/en/nnedit.mxs?0&d&0"); //if none, keep default.
+				std::ostringstream sub;
+				sub << "\\1" << this->id() << "\\2" << build.currentLang() << "\\3";
+				Regex::replace(errs,pattern,sub.str(),editor);
+				line_oss << editor;
 			} else {
-				line_oss << "/en/nnedit.mxs?" << this->id() << "&d&" << bld->lng;
+				line_oss << "/en/nnedit.mxs?" << this->id() << "&d&" << build.currentLang();
 			}
 		}
-		string enctitle = title();
-		if (enctitle.empty()) enctitle = linkref();
-		if (bld->dev) {
-			bld->baseurl(baseurl_s,Build::Preview);
-		} else {
-			bld->baseurl(baseurl_s,Build::Public);
-		}
-		if (enctitle.length() > 60) {
-			enctitle = enctitle.substr(0,60);
-			enctitle = enctitle.append("...");
+		string Title = title();
+		if (Title.empty()) Title = linkref();
+		baseurl_s = env.baseUrl(build.current()); //current()
+		if (Title.length() > 60) {
+			Title = Title.substr(0,60);
+			Title = Title.append("...");
 		}
 		bool did_url = false;
 		for(size_t i = 0; i < templateCount() && !did_url; i++) {
 			if (Suffix(i) != "XXX") {
-				errs << Message(even << I;
-				if (inteam) {
-					*Logger::log << urli << baseurl_a << line_oss.str() << urlt << "*" << urlo << " ";
+				ostringstream line;
+				if (inTeam) {
+					line << "<a href='" << baseurl_a << line_oss.str() << "'>" << "*" << "</a>";
 				} else {
-					*Logger::log << "+ ";
+					line << "+ ";
 				}
-				*Logger::log << this->id() << " - " << urli << baseurl_s << "/" << langtech_s << Ffilename(0) << urlt << Log::RI << enctitle << Log::RO << urlo );
+				line << this->id() << " - <a href='" << baseurl_s << "/" << langtech_s << Ffilename(0)  << "'>" << Title << "</a>";
+				errs << Message(even,line.str());
 				did_url = true;
 			}
 		}
 		if (!did_url) {
-			errs << Message(structure << I;
-			if (inteam) {
-				*Logger::log << urli << baseurl_a << line_oss.str() << urlt << "*" << urlo << " ";
+			ostringstream line;
+			if (inTeam) {
+				line << "<a href='" << baseurl_a << line_oss.str() << "'>" << "*" << "</a>";
 			} else {
-				*Logger::log << "+ ";
+				line << "+ ";
 			}
-			*Logger::log << this->id() << " - " << Log::RI << enctitle << Log::RO );
+			line << this->id() << " - " << Title;
+			errs << Message(struc,line.str());
 		}
 	}
 	//--
 	string bk;
-	for(size_t i = 0; i < this->templateCount(); i++) {
-		if (bld->showTemplate && this->templateCount() > 1) {
-			errs << Message(info << I << " Template (" << i + 1 << ")" );
+	for(size_t i = 0; i < templateCount(); i++) {
+		build.setPage(i);
+		if (_showTemplates && templateCount() > 1) {
+			ostringstream text;
+			text << " Template (" << i + 1 << ")";
+			errs << Message(info, text.str());
 		}
-		bld->Page = i;
 
-		size_t tnum = this->Template(i);
-		filetemplate curtemplate;
-		templatemap::const_iterator nmi = bld->TemplateList.find(tnum);
 		string templatename("Undefined Template");
-		if (nmi != bld->TemplateList.end()) {
+		size_t templateId = Template(i);
+		FileTemplate curtemplate;
+		auto nmi = templateList.find(templateId);
+		if (nmi != templateList.end()) {
 			curtemplate = nmi->second.second;  // My order
 			templatename = "[" + nmi->second.first + "]";  // The template's name
-			bld->Suffix = curtemplate.suffix;
+			build.setSuffix(curtemplate.suffix);
 			in_s = curtemplate.str;  //Starter for template
 			bk = curtemplate.br; //Template's own break.
 		} else {
-			errs << Message(warn << "Template " << tnum << " at Node " << this->id() << ",Technology " << bld->Tech << " referenced but does not exist." );
-			bld->Suffix = "";
+			ostringstream line;
+			line << "Template " << templateId << " at Node " << this->id() << ",Technology " << build.currentTech()
+				 << " referenced but does not exist.";
+			errs << Message(warn, line.str());
+			build.setSuffix("");
 			in_s = "";
 			bk = "";
 		}
 
+		//TODO:: Finish template generation!!
+/*
 		Macro::environ TemplateEnv = macro::topEnv();
 		if ( bk.length() > 0 ) {
 			macro::pushEnv({false,"\n","\t"}); //do not rembr, \n  = newline, tabs are tabs.
-			bld->node_stack.push_back(this);
+			nodeStack.push_back(this);
 			string crlfName = "CR:" + to_string(String::Digest::hash(bk));
 			TemplateEnv.crlf = macro::process(Logger::log,crlfName,bk);
-			bld->node_stack.pop_back();
+			nodeStack.pop_back();
 			macro::popEnv();
 		}
 		macro::pushEnv(TemplateEnv);
@@ -657,46 +689,52 @@ void Node::gettextoutput(Messages& errs) {
 			if (in_s.length() > 0) {
 				string outval;
 				if (in_s.length() > 0) {						//fandr may remove the last char!
-					bld->node_stack.push_back(this);
+					nodeStack.push_back(this);
 					string tnumStr = to_string(tnum);
 					outval = macro::process(Logger::log,"Template " + tnumStr,in_s);
-					bld->node_stack.pop_back();
+					nodeStack.pop_back();
 				}
 				outputtofile(i,outval);
 			}
-			if (bld->showTemplate && this->templateCount() > 1 && errs.verbosity()  > 0) {
+			if (showTemplate && this->templateCount() > 1 && errs.verbosity()  > 0) {
 				*Logger::log << O; //end of show template.
 			}
 			in_s.clear();
 			bk.clear();
 		}
 		macro::popEnv();
+*/
 	}
-
+	//TODO:: And the rest.
+/*
 	//-- This used to be in genfiles, but then happened once for each file, rather than one for each Node.
-	if (bld->dbc->dbselected() && bld->dbc->table_exists("bldnode") ) {
+	if (dbc->dbselected() && dbc->table_exists("bldnode") ) {
 		ostringstream qstr;
 		qstr << "UPDATE LOW_PRIORITY bldnode SET filename='" << this->Ffilename(0) << "' WHERE id=" << this->id();
-		Query* q = bld->dbc->query(qstr.str());
+		Query* q = dbc->query(qstr.str());
 		if (! q->execute() ) {
 			errs << Message(error << "Node::gettextoutput(): DB Error" );
 		}
 		delete q;
 	}
-	bld->resetNodePersistance();	//Delete *vars.
-	if (bld->showTiming && errs.verbosity()  > 3) {
+	resetNodePersistance();	//Delete *vars.
+	if (showTiming && errs.verbosity()  > 3) {
 		errs << Message(timing << Log::Ntime << " build time for node: " << linkref() );
 	}
 	if (errs.verbosity()  > 0) *Logger::log << O; //end of node.
+	*/
 }
 //-----------------------------------------------------------------
 // We shall generate each file here, and then post-process it until its suffix is at A2 of the processor tree.
 // We use A2, because we are allowed multiple suffixes!
 //-----------------------------------------------------------------
 void Node::outputtofile(size_t page, string& out) {
-	File tmpScrp(bld->scrDir);
-	File tmpFil1(bld->tmpDir);
-	File tmpFil2(bld->tmpDir);
+	//TODO:: Finish outputtofile.
+
+	/**
+	File tmpScrp(scrDir);
+	File tmpFil1(tmpDir);
+	File tmpFil2(tmpDir);
 	string tfilename;
 	string suff;
 	bool postprocessed=false;
@@ -704,12 +742,12 @@ void Node::outputtofile(size_t page, string& out) {
 	if (suff != "XXX") {
 		tfilename =  Filename(page);
 		if (suff == "scssi") {					// Sass internal pre-process
-			bld->scssifiles.push_back(tfilename);
+			scssifiles.push_back(tfilename);
 			suff = "scss";									// flipped.
 		}
 		tfilename.append(suff);
 		tmpFil1.setFileName(tfilename);					// Start off with the source..
-		if (bld->showFiling) {
+		if (showFiling) {
 			size_t tflen =  out.length();
 			errs << Message(info << "About to output file " << tfilename << " having " << (size_t)tflen << " bytes" ) ;
 		}
@@ -723,37 +761,37 @@ void Node::outputtofile(size_t page, string& out) {
 			errs << Message(error << "Failed to create file (" << tmpFil1.output() << ")" ) ;
 		}
 		out.clear();
-		Node *x = bld->roots->nodebylinkref(suff);		// Find the post-processor NodeSuffix.  We have the file for this now.
+		Node *x = roots->nodebylinkref(suff);		// Find the post-processor NodeSuffix.  We have the file for this now.
 		if (x != nullptr) {								// We do have a post-processing entry, so lets use it.
-			Node* y = x->nodebypath(bld->finalsuffix.begin(),bld->finalsuffix.end());
+			Node* y = x->nodebypath(finalsuffix.begin(),finalsuffix.end());
 			while ( x != y && x != nullptr) {					// While x is not y, and x is not null, use the scriptpath for x
-				if (!postprocessed && bld->showFiling) {
+				if (!postprocessed && showFiling) {
 					errs << Message(info << "for post-processing using: " << suff << " ";
 					postprocessed = true;
 				}
 				tmpScrp.setFileName(x->script());		// Get the script name for x
 				Node *z = x->parent();
 				if (  x->batch() == 1  ) {							// this is to be batch-processed
-					if (bld->showFiling) {
+					if (showFiling) {
 						*Logger::log << " as one of a batch." );
 					}
-					bld->batchscripts.insert(storage_map_type::value_type(tmpScrp.output(), bld->tmpDir.output() ));
+					batchscripts.insert(storage_map_type::value_type(tmpScrp.output(), tmpDir.output() ));
 				} else {
 					string sfilename =  Filename(page) + x->suffix();
 					tmpFil1.setFileName(sfilename);
 					string dfilename =  Filename(page) + z->suffix();
 					tmpFil2.setFileName(dfilename);
-					if (bld->showFiling) *Logger::log << " -> "<< z->suffix();
+					if (showFiling) *Logger::log << " -> "<< z->suffix();
 					ostringstream command;
-					string build=bld->dev ? "dev " : "live "; // + Environment::Path();
-					command << tmpScrp.output() << " " << tmpFil1.output() << " " << bld->pagePath.output(true) << " " << build << " > " << tmpFil2.output();
-					if (bld->showFiling) errs << Message(info << " About to run command:" << command.str() );
+					string build=dev ? "dev " : "live "; // + Environment::Path();
+					command << tmpScrp.output() << " " << tmpFil1.output() << " " << pagePath.output(true) << " " << build << " > " << tmpFil2.output();
+					if (showFiling) errs << Message(info << " About to run command:" << command.str() );
 					MLog::stream errs("exec");
 					FileUtils::exec(command.str(),errs);
 					errs.str(Logger::log);
 					if ( z->exec() == 1 ) {
-						if (bld->showFiling) *Logger::log << " (Adding exec to:" << tmpFil2.output() << ")";
-						if (bld->showFiling) errs << Message(info << " About to adjust permissions for execute." );
+						if (showFiling) *Logger::log << " (Adding exec to:" << tmpFil2.output() << ")";
+						if (showFiling) errs << Message(info << " About to adjust permissions for execute." );
 						chmod(tmpFil2.output().c_str(),S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IWGRP | S_IXGRP | S_IROTH | S_IXOTH );
 					}
 					tmpFil1.removeFile();
@@ -761,32 +799,34 @@ void Node::outputtofile(size_t page, string& out) {
 				x = z;
 			}
 		}
-		if (bld->showFiling && !postprocessed)  errs << Message(info << " with no post-processing";
-		if (bld->showFiling) errs << Message(end;
+		if (showFiling && !postprocessed)  errs << Message(info << " with no post-processing";
+		if (showFiling) errs << Message(end;
 	}
+	 **/
 }
+
 // -----------------------------------------------------------------------------------
 // generate basic text output for all nodes below Node n in the Node tree */
 // and 'n's direct ancestors for link generation */
-void Node::generateoutput(int level) {
+void Node::generateOutput(Messages& errs,int level) {
 	if(level >= 0 && nodeparent != nullptr ) {// generate output for all direct ancestors
-		nodeparent->generateoutput(level+1);
+		nodeparent->generateOutput(errs,level+1);
 	}
-	if( this != bld->rootc) {
-		gettextoutput();
+	if( this != rootc) {
+		gettextoutput(errs);
 	}
 	if(level <= 0) { 	// generate output for all descendents
 		for (auto &i : children)
-			i->generateoutput(level-1);
+			i->generateOutput(errs,level-1);
 	}
 }
 // -----------------------------------------------------------------------------------
 // generate basic text output for all nodes below Node n in the Node tree */
-void Node::generatebranch(int level) {
-	if( this != bld->rootc)  gettextoutput();
+void Node::generateBranch(Messages& errs,int level) {
+	if( this != rootc)  gettextoutput(errs);
 	if(level <= 0) { 	// generate output for all descendents
 		for (auto &i : children)
-			i->generatebranch(level-1);
+			i->generateBranch(errs,level-1);
 	}
 }
 // -----------------------------------------------------------------------------------

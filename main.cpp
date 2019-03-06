@@ -4,6 +4,8 @@
 #include <sstream>
 #include <clocale>
 #include "test.h"
+#include "Build.h"
+
 #include "support/Infix.h"
 #include "support/Timing.h"
 #include "support/Env.h"
@@ -18,8 +20,9 @@
 
 int main( const int argc, const char **argv ) {
 	Support::Env& env = Support::Env::e();
+	Build& build = Build::b();
 	env.startup(argc,argv);
-	env.setTesting(true);
+	build.setCurrent(Support::Testing); //For this..
 	Support::Messages log;
 	auto* mysql = Support::Db::ServiceFactory::sf().getConnection(log,"mysql");
 //	mysql->exec(log,"insert into bldvar(name,value) values ('foo','bar')");
