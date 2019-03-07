@@ -31,10 +31,10 @@ namespace Support {
 		return singleton;
 	}
 
-	Env::Env() : mysql(nullptr) {
-		MayBuild	= false;
-		FullBuild 	= true;
-		AllTechs 	= true;
+	Env::Env() {
+//		MayBuild	= false;
+//		FullBuild 	= true;
+//		AllTechs 	= true;
 //		AllLangs 	= true;
 		if (!get("RS_PATH",SiteRootDir))  {
 			SiteRootDir=wd();
@@ -42,8 +42,8 @@ namespace Support {
 		if (SiteRootDir.back() != '/') {
 			SiteRootDir.push_back('/');
 		}
-		RemoteUser	= "AnonymousUser";
-		NodeSet 	= Branch;
+//		RemoteUser	= "AnonymousUser";
+//		NodeSet 	= Branch;
 
 	}
 
@@ -178,16 +178,8 @@ namespace Support {
 	}
 
 	void Env::doArgs(Messages& log,const int argc,const char **argv) {
-		setlocale(LC_ALL, "en_UK.UTF-8");
-		mt::Definition::startup(); // Set the internals.
-		Messages::startup(area() != Console);
-		Infix::Evaluate::startup();
 		Timing& timer = Timing::t(); //auto startup at instantiation.
 		Build& build = Build::b();
-		vector<size_t>	nodelist;
-		if (get("REMOTE_USER",RemoteUser)) {
-			if (RemoteUser != "AnonymousUser" || area() == Console) MayBuild = true;
-		}
 
 //		bool ParseAdvanced;
 //		bool ParseLegacy;
@@ -210,10 +202,11 @@ namespace Support {
 					case 'b':
 						Node::setShowTemplates(true);
 						break;
-					case 'B':
-						NodeSet = Branch;
-						tolist(nodelist,parameter.substr(2));
-						break;
+					case 'B': {
+						deque<size_t> nodes;
+						tolist(nodes, parameter.substr(2));
+						build.setNodes(Build::Branch,nodes);
+					} break;
 					case 'c':   //forced advanced parse switch.
 //--??					doParse = String::tostring(argi,' '); (text to parse?)
 						ParseAdvanced = true;
@@ -233,7 +226,8 @@ namespace Support {
 //						showTrace = true;
 //						showGetSet = true;
 						Messages::setVerbosity(9);
-					} break;
+					}
+						break;
 					case 'd':
 						build.setCurrent(Testing); // = true;
 						Messages::setVerbosity(0);
@@ -241,33 +235,36 @@ namespace Support {
 					case 'f':
 //						showFiling = true;
 						break;
-					case 'F':
-						NodeSet = Descendants;
-						tolist(nodelist,parameter.substr(2));
-						break;
+					case 'F':{
+						deque<size_t> nodes;
+						tolist(nodes, parameter.substr(2)); //setnodes
+						build.setNodes(Build::Descendants,nodes);
+				} break;
 					case 'I':
 //						showMediaReqs = true;
 						break;
 					case 'L': {
-						vector<size_t> languages;
-						tolist(languages,parameter.substr(2));
-						for(auto& i : languages) {
-							build.addLang(i);
-						}
-					} break;
+						deque<size_t> languages;
+						tolist(languages, parameter.substr(2));
+						build.setLangs(languages);
+					}
+						break;
 					case 'M': {
 						string cssurl;
-						get("RS_CSSFILE",cssurl);         //rebuild.css   rebuild.css
-						fandr(cssurl,"[S]",parameter.substr(2));  //allow for a css switch. eg rebuild[S].css env and -MAdmin -> rebuildA.css
-						get("RS_BUILDNODEPATH",EditNodeUrl,"/mortar/oedit.obyx?node=0"); //if none, keep default.
-					} break;
+						get("RS_CSSFILE", cssurl);         //rebuild.css   rebuild.css
+						fandr(cssurl, "[S]", parameter.substr(
+								2));  //allow for a css switch. eg rebuild[S].css env and -MAdmin -> rebuildA.css
+						get("RS_BUILDNODEPATH", EditNodeUrl, "/mortar/oedit.obyx?node=0"); //if none, keep default.
+					}
+						break;
 					case 'n':
 //						showNodes = true;
 						break;
-					case 'O':
-						NodeSet = Singles;
-						tolist(nodelist,parameter.substr(2));
-						break;
+					case 'O': {
+						deque<size_t> nodes;
+						tolist(nodes, parameter.substr(2));
+						build.setNodes(Build::Singles,nodes);
+					} break;
 					case 'p':
 						NodeLocator::showPaths = true;
 						break;
@@ -285,11 +282,9 @@ namespace Support {
 						Messages::setVerbosity(4);
 						break;
 					case 'T': {
-						vector<size_t> techs;
+						deque<size_t> techs;
 						tolist(techs,parameter.substr(2));
-						for(auto& i : techs) {
-							build.addTech(i);
-						}
+						build.setTechs(techs);
 					} break;
 					case 'V':
 						Messages::setVerbosity(natural(argi));
@@ -303,6 +298,7 @@ namespace Support {
 //						keepTmp = true;
 						break;
 					default:
+						log << Message(warn,"Parameter (" + parameter + ") is unknown.");
 						break;
 				}
 			} else {
@@ -311,15 +307,13 @@ namespace Support {
 		}
 	}
 
-	Messages Env::startup(int argc,const char **argv) {
+	pair<Messages&,Db::Connection*> Env::startup(int argc,const char **argv) {
 		setlocale(LC_ALL, "en_UK.UTF-8");
+		Db::Connection *mysql = nullptr;
 		mt::Definition::startup(); // Set the internals.
-		Messages::startup(area() != Console);
-		Messages log;
 		Infix::Evaluate::startup();
-		if (get("REMOTE_USER",RemoteUser)) {
-			if (RemoteUser != "AnonymousUser" || area() == Console) MayBuild = true;
-		}
+		Messages::setMarkup(area() != Console);
+		Messages log;
 		doArgs(log,argc,argv);
 		string config_path;
 		if(get("SQL_CONFIG_FILE",config_path)) {
@@ -333,8 +327,9 @@ namespace Support {
 //		bool ParseOnly;
 //		bool ForceDeleteLock;
 
-		Messages::defer( NodeSet == Singles && (Messages::verboseness() < 2) );
-		return log;
+		Build& build = Build::b();
+		Messages::defer( build.mayDefer() && (Messages::verboseness() < 2) );
+		return {log,mysql};
 	}
 
 }

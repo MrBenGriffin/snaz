@@ -60,5 +60,5 @@ add_executable(macrotext ${BISON_parser_OUTPUTS} ${FLEX_advanced_OUTPUTS} ${FLEX
         node/NodeFilename.cpp node/NodeFilename.h
         node/NodeLocator.cpp node/NodeLocator.h
         node/NodeVal.cpp node/NodeVal.h
-        main.cpp test.cpp Build.cpp Build.h
+        main.cpp test.cpp Build.cpp
         )

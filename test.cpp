@@ -1,4 +1,4 @@
-#include <iostream>
+#include <ostream>
 #include <fstream>
 #include <string>
 #include <cstdlib>
@@ -24,7 +24,7 @@ namespace testing {
 
 	group::group(string b) : base(b) {}
 
-	void group::title(string title,int type) {
+	void group::title(ostream& o,string title,int type) {
 		string head; size_t length;
 		string f = "─";
 		string m = "•";
@@ -44,7 +44,7 @@ namespace testing {
 				n = " ";
 				f = " ";
 			} break;
-				//cout << "• " << name << " √ " << endl;
+				//o << "• " << name << " √ " << endl;
 			default: {
 				title.insert(0,1,' ');
 				title.push_back(' ');
@@ -53,7 +53,7 @@ namespace testing {
 		Support::length(title,length);
 		length = length > 70 ? 70 : length;
 		for (size_t i=0 ; i < 70 - length ; i++) head.append(f);
-		cout  << blue << m << f << f << f << f << f << n << " " << title << " " << n << head << m << norm << endl;
+		o << blue << m << f << f << f << f << f << n << " " << title << " " << n << head << m << norm << endl;
 	}
 
 	void group::wss(std::string& basis,bool toSym) {
@@ -70,7 +70,7 @@ namespace testing {
 		}
 	}
 
-	void group::load(string filename="main", bool showGood, bool showDefines) {
+	void group::load(ostream& o,string filename="main", bool showGood, bool showDefines) {
 		ifstream infile(base+filename);
 		if (infile.is_open()) {
 			char c;
@@ -88,31 +88,31 @@ namespace testing {
 					case 'T': {
 						//Template 	id  code	suffix	break
 						//T			1	@page()	html	@wBr()
-						cout << "Template definition not yet implemented." << endl;
+						o << "Template definition not yet implemented." << endl;
 						getline(infile,name); break;
 					}
 					case 'S': {
 						//Segment 	id  name	type*	break
 						//S			1	text	2		@wBr()
-						cout << "Segment definition not yet implemented." << endl;
+						o << "Segment definition not yet implemented." << endl;
 						getline(infile,name); break;
 					}
 					case 'L': {
 						//Layout  	id  name		template(s)	segment(s)
 						//L			1	TestLayout	20,21,22	12,13,14
-						cout << "Layout definition not yet implemented." << endl;
+						o << "Layout definition not yet implemented." << endl;
 						getline(infile,name); break;
 					}
 					case 'N': {
 						//Node		id	parent		linkref		layout	title
 						//N			2	0			home		1		Home Page
-						cout << "Node definition not yet implemented." << endl;
+						o << "Node definition not yet implemented." << endl;
 						getline(infile,name); break;
 					}
 					case 'C': {
 						//Content	node	segment		code
 						//C			2		1			@iTitle(I0)
-						cout << "Content definition not yet implemented." << endl;
+						o << "Content definition not yet implemented." << endl;
 						getline(infile,name); break;
 					}
 
@@ -124,15 +124,15 @@ namespace testing {
 						infile >> ws;
 						getline(infile, name);
 						name.erase(name.find_last_not_of(" \t'\"")+1);
-						title(name,1);
+						title(o,name,1);
 						testing::group insert(base);
-						insert.load(name,showGood);
+						insert.load(o,name,showGood);
 					} break;
 
 					case '#': { // comment
 						string comment;
 						getline(infile,comment);
-						title(comment);
+						title(o,comment);
 					} break;
 
 					case 'F': { // flag
@@ -179,20 +179,20 @@ namespace testing {
 							mt::Driver::visit(structure,expansion.out);
 						}
 						if(errs.marked()) {
-							cout << lred << "Parse Errors" << endl;
-							errs.str(cout);
-							cout << norm << endl;
+							o << lred << "Parse Errors" << endl;
+							errs.str(o);
+							o << norm << endl;
 						}
 						string visited=expansion.out.str();
 						wss(pcode,true);
 						if(visited == expected) {
 							if (showGood) {
-								title(code,2);
+								title(o,code,2);
 							}
 						} else {
-							title(code,3);
-							cout << lred << " -found:"  << blue << visited  << endl;
-							cout << lred << " -not  :" << expected << endl << norm;
+							title(o,code,3);
+							o << lred << " -found:"  << blue << visited  << endl;
+							o << lred << " -not  :" << expected << endl << norm;
 						}
 					} break;
 
@@ -216,17 +216,17 @@ namespace testing {
 						if(!errs.marked()) {
 							mt::Definition::add(macro);
 						} else {
-							cout << lred << "Definition Parse Error while defining " << name << endl;
-							errs.str(cout);
-							cout << norm << endl;
+							o << lred << "Definition Parse Error while defining " << name << endl;
+							errs.str(o);
+							o << norm << endl;
 						}
 						if(showDefines) {
-							cout << "Defined " << name << ":" ;
+							o << "Defined " << name << ":" ;
 							std::ostringstream result;
 							mt::Definition::vis(name,result);
 							std::string definition = result.str();
 							wss(definition,true);
-							cout << definition << " " << min << "-" << max << " SPx:" << bools << std::endl;
+							o << definition << " " << min << "-" << max << " SPx:" << bools << std::endl;
 						}
 					} break;
 
@@ -279,39 +279,39 @@ namespace testing {
 									testPassed = Support::Regex::fullMatch(discard, pexpected,
 																		expansion.out.str()); //match entire string using pcre
 									if (discard.marked()) {
-										cout << " E Error in Test Regex:" << expected << endl;
-										cout << lred << "Regex Errors: ";
-										errs.str(cout);
-										cout << norm << endl;
+										o << " E Error in Test Regex:" << expected << endl;
+										o << lred << "Regex Errors: ";
+										errs.str(o);
+										o << norm << endl;
 									}
 								} else {
-									cout << "E regex not available for test" << endl;
+									o << "E regex not available for test" << endl;
 								}
 							} else {
 								testPassed = expansion.out.str() == pexpected;
 							}
 							if(testPassed && !errs.marked() ) {
 								if (showGood) {
-									title(name,2);
+									title(o,name,2);
 								}
 							} else {
-								title(name,3);
+								title(o,name,3);
 								if(!testPassed) {
 									ostringstream pstuff;
 									string parsed,returned = expansion.out.str();
 									mt::Driver::visit(structure,pstuff);
 									parsed = pstuff.str();
 									wss(returned,true); wss(parsed,true);
-									cout << lred << " - program:" << blue << program << lred << endl;
+									o << lred << " - program:" << blue << program << lred << endl;
 
-									cout << " -  parsed:" << blue << parsed << lred << endl;
-									cout << " - returned:" << returned << endl;
-									cout << " - expected:" << expected << norm << endl;
+									o << " -  parsed:" << blue << parsed << lred << endl;
+									o << " - returned:" << returned << endl;
+									o << " - expected:" << expected << norm << endl;
 								}
 								if(errs.marked()) {
-									cout << lred << "Errors: ";
-									errs.str(cout);
-									cout << norm << endl;
+									o << lred << "Errors: ";
+									errs.str(o);
+									o << norm << endl;
 								}
 							}
 						} else {
@@ -322,30 +322,30 @@ namespace testing {
 								if(Support::Regex::available(discard)) {
 									matched= Support::Regex::fullMatch(discard,pexpected,message); //match entire string using pcre
 									if(discard.marked()) {
-										cout << " E Error in Test Regex:"  << expected << endl;
-										cout << lred << "Regex Errors: ";
-										discard.str(cout);
-										cout << norm << endl;
+										o << " E Error in Test Regex:"  << expected << endl;
+										o << lred << "Regex Errors: ";
+										discard.str(o);
+										o << norm << endl;
 									}
 								} else {
-									cout << "E regex not available for test" << endl;
+									o << "E regex not available for test" << endl;
 								}
 							} else {
 								matched= (message == pexpected);
 							}
 							if(matched) {
 								if(showGood) {
-									title(name,2);
+									title(o,name,2);
 								}
 							} else {
-								title(name,3);
-								cout << " E program:"  << program << endl;
-								cout << " E returned:\"" << message <<  "\" on line:" << error_index  << endl;
-								cout << " E expected:\"" << expected << "\"" << endl;
+								title(o,name,3);
+								o << " E program:"  << program << endl;
+								o << " E returned:\"" << message <<  "\" on line:" << error_index  << endl;
+								o << " E expected:\"" << expected << "\"" << endl;
 								if(errs.marked()) {
-									cout << lred << "Errors: ";
-									errs.str(cout);
-									cout << norm << endl;
+									o << lred << "Errors: ";
+									errs.str(o);
+									o << norm << endl;
 								}
 							}
 						}
@@ -353,11 +353,11 @@ namespace testing {
 				}
 			}
 			if(filename == "main") {
-				cout << blue << "•═══════════════════════════════════════════════════════════════════════════════•" << endl << endl << endl;
+				o << blue << "•═══════════════════════════════════════════════════════════════════════════════•" << endl << endl << endl;
 			}
 			infile.close();
 		} else {
-			title("filename "+filename+" not found",3);
+			title(o,"filename "+filename+" not found",3);
 		}
 	}
 

@@ -15,7 +15,6 @@ namespace Support {
 	using 	namespace std;
 	enum	buildspace {Built,Temporary,Scripts,Media,Tests};	//Buildspace indicates what directory area is relevant
 	enum 	buildArea  {Editorial,Final,Draft,Console,Release,Staging,Testing};
-	enum    buildnodes {Branch,Descendants,Singles,None};
 
 	struct tech {
 		size_t id;
@@ -33,50 +32,48 @@ namespace Support {
 		static constexpr auto ReleaseDir 	= "release";
 		static constexpr auto IncludeDir 	= "include";
 
-		Db::Connection*	mysql;
-
 		Storage storage;
 
 		string wd();
 
 		Env(); // Disallow instantiation outside of the class.
 		bool IsFinal; //is this draft or final.
-		bool MayBuild;
-		bool FullBuild;
-		bool AllTechs;
+//		bool MayBuild;
+//		bool FullBuild;
+//		bool AllTechs;
 //		bool AllLangs;
 
-		deque<tech>   technologies; //queue holding all information about the build
-		deque<size_t> nodelist;     //things to build.
+//		deque<tech>   technologies; //queue holding all information about the build
+//		deque<size_t> nodelist;     //things to build.
+
+//		bool ParseOnly;
+
+//		size_t LanguageID;
+//		size_t TechnologyID;
+//		size_t TechnologyCount;
+//		size_t LanguageCount;
 
 		bool ParseAdvanced;
 		bool ParseLegacy;
-		bool ParseOnly;
 		bool ForceDeleteLock;
-
-//		size_t LanguageID;
-		size_t TechnologyID;
-		size_t TechnologyCount;
-		size_t LanguageCount;
 
 		string SiteRootDir;
 		string RemoteUser;
 		string EditNodeUrl; //= "/mortar/oedit.obyx?node=0";
 
 
-		buildnodes NodeSet;
 		void doArgs(Messages&,int,const char**);
 
 	public:
 		static Env& e();
-		Messages startup(int=0,const char** = nullptr);
+		pair<Messages&,Db::Connection*> startup(int=0,const char** = nullptr);
 		bool   get(string,string&,string="");
 		buildArea area();
 
 		Path basedir(buildspace);
 		void basedir(string&,buildspace,bool,bool);
 		std::string baseUrl(buildArea);
-		tech& technology()  { return technologies.front(); }  //returns currently built technology.
+//		tech& technology()  { return technologies.front(); }  //returns currently built technology.
 	};
 
 }

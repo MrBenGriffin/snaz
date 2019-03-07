@@ -1,3 +1,5 @@
+#include <utility>
+
 //
 // Created by Ben Griffin on 2019-01-30.
 //
@@ -7,7 +9,7 @@
 
 namespace Support {
 
-	Message::Message(channel c,string s): ch(c),content(s) {}
+	Message::Message(channel c,string s): ch(c),content(std::move(s)) {}
 
 	void Message::str(ostream& log) const {
 		switch (ch) { //syntax
@@ -31,12 +33,30 @@ namespace Support {
 		log << ": " << content << flush;
 	}
 
+
 	Messages::format Messages::Format = Messages::Html;
 	size_t Messages::Verbosity = 3;
 	bool Messages::Deferred = true;
 
-	void Messages::startup(bool useMarkup) {
+	Messages::Messages(): _suppressed(false),_marked(false) {
+//		list.clear();
+	}
+
+	void Messages::setVerbosity(size_t v) {
+		Verbosity = v;
+	}
+	void Messages::setMarkup(bool useMarkup) {
 		Format =  useMarkup ? Html : Console;
+	}
+	void Messages::defer(bool defer) {
+		Deferred = defer;
+	}
+
+	bool Messages::marked() const {
+		return _marked;
+	}
+	bool Messages::suppressed() const {
+		return _suppressed;
 	}
 
 	string Messages::line(size_t line_number) const {
@@ -63,6 +83,10 @@ namespace Support {
 		return *this;
 	}
 
+	void Messages::suppress(bool supp) {
+		_suppressed=supp;
+	}
+
 	void Messages::str(ostream& o) {
 		if (_marked) {
 			for (auto& m : list) {
@@ -70,5 +94,6 @@ namespace Support {
 				o << endl;
 			}
 		}
+		o << flush;
 	}
 }

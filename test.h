@@ -45,8 +45,8 @@ namespace testing {
 
     public:
         group(string);
-        void title(string,int = 0);
-        void load(string,bool = false,bool = false);
+        void title(ostream&,string,int = 0);
+        void load(ostream&,string,bool = false,bool = false);
     };
 
 }

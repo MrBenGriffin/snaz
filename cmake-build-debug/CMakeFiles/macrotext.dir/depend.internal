@@ -9,6 +9,7 @@ CMakeFiles/macrotext.dir/Build.cpp.o
  /Users/ben/CLionProjects/snaz/support/Message.h
  /Users/ben/CLionProjects/snaz/support/Storage.h
  /Users/ben/CLionProjects/snaz/support/db/Connection.h
+ /Users/ben/CLionProjects/snaz/support/db/Query.h
 CMakeFiles/macrotext.dir/advanced.yy.cpp.o
  ..//mt/Scanner.h
  ..//support/Message.h

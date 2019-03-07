@@ -35,18 +35,18 @@ namespace Support {
 		bool _marked;
 		deque<Message> list;
 	public:
-		static void setVerbosity(size_t v) { Verbosity = v;}
-		static void startup(bool);
-		static void defer(bool defer) { Deferred = defer; }
+		static void setVerbosity(size_t v);
+		static void setMarkup(bool);
+		static void defer(bool defer);
 		static size_t verboseness() { return Verbosity;}
 
-		Messages() : _suppressed(false),_marked(false) {}
-		bool marked() const { return _marked; }
-		bool suppressed() const { return _suppressed; }
-		void suppress(bool s=true) { _suppressed=s; }
+		Messages();
+		bool marked() const;
+		bool suppressed() const;
+		void suppress(bool=false);
 		void prefix(Message);
 		void enscope(string);
-		size_t verbosity() { return Verbosity;}
+		size_t verbosity() const { return Verbosity;}
 		string line(size_t) const;
 
 		Messages& operator<< (Message);

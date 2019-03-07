@@ -17,19 +17,26 @@
 
 // Currently using the following environment variables...
 // LIBMYSQLCRSO=/usr/local/mysql/lib/libmysqlclient.dylib
-// =/Users/ben/Desktop/my.cnf
+// SQL_CONFIG_FILE=/Users/ben/Desktop/my.cnf
 
 using namespace Support;
 int main( const int argc, const char **argv ) {
 	Env& env = Env::e();
-	Build& build = Build::b();
-	env.startup(argc,argv);
+	pair<Messages&,Db::Connection*> services = env.startup(argc,argv);
+
+	Messages& log = services.first;
+	Db::Connection* sql = services.second;
+
+	Build& build = Build::b(log,sql);
 	build.setCurrent(Testing); //For this..
-	Messages log = std::move(env.startup(argc,argv));
-	testing::group tests("tests/");       // Set the working directory from the Run|Edit Configurations... menu.
-	tests.load("main",false); 			  // Boolean turns on/off success reports.
-	Infix::Evaluate::shutdown();
 	log.str(std::cout);
+	testing::group tests("tests/");   		// Set the working directory from the Run|Edit Configurations... menu.
+	tests.title(std::cout,"Main");
+	tests.load(std::cout, "main", false);   // Boolean turns on/off success reports.
+	log.str(std::cout);
+
+	Infix::Evaluate::shutdown();
 	return( EXIT_SUCCESS );
+
 }
 

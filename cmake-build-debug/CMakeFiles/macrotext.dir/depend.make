@@ -8,6 +8,7 @@ CMakeFiles/macrotext.dir/Build.cpp.o: ../support/File.h
 CMakeFiles/macrotext.dir/Build.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/Build.cpp.o: ../support/Storage.h
 CMakeFiles/macrotext.dir/Build.cpp.o: ../support/db/Connection.h
+CMakeFiles/macrotext.dir/Build.cpp.o: ../support/db/Query.h
 
 CMakeFiles/macrotext.dir/advanced.yy.cpp.o: ../mt/Scanner.h
 CMakeFiles/macrotext.dir/advanced.yy.cpp.o: ../support/Message.h
