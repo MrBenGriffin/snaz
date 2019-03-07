@@ -113,57 +113,57 @@ CMakeFiles/macrotext.dir/classic.yy.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/classic.yy.cpp.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/cmake-build-debug/classic.yy.cpp -o CMakeFiles/macrotext.dir/classic.yy.cpp.s
 
-CMakeFiles/macrotext.dir/main.cpp.o: CMakeFiles/macrotext.dir/flags.make
-CMakeFiles/macrotext.dir/main.cpp.o: ../main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/macrotext.dir/main.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/main.cpp.o -c /Users/ben/CLionProjects/snaz/main.cpp
+CMakeFiles/macrotext.dir/mt/Content.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/mt/Content.cpp.o: ../mt/Content.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/macrotext.dir/mt/Content.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/mt/Content.cpp.o -c /Users/ben/CLionProjects/snaz/mt/Content.cpp
 
-CMakeFiles/macrotext.dir/main.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/main.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/main.cpp > CMakeFiles/macrotext.dir/main.cpp.i
+CMakeFiles/macrotext.dir/mt/Content.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/mt/Content.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/mt/Content.cpp > CMakeFiles/macrotext.dir/mt/Content.cpp.i
 
-CMakeFiles/macrotext.dir/main.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/main.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/main.cpp -o CMakeFiles/macrotext.dir/main.cpp.s
+CMakeFiles/macrotext.dir/mt/Content.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/mt/Content.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/mt/Content.cpp -o CMakeFiles/macrotext.dir/mt/Content.cpp.s
 
-CMakeFiles/macrotext.dir/mt/Driver.cpp.o: CMakeFiles/macrotext.dir/flags.make
-CMakeFiles/macrotext.dir/mt/Driver.cpp.o: ../mt/Driver.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/macrotext.dir/mt/Driver.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/mt/Driver.cpp.o -c /Users/ben/CLionProjects/snaz/mt/Driver.cpp
+CMakeFiles/macrotext.dir/mt/Macro.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/mt/Macro.cpp.o: ../mt/Macro.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/macrotext.dir/mt/Macro.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/mt/Macro.cpp.o -c /Users/ben/CLionProjects/snaz/mt/Macro.cpp
 
-CMakeFiles/macrotext.dir/mt/Driver.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/mt/Driver.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/mt/Driver.cpp > CMakeFiles/macrotext.dir/mt/Driver.cpp.i
+CMakeFiles/macrotext.dir/mt/Macro.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/mt/Macro.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/mt/Macro.cpp > CMakeFiles/macrotext.dir/mt/Macro.cpp.i
 
-CMakeFiles/macrotext.dir/mt/Driver.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/mt/Driver.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/mt/Driver.cpp -o CMakeFiles/macrotext.dir/mt/Driver.cpp.s
+CMakeFiles/macrotext.dir/mt/Macro.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/mt/Macro.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/mt/Macro.cpp -o CMakeFiles/macrotext.dir/mt/Macro.cpp.s
 
-CMakeFiles/macrotext.dir/test.cpp.o: CMakeFiles/macrotext.dir/flags.make
-CMakeFiles/macrotext.dir/test.cpp.o: ../test.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/macrotext.dir/test.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/test.cpp.o -c /Users/ben/CLionProjects/snaz/test.cpp
+CMakeFiles/macrotext.dir/mt/Text.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/mt/Text.cpp.o: ../mt/Text.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/macrotext.dir/mt/Text.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/mt/Text.cpp.o -c /Users/ben/CLionProjects/snaz/mt/Text.cpp
 
-CMakeFiles/macrotext.dir/test.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/test.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/test.cpp > CMakeFiles/macrotext.dir/test.cpp.i
+CMakeFiles/macrotext.dir/mt/Text.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/mt/Text.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/mt/Text.cpp > CMakeFiles/macrotext.dir/mt/Text.cpp.i
 
-CMakeFiles/macrotext.dir/test.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/test.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/test.cpp -o CMakeFiles/macrotext.dir/test.cpp.s
+CMakeFiles/macrotext.dir/mt/Text.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/mt/Text.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/mt/Text.cpp -o CMakeFiles/macrotext.dir/mt/Text.cpp.s
 
-CMakeFiles/macrotext.dir/support/Storage.cpp.o: CMakeFiles/macrotext.dir/flags.make
-CMakeFiles/macrotext.dir/support/Storage.cpp.o: ../support/Storage.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/macrotext.dir/support/Storage.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/Storage.cpp.o -c /Users/ben/CLionProjects/snaz/support/Storage.cpp
+CMakeFiles/macrotext.dir/mt/Wss.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/mt/Wss.cpp.o: ../mt/Wss.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/macrotext.dir/mt/Wss.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/mt/Wss.cpp.o -c /Users/ben/CLionProjects/snaz/mt/Wss.cpp
 
-CMakeFiles/macrotext.dir/support/Storage.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/Storage.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/Storage.cpp > CMakeFiles/macrotext.dir/support/Storage.cpp.i
+CMakeFiles/macrotext.dir/mt/Wss.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/mt/Wss.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/mt/Wss.cpp > CMakeFiles/macrotext.dir/mt/Wss.cpp.i
 
-CMakeFiles/macrotext.dir/support/Storage.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/Storage.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/Storage.cpp -o CMakeFiles/macrotext.dir/support/Storage.cpp.s
+CMakeFiles/macrotext.dir/mt/Wss.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/mt/Wss.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/mt/Wss.cpp -o CMakeFiles/macrotext.dir/mt/Wss.cpp.s
 
 CMakeFiles/macrotext.dir/mt/Definition.cpp.o: CMakeFiles/macrotext.dir/flags.make
 CMakeFiles/macrotext.dir/mt/Definition.cpp.o: ../mt/Definition.cpp
@@ -191,48 +191,35 @@ CMakeFiles/macrotext.dir/mt/Injection.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/mt/Injection.cpp.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/mt/Injection.cpp -o CMakeFiles/macrotext.dir/mt/Injection.cpp.s
 
-CMakeFiles/macrotext.dir/mt/Wss.cpp.o: CMakeFiles/macrotext.dir/flags.make
-CMakeFiles/macrotext.dir/mt/Wss.cpp.o: ../mt/Wss.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/macrotext.dir/mt/Wss.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/mt/Wss.cpp.o -c /Users/ben/CLionProjects/snaz/mt/Wss.cpp
+CMakeFiles/macrotext.dir/mt/Driver.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/mt/Driver.cpp.o: ../mt/Driver.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/macrotext.dir/mt/Driver.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/mt/Driver.cpp.o -c /Users/ben/CLionProjects/snaz/mt/Driver.cpp
 
-CMakeFiles/macrotext.dir/mt/Wss.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/mt/Wss.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/mt/Wss.cpp > CMakeFiles/macrotext.dir/mt/Wss.cpp.i
+CMakeFiles/macrotext.dir/mt/Driver.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/mt/Driver.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/mt/Driver.cpp > CMakeFiles/macrotext.dir/mt/Driver.cpp.i
 
-CMakeFiles/macrotext.dir/mt/Wss.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/mt/Wss.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/mt/Wss.cpp -o CMakeFiles/macrotext.dir/mt/Wss.cpp.s
+CMakeFiles/macrotext.dir/mt/Driver.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/mt/Driver.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/mt/Driver.cpp -o CMakeFiles/macrotext.dir/mt/Driver.cpp.s
 
-CMakeFiles/macrotext.dir/mt/Macro.cpp.o: CMakeFiles/macrotext.dir/flags.make
-CMakeFiles/macrotext.dir/mt/Macro.cpp.o: ../mt/Macro.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/macrotext.dir/mt/Macro.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/mt/Macro.cpp.o -c /Users/ben/CLionProjects/snaz/mt/Macro.cpp
+CMakeFiles/macrotext.dir/mt/Instance.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/mt/Instance.cpp.o: ../mt/Instance.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/macrotext.dir/mt/Instance.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/mt/Instance.cpp.o -c /Users/ben/CLionProjects/snaz/mt/Instance.cpp
 
-CMakeFiles/macrotext.dir/mt/Macro.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/mt/Macro.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/mt/Macro.cpp > CMakeFiles/macrotext.dir/mt/Macro.cpp.i
+CMakeFiles/macrotext.dir/mt/Instance.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/mt/Instance.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/mt/Instance.cpp > CMakeFiles/macrotext.dir/mt/Instance.cpp.i
 
-CMakeFiles/macrotext.dir/mt/Macro.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/mt/Macro.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/mt/Macro.cpp -o CMakeFiles/macrotext.dir/mt/Macro.cpp.s
-
-CMakeFiles/macrotext.dir/mt/Text.cpp.o: CMakeFiles/macrotext.dir/flags.make
-CMakeFiles/macrotext.dir/mt/Text.cpp.o: ../mt/Text.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/macrotext.dir/mt/Text.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/mt/Text.cpp.o -c /Users/ben/CLionProjects/snaz/mt/Text.cpp
-
-CMakeFiles/macrotext.dir/mt/Text.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/mt/Text.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/mt/Text.cpp > CMakeFiles/macrotext.dir/mt/Text.cpp.i
-
-CMakeFiles/macrotext.dir/mt/Text.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/mt/Text.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/mt/Text.cpp -o CMakeFiles/macrotext.dir/mt/Text.cpp.s
+CMakeFiles/macrotext.dir/mt/Instance.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/mt/Instance.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/mt/Instance.cpp -o CMakeFiles/macrotext.dir/mt/Instance.cpp.s
 
 CMakeFiles/macrotext.dir/mt/Internal.cpp.o: CMakeFiles/macrotext.dir/flags.make
 CMakeFiles/macrotext.dir/mt/Internal.cpp.o: ../mt/Internal.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/macrotext.dir/mt/Internal.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/macrotext.dir/mt/Internal.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/mt/Internal.cpp.o -c /Users/ben/CLionProjects/snaz/mt/Internal.cpp
 
 CMakeFiles/macrotext.dir/mt/Internal.cpp.i: cmake_force
@@ -245,7 +232,7 @@ CMakeFiles/macrotext.dir/mt/Internal.cpp.s: cmake_force
 
 CMakeFiles/macrotext.dir/mt/InternalInstance.cpp.o: CMakeFiles/macrotext.dir/flags.make
 CMakeFiles/macrotext.dir/mt/InternalInstance.cpp.o: ../mt/InternalInstance.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/macrotext.dir/mt/InternalInstance.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/macrotext.dir/mt/InternalInstance.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/mt/InternalInstance.cpp.o -c /Users/ben/CLionProjects/snaz/mt/InternalInstance.cpp
 
 CMakeFiles/macrotext.dir/mt/InternalInstance.cpp.i: cmake_force
@@ -256,87 +243,74 @@ CMakeFiles/macrotext.dir/mt/InternalInstance.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/mt/InternalInstance.cpp.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/mt/InternalInstance.cpp -o CMakeFiles/macrotext.dir/mt/InternalInstance.cpp.s
 
-CMakeFiles/macrotext.dir/mt/Content.cpp.o: CMakeFiles/macrotext.dir/flags.make
-CMakeFiles/macrotext.dir/mt/Content.cpp.o: ../mt/Content.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object CMakeFiles/macrotext.dir/mt/Content.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/mt/Content.cpp.o -c /Users/ben/CLionProjects/snaz/mt/Content.cpp
+CMakeFiles/macrotext.dir/mt/InternalsBuild.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/mt/InternalsBuild.cpp.o: ../mt/InternalsBuild.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/macrotext.dir/mt/InternalsBuild.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/mt/InternalsBuild.cpp.o -c /Users/ben/CLionProjects/snaz/mt/InternalsBuild.cpp
 
-CMakeFiles/macrotext.dir/mt/Content.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/mt/Content.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/mt/Content.cpp > CMakeFiles/macrotext.dir/mt/Content.cpp.i
+CMakeFiles/macrotext.dir/mt/InternalsBuild.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/mt/InternalsBuild.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/mt/InternalsBuild.cpp > CMakeFiles/macrotext.dir/mt/InternalsBuild.cpp.i
 
-CMakeFiles/macrotext.dir/mt/Content.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/mt/Content.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/mt/Content.cpp -o CMakeFiles/macrotext.dir/mt/Content.cpp.s
+CMakeFiles/macrotext.dir/mt/InternalsBuild.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/mt/InternalsBuild.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/mt/InternalsBuild.cpp -o CMakeFiles/macrotext.dir/mt/InternalsBuild.cpp.s
 
-CMakeFiles/macrotext.dir/support/Infix.cpp.o: CMakeFiles/macrotext.dir/flags.make
-CMakeFiles/macrotext.dir/support/Infix.cpp.o: ../support/Infix.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object CMakeFiles/macrotext.dir/support/Infix.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/Infix.cpp.o -c /Users/ben/CLionProjects/snaz/support/Infix.cpp
+CMakeFiles/macrotext.dir/mt/InternalsEncoder.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/mt/InternalsEncoder.cpp.o: ../mt/InternalsEncoder.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object CMakeFiles/macrotext.dir/mt/InternalsEncoder.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/mt/InternalsEncoder.cpp.o -c /Users/ben/CLionProjects/snaz/mt/InternalsEncoder.cpp
 
-CMakeFiles/macrotext.dir/support/Infix.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/Infix.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/Infix.cpp > CMakeFiles/macrotext.dir/support/Infix.cpp.i
+CMakeFiles/macrotext.dir/mt/InternalsEncoder.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/mt/InternalsEncoder.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/mt/InternalsEncoder.cpp > CMakeFiles/macrotext.dir/mt/InternalsEncoder.cpp.i
 
-CMakeFiles/macrotext.dir/support/Infix.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/Infix.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/Infix.cpp -o CMakeFiles/macrotext.dir/support/Infix.cpp.s
+CMakeFiles/macrotext.dir/mt/InternalsEncoder.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/mt/InternalsEncoder.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/mt/InternalsEncoder.cpp -o CMakeFiles/macrotext.dir/mt/InternalsEncoder.cpp.s
 
-CMakeFiles/macrotext.dir/support/Message.cpp.o: CMakeFiles/macrotext.dir/flags.make
-CMakeFiles/macrotext.dir/support/Message.cpp.o: ../support/Message.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object CMakeFiles/macrotext.dir/support/Message.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/Message.cpp.o -c /Users/ben/CLionProjects/snaz/support/Message.cpp
+CMakeFiles/macrotext.dir/mt/InternalsMedia.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/mt/InternalsMedia.cpp.o: ../mt/InternalsMedia.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object CMakeFiles/macrotext.dir/mt/InternalsMedia.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/mt/InternalsMedia.cpp.o -c /Users/ben/CLionProjects/snaz/mt/InternalsMedia.cpp
 
-CMakeFiles/macrotext.dir/support/Message.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/Message.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/Message.cpp > CMakeFiles/macrotext.dir/support/Message.cpp.i
+CMakeFiles/macrotext.dir/mt/InternalsMedia.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/mt/InternalsMedia.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/mt/InternalsMedia.cpp > CMakeFiles/macrotext.dir/mt/InternalsMedia.cpp.i
 
-CMakeFiles/macrotext.dir/support/Message.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/Message.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/Message.cpp -o CMakeFiles/macrotext.dir/support/Message.cpp.s
+CMakeFiles/macrotext.dir/mt/InternalsMedia.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/mt/InternalsMedia.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/mt/InternalsMedia.cpp -o CMakeFiles/macrotext.dir/mt/InternalsMedia.cpp.s
 
-CMakeFiles/macrotext.dir/support/Encode.cpp.o: CMakeFiles/macrotext.dir/flags.make
-CMakeFiles/macrotext.dir/support/Encode.cpp.o: ../support/Encode.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object CMakeFiles/macrotext.dir/support/Encode.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/Encode.cpp.o -c /Users/ben/CLionProjects/snaz/support/Encode.cpp
+CMakeFiles/macrotext.dir/mt/InternalsNode.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/mt/InternalsNode.cpp.o: ../mt/InternalsNode.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object CMakeFiles/macrotext.dir/mt/InternalsNode.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/mt/InternalsNode.cpp.o -c /Users/ben/CLionProjects/snaz/mt/InternalsNode.cpp
 
-CMakeFiles/macrotext.dir/support/Encode.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/Encode.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/Encode.cpp > CMakeFiles/macrotext.dir/support/Encode.cpp.i
+CMakeFiles/macrotext.dir/mt/InternalsNode.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/mt/InternalsNode.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/mt/InternalsNode.cpp > CMakeFiles/macrotext.dir/mt/InternalsNode.cpp.i
 
-CMakeFiles/macrotext.dir/support/Encode.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/Encode.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/Encode.cpp -o CMakeFiles/macrotext.dir/support/Encode.cpp.s
+CMakeFiles/macrotext.dir/mt/InternalsNode.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/mt/InternalsNode.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/mt/InternalsNode.cpp -o CMakeFiles/macrotext.dir/mt/InternalsNode.cpp.s
 
-CMakeFiles/macrotext.dir/support/Fandr.cpp.o: CMakeFiles/macrotext.dir/flags.make
-CMakeFiles/macrotext.dir/support/Fandr.cpp.o: ../support/Fandr.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object CMakeFiles/macrotext.dir/support/Fandr.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/Fandr.cpp.o -c /Users/ben/CLionProjects/snaz/support/Fandr.cpp
+CMakeFiles/macrotext.dir/mt/InternalsNodeTree.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/mt/InternalsNodeTree.cpp.o: ../mt/InternalsNodeTree.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object CMakeFiles/macrotext.dir/mt/InternalsNodeTree.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/mt/InternalsNodeTree.cpp.o -c /Users/ben/CLionProjects/snaz/mt/InternalsNodeTree.cpp
 
-CMakeFiles/macrotext.dir/support/Fandr.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/Fandr.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/Fandr.cpp > CMakeFiles/macrotext.dir/support/Fandr.cpp.i
+CMakeFiles/macrotext.dir/mt/InternalsNodeTree.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/mt/InternalsNodeTree.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/mt/InternalsNodeTree.cpp > CMakeFiles/macrotext.dir/mt/InternalsNodeTree.cpp.i
 
-CMakeFiles/macrotext.dir/support/Fandr.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/Fandr.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/Fandr.cpp -o CMakeFiles/macrotext.dir/support/Fandr.cpp.s
-
-CMakeFiles/macrotext.dir/support/Convert.cpp.o: CMakeFiles/macrotext.dir/flags.make
-CMakeFiles/macrotext.dir/support/Convert.cpp.o: ../support/Convert.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building CXX object CMakeFiles/macrotext.dir/support/Convert.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/Convert.cpp.o -c /Users/ben/CLionProjects/snaz/support/Convert.cpp
-
-CMakeFiles/macrotext.dir/support/Convert.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/Convert.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/Convert.cpp > CMakeFiles/macrotext.dir/support/Convert.cpp.i
-
-CMakeFiles/macrotext.dir/support/Convert.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/Convert.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/Convert.cpp -o CMakeFiles/macrotext.dir/support/Convert.cpp.s
+CMakeFiles/macrotext.dir/mt/InternalsNodeTree.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/mt/InternalsNodeTree.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/mt/InternalsNodeTree.cpp -o CMakeFiles/macrotext.dir/mt/InternalsNodeTree.cpp.s
 
 CMakeFiles/macrotext.dir/mt/InternalsStorage.cpp.o: CMakeFiles/macrotext.dir/flags.make
 CMakeFiles/macrotext.dir/mt/InternalsStorage.cpp.o: ../mt/InternalsStorage.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building CXX object CMakeFiles/macrotext.dir/mt/InternalsStorage.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building CXX object CMakeFiles/macrotext.dir/mt/InternalsStorage.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/mt/InternalsStorage.cpp.o -c /Users/ben/CLionProjects/snaz/mt/InternalsStorage.cpp
 
 CMakeFiles/macrotext.dir/mt/InternalsStorage.cpp.i: cmake_force
@@ -346,6 +320,32 @@ CMakeFiles/macrotext.dir/mt/InternalsStorage.cpp.i: cmake_force
 CMakeFiles/macrotext.dir/mt/InternalsStorage.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/mt/InternalsStorage.cpp.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/mt/InternalsStorage.cpp -o CMakeFiles/macrotext.dir/mt/InternalsStorage.cpp.s
+
+CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o: ../mt/InternalsString.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building CXX object CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o -c /Users/ben/CLionProjects/snaz/mt/InternalsString.cpp
+
+CMakeFiles/macrotext.dir/mt/InternalsString.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/mt/InternalsString.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/mt/InternalsString.cpp > CMakeFiles/macrotext.dir/mt/InternalsString.cpp.i
+
+CMakeFiles/macrotext.dir/mt/InternalsString.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/mt/InternalsString.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/mt/InternalsString.cpp -o CMakeFiles/macrotext.dir/mt/InternalsString.cpp.s
+
+CMakeFiles/macrotext.dir/mt/InternalsTaxonomy.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/mt/InternalsTaxonomy.cpp.o: ../mt/InternalsTaxonomy.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building CXX object CMakeFiles/macrotext.dir/mt/InternalsTaxonomy.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/mt/InternalsTaxonomy.cpp.o -c /Users/ben/CLionProjects/snaz/mt/InternalsTaxonomy.cpp
+
+CMakeFiles/macrotext.dir/mt/InternalsTaxonomy.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/mt/InternalsTaxonomy.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/mt/InternalsTaxonomy.cpp > CMakeFiles/macrotext.dir/mt/InternalsTaxonomy.cpp.i
+
+CMakeFiles/macrotext.dir/mt/InternalsTaxonomy.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/mt/InternalsTaxonomy.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/mt/InternalsTaxonomy.cpp -o CMakeFiles/macrotext.dir/mt/InternalsTaxonomy.cpp.s
 
 CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o: CMakeFiles/macrotext.dir/flags.make
 CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o: ../mt/InternalsUtility.cpp
@@ -360,217 +360,9 @@ CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/mt/InternalsUtility.cpp -o CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.s
 
-CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o: CMakeFiles/macrotext.dir/flags.make
-CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o: ../mt/InternalsString.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building CXX object CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o -c /Users/ben/CLionProjects/snaz/mt/InternalsString.cpp
-
-CMakeFiles/macrotext.dir/mt/InternalsString.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/mt/InternalsString.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/mt/InternalsString.cpp > CMakeFiles/macrotext.dir/mt/InternalsString.cpp.i
-
-CMakeFiles/macrotext.dir/mt/InternalsString.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/mt/InternalsString.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/mt/InternalsString.cpp -o CMakeFiles/macrotext.dir/mt/InternalsString.cpp.s
-
-CMakeFiles/macrotext.dir/support/Comparison.cpp.o: CMakeFiles/macrotext.dir/flags.make
-CMakeFiles/macrotext.dir/support/Comparison.cpp.o: ../support/Comparison.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building CXX object CMakeFiles/macrotext.dir/support/Comparison.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/Comparison.cpp.o -c /Users/ben/CLionProjects/snaz/support/Comparison.cpp
-
-CMakeFiles/macrotext.dir/support/Comparison.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/Comparison.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/Comparison.cpp > CMakeFiles/macrotext.dir/support/Comparison.cpp.i
-
-CMakeFiles/macrotext.dir/support/Comparison.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/Comparison.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/Comparison.cpp -o CMakeFiles/macrotext.dir/support/Comparison.cpp.s
-
-CMakeFiles/macrotext.dir/support/Regex.cpp.o: CMakeFiles/macrotext.dir/flags.make
-CMakeFiles/macrotext.dir/support/Regex.cpp.o: ../support/Regex.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Building CXX object CMakeFiles/macrotext.dir/support/Regex.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/Regex.cpp.o -c /Users/ben/CLionProjects/snaz/support/Regex.cpp
-
-CMakeFiles/macrotext.dir/support/Regex.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/Regex.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/Regex.cpp > CMakeFiles/macrotext.dir/support/Regex.cpp.i
-
-CMakeFiles/macrotext.dir/support/Regex.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/Regex.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/Regex.cpp -o CMakeFiles/macrotext.dir/support/Regex.cpp.s
-
-CMakeFiles/macrotext.dir/mt/Instance.cpp.o: CMakeFiles/macrotext.dir/flags.make
-CMakeFiles/macrotext.dir/mt/Instance.cpp.o: ../mt/Instance.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Building CXX object CMakeFiles/macrotext.dir/mt/Instance.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/mt/Instance.cpp.o -c /Users/ben/CLionProjects/snaz/mt/Instance.cpp
-
-CMakeFiles/macrotext.dir/mt/Instance.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/mt/Instance.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/mt/Instance.cpp > CMakeFiles/macrotext.dir/mt/Instance.cpp.i
-
-CMakeFiles/macrotext.dir/mt/Instance.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/mt/Instance.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/mt/Instance.cpp -o CMakeFiles/macrotext.dir/mt/Instance.cpp.s
-
-CMakeFiles/macrotext.dir/support/Timing.cpp.o: CMakeFiles/macrotext.dir/flags.make
-CMakeFiles/macrotext.dir/support/Timing.cpp.o: ../support/Timing.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_30) "Building CXX object CMakeFiles/macrotext.dir/support/Timing.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/Timing.cpp.o -c /Users/ben/CLionProjects/snaz/support/Timing.cpp
-
-CMakeFiles/macrotext.dir/support/Timing.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/Timing.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/Timing.cpp > CMakeFiles/macrotext.dir/support/Timing.cpp.i
-
-CMakeFiles/macrotext.dir/support/Timing.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/Timing.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/Timing.cpp -o CMakeFiles/macrotext.dir/support/Timing.cpp.s
-
-CMakeFiles/macrotext.dir/support/File.cpp.o: CMakeFiles/macrotext.dir/flags.make
-CMakeFiles/macrotext.dir/support/File.cpp.o: ../support/File.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_31) "Building CXX object CMakeFiles/macrotext.dir/support/File.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/File.cpp.o -c /Users/ben/CLionProjects/snaz/support/File.cpp
-
-CMakeFiles/macrotext.dir/support/File.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/File.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/File.cpp > CMakeFiles/macrotext.dir/support/File.cpp.i
-
-CMakeFiles/macrotext.dir/support/File.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/File.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/File.cpp -o CMakeFiles/macrotext.dir/support/File.cpp.s
-
-CMakeFiles/macrotext.dir/support/Date.cpp.o: CMakeFiles/macrotext.dir/flags.make
-CMakeFiles/macrotext.dir/support/Date.cpp.o: ../support/Date.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_32) "Building CXX object CMakeFiles/macrotext.dir/support/Date.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/Date.cpp.o -c /Users/ben/CLionProjects/snaz/support/Date.cpp
-
-CMakeFiles/macrotext.dir/support/Date.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/Date.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/Date.cpp > CMakeFiles/macrotext.dir/support/Date.cpp.i
-
-CMakeFiles/macrotext.dir/support/Date.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/Date.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/Date.cpp -o CMakeFiles/macrotext.dir/support/Date.cpp.s
-
-CMakeFiles/macrotext.dir/support/Env.cpp.o: CMakeFiles/macrotext.dir/flags.make
-CMakeFiles/macrotext.dir/support/Env.cpp.o: ../support/Env.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_33) "Building CXX object CMakeFiles/macrotext.dir/support/Env.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/Env.cpp.o -c /Users/ben/CLionProjects/snaz/support/Env.cpp
-
-CMakeFiles/macrotext.dir/support/Env.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/Env.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/Env.cpp > CMakeFiles/macrotext.dir/support/Env.cpp.i
-
-CMakeFiles/macrotext.dir/support/Env.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/Env.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/Env.cpp -o CMakeFiles/macrotext.dir/support/Env.cpp.s
-
-CMakeFiles/macrotext.dir/mt/InternalsEncoder.cpp.o: CMakeFiles/macrotext.dir/flags.make
-CMakeFiles/macrotext.dir/mt/InternalsEncoder.cpp.o: ../mt/InternalsEncoder.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_34) "Building CXX object CMakeFiles/macrotext.dir/mt/InternalsEncoder.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/mt/InternalsEncoder.cpp.o -c /Users/ben/CLionProjects/snaz/mt/InternalsEncoder.cpp
-
-CMakeFiles/macrotext.dir/mt/InternalsEncoder.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/mt/InternalsEncoder.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/mt/InternalsEncoder.cpp > CMakeFiles/macrotext.dir/mt/InternalsEncoder.cpp.i
-
-CMakeFiles/macrotext.dir/mt/InternalsEncoder.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/mt/InternalsEncoder.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/mt/InternalsEncoder.cpp -o CMakeFiles/macrotext.dir/mt/InternalsEncoder.cpp.s
-
-CMakeFiles/macrotext.dir/mt/InternalsNodeTree.cpp.o: CMakeFiles/macrotext.dir/flags.make
-CMakeFiles/macrotext.dir/mt/InternalsNodeTree.cpp.o: ../mt/InternalsNodeTree.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_35) "Building CXX object CMakeFiles/macrotext.dir/mt/InternalsNodeTree.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/mt/InternalsNodeTree.cpp.o -c /Users/ben/CLionProjects/snaz/mt/InternalsNodeTree.cpp
-
-CMakeFiles/macrotext.dir/mt/InternalsNodeTree.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/mt/InternalsNodeTree.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/mt/InternalsNodeTree.cpp > CMakeFiles/macrotext.dir/mt/InternalsNodeTree.cpp.i
-
-CMakeFiles/macrotext.dir/mt/InternalsNodeTree.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/mt/InternalsNodeTree.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/mt/InternalsNodeTree.cpp -o CMakeFiles/macrotext.dir/mt/InternalsNodeTree.cpp.s
-
-CMakeFiles/macrotext.dir/mt/InternalsBuild.cpp.o: CMakeFiles/macrotext.dir/flags.make
-CMakeFiles/macrotext.dir/mt/InternalsBuild.cpp.o: ../mt/InternalsBuild.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_36) "Building CXX object CMakeFiles/macrotext.dir/mt/InternalsBuild.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/mt/InternalsBuild.cpp.o -c /Users/ben/CLionProjects/snaz/mt/InternalsBuild.cpp
-
-CMakeFiles/macrotext.dir/mt/InternalsBuild.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/mt/InternalsBuild.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/mt/InternalsBuild.cpp > CMakeFiles/macrotext.dir/mt/InternalsBuild.cpp.i
-
-CMakeFiles/macrotext.dir/mt/InternalsBuild.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/mt/InternalsBuild.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/mt/InternalsBuild.cpp -o CMakeFiles/macrotext.dir/mt/InternalsBuild.cpp.s
-
-CMakeFiles/macrotext.dir/mt/InternalsNode.cpp.o: CMakeFiles/macrotext.dir/flags.make
-CMakeFiles/macrotext.dir/mt/InternalsNode.cpp.o: ../mt/InternalsNode.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_37) "Building CXX object CMakeFiles/macrotext.dir/mt/InternalsNode.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/mt/InternalsNode.cpp.o -c /Users/ben/CLionProjects/snaz/mt/InternalsNode.cpp
-
-CMakeFiles/macrotext.dir/mt/InternalsNode.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/mt/InternalsNode.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/mt/InternalsNode.cpp > CMakeFiles/macrotext.dir/mt/InternalsNode.cpp.i
-
-CMakeFiles/macrotext.dir/mt/InternalsNode.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/mt/InternalsNode.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/mt/InternalsNode.cpp -o CMakeFiles/macrotext.dir/mt/InternalsNode.cpp.s
-
-CMakeFiles/macrotext.dir/mt/InternalsMedia.cpp.o: CMakeFiles/macrotext.dir/flags.make
-CMakeFiles/macrotext.dir/mt/InternalsMedia.cpp.o: ../mt/InternalsMedia.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_38) "Building CXX object CMakeFiles/macrotext.dir/mt/InternalsMedia.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/mt/InternalsMedia.cpp.o -c /Users/ben/CLionProjects/snaz/mt/InternalsMedia.cpp
-
-CMakeFiles/macrotext.dir/mt/InternalsMedia.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/mt/InternalsMedia.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/mt/InternalsMedia.cpp > CMakeFiles/macrotext.dir/mt/InternalsMedia.cpp.i
-
-CMakeFiles/macrotext.dir/mt/InternalsMedia.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/mt/InternalsMedia.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/mt/InternalsMedia.cpp -o CMakeFiles/macrotext.dir/mt/InternalsMedia.cpp.s
-
-CMakeFiles/macrotext.dir/mt/InternalsTaxonomy.cpp.o: CMakeFiles/macrotext.dir/flags.make
-CMakeFiles/macrotext.dir/mt/InternalsTaxonomy.cpp.o: ../mt/InternalsTaxonomy.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_39) "Building CXX object CMakeFiles/macrotext.dir/mt/InternalsTaxonomy.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/mt/InternalsTaxonomy.cpp.o -c /Users/ben/CLionProjects/snaz/mt/InternalsTaxonomy.cpp
-
-CMakeFiles/macrotext.dir/mt/InternalsTaxonomy.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/mt/InternalsTaxonomy.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/mt/InternalsTaxonomy.cpp > CMakeFiles/macrotext.dir/mt/InternalsTaxonomy.cpp.i
-
-CMakeFiles/macrotext.dir/mt/InternalsTaxonomy.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/mt/InternalsTaxonomy.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/mt/InternalsTaxonomy.cpp -o CMakeFiles/macrotext.dir/mt/InternalsTaxonomy.cpp.s
-
-CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.o: CMakeFiles/macrotext.dir/flags.make
-CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.o: ../support/db/ServiceFactory.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_40) "Building CXX object CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.o -c /Users/ben/CLionProjects/snaz/support/db/ServiceFactory.cpp
-
-CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/db/ServiceFactory.cpp > CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.i
-
-CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/db/ServiceFactory.cpp -o CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.s
-
-CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.o: CMakeFiles/macrotext.dir/flags.make
-CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.o: ../support/db/MySQLService.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_41) "Building CXX object CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.o -c /Users/ben/CLionProjects/snaz/support/db/MySQLService.cpp
-
-CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/db/MySQLService.cpp > CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.i
-
-CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/db/MySQLService.cpp -o CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.s
-
 CMakeFiles/macrotext.dir/support/db/Connection.cpp.o: CMakeFiles/macrotext.dir/flags.make
 CMakeFiles/macrotext.dir/support/db/Connection.cpp.o: ../support/db/Connection.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_42) "Building CXX object CMakeFiles/macrotext.dir/support/db/Connection.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building CXX object CMakeFiles/macrotext.dir/support/db/Connection.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/db/Connection.cpp.o -c /Users/ben/CLionProjects/snaz/support/db/Connection.cpp
 
 CMakeFiles/macrotext.dir/support/db/Connection.cpp.i: cmake_force
@@ -581,22 +373,9 @@ CMakeFiles/macrotext.dir/support/db/Connection.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/db/Connection.cpp.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/db/Connection.cpp -o CMakeFiles/macrotext.dir/support/db/Connection.cpp.s
 
-CMakeFiles/macrotext.dir/support/db/Query.cpp.o: CMakeFiles/macrotext.dir/flags.make
-CMakeFiles/macrotext.dir/support/db/Query.cpp.o: ../support/db/Query.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_43) "Building CXX object CMakeFiles/macrotext.dir/support/db/Query.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/db/Query.cpp.o -c /Users/ben/CLionProjects/snaz/support/db/Query.cpp
-
-CMakeFiles/macrotext.dir/support/db/Query.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/db/Query.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/db/Query.cpp > CMakeFiles/macrotext.dir/support/db/Query.cpp.i
-
-CMakeFiles/macrotext.dir/support/db/Query.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/db/Query.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/db/Query.cpp -o CMakeFiles/macrotext.dir/support/db/Query.cpp.s
-
 CMakeFiles/macrotext.dir/support/db/MySQLConnection.cpp.o: CMakeFiles/macrotext.dir/flags.make
 CMakeFiles/macrotext.dir/support/db/MySQLConnection.cpp.o: ../support/db/MySQLConnection.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_44) "Building CXX object CMakeFiles/macrotext.dir/support/db/MySQLConnection.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building CXX object CMakeFiles/macrotext.dir/support/db/MySQLConnection.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/db/MySQLConnection.cpp.o -c /Users/ben/CLionProjects/snaz/support/db/MySQLConnection.cpp
 
 CMakeFiles/macrotext.dir/support/db/MySQLConnection.cpp.i: cmake_force
@@ -609,7 +388,7 @@ CMakeFiles/macrotext.dir/support/db/MySQLConnection.cpp.s: cmake_force
 
 CMakeFiles/macrotext.dir/support/db/MySQLQuery.cpp.o: CMakeFiles/macrotext.dir/flags.make
 CMakeFiles/macrotext.dir/support/db/MySQLQuery.cpp.o: ../support/db/MySQLQuery.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_45) "Building CXX object CMakeFiles/macrotext.dir/support/db/MySQLQuery.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Building CXX object CMakeFiles/macrotext.dir/support/db/MySQLQuery.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/db/MySQLQuery.cpp.o -c /Users/ben/CLionProjects/snaz/support/db/MySQLQuery.cpp
 
 CMakeFiles/macrotext.dir/support/db/MySQLQuery.cpp.i: cmake_force
@@ -620,9 +399,204 @@ CMakeFiles/macrotext.dir/support/db/MySQLQuery.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/db/MySQLQuery.cpp.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/db/MySQLQuery.cpp -o CMakeFiles/macrotext.dir/support/db/MySQLQuery.cpp.s
 
+CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.o: ../support/db/MySQLService.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Building CXX object CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.o -c /Users/ben/CLionProjects/snaz/support/db/MySQLService.cpp
+
+CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/db/MySQLService.cpp > CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.i
+
+CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/db/MySQLService.cpp -o CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.s
+
+CMakeFiles/macrotext.dir/support/db/Query.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/support/db/Query.cpp.o: ../support/db/Query.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_30) "Building CXX object CMakeFiles/macrotext.dir/support/db/Query.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/db/Query.cpp.o -c /Users/ben/CLionProjects/snaz/support/db/Query.cpp
+
+CMakeFiles/macrotext.dir/support/db/Query.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/db/Query.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/db/Query.cpp > CMakeFiles/macrotext.dir/support/db/Query.cpp.i
+
+CMakeFiles/macrotext.dir/support/db/Query.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/db/Query.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/db/Query.cpp -o CMakeFiles/macrotext.dir/support/db/Query.cpp.s
+
+CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.o: ../support/db/ServiceFactory.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_31) "Building CXX object CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.o -c /Users/ben/CLionProjects/snaz/support/db/ServiceFactory.cpp
+
+CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/db/ServiceFactory.cpp > CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.i
+
+CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/db/ServiceFactory.cpp -o CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.s
+
+CMakeFiles/macrotext.dir/support/Comparison.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/support/Comparison.cpp.o: ../support/Comparison.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_32) "Building CXX object CMakeFiles/macrotext.dir/support/Comparison.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/Comparison.cpp.o -c /Users/ben/CLionProjects/snaz/support/Comparison.cpp
+
+CMakeFiles/macrotext.dir/support/Comparison.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/Comparison.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/Comparison.cpp > CMakeFiles/macrotext.dir/support/Comparison.cpp.i
+
+CMakeFiles/macrotext.dir/support/Comparison.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/Comparison.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/Comparison.cpp -o CMakeFiles/macrotext.dir/support/Comparison.cpp.s
+
+CMakeFiles/macrotext.dir/support/Convert.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/support/Convert.cpp.o: ../support/Convert.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_33) "Building CXX object CMakeFiles/macrotext.dir/support/Convert.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/Convert.cpp.o -c /Users/ben/CLionProjects/snaz/support/Convert.cpp
+
+CMakeFiles/macrotext.dir/support/Convert.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/Convert.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/Convert.cpp > CMakeFiles/macrotext.dir/support/Convert.cpp.i
+
+CMakeFiles/macrotext.dir/support/Convert.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/Convert.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/Convert.cpp -o CMakeFiles/macrotext.dir/support/Convert.cpp.s
+
+CMakeFiles/macrotext.dir/support/Date.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/support/Date.cpp.o: ../support/Date.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_34) "Building CXX object CMakeFiles/macrotext.dir/support/Date.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/Date.cpp.o -c /Users/ben/CLionProjects/snaz/support/Date.cpp
+
+CMakeFiles/macrotext.dir/support/Date.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/Date.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/Date.cpp > CMakeFiles/macrotext.dir/support/Date.cpp.i
+
+CMakeFiles/macrotext.dir/support/Date.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/Date.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/Date.cpp -o CMakeFiles/macrotext.dir/support/Date.cpp.s
+
+CMakeFiles/macrotext.dir/support/Encode.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/support/Encode.cpp.o: ../support/Encode.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_35) "Building CXX object CMakeFiles/macrotext.dir/support/Encode.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/Encode.cpp.o -c /Users/ben/CLionProjects/snaz/support/Encode.cpp
+
+CMakeFiles/macrotext.dir/support/Encode.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/Encode.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/Encode.cpp > CMakeFiles/macrotext.dir/support/Encode.cpp.i
+
+CMakeFiles/macrotext.dir/support/Encode.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/Encode.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/Encode.cpp -o CMakeFiles/macrotext.dir/support/Encode.cpp.s
+
+CMakeFiles/macrotext.dir/support/Env.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/support/Env.cpp.o: ../support/Env.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_36) "Building CXX object CMakeFiles/macrotext.dir/support/Env.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/Env.cpp.o -c /Users/ben/CLionProjects/snaz/support/Env.cpp
+
+CMakeFiles/macrotext.dir/support/Env.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/Env.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/Env.cpp > CMakeFiles/macrotext.dir/support/Env.cpp.i
+
+CMakeFiles/macrotext.dir/support/Env.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/Env.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/Env.cpp -o CMakeFiles/macrotext.dir/support/Env.cpp.s
+
+CMakeFiles/macrotext.dir/support/Fandr.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/support/Fandr.cpp.o: ../support/Fandr.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_37) "Building CXX object CMakeFiles/macrotext.dir/support/Fandr.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/Fandr.cpp.o -c /Users/ben/CLionProjects/snaz/support/Fandr.cpp
+
+CMakeFiles/macrotext.dir/support/Fandr.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/Fandr.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/Fandr.cpp > CMakeFiles/macrotext.dir/support/Fandr.cpp.i
+
+CMakeFiles/macrotext.dir/support/Fandr.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/Fandr.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/Fandr.cpp -o CMakeFiles/macrotext.dir/support/Fandr.cpp.s
+
+CMakeFiles/macrotext.dir/support/File.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/support/File.cpp.o: ../support/File.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_38) "Building CXX object CMakeFiles/macrotext.dir/support/File.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/File.cpp.o -c /Users/ben/CLionProjects/snaz/support/File.cpp
+
+CMakeFiles/macrotext.dir/support/File.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/File.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/File.cpp > CMakeFiles/macrotext.dir/support/File.cpp.i
+
+CMakeFiles/macrotext.dir/support/File.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/File.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/File.cpp -o CMakeFiles/macrotext.dir/support/File.cpp.s
+
+CMakeFiles/macrotext.dir/support/Infix.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/support/Infix.cpp.o: ../support/Infix.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_39) "Building CXX object CMakeFiles/macrotext.dir/support/Infix.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/Infix.cpp.o -c /Users/ben/CLionProjects/snaz/support/Infix.cpp
+
+CMakeFiles/macrotext.dir/support/Infix.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/Infix.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/Infix.cpp > CMakeFiles/macrotext.dir/support/Infix.cpp.i
+
+CMakeFiles/macrotext.dir/support/Infix.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/Infix.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/Infix.cpp -o CMakeFiles/macrotext.dir/support/Infix.cpp.s
+
+CMakeFiles/macrotext.dir/support/Message.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/support/Message.cpp.o: ../support/Message.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_40) "Building CXX object CMakeFiles/macrotext.dir/support/Message.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/Message.cpp.o -c /Users/ben/CLionProjects/snaz/support/Message.cpp
+
+CMakeFiles/macrotext.dir/support/Message.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/Message.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/Message.cpp > CMakeFiles/macrotext.dir/support/Message.cpp.i
+
+CMakeFiles/macrotext.dir/support/Message.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/Message.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/Message.cpp -o CMakeFiles/macrotext.dir/support/Message.cpp.s
+
+CMakeFiles/macrotext.dir/support/Regex.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/support/Regex.cpp.o: ../support/Regex.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_41) "Building CXX object CMakeFiles/macrotext.dir/support/Regex.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/Regex.cpp.o -c /Users/ben/CLionProjects/snaz/support/Regex.cpp
+
+CMakeFiles/macrotext.dir/support/Regex.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/Regex.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/Regex.cpp > CMakeFiles/macrotext.dir/support/Regex.cpp.i
+
+CMakeFiles/macrotext.dir/support/Regex.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/Regex.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/Regex.cpp -o CMakeFiles/macrotext.dir/support/Regex.cpp.s
+
+CMakeFiles/macrotext.dir/support/Storage.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/support/Storage.cpp.o: ../support/Storage.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_42) "Building CXX object CMakeFiles/macrotext.dir/support/Storage.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/Storage.cpp.o -c /Users/ben/CLionProjects/snaz/support/Storage.cpp
+
+CMakeFiles/macrotext.dir/support/Storage.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/Storage.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/Storage.cpp > CMakeFiles/macrotext.dir/support/Storage.cpp.i
+
+CMakeFiles/macrotext.dir/support/Storage.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/Storage.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/Storage.cpp -o CMakeFiles/macrotext.dir/support/Storage.cpp.s
+
+CMakeFiles/macrotext.dir/support/Timing.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/support/Timing.cpp.o: ../support/Timing.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_43) "Building CXX object CMakeFiles/macrotext.dir/support/Timing.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/support/Timing.cpp.o -c /Users/ben/CLionProjects/snaz/support/Timing.cpp
+
+CMakeFiles/macrotext.dir/support/Timing.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/support/Timing.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/support/Timing.cpp > CMakeFiles/macrotext.dir/support/Timing.cpp.i
+
+CMakeFiles/macrotext.dir/support/Timing.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/support/Timing.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/support/Timing.cpp -o CMakeFiles/macrotext.dir/support/Timing.cpp.s
+
 CMakeFiles/macrotext.dir/node/Node.cpp.o: CMakeFiles/macrotext.dir/flags.make
 CMakeFiles/macrotext.dir/node/Node.cpp.o: ../node/Node.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_46) "Building CXX object CMakeFiles/macrotext.dir/node/Node.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_44) "Building CXX object CMakeFiles/macrotext.dir/node/Node.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/node/Node.cpp.o -c /Users/ben/CLionProjects/snaz/node/Node.cpp
 
 CMakeFiles/macrotext.dir/node/Node.cpp.i: cmake_force
@@ -635,7 +609,7 @@ CMakeFiles/macrotext.dir/node/Node.cpp.s: cmake_force
 
 CMakeFiles/macrotext.dir/node/NodeFilename.cpp.o: CMakeFiles/macrotext.dir/flags.make
 CMakeFiles/macrotext.dir/node/NodeFilename.cpp.o: ../node/NodeFilename.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_47) "Building CXX object CMakeFiles/macrotext.dir/node/NodeFilename.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_45) "Building CXX object CMakeFiles/macrotext.dir/node/NodeFilename.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/node/NodeFilename.cpp.o -c /Users/ben/CLionProjects/snaz/node/NodeFilename.cpp
 
 CMakeFiles/macrotext.dir/node/NodeFilename.cpp.i: cmake_force
@@ -648,7 +622,7 @@ CMakeFiles/macrotext.dir/node/NodeFilename.cpp.s: cmake_force
 
 CMakeFiles/macrotext.dir/node/NodeLocator.cpp.o: CMakeFiles/macrotext.dir/flags.make
 CMakeFiles/macrotext.dir/node/NodeLocator.cpp.o: ../node/NodeLocator.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_48) "Building CXX object CMakeFiles/macrotext.dir/node/NodeLocator.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_46) "Building CXX object CMakeFiles/macrotext.dir/node/NodeLocator.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/node/NodeLocator.cpp.o -c /Users/ben/CLionProjects/snaz/node/NodeLocator.cpp
 
 CMakeFiles/macrotext.dir/node/NodeLocator.cpp.i: cmake_force
@@ -661,7 +635,7 @@ CMakeFiles/macrotext.dir/node/NodeLocator.cpp.s: cmake_force
 
 CMakeFiles/macrotext.dir/node/NodeVal.cpp.o: CMakeFiles/macrotext.dir/flags.make
 CMakeFiles/macrotext.dir/node/NodeVal.cpp.o: ../node/NodeVal.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_49) "Building CXX object CMakeFiles/macrotext.dir/node/NodeVal.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_47) "Building CXX object CMakeFiles/macrotext.dir/node/NodeVal.cpp.o"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/node/NodeVal.cpp.o -c /Users/ben/CLionProjects/snaz/node/NodeVal.cpp
 
 CMakeFiles/macrotext.dir/node/NodeVal.cpp.i: cmake_force
@@ -672,68 +646,94 @@ CMakeFiles/macrotext.dir/node/NodeVal.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/node/NodeVal.cpp.s"
 	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/node/NodeVal.cpp -o CMakeFiles/macrotext.dir/node/NodeVal.cpp.s
 
-CMakeFiles/macrotext.dir/node/Build.cpp.o: CMakeFiles/macrotext.dir/flags.make
-CMakeFiles/macrotext.dir/node/Build.cpp.o: ../node/Build.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_50) "Building CXX object CMakeFiles/macrotext.dir/node/Build.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/node/Build.cpp.o -c /Users/ben/CLionProjects/snaz/node/Build.cpp
+CMakeFiles/macrotext.dir/main.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/main.cpp.o: ../main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_48) "Building CXX object CMakeFiles/macrotext.dir/main.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/main.cpp.o -c /Users/ben/CLionProjects/snaz/main.cpp
 
-CMakeFiles/macrotext.dir/node/Build.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/node/Build.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/node/Build.cpp > CMakeFiles/macrotext.dir/node/Build.cpp.i
+CMakeFiles/macrotext.dir/main.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/main.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/main.cpp > CMakeFiles/macrotext.dir/main.cpp.i
 
-CMakeFiles/macrotext.dir/node/Build.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/node/Build.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/node/Build.cpp -o CMakeFiles/macrotext.dir/node/Build.cpp.s
+CMakeFiles/macrotext.dir/main.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/main.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/main.cpp -o CMakeFiles/macrotext.dir/main.cpp.s
+
+CMakeFiles/macrotext.dir/test.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/test.cpp.o: ../test.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_49) "Building CXX object CMakeFiles/macrotext.dir/test.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/test.cpp.o -c /Users/ben/CLionProjects/snaz/test.cpp
+
+CMakeFiles/macrotext.dir/test.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/test.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/test.cpp > CMakeFiles/macrotext.dir/test.cpp.i
+
+CMakeFiles/macrotext.dir/test.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/test.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/test.cpp -o CMakeFiles/macrotext.dir/test.cpp.s
+
+CMakeFiles/macrotext.dir/Build.cpp.o: CMakeFiles/macrotext.dir/flags.make
+CMakeFiles/macrotext.dir/Build.cpp.o: ../Build.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_50) "Building CXX object CMakeFiles/macrotext.dir/Build.cpp.o"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/macrotext.dir/Build.cpp.o -c /Users/ben/CLionProjects/snaz/Build.cpp
+
+CMakeFiles/macrotext.dir/Build.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/macrotext.dir/Build.cpp.i"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/ben/CLionProjects/snaz/Build.cpp > CMakeFiles/macrotext.dir/Build.cpp.i
+
+CMakeFiles/macrotext.dir/Build.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/macrotext.dir/Build.cpp.s"
+	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/ben/CLionProjects/snaz/Build.cpp -o CMakeFiles/macrotext.dir/Build.cpp.s
 
 # Object files for target macrotext
 macrotext_OBJECTS = \
 "CMakeFiles/macrotext.dir/parser.tab.cpp.o" \
 "CMakeFiles/macrotext.dir/advanced.yy.cpp.o" \
 "CMakeFiles/macrotext.dir/classic.yy.cpp.o" \
-"CMakeFiles/macrotext.dir/main.cpp.o" \
-"CMakeFiles/macrotext.dir/mt/Driver.cpp.o" \
-"CMakeFiles/macrotext.dir/test.cpp.o" \
-"CMakeFiles/macrotext.dir/support/Storage.cpp.o" \
-"CMakeFiles/macrotext.dir/mt/Definition.cpp.o" \
-"CMakeFiles/macrotext.dir/mt/Injection.cpp.o" \
-"CMakeFiles/macrotext.dir/mt/Wss.cpp.o" \
+"CMakeFiles/macrotext.dir/mt/Content.cpp.o" \
 "CMakeFiles/macrotext.dir/mt/Macro.cpp.o" \
 "CMakeFiles/macrotext.dir/mt/Text.cpp.o" \
+"CMakeFiles/macrotext.dir/mt/Wss.cpp.o" \
+"CMakeFiles/macrotext.dir/mt/Definition.cpp.o" \
+"CMakeFiles/macrotext.dir/mt/Injection.cpp.o" \
+"CMakeFiles/macrotext.dir/mt/Driver.cpp.o" \
+"CMakeFiles/macrotext.dir/mt/Instance.cpp.o" \
 "CMakeFiles/macrotext.dir/mt/Internal.cpp.o" \
 "CMakeFiles/macrotext.dir/mt/InternalInstance.cpp.o" \
-"CMakeFiles/macrotext.dir/mt/Content.cpp.o" \
-"CMakeFiles/macrotext.dir/support/Infix.cpp.o" \
-"CMakeFiles/macrotext.dir/support/Message.cpp.o" \
-"CMakeFiles/macrotext.dir/support/Encode.cpp.o" \
-"CMakeFiles/macrotext.dir/support/Fandr.cpp.o" \
-"CMakeFiles/macrotext.dir/support/Convert.cpp.o" \
-"CMakeFiles/macrotext.dir/mt/InternalsStorage.cpp.o" \
-"CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o" \
-"CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o" \
-"CMakeFiles/macrotext.dir/support/Comparison.cpp.o" \
-"CMakeFiles/macrotext.dir/support/Regex.cpp.o" \
-"CMakeFiles/macrotext.dir/mt/Instance.cpp.o" \
-"CMakeFiles/macrotext.dir/support/Timing.cpp.o" \
-"CMakeFiles/macrotext.dir/support/File.cpp.o" \
-"CMakeFiles/macrotext.dir/support/Date.cpp.o" \
-"CMakeFiles/macrotext.dir/support/Env.cpp.o" \
-"CMakeFiles/macrotext.dir/mt/InternalsEncoder.cpp.o" \
-"CMakeFiles/macrotext.dir/mt/InternalsNodeTree.cpp.o" \
 "CMakeFiles/macrotext.dir/mt/InternalsBuild.cpp.o" \
-"CMakeFiles/macrotext.dir/mt/InternalsNode.cpp.o" \
+"CMakeFiles/macrotext.dir/mt/InternalsEncoder.cpp.o" \
 "CMakeFiles/macrotext.dir/mt/InternalsMedia.cpp.o" \
+"CMakeFiles/macrotext.dir/mt/InternalsNode.cpp.o" \
+"CMakeFiles/macrotext.dir/mt/InternalsNodeTree.cpp.o" \
+"CMakeFiles/macrotext.dir/mt/InternalsStorage.cpp.o" \
+"CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o" \
 "CMakeFiles/macrotext.dir/mt/InternalsTaxonomy.cpp.o" \
-"CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.o" \
-"CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.o" \
+"CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o" \
 "CMakeFiles/macrotext.dir/support/db/Connection.cpp.o" \
-"CMakeFiles/macrotext.dir/support/db/Query.cpp.o" \
 "CMakeFiles/macrotext.dir/support/db/MySQLConnection.cpp.o" \
 "CMakeFiles/macrotext.dir/support/db/MySQLQuery.cpp.o" \
+"CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.o" \
+"CMakeFiles/macrotext.dir/support/db/Query.cpp.o" \
+"CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.o" \
+"CMakeFiles/macrotext.dir/support/Comparison.cpp.o" \
+"CMakeFiles/macrotext.dir/support/Convert.cpp.o" \
+"CMakeFiles/macrotext.dir/support/Date.cpp.o" \
+"CMakeFiles/macrotext.dir/support/Encode.cpp.o" \
+"CMakeFiles/macrotext.dir/support/Env.cpp.o" \
+"CMakeFiles/macrotext.dir/support/Fandr.cpp.o" \
+"CMakeFiles/macrotext.dir/support/File.cpp.o" \
+"CMakeFiles/macrotext.dir/support/Infix.cpp.o" \
+"CMakeFiles/macrotext.dir/support/Message.cpp.o" \
+"CMakeFiles/macrotext.dir/support/Regex.cpp.o" \
+"CMakeFiles/macrotext.dir/support/Storage.cpp.o" \
+"CMakeFiles/macrotext.dir/support/Timing.cpp.o" \
 "CMakeFiles/macrotext.dir/node/Node.cpp.o" \
 "CMakeFiles/macrotext.dir/node/NodeFilename.cpp.o" \
 "CMakeFiles/macrotext.dir/node/NodeLocator.cpp.o" \
 "CMakeFiles/macrotext.dir/node/NodeVal.cpp.o" \
-"CMakeFiles/macrotext.dir/node/Build.cpp.o"
+"CMakeFiles/macrotext.dir/main.cpp.o" \
+"CMakeFiles/macrotext.dir/test.cpp.o" \
+"CMakeFiles/macrotext.dir/Build.cpp.o"
 
 # External object files for target macrotext
 macrotext_EXTERNAL_OBJECTS =
@@ -741,50 +741,50 @@ macrotext_EXTERNAL_OBJECTS =
 macrotext: CMakeFiles/macrotext.dir/parser.tab.cpp.o
 macrotext: CMakeFiles/macrotext.dir/advanced.yy.cpp.o
 macrotext: CMakeFiles/macrotext.dir/classic.yy.cpp.o
-macrotext: CMakeFiles/macrotext.dir/main.cpp.o
-macrotext: CMakeFiles/macrotext.dir/mt/Driver.cpp.o
-macrotext: CMakeFiles/macrotext.dir/test.cpp.o
-macrotext: CMakeFiles/macrotext.dir/support/Storage.cpp.o
-macrotext: CMakeFiles/macrotext.dir/mt/Definition.cpp.o
-macrotext: CMakeFiles/macrotext.dir/mt/Injection.cpp.o
-macrotext: CMakeFiles/macrotext.dir/mt/Wss.cpp.o
+macrotext: CMakeFiles/macrotext.dir/mt/Content.cpp.o
 macrotext: CMakeFiles/macrotext.dir/mt/Macro.cpp.o
 macrotext: CMakeFiles/macrotext.dir/mt/Text.cpp.o
+macrotext: CMakeFiles/macrotext.dir/mt/Wss.cpp.o
+macrotext: CMakeFiles/macrotext.dir/mt/Definition.cpp.o
+macrotext: CMakeFiles/macrotext.dir/mt/Injection.cpp.o
+macrotext: CMakeFiles/macrotext.dir/mt/Driver.cpp.o
+macrotext: CMakeFiles/macrotext.dir/mt/Instance.cpp.o
 macrotext: CMakeFiles/macrotext.dir/mt/Internal.cpp.o
 macrotext: CMakeFiles/macrotext.dir/mt/InternalInstance.cpp.o
-macrotext: CMakeFiles/macrotext.dir/mt/Content.cpp.o
-macrotext: CMakeFiles/macrotext.dir/support/Infix.cpp.o
-macrotext: CMakeFiles/macrotext.dir/support/Message.cpp.o
-macrotext: CMakeFiles/macrotext.dir/support/Encode.cpp.o
-macrotext: CMakeFiles/macrotext.dir/support/Fandr.cpp.o
-macrotext: CMakeFiles/macrotext.dir/support/Convert.cpp.o
-macrotext: CMakeFiles/macrotext.dir/mt/InternalsStorage.cpp.o
-macrotext: CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o
-macrotext: CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o
-macrotext: CMakeFiles/macrotext.dir/support/Comparison.cpp.o
-macrotext: CMakeFiles/macrotext.dir/support/Regex.cpp.o
-macrotext: CMakeFiles/macrotext.dir/mt/Instance.cpp.o
-macrotext: CMakeFiles/macrotext.dir/support/Timing.cpp.o
-macrotext: CMakeFiles/macrotext.dir/support/File.cpp.o
-macrotext: CMakeFiles/macrotext.dir/support/Date.cpp.o
-macrotext: CMakeFiles/macrotext.dir/support/Env.cpp.o
-macrotext: CMakeFiles/macrotext.dir/mt/InternalsEncoder.cpp.o
-macrotext: CMakeFiles/macrotext.dir/mt/InternalsNodeTree.cpp.o
 macrotext: CMakeFiles/macrotext.dir/mt/InternalsBuild.cpp.o
-macrotext: CMakeFiles/macrotext.dir/mt/InternalsNode.cpp.o
+macrotext: CMakeFiles/macrotext.dir/mt/InternalsEncoder.cpp.o
 macrotext: CMakeFiles/macrotext.dir/mt/InternalsMedia.cpp.o
+macrotext: CMakeFiles/macrotext.dir/mt/InternalsNode.cpp.o
+macrotext: CMakeFiles/macrotext.dir/mt/InternalsNodeTree.cpp.o
+macrotext: CMakeFiles/macrotext.dir/mt/InternalsStorage.cpp.o
+macrotext: CMakeFiles/macrotext.dir/mt/InternalsString.cpp.o
 macrotext: CMakeFiles/macrotext.dir/mt/InternalsTaxonomy.cpp.o
-macrotext: CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.o
-macrotext: CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.o
+macrotext: CMakeFiles/macrotext.dir/mt/InternalsUtility.cpp.o
 macrotext: CMakeFiles/macrotext.dir/support/db/Connection.cpp.o
-macrotext: CMakeFiles/macrotext.dir/support/db/Query.cpp.o
 macrotext: CMakeFiles/macrotext.dir/support/db/MySQLConnection.cpp.o
 macrotext: CMakeFiles/macrotext.dir/support/db/MySQLQuery.cpp.o
+macrotext: CMakeFiles/macrotext.dir/support/db/MySQLService.cpp.o
+macrotext: CMakeFiles/macrotext.dir/support/db/Query.cpp.o
+macrotext: CMakeFiles/macrotext.dir/support/db/ServiceFactory.cpp.o
+macrotext: CMakeFiles/macrotext.dir/support/Comparison.cpp.o
+macrotext: CMakeFiles/macrotext.dir/support/Convert.cpp.o
+macrotext: CMakeFiles/macrotext.dir/support/Date.cpp.o
+macrotext: CMakeFiles/macrotext.dir/support/Encode.cpp.o
+macrotext: CMakeFiles/macrotext.dir/support/Env.cpp.o
+macrotext: CMakeFiles/macrotext.dir/support/Fandr.cpp.o
+macrotext: CMakeFiles/macrotext.dir/support/File.cpp.o
+macrotext: CMakeFiles/macrotext.dir/support/Infix.cpp.o
+macrotext: CMakeFiles/macrotext.dir/support/Message.cpp.o
+macrotext: CMakeFiles/macrotext.dir/support/Regex.cpp.o
+macrotext: CMakeFiles/macrotext.dir/support/Storage.cpp.o
+macrotext: CMakeFiles/macrotext.dir/support/Timing.cpp.o
 macrotext: CMakeFiles/macrotext.dir/node/Node.cpp.o
 macrotext: CMakeFiles/macrotext.dir/node/NodeFilename.cpp.o
 macrotext: CMakeFiles/macrotext.dir/node/NodeLocator.cpp.o
 macrotext: CMakeFiles/macrotext.dir/node/NodeVal.cpp.o
-macrotext: CMakeFiles/macrotext.dir/node/Build.cpp.o
+macrotext: CMakeFiles/macrotext.dir/main.cpp.o
+macrotext: CMakeFiles/macrotext.dir/test.cpp.o
+macrotext: CMakeFiles/macrotext.dir/Build.cpp.o
 macrotext: CMakeFiles/macrotext.dir/build.make
 macrotext: CMakeFiles/macrotext.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/ben/CLionProjects/snaz/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_51) "Linking CXX executable macrotext"

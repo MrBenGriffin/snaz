@@ -332,8 +332,8 @@ bool NodeLocator::doMainNode(Messages& errs) {
 	if (showPaths) message << "m";
 	in++;
 	setdirty();
-	if(!Node::node_stack.empty()) {
-		find = Node::node_stack.front();
+	if(!Node::nodeStack.empty()) {
+		find = Node::nodeStack.front();
 		return nextPathSection(errs);
 	} else {
 		return true;
@@ -646,7 +646,7 @@ bool NodeLocator::doStackFromInside(Messages& errs) {
 	if (!offset.second) {
 		throw BadNodeLocatorPath(errs,start,in,out);
 	} else {
-		size_t stsize = Node::node_stack.size();
+		size_t stsize = Node::nodeStack.size();
 		if (offset.first!=0) {
 			setdirty();
 			//			dirtmsg << "I-Stack must be 0 Path:"+NodeLocator::loc_path;
@@ -655,11 +655,11 @@ bool NodeLocator::doStackFromInside(Messages& errs) {
 		Node* result = nullptr;
 		if (stsize < 2) { //we are in template.
 			if ((size_t)offset.first < stsize) {
-				result = Node::node_stack[stsize-((size_t)offset.first+1)]; //offset=0, size=1; 1-(0+1) = 0;
+				result = Node::nodeStack[stsize-((size_t)offset.first+1)]; //offset=0, size=1; 1-(0+1) = 0;
 			}
 		} else {
 			if ((size_t)offset.first < (stsize-1)) {
-				result = Node::node_stack[stsize-((size_t)offset.first+1)]; //offset=0, size=1; 1-(0+1) = 0;
+				result = Node::nodeStack[stsize-((size_t)offset.first+1)]; //offset=0, size=1; 1-(0+1) = 0;
 			}
 		}
 		if (result != nullptr ) {
@@ -678,17 +678,17 @@ bool NodeLocator::doStackFromOutside(Messages& errs) {
 	if (!offset.second) {
 		throw BadNodeLocatorPath(errs,start,in,out);
 	} else {
-		size_t stsize = Node::node_stack.size();
+		size_t stsize = 	Node::nodeStack.size();
 		setdirty();
 		if (showPaths) message << "O" << (size_t)offset.first;
 		Node* result = nullptr;
 		if (stsize < 2) { //we are in template.
 			if (offset.first < stsize) {
-				result = Node::node_stack[offset.first];
+				result = Node::nodeStack[offset.first];
 			}
 		} else {
 			if (1+offset.first < stsize) {
-				result = Node::node_stack[1+offset.first];
+				result = Node::nodeStack[1+offset.first];
 			}
 		}
 		if (result != nullptr ) {

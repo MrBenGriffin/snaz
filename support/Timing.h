@@ -28,6 +28,7 @@ namespace Support {
 		timestamp lBasetime;    //used for loop timing.
 		std::unordered_map<std::string, timestamp> userTimes;
 		std::unordered_map<std::string, timestamp> lapTimes;
+		bool _show;    //show timing in logs..
 
 	public:
 		static Timing& t();
@@ -37,11 +38,14 @@ namespace Support {
 		timecount timer_diff(const timestamp &);
 		long long nanos(const timecount &);
 		long double seconds(const timecount &);
-		void setTiming(char,std::string= "unknown");
 		void str(std::ostream&,timecount,units=nat);
-		void getTiming(std::ostream&,char,std::string= "unknown",units=nat);
-		void getTiming(Messages&,char,std::string= "unknown",units=nat);
 		bool smaller(const timecount &, const timecount &);
+
+		void set(char,std::string= "unknown");
+		void setShow(bool Show = true) { _show = Show; }
+		bool show() { return _show; }
+		void get(std::ostream&,char,std::string= "unknown",units=nat);
+		void get(Messages&,char,std::string= "unknown",units=nat);
 
 	};
 }

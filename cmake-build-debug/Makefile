@@ -123,6 +123,33 @@ macrotext/fast:
 	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/build
 .PHONY : macrotext/fast
 
+Build.o: Build.cpp.o
+
+.PHONY : Build.o
+
+# target to build an object file
+Build.cpp.o:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Build.cpp.o
+.PHONY : Build.cpp.o
+
+Build.i: Build.cpp.i
+
+.PHONY : Build.i
+
+# target to preprocess a source file
+Build.cpp.i:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Build.cpp.i
+.PHONY : Build.cpp.i
+
+Build.s: Build.cpp.s
+
+.PHONY : Build.s
+
+# target to generate assembly for a file
+Build.cpp.s:
+	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/Build.cpp.s
+.PHONY : Build.cpp.s
+
 advanced.yy.o: advanced.yy.cpp.o
 
 .PHONY : advanced.yy.o
@@ -716,33 +743,6 @@ mt/Wss.s: mt/Wss.cpp.s
 mt/Wss.cpp.s:
 	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/mt/Wss.cpp.s
 .PHONY : mt/Wss.cpp.s
-
-node/Build.o: node/Build.cpp.o
-
-.PHONY : node/Build.o
-
-# target to build an object file
-node/Build.cpp.o:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/node/Build.cpp.o
-.PHONY : node/Build.cpp.o
-
-node/Build.i: node/Build.cpp.i
-
-.PHONY : node/Build.i
-
-# target to preprocess a source file
-node/Build.cpp.i:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/node/Build.cpp.i
-.PHONY : node/Build.cpp.i
-
-node/Build.s: node/Build.cpp.s
-
-.PHONY : node/Build.s
-
-# target to generate assembly for a file
-node/Build.cpp.s:
-	$(MAKE) -f CMakeFiles/macrotext.dir/build.make CMakeFiles/macrotext.dir/node/Build.cpp.s
-.PHONY : node/Build.cpp.s
 
 node/Node.o: node/Node.cpp.o
 
@@ -1401,6 +1401,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... macrotext"
+	@echo "... Build.o"
+	@echo "... Build.i"
+	@echo "... Build.s"
 	@echo "... advanced.yy.o"
 	@echo "... advanced.yy.i"
 	@echo "... advanced.yy.s"
@@ -1467,9 +1470,6 @@ help:
 	@echo "... mt/Wss.o"
 	@echo "... mt/Wss.i"
 	@echo "... mt/Wss.s"
-	@echo "... node/Build.o"
-	@echo "... node/Build.i"
-	@echo "... node/Build.s"
 	@echo "... node/Node.o"
 	@echo "... node/Node.i"
 	@echo "... node/Node.s"

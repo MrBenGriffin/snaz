@@ -19,7 +19,7 @@ namespace Support {
 		return singleton;
 	}
 
-	Timing::Timing() : showTiming(false) {
+	Timing::Timing() : _show(false) {
 		unitMap = {
 				{"µs",      µs},
 				{"ms",      ms},
@@ -61,7 +61,7 @@ namespace Support {
 		return s < l;
 	}
 
-	void Timing::getTiming(ostream& ostr,char timer_c,const string name,units style) {
+	void Timing::get(ostream& ostr,char timer_c,const string name,units style) {
 		timecount the_timer;
 		timer_c = (char) tolower(timer_c);
 		switch(timer_c) {
@@ -108,13 +108,13 @@ namespace Support {
 		str(ostr,the_timer,style);
 	}
 
-	void Timing::getTiming(Messages& ostr,char timer_c,const string name,units style) {
+	void Timing::get(Messages& ostr,char timer_c,const string name,units style) {
 		ostringstream repo;
-		getTiming(repo,timer_c,name,style);
+		get(repo,timer_c,name,style);
 		ostr << Message(timing,repo.str());
 	}
 
-	void Timing::setTiming(char kind,const string name) { //if bld, then build, else node.
+	void Timing::set(char kind,const string name) { //if bld, then build, else node.
 		timestamp tmpbase = timer_start();
 		kind = (char) tolower(kind);
 		switch (kind) {

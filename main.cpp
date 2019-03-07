@@ -4,9 +4,12 @@
 #include <sstream>
 #include <clocale>
 #include "test.h"
+#include "Build.h"
+
 #include "support/Infix.h"
 #include "support/Timing.h"
 #include "support/Env.h"
+#include "support/Message.h"
 #include "support/db/ServiceFactory.h"
 #include "support/db/Connection.h"
 
@@ -14,15 +17,18 @@
 
 // Currently using the following environment variables...
 // LIBMYSQLCRSO=/usr/local/mysql/lib/libmysqlclient.dylib
-// SQL_CONFIG_FILE=/Users/ben/Desktop/my.cnf
+// =/Users/ben/Desktop/my.cnf
 
+using namespace Support;
 int main( const int argc, const char **argv ) {
-	Support::Env& env = Support::Env::e();
-	Support::Messages log = std::move(env.startup(argc,argv));
-	env.setTesting(true);
+	Env& env = Env::e();
+	Build& build = Build::b();
+	env.startup(argc,argv);
+	build.setCurrent(Testing); //For this..
+	Messages log = std::move(env.startup(argc,argv));
 	testing::group tests("tests/");       // Set the working directory from the Run|Edit Configurations... menu.
 	tests.load("main",false); 			  // Boolean turns on/off success reports.
-	Support::Infix::Evaluate::shutdown();
+	Infix::Evaluate::shutdown();
 	log.str(std::cout);
 	return( EXIT_SUCCESS );
 }

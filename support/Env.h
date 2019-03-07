@@ -13,8 +13,8 @@
 
 namespace Support {
 	using 	namespace std;
-	enum	buildspace {Build,Temporary,Scripts,Media,Tests};	//Buildspace indicates what directory area is relevant
-	enum 	buildarea  {Editorial,Final,Draft,Console,Release,Staging};
+	enum	buildspace {Built,Temporary,Scripts,Media,Tests};	//Buildspace indicates what directory area is relevant
+	enum 	buildArea  {Editorial,Final,Draft,Console,Release,Staging,Testing};
 	enum    buildnodes {Branch,Descendants,Singles,None};
 
 	struct tech {
@@ -40,7 +40,6 @@ namespace Support {
 		string wd();
 
 		Env(); // Disallow instantiation outside of the class.
-		bool Testing;
 		bool IsFinal; //is this draft or final.
 		bool MayBuild;
 		bool FullBuild;
@@ -72,17 +71,12 @@ namespace Support {
 		static Env& e();
 		Messages startup(int=0,const char** = nullptr);
 		bool   get(string,string&,string="");
-		buildarea area();
+		buildArea area();
 
-//		string logsDir()  	const 	{ return LogsDir; }
-//		string finalDir() 	const 	{ return FinalDir; }
-//		string draftDir() 	const 	{ return DraftDir; }
-//		string scriptsDir() const 	{ return ScriptsDir; }
 		Path basedir(buildspace);
 		void basedir(string&,buildspace,bool,bool);
-		void setTesting(bool flag) { Testing = flag; }
+		std::string baseUrl(buildArea);
 		tech& technology()  { return technologies.front(); }  //returns currently built technology.
-//		Path root(string append = "");
 	};
 
 }

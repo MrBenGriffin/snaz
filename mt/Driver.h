@@ -35,7 +35,7 @@ namespace mt {
 
 		mtext parse(Messages&,bool);
 		parse_result define(Messages&,bool);
-		void expand(std::ostream&,Messages&,const std::string &);
+		void expand(std::ostream&,Messages&,const std::string&);
 
 		void new_macro( const std::string & );
 		void storeWss(const std::string &);
@@ -45,6 +45,7 @@ namespace mt {
 		void store_macro();
 		void setPos(pos& p) {position = std::move(p);}
 
+		static std::string expand(Messages&,std::string&,std::string); //syntactic sugar.
 		static std::ostream& visit(const Token&, std::ostream&);
 		static std::ostream& visit(const mtext&, std::ostream&);
 		static void expand(const mtext&,Messages&,std::ostream&,mstack&);

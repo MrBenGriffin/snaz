@@ -1,3 +1,4 @@
+#include "Build.h"
 #include "Internal.h"
 #include "InternalInstance.h"
 #include "support/Infix.h"
@@ -248,9 +249,9 @@ namespace mt {
 					case 'u': type=usage; break;
 					case 'p': type=code; break;
 					case 't': doTrace(e,context); e.enscope(message); return;
-					case 'b': Timing::t().getTiming(e,'b'); e.enscope(message); return;
-					case 'n': Timing::t().getTiming(e,'n'); e.enscope(message); return;
-					case 'c': Timing::t().getTiming(e,'c',message); return;
+					case 'b': Timing::t().get(e,'b'); e.enscope(message); return;
+					case 'n': Timing::t().get(e,'n'); e.enscope(message); return;
+					case 'c': Timing::t().get(e,'c',message); return;
 					default: break;
 				}
 			}
@@ -308,7 +309,7 @@ namespace mt {
 		//second parameter is 'true' or 'false' - (default = false) and represents whether
 		//or not to treat the file as macrotext.
 		InternalInstance my(this,e,o,instance,context);
-		Path base = Env::e().basedir(Build);
+		Path base = Env::e().basedir(Built);
 		std::string filename = my.parm(1);
 		File file(base,filename);
 		if(file.makeRelativeTo(base)) {
@@ -507,18 +508,19 @@ namespace mt {
 			switch(c) {
 				case 'l': {
 					if (my.count == 3) {
-						timer.getTiming(result,c,p2,timer.unit(my.parm(3),none));
+						timer.get(result,c,p2,timer.unit(my.parm(3),none));
 					} else {
-						timer.getTiming(result,c,"",timer.unit(p2,none));
+						timer.get(result,c,"",timer.unit(p2,none));
 					}
 				} break;
 				case 'n':
-				case 'b': timer.getTiming(result,c,"",timer.unit(p2,none)); break;
-				case 'c': if(!p2.empty()) timer.setTiming(c,p2); break;
-				default : timer.getTiming(result,'c',timerParm,timer.unit(p2,none));
+				case 'b': timer.get(result,c,"",timer.unit(p2,none)); break;
+				case 'c': if(!p2.empty()) timer.set(c,p2); break;
+				default : timer.get(result,'c',timerParm,timer.unit(p2,none));
 			}
 		} else {
-			timer.getTiming(result,'c',timerParm,timer.unit(p2,none));
+			timer.get(result,'c',timerParm,timer.unit(p2,none));
+
 		}
 		my.set(result.str());
 	}

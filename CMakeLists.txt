@@ -18,14 +18,47 @@ ADD_FLEX_BISON_DEPENDENCY(advanced parser)
 ADD_FLEX_BISON_DEPENDENCY(classic parser)
 
 
-add_executable(macrotext ${BISON_parser_OUTPUTS} ${FLEX_advanced_OUTPUTS} ${FLEX_classic_OUTPUTS} main.cpp
-        mt/Driver.cpp test.cpp support/Storage.cpp mt/Definition.cpp mt/Injection.cpp mt/Wss.cpp mt/Macro.cpp mt/Text.cpp
-        mt/Internal.cpp mt/InternalInstance.cpp mt/Content.cpp support/Infix.cpp support/Message.cpp support/Encode.cpp
-        support/Fandr.cpp support/Convert.cpp mt/declarations.h mt/Scanner.h mt/Advanced.h mt/Classic.h
-        mt/InternalsStorage.cpp mt/InternalsUtility.cpp mt/InternalsString.cpp support/Comparison.cpp support/Comparison.h
-        support/Regex.cpp support/Regex.h support/Dynamic.h mt/Internals.h mt/Instance.cpp mt/Instance.h
-        support/Timing.cpp support/Timing.h support/File.cpp support/File.h support/Date.cpp
-        support/Date.h support/Env.cpp support/Env.h mt/InternalsEncoder.cpp mt/InternalsNodeTree.cpp
-        mt/InternalsBuild.cpp mt/InternalsNode.cpp mt/InternalsMedia.cpp mt/InternalsTaxonomy.cpp
-        support/db/ServiceFactory.cpp support/db/ServiceFactory.h support/db/Service.h
-        support/db/MySQLService.cpp support/db/MySQLService.h support/db/Connection.cpp support/db/Connection.h support/db/Query.cpp support/db/Query.h support/db/MySQLConnection.cpp support/db/MySQLConnection.h support/db/MySQLQuery.cpp support/db/MySQLQuery.h node/Node.cpp node/Node.h node/NodeFilename.cpp node/NodeFilename.h node/BadNodeLocatorPath.h node/NodeLocator.cpp node/NodeLocator.h node/NodeVal.cpp node/NodeVal.h node/Build.cpp node/Build.h)
+add_executable(macrotext ${BISON_parser_OUTPUTS} ${FLEX_advanced_OUTPUTS} ${FLEX_classic_OUTPUTS}
+        mt/Advanced.h mt/Classic.h mt/Scanner.h mt/declarations.h
+        mt/Content.cpp mt/Macro.cpp mt/Text.cpp mt/Wss.cpp mt/Definition.cpp mt/Injection.cpp
+        mt/Driver.cpp
+        mt/Instance.cpp mt/Instance.h
+        mt/Internal.cpp
+        mt/InternalInstance.cpp
+        mt/Internals.h
+        mt/InternalsBuild.cpp
+        mt/InternalsEncoder.cpp
+        mt/InternalsMedia.cpp
+        mt/InternalsNode.cpp
+        mt/InternalsNodeTree.cpp
+        mt/InternalsStorage.cpp
+        mt/InternalsString.cpp
+        mt/InternalsTaxonomy.cpp
+        mt/InternalsUtility.cpp
+        support/db/Service.h
+        support/db/Connection.cpp support/db/Connection.h
+        support/db/MySQLConnection.cpp support/db/MySQLConnection.h
+        support/db/MySQLQuery.cpp support/db/MySQLQuery.h
+        support/db/MySQLService.cpp support/db/MySQLService.h
+        support/db/Query.cpp support/db/Query.h
+        support/db/ServiceFactory.cpp support/db/ServiceFactory.h
+        support/Dynamic.h
+        support/Comparison.cpp support/Comparison.h
+        support/Convert.cpp support/Convert.h
+        support/Date.cpp support/Date.h
+        support/Encode.cpp support/Encode.h
+        support/Env.cpp support/Env.h
+        support/Fandr.cpp support/Fandr.h
+        support/File.cpp support/File.h
+        support/Infix.cpp support/Infix.h
+        support/Message.cpp support/Message.h
+        support/Regex.cpp support/Regex.h
+        support/Storage.cpp support/Storage.h
+        support/Timing.cpp support/Timing.h
+        node/BadNodeLocatorPath.h
+        node/Node.cpp node/Node.h
+        node/NodeFilename.cpp node/NodeFilename.h
+        node/NodeLocator.cpp node/NodeLocator.h
+        node/NodeVal.cpp node/NodeVal.h
+        main.cpp test.cpp Build.cpp Build.h
+        )

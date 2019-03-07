@@ -12,15 +12,16 @@
 #else
 #include <unistd.h>
 #endif
-#include "Env.h"
-#include "Fandr.h"
-#include "Infix.h"
-#include "Convert.h"
-#include "Timing.h"
-#include "Message.h"
+#include "support/Env.h"
+#include "support/Fandr.h"
+#include "support/Infix.h"
+#include "support/Convert.h"
+#include "support/Timing.h"
+#include "support/Message.h"
 #include "mt/Definition.h"
+#include "support/db/ServiceFactory.h"
 #include "node/NodeLocator.h"
-#include "db/ServiceFactory.h"
+#include "Build.h"
 
 namespace Support {
 	using namespace std;
@@ -32,7 +33,6 @@ namespace Support {
 
 	Env::Env() : mysql(nullptr) {
 		MayBuild	= false;
-		IsFinal 	= true;
 		FullBuild 	= true;
 		AllTechs 	= true;
 //		AllLangs 	= true;
@@ -44,6 +44,7 @@ namespace Support {
 		}
 		RemoteUser	= "AnonymousUser";
 		NodeSet 	= Branch;
+
 	}
 
 	string Env::wd() {
@@ -60,18 +61,19 @@ namespace Support {
 	}
 
 	void Env::basedir(string& base,buildspace space,bool addslash,bool full) {	//returns e.g.  /home/web/site/collins/buildlog/BUILDxxxx/ OR /home/web/site/collins/approve/
+		Build& build = Build::b();
 		string dirbit,extrabit;
-		if(Testing) {
-			dirbit = TestsDir;
-		} else {
-			if ( IsFinal ) {
-				dirbit = FinalDir;
-			} else {
-				dirbit = DraftDir;
-			}
+		switch (build.current()) {
+			case Editorial: dirbit = "/tmp"; break;
+			case Testing: 	dirbit = TestsDir; break;
+			case Final:   	dirbit = FinalDir; break;
+			case Draft:   	dirbit = DraftDir; break;
+			case Release: 	dirbit = ReleaseDir; break;
+			case Staging: 	dirbit = StagingDir; break;
+			case Console: 	dirbit = "/tmp"; break;
 		}
 		switch (space) {
-			case Build:		break;
+			case Built:		break;
 			case Media:		dirbit.append("/media"); break;
 			case Temporary:	{
 //				dirbit = LogsDir + "_" + dirbit;
@@ -92,8 +94,8 @@ namespace Support {
 		if (addslash) base.append("/");
 	}
 
-	buildarea Env::area() {
-		buildarea retval = Final;
+	buildArea Env::area() {
+		buildArea retval = Final;
 		string req_method;
 		if ( get("REQUEST_METHOD",req_method) ) {
 			if (req_method == "CONSOLE") {
@@ -137,6 +139,25 @@ namespace Support {
 		return retval;
 	}
 
+		std::string Env::baseUrl(buildArea area) {
+			std::string response;
+			std::string url;
+//		enum 	buildArea  {Editorial,Final,Draft,Console,Release,Staging};
+			bool found = false;
+			switch (area) {
+				case Editorial:	 	found = get("RS_URLE",url); break;
+				case Draft:	 		found = get("RS_URLD",url); break;
+				case Final:	 		found = get("RS_URLP",url); break;
+				default:;
+			}
+			if(found) {
+				response = "https://" + url ;
+			} else {
+				basedir(url,Built,false,true);
+				response = "file:" + url ;
+			}
+		return response;
+	}
 
 	bool Env::get(string name,string& value,string Default) {
 		auto discovery = storage.find(name);
@@ -156,8 +177,23 @@ namespace Support {
 		}
 	}
 
-	void Env::doArgs(Messages& log,int argc,const char** argv) {
+	void Env::doArgs(Messages& log,const int argc,const char **argv) {
+		setlocale(LC_ALL, "en_UK.UTF-8");
+		mt::Definition::startup(); // Set the internals.
+		Messages::startup(area() != Console);
+		Infix::Evaluate::startup();
 		Timing& timer = Timing::t(); //auto startup at instantiation.
+		Build& build = Build::b();
+		vector<size_t>	nodelist;
+		if (get("REMOTE_USER",RemoteUser)) {
+			if (RemoteUser != "AnonymousUser" || area() == Console) MayBuild = true;
+		}
+
+//		bool ParseAdvanced;
+//		bool ParseLegacy;
+//		bool ParseOnly;
+//		bool ForceDeleteLock;
+
 		for(int i = 1; i < argc; i++) {
 			string parameter(argv[i]);
 			string::const_iterator argi = parameter.begin();
@@ -166,13 +202,13 @@ namespace Support {
 					case 'a':   //dynamically assessed classic/advanced parse
 //--??				doParse = tostring(argi,' ');
 						ParseAdvanced = false;
-						IsFinal = false;
+						build.setCurrent(Draft);
 						break;
 					case 'A':
-						timer.showTiming = true;
+						timer.setShow(true);
 						break;
 					case 'b':
-//--??							showTemplate = true;
+						Node::setShowTemplates(true);
 						break;
 					case 'B':
 						NodeSet = Branch;
@@ -181,7 +217,7 @@ namespace Support {
 					case 'c':   //forced advanced parse switch.
 //--??					doParse = String::tostring(argi,' '); (text to parse?)
 						ParseAdvanced = true;
-						IsFinal = false;
+						build.setCurrent(Draft);
 					case 'C':
 //--??					showProfile = true; //NOW used to show min/max macro parameter warnings.
 						break;
@@ -189,7 +225,7 @@ namespace Support {
 //						Messages::setdebug(true);
 //						showMediaReqs = true;
 						NodeLocator::showPaths = true;
-//						showTemplate = true;
+						Node::setShowTemplates(true);
 //						showQueries = true;
 //						showProfile = true; //NOW used to show min/max macro parameter warnings.
 //						showFiling = true;
@@ -199,7 +235,7 @@ namespace Support {
 						Messages::setVerbosity(9);
 					} break;
 					case 'd':
-						Testing = true;
+						build.setCurrent(Testing); // = true;
 						Messages::setVerbosity(0);
 						break;
 					case 'f':
@@ -212,10 +248,13 @@ namespace Support {
 					case 'I':
 //						showMediaReqs = true;
 						break;
-					case 'L':
-//						LanguageID = natural(argi);
-						LanguageCount = 1;
-						break;
+					case 'L': {
+						vector<size_t> languages;
+						tolist(languages,parameter.substr(2));
+						for(auto& i : languages) {
+							build.addLang(i);
+						}
+					} break;
 					case 'M': {
 						string cssurl;
 						get("RS_CSSFILE",cssurl);         //rebuild.css   rebuild.css
@@ -233,7 +272,7 @@ namespace Support {
 						NodeLocator::showPaths = true;
 						break;
 					case 'P':
-						IsFinal = false;
+						build.setCurrent(Draft);
 						break;
 					case 'Q':
 //						showQueries = true;
@@ -245,10 +284,13 @@ namespace Support {
 //						showTrace = true;
 						Messages::setVerbosity(4);
 						break;
-					case 'T':
-						TechnologyID = natural(argi);
-						TechnologyCount = 1;
-						break;
+					case 'T': {
+						vector<size_t> techs;
+						tolist(techs,parameter.substr(2));
+						for(auto& i : techs) {
+							build.addTech(i);
+						}
+					} break;
 					case 'V':
 						Messages::setVerbosity(natural(argi));
 						break;

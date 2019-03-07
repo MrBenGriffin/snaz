@@ -26,6 +26,14 @@ class Node;
 class NodeVal;
 class FileTemplate;
 
+using refMap = unordered_map<string, size_t>;    //given a ref, return it's id.
+using invRefMap = unordered_map<size_t, string>; //given an id, return it's ref.
+
+using idNodeMap = unordered_map<size_t, Node* >;
+using refNodeMap = unordered_map<string, Node* >;
+using idIdListMap = unordered_map<size_t, vector<size_t> >;
+using idTemplateMap = unordered_map<size_t, pair< string , FileTemplate >> ;
+
 class Node {					// build the tree..
 private:
 	static string kRootFilename;
@@ -36,12 +44,12 @@ private:
 	void outputtofile(size_t page, string& out);
 
 protected:
-	Node *nodeparent;	  		// parent
-	size_t nodeid;        		// unique id
+	Node *nodeparent;	  // parent
+	size_t nodeid;        // unique id
 	size_t nodetw;				// treewalk value
 	size_t nodetier;			// tier of Node
-	size_t nodesiblingnum;		// my number from 1 to n (NOT a zero prefixed array!)
-	vector< Node* > children;	// list of children
+	size_t nodesiblingnum;			// my number from 1 to n (NOT a zero prefixed array!)
+	vector< Node* > children;		// list of children
 	string idstr;
 
 //reference to tree-type values (content,tax,suffix, etc)
@@ -49,6 +57,21 @@ protected:
 	void  addPeers(vector<Node *>&,size_t);
 
 public:
+	static idTemplateMap		templateList;
+	static idIdListMap			layoutList;				//Stores a layout-id -> template-list structure
+	static refMap				layoutRefs;								//Layout names -> ids
+	static invRefMap			layoutNames;							//Layout ids->names
+	static std::string			finalSuffix;
+
+	static deque< Node* > 	nodeStack;				//current node - used to pass to built-in functions
+
+	static Node* roott;
+	static Node* rootc;
+	static Node* roots;
+
+	static bool _showTemplates;   //show templates in logs..
+
+	static 	refMap tax_fields;								//A quick reference to the fields by name (as in iTax)
 	enum kind { page, tax, file };
 	NodeLocator* locator;
 
@@ -61,12 +84,19 @@ public:
 
 	size_t getNumchildren();		//accessor
 
+//Setup
+	static void inittaxfields();
+	static void loadLayouts(Messages&,Connection&);
+	static void setShowTemplates(bool Show = true) { _showTemplates = Show; }
+
 //Generation
 	void gettextoutput(Messages&);
-	void generateoutput(int);
-	void generatebranch(int);
+	void generateOutput(Messages&,int);
+	void generateBranch(Messages&,int);
 
 //Nodetree navigation
+	static Node* current(kind = page);
+	static Node* node(size_t,Node::kind = Node::page); //by id.
 	Node* parent()				{ return nodeparent; }
 	Node* child(Messages&,size_t);
 	Node* nodelast(Messages&,Node*);
@@ -84,10 +114,10 @@ public:
 
 
 //Data accessors.
-	size_t id() const						{ return nodeid; }			// unique id
+	size_t id() const					{ return nodeid; }		// unique id
 	string ids() const					{ return idstr; }		// unique id as a string
-	size_t tw() const						{ return nodetw; }			// treewalk value
-	size_t tier() const					{ return nodetier; }		// tier of Node
+	size_t tw() const					{ return nodetw; }		// treewalk value
+	size_t tier() const					{ return nodetier; }	// tier of Node
 	size_t siblingnum() const		{ return nodesiblingnum; }	// my number from 1 to n (NOT a zero prefixed array!)
 	size_t size() const;
 
@@ -139,6 +169,12 @@ public:
 
 	string suffix() const		{ return v->getsval(0); }
 	string script() const		{ return v->getsval(1); }
+};
+
+struct FileTemplate {
+	string str;
+	string suffix;
+	string br;
 };
 
 

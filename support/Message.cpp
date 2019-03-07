@@ -25,6 +25,8 @@ namespace Support {
 			case trace:  log << "trace"; break;
 			case code:   log << "-raw-"; break;
 			case timing: log << "time"; break;
+			case even: 	 log << "-line"; break;
+			case struc:  log << "....."; break;
 		}
 		log << ": " << content << flush;
 	}
