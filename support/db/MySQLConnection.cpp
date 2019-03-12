@@ -130,7 +130,7 @@ namespace Support {
 			}
 
 			bool MySQLConnection::query(Messages& errs,Query*& q,std::string query_str) {
-				bool retval = false;
+				bool retval = false; q=nullptr;
 				if ( isopen() ) {
 //			if ( q != nullptr ) delete q; -- must be deleted by containing fn.
 					if ( db_open ) {

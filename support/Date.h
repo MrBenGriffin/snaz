@@ -43,6 +43,7 @@ namespace Support {
 		void getDateStr(struct tm*, std::string &cont);
 		void getNowDateStr(const std::string &format, std::string &cont);
 		void getNow(std::string& cont);
+		std::string str();
 		const time_t getUTC() const;
 
 	};

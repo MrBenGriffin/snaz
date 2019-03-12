@@ -139,7 +139,7 @@ namespace Support {
 		return retval;
 	}
 
-		std::string Env::baseUrl(buildArea area) {
+	std::string Env::baseUrl(buildArea area) {
 			std::string response;
 			std::string url;
 //		enum 	buildArea  {Editorial,Final,Draft,Console,Release,Staging};
@@ -157,6 +157,12 @@ namespace Support {
 				response = "file:" + url ;
 			}
 		return response;
+	}
+
+	std::string Env::get(const string& name) {
+		string value=name;
+		get(name,value); //discarding bool.
+		return value;
 	}
 
 	bool Env::get(string name,string& value,string Default) {
@@ -205,7 +211,7 @@ namespace Support {
 					case 'B': {
 						deque<size_t> nodes;
 						tolist(nodes, parameter.substr(2));
-						build.setNodes(Build::Branch,nodes);
+						build.setNodes(Branch,nodes);
 					} break;
 					case 'c':   //forced advanced parse switch.
 //--??					doParse = String::tostring(argi,' '); (text to parse?)
@@ -238,15 +244,13 @@ namespace Support {
 					case 'F':{
 						deque<size_t> nodes;
 						tolist(nodes, parameter.substr(2)); //setnodes
-						build.setNodes(Build::Descendants,nodes);
+						build.setNodes(Descendants,nodes);
 				} break;
 					case 'I':
 //						showMediaReqs = true;
 						break;
 					case 'L': {
-						deque<size_t> languages;
-						tolist(languages, parameter.substr(2));
-						build.setLangs(languages);
+						tolist(askedLangs, parameter.substr(2));
 					}
 						break;
 					case 'M': {
@@ -263,7 +267,7 @@ namespace Support {
 					case 'O': {
 						deque<size_t> nodes;
 						tolist(nodes, parameter.substr(2));
-						build.setNodes(Build::Singles,nodes);
+						build.setNodes(Singles,nodes);
 					} break;
 					case 'p':
 						NodeLocator::showPaths = true;
@@ -282,9 +286,7 @@ namespace Support {
 						Messages::setVerbosity(4);
 						break;
 					case 'T': {
-						deque<size_t> techs;
-						tolist(techs,parameter.substr(2));
-						build.setTechs(techs);
+						tolist(askedTechs, parameter.substr(2));
 					} break;
 					case 'V':
 						Messages::setVerbosity(natural(argi));
@@ -307,7 +309,7 @@ namespace Support {
 		}
 	}
 
-	pair<Messages&,Db::Connection*> Env::startup(int argc,const char **argv) {
+	pair<Messages,Db::Connection*> Env::startup(int argc,const char **argv) {
 		setlocale(LC_ALL, "en_UK.UTF-8");
 		Db::Connection *mysql = nullptr;
 		mt::Definition::startup(); // Set the internals.
@@ -326,10 +328,11 @@ namespace Support {
 //		bool ParseLegacy;
 //		bool ParseOnly;
 //		bool ForceDeleteLock;
+		log << Message(debug,"Environnment is initialised.");
 
 		Build& build = Build::b();
 		Messages::defer( build.mayDefer() && (Messages::verboseness() < 2) );
-		return {log,mysql};
+		return {std::move(log),mysql};
 	}
 
 }

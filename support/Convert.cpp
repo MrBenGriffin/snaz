@@ -310,6 +310,17 @@ namespace Support {
 		}
 	}
 	//-----------------------------------------------------------------------------
+	void toSet(set<size_t>& iset,const string &s) {
+		iset.clear();
+		size_t i;
+		char comma;
+		istringstream ist(s);
+		while (ist >> i) {
+			iset.insert(i);
+			ist >> comma;
+		}
+	}
+	//---------------------------------------------------------------------------
 	void tolist(deque<size_t>& ilist,const string &s) {
 		ilist.clear();
 		size_t i;

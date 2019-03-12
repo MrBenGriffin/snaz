@@ -3,10 +3,16 @@
 
 CMakeFiles/macrotext.dir/Build.cpp.o: ../Build.cpp
 CMakeFiles/macrotext.dir/Build.cpp.o: ../Build.h
+CMakeFiles/macrotext.dir/Build.cpp.o: ../node/Node.h
+CMakeFiles/macrotext.dir/Build.cpp.o: ../node/NodeFilename.h
+CMakeFiles/macrotext.dir/Build.cpp.o: ../node/NodeVal.h
+CMakeFiles/macrotext.dir/Build.cpp.o: ../support/Date.h
 CMakeFiles/macrotext.dir/Build.cpp.o: ../support/Env.h
 CMakeFiles/macrotext.dir/Build.cpp.o: ../support/File.h
+CMakeFiles/macrotext.dir/Build.cpp.o: ../support/Infix.h
 CMakeFiles/macrotext.dir/Build.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/Build.cpp.o: ../support/Storage.h
+CMakeFiles/macrotext.dir/Build.cpp.o: ../support/Timing.h
 CMakeFiles/macrotext.dir/Build.cpp.o: ../support/db/Connection.h
 CMakeFiles/macrotext.dir/Build.cpp.o: ../support/db/Query.h
 
@@ -40,7 +46,6 @@ CMakeFiles/macrotext.dir/main.cpp.o: ../mt/declarations.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../mt/mt.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../support/Env.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../support/File.h
-CMakeFiles/macrotext.dir/main.cpp.o: ../support/Infix.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../support/Storage.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../support/Timing.h

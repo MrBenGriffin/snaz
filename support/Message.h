@@ -10,6 +10,7 @@
 #include <deque>
 #include <ostream>
 
+
 namespace Support {
 	using namespace std;
 
@@ -46,14 +47,14 @@ namespace Support {
 		void suppress(bool=false);
 		void prefix(Message);
 		void enscope(string);
-		size_t verbosity() const { return Verbosity;}
+		size_t verbosity() const { return Verbosity; }
 		string line(size_t) const;
 
-		Messages& operator<< (Message);
+		void operator<< (const Message& m );
 
-		void str(ostream&);
+		void str(ostream&, bool=false) const;
 	};
 
-
 }
+
 #endif //MACROTEXT_MESSAGE_H

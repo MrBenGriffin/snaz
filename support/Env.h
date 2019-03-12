@@ -6,6 +6,7 @@
 #define MACROTEXT_ENVIRONMENT_H
 
 #include <string>
+#include <set>
 
 #include "File.h"
 #include "Storage.h"
@@ -15,14 +16,11 @@ namespace Support {
 	using 	namespace std;
 	enum	buildspace {Built,Temporary,Scripts,Media,Tests};	//Buildspace indicates what directory area is relevant
 	enum 	buildArea  {Editorial,Final,Draft,Console,Release,Staging,Testing};
-
-	struct tech {
-		size_t id;
-		string name;
-	};
+	enum 	buildType {Branch,Descendants,Singles};
 
 	class Env {
 	private:
+
 		static constexpr auto LogsDir 		= "logs";
 		static constexpr auto TestsDir 		= "tests";
 		static constexpr auto FinalDir 		= "final";
@@ -33,25 +31,23 @@ namespace Support {
 		static constexpr auto IncludeDir 	= "include";
 
 		Storage storage;
+		std::deque<size_t> askedTechs;
+		std::deque<size_t> askedLangs;
+
 
 		string wd();
 
+
+
 		Env(); // Disallow instantiation outside of the class.
-		bool IsFinal; //is this draft or final.
-//		bool MayBuild;
+//		bool IsFinal; //is this draft or final.
 //		bool FullBuild;
 //		bool AllTechs;
 //		bool AllLangs;
 
 //		deque<tech>   technologies; //queue holding all information about the build
 //		deque<size_t> nodelist;     //things to build.
-
 //		bool ParseOnly;
-
-//		size_t LanguageID;
-//		size_t TechnologyID;
-//		size_t TechnologyCount;
-//		size_t LanguageCount;
 
 		bool ParseAdvanced;
 		bool ParseLegacy;
@@ -61,18 +57,20 @@ namespace Support {
 		string RemoteUser;
 		string EditNodeUrl; //= "/mortar/oedit.obyx?node=0";
 
-
 		void doArgs(Messages&,int,const char**);
 
 	public:
 		static Env& e();
-		pair<Messages&,Db::Connection*> startup(int=0,const char** = nullptr);
+		pair<Messages,Db::Connection*> startup(int=0,const char** = nullptr);
 		bool   get(string,string&,string="");
+		std::string get(const string&);
 		buildArea area();
 
 		Path basedir(buildspace);
 		void basedir(string&,buildspace,bool,bool);
 		std::string baseUrl(buildArea);
+		const std::deque<size_t>& techs() const {return askedTechs;}
+		const std::deque<size_t>& langs() const {return askedLangs;}
 //		tech& technology()  { return technologies.front(); }  //returns currently built technology.
 	};
 

@@ -44,6 +44,22 @@ namespace Support {
 			}
 		}
 
+		bool Query::fieldMatch(Messages& errs,const std::string& field, const std::string& test) {
+			if (isactive) {
+				string value;
+				auto it = fieldnameidx.find(field);
+				if (it != fieldnameidx.end()) {
+					readfield(errs, it->second,value);
+					return value == test;
+				} else {
+					errs << Message(fatal,"field " + field + "does not exist for fieldMatch.");
+				}
+			} else {
+				errs << Message(fatal,"Query/Connection is not active.");
+			}
+			return false;
+		}
+
 		bool Query::readfield(Messages& errs,const std::string& field, std::string& readString) {
 			if (isactive) {
 				auto it = fieldnameidx.find(field);
@@ -60,6 +76,17 @@ namespace Support {
 				auto it = fieldnameidx.find(field);
 				if (it != fieldnameidx.end()) {
 					readfield(errs, it->second, readDouble);
+					return true;
+				}
+			}
+			return false;
+		}
+
+		bool Query::readfield(Messages& errs,const std::string& field, size_t& readUnsized) {
+			if (isactive) {
+				auto it = fieldnameidx.find(field);
+				if (it != fieldnameidx.end()) {
+					readfield(errs, it->second, readUnsized);
 					return true;
 				}
 			}

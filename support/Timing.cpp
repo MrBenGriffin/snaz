@@ -63,6 +63,7 @@ namespace Support {
 
 	void Timing::get(ostream& ostr,char timer_c,const string name,units style) {
 		timecount the_timer;
+		string uname = name;
 		timer_c = (char) tolower(timer_c);
 		switch(timer_c) {
 			case 'l': { //laptime
@@ -96,22 +97,38 @@ namespace Support {
 				}
 			} break;
 			case 'n':
+				uname = "node";
 				the_timer = timer_diff(nBasetime);
 				break;
 			case 'b':
+				uname = "build";
 				//build/process
 				the_timer = timer_diff(bBasetime);
 				break;
 			default:
 				return;
 		}
-		str(ostr,the_timer,style);
+		str(ostr,uname,the_timer,style);
 	}
 
 	void Timing::get(Messages& ostr,char timer_c,const string name,units style) {
 		ostringstream repo;
+		switch(timer_c) {
+			case 'b': repo << setw(18) << "Build:"; break;
+			case 'n': repo << setw(18) << "Node:"; break;
+			case 'l': repo << setw(11) << name << " (lap):"; break;
+			case 'c': repo << setw(17) << name << ":"; break;
+		}
 		get(repo,timer_c,name,style);
 		ostr << Message(timing,repo.str());
+	}
+
+	void Timing::get(Messages& ostr,const string name,units style) {
+		get(ostr,'c',name,style);
+	}
+
+	void Timing::set(string name) {
+		set('c',name);
 	}
 
 	void Timing::set(char kind,const string name) { //if bld, then build, else node.
@@ -144,7 +161,7 @@ namespace Support {
 		}
 	}
 
-	void Timing::str(ostream& ostr,timecount t,units style) {
+	void Timing::str(ostream& ostr,string name,timecount t,units style) {
 		ostr << fixed;
 		chrono::nanoseconds	ticks[6]={3600s,   60s  ,1s   ,1ms  ,1us  ,1ns};
 		string			  	times[6]={"h ", "m ","s ","ms","µs","ns"};

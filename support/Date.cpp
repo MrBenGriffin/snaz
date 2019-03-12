@@ -111,6 +111,13 @@ namespace Support {
 		local = localtime(&tt);
 		getDateStr(local,cont);
 	}
+
+	std::string Date::str() {
+		std::string value;
+		getNow(value);
+		return value;
+	}
+
 	void Date::getNowDateStr(const std::string &format, std::string &cont) {
 		tt = time(&tt);
 		local = localtime(&tt);

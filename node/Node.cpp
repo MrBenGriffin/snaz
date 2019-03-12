@@ -384,7 +384,7 @@ void Node::Layout(Messages& errs) {
 			templateids = nmi->second; // My order
 		} else {
 			ostringstream text;
-			text << "Found a Layout " << layout() << " at Node " + idstr + " for Technology " << build.currentTech() << " with a null templatelist.";
+			text << "Found a Layout " << layout() << " at Node " + idstr + " for Technology " << build.tech() << " with a null templatelist.";
 			errs << Message(error,text.str());
 			return;
 		}
@@ -444,11 +444,11 @@ void Node::loadLayouts(Messages& errs,Connection& dbc) {
 	Timing& times = Timing::t();
 	Build& build = Build::b();
 	if (errs.verbosity() > 3) errs << Message(info,"Loading layouts and templates.");
-	if (times.show()) { times.set('c',"loadLayouts"); }
+	if (times.show()) { times.set("loadLayouts()"); }
 	if (dbc.dbselected() && dbc.table_exists(errs,"bldlayout") && dbc.table_exists(errs,"bldlayouttechs") && dbc.table_exists(errs,"bldtemplate")) {
 		ostringstream qstr;
 		dbc.lock(errs, "bldlayout l read,bldlayouttechs x read,bldtemplate t read" ); //everyone can read only..
-		qstr << "select layout,templatelist,name from bldlayout l, bldlayouttechs x where x.layout=l.id and technology=" << build.currentTech();
+		qstr << "select layout,templatelist,name from bldlayout l, bldlayouttechs x where x.layout=l.id and technology=" << build.tech();
 		auto* q = dbc.query(errs,qstr.str());
 		if ( q->execute(errs) ) {
 			string f_layout_id,f_templatelist,f_name;
@@ -469,7 +469,7 @@ void Node::loadLayouts(Messages& errs,Connection& dbc) {
 			}
 			qstr.str("");
 			qstr << "select distinct(t.id) as id,t.templatemacro,t.suffix,t.break,t.comment from bldtemplate t,bldlayouttechs x where ";
-			qstr <<  "find_in_set(t.id,x.templatelist) != 0 and x.technology="  << build.currentTech();
+			qstr <<  "find_in_set(t.id,x.templatelist) != 0 and x.technology="  << build.tech();
 			q->setquery(qstr.str());
 			if ( q->execute(errs) ) {
 				string f_id,f_comment;
@@ -495,11 +495,7 @@ void Node::loadLayouts(Messages& errs,Connection& dbc) {
 		}
 		dbc.unlock(errs);
 	}
-	if (times.show()) {
-		text << "loadLayouts() took ";
-		times.get(text,'c',"loadLayouts");
-		errs << Message(timing,text.str()); text.str("");
-	}
+	if (times.show()) { times.get(errs,"loadLayouts()"); }
 	if (errs.verbosity() > 3) {
 		errs << Message(info,"Layouts and templates loaded.");
 	}
@@ -579,7 +575,7 @@ void Node::addpage(Messages& errs,NodeFilename* filename) {
 			incPageCount();
 		} else {
 			Env env = Env::e();
-			text << "Template " << tid << " at Node " << id() << ",Technology " << build.currentTech() << " referenced but does not exist.";
+			text << "Template " << tid << " at Node " << id() << ",Technology " << build.tech() << " referenced but does not exist.";
 			errs << Message(error,text.str()); text.str("");
 		}
 	}
@@ -594,7 +590,7 @@ void Node::gettextoutput(Messages& errs) {
 	string in_s,baseurl_a,baseurl_s,langtech_s;
 	timing.set('N');
 	env.get("LTPATH",langtech_s);
-	bool inTeam = build.inUserTeams(team());
+	bool inTeam = build.user.mayTeamEdit(team());
 	if (errs.verbosity() > 0) {
 		ostringstream line_oss;
 		if (inTeam) {
@@ -604,11 +600,11 @@ void Node::gettextoutput(Messages& errs) {
 				const string pattern = "^([^0]*)0([^0]*)0([^0]*)$";
 				env.get("RS_BUILDNODEPATH",editor,"/en/nnedit.mxs?0&d&0"); //if none, keep default.
 				std::ostringstream sub;
-				sub << "\\1" << this->id() << "\\2" << build.currentLang() << "\\3";
+				sub << "\\1" << this->id() << "\\2" << build.lang() << "\\3";
 				Regex::replace(errs,pattern,sub.str(),editor);
 				line_oss << editor;
 			} else {
-				line_oss << "/en/nnedit.mxs?" << this->id() << "&d&" << build.currentLang();
+				line_oss << "/en/nnedit.mxs?" << this->id() << "&d&" << build.lang();
 			}
 		}
 		string Title = title();
@@ -665,7 +661,7 @@ void Node::gettextoutput(Messages& errs) {
 			bk = curtemplate.br; //Template's own break.
 		} else {
 			ostringstream line;
-			line << "Template " << templateId << " at Node " << this->id() << ",Technology " << build.currentTech()
+			line << "Template " << templateId << " at Node " << this->id() << ",Technology " << build.tech()
 				 << " referenced but does not exist.";
 			errs << Message(warn, line.str());
 			build.setSuffix("");

@@ -14,7 +14,6 @@
 
 #include "support/Message.h"
 
-
 namespace Support {
 	namespace Db {
 
@@ -39,6 +38,7 @@ namespace Support {
 			friend class Query;
 			friend class MySQLConnection;
 			bool readfield(Messages &,size_t, std::string&) override;
+			bool readfield(Messages &,size_t, size_t&)  override;
 			bool readfield(Messages &,size_t, long&)  override;		//
 			bool readfield(Messages &,size_t, long double&)  override;		//
 			bool readfield(Messages &,size_t, size_t, std::string&) override;

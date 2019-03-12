@@ -2,6 +2,7 @@
 // Created by Ben on 2019-02-27.
 //
 #include <sstream>
+#include <iostream>
 #include <mysql_version.h>
 
 #include "MySQLQuery.h"
@@ -147,6 +148,32 @@ namespace Support {
 			return retval;
 		}
 
+		//i is field_id, not row number..
+		bool MySQLQuery::readfield(Messages &errs,size_t i, size_t& readUnsigned) {
+			bool retval = false;
+			if (isactive) {
+				if (s->row_tell(result) != start) {
+					try {
+						fieldRangeCheck(errs,i);
+						const char *field = row[i - 1];
+						size_t length = mysqlRowLengths[i - 1];
+						if (field != nullptr && length > 0 )  {
+							string readString;
+							readString = std::string(field, length);
+							readUnsigned = Support::natural(readString);
+							retval = true;
+						}
+					} catch (...) {
+						ostringstream message;
+						message << "MySQLQuery readField error::  for row '" << i << "'.";
+						errs << Message(error,message.str());
+						retval = false;
+					}
+				}
+			}
+			return retval;
+		}
+
 
 		bool MySQLQuery::readfield(Messages &errs,size_t i, size_t j, std::string& readString) {
 			bool retval = false;
@@ -157,7 +184,7 @@ namespace Support {
 					s->data_seek(result, i - 1);
 					MYSQL_ROW currow = s->fetch_row(result);
 					const char* field = currow[j - 1];
-					long length = s->fetch_lengths(result)[j - 1];
+					size_t length = s->fetch_lengths(result)[j - 1];
 					s->row_seek(result, currowoff);
 					if (length > 0) {
 						readString.assign(field, length);
@@ -212,13 +239,16 @@ namespace Support {
 
 		bool MySQLQuery::execute(Messages &errs) {
 			bool retval = false;
+			ostringstream str;
 			try {
 				if (isactive) reset();
 				int err = s->real_query(queryHandle, querystr.c_str(), querystr.length());
 				if (err) {
-					string errorstr = "MySQLQuery execute error:";
-					errs << Message(error,errorstr + s->error(queryHandle));
-					errs << Message(info,"Query: " + querystr);
+					string serverError(s->error(queryHandle));
+					str << "SQL error:" << serverError;
+					errs << Message(error,str.str()); str.str("");
+					str << "Offending query:" << querystr;
+					errs << Message(info,str.str());
 					row = nullptr;
 					start = nullptr;
 					result = nullptr;
@@ -230,7 +260,8 @@ namespace Support {
 				}
 			}
 			catch (...) {
-				errs << Message(error,"MySQLQuery execute error for query '" + querystr + "'.");
+				str << "MySQLQuery execute error for query '" << querystr << "'.";
+				errs << Message(error,str.str());
 			}
 			return retval;
 		}

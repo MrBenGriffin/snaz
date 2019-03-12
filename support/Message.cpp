@@ -77,18 +77,18 @@ namespace Support {
 		list.push_front(std::move(m));
 	}
 
-	Messages& Messages::operator<< (Message m) {
+	void Messages::operator<< (const Message& m ) {
 		_marked = _marked || (m.ch != info && m.ch != debug);
 		list.push_back(std::move(m));
-		return *this;
+//		return *this;
 	}
 
 	void Messages::suppress(bool supp) {
 		_suppressed=supp;
 	}
 
-	void Messages::str(ostream& o) {
-		if (_marked) {
+	void Messages::str(ostream& o, bool anyway) const {
+		if (_marked || anyway) {
 			for (auto& m : list) {
 				m.str(o);
 				o << endl;
