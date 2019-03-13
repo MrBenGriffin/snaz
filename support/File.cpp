@@ -989,24 +989,24 @@ namespace Support {
 						if (result == -1)	{
 							switch (errno) {
 								case EAGAIN:
-									errstream << stream(MLog::error,"EAGAIN: Nonblocking I/O has been selected using O_NONBLOCK and the write would block.");
+									errstream << Message(error,"EAGAIN: Nonblocking I/O has been selected using O_NONBLOCK and the write would block.");
 									break;
 								case EBADF:
-									errstream << stream(MLog::error,"EBADF: The input file was not opened for reading or the output file was not opened for writing.");
+									errstream << Message(error,"EBADF: The input file was not opened for reading or the output file was not opened for writing.");
 									break;
 								case EFAULT:
-									errstream << stream(MLog::error,"EFAULT: Bad address.");
+									errstream << Message(error,"EFAULT: Bad address.");
 									break;
 								case EINVAL:
-									errstream << stream(MLog::error,"EINVAL: Descriptor is not valid or locked, or an mmap(2)-like operation is not available for in_fd.");
+									errstream << Message(error,"EINVAL: Descriptor is not valid or locked, or an mmap(2)-like operation is not available for in_fd.");
 									break;
 								case EIO:
-									errstream << stream(MLog::error,"EIO: Unspecified error while reading from in_fd.");
+									errstream << Message(error,"EIO: Unspecified error while reading from in_fd.");
 								case ENOMEM:
-									errstream << stream(MLog::error,"ENOMEM: Insufficient memory to read from in_fd.");
+									errstream << Message(error,"ENOMEM: Insufficient memory to read from in_fd.");
 									break;
 								case ENOSYS:
-									errstream << stream(MLog::error,"ENOSYS: The system doesn't support that function.");
+									errstream << Message(error,"ENOSYS: The system doesn't support that function.");
 									break;
 								default: break;
 								}
@@ -1017,7 +1017,7 @@ namespace Support {
 									times[1].tv_sec = stat_source.st_mtime;			/* time of last modification */
 									int err = chmod(dest_path.c_str(),S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
 									if (err != 0) { string ers = strerror(errno);
-										errstream << stream(MLog::error,ers);
+										errstream << Message(error,ers);
 										retval = false;
 
 									}
@@ -1029,7 +1029,7 @@ namespace Support {
 									err = utimes(dest_path.c_str(),times);
 									if (err != 0) {
 										string ers = strerror(errno);
-										errstream << stream(MLog::error,ers);
+										errstream << Message(error,ers);
 										retval = false;
 									}
 								}
