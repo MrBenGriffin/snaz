@@ -59,6 +59,9 @@ namespace Support {
 					loaded = true;
 				}
 			}
+			if(!loaded) {
+				e << Message(error,"Regex::startup() The pcre library was not found.");
+			}
 		}
 		return loaded;
 	}
