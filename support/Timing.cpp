@@ -7,6 +7,7 @@
 #include <iomanip>
 #include <iostream>
 #include <ctime>
+#include <cmath>
 #include <float.h>
 
 
