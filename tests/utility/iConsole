@@ -5,9 +5,9 @@ U cdog			1	1	11	⌽con(T,⍟1)
 
 Range 001		@iEq(T,F,W,B,C)									!1!range: Range Error in ‘iEq’; 5 parameters found. But this macro requires from 0 to 4 parameters.
 iConsole 001	[@iConsole(woot)]								!1!info: woot
-iConsole B02	[@iConsole(B,woot)]								!2?time: Build:[ ]+\d+\.\d*(µs|ms|s)
+iConsole B02	[@iConsole(B,woot)]								!2?time:[ ]+Build:[ ]+\d+\.\d*(µs|ms|s)
 iConsole S03	[@iConsole(S,woot)]								!1!info: woot
-iConsole N04	[@iConsole(N,woot)]								!2?time: Node:[ ]+\d+\.\d*(µs|ms|s)
+iConsole N04	[@iConsole(N,woot)]								!2?time:[ ]+Node:[ ]+\d+\.\d*(µs|ms|s)
 iConsole I05	[@iConsole(I,woot)]								!1!info: woot
 iConsole W06	[@iConsole(W,woot)]								!1!warn: woot
 iConsole E07	[@iConsole(E,woot)]								!1!error: woot
@@ -16,9 +16,9 @@ iConsole T08	[@iConsole(T,woot)]								!2!trace: iConsole T08
 
 #Console in macros.
 iConsole n001	[@con(I,woot)]									!1!info: woot
-iConsole nB02	[@con(B,woot)]									!2?time: Build:[ ]+\d+\.\d*(µs|ms|s)
+iConsole nB02	[@con(B,woot)]									!2?time:[ ]+Build:[ ]+\d+\.\d*(µs|ms|s)
 iConsole nS03	[@con(S,woot)]									!1!info: woot
-iConsole nN04	[@con(N,woot)]									!2?time: Node:[ ]+\d+\.\d*(µs|ms|s)
+iConsole nN04	[@con(N,woot)]									!2?time:[ ]+Node:[ ]+\d+\.\d*(µs|ms|s)
 iConsole nI05	[@con(I,woot)]									!1!info: woot
 
 iConsole nW06	[@con(W,woot)]									!1!warn: woot
