@@ -7,7 +7,7 @@ find_package(BISON 3.2)
 find_package(FLEX 2.6)
 set(CMAKE_CXX_STANDARD 17)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR};${CMAKE_CURRENT_BINARY_DIR};/usr/local/include;/usr/local/mysql/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR};${CMAKE_CURRENT_BINARY_DIR};/usr/local/include;/usr/local/mysql/include;/usr/include/mysql)
 #find_library(MYSQLCLIENT libmysqlclient HINTS "/usr/local/mysql/lib" )
 #MESSAGE("MYSQL LIB: " ${MYSQLCLIENT})
 
