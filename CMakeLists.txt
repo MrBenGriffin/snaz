@@ -11,6 +11,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR};${CMAKE_CURRENT_BINARY_DIR};/usr
 #find_library(MYSQLCLIENT libmysqlclient HINTS "/usr/local/mysql/lib" )
 #MESSAGE("MYSQL LIB: " ${MYSQLCLIENT})
 
+link_libraries(${CMAKE_DL_LIBS})
+
 FLEX_TARGET(advanced mt/advanced.lpp ${CMAKE_CURRENT_BINARY_DIR}/advanced.yy.cpp COMPILE_FLAGS "-d")
 FLEX_TARGET(classic mt/classic.lpp ${CMAKE_CURRENT_BINARY_DIR}/classic.yy.cpp COMPILE_FLAGS "-d ")
 BISON_TARGET(parser mt/parser.ypp ${CMAKE_CURRENT_BINARY_DIR}/parser.tab.cpp COMPILE_FLAGS "-Wother -Wconflicts-sr")
