@@ -21,7 +21,7 @@ namespace Support {
 
 	Timing::Timing() : _show(false) {
 		unitMap = {
-				{"µs",      µs},
+				{"µs",      us},
 				{"ms",      ms},
 				{"ns",      ns},
 				{"s",       s},
@@ -175,7 +175,7 @@ namespace Support {
 					for (counter=0; counter < types && t < ticks[counter]; counter++);
 				} break;
 				case ns: counter = 5; break;
-				case µs: counter = 4; break;
+				case us: counter = 4; break;
 				case ms: counter = 3; break;
 				case none:	//none uses seconds.
 				case  s: counter = 2; break;

@@ -17,7 +17,7 @@
 namespace Support {
 	using timestamp = std::chrono::high_resolution_clock::time_point;
 	using timecount = std::chrono::nanoseconds;
-	enum units { µs, ms, ns, s, m, h, nat, all, none};
+	enum units { us, ms, ns, s, m, h, nat, all, none}; //µ not allowed.
 
 	class Timing {
 		Timing(); //hide singleton from being publicly instantiable

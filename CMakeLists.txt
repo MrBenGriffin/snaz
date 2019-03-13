@@ -13,7 +13,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR};${CMAKE_CURRENT_BINARY_DIR};/usr
 
 FLEX_TARGET(advanced mt/advanced.lpp ${CMAKE_CURRENT_BINARY_DIR}/advanced.yy.cpp COMPILE_FLAGS "-d")
 FLEX_TARGET(classic mt/classic.lpp ${CMAKE_CURRENT_BINARY_DIR}/classic.yy.cpp COMPILE_FLAGS "-d ")
-BISON_TARGET(parser mt/parser.ypp ${CMAKE_CURRENT_BINARY_DIR}/parser.tab.cpp COMPILE_FLAGS "--update -Wother ")
+BISON_TARGET(parser mt/parser.ypp ${CMAKE_CURRENT_BINARY_DIR}/parser.tab.cpp COMPILE_FLAGS "-Wother -Wconflicts-sr")
 ADD_FLEX_BISON_DEPENDENCY(advanced parser)
 ADD_FLEX_BISON_DEPENDENCY(classic parser)
 
