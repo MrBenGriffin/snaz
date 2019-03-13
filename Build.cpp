@@ -18,6 +18,7 @@
 #include "node/Node.h"
 
 #include "Build.h"
+#include "test.h"
 
 using namespace std;
 using namespace Support;
@@ -193,6 +194,13 @@ Build& Build::b(Messages &errs, Connection* sql,long double version) {
 		errs << Message(fatal,"Build needs an SQL connection");
 	}
 	return bld;
+}
+
+void Build::run() {
+	setCurrent(Testing); //For this..
+	testing::group tests("tests/");        	// Set the working directory from the Run|Edit Configurations... menu.
+	tests.title(std::cout, "Main");
+	tests.load(std::cout,  "main", false);   // Boolean turns on/off success reports.
 }
 
 void Build::loadLanguages(Messages &errs, Connection& dbc) {

@@ -5,7 +5,7 @@
 #ifndef MACROTEXT_INTERNALS_H
 #define MACROTEXT_INTERNALS_H
 
-
+#include <climits>
 #include "Definition.h"
 #include "mt.h"
 #include "support/Storage.h"

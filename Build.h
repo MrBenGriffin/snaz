@@ -73,6 +73,9 @@ public:
 	void setPage(size_t page) { currentPage = page; }
 	void setCurrent(Support::buildArea current) { _current = current; }
 	void setNodes(Support::buildType,std::deque<size_t>&);
+
+	void run();
+
 	bool mayDefer();
 
 	bool nextTech() {

@@ -15,6 +15,7 @@ CMakeFiles/macrotext.dir/Build.cpp.o: ../support/Storage.h
 CMakeFiles/macrotext.dir/Build.cpp.o: ../support/Timing.h
 CMakeFiles/macrotext.dir/Build.cpp.o: ../support/db/Connection.h
 CMakeFiles/macrotext.dir/Build.cpp.o: ../support/db/Query.h
+CMakeFiles/macrotext.dir/Build.cpp.o: ../test.h
 
 CMakeFiles/macrotext.dir/advanced.yy.cpp.o: ../mt/Scanner.h
 CMakeFiles/macrotext.dir/advanced.yy.cpp.o: ../support/Message.h
@@ -30,30 +31,13 @@ CMakeFiles/macrotext.dir/classic.yy.cpp.o: location.hh
 CMakeFiles/macrotext.dir/classic.yy.cpp.o: parser.tab.hpp
 CMakeFiles/macrotext.dir/classic.yy.cpp.o: /usr/local/include/FlexLexer.h
 
-CMakeFiles/macrotext.dir/main.cpp.o: ../support/Storage.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../Build.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../main.cpp
-CMakeFiles/macrotext.dir/main.cpp.o: ../mt/Content.h
-CMakeFiles/macrotext.dir/main.cpp.o: ../mt/Definition.h
-CMakeFiles/macrotext.dir/main.cpp.o: ../mt/Driver.h
-CMakeFiles/macrotext.dir/main.cpp.o: ../mt/Injection.h
-CMakeFiles/macrotext.dir/main.cpp.o: ../mt/Instance.h
-CMakeFiles/macrotext.dir/main.cpp.o: ../mt/Internal.h
-CMakeFiles/macrotext.dir/main.cpp.o: ../mt/Macro.h
-CMakeFiles/macrotext.dir/main.cpp.o: ../mt/Text.h
-CMakeFiles/macrotext.dir/main.cpp.o: ../mt/Wss.h
-CMakeFiles/macrotext.dir/main.cpp.o: ../mt/declarations.h
-CMakeFiles/macrotext.dir/main.cpp.o: ../mt/mt.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../support/Env.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../support/File.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../support/Storage.h
-CMakeFiles/macrotext.dir/main.cpp.o: ../support/Timing.h
 CMakeFiles/macrotext.dir/main.cpp.o: ../support/db/Connection.h
-CMakeFiles/macrotext.dir/main.cpp.o: ../support/db/ServiceFactory.h
-CMakeFiles/macrotext.dir/main.cpp.o: ../test.h
-CMakeFiles/macrotext.dir/main.cpp.o: location.hh
-CMakeFiles/macrotext.dir/main.cpp.o: parser.tab.hpp
 
 CMakeFiles/macrotext.dir/mt/Content.cpp.o: ../support/Message.h
 CMakeFiles/macrotext.dir/mt/Content.cpp.o: ../support/Storage.h
