@@ -29,6 +29,7 @@ namespace Support {
 			case timing: log << "time"; break;
 			case even: 	 log << "-line"; break;
 			case struc:  log << "....."; break;
+			case link:   log << "link"; break;
 		}
 		log << ": " << content << flush;
 	}

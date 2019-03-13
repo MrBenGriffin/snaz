@@ -609,7 +609,7 @@ void Node::gettextoutput(Messages& errs) {
 		}
 		string Title = title();
 		if (Title.empty()) Title = linkref();
-		baseurl_s = env.baseUrl(build.current()); //current()
+		baseurl_s = env.baseUrl(build.area()); //current()
 		if (Title.length() > 60) {
 			Title = Title.substr(0,60);
 			Title = Title.append("...");

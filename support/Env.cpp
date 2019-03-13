@@ -32,19 +32,12 @@ namespace Support {
 	}
 
 	Env::Env() {
-//		MayBuild	= false;
-//		FullBuild 	= true;
-//		AllTechs 	= true;
-//		AllLangs 	= true;
 		if (!get("RS_PATH",SiteRootDir))  {
 			SiteRootDir=wd();
 		}
 		if (SiteRootDir.back() != '/') {
 			SiteRootDir.push_back('/');
 		}
-//		RemoteUser	= "AnonymousUser";
-//		NodeSet 	= Branch;
-
 	}
 
 	string Env::wd() {
@@ -54,31 +47,25 @@ namespace Support {
 		return cwd;
 	}
 
-	Path Env::basedir(buildspace space) {
+	Path Env::basedir(buildSpace space) {
 		string directory;
 		basedir(directory,space,true,true);
 		return Path(directory);
 	}
 
-	void Env::basedir(string& base,buildspace space,bool addslash,bool full) {	//returns e.g.  /home/web/site/collins/buildlog/BUILDxxxx/ OR /home/web/site/collins/approve/
+	void Env::basedir(string& base,buildSpace space,bool addslash,bool full) {	//returns e.g.  /home/web/site/collins/buildlog/BUILDxxxx/ OR /home/web/site/collins/approve/
 		Build& build = Build::b();
 		string dirbit,extrabit;
 		switch (build.current()) {
-			case Editorial: dirbit = "/tmp"; break;
-			case Testing: 	dirbit = TestsDir; break;
-			case Final:   	dirbit = FinalDir; break;
-			case Draft:   	dirbit = DraftDir; break;
-			case Release: 	dirbit = ReleaseDir; break;
-			case Staging: 	dirbit = StagingDir; break;
-			case Console: 	dirbit = "/tmp"; break;
+			case test: 		dirbit = TestsDir; break;
+			case final:   	dirbit = FinalDir; break;
+			case draft:   	dirbit = DraftDir; break;
+			case parse:   	dirbit = "/tmp"; break;
 		}
 		switch (space) {
 			case Built:		break;
 			case Media:		dirbit.append("/media"); break;
 			case Temporary:	{
-//				dirbit = LogsDir + "_" + dirbit;
-//				dirbit.append("/");
-//				dirbit.append(tmpdirname);
 			} break;
 			case Scripts: {
 				base= ScriptsDir;
@@ -187,11 +174,6 @@ namespace Support {
 		Timing& timer = Timing::t(); //auto startup at instantiation.
 		Build& build = Build::b();
 
-//		bool ParseAdvanced;
-//		bool ParseLegacy;
-//		bool ParseOnly;
-//		bool ForceDeleteLock;
-
 		for(int i = 1; i < argc; i++) {
 			string parameter(argv[i]);
 			string::const_iterator argi = parameter.begin();
@@ -200,7 +182,7 @@ namespace Support {
 					case 'a':   //dynamically assessed classic/advanced parse
 //--??				doParse = tostring(argi,' ');
 						ParseAdvanced = false;
-						build.setCurrent(Draft);
+						build.setCurrent(draft);
 						break;
 					case 'A':
 						timer.setShow(true);
@@ -215,8 +197,7 @@ namespace Support {
 					} break;
 					case 'c':   //forced advanced parse switch.
 //--??					doParse = String::tostring(argi,' '); (text to parse?)
-						ParseAdvanced = true;
-						build.setCurrent(Draft);
+						build.setCurrent(parse);
 					case 'C':
 //--??					showProfile = true; //NOW used to show min/max macro parameter warnings.
 						break;
@@ -235,7 +216,7 @@ namespace Support {
 					}
 						break;
 					case 'd':
-						build.setCurrent(Testing); // = true;
+						build.setCurrent(test); // = true;
 						Messages::setVerbosity(0);
 						break;
 					case 'f':
@@ -273,7 +254,7 @@ namespace Support {
 						NodeLocator::showPaths = true;
 						break;
 					case 'P':
-						build.setCurrent(Draft);
+						build.setCurrent(draft);
 						break;
 					case 'Q':
 //						showQueries = true;
@@ -282,8 +263,12 @@ namespace Support {
 //						showGetSet = true;
 						break;
 					case 't':
-//						showTrace = true;
-						Messages::setVerbosity(4);
+						if(parameter == "-tests") {
+							build.setCurrent(test); // = true;
+						} else {
+							Messages::setVerbosity(4);
+							log << Message(error,"-t (macro tracing / parse visits) is not yet implemented.");
+						}
 						break;
 					case 'T': {
 						tolist(askedTechs, parameter.substr(2));
@@ -292,7 +277,7 @@ namespace Support {
 						Messages::setVerbosity(natural(argi));
 						break;
 					case 'X':
-						ForceDeleteLock = true;
+						build.breakLock();
 						break;
 					case 'x': //comment until next -
 						break;

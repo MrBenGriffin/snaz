@@ -209,7 +209,6 @@ namespace mt {
 		}
 	}
 
-
 	std::ostream& Driver::visit(const Token& j, std::ostream& o) {
 		std::visit([&o](auto&& arg){ arg.visit(o);},j);
 		return o;

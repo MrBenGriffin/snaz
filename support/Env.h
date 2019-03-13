@@ -14,9 +14,10 @@
 
 namespace Support {
 	using 	namespace std;
-	enum	buildspace {Built,Temporary,Scripts,Media,Tests};	//Buildspace indicates what directory area is relevant
-	enum 	buildArea  {Editorial,Final,Draft,Console,Release,Staging,Testing};
-	enum 	buildType {Branch,Descendants,Singles};
+	enum	buildSpace {Built,Temporary,Scripts,Media,Tests};	//Buildspace indicates what directory area is relevant
+	enum 	buildArea  {Editorial,Final,Draft,Console,Release,Staging,Testing,Parse}; //areas that there are..
+	enum 	buildKind  {parse,final,draft,test}; //areas that there are..
+	enum 	buildType  {Branch,Descendants,Singles};
 
 	class Env {
 	private:
@@ -51,7 +52,6 @@ namespace Support {
 
 		bool ParseAdvanced;
 		bool ParseLegacy;
-		bool ForceDeleteLock;
 
 		string SiteRootDir;
 		string RemoteUser;
@@ -66,8 +66,8 @@ namespace Support {
 		std::string get(const string&);
 		buildArea area();
 
-		Path basedir(buildspace);
-		void basedir(string&,buildspace,bool,bool);
+		Path basedir(buildSpace);
+		void basedir(string&,buildSpace,bool,bool);
 		std::string baseUrl(buildArea);
 		const std::deque<size_t>& techs() const {return askedTechs;}
 		const std::deque<size_t>& langs() const {return askedLangs;}

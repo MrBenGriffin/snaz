@@ -25,6 +25,7 @@ struct UserMay {
 	bool final;
 	bool draftDown;
 	bool finalDown;
+	UserMay();
 };
 
 struct BuildUser {
@@ -42,27 +43,44 @@ struct BuildUser {
 
 class Build {
 
+public:
+	static constexpr long double version = 2019.031301;
 private:
 	size_t currentLangID;
 	size_t currentTechID;
 	bool allTechs;
 	bool allLangs;
+	bool full;
+	bool lock;
 	size_t currentPage;
 	std::string currentSuffix;
+	Support::Db::Connection* sql;
 	std::deque< std::pair<size_t,std::string> > languages;
 	std::deque< std::pair<size_t,std::string> > technologies;
-	bool mayBuild;
 
 	Build();
 	void loadLanguages(Support::Messages&,Support::Db::Connection&);
 	void loadTechs(Support::Messages&,Support::Db::Connection&);
+	bool setLock(Support::Messages&,Support::Db::Connection&);
+	void doParse(Support::Messages&,Support::Db::Connection&);
+
+	void build(Support::Messages&,Support::Db::Connection&);
+	void global(Support::Messages&,Support::Db::Connection&);
+	void langs(Support::Messages&,Support::Db::Connection&);
+	void techs(Support::Messages&,Support::Db::Connection&);
+	void files(Support::Messages&,Support::Db::Connection&);
+
+
+	static void releaseLock(int);
 
 public:
 	BuildUser	user;
 	static Build& b();
-	static Build& b(Support::Messages&,Support::Db::Connection*,long double);
+	static Build& b(Support::Messages&);
+	void run(Support::Messages&,Support::Db::Connection*);
 
-	Support::buildArea current() const { return _current; }
+	Support::buildArea area() const;
+	Support::buildKind current() const { return _current; }
 	size_t page() const { return currentPage; }
 	std::string suffix() const { return currentSuffix; }
 	size_t tech() const { return technologies.empty() ? 0 : technologies.front().first; }
@@ -71,10 +89,10 @@ public:
 	std::string langName() const { return languages.empty() ? "None" : languages.front().second; }
 	void setSuffix(std::string suffix) { currentSuffix = suffix; }
 	void setPage(size_t page) { currentPage = page; }
-	void setCurrent(Support::buildArea current) { _current = current; }
+	void setCurrent(Support::buildKind current) { _current = current; }
 	void setNodes(Support::buildType,std::deque<size_t>&);
 
-	void run();
+	void breakLock() { lock = false; }
 
 	bool mayDefer();
 
@@ -95,8 +113,9 @@ public:
 	void list(); //for checking stuff only.
 	void close(Support::Messages&);
 
+
 private:
-	Support::buildArea _current;	//one of Final/Draft/?Test/
+	Support::buildKind _current;	//one of Final/Draft/Test/Parse
 	std::set<Support::buildType> builds;
 	std::map<Support::buildType,std::deque<size_t>> requestedNodes;
 };
