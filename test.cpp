@@ -357,7 +357,7 @@ namespace testing {
 			}
 			infile.close();
 		} else {
-			title(o,"filename "+filename+" not found",3);
+			title(o,"filename "+filename+" not found in "+ base,3);
 		}
 	}
 
