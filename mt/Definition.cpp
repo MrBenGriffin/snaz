@@ -6,14 +6,79 @@
 
 #include <utility>
 #include <variant>
-#include "mt.h"
-#include "Internal.h"
-#include "Internals.h"
+
+#include "support/Message.h"
+#include "support/Timing.h"
+
+#include "support/db/Connection.h"
+#include "support/db/Query.h"
+
+#include "mt/mt.h"
+#include "mt/Internal.h"
+#include "mt/Internals.h"
 
 namespace mt {
 
 	std::unordered_map<std::string, Handler> Definition::library;
-//	Definition Definition::empty(Messages(),"__empty", "", false, false, false);
+
+
+//Load from database.
+	void Definition::load(Messages& errs,Db::Connection& sql,buildKind kind) {
+		Timing& times = Timing::t();
+		mt::Internal::startup(errs,sql,kind); //loading internals and storage?!;
+
+		if (times.show()) { times.set("Load User Macros"); }
+		//Now load macros.
+		if ( sql.dbselected() && sql.table_exists(errs,"bldmacro") && sql.table_exists(errs,"bldmacrov") ) {
+			sql.lock(errs,"bldmacro as m read,bldmacrov as v read");
+			std::ostringstream str;
+			str << "select m.search,v.expansion,m.id,v.stripf='on' as strip_d,v.stripx='on' as strip_p,v.preparse='on' as pre_p,v.minparms,v.maxparms from bldmacro m,bldmacrov v where v.id=m.version and v.expansion !='internal'";
+			Db::Query* q = nullptr;
+			if (sql.query(errs,q,str.str()) && q->execute(errs)) {
+//				+---------+-----------+----+---------+---------+-------+----------+----------+
+//				| search  | expansion | id | strip_d | strip_p | pre_p | minparms | maxparms |
+//				+---------+-----------+----+---------+---------+-------+----------+----------+
+//				| wa      |  %1="%2"  | 66 |       1 |       1 |     0 |        2 |        2 |
+//				+---------+-----------+----+---------+---------+-------+----------+----------+
+				std::string name,expansion,macro_id;
+				signed long min,max;
+				size_t id,pre,stripDef,stripParms;
+//				str.str(""); str << "Found " << q->getnumrows() << " macro Definitions";
+//				errs << Message(debug,str.str());
+				while(q->nextrow()) {
+					q->readfield(errs,"search",name);
+					q->readfield(errs,"expansion",expansion);
+					q->readfield(errs,"id",macro_id);
+					q->readfield(errs,"strip_d",stripDef);
+					q->readfield(errs,"strip_p",stripParms);
+					q->readfield(errs,"preparse",pre);
+					q->readfield(errs,"minparms",min);
+					q->readfield(errs,"maxparms",max);
+					if (name.empty()) {
+						errs << Message(error,"macro with id " + macro_id + " has no name!");
+					} else {
+						Messages log;
+						Definition macro(log,name,expansion,min,max,stripDef==1,stripParms==1,pre==1);
+						if(log.marked()) {
+							str.str(""); str << "Define `" << name << "` failed while parsing `" << expansion << "`";
+							errs << Message(error,str.str());
+							errs += log;
+						} else {
+							add(macro);
+						}
+					}
+				}
+//				str.str(""); str << "Loaded " << library.size() << " Macro Definitions";
+//				errs << Message(debug,str.str());
+			}
+			sql.unlock(errs);
+		}
+		if (times.show()) { times.use(errs,"Load User Macros"); }
+	}
+
+	void Definition::shutdown(Messages& errs,Db::Connection& sql,buildKind kind) {
+		mt::Internal::shutdown(errs,sql,kind); //savePersistance();
+	}
 
 	Definition::Definition(
 			Messages& errs,std::string name_i, std::string expansion_i,
@@ -29,8 +94,13 @@ namespace mt {
 			bool advanced = test_adv(expansion_i);
 			Driver driver(errs,code,advanced);
 			parse_result result = driver.define(errs,strip);
-			expansion = result.first;
-			iterated = result.second;
+			expansion = result.second.first;
+			iterated = result.second.second;
+			if(! result.first ) {
+				ostringstream str;
+				str << "Macro `" << name_i <<  "` parse failed using expansion: `" << expansion_i << "`";
+				errs << Message(error,str.str());
+			}
 		}
 	}
 
@@ -194,7 +264,10 @@ namespace mt {
 		}
 	}
 
-	void Definition::startup() {
+	void Definition::startup(Messages& log) {
+		Timing& times = Timing::t();
+		if (times.show()) { times.set("Load Internal Macros"); }
+
 //•------------  Utility macros
 		library.emplace("iEq",Handler(std::move(iEq())));
 		library.emplace("iIndex",Handler(std::move(iIndex())));
@@ -298,6 +371,10 @@ namespace mt {
 		library.emplace("iForTaxNodes",Handler(std::move(iForTaxNodes())));
 		library.emplace("iExistSimilar",Handler(std::move(iExistSimilar())));
 		library.emplace("iForSimilar",Handler(std::move(iForSimilar())));
+
+
+//•------------ FINISHED
+		if (times.show()) { times.use(log,"Load Internal Macros"); }
 
 	}
 

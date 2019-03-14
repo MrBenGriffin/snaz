@@ -83,6 +83,7 @@ NOT_SPECIAL_3C		(\xe2(([^\x9d][^\0])|(\x9d[^\xab])))
 
 	/** everything is unrestricted in literal ⎣ context, except for close literal. E2 8E A6 = close lit **/
 <literal>{
+	{LITERAL_OUT} {	yy_pop_state(); }
 	{NOT_LITERAL_OUT}+{LITERAL_OUT} {
 		yylval->build<std::string>(std::string(yytext, yyleng -2));
 		yy_pop_state(); /**  Pop Literal **/

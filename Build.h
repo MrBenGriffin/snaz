@@ -79,7 +79,6 @@ public:
 	static Build& b(Support::Messages&);
 	void run(Support::Messages&,Support::Db::Connection*);
 
-	Support::buildArea area() const;
 	Support::buildKind current() const { return _current; }
 	size_t page() const { return currentPage; }
 	std::string suffix() const { return currentSuffix; }

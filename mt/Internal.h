@@ -9,6 +9,7 @@
 #include "Definition.h"
 #include "mt.h"
 #include "support/Storage.h"
+#include "support/db/Connection.h"
 
 namespace mt {
 	class Internal {
@@ -16,8 +17,10 @@ namespace mt {
 		bool inRange(size_t i) const { return (minParms <= i) && (i <= maxParms);}
 		std::string name() const {return _name;}
 		size_t minParms {0}, maxParms {0};
-	protected:
+		static void startup(Messages&,Db::Connection&,buildKind);
+		static void shutdown(Messages&,Db::Connection&,buildKind);
 
+	protected:
 //Not so sure these should be here..
 		static Storage storage;
 		static Library library;
@@ -29,6 +32,7 @@ namespace mt {
 		plist toParms(const listType*,string);
 		void doSort(vector<std::string>&,std::string);
 		void doTrace(Support::Messages&,mstack&);
+
 	};
 //•------------ √ Utility macros
 	struct iEq : public Internal {

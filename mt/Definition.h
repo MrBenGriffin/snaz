@@ -8,20 +8,26 @@
 #include <unordered_map>
 #include <string>
 #include <vector>
-#include "mt.h"
-#include "Internal.h"
+
+#include "support/Definitions.h"
+#include "support/db/Connection.h"
+#include "support/Message.h"
+
+#include "mt/mt.h"
+#include "mt/Internal.h"
 
 namespace mt {
 	using namespace Support;
 
     class Definition {
     public:
-        static void startup();
+        static void startup(Messages&);
+		static void load(Messages&,Db::Connection&,buildKind);
+		static void shutdown(Messages&,Db::Connection&,buildKind);
 
     private:
         size_t minParms, maxParms;
         std::string _name;
- //       static Definition empty;
         static std::unordered_map<std::string, Handler> library;
 
         static void trim(plist&);

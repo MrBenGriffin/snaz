@@ -15,7 +15,7 @@
 
 namespace mt {
 	using mtext=std::deque<Token>;
-	using parse_result=std::pair<mtext, bool>;
+	using parse_result=std::pair<bool,std::pair<mtext, bool>>;
 	using iteration=std::pair<size_t,size_t>;
 	using plist=std::vector<mtext>;
 	using pos=std::pair<size_t,size_t>;

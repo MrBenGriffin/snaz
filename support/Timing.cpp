@@ -128,6 +128,12 @@ namespace Support {
 		get(ostr,'c',name,style);
 	}
 
+	void Timing::use(Messages& ostr,const string name,units style) {
+		get(ostr,'c',name,style);
+		userTimes.erase(name);
+		lapTimes.erase(name);
+	}
+
 	void Timing::set(string name) {
 		set('c',name);
 	}

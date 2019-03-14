@@ -297,7 +297,6 @@ namespace Support {
 	pair<Messages,Db::Connection*> Env::startup(int argc,const char **argv) {
 		setlocale(LC_ALL, "en_UK.UTF-8");
 		Db::Connection *mysql = nullptr;
-		mt::Definition::startup(); // Set the internals.
 		Infix::Evaluate::startup();
 		Messages::setMarkup(area() != Console);
 		Messages log;

@@ -84,6 +84,14 @@ namespace Support {
 //		return *this;
 	}
 
+	void Messages::operator+= (Messages& msgs) {
+		_marked = _marked || msgs._marked;
+		while (! msgs.list.empty() ) {
+			list.push_back(std::move(msgs.list.front()));
+			msgs.list.pop_front();
+		}
+	}
+
 	void Messages::suppress(bool supp) {
 		_suppressed=supp;
 	}

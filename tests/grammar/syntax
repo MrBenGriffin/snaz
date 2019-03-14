@@ -24,6 +24,7 @@ P	1	⌽wt(o⍟1)			⸠wt「“o”⁅1⁆」
 P	1	⌽wt(⍟1)				⸠wt「⁅1⁆」
 
 # Advanced: Tests
+P	0	[⎣⎦]								“[]”
 P	0	⌽a(teen)							⸠a「“teen”」
 P	0	[⌽wa(foo,bar)]						“[”⸠wa「“foo”」「“bar”」“]”
 P	0	[⌽wtagi(bog,blob)]					“[”⸠wtagi「“bog”」「“blob”」“]”
@@ -75,6 +76,7 @@ P	1	@wt(o%1)			⸠wt「“o”⁅1⁆」
 P	1	@wt(%1)				⸠wt「⁅1⁆」
 
 # Classic: Tests
+P	1	[{||}]								“[]”
 P	0	@a(teen)							⸠a「“teen”」
 P	0	[@wa(foo,bar)]						“[”⸠wa「“foo”」「“bar”」“]”
 P	0	[@wtagi(bog,blob)]					“[”⸠wtagi「“bog”」「“blob”」“]”

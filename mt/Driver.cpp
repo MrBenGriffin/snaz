@@ -61,14 +61,20 @@ namespace mt {
 	}
 
 	parse_result Driver::define(Messages& errs,bool strip) {
+		bool success = false;
 		scanner->stripped=strip;
 		scanner->defining=true;
 		parser = new Parser(errs,scanner,(*this));
-		if (parser->parse() != accept) {
-			parseError(errs);
+		try {
+			success = parser->parse() == accept;
+			if (!success) {
+				parseError(errs);
+			}
+		} catch (...) {
+//			scanner.
 		}
 		delete parser; parser= nullptr;
-		return {final,iterated};
+		return {success, {final,iterated}};
 	}
 
 	/*

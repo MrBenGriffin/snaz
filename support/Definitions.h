@@ -31,12 +31,27 @@ namespace Support {
 		bool operator==(buildKindValue);// { return value == v; }
 		bool operator!=(buildKindValue); // { return value != v; }
 		operator buildKindValue() const; // { return value; }
-		operator std::string() const;
+		explicit operator std::string() const;
+		explicit operator buildArea() const;
 	};
 
-	enum buildType {
+	enum buildTypeValue {
 		Branch, Descendants, Singles
-	}; // each build (final/draft) is made up of one or more of these, (or does everything)
+	};
+
+	// each build (final/draft) is made up of one or more of these, (or does everything).
+	class buildType {
+	private:
+		buildTypeValue value;
+		buildType() {}
+	public:
+		buildType(buildTypeValue); // : value{v} {}
+		bool operator==(buildTypeValue);// { return value == v; }
+		bool operator!=(buildTypeValue); // { return value != v; }
+		operator buildTypeValue() const; // { return value; }
+		explicit operator std::string() const;
+	};
+
 }
 
 

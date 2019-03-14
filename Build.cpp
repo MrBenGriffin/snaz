@@ -20,6 +20,7 @@
 #include "support/Infix.h"
 
 #include "node/Node.h"
+#include "mt/Internal.h"
 
 #include "Build.h"
 #include "test.h"
@@ -51,25 +52,22 @@ void Build::run(Messages &errs,Connection* _sql) {
 		sql = _sql;
 	}
 	Env& env = Env::e();
+	mt::Definition::startup(errs); //initialise internals
 	Date date;
 	std::ostringstream str;
 	str << "Builder v" << std::setprecision(16) << version << " - " << env.get("RS_SITENAME") << " - ";
+	str << string(_current) << " build; started on " << date.str() << " (UTC)";
+	errs << Message(info,str.str());
 	switch(_current) {
 		case test: {
-			str << "Test System; started on " << date.str() << " (UTC)";
-			errs << Message(info,str.str());
 			testing::group tests("tests/");        	// Set the working directory from the Run|Edit Configurations... menu.
 			tests.title(std::cout, "Main");
 			tests.load(std::cout,  "main", false);   // Boolean turns on/off success reports.
 		} break;
 		case draft: {
-			str << "Draft Build; started on " << date.str() << " (UTC)";
-			errs << Message(info,str.str());
 			build(errs,*sql);
 		} break;
 		case final: {
-			str << "Final Build; started on " << date.str() << " (UTC)";
-			errs << Message(info,str.str());
 			build(errs,*sql);
 		} break;
 		case parse: {
@@ -112,7 +110,9 @@ void Build::build(Messages &errs,Connection& sql) {
 }
 
 void Build::global(Messages& errs,Connection& sql) {
+	mt::Definition::load(errs,sql,_current); // Set the internals.
 	Node::loadLayouts(errs,sql);
+
 //	bld->createDirectory(bld->scrDir);  //Generate the scripts directory if it doesn't exist.
 //	macro::load(sql,local);		//load
 //	SuffixVal::load();
@@ -133,19 +133,19 @@ void Build::global(Messages& errs,Connection& sql) {
 //	if (script.found) {
 //		finalscript = script.result;
 //	}
-//	bld->savePersistance();
-//	bld->prunePersistance();
 //	RunScript("POST_PROCESSING_SCRIPT", "Post Processor", errs);
 //	RunScript("~POST_PROCESSING_SCRIPT", "Post Processor", errs);
 //	errs.str(Logger::log);
+//	bld->savePersistance();
+//	bld->prunePersistance();
 //	bld->clearPersistance();
 //	iMedia::close(); (not sure why this is here).
 /******/
 
 //SuffixVal::unload();
 //  macro::terminate();			//unload
+	mt::Internal::shutdown(errs,sql,_current); //bld->savePersistance(); prunePersistance(); clearPersistance();
 //do FINAL_PROCESSING_SCRIPT stuff here if it's a full, final build..
-
 }
 
 void Build::langs(Messages& errs,Connection& sql) {
@@ -161,11 +161,6 @@ void Build::techs(Messages& errs,Connection& sql) {
 }
 
 void  Build::files(Messages& errs,Connection& sql) {
-//	ostringstream str;
-//	Query* query;
-//	string mode = _current;
-//	str << mode << " " << string(_current) ;
-//	string foo = str.str();
 
 	//for each requestedNodes (or everything if it's a full build).
 }
@@ -265,11 +260,7 @@ bool Build::mayDefer() {
 
 void Build::list() {
 	for(auto& i : requestedNodes) {
-		switch (i.first) {
-			case Branch: std::cout << "Branch Nodes"; break;
-			case Descendants: std::cout << "Descendant Nodes:"; break;
-			case Singles: std::cout << "Single Nodes:"; break;
-		}
+		std::cout << std::string(i.first)<< " Nodes";
 		for(auto& j : i.second) {
 			std::cout << j << ",";
 		}
@@ -282,19 +273,6 @@ void Build::close(Support::Messages &errs) {
 	Timing& timer = Timing::t();
 	if (timer.show()) { timer.get(errs,'b'); }
 	errs.str(std::cout, true); //output always.
-}
-
-Support::buildArea Build::area() const {
-	switch (_current) {
-		case final:
-			return Final;
-		case draft:
-			return Draft;
-		case test:
-			return Testing;
-		case parse:
-			return Parse;
-	}
 }
 
 bool Build::setLock(Support::Messages& errs,Connection& dbc) {
@@ -383,7 +361,7 @@ bool BuildUser::checkTeam(size_t team,buildType what) {
 	if(t == teams.end()) {
 		return false;
 	} else {
-		auto area = Build::b().current();
+		buildArea area = buildArea(Build::b().current());
 		auto& item = t->second;
 		switch (area) {
 			case Final: {

@@ -8,11 +8,13 @@
 #include <variant>
 
 #include "mt.h"
+#include "support/Definitions.h"
 #include "support/Infix.h"
 #include "support/Message.h"
 #include "support/Fandr.h"
 #include "support/Comparison.h"
 #include "support/Convert.h"
+#include "support/Timing.h"
 
 #include "Internal.h"
 #include "InternalInstance.h"
@@ -24,6 +26,17 @@ namespace mt {
     Storage Internal::storage;
     Library Internal::library;
     LStore Internal::lStore;
+
+
+	void Internal::startup(Messages& log,Db::Connection& sql,buildKind kind) {
+		Timing& times = Timing::t();
+		if (times.show()) { times.set("Load User Storage"); }
+		storage.load(log,sql,kind);
+		if (times.show()) { times.use(log,"Load User Storage"); }
+	}
+	void Internal::shutdown(Messages& log,Db::Connection& sql,buildKind kind) {
+		storage.save(log,sql,kind);
+	}
 
 
 	plist Internal::toParms(string basis,string cutter,string sort) {

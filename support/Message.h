@@ -50,7 +50,8 @@ namespace Support {
 		size_t verbosity() const { return Verbosity; }
 		string line(size_t) const;
 
-		void operator<< (const Message& m );
+		void operator<< (const Message& );
+		void operator+= ( Messages& );
 
 		void str(ostream&, bool=false) const;
 	};

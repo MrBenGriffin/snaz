@@ -46,6 +46,7 @@ namespace Support {
 		bool show() { return _show; }
 		void get(std::ostream&,char,std::string= "unknown",units=nat);
 		void get(Messages&,std::string= "unknown",units=nat);
+		void use(Messages&,std::string= "unknown",units=nat);
 		void get(Messages&,char,std::string= "unknown",units=nat);
 
 	};
