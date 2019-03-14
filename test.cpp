@@ -4,9 +4,12 @@
 #include <cstdlib>
 
 #include "test.h"
+#include "support/Definitions.h"
 #include "support/Regex.h"
 #include "support/Convert.h"
 #include "support/Fandr.h"
+#include "support/Env.h"
+
 #include "mt/Driver.h"
 #include "mt/Definition.h"
 #include "mt/Internal.h"
@@ -71,7 +74,10 @@ namespace testing {
 	}
 
 	void group::load(ostream& o,string filename="main", bool showGood, bool showDefines) {
-		ifstream infile(base+filename);
+		Support::Env& env = Support::Env::e();
+		string newBase;
+		env.basedir(newBase,Support::Tests,true,true);
+		ifstream infile(newBase+filename);
 		if (infile.is_open()) {
 			char c;
 			string name;
@@ -357,7 +363,7 @@ namespace testing {
 			}
 			infile.close();
 		} else {
-			title(o,"filename "+filename+" not found in "+ base,3);
+			title(o,"filename "+filename+" not found in "+ newBase,3);
 		}
 	}
 
