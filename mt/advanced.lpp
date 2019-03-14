@@ -260,13 +260,6 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 
 }
 
-{MACRO_SIGN} {
-		std::ostringstream eStream;
-		eStream << "Bad @ " << yytext;
-		errs << Support::Message(Support::syntax,eStream.str());
-	}
-
-
 .	{
 		std::ostringstream eStream;
 		eStream << "Bad input character " << yytext;
