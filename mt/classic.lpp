@@ -211,8 +211,22 @@ NOT_SPECIAL_3C		(\xe2(([^\x9d][^\0])|(\x9d[^\xab])))
 		return( token::MACRO_IN );
 	}
 
-	{INJECT_SIGN}{I_OFFSET}({I_NUMBER}|{I_ITS}|({BRACKET_IN}{I_OFFSET}({I_STACK}|{I_ITER}|{I_MORE}){BRACKET_OUT})) {
-		/** yy_push_state(injection); **/
+	{INJECT_SIGN} {
+		yy_push_state(injection);
+	}
+
+	/** NOT ",\t\n()⌽⍟⎡⎤⎣❫" **/
+	({NOT_SPECIAL_1C}|{NOT_SPECIAL_3C})+ {
+		yylval->build<std::string>(yytext);
+		return( token::TEXT );
+	}
+
+}
+
+<injection>{
+
+	{I_OFFSET}({I_NUMBER}|{I_ITS}|({BRACKET_IN}{I_OFFSET}({I_STACK}|{I_ITER}|{I_MORE}){BRACKET_OUT})) {
+		yy_pop_state();
 		if(defining) {
 			yylval->build< std::string >(yytext);
 			return(token::INJECTION);
@@ -223,9 +237,10 @@ NOT_SPECIAL_3C		(\xe2(([^\x9d][^\0])|(\x9d[^\xab])))
 		}
 	}
 
-	/** NOT ",\t\n()⌽⍟⎡⎤⎣❫" **/
-	({NOT_SPECIAL_1C}|{NOT_SPECIAL_3C}|{INJECT_SIGN})+ {
-		yylval->build<std::string>(yytext);
+	. {
+		yy_pop_state();
+		std::string sign("%");
+		yylval->build< std::string >( sign + yytext );
 		return( token::TEXT );
 	}
 
