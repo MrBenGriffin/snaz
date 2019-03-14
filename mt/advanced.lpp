@@ -87,8 +87,7 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 
 	/** everything is unrestricted in literal ⎣ context, except for close literal. E2 8E A6 = close lit **/
 <literal>{
-	{LITERAL_OUT} {	yy_pop_state(); }
-	{NOT_LITERAL_OUT}+{LITERAL_OUT} {
+	{NOT_LITERAL_OUT}*{LITERAL_OUT} {
 		yylval->build<std::string>(std::string(yytext, yyleng -3));
 		yy_pop_state(); /**  Pop Literal **/
 		return( token::TEXT );
@@ -215,8 +214,14 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 		return( token::MACRO_IN );
 	}
 
-	{INJECT_SIGN} {
-		yy_push_state(injection);
+	{INJECT_SIGN}{I_OFFSET}({I_NUMBER}|{I_ITS}|({BRACKET_IN}{I_OFFSET}({I_STACK}|{I_ITER}|{I_MORE}){BRACKET_OUT})) {
+		if(defining) {
+			yylval->build< std::string >(std::string(yytext+3, yyleng -3));
+			return(token::INJECTION);
+		} else {
+			yylval->build< std::string >( yytext );
+			return( token::TEXT );
+		}
 	}
 
 	/** NOT ",\t\n()⌽⍟⎡⎤⎣❫" **/
@@ -225,28 +230,11 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 		return( token::TEXT );
 	}
 
-}
-
-<injection>{
-
-	{I_OFFSET}({I_NUMBER}|{I_ITS}|({BRACKET_IN}{I_OFFSET}({I_STACK}|{I_ITER}|{I_MORE}){BRACKET_OUT})) {
-		yy_pop_state();
-		if(defining) {
-			yylval->build< std::string >(yytext);
-			return(token::INJECTION);
-		} else {
-			std::string sign("⍟");
-			yylval->build< std::string >( sign + yytext );
-			return( token::TEXT );
-		}
-	}
-
-	. {
-		yy_pop_state();
-		std::string sign("⍟");
-		yylval->build< std::string >( sign + yytext );
+	{MACRO_SIGN}|{INJECT_SIGN} {
+		yylval->build<std::string>(yytext);
 		return( token::TEXT );
-	}
+    }
+
 
 }
 
@@ -271,6 +259,13 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 	}
 
 }
+
+{MACRO_SIGN} {
+		std::ostringstream eStream;
+		eStream << "Bad @ " << yytext;
+		errs << Support::Message(Support::syntax,eStream.str());
+	}
+
 
 .	{
 		std::ostringstream eStream;

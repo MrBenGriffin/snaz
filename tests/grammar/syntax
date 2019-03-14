@@ -81,6 +81,11 @@ P	0	@a(teen)							⸠a「“teen”」
 P	0	[@wa(foo,bar)]						“[”⸠wa「“foo”」「“bar”」“]”
 P	0	[@wtagi(bog,blob)]					“[”⸠wtagi「“bog”」「“blob”」“]”
 P	0	@wtag(bog,@wa(foo,bar),hi)			⸠wtag「“bog”」「⸠wa「“foo”」「“bar”」」「“hi”」
+P	0	%do-eo								“%do-eo”
+P	0	%@do-eo								“%@do-eo”
+P	0	%~@do-eo							“%~@do-eo”
+P	0	@do-do								“@do-do”
+
 
 # Classic: Basic Syntax returning debugging visit
 P	0	EX@wibble_33(teen,foy)PO		“EX”⸠wibble_33「“teen”」「“foy”」“PO”
