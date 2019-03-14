@@ -7,12 +7,10 @@
 #include <map>
 #include <set>
 
+#include "support/Definitions.h"
+#include "support/Message.h"
+#include "support/db/Connection.h"
 
-#include "Message.h"
-
-namespace Vdb {
-    class Connection;
-}
 namespace Support {
 
 	using listType = std::multiset<std::string>;
@@ -98,11 +96,13 @@ namespace Support {
 
 		size_t size() const;
 
-//    void load(Vdb::Connection*,std::string);
-//    void save(Vdb::Connection*,std::string);
 		void clear();
 
 		bool empty() const;
+
+		void load(Messages&,Db::Connection&,buildKind);
+		void save(Messages&,Db::Connection&,buildKind);
+
 	};
 
 

@@ -2,12 +2,16 @@
 #include <sstream>
 #include <vector>
 #include <iterator>
+
 #include "Storage.h"
 #include "Regex.h"
+
+#include "db/Query.h"
 
 namespace Support {
 
 	using namespace std;
+	using namespace Db;
 
 	LStore::LStore() = default;
 
@@ -290,6 +294,60 @@ namespace Support {
 		store.insert(other->store.begin(), other->store.end());
 	}
 
+	void Storage::load(Messages& log,Db::Connection& sql,buildKind kind) {
+		ostringstream str;
+		Query* query;
+		str << "select id,name from bldlanguage where active='on' and bldmode >= " << kind << " order by id";
+		string foo = str.str();
+//		if(dbc.query(errs,query,str.str()) && query->execute(errs)) {
+//			while(query->nextrow()) {
+//				size_t id; string name;
+//				query->readfield(errs,"id",id);
+//				query->readfield(errs,"name",name);
+//				qLangs.insert({id,name});
+//			}
+//			delete query; query= nullptr;
+//		}
+//
+//
+//
+//		qstr << "select name,value from bldvar where bld='" << dev << "'";
+//		Query *q = sql.query(qstr.str());
+//		if ( q->execute() ) {
+//			string f_name,f_value;
+//			while(q->nextrow()) {
+//				q->readfield("name",f_name);	//discarding bool.
+//				q->readfield("value",f_value);	//discarding bool.
+//				set(f_name, f_value);
+//			}
+//		}
+//		delete q;
+
+	}
+
+	void Storage::save(Messages& log,Db::Connection& sql,buildKind kind) {
+//		Query *qi = sql.query();
+//		for (auto &it : store) {
+//			string name = it.first;
+//			if(name[0] != '~') {
+//				string value = it.second;
+//				ostringstream qstr;
+//				dbc->escape(name);
+//				dbc->escape(value);
+//				qstr << "replace into bldvar set name='" << name << "',value='" << value << "', bld='" << dev << "'" ;
+//				qi->setquery(qstr.str());
+//				qi->execute();
+//			}
+//		}
+//		for (auto &et : erased) {
+//			string name=et;
+//			dbc->escape(name);
+//			qi->setquery("delete from bldvar where name='"+ name +"' and bld='" + dev + "'");
+//			qi->execute();
+//		}
+//		delete qi;
+	}
+
 //check if the book is in the library.
 	bool Library::has(const string book) const {
 		bool found = false;
@@ -408,5 +466,6 @@ namespace Support {
 			}
 		}
 	}
+
 
 }

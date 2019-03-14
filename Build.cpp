@@ -7,6 +7,7 @@
 #include <set>
 #include <map>
 
+#include <signal.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 
@@ -160,6 +161,12 @@ void Build::techs(Messages& errs,Connection& sql) {
 }
 
 void  Build::files(Messages& errs,Connection& sql) {
+//	ostringstream str;
+//	Query* query;
+//	string mode = _current;
+//	str << mode << " " << string(_current) ;
+//	string foo = str.str();
+
 	//for each requestedNodes (or everything if it's a full build).
 }
 

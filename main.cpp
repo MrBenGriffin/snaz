@@ -5,7 +5,6 @@
 #include "support/Env.h"
 #include "support/Message.h"
 
-
 // Currently using the following environment variables...
 // LIBMYSQLCRSO=/usr/local/mysql/lib/libmysqlclient.dylib
 // SQL_CONFIG_FILE=/Users/ben/Desktop/my.cnf

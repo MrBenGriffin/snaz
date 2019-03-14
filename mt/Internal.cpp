@@ -23,7 +23,6 @@ namespace mt {
 
     Storage Internal::storage;
     Library Internal::library;
-    Library Internal::cache;
     LStore Internal::lStore;
 
 

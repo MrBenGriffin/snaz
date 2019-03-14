@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Build" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="-A -O23,24 -O45,34,23 -F33 -L1,2 -T1,2" PASS_PARENT_ENVS_2="true" PROJECT_NAME="macrotext" TARGET_NAME="macrotext" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="macrotext" RUN_TARGET_NAME="macrotext">
+  <configuration default="false" name="Build" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="-A -O23,24 -O45,34,23 -F33 -L1,2 -T1,2 -X" PASS_PARENT_ENVS_2="true" PROJECT_NAME="macrotext" TARGET_NAME="macrotext" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="macrotext" RUN_TARGET_NAME="macrotext">
     <envs>
       <env name="LIBMYSQLCRSO" value="/usr/local/mysql/lib/libmysqlclient.dylib" />
       <env name="SQL_CONFIG_FILE" value="$USER_HOME$/Desktop/my.cnf" />

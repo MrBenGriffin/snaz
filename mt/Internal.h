@@ -17,10 +17,12 @@ namespace mt {
 		std::string name() const {return _name;}
 		size_t minParms {0}, maxParms {0};
 	protected:
+
+//Not so sure these should be here..
 		static Storage storage;
 		static Library library;
-		static Library cache;
-		static LStore lStore;
+		static LStore  lStore;    //'list store'  string:multiset(string)
+
 		std::string _name;
 		Internal(std::string name,size_t min,size_t max) : _name(std::move(name)),minParms(min),maxParms(max) {}
 		plist toParms(string,string,string);

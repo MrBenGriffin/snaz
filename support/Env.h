@@ -8,16 +8,13 @@
 #include <string>
 #include <set>
 
+#include "Definitions.h"
 #include "File.h"
 #include "Storage.h"
 #include "db/Connection.h"
 
 namespace Support {
 	using 	namespace std;
-	enum	buildSpace {Built,Temporary,Scripts,Media,Tests};	//Buildspace indicates what directory area is relevant
-	enum 	buildArea  {Editorial,Final,Draft,Console,Release,Staging,Testing,Parse}; //areas that there are..
-	enum 	buildKind  {parse,final,draft,test}; //areas that there are..
-	enum 	buildType  {Branch,Descendants,Singles};
 
 	class Env {
 	private:
@@ -35,10 +32,7 @@ namespace Support {
 		std::deque<size_t> askedTechs;
 		std::deque<size_t> askedLangs;
 
-
 		string wd();
-
-
 
 		Env(); // Disallow instantiation outside of the class.
 //		bool IsFinal; //is this draft or final.

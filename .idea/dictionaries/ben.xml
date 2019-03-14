@@ -6,6 +6,7 @@
       <w>posi</w>
       <w>readfield</w>
       <w>retval</w>
+      <w>std::string</w>
       <w>yymore</w>
     </words>
   </dictionary>
