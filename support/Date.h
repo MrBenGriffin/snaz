@@ -25,7 +25,7 @@ namespace Support {
 
 		Date();
 
-		explicit Date(time_t ttime);
+		explicit Date(::time_t ttime);
 		~Date() = default;
 
 		int	tm_sec;		/* seconds after the minute [0-60] */
@@ -44,7 +44,7 @@ namespace Support {
 		void getNowDateStr(const std::string &format, std::string &cont);
 		void getNow(std::string& cont);
 		std::string str();
-		const time_t getUTC() const;
+		const ::time_t getUTC() const;
 
 	};
 }

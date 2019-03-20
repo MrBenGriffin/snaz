@@ -12,6 +12,7 @@
 #include <sys/stat.h>
 
 #include "support/Env.h"
+#include "support/File.h"
 #include "support/Date.h"
 #include "support/Message.h"
 #include "support/Timing.h"
@@ -20,6 +21,7 @@
 #include "support/Infix.h"
 
 #include "node/Node.h"
+#include "node/Suffix.h"
 #include "mt/Internal.h"
 
 #include "Build.h"
@@ -64,14 +66,12 @@ void Build::run(Messages &errs,Connection* _sql) {
 			tests.title(std::cout, "Main");
 			tests.load(std::cout,  "main", false);   // Boolean turns on/off success reports.
 		} break;
-		case draft: {
-			build(errs,*sql);
-		} break;
-		case final: {
-			build(errs,*sql);
-		} break;
 		case parse: {
 			doParse(errs,*sql);
+		} break;
+		case draft:
+		case final: {
+			build(errs,*sql);
 		} break;
 	}
 }
@@ -110,12 +110,11 @@ void Build::build(Messages &errs,Connection& sql) {
 }
 
 void Build::global(Messages& errs,Connection& sql) {
+	Env& env = Env::e();
+	env.basedir(Scripts).makeDir(errs);
 	mt::Definition::load(errs,sql,_current); // Set the internals.
-	Node::loadLayouts(errs,sql);
-
-//	bld->createDirectory(bld->scrDir);  //Generate the scripts directory if it doesn't exist.
-//	macro::load(sql,local);		//load
-//	SuffixVal::load();
+//	node::Content::loadLayouts(errs,sql);
+//	node::Suffix::load(errs,sql);
 
 /*****/
 //	BuildProtocol(Build::Open,finalscript);

@@ -18,9 +18,13 @@
 #include "support/Convert.h"
 #include "support/Timing.h"
 #include "support/Message.h"
-#include "mt/Definition.h"
 #include "support/db/ServiceFactory.h"
-#include "node/NodeLocator.h"
+
+#include "mt/Definition.h"
+
+#include "node/Locator.h"
+#include "node/Content.h"
+
 #include "Build.h"
 
 namespace Support {
@@ -188,7 +192,7 @@ namespace Support {
 						timer.setShow(true);
 						break;
 					case 'b':
-						Node::setShowTemplates(true);
+						node::Content::setShowTemplates(true);
 						break;
 					case 'B': {
 						deque<size_t> nodes;
@@ -204,8 +208,8 @@ namespace Support {
 					case 'D': {
 //						Messages::setdebug(true);
 //						showMediaReqs = true;
-						NodeLocator::showPaths = true;
-						Node::setShowTemplates(true);
+						node::Locator::showPaths = true;
+						node::Content::setShowTemplates(true);
 //						showQueries = true;
 //						showProfile = true; //NOW used to show min/max macro parameter warnings.
 //						showFiling = true;
@@ -251,7 +255,7 @@ namespace Support {
 						build.setNodes(Singles,nodes);
 					} break;
 					case 'p':
-						NodeLocator::showPaths = true;
+						node::Locator::showPaths = true;
 						break;
 					case 'P':
 						build.setCurrent(draft);

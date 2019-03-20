@@ -37,6 +37,7 @@ add_executable(macrotext ${BISON_parser_OUTPUTS} ${FLEX_advanced_OUTPUTS} ${FLEX
         mt/InternalsString.cpp
         mt/InternalsTaxonomy.cpp
         mt/InternalsUtility.cpp
+        support/Definitions.h support/Definitions.cpp
         support/db/Service.h
         support/db/Connection.cpp support/db/Connection.h
         support/db/MySQLConnection.cpp support/db/MySQLConnection.h
@@ -57,10 +58,13 @@ add_executable(macrotext ${BISON_parser_OUTPUTS} ${FLEX_advanced_OUTPUTS} ${FLEX
         support/Regex.cpp support/Regex.h
         support/Storage.cpp support/Storage.h
         support/Timing.cpp support/Timing.h
-        node/BadNodeLocatorPath.h
+        node/Tree.cpp node/Tree.h
         node/Node.cpp node/Node.h
         node/NodeFilename.cpp node/NodeFilename.h
-        node/NodeLocator.cpp node/NodeLocator.h
-        node/NodeVal.cpp node/NodeVal.h
+        node/BadLocatorPath.h
+        node/Locator.cpp node/Locator.h
+        node/Content.cpp node/Content.h
+        node/Suffix.cpp node/Suffix.h
+        node/Taxon.cpp node/Taxon.h
         main.cpp test.cpp Build.cpp
-        support/Definitions.h support/Definitions.cpp)
+        )

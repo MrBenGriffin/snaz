@@ -62,7 +62,7 @@ namespace mt {
 		e << Message(fatal,"iSetCache is not yet implemented. It requires Node support.");
 		if (my.count == 2) {
 			string key = my.parm(1);
-//			NodeLocator* nl =  Node::current()->locator;
+//			Locator* nl =  Node::current()->locator;
 //			nl->track();
 			string value = my.parm(2);
 //			if(nl->untrack()) { //was dirty.
