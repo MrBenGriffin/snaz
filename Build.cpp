@@ -22,6 +22,8 @@
 
 #include "node/Node.h"
 #include "node/Suffix.h"
+#include "node/Content.h"
+#include "node/Taxon.h"
 #include "mt/Internal.h"
 
 #include "Build.h"
@@ -113,19 +115,21 @@ void Build::global(Messages& errs,Connection& sql) {
 	Env& env = Env::e();
 	env.basedir(Scripts).makeDir(errs);
 	mt::Definition::load(errs,sql,_current); // Set the internals.
-//	node::Content::loadLayouts(errs,sql);
-//	node::Suffix::load(errs,sql);
-
-/*****/
-//	BuildProtocol(Build::Open,finalscript);
-//	bld->loadPersistance();
+	node::Suffix().loadTree(errs,sql,0);
+	node::Content().loadGlobal(errs,sql);
 //	RunScript("PRE_PROCESSING_SCRIPT", "Pre Processor", errs);
-//
-//	bld->loadSegmentIDs();
-//	bld->calcBuildScope();
-//	bld->initRandom();
 	langs(errs,sql);
-//	BuildLanguages();						//Main process.
+//	iMedia::move(errs);
+//
+//	storageResult script = bld->varStorage.find("FINAL_PROCESSING_SCRIPT");
+//	if (script.found) {
+//		finalscript = script.result;
+//	}
+//	bld->savePersistance();
+//	bld->prunePersistance();
+
+
+	//	BuildLanguages();						//Main process.
 //	iMedia::move(errs);
 //
 //	storageResult script = bld->varStorage.find("FINAL_PROCESSING_SCRIPT");
@@ -148,19 +152,39 @@ void Build::global(Messages& errs,Connection& sql) {
 }
 
 void Build::langs(Messages& errs,Connection& sql) {
-	//for each language..
-	techs(errs,sql);
-	// .. and tidy
+	Timing& times = Timing::t();
+	while (!languages.empty()) {
+		size_t langID = lang();
+		if (times.show()) { times.set("Language " + langName()); }
+		node::Taxon().loadTree(errs,sql,langID);
+		node::Content::updateBirthAndDeath(errs,sql,langID);
+//		node::Taxon::loaddata();						// TODO:: get Content-taxonomy subscriptions!!
+//		ContentVal::updatepublishable(errs,sql,lang);   // This is all to do with approvers.
+//		ContentVal::load(errs,sql,lang);				// Load the content map
+//		TaxVal::load();						//load the taxonomy
+//		iMedia::load(bld->dbc,errors);
+
+		techs(errs,sql);
+		//.....
+		if (times.show()) { times.use(errs,"Language " + langName()); }
+		languages.pop_front();
+	}
 }
 
 void Build::techs(Messages& errs,Connection& sql) {
-	//for each tech..
-	files(errs,sql);
-	// .. and tidy
+	Timing& times = Timing::t();
+	while (!technologies.empty()) {
+		if (times.show()) { times.set("Tech " + techName()); }
+		node::Content().loadLayouts(errs,sql,tech());
+		//.....
+		files(errs,sql);
+		//.....
+		if (times.show()) { times.use(errs,"Tech " + techName()); }
+		technologies.pop_front();
+	}
 }
 
 void  Build::files(Messages& errs,Connection& sql) {
-
 	//for each requestedNodes (or everything if it's a full build).
 }
 
@@ -169,23 +193,34 @@ void Build::doParse(Messages &errs, Connection&) {
 }
 
 void Build::loadLanguages(Messages &errs, Connection& dbc) {
-	map< size_t,string > qLangs;
+	map< size_t,Language > qLangs;
 	if (dbc.dbselected() && dbc.table_exists(errs,"bldlanguage")) {
 		errs << Message(info,"Loading Languages");
 		Query* query;
 		size_t mode = _current == final ? 2 : 1;
 		ostringstream str;
-		str << "select id,name from bldlanguage where active='on' and bldmode >= " << mode << " order by id";
+		str << "select id,name,ln,territory,encoding from bldlanguage where active='on' and bldmode >= " << mode << " order by id";
+/**
+	* +----+---------+----+-----------+----------+
+	* | id | name    | ln | territory | encoding |
+	* +----+---------+----+-----------+----------+
+	* |  1 | English | en | GB        | UTF-8    |
+	* +----+---------+----+-----------+----------+
+ */
 		if(dbc.query(errs,query,str.str()) && query->execute(errs)) {
+			Language item; size_t id;
 			while(query->nextrow()) {
 				size_t id; string name;
 				query->readfield(errs,"id",id);
-				query->readfield(errs,"name",name);
-				qLangs.insert({id,name});
+				query->readfield(errs,"name",item.name);
+				query->readfield(errs,"ln",item.ln);
+				query->readfield(errs,"territory",item.territory);
+				query->readfield(errs,"encoding",item.encoding);
+				qLangs.insert({id,item});
 			}
 			delete query; query= nullptr;
 		}
-		auto& langs = Env::e().langs();
+		auto& langs = Env::e().langs(); //As requested.
 		if(!langs.empty()) {
 			for(size_t i : langs) {
 				auto lng = qLangs.find(i);

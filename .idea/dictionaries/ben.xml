@@ -8,6 +8,8 @@
       <w>readfield</w>
       <w>retval</w>
       <w>std::string</w>
+      <w>taxon</w>
+      <w>taxonom</w>
       <w>yymore</w>
     </words>
   </dictionary>

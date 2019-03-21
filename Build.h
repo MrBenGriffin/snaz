@@ -28,6 +28,19 @@ struct UserMay {
 	UserMay();
 };
 
+//* +----+---------+----+-----------+----------+
+//* | id | name    | ln | territory | encoding |
+//* +----+---------+----+-----------+----------+
+//* |  1 | English | en | GB        | UTF-8    |
+//* +----+---------+----+-----------+----------+
+
+struct Language {
+	std::string name;
+	std::string ln;
+	std::string territory;
+	std::string encoding;
+};
+
 struct BuildUser {
 	size_t		id;					//eg. 2
 	std::string username;   		//eg. bgriffin
@@ -46,8 +59,6 @@ class Build {
 public:
 	static constexpr long double version = 2019.031301;
 private:
-	size_t currentLangID;
-	size_t currentTechID;
 	bool allTechs;
 	bool allLangs;
 	bool full;
@@ -55,7 +66,7 @@ private:
 	size_t currentPage;
 	std::string currentSuffix;
 	Support::Db::Connection* sql;
-	std::deque< std::pair<size_t,std::string> > languages;
+	std::deque< std::pair<size_t,Language> > languages;
 	std::deque< std::pair<size_t,std::string> > technologies;
 
 	Build();
@@ -85,7 +96,7 @@ public:
 	size_t tech() const { return technologies.empty() ? 0 : technologies.front().first; }
 	std::string techName() const { return technologies.empty() ? "None" : technologies.front().second; }
 	size_t lang() const { return languages.empty() ? 0 : languages.front().first; }
-	std::string langName() const { return languages.empty() ? "None" : languages.front().second; }
+	std::string langName() const { return languages.empty() ? "None" : languages.front().second.name; }
 	void setSuffix(std::string suffix) { currentSuffix = suffix; }
 	void setPage(size_t page) { currentPage = page; }
 	void setCurrent(Support::buildKind current) { _current = current; }
@@ -95,19 +106,19 @@ public:
 
 	bool mayDefer();
 
-	bool nextTech() {
-		if(!technologies.empty()) {
-			technologies.pop_front();
-		}
-		return ! technologies.empty();
-	}
-
-	bool nextLang() {
-		if(!languages.empty()) {
-			languages.pop_front();
-		}
-		return ! languages.empty();
-	}
+//	bool nextTech() {
+//		if(!technologies.empty()) {
+//			technologies.pop_front();
+//		}
+//		return ! technologies.empty();
+//	}
+//
+//	bool nextLang() {
+//		if(!languages.empty()) {
+//			languages.pop_front();
+//		}
+//		return ! languages.empty();
+//	}
 
 	void list(); //for checking stuff only.
 	void close(Support::Messages&);

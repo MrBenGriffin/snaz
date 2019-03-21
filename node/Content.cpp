@@ -3,6 +3,8 @@
 //
 #include <sstream>
 #include <utility>
+#include <unordered_map>
+
 #include "node/Node.h"
 #include "node/Tree.h"
 #include "node/Locator.h"
@@ -26,6 +28,10 @@
 namespace node {
 	using namespace std;
 
+	Tree Content::editorial("Content");
+	unordered_map<size_t,Content> Content::nodes;
+	segmentIdMap		Content::segmentIDs;			//A quick reference to the segment IDs/types by name
+	invRefMap			Content::segmentNames;		//A quick reference to the segment names by ID..
 	idTemplateMap    	Content::templateList;
 	idIdListMap        	Content::layoutList;               //Stores a layout-id -> template-list structure
 	refMap            	Content::layoutRefs;               //Layout names -> ids
@@ -33,16 +39,71 @@ namespace node {
 	bool            	Content::_showTemplates = false;   //show templates in logs..
 	deque<Content *> 	Content::nodeStack;    // current node - used to pass to built-in functions
 
-	void Content::load(Messages& log, Connection& sql) {
+	Content::Content() : Node(editorial) {}
 
-	}
-	bool   Content::get(Messages& errs,boolValue field) const {
-		bool result=false;
-		switch(field) {
-			case exec: break;
-			case batch: break;
+	void Content::loadTree(Messages& errs, Connection& sql, size_t language) {}
+
+	void Content::updateBirthAndDeath(Messages& errs, Connection& sql, size_t langId) {
+		Timing &times = Timing::t();
+		if (times.show()) { times.set("Birth/Death Dates"); }
+		if (sql.dbselected() && sql.table_exists(errs,"bldnode") && sql.table_exists(errs,"bldnodelang") ) {
+			Query* q1 = nullptr;
+			Query* q2 = nullptr;
+			std::ostringstream death,birth;
+			death << "update bldnodelang set used='' where "
+				   "(( unix_timestamp() >= outdate) AND (outdate <> 0)) and language=" << langId;
+			birth << "update bldnodelang set used='on' where "
+		  			"(( unix_timestamp() >= incdate) AND (incdate <> 0)) and language=" << langId;
+			sql.lock(errs,"bldnodelang write");
+			if(sql.query(errs,q1,death.str())) { q1->execute(errs); }
+			if(sql.query(errs,q2,birth.str())) { q2->execute(errs); }
+			sql.unlock(errs);
 		}
-		return result;
+		if (times.show()) { times.use(errs,"Birth/Death Dates"); }
+	}
+
+	void Content::loadGlobal(Messages &errs, Connection &sql) {
+		//Set Segment Maps.
+		/*
+		 Segment types (as declared in blddefs) and what happens to them.
+		 name	XML encoded, expanded
+		 SEG**	√		√
+		 SEGXM	X		√
+		 SEGRE	√		X
+		 SEGRW	X		X
+		 */
+		Timing &times = Timing::t();
+		if (times.show()) { times.set("Content Init"); }
+
+		if (sql.dbselected() && sql.table_exists(errs,"bldsegment") && sql.table_exists(errs,"blddefs") ) {
+			string select = "select s.name,s.id,d.type from bldsegment s,blddefs d where left(d.type,3)='SEG' and d.code=s.type order by s.id";
+			Query* q = nullptr;
+			if (sql.query(errs,q,select) && q->execute(errs)) {
+				while(q->nextrow()) {
+					size_t f_uid(0);
+					string f_name,f_type;
+					q->readfield(errs,"id",f_uid);		//discarding bool.
+					q->readfield(errs,"name",f_name);	//discarding bool.
+					q->readfield(errs,"type",f_type);	//discarding bool.
+					segmentNames.emplace(f_uid,f_name);
+					segmentIDs.emplace(f_name,pair<size_t,string>(f_uid,f_type));
+				}
+			}
+			delete q;
+		}
+		if (times.show()) { times.use(errs,"Content Init"); }
+	}
+
+	const Node* Content::current() const {
+		if (!nodeStack.empty()) {
+			return nodeStack.back();
+		} else {
+			return editorial.root();
+		}
+	}
+
+	bool   Content::get(Messages& errs,boolValue field) const {
+		return false;
 	};
 	size_t Content::get(Messages& errs,uintValue field) const {
 		size_t result=0;
@@ -59,46 +120,28 @@ namespace node {
 		switch(field) {
 			case title: break;
 			case shortTitle: break;
-			case tierRef: break;
+			case comment: break;
 			case baseFilename: result=baseFileName; break;
 			case scope: break;
 			case classCode: break;
 			case synonyms: break;
 			case keywords: break;
-			case descr: break;
+			case description: break;
 			case fileSuffix: break;
 			case script: break;
+			case editor: break;
 		}
 		return result;
 	};
 	Date   Content::get(Messages& errs,dateValue field) const {
 		Date result;
 		switch(field) {
+			case modified: break;
 			case birth: break;
 			case death: break;
 		}
 		return result;
 	};
-
-	//-------------------------------------------------------------------
-//Accessors below.
-//-------------------------------------------------------------------
-//	void Content::Suffix(size_t i, string s) {        //Set suffix at position.
-//		if (i >= suffixes.size()) return;                //No suffix
-//		suffixes[i] = std::move(s);
-//	}
-
-//-------------------------------------------------------------------
-//	void Content::SetFfilename(size_t i, string s) {        //Set suffix at position.
-//		if (i >= ffilename.size()) return;                //No suffix
-//		ffilename[i] = std::move(s);
-//	}
-
-//-------------------------------------------------------------------
-//	void Content::SetFilename(size_t i, string s) {        //Set suffix at position.
-//		if (i >= filename.size()) return;                //No suffix
-//		filename[i] = std::move(s);
-//	}
 
 	void Content::setLayouts(Messages &errs) {
 		auto i = _tree->twNodes.begin();
@@ -117,23 +160,30 @@ namespace node {
 		}
 	}
 
-//	vector<string> filename;            // This is the initial page filename (includes . )
-//	vector<string> suffixes;            // This is the initial page suffix.
-//	vector<string> ffilename;           // This is the full, final filename (post-processed)
-//	vector<size_t> tplates;             // list of template ID's to use
+	void Content::reset() {
+		//reset templates etc. after each technology.
+	}
+
+	const Node* Content::node(Messages& errs, size_t id, bool silent) const {
+		const Node* result =  nullptr;
+		auto found = nodes.find(id);
+		if(found != nodes.end()) {
+			result = &(found->second);
+		} else {
+			if(!silent) {
+				ostringstream err;
+				err << "There is no editorial node with id " << id;
+				errs << Message(range,err.str());
+			}
+		}
+		return result;
+	}
 
 
-//	const string &Content::Filename(size_t i) const {
-//		return filename[i];
-//	}    //This is the initial page filename (includes . )
-//	const string &Content::Ffilename(size_t i) const {
-//		return ffilename[i];
-//	}    //This is the full, final filename (post-processed)
-//
-	//-------------------------------------------------------------------
+//-------------------------------------------------------------------
 // load template list for the (content) node
 // It should probably be part of nodeval
-	void Content::Layout(Messages &errs) {
+	void Content::doTemplates(Messages &errs) {
 		Build build = Build::b();
 		if (errs.verbosity() > 6) errs << Message(info, "Loading template list for node " + idStr);
 		Env &env = Env::e();
@@ -207,43 +257,40 @@ namespace node {
 		}
 	}
 
-	void Content::loadLayouts(Messages &errs, Connection &dbc) {
+	void Content::loadLayouts(Messages &errs, Connection &dbc, size_t techID) {
+		//loads layouts and templates.
 		ostringstream text;
 		Env &env = Env::e();
 		Timing &times = Timing::t();
-		Build &build = Build::b();
-		if (errs.verbosity() > 3) errs << Message(info, "Loading layouts and templates.");
-		if (times.show()) { times.set("loadLayouts()"); }
+		string techName = Build::b().techName();
+		if (times.show()) { times.set("Load " + techName); }
+		layoutList.clear();
+		layoutRefs.clear();
+		layoutNames.clear();
+		templateList.clear();
 		if (dbc.dbselected() && dbc.table_exists(errs, "bldlayout") && dbc.table_exists(errs, "bldlayouttechs") &&
 			dbc.table_exists(errs, "bldtemplate")) {
 			ostringstream qstr;
 			dbc.lock(errs, "bldlayout l read,bldlayouttechs x read,bldtemplate t read"); //everyone can read only..
-			qstr
-					<< "select layout,templatelist,name from bldlayout l, bldlayouttechs x where x.layout=l.id and technology="
-					<< build.tech();
+			qstr << "select layout,templatelist,name from bldlayout l, bldlayouttechs x where x.layout=l.id"
+		   			" and technology=" << techID;
 			auto *q = dbc.query(errs, qstr.str());
 			if (q->execute(errs)) {
 				string f_layout_id, f_templatelist, f_name;
 				while (q->nextrow()) {
-					q->readfield(errs, "layout", f_layout_id);            //discarding bool.
+					q->readfield(errs, "layout", f_layout_id);             //discarding bool.
 					q->readfield(errs, "templatelist", f_templatelist);    //discarding bool.
 					q->readfield(errs, "name", f_name);                    //discarding bool.
-					vector<size_t> templatelist;
+					vector<size_t> templateIDlist;
 					size_t id = natural(f_layout_id);
-					tolist(templatelist, f_templatelist);
-					layoutList.insert({id, templatelist});
+					tolist(templateIDlist, f_templatelist);
+					layoutList.insert({id, templateIDlist});
 					layoutRefs.insert({f_name, id});
 					layoutNames.insert({id, f_name});
 				}
-				if (errs.verbosity() > 3) {
-					text << layoutRefs.size() << " layouts imported.";
-					errs << Message(info, text.str());
-					text.str("");
-				}
 				qstr.str("");
-				qstr
-						<< "select distinct(t.id) as id,t.templatemacro,t.suffix,t.break,t.comment from bldtemplate t,bldlayouttechs x where ";
-				qstr << "find_in_set(t.id,x.templatelist) != 0 and x.technology=" << build.tech();
+				qstr << "select distinct(t.id) as id,t.templatemacro,t.suffix,t.break,t.comment from bldtemplate t,bldlayouttechs x where ";
+				qstr << "find_in_set(t.id,x.templatelist) != 0 and x.technology=" << techID;
 				q->setquery(qstr.str());
 				if (q->execute(errs)) {
 					string f_id, f_comment;
@@ -252,31 +299,18 @@ namespace node {
 						q->readfield(errs, "id", f_id);                //discarding bool.
 						q->readfield(errs, "templatemacro", n.str);    //discarding bool.
 						q->readfield(errs, "suffix", n.suffix);        //discarding bool.
-						q->readfield(errs, "break", n.br);                //discarding bool.
-						q->readfield(errs, "comment", f_comment);        //discarding bool.
+						q->readfield(errs, "break", n.br);             //discarding bool.
+						q->readfield(errs, "comment", f_comment);      //discarding bool.
 						size_t id = natural(f_id);
 						templateList.insert({id, pair<string, FileTemplate>(f_comment, n)});
 					}
-					if (errs.verbosity() > 3) {
-						text << templateList.size() << " templates imported. ";
-						errs << Message(info, text.str());
-						text.str("");
-					}
-				} else {
-					errs << Message(error, "Build::loadLayouts: DB Error while loading templates.");
 				}
-			} else {
-				errs << Message(error, "Build::loadLayouts: DB Error while loading templates.");
 			}
 			dbc.unlock(errs);
 		}
-		if (times.show()) { times.get(errs, "loadLayouts()"); }
-		if (errs.verbosity() > 3) {
-			errs << Message(info, "Layouts and templates loaded.");
-		}
+		if (times.show()) { times.get(errs,"Load " + techName); }
 	}
 
-//-------------------------------------------------------------------
 	void Content::addpage(Messages &errs, NodeFilename *filename) {
 		ostringstream text;
 		Build &build = Build::b();
@@ -323,35 +357,30 @@ namespace node {
 					errs << Message(info, text.str());
 					text.str("");
 				}
-				if(Tree::suffixTree == nullptr) {
-					errs << Message(error, "suffix tree is not initialised!");
+				//We need to find the ancestor suffix so that any links we create can deal with the post-processed versions!
+				const Node* x = Suffix::suffixes.byRef(errs, suff);
+				if (x == nullptr) {
+					string fname = filenames[current_page];
+					filename->getFullName(fname, suff);
+					ffilename[current_page] = fname;
 				} else {
-					//This has set up the suffixes..
-					//We need to find the ancestor suffix so that any links we create can deal with the post-processed versions!
-					const Node* x = Tree::suffixTree->byRef(errs, suff);
-					if (x == nullptr) {
-						string fname = filenames[current_page];
-						filename->getFullName(fname, suff);
-						ffilename[current_page] = fname;
-					} else {
 //						const Node *byPath(Messages &,Locator&, string::const_iterator, string::const_iterator) const;
 //						Node *vx = x->nodebypath(errs, Suffix::finalSuffix.begin(), Suffix::finalSuffix.end());
-						Locator suffixLocator(x); string suffixTop(Suffix::finalSuffix);
-						const Node *vx = Tree::suffixTree->byPath(errs,suffixLocator,suffixTop.begin(), suffixTop.end());
-						if (vx == nullptr) {
-							errs << Message(error, "Error of some sort in suffix table");
-						} else {
-							suff = vx->get(errs,fileSuffix);
-						}
-						string fname = filenames[current_page];
-						filename->getFullName(fname, suff);    //This now works!  Amazing.
-						if (errs.verbosity() > 6) {
-							text << "Node " + idStr + " page " << current_page << " is set with filename " << fname;
-							errs << Message(info, text.str());
-							text.str("");
-						}
-						ffilename[current_page] = fname;
+					Locator suffixLocator(x); string suffixTop(Suffix::finalSuffix);
+					const Node *vx = Suffix::suffixes.byPath(errs,suffixLocator,suffixTop.begin(), suffixTop.end());
+					if (vx == nullptr) {
+						errs << Message(error, "Error of some sort in suffix table");
+					} else {
+						suff = vx->get(errs,fileSuffix);
 					}
+					string fname = filenames[current_page];
+					filename->getFullName(fname, suff);    //This now works!  Amazing.
+					if (errs.verbosity() > 6) {
+						text << "Node " + idStr + " page " << current_page << " is set with filename " << fname;
+						errs << Message(info, text.str());
+						text.str("");
+					}
+					ffilename[current_page] = fname;
 				}
 				current_page++;
 			} else {
@@ -592,7 +621,7 @@ namespace node {
 // and 'n's direct ancestors for link generation */
 	void Content::generateOutput(Messages &errs, int level) {
 		if (level >= 0 && _parent != nullptr) {// generate output for all direct ancestors
-			Content* par = dynamic_cast<Content*>(_parent);
+			Content* par = const_cast<Content*>(dynamic_cast<const Content*>(_parent));
 			par->generateOutput(errs, level + 1);
 		}
 		if (this != _tree->root()) {
@@ -600,7 +629,7 @@ namespace node {
 		}
 		if (level <= 0) {    // generate output for all descendents
 			for (auto* childNode : children) {
-				Content *aChild = dynamic_cast<Content *>(childNode);
+				Content *aChild = const_cast<Content*>(dynamic_cast<const Content *>(childNode));
 				aChild->generateOutput(errs, level - 1);
 			}
 		}
@@ -612,7 +641,7 @@ namespace node {
 		if (this != _tree->root()) gettextoutput(errs);
 		if (level <= 0) {    // generate output for all descendents
 			for (auto* childNode : children) {
-				Content *aChild = dynamic_cast<Content *>(childNode);
+				Content *aChild = const_cast<Content*>(dynamic_cast<const Content *>(childNode));
 				aChild->generateBranch(errs, level - 1);
 			}
 		}

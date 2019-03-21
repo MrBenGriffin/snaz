@@ -34,65 +34,43 @@ namespace node {
 	const string Node::ref() 	 const	{ return _ref; }        	// unique id as a string
 	const string Node::ids() 	 const	{ return idStr; }        	// unique id as a string
 //-------------------------------------------------------------------
-
-//-------------------------------------------------------------------
-//return current node (I0)
-//	Node *Node::current(flavour tree) {
-//		if (tree == content && !nodeStack.empty()) {
-//			return nodeStack.back();
-//		} else {
-//			switch (tree) {
-//				case content:
-//					return Content::root;
-//				case taxon:
-//					return Taxon::root;
-//				case suffix:
-//					return Suffix::root;
-//			}
-//		}
-//	}
-
-//	Node *Node::node(size_t id, flavour tree) {
-//		Node *n = current(tree);
-//		return n->nodebyid(id);
-//	}
-
-
-//-------------------------------------------------------------------
-	Node::Node()  : _tree(nullptr),_parent(nullptr),_id(0),_tw(0),_tier(0),_sibling(0),idStr("") {
+	Node::Node(Tree& tree) : _tree(&tree),_parent(nullptr),_id(0),_tw(0),_tier(0),_weight(1),_sibling(0),idStr("") {
 	}
 
-//-------------------------------------------------------------------
-	Node::Node(Locator *loc, string ids, size_t newid, size_t newtw, size_t newtier) {
-//		nodeid = newid;
-//		nodetw = newtw;
-//		idstr = ids;
-//		nodetier = newtier;
-//		nodeparent = nullptr; // filled during addchild
-//		nodesiblingnum = 0;
-//		locator = loc;
-//		children.clear();        // added in when necessary
+	//-------------------------------------------------------------------
+	//Read fields common to all nodes here.
+	void Node::common(Messages& errs,Db::Query* q,size_t& parent,size_t& tw) {
+		//weights will be calculated later.
+		q->readfield(errs,"id",_id);
+		q->readfield(errs,"parent",parent); 		// parent is stored as a node. will be calculated by add.
+		q->readfield(errs,"tier",_tier);
+		q->readfield(errs,"ref",_ref);
+		if(tw == 0) {
+			q->readfield(errs,"tw",_tw); 			// we can use this because there are no 'unused' nodes.
+		} else {
+			_tw = tw++;
+		}
 	}
 
 	//-------------------------------------------------------------------
 	void Node::addChild(Messages & errs,Node* node) {
 		node->_sibling = children.size();
 		node->_parent = this;
-		_tree->add(errs,node);
 		children.push_back(node);
 	}
 
-//-------------------------------------------------------------------
+	//-------------------------------------------------------------------
 	const Node* Node::offset(Messages &errs, signed long offset) const { //root isn't in here.. 0 will return end of tree.
 		return _tree->tw(errs,_tw,offset);
 	}
 
 	//-------------------------------------------------------------------
 	Node::~Node() {
-		while (!children.empty()) {
-			delete children.back();
-			children.pop_back();
-		}
+//		while (!children.empty()) {
+//			delete children.back();
+//			children.pop_back();
+//		}
+		children.clear();
 		_tree = nullptr; 	// a reference value, so do not delete here!
 		_parent = nullptr;  // a reference value - so do not delete here!
 	}

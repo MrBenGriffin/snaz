@@ -25,13 +25,14 @@ namespace Support {
 
 		Date();
 
-		explicit Date(::time_t ttime);
+		explicit Date(::time_t);
 		~Date() = default;
 
 		int	tm_sec;		/* seconds after the minute [0-60] */
 		int	tm_min;		/* minutes after the hour [0-59] */
 		int	tm_hour;	/* hours since midnight [0-23] */
 
+		void set(::time_t);
 		void setYearOffset(int);
 		void setSecOffset(int);
 		void setMinOffset(int);

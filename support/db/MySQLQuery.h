@@ -42,6 +42,7 @@ namespace Support {
 			bool readfield(Messages &,size_t, long&)  override;		//
 			bool readfield(Messages &,size_t, long double&)  override;		//
 			bool readfield(Messages &,size_t, size_t, std::string&) override;
+			bool readfield(Messages &,size_t, bool&) override;	// bool
 
 			MySQLQuery(MySQLService*, MySQLConnection*, MYSQL*&, std::string&);
 

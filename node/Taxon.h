@@ -9,25 +9,40 @@
 #include "support/Message.h"
 #include "support/db/Connection.h"
 
+using namespace std;
 using namespace Support;
 using namespace Db;
 
 namespace node {
 	class Taxon : public Node {
+	private:
+		static unordered_map<size_t,Taxon> nodes;
+
 		public:
+		static Tree taxonomies;
+		Taxon();
+
 		flavour cultivar() const override { return taxon; }
-		static void load(Messages&, Connection&);
 		virtual ~Taxon();            //deleting a Node deletes all of it's children
+		const Node* node(Messages&, size_t, bool= false) const override; //by id.
 		bool   get(Messages&,boolValue) const override;
 		size_t get(Messages&,uintValue) const override;
 		string get(Messages&,textValue) const override;
 		Date   get(Messages&,dateValue) const override;
+		void 	loadTree(Messages&, Connection&, size_t) override; //depends upon Node flavour of
+		const Node* current() const override;
 
-
-//		enum boolValue  { exec,batch};
-//		enum uintValue  { team,layout,pages};
-//		enum textValue  { title,shortTitle,tierRef,baseFilename,scope,classCode,synonyms,keywords,descr,fileSuffix,script};
-//		enum dateValue  { birth,death};
+		size_t _team;
+		string _classcode;
+		string _scope;
+		string _title;
+		string _shortTitle;
+		string _synonyms;
+		string _keywords;
+		string _descr;
+		string _editor;
+		bool _container;
+		Date _modified;
 
 	};
 }

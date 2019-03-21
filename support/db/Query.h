@@ -30,10 +30,12 @@ namespace Support {
 
 			virtual void reset();									// reset the query		--used by vdb
 			virtual void resetrows()=0;								//
-			virtual bool readfield(Messages &,size_t, std::string&)=0;			//
-			virtual bool readfield(Messages &,size_t, long&)=0;				//
-			virtual bool readfield(Messages &,size_t, long double&)=0;			//
-			virtual bool readfield(Messages &,size_t, size_t&)=0;
+			virtual bool readfield(Messages &,size_t, std::string&)=0;		// string
+			virtual bool readfield(Messages &,size_t, long&)=0;				// signed
+			virtual bool readfield(Messages &,size_t, long double&)=0;		// float
+			virtual bool readfield(Messages &,size_t, size_t&)=0;			// size_t
+			virtual bool readfield(Messages &,size_t, bool&)=0;				// bool
+
 			virtual void readFieldName(Messages &,size_t i, std::string&, std::string&)=0;
 			virtual void forQuery(Messages &,std::string& value)=0; //convert a string to make ready for query.. See Service::escape!!
 			void prepareFieldCache(Messages&);
@@ -47,6 +49,9 @@ namespace Support {
 			bool readfield(Messages&,const std::string&, size_t&);
 			bool readfield(Messages&,const std::string&, long&);
 			bool readfield(Messages&,const std::string&, long double&);
+			bool readfield(Messages&,const std::string&, bool&);
+			bool readTime(Messages&,const std::string&, ::time_t&);
+
 			bool fieldMatch(Messages&,const std::string&, const std::string&);
 			bool readfield(Messages&,size_t,const std::string&,std::string&);	//context(1),medusa(4),rebuild(3)
 			size_t getnumrows() const { return numRows; }			//used env::builder (5), context (1), medusa (4), rebuild(1).

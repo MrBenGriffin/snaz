@@ -22,6 +22,11 @@ namespace Support {
 		utc = gmtime(&tt);
 		local = localtime(&tt);
 	}
+	void Date::set(::time_t time) {
+		tt = time;
+		utc = gmtime(&tt);
+		local = localtime(&tt);
+	}
 
 	void Date::getDateStr(struct tm* ttime, const std::string& format, std::string& cont)  {
 		auto * buff = (char *)malloc (256);

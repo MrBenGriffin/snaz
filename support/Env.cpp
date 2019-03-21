@@ -312,11 +312,12 @@ namespace Support {
 			log << Message(fatal,"The environment variable `SQL_CONFIG_FILE` must be set.");
 		}
 
-//		bool ParseAdvanced;
-//		bool ParseLegacy;
-//		bool ParseOnly;
-//		bool ForceDeleteLock;
-		log << Message(debug,"Environnment is initialised.");
+		//Initialise RNG.
+		::time_t tt; time(&tt);
+		clock_t clk = clock();
+		srand48( static_cast<long>(clk+tt) );	//need to set up the randomizer once
+
+		log << Message(debug,"Environment is initialised.");
 
 		Build& build = Build::b();
 		Messages::defer( build.mayDefer() && (Messages::verboseness() < 2) );
