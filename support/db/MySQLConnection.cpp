@@ -147,7 +147,14 @@ namespace Support {
 				return retval;
 			}
 
-			Query* MySQLConnection::query(Messages& errs,std::string query_str) {
+		void MySQLConnection::dispose(Query*& qry) {
+			if(qry != nullptr) {
+				delete qry;
+				qry = nullptr;
+			}
+		}
+
+		Query* MySQLConnection::query(Messages& errs,std::string query_str) {
 				if ( isopen() ) {
 					if ( db_open ) {
 						return new MySQLQuery(s, this, connectionHandle, query_str);

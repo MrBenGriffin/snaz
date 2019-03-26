@@ -101,12 +101,12 @@ void Build::build(Messages &errs,Connection& sql) {
 			releaseLock(0);
 		} else {
 			ostringstream err;
-			err << "A build is currently being run the user " << user.name;
+			err << "A build is currently being run by " << user.givenName();
 			errs << Message(fatal,err.str());
 		}
 	} else {
 		ostringstream err;
-		err << "This build is not allowed by the user " << user.name;
+		err << "This build is not allowed by " << user.givenName();
 		errs << Message(fatal,err.str());
 	}
 }
@@ -115,7 +115,7 @@ void Build::global(Messages& errs,Connection& sql) {
 	Env& env = Env::e();
 	env.basedir(Scripts).makeDir(errs);
 	mt::Definition::load(errs,sql,_current); // Set the internals.
-	node::Suffix().loadTree(errs,sql,0);
+	node::Suffix().loadTree(errs,sql,0, _current);
 	node::Content().loadGlobal(errs,sql);
 //	RunScript("PRE_PROCESSING_SCRIPT", "Pre Processor", errs);
 	langs(errs,sql);
@@ -129,7 +129,7 @@ void Build::global(Messages& errs,Connection& sql) {
 //	bld->prunePersistance();
 
 
-	//	BuildLanguages();						//Main process.
+//	BuildLanguages();						//Main process.
 //	iMedia::move(errs);
 //
 //	storageResult script = bld->varStorage.find("FINAL_PROCESSING_SCRIPT");
@@ -156,14 +156,11 @@ void Build::langs(Messages& errs,Connection& sql) {
 	while (!languages.empty()) {
 		size_t langID = lang();
 		if (times.show()) { times.set("Language " + langName()); }
-		node::Taxon().loadTree(errs,sql,langID);
-		node::Content::updateBirthAndDeath(errs,sql,langID);
-//		node::Taxon::loaddata();						// TODO:: get Content-taxonomy subscriptions!!
-//		ContentVal::updatepublishable(errs,sql,lang);   // This is all to do with approvers.
-//		ContentVal::load(errs,sql,lang);				// Load the content map
-//		TaxVal::load();						//load the taxonomy
-//		iMedia::load(bld->dbc,errors);
-
+		node::Taxon().loadTree(errs,sql,langID, _current);
+		node::Content::updateBirthAndDeath(errs,sql,langID,_current); //* Per Language.
+		node::Content::updateContent(errs,sql,langID,_current); //this moves the latest version into bldcontent.
+		//TODO:: Content APPROVERS.
+		node::Content().loadTree(errs,sql,langID,_current);
 		techs(errs,sql);
 		//.....
 		if (times.show()) { times.use(errs,"Language " + langName()); }
@@ -218,8 +215,9 @@ void Build::loadLanguages(Messages &errs, Connection& dbc) {
 				query->readfield(errs,"encoding",item.encoding);
 				qLangs.insert({id,item});
 			}
-			delete query; query= nullptr;
+//			delete query; query= nullptr;
 		}
+		dbc.dispose(query);
 		auto& langs = Env::e().langs(); //As requested.
 		if(!langs.empty()) {
 			for(size_t i : langs) {
@@ -252,8 +250,9 @@ void Build::loadTechs(Messages &errs, Connection& dbc) {
 				query->readfield(errs,"name",name);
 				qTechs.insert({id,name});
 			}
-			delete query; query= nullptr;
+//			delete query; query= nullptr;
 		}
+		dbc.dispose(query);
 	}
 	auto& techs = Env::e().techs();
 	if(!techs.empty()) {
@@ -326,18 +325,18 @@ bool Build::setLock(Support::Messages& errs,Connection& dbc) {
 				query->readfield(errs, "locked", count);
 				query->readfield(errs, "value", otherUser);
 			}
-			delete query;
-			query = nullptr;
 		}
+		dbc.dispose(query);
+
 		str.str("");
 		if (count == 0 || !lock) {
 			str << "replace into blddefs set type='LOCK" << (_current == draft ? "D" : "F") << "',value=concat('"
-				<< user.username << ", at ',now())";
+				<< user.userName() << ", at ',now())";
 			if (dbc.query(errs, query, str.str()) && query->execute(errs)) {
 				response = true;
-				delete query;
-				query = nullptr;
 			}
+			dbc.dispose(query);
+
 		} else {
 			Env env = Env::e();
 			string this_script,these_parms;
@@ -366,148 +365,9 @@ void Build::releaseLock(int) {
 			str << "delete from blddefs where type='LOCK" << ( build._current == draft ? "D" : "F") << "'";
 			if (build.sql->query(log,query,str.str())) {
 				query->execute(log);
-				delete query;
 			}
+			build.sql->dispose(query);
 		}
 	}
 	log.str(std::cerr);
 }
-
-BuildUser::BuildUser() : id(0),username(""),name("Unrecognised Person"),found(false) {
-	may.edit = false;  //go to editor page (in general)
-	may.draft = false; //draft build all site
-	may.final = false; //final build all site.
-}
-
-bool BuildUser::mayTeamEdit(size_t team) {
-	auto t = teams.find(team);
-	if(t == teams.end()) {
-		return false;
-	} else {
-		return t->second.edit;
-	}
-}
-
-UserMay::UserMay() : edit(false),draft(false),final(false),draftDown(false),finalDown(false) {}
-
-bool BuildUser::checkTeam(size_t team,buildType what) {
-	auto t = teams.find(team);
-	if(t == teams.end()) {
-		return false;
-	} else {
-		buildArea area = buildArea(Build::b().current());
-		auto& item = t->second;
-		switch (area) {
-			case Final: {
-				switch(what) {
-					case Branch:
-						return (item.final && item.finalDown);
-					case Descendants:
-						return (item.finalDown);
-					case Singles:
-						return (item.final);
-				}
-			} break;
-			case Draft: {
-				switch(what) {
-					case Branch:
-						return (item.draft && item.draftDown);
-					case Descendants:
-						return (item.draftDown);
-					case Singles:
-						return (item.draft);
-				}
-			} break;
-			case Editorial: {
-				return item.edit;
-			} break;
-			default: return false;
-		}
-	}
-}
-
-void BuildUser::load(Support::Messages& errs,Support::Db::Connection& dbc) {
-	Env env = Env::e();
-	if (env.get("REMOTE_USER",username)) {
-		dbc.escape(username);
-		if (dbc.dbselected() && dbc.table_exists(errs,"blduser")) {
-			Query* query;
-			if(dbc.query(errs,query,"select id,concat(firstname,' ',name) as name from blduser where username='" + username + "'") && query->execute(errs)) {
-				while(query->nextrow()) {
-					found = true;
-					query->readfield(errs,"id",id);
-					query->readfield(errs,"name",name);
-				}
-				delete query; query= nullptr;
-			}
-			if(found) {
-				ostringstream str;
-//		*** Team-independent activities.
-//		Build Public       | PBLD | May build the public site from the admin page (allows full build)
-//		Build Site Preview | DBLD | May build the preview site from the admin page (allows full build)
-//		General Edit	   | EDIT | Has access to editorial.
-				str << "select a.vcode as code from blduserteamroles utr,bldroleactivities ra,bldactivity a where "
-					   "ra.setting=2 and utr.member=" << id << " and utr.role=ra.role and ra.activity=a.id "
-															   "and a.vcode in ('EDIT','DBLD','PBLD') group by code";
-				if(dbc.query(errs,query,str.str()) && query->execute(errs)) {
-					string code;
-					while(query->nextrow()) {
-						query->readfield(errs,"code",code);
-						if(code == "EDIT") may.edit = true;
-						if(code == "DBLD") { may.draft = true; may.draftDown = true; }
-						if(code == "PBLD") { may.final = true; may.finalDown = true; }
-					}
-					delete query; query= nullptr;
-				}
-				str.str("");
-
-				//Team-based activities. 'ETPS','ETPD','ETBP','ETBD','EDVT'
-//		*** Team-based activities.
-//		Publish Now        | ETPS | May build the current page to public
-//		Publish Down       | ETPD | May build the current branch to public
-//		Build Preview      | ETBP | May build the current page to preview
-//		Build Preview Down | ETBD | May build the current branch for preview
-//		May Edit this Node | EDVT | Has access to editorial.
-				str << "select utr.team,a.vcode as code from blduserteamroles utr,bldroleactivities ra,bldactivity a "
-					   "where ra.setting=2 and utr.member=" << id << " and utr.role=ra.role and ra.activity=a.id "
-																	 " and a.vcode in ('ETPS','ETPD','ETBP','ETBD','EDVT') group by team,code";
-				if(dbc.query(errs,query,str.str()) && query->execute(errs)) {
-					size_t team;
-					std::string code;
-					while(query->nextrow()) {
-						query->readfield(errs,"team",team);
-						query->readfield(errs,"code",code);
-						auto pos = teams.find(team);
-						if(pos == teams.end()) {
-							UserMay tmay;
-							//'ETPS','ETPD','ETBP','ETBD','EDVT'
-							if(code == "ETPS") tmay.final = true;
-							if(code == "ETPD") tmay.finalDown = true;
-							if(code == "ETBP") tmay.draft = true;
-							if(code == "ETBD") tmay.draftDown = true;
-							if(code == "EDVT") tmay.edit = true;
-							teams.emplace(team,tmay);
-						} else {
-							if(code == "ETPS") pos->second.final = true;
-							if(code == "ETPD") pos->second.finalDown = true;
-							if(code == "ETBP") pos->second.draft = true;
-							if(code == "ETBD") pos->second.draftDown = true; //		Build Preview Down
-							if(code == "EDVT") pos->second.edit = true;
-						}
-					}
-					delete query; query= nullptr;
-				}
-			}
-		}
-	} else {
-		if (env.area() == Console) { // set 'user' up for Console use.
-			found = true;
-			id  =0;
-			name= "CLI";
-			may.edit = false;
-			may.draft = true; may.draftDown = true;
-			may.final = true; may.finalDown = true;
-		}
-	}
-
-};

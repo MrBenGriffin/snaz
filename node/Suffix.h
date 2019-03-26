@@ -9,6 +9,7 @@
 #include <unordered_map>
 
 #include "node/Node.h"
+#include "support/Definitions.h"
 #include "support/Message.h"
 #include "support/db/Connection.h"
 #include "mt/mt.h"
@@ -36,7 +37,7 @@ namespace node {
 		Date   get(Messages&,dateValue) const override;
 		const Node* current() const override;
 
-		void loadTree(Messages&, Connection&, size_t) override;
+		void loadTree(Messages&, Connection&, size_t,buildKind = final) override;
 
 		// data fields here.
 		string _title;

@@ -27,7 +27,7 @@ namespace mt {
 		Timing& times = Timing::t();
 		mt::Internal::startup(errs,sql,kind); //loading internals and storage?!;
 
-		if (times.show()) { times.set("Load User Macros"); }
+		if (times.show()) { times.set("Load Site Macros"); }
 		//Now load macros.
 		if ( sql.dbselected() && sql.table_exists(errs,"bldmacro") && sql.table_exists(errs,"bldmacrov") ) {
 			sql.lock(errs,"bldmacro as m read,bldmacrov as v read");
@@ -71,9 +71,10 @@ namespace mt {
 //				str.str(""); str << "Loaded " << library.size() << " Macro Definitions";
 //				errs << Message(debug,str.str());
 			}
+			sql.dispose(q);
 			sql.unlock(errs);
 		}
-		if (times.show()) { times.use(errs,"Load User Macros"); }
+		if (times.show()) { times.use(errs,"Load Site Macros"); }
 	}
 
 	void Definition::shutdown(Messages& errs,Db::Connection& sql,buildKind kind) {

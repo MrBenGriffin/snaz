@@ -95,7 +95,7 @@ namespace Support {
 					Query *q = query(errs);
 					q->list_tables(errs,table_set);
 					tset_loaded = true;
-					delete q;
+					dispose(q);
 				}
 				if (table_set.find(table_name) != table_set.end()) {
 					retval = true;

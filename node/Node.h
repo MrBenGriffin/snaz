@@ -8,6 +8,7 @@
 #include <map>
 #include <sstream>
 
+#include "support/Definitions.h"
 #include "support/Message.h"
 #include "support/Date.h"
 #include "support/db/Connection.h"
@@ -56,7 +57,7 @@ namespace node {
 		virtual ~Node();            //deleting a Node deletes all of it's children
 		virtual const Node* current() const = 0; //depends upon Node flavour of
 		virtual const Node* node(Messages&, size_t, bool= false) const = 0; //by id.
-		virtual void loadTree(Messages&, Db::Connection&, size_t = 0) = 0; //depends upon Node flavour of
+		virtual void loadTree(Messages&, Db::Connection&, size_t = 0, buildKind = final) = 0; //depends upon Node flavour of
 
 //Setup
 
@@ -81,6 +82,9 @@ namespace node {
 		size_t size() const;
 		const string ids() const;	 		// unique id as a string
 		const string ref() const;	 		// linkref as a string
+
+		void str(ostream&) const;			 // show the Node..
+		void weigh();
 
 //Accessors to Value data
 		virtual bool   get(Messages&,boolValue) const = 0;

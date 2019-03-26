@@ -44,6 +44,7 @@ namespace node {
 
 		const Node *tw(Messages &, size_t, signed long,const Node* = nullptr) const; //treeWalk from offset.
 		void add(Messages &, Node*, size_t);
+
 	};
 }
 #endif //MACROTEXT_NODE_TREE_H

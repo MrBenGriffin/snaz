@@ -41,9 +41,78 @@ namespace node {
 
 	Content::Content() : Node(editorial) {}
 
-	void Content::loadTree(Messages& errs, Connection& sql, size_t language) {}
+	void Content::loadTree(Messages& errs, Connection& sql, size_t language,buildKind build) {
+//	This does languages, but not layouts / templates as they have not yet been done.
+//  It also doesn't do segment content, which depend upon layouts!
+//	We just get the layoutID for that.
+		editorial.clear();
+		nodes.clear();
 
-	void Content::updateBirthAndDeath(Messages& errs, Connection& sql, size_t langId) {
+		Timing &times = Timing::t();
+		if (times.show()) { times.set("Content Tree"); }
+		if (sql.dbselected() && sql.table_exists(errs, "bldnode") && sql.table_exists(errs, "bldnodelang")) {
+			sql.lock(errs, "bldnode n read,bldnodelang l read");
+			std::ostringstream str;
+			str <<	"select n.id,ifnull(n.p,0) as parent,n.t as tier, n.lnkref as ref,"
+		  			"n.layout,n.team,l.navtitle,l.title,l.incdate,l.outdate,"
+					"l.editor from bldnode n,bldnodelang l where "
+	   				"l.node=n.id and l.language=" << language << " and "
+					"l.used " << (build==final ? "in('on','lk')" : "!=''") << " order by n.tw";
+			Db::Query *q = nullptr;
+			if (sql.query(errs, q, str.str()) && q->execute(errs)) {
+				/**
+				 *
+				 * +----+------+------+--------+------+---------------+-----------+-----------+---------+---------+-----------+---------------------+
+				 * | id | par. | tier | layout | team | ref           | navtitle  | title     | incdate | outdate | editor    | tstamp              |
+				 * +----+------+------+--------+------+---------------+-----------+-----------+---------+---------+-----------+---------------------+
+				 * |  2 |    0 |    1 |      1 |    4 | root          | Root      | Root      |    NULL |    NULL | ejohnson  | 2011-04-12 16:47:05 |
+				 * |  3 |    4 |    3 |     25 |    4 | 404           | 404       | 404       |       0 |       0 | aoliver   | 2011-02-17 16:05:45 |
+				 * |  4 |    2 |    2 |      1 |    4 | siteResources | Resources | Resources |       0 |       0 | jbuchanan | 0000-00-00 00:00:00 |
+				 * |  5 |    2 |    2 |      1 |    6 | siteRoot      | Site Root | Site Root |       0 |       0 | jbuchanan | 0000-00-00 00:00:00 |
+				 * +----+------+------+--------+------+---------------+-----------+-----------+---------+---------+-----------+---------------------+
+				 **/
+				size_t parent = 0;
+				size_t active_tw = 1;  //we cannot use the native tw as we will be skipping used..
+				auto par = nodes.end();
+				while (q->nextrow()) {
+					Content contents;
+					//id, parent,tier,ref,tw
+					contents.common(errs, q, parent, active_tw);
+					if(!nodes.empty()) {
+						par = nodes.find(parent);
+					}
+					if(nodes.empty() || par != nodes.end()) {
+						::time_t birth,death;
+
+						q->readfield(errs, "layout", contents._layout);
+						q->readfield(errs, "team", contents._team);
+						q->readfield(errs, "navtitle", contents._shortTitle);
+						q->readfield(errs, "title", contents._title);
+						q->readfield(errs, "editor", contents._editor);
+						q->readTime(errs, "incdate", birth);
+						q->readTime(errs, "outdate", death);
+						contents._birth.set(birth);
+						contents._death.set(death);
+
+						auto ins = nodes.emplace(contents._id, std::move(contents));
+						if (ins.second) {
+							Content* node = &(ins.first->second);
+							editorial.add(errs, node, parent);
+						}
+					} else {
+						active_tw--; //don't want to include the fake tw.
+					}
+				}
+			}
+			sql.dispose(q);
+			sql.unlock(errs);
+			nodes.find(editorial.root()->id())->second.weigh();
+		}
+		if (times.show()) { times.use(errs, "Content Tree"); }
+		editorial.root()->str(cout);
+	}
+
+	void Content::updateBirthAndDeath(Messages& errs, Connection& sql, size_t langId,buildKind) {
 		Timing &times = Timing::t();
 		if (times.show()) { times.set("Birth/Death Dates"); }
 		if (sql.dbselected() && sql.table_exists(errs,"bldnode") && sql.table_exists(errs,"bldnodelang") ) {
@@ -57,9 +126,29 @@ namespace node {
 			sql.lock(errs,"bldnodelang write");
 			if(sql.query(errs,q1,death.str())) { q1->execute(errs); }
 			if(sql.query(errs,q2,birth.str())) { q2->execute(errs); }
+			sql.dispose(q1);
+			sql.dispose(q2);
 			sql.unlock(errs);
 		}
 		if (times.show()) { times.use(errs,"Birth/Death Dates"); }
+	}
+
+	void Content::updateContent(Messages& errs, Connection& sql, size_t langId,buildKind build) {
+		if (build == final) {
+			Timing &times = Timing::t();
+			if (times.show()) { times.set("Content Versions"); }
+			if (sql.dbselected() && sql.table_exists(errs,"bldcontent") && sql.table_exists(errs,"bldcontentv") && sql.table_exists(errs,"bldnodelang") ) {
+				Query* q = nullptr;
+				std::ostringstream query;
+				query << "update bldcontent c,bldcontentv v,bldnodelang l set c.pcontent=v.content,c.editor=v.editor,c.moddate=v.tstamp "
+						 "where l.used='on' and v.active='on' and l.node=c.node and l.language=c.language and v.node=c.node and v.language=c.language "
+						 "and v.segment=c.segment and v.id=c.version and l.language=" << langId;
+				sql.lock(errs,"bldcontent c write,bldcontentv v read,bldnodelang l read");
+				if(sql.query(errs,q,query.str())) { q->execute(errs); sql.dispose(q); }
+				sql.unlock(errs);
+			}
+			if (times.show()) { times.use(errs,"Content Versions"); }
+		}
 	}
 
 	void Content::loadGlobal(Messages &errs, Connection &sql) {
@@ -89,7 +178,7 @@ namespace node {
 					segmentIDs.emplace(f_name,pair<size_t,string>(f_uid,f_type));
 				}
 			}
-			delete q;
+			sql.dispose(q);
 		}
 		if (times.show()) { times.use(errs,"Content Init"); }
 	}
@@ -164,8 +253,8 @@ namespace node {
 		//reset templates etc. after each technology.
 	}
 
-	const Node* Content::node(Messages& errs, size_t id, bool silent) const {
-		const Node* result =  nullptr;
+	const Content* Content::content(Messages& errs, size_t id, bool silent) const {
+		const Content* result =  nullptr;
 		auto found = nodes.find(id);
 		if(found != nodes.end()) {
 			result = &(found->second);
@@ -177,6 +266,10 @@ namespace node {
 			}
 		}
 		return result;
+	}
+
+	const Node* Content::node(Messages& errs, size_t id, bool silent) const {
+		return content(errs,id,silent);
 	}
 
 
@@ -257,6 +350,7 @@ namespace node {
 		}
 	}
 
+	//select layout,technology,templatelist from bldlayouttechs;
 	void Content::loadLayouts(Messages &errs, Connection &dbc, size_t techID) {
 		//loads layouts and templates.
 		ostringstream text;
@@ -525,7 +619,7 @@ namespace node {
 		if (! q->execute() ) {
 			errs << Message(error << "Node::gettextoutput(): DB Error" );
 		}
-		delete q;
+		dbc.dispose(q);
 	}
 	resetNodePersistance();	//Delete *vars.
 	if (showTiming && errs.verbosity()  > 3) {

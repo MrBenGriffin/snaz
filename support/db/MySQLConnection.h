@@ -40,6 +40,8 @@ namespace Support {
 
 			Query *query(Messages&,std::string = "") override;
 
+			void dispose(Query*&) override;
+
 			bool query(Messages&,Query *&, std::string = "") override;
 
 			void escape(std::string &) override;

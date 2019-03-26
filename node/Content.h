@@ -5,6 +5,7 @@
 #ifndef MACROTEXT_NODE_CONTENT_H
 #define MACROTEXT_NODE_CONTENT_H
 
+#include "support/Definitions.h"
 #include "support/Message.h"
 #include "support/db/Connection.h"
 #include "node/Node.h"
@@ -34,13 +35,21 @@ namespace node {
 		static constexpr auto rootFilename 	= "index";
 		static bool _showTemplates;   		//show templates in logs..
 
+	//** Language Content (per node)
+		size_t _team;
+		size_t _layout;
+		string _shortTitle;
+		string _title;
+		string _editor;
+		Date _birth;
+		Date _death;
+
 		string baseFileName;
 		string scratchpad;    				// used for iForPeers <- maybe should go elsewhere..
 		vector<string> filenames;           // This is the initial page filename (includes . )
 		vector<string> suffixes;            // This is the initial page suffix.
 		vector<string> ffilename;           // This is the full, final filename (post-processed)
 		vector<size_t> tplates;             // list of template ID's to use
-
 
 		void addpage(Messages &, NodeFilename *);
 		void outputtofile(size_t page, string &out);
@@ -57,23 +66,25 @@ namespace node {
 
 		Content();
 
-		const Node* node(Messages&, size_t, bool= false) const override; //by id.
+		const Node* node(Messages&, size_t, bool= false) const override; //Node by id.
+		const Content* content(Messages&, size_t, bool= false) const; //Content by id.
 
 		bool   get(Messages&,boolValue) const override;
 		size_t get(Messages&,uintValue) const override;
 		string get(Messages&,textValue) const override;
 		Date   get(Messages&,dateValue) const override;
-		void   loadTree(Messages&, Connection&, size_t) override; //depends upon Node flavour of
+		void   loadTree(Messages&, Connection&, size_t,buildKind) override; //depends upon Node flavour of
 		void   loadGlobal(Messages&, Connection&); //supporting data structures.
 
 		void setLayouts(Messages &); 		//Set all the layouts for a nodetree
-		flavour cultivar() const override { return content; }
+		flavour cultivar() const override { return flavour::content; }
 
 		static void setShowTemplates(bool Show = true) { _showTemplates = Show; }
 
 /** Per language static functions **/
 		static void loadLayouts(Messages&, Connection&, size_t);
-		static void updateBirthAndDeath(Messages&, Connection&, size_t);
+		static void updateBirthAndDeath(Messages&, Connection&, size_t,buildKind);
+		static void updateContent(Messages&, Connection&, size_t,buildKind);
 
 		static idTemplateMap templateList;
 		static idIdListMap layoutList;                //Stores a layout-id -> template-list structure

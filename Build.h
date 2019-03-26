@@ -13,20 +13,13 @@
 #include "support/Env.h"
 #include "support/Message.h"
 
+#include "BuildUser.h"
+
 namespace Support {
 	namespace Db {
 		class Connection;
 	}
 }
-
-struct UserMay {
-	bool edit;
-	bool draft;
-	bool final;
-	bool draftDown;
-	bool finalDown;
-	UserMay();
-};
 
 //* +----+---------+----+-----------+----------+
 //* | id | name    | ln | territory | encoding |
@@ -39,19 +32,6 @@ struct Language {
 	std::string ln;
 	std::string territory;
 	std::string encoding;
-};
-
-struct BuildUser {
-	size_t		id;					//eg. 2
-	std::string username;   		//eg. bgriffin
-	std::string name;				//eg. Ben Griffin
-	bool 		found;				//exists in database.
-	UserMay		may;
-	std::unordered_map<size_t,UserMay> teams;
-	BuildUser();
-	void load(Support::Messages&,Support::Db::Connection&);
-	bool checkTeam(size_t,Support::buildType);
-	bool mayTeamEdit(size_t);
 };
 
 class Build {
@@ -105,21 +85,6 @@ public:
 	void breakLock() { lock = false; }
 
 	bool mayDefer();
-
-//	bool nextTech() {
-//		if(!technologies.empty()) {
-//			technologies.pop_front();
-//		}
-//		return ! technologies.empty();
-//	}
-//
-//	bool nextLang() {
-//		if(!languages.empty()) {
-//			languages.pop_front();
-//		}
-//		return ! languages.empty();
-//	}
-
 	void list(); //for checking stuff only.
 	void close(Support::Messages&);
 

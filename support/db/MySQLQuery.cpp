@@ -253,11 +253,11 @@ namespace Support {
 		void MySQLQuery::reset() {
 			if (result != nullptr) {
 				s->free_result(result);
+				result = nullptr;
 			}
 			row = nullptr;
 			start = nullptr;
 			end = nullptr;
-			result = nullptr;
 			Query::reset();
 		}
 

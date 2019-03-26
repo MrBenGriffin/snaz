@@ -26,7 +26,7 @@ namespace node {
 
 	Suffix::Suffix() : Node(suffixes) {}
 
-	void Suffix::loadTree(Messages& errs, Connection& sql, size_t languageId) {
+	void Suffix::loadTree(Messages& errs, Connection& sql,size_t,buildKind) {
 		size_t baked_tw = 0;  //we won't be incrementing this as we can use the native tw. But we need to declare it.
 		Timing& times = Timing::t();
 		if (times.show()) { times.set("Load Suffixes"); }
@@ -100,7 +100,9 @@ namespace node {
 					}
 				}
 			}
+			sql.dispose(q);
 			sql.unlock(errs);
+			nodes.find(suffixes.root()->id())->second.weigh();
 		}
 		if (times.show()) { times.use(errs,"Load Suffixes"); }
 	}

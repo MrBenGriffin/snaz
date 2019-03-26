@@ -1,6 +1,7 @@
 
 #include <sstream>
 #include <utility>
+#include <iomanip>
 
 #include "node/Node.h"
 #include "node/Tree.h"
@@ -126,6 +127,21 @@ namespace node {
 		}
 	}
 
+	void Node::str(ostream& o) const {
+		std::setfill('-');
+		o << std::setw(6+ _tier) << " tier:" << _tier << " weight:" << _weight << " tw:" << _tw  << " ref:" << _ref << endl;
+		for (auto& i : children) {
+			i->str(o);
+		}
+	}
+
+	void Node::weigh() {
+		_weight = 1;
+		for (auto& i : children) {
+			const_cast<Node*>(i)->weigh();
+			_weight += i->_weight;
+		}
+	}
 
 //-------------------------------------------------------------------
 // Contextual Navigation functions follow
@@ -139,6 +155,8 @@ namespace node {
 		}
 		return children[x];
 	}
+
+
 
 //-------------------------------------------------------------------
 

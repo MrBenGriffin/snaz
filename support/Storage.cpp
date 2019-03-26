@@ -296,33 +296,17 @@ namespace Support {
 
 	void Storage::load(Messages& log,Db::Connection& sql,buildKind kind) {
 		ostringstream str;
-		Query* query;
-		str << "select id,name from bldlanguage where active='on' and bldmode >= " << kind << " order by id";
-		string foo = str.str();
-//		if(dbc.query(errs,query,str.str()) && query->execute(errs)) {
-//			while(query->nextrow()) {
-//				size_t id; string name;
-//				query->readfield(errs,"id",id);
-//				query->readfield(errs,"name",name);
-//				qLangs.insert({id,name});
-//			}
-//			delete query; query= nullptr;
-//		}
-//
-//
-//
-//		qstr << "select name,value from bldvar where bld='" << dev << "'";
-//		Query *q = sql.query(qstr.str());
-//		if ( q->execute() ) {
-//			string f_name,f_value;
-//			while(q->nextrow()) {
-//				q->readfield("name",f_name);	//discarding bool.
-//				q->readfield("value",f_value);	//discarding bool.
-//				set(f_name, f_value);
-//			}
-//		}
-//		delete q;
-
+		Query* q = nullptr;
+		str << "select name,value from bldvar where bld='" << (kind == final ? "pub" : "dev" ) << "'";
+		if (sql.query(log,q,str.str()) && q->execute(log)) {
+			string f_name,f_value;
+			while(q->nextrow()) {
+				q->readfield(log,"name",f_name);	//discarding bool.
+				q->readfield(log,"value",f_value);	//discarding bool.
+				set(f_name, f_value);
+			}
+		}
+		sql.dispose(q);
 	}
 
 	void Storage::save(Messages& log,Db::Connection& sql,buildKind kind) {
@@ -345,7 +329,7 @@ namespace Support {
 //			qi->setquery("delete from bldvar where name='"+ name +"' and bld='" + dev + "'");
 //			qi->execute();
 //		}
-//		delete qi;
+//		sql.dispose(q);
 	}
 
 //check if the book is in the library.

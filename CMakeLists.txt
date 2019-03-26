@@ -66,5 +66,7 @@ add_executable(macrotext ${BISON_parser_OUTPUTS} ${FLEX_advanced_OUTPUTS} ${FLEX
         node/Content.cpp node/Content.h
         node/Suffix.cpp node/Suffix.h
         node/Taxon.cpp node/Taxon.h
-        main.cpp test.cpp Build.cpp
+        main.cpp test.cpp
+        Build.cpp Build.h
+        BuildUser.cpp BuildUser.h
         )

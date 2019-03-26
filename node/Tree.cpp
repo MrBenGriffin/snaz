@@ -134,7 +134,8 @@ namespace node {
 		}
 		return result;
 	}
-//-------------------------------------------------------------------
+
+	//-------------------------------------------------------------------
 //return the Node described by 'path'
 	const Node* Tree::byPath(Messages &errs,Locator& locator, string::const_iterator in, string::const_iterator out) const {
 		const Node *result = nullptr;

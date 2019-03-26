@@ -30,9 +30,9 @@ namespace mt {
 
 	void Internal::startup(Messages& log,Db::Connection& sql,buildKind kind) {
 		Timing& times = Timing::t();
-		if (times.show()) { times.set("Load User Storage"); }
+		if (times.show()) { times.set("Load Site Storage"); }
 		storage.load(log,sql,kind);
-		if (times.show()) { times.use(log,"Load User Storage"); }
+		if (times.show()) { times.use(log,"Load Site Storage"); }
 	}
 	void Internal::shutdown(Messages& log,Db::Connection& sql,buildKind kind) {
 		storage.save(log,sql,kind);

@@ -43,6 +43,7 @@ namespace Support {
 			virtual void close()=0;
 			virtual bool last_insert_id(unsigned long long&)=0;
 			virtual Query* query(Messages&,std::string = "")=0;
+			virtual void dispose(Query*&)=0;
 			virtual bool query(Messages&,Query*&,std::string = "")=0;
 			virtual void escape(std::string&) =0;
 
