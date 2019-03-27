@@ -26,6 +26,10 @@
 #include "node/Taxon.h"
 #include "mt/Internal.h"
 
+#include "content/Template.h"
+#include "content/Segment.h"
+#include "content/Layout.h"
+
 #include "Build.h"
 #include "test.h"
 
@@ -116,7 +120,8 @@ void Build::global(Messages& errs,Connection& sql) {
 	env.basedir(Scripts).makeDir(errs);
 	mt::Definition::load(errs,sql,_current); // Set the internals.
 	node::Suffix().loadTree(errs,sql,0, _current);
-	node::Content().loadGlobal(errs,sql);
+	content::Template::load(errs,sql,_current);
+	content::Segment::load(errs,sql,_current);
 //	RunScript("PRE_PROCESSING_SCRIPT", "Pre Processor", errs);
 	langs(errs,sql);
 //	iMedia::move(errs);
@@ -125,25 +130,11 @@ void Build::global(Messages& errs,Connection& sql) {
 //	if (script.found) {
 //		finalscript = script.result;
 //	}
-//	bld->savePersistance();
-//	bld->prunePersistance();
 
-
-//	BuildLanguages();						//Main process.
-//	iMedia::move(errs);
-//
-//	storageResult script = bld->varStorage.find("FINAL_PROCESSING_SCRIPT");
-//	if (script.found) {
-//		finalscript = script.result;
-//	}
 //	RunScript("POST_PROCESSING_SCRIPT", "Post Processor", errs);
 //	RunScript("~POST_PROCESSING_SCRIPT", "Post Processor", errs);
 //	errs.str(Logger::log);
-//	bld->savePersistance();
-//	bld->prunePersistance();
-//	bld->clearPersistance();
 //	iMedia::close(); (not sure why this is here).
-/******/
 
 //SuffixVal::unload();
 //  macro::terminate();			//unload
@@ -161,27 +152,31 @@ void Build::langs(Messages& errs,Connection& sql) {
 		node::Content::updateContent(errs,sql,langID,_current); //this moves the latest version into bldcontent.
 		//TODO:: Content APPROVERS.
 		node::Content().loadTree(errs,sql,langID,_current);
-		techs(errs,sql);
+		techs(errs,sql,langID);
 		//.....
 		if (times.show()) { times.use(errs,"Language " + langName()); }
 		languages.pop_front();
 	}
 }
 
-void Build::techs(Messages& errs,Connection& sql) {
+void Build::techs(Messages& errs,Connection& sql,size_t langID) {
 	Timing& times = Timing::t();
 	while (!technologies.empty()) {
+		size_t techID = tech();
 		if (times.show()) { times.set("Tech " + techName()); }
-		node::Content().loadLayouts(errs,sql,tech());
+		content::Layout::load(errs,sql,techID,_current);
+		node::Content().setLayouts(errs);
 		//.....
-		files(errs,sql);
+		//TODO:: Content Proper. We now have layouts, templates, suffixes, segments -configured-
+
+		files(errs,sql,langID,techID);
 		//.....
 		if (times.show()) { times.use(errs,"Tech " + techName()); }
 		technologies.pop_front();
 	}
 }
 
-void  Build::files(Messages& errs,Connection& sql) {
+void  Build::files(Messages& errs,Connection& sql,size_t langID,size_t techID) {
 	//for each requestedNodes (or everything if it's a full build).
 }
 

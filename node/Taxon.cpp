@@ -189,8 +189,8 @@ namespace node {
 		return result;
 	};
 
-	const Node *Taxon::node(Messages &errs, size_t id, bool silent) const {
-		const Node *result = nullptr;
+	const Taxon* Taxon::taxon(Messages &errs, size_t id, bool silent) {
+		const Taxon *result = nullptr;
 		auto found = nodes.find(id);
 		if (found != nodes.end()) {
 			result = &(found->second);
@@ -202,6 +202,10 @@ namespace node {
 			}
 		}
 		return result;
+	}
+
+	const Node *Taxon::node(Messages &errs, size_t id, bool silent) const {
+		return taxon(errs,id,silent);
 	}
 
 	Taxon::~Taxon() {}

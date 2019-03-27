@@ -25,6 +25,8 @@
 #include "node/Locator.h"
 #include "node/Content.h"
 
+#include "content/Template.h"
+
 #include "Build.h"
 
 namespace Support {
@@ -192,7 +194,7 @@ namespace Support {
 						timer.setShow(true);
 						break;
 					case 'b':
-						node::Content::setShowTemplates(true);
+						content::Template::show(true);
 						break;
 					case 'B': {
 						deque<size_t> nodes;
@@ -209,7 +211,7 @@ namespace Support {
 //						Messages::setdebug(true);
 //						showMediaReqs = true;
 						node::Locator::showPaths = true;
-						node::Content::setShowTemplates(true);
+						content::Template::show(true);
 //						showQueries = true;
 //						showProfile = true; //NOW used to show min/max macro parameter warnings.
 //						showFiling = true;

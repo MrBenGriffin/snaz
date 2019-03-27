@@ -51,9 +51,10 @@ namespace node {
 		static Tree taxonomies;
 		Taxon();
 
-		flavour cultivar() const override { return taxon; }
+		flavour cultivar() const override { return flavour::taxon; }
 		virtual ~Taxon();            //deleting a Node deletes all of it's children
 		const Node* node(Messages&, size_t, bool= false) const override; //by id.
+		static const Taxon* taxon(Messages&, size_t, bool= false); //by id.
 		bool   get(Messages&,boolValue) const override;
 		size_t get(Messages&,uintValue) const override;
 		string get(Messages&,textValue) const override;

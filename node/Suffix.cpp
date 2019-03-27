@@ -19,6 +19,7 @@ namespace node {
 
 	Tree Suffix::suffixes("Suffixes");
 	unordered_map<size_t,Suffix> Suffix::nodes;
+	unordered_map<string,Suffix*> Suffix::refs;
 
 	const Node* Suffix::current() const {
 		return suffixes.root();
@@ -83,7 +84,7 @@ namespace node {
 					q->readfield(errs,"title",suffix._title);
 					q->readfield(errs,"comment",suffix._comment);		// The comment as text
 					q->readfield(errs,"macro",suffix._macro);			// is the comment a macrotext to generate the actual suffix? (always terminal).
-					q->readfield(errs,"terminal",suffix._terminal);	// Is this a 'final' suffix?
+					q->readfield(errs,"terminal",suffix._terminal);		// Is this a 'final' suffix?
 					if(!suffix._terminal) {
 						q->readfield(errs,"scriptpath",suffix._script);	// Script to handle process of suffix mapping.
 						q->readfield(errs,"exec",suffix._exec);			// Run as executable?
@@ -97,6 +98,7 @@ namespace node {
 					if(ins.second) {
 						Suffix* node = &(ins.first->second);
 						suffixes.add(errs,node,parent);
+						refs.emplace(node->_ref,node);
 					}
 				}
 			}
@@ -107,8 +109,28 @@ namespace node {
 		if (times.show()) { times.use(errs,"Load Suffixes"); }
 	}
 
+
 	const Node* Suffix::node(Messages& errs, size_t id, bool silent) const {
-		const Node* result =  nullptr;
+		return suffix(errs,id,silent);
+	}
+
+	const Suffix* Suffix::ref(Messages& errs, string name, bool silent) {
+		const Suffix* result =  nullptr;
+		auto found = refs.find(name);
+		if(found != refs.end()) {
+			result = found->second;
+		} else {
+			if(!silent) {
+				ostringstream err;
+				err << "There is no suffix with reference " << name;
+				errs << Message(range,err.str());
+			}
+		}
+		return result;
+	}
+
+	const Suffix* Suffix::suffix(Messages& errs, size_t id, bool silent) {
+		const Suffix* result =  nullptr;
 		auto found = nodes.find(id);
 		if(found != nodes.end()) {
 			result = &(found->second);

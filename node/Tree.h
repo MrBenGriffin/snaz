@@ -25,7 +25,6 @@ namespace node {
 		const Node *_root;
 
 	public:
-
 		map<size_t, const Node *> twNodes;
 		unordered_map<string, const Node *> refNodes;
 		size_t depth;            // maximum depth of tree.

@@ -58,8 +58,8 @@ private:
 	void build(Support::Messages&,Support::Db::Connection&);
 	void global(Support::Messages&,Support::Db::Connection&);
 	void langs(Support::Messages&,Support::Db::Connection&);
-	void techs(Support::Messages&,Support::Db::Connection&);
-	void files(Support::Messages&,Support::Db::Connection&);
+	void techs(Support::Messages&,Support::Db::Connection&,size_t);
+	void files(Support::Messages&,Support::Db::Connection&,size_t,size_t);
 
 
 	static void releaseLock(int);
