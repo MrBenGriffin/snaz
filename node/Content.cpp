@@ -109,7 +109,7 @@ namespace node {
 			nodes.find(editorial.root()->id())->second.weigh();
 		}
 		if (times.show()) { times.use(errs, "Content Tree"); }
-		editorial.root()->str(cout);
+//		editorial.root()->str(cout);
 	}
 
 	void Content::updateBirthAndDeath(Messages& errs, Connection& sql, size_t langId,buildKind) {
