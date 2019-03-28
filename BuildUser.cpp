@@ -33,7 +33,47 @@ bool BuildUser::mayTeamEdit(size_t team) {
 
 UserMay::UserMay() : edit(false),draft(false),final(false),draftDown(false),finalDown(false) {}
 
-bool BuildUser::checkTeam(size_t team,buildType what) {
+
+bool BuildUser::check(buildType what) {
+	buildArea area = buildArea(Build::b().current());
+	switch (area) {
+		case Final: {
+			switch (what) {
+				case Branch:
+					return (may.final && may.finalDown);
+				case Descendants:
+					return (may.finalDown);
+				case Single:
+					return (may.final);
+				case Full:
+					return (may.final);
+			}
+		}
+			break;
+		case Draft: {
+			switch (what) {
+				case Branch:
+					return (may.draft && may.draftDown);
+				case Descendants:
+					return (may.draftDown);
+				case Single:
+					return (may.draft);
+				case Full:
+					return (may.draft);
+			}
+		}
+			break;
+		case Editorial: {
+			return may.edit;
+		}
+			break;
+		default:
+			return false;
+	}
+}
+
+
+bool BuildUser::check(size_t team,buildType what) {
 	auto t = teams.find(team);
 	if(t == teams.end()) {
 		return false;
@@ -47,8 +87,10 @@ bool BuildUser::checkTeam(size_t team,buildType what) {
 						return (item.final && item.finalDown);
 					case Descendants:
 						return (item.finalDown);
-					case Singles:
+					case Single:
 						return (item.final);
+					case Full:
+						return (may.final);
 				}
 			} break;
 			case Draft: {
@@ -57,8 +99,10 @@ bool BuildUser::checkTeam(size_t team,buildType what) {
 						return (item.draft && item.draftDown);
 					case Descendants:
 						return (item.draftDown);
-					case Singles:
+					case Single:
 						return (item.draft);
+					case Full:
+						return (may.draft);
 				}
 			} break;
 			case Editorial: {

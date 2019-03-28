@@ -254,7 +254,7 @@ namespace Support {
 					case 'O': {
 						deque<size_t> nodes;
 						tolist(nodes, parameter.substr(2));
-						build.setNodes(Singles,nodes);
+						build.setNodes(Single,nodes);
 					} break;
 					case 'p':
 						node::Locator::showPaths = true;

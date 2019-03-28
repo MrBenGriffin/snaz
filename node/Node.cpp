@@ -129,7 +129,7 @@ namespace node {
 
 	void Node::str(ostream& o) const {
 		std::setfill('-');
-		o << std::setw(6+ _tier) << " tier:" << _tier << " weight:" << _weight << " tw:" << _tw  << " ref:" << _ref << endl;
+		o << std::setw(6+ _tier) << " tier:" << _tier << " weight:" << _weight << " tw:" << _tw  << " id:" << _id << " ref:" << _ref << endl;
 		for (auto& i : children) {
 			i->str(o);
 		}

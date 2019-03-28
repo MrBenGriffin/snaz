@@ -48,7 +48,8 @@ namespace mt {
 		static std::string expand(Messages&,std::string&,std::string); //syntactic sugar.
 		static std::ostream& visit(const Token&, std::ostream&);
 		static std::ostream& visit(const mtext&, std::ostream&);
-		static void expand(const mtext&,Messages&,std::ostream&,mstack&);
+
+		static void expand(const mtext&,Messages&,std::ostream&,mstack& = empty_stack);
 		static void expand(const mtext&,Messages&,mtext&,mstack& = empty_stack);
 		static void inject(const mtext&,Messages&,mtext&,mstack&);
 		static void subs(const mtext&,mtext&,std::vector<std::string>&,const std::string&);

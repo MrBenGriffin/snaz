@@ -23,9 +23,9 @@
 #include "support/db/Query.h"
 
 #include "content/Template.h"
+#include "content/Layout.h"
 
 #include "Build.h"
-#include "Content.h"
 
 namespace node {
 	using namespace std;
@@ -153,7 +153,6 @@ namespace node {
 			return editorial.root();
 		}
 	}
-
 	bool   Content::get(Messages& errs,boolValue field) const {
 		return false;
 	};
@@ -216,11 +215,15 @@ namespace node {
 		} else {
 			if(!silent) {
 				ostringstream err;
-				err << "There is no editorial node with id " << id;
+				err << "There is no editorial node available with id " << id;
 				errs << Message(range,err.str());
 			}
 		}
 		return result;
+	}
+
+	const Content* Content::root() {
+		return dynamic_cast<const Content*>(editorial.root());
 	}
 
 	const Node* Content::node(Messages& errs, size_t id, bool silent) const {
@@ -228,167 +231,107 @@ namespace node {
 	}
 
 //-------------------------------------------------------------------
-// load template list for the (content) node
-// It should probably be part of nodeval
-	void Content::doTemplates(Messages &errs) {
-		Build build = Build::b();
-		if (errs.verbosity() > 6) errs << Message(info, "Loading template list for node " + idStr);
-		Env &env = Env::e();
-		if (_id != 0) {  //don't do anything for root
-			vector<size_t> templateids;
-			if (errs.verbosity() > 6) {
-				ostringstream message;
-				message << "Node " << idStr << " uses layout " << get(errs,layout);
-				errs << Message(info, message.str());
-			}
-////			auto nmi = layoutList.find(get(errs,layout));
-////			if (nmi != layoutList.end()) {
-////				templateids = nmi->second; // My order
-//			} else {
-//				ostringstream text;
-//				text << "Found a Layout " << get(errs,layout) << " at Node " + idStr + " for Technology " << build.tech()
-//					 << " with a null templatelist.";
-//				errs << Message(error, text.str());
-//				return;
-//			}
-			if (errs.verbosity() > 6) {
-				size_t tids = templateids.size();
-				ostringstream text;
-				text << "Node " << idStr << ", Layout " << get(errs,layout) << " has a template list with " << (size_t) tids
-					 << " template(s).";
-				errs << Message(info, text.str());
-			}
-//			if (!templateids.empty()) {    // template list not defined //
-//				// get template list and count number of templates in list //
-//				tplates = templateids;
-//				filenames.resize(templateids.size(), "");     //Source filename (no suffix anymore)
-//				suffixes.resize(templateids.size(), "");     //
-//				ffilename.resize(templateids.size(), "");    //Makes space for the filenames & ffilenames.
-//				if (errs.verbosity() > 6) {
-//					ostringstream text;
-//					text << "Node " + idStr + " record has been resized for " << templateids.size() << " templates.";
-//					errs << Message(info, text.str());
-//				}
-//				NodeFilename *nfilename = NodeFilename::createInstance();
-//				if (errs.verbosity() > 6) {
-//					errs << Message(info, "Node " + idStr + " had it's filenaming instance created.");
-//					if (this == _tree->root()) {
-//						errs << Message(info, "Node " + idStr + " is the root content node.");
-//					} else {
-//						ostringstream text;
-//						text << "Node " << idStr << " is NOT the root content node. The root content node id is:"
-//							 << _tree->root()->id();
-//						errs << Message(info, text.str());
-//					}
-//				}
-//				if (this == _tree->root()) {
-//					ostringstream text;
-//					text << "Node id: " + idStr + ", basefilename: " << baseFileName << ", rootfilename: " << rootFilename;
-//					errs << Message(info, text.str());
-//					baseFileName = rootFilename; //Set basefilename
-//					errs << Message(info, "basefilename: " + baseFileName);
-//				}
-//				nfilename->set(this);
-//				string thisbasename;
-//				nfilename->getBaseName(thisbasename);
-//				if (errs.verbosity() > 6)
-//					errs << Message(info, "Node " + idStr + " Basename is set to:" + thisbasename);
-//				baseFileName = thisbasename;
-//				if (errs.verbosity() > 6) errs << Message(info, "Node " + idStr + " About to add the pages. ");
-//				for (size_t i = 0; i < templateids.size(); i++) {
-//					addpage(errs, nfilename);        //<--- We are adding the pages here..
-//				}
-//				if (errs.verbosity() > 6) errs << Message(info, "Node " + idStr + " Finished adding pages. ");
-//				delete nfilename;
-//			}
+// All builds starts here, and then any single node build goes to compose.
+	void Content::generate(Messages& errs,buildType build,buildKind kind,size_t langID,size_t techID) const {
+		Build &core = Build::b();
+//		ostringstream msg;
+//		msg << string(build) << ": " << _id << ";" << _tw << ";" << _ref;
+//		errs << Message(info,msg.str());
+//		static unordered_map<size_t,Content>  nodes;
+		switch(build) {
+			case Full:
+				if(core.user.check(build) && this == root()) {
+					generate(errs,Branch,kind,langID,techID);
+				} else {
+					errs << Message(security,"Not root or not allowed to full build.");
+				} break;
+			case Branch:
+				if(core.user.check(_team,build)) {
+					nodes[_id].compose(errs,kind,langID,techID);
+					generate(errs,Descendants,kind,langID,techID);
+				} else {
+					errs << Message(security,"Not allowed to branch build here.");
+				} break;
+			case Descendants:
+				if(core.user.check(_team,build)) {
+					for(auto* node : children) {
+						const Content* child = dynamic_cast<const Content *>(node);
+						if(child != nullptr && child->layoutPtr != nullptr && child->layoutPtr->buildPoint) {
+							child->generate(errs,Branch,kind,langID,techID);
+						}
+					}
+				} else {
+					errs << Message(security,"Not allowed to descendant build here.");
+				} break;
+			case Single:
+				if(core.user.check(_team,build)) {
+					nodes[_id].compose(errs,kind,langID,techID);
+				} else {
+					errs << Message(security,"Not allowed to build this node.");
+				} break;
 		}
 	}
 
-	void Content::addpage(Messages &errs, NodeFilename *filename) {
-		ostringstream text;
-		Build &build = Build::b();
-		if (this == _tree->root()) {
-			return;
-		} else {
-			size_t current_page = get(errs,page); //current page we are creating..
-			if (errs.verbosity() > 6) {
-				text << "Node " << idStr << " currently on page " << current_page << " page of " << get(errs,templates);
-				errs << Message(info, text.str());
+	void Content::compose(Messages& errs,buildKind kind,size_t langID,size_t techID) {
+		// To get here, this node generates files
+		ostringstream msg; msg << "Composing " << _ref;
+		errs << Message(info,msg.str());
+		content::Layout::layouts[layoutPtr->id].compose(errs,*this,kind,langID,techID);
+	}
+	/**
+			auto nmi = templateList.find(tid);
+			if (nmi != templateList.end()) {
+				curtemplate = nmi->second.second; // My order
+				nodeStack.push_back(this); //tid
+				ostringstream tname;
+				tname << "Suffix " << tid;
+				ostringstream result;
+				string suff = mt::Driver::expand(errs, curtemplate.suffix, tname.str());
+				nodeStack.pop_back();
+				suffixes[current_page]=suff;
+				if (errs.verbosity() > 6) {
+					text << "Node " << idStr << " page " << current_page << " has suffix " << suff;
+					errs << Message(info, text.str());
+					text.str("");
+				}
+				//We need to find the ancestor suffix so that any links we create can deal with the post-processed versions!
+				const Node* x = Suffix::suffixes.byRef(errs, suff);
+				if (x == nullptr) {
+					string fname = filenames[current_page];
+					filename->getFullName(fname, suff);
+					ffilename[current_page] = fname;
+				} else {
+//						const Node *byPath(Messages &,Locator&, string::const_iterator, string::const_iterator) const;
+//						Node *vx = x->nodebypath(errs, Suffix::finalSuffix.begin(), Suffix::finalSuffix.end());
+					Locator suffixLocator(x); string suffixTop(Suffix::finalSuffix);
+					const Node *vx = Suffix::suffixes.byPath(errs,suffixLocator,suffixTop.begin(), suffixTop.end());
+					if (vx == nullptr) {
+						errs << Message(error, "Error of some sort in suffix table");
+					} else {
+						suff = vx->get(errs,fileSuffix);
+					}
+					string fname = filenames[current_page];
+					filename->getFullName(fname, suff);    //This now works!  Amazing.
+					if (errs.verbosity() > 6) {
+						text << "Node " + idStr + " page " << current_page << " is set with filename " << fname;
+						errs << Message(info, text.str());
+						text.str("");
+					}
+					ffilename[current_page] = fname;
+				}
+				current_page++;
+			} else {
+				Env env = Env::e();
+				text << "Template " << tid << " at Node " << id() << ",Technology " << build.tech()
+					 << " referenced but does not exist.";
+				errs << Message(error, text.str());
 				text.str("");
 			}
-			string emptyname;
 
-			if (current_page >= get(errs,templates)) {
-				text << " Attempt to create pages for too few templates; " << current_page << " requested; "
-					 << (size_t) get(errs,templates) << " defined. Will leave it empty";
-				errs << Message(warn, text.str());
-				return;
-			}
-			filename->setPageName(baseFileName, current_page);
-//			filename->getFullName(filenames[current_page], emptyname);
-			content::Template curtemplate;
-//			size_t tid = tplates[current_page];
-//			if (errs.verbosity() > 6) {
-//				ostringstream text;
-//				text << "Node " << idStr << " page " << current_page << " has template ID " << tid;
-//				errs << Message(info, text.str());
-//				text.str("");
-//			}
-
-//			auto nmi = templateList.find(tid);
-//			if (nmi != templateList.end()) {
-//				curtemplate = nmi->second.second; // My order
-//				nodeStack.push_back(this); //tid
-//				ostringstream tname;
-//				tname << "Suffix " << tid;
-//				ostringstream result;
-//				string suff = mt::Driver::expand(errs, curtemplate.suffix, tname.str());
-//				nodeStack.pop_back();
-//				suffixes[current_page]=suff;
-//				if (errs.verbosity() > 6) {
-//					text << "Node " << idStr << " page " << current_page << " has suffix " << suff;
-//					errs << Message(info, text.str());
-//					text.str("");
-//				}
-//				//We need to find the ancestor suffix so that any links we create can deal with the post-processed versions!
-//				const Node* x = Suffix::suffixes.byRef(errs, suff);
-//				if (x == nullptr) {
-//					string fname = filenames[current_page];
-//					filename->getFullName(fname, suff);
-//					ffilename[current_page] = fname;
-//				} else {
-////						const Node *byPath(Messages &,Locator&, string::const_iterator, string::const_iterator) const;
-////						Node *vx = x->nodebypath(errs, Suffix::finalSuffix.begin(), Suffix::finalSuffix.end());
-//					Locator suffixLocator(x); string suffixTop(Suffix::finalSuffix);
-//					const Node *vx = Suffix::suffixes.byPath(errs,suffixLocator,suffixTop.begin(), suffixTop.end());
-//					if (vx == nullptr) {
-//						errs << Message(error, "Error of some sort in suffix table");
-//					} else {
-//						suff = vx->get(errs,fileSuffix);
-//					}
-//					string fname = filenames[current_page];
-//					filename->getFullName(fname, suff);    //This now works!  Amazing.
-//					if (errs.verbosity() > 6) {
-//						text << "Node " + idStr + " page " << current_page << " is set with filename " << fname;
-//						errs << Message(info, text.str());
-//						text.str("");
-//					}
-//					ffilename[current_page] = fname;
-//				}
-//				current_page++;
-//			} else {
-//				Env env = Env::e();
-//				text << "Template " << tid << " at Node " << id() << ",Technology " << build.tech()
-//					 << " referenced but does not exist.";
-//				errs << Message(error, text.str());
-//				text.str("");
-//			}
-		}
-		if (errs.verbosity() > 6) errs << Message(info, "Node " + idStr + " Finished adding page ");
-	}
-
+***/
 //-------------------------------------------------------------------
 //This is the beginning of the node build.
+/**
 	void Content::gettextoutput(Messages &errs) {
 		Env env = Env::e();
 		Build build = Build::b();
@@ -477,7 +420,7 @@ namespace node {
 //			}
 
 			//TODO:: Finish template generation!!
-/*
+
 		Macro::environ TemplateEnv = macro::topEnv();
 		if ( bk.length() > 0 ) {
 			macro::pushEnv({false,"\n","\t"}); //do not rembr, \n  = newline, tabs are tabs.
@@ -506,10 +449,10 @@ namespace node {
 			bk.clear();
 		}
 		macro::popEnv();
-*/
+
 		}
 		//TODO:: And the rest.
-/*
+
 	//-- This used to be in genfiles, but then happened once for each file, rather than one for each Node.
 	if (dbc->dbselected() && dbc->table_exists("bldnode") ) {
 		ostringstream qstr;
@@ -525,17 +468,15 @@ namespace node {
 		errs << Message(timing << Log::Ntime << " build time for node: " << linkref() );
 	}
 	if (errs.verbosity()  > 0) *Logger::log << O; //end of node.
-	*/
 	}
-
+**/
 //-----------------------------------------------------------------
 // We shall generate each file here, and then post-process it until its suffix is at A2 of the processor tree.
 // We use A2, because we are allowed multiple suffixes!
 //-----------------------------------------------------------------
+/**
 	void Content::outputtofile(size_t page, string &out) {
 		//TODO:: Finish outputtofile.
-
-		/**
 		File tmpScrp(scrDir);
 		File tmpFil1(tmpDir);
 		File tmpFil2(tmpDir);
@@ -606,39 +547,7 @@ namespace node {
 			if (bld->showFiling && !postprocessed)  errs << Message(info << " with no post-processing";
 			if (bld->showFiling) errs << Message(end;
 		}
-		 **/
 	}
-
-// -----------------------------------------------------------------------------------
-// generate basic text output for all nodes below Node n in the Node tree */
-// and 'n's direct ancestors for link generation */
-	void Content::generateOutput(Messages &errs, int level) {
-		if (level >= 0 && _parent != nullptr) {// generate output for all direct ancestors
-			Content* par = const_cast<Content*>(dynamic_cast<const Content*>(_parent));
-			par->generateOutput(errs, level + 1);
-		}
-		if (this != _tree->root()) {
-			gettextoutput(errs);
-		}
-		if (level <= 0) {    // generate output for all descendents
-			for (auto* childNode : children) {
-				Content *aChild = const_cast<Content*>(dynamic_cast<const Content *>(childNode));
-				aChild->generateOutput(errs, level - 1);
-			}
-		}
-	}
-
-// -----------------------------------------------------------------------------------
-// generate basic text output for all nodes below Node n in the Node tree */
-	void Content::generateBranch(Messages &errs, int level) {
-		if (this != _tree->root()) gettextoutput(errs);
-		if (level <= 0) {    // generate output for all descendents
-			for (auto* childNode : children) {
-				Content *aChild = const_cast<Content*>(dynamic_cast<const Content *>(childNode));
-				aChild->generateBranch(errs, level - 1);
-			}
-		}
-	}
-
+**/
 
 }

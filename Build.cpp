@@ -29,6 +29,7 @@
 #include "content/Template.h"
 #include "content/Segment.h"
 #include "content/Layout.h"
+#include "content/Editorial.h"
 
 #include "Build.h"
 #include "test.h"
@@ -138,6 +139,7 @@ void Build::global(Messages& errs,Connection& sql) {
 
 //SuffixVal::unload();
 //  macro::terminate();			//unload
+	content::Editorial::e().unload(errs,sql);
 	mt::Internal::shutdown(errs,sql,_current); //bld->savePersistance(); prunePersistance(); clearPersistance();
 //do FINAL_PROCESSING_SCRIPT stuff here if it's a full, final build..
 }
@@ -152,6 +154,7 @@ void Build::langs(Messages& errs,Connection& sql) {
 		node::Content::updateContent(errs,sql,langID,_current); //this moves the latest version into bldcontent.
 		//TODO:: Content APPROVERS.
 		node::Content().loadTree(errs,sql,langID,_current);
+		content::Editorial::e().set(errs,sql,langID,_current);
 		techs(errs,sql,langID);
 		//.....
 		if (times.show()) { times.use(errs,"Language " + langName()); }
@@ -167,9 +170,11 @@ void Build::techs(Messages& errs,Connection& sql,size_t langID) {
 		content::Layout::load(errs,sql,techID,_current);
 		node::Content().setLayouts(errs);
 		//.....
-		//TODO:: Content Proper. We now have layouts, templates, suffixes, segments -configured-
-
-		files(errs,sql,langID,techID);
+		try {
+			files(errs, sql, langID, techID);
+		} catch (...) {
+			errs << Message(fatal,"exception thrown.");
+		}
 		//.....
 		if (times.show()) { times.use(errs,"Tech " + techName()); }
 		technologies.pop_front();
@@ -177,7 +182,19 @@ void Build::techs(Messages& errs,Connection& sql,size_t langID) {
 }
 
 void  Build::files(Messages& errs,Connection& sql,size_t langID,size_t techID) {
-	//for each requestedNodes (or everything if it's a full build).
+//	node::Content::root()->str(cout);
+	if(requestedNodes.empty()) {
+		node::Content::root()->generate(errs,Full,_current,langID,techID);
+	} else {
+		for (auto t : requestedNodes) { //t.first is the buildType.
+			for(auto n : t.second ) { // t.second is the deque of node IDs for this buildtype.
+				const node::Content* node = node::Content::content(errs,n);
+				if(node != nullptr) {
+					node->generate(errs,t.first,_current,langID,techID);
+				}
+			}
+		}
+	}
 }
 
 void Build::doParse(Messages &errs, Connection&) {
@@ -283,7 +300,7 @@ void Build::setNodes(Support::buildType style,std::deque<size_t>& list) {
 }
 
 bool Build::mayDefer() {
-	return requestedNodes.size() == 1 && requestedNodes.count(Singles) == 1;
+	return requestedNodes.size() == 1 && requestedNodes.count(Single) == 1;
 }
 
 void Build::list() {

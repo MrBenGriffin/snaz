@@ -13,6 +13,7 @@ namespace Support {
 
 	void Message::str(ostream& log) const {
 		switch (ch) { //syntax
+			case security: log << "security"; break;
 			case fatal:  log << "fatal"; break;
 			case error:  log << "error"; break;
 			case syntax: log << "syntax"; break;

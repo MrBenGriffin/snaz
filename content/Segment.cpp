@@ -44,6 +44,7 @@ namespace content {
 
 		//Set Segment Maps.
 		/*
+		 * cf. new bldsegtype table proposal.
 		 Segment types (as declared in blddefs) and what happens to them.
 		 name	XML encoded, expanded
 		 SEG**	√		√

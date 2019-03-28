@@ -14,7 +14,7 @@
 namespace Support {
 	using namespace std;
 
-	enum channel { fatal, error, syntax, range, parms, warn, info, debug, usage, scope, endsc, link, trace, code, timing, even, struc };
+	enum channel { fatal, error, syntax, range, parms, warn, info, debug, security, usage, scope, endsc, link, trace, code, timing, even, struc };
 
 	// Message is a single message.
 	class Message {

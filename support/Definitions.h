@@ -36,7 +36,7 @@ namespace Support {
 	};
 
 	enum buildTypeValue {
-		Branch, Descendants, Singles
+		Full,Branch,Descendants,Single
 	};
 
 	// each build (final/draft) is made up of one or more of these, (or does everything).

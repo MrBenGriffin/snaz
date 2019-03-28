@@ -140,7 +140,6 @@ namespace mt {
 		parm.clear();
 	}
 
-
 	std::string Driver::expand(Messages& e,std::string& program,std::string name) {
 		bool advanced = Definition::test_adv(program);
 		std::istringstream code(program);

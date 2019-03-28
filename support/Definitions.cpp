@@ -45,11 +45,12 @@ namespace Support {
 	buildType::operator buildTypeValue() const { return value; }
 	buildType::operator std::string() const {
 		switch (value) {
+			case Full: return "Full";
 			case Branch: return "Branch";
 			case Descendants: return "Descendants";
-			case Singles: return "Singles";
+			case Single: return "Single";
 		}
-		return "Singles";
+		return "Full";
 	}
 
 }

@@ -11,10 +11,13 @@
 #include "node/Node.h"
 #include "node/Suffix.h"
 #include "mt/mt.h"
-#include "content/Layout.h"
 
 using namespace Support;
 using namespace Db;
+
+namespace content {
+	class Layout;
+}
 
 namespace node {
 
@@ -43,11 +46,15 @@ namespace node {
 		void addpage(Messages &, NodeFilename *);
 		void outputtofile(size_t page, string &out);
 //Generation
+
 		void gettextoutput(Messages &);
 		void generateOutput(Messages &, int);
-		void generateBranch(Messages &, int);
+
 		void reset();
 		void doTemplates(Messages &);
+
+		// Single Node Build.
+		void compose(Messages&,buildKind,size_t,size_t);
 
 	public:
 		static Tree editorial;
@@ -57,6 +64,9 @@ namespace node {
 
 		const Node* node(Messages&, size_t, bool= false) const override; //Node by id.
 		static const Content* content(Messages&, size_t, bool= false); //Content by id.
+		static const Content* root();// { return dynamic_cast<const Content*>(editorial.root()); }
+
+		void generate(Messages&,buildType,buildKind,size_t,size_t) const;
 
 		bool   get(Messages&,boolValue) const override;
 		size_t get(Messages&,uintValue) const override;
@@ -73,38 +83,6 @@ namespace node {
 		static void updateContent(Messages&, Connection&, size_t,buildKind);
 
 		const Node* current() const override;
-
-//		static idTemplateMap templateList;
-//		static idIdListMap layoutList;                //Stores a layout-id -> template-list structure
-//		static refMap layoutRefs;                     //Layout names -> ids
-//		static invRefMap layoutNames;                 //Layout ids->names
-
-//		virtual ~Content();            //deleting a Node deletes all of it's children
-//		string &getfilename(size_t);
-//		string &getsuffix(size_t);
-//		string &getffilename(size_t);
-//		size_t gettemplate(size_t);
-
-//		const string &filename(size_t)  const;   //This is the initial page filename (includes . )
-//		const string &filename(size_t) const;   //This is the full, final filename (post-processed)
-//		string &Suffix(size_t) const;        	//This is the initial page suffix.
-//		size_t Template(size_t) const;    		// list of template ID's to use
-
-//		void Suffix(size_t, string);           // Set suffix at position.
-//		void SetFfilename(size_t, string);     // Set Ffilename at position.
-//		void SetFilename(size_t, string);      // Set Filename at position.
-
-
-//		size_t filenameCount() const;
-//		size_t ffilenameCount() const;
-//		size_t suffixCount() const;
-//		size_t templateCount() const;
-//
-//		void scratch(string);            //Set scratchpad.
-//		string &scratch() const;    	//get scratchpad.
-//
-//		void basefilename(string);    	//Set basefilename.
-//		void incPageCount();    		//increment pagecount (numpages)
 
 
 	};
