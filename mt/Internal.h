@@ -11,6 +11,7 @@
 #include "mt.h"
 #include "support/Storage.h"
 #include "support/db/Connection.h"
+#include "support/db/Query.h"
 
 namespace mt {
 	class Internal {
@@ -40,7 +41,7 @@ namespace mt {
 	protected:
 		FieldContext(std::string name,size_t min,size_t max) : Internal(name,min,max) {}
 	public:
-		virtual pair<bool,string> get(const string name) const = 0;
+		virtual string get(Messages&,const string name) const = 0;
 	};
 
 	//•------------ √ Utility macros
@@ -81,17 +82,18 @@ namespace mt {
 	};
 	struct iField : public Internal {
 		static std::stack<const FieldContext*> contextStack;
-		iField() : Internal("iField",1,2) {}
+		iField() : Internal("iField",1,1) {}
 		void expand(Support::Messages&,mtext&,Instance&,mstack&);
 	};
 	struct iForSubs : public FieldContext {
 		iForSubs() : FieldContext("iForSubs",5,5) {}
-		pair<bool,string> get(const string name) const override;
+		string get(Messages& e,const string name) const override;
 		void expand(Support::Messages&,mtext&,Instance&,mstack&);
 	};
 	struct iForQuery : public FieldContext {
-		iForQuery() : FieldContext("iForQuery",2,2) {}
-		pair<bool,string> get(const string name) const override;
+		Support::Db::Query* query;
+		iForQuery() : FieldContext("iForQuery",2,2),query(nullptr) {}
+		string get(Messages& e,const string name) const override;
 		void expand(Support::Messages&,mtext&,Instance&,mstack&);
 	};
 	struct iMath : public Internal {

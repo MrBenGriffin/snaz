@@ -341,15 +341,7 @@ namespace mt {
 		if(contextStack.empty()) {
 			e << Message(error,_name + " must be used within a context such as iForSubs or iForQuery.");
 		} else {
-			const FieldContext* context = contextStack.top();
-			auto value = context->get(my.parm(1));
-			if(value.first) {
-				my.set(value.second);
-			} else { //not found, use default value.
-				if(my.count == 2) {
-					my.set(my.parm(2));
-				}
-			}
+			my.set(contextStack.top()->get(e,my.parm(1)));
 		}
 	}
 
@@ -359,21 +351,34 @@ namespace mt {
 		std::string left =  my.parm(1);
 		my.logic(false,1);
 	}
-	pair<bool,string> iForSubs::get(const string name) const {
-		return {false,""};
+	string iForSubs::get(Messages& e,const string name) const {
+		return "";
 	}
 
 	void iForQuery::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
 		if (sql != nullptr && sql->isopen()) {
-//		std::string left =  my.parm(1);
-//		my.logic(false,1);
+			if (sql->select(e,query,my.parm(1))) {
+				auto foo = query->getnumfields();
+				if(query->execute(e)) {
+					iField::contextStack.push(this);
+					while(query->nextrow()) {
+						my.expand(2);
+					}
+					iField::contextStack.pop();
+				}
+			}
+			sql->dispose(query);
 		} else {
 			e << Message(error,_name + " requires an open sql connection.");
 		}
 	}
-	pair<bool,string> iForQuery::get(const string name) const {
-		return {false,""};
+	string iForQuery::get(Messages& errs,const string name) const {
+		string result;
+		if(query != nullptr) {
+			query->readfield(errs,name,result);
+		}
+		return result;
 	}
 
 	void iMath::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {

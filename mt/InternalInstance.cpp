@@ -20,7 +20,11 @@ namespace mt {
 			if (max == INT_MAX) {
 				err << " at least " << min << " parameters.";
 			} else {
-				err << " from " << min << " to " << max << " parameters.";
+				if(min == max) {
+					err << " exactly " << min << " parameter" << ( min == 1 ? "." : "s.");
+				} else {
+					err << " from " << min << " to " << max << " parameters.";
+				}
 			}
 			e << Message(range,err.str());
 		}
@@ -37,7 +41,7 @@ namespace mt {
 	}
 
 	bool InternalInstance::boolParm(size_t i,bool _default) {
-		if(i > parms->size()) {
+		if(i > count) {
 			return _default;
 		} else {
 			std::ostringstream result;
@@ -50,7 +54,7 @@ namespace mt {
 
 	std::string InternalInstance::parm(size_t i) {
 		std::ostringstream result;
-		if(i > parms->size()) {
+		if(i > count) {
 			return "";
 		} else {
 			Driver::expand((*parms)[i - 1],*errs,result, *context);
@@ -60,14 +64,16 @@ namespace mt {
 
 	const mtext* InternalInstance::praw(size_t i) {
 		const mtext* m = nullptr;
-		if(parms->size() >= i) {
+		if(count >= i) {
 			m = &((*parms)[i - 1]);
 		}
 		return m;
 	}
 
 	void InternalInstance::expand(size_t i) {
-		Driver::expand((*parms)[i - 1],*errs, *output, *context);
+		if(count >= i) {
+			Driver::expand((*parms)[i - 1], *errs, *output, *context);
+		}
 	}
 
 	void InternalInstance::set(std::string str) {

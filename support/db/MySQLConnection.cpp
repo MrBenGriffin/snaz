@@ -129,23 +129,54 @@ namespace Support {
 				}
 			}
 
-			bool MySQLConnection::query(Messages& errs,Query*& q,std::string query_str) {
-				bool retval = false; q=nullptr;
-				if ( isopen() ) {
-//			if ( q != nullptr ) delete q; -- must be deleted by containing fn.
-					if ( db_open ) {
-						q = new MySQLQuery(s, this, connectionHandle, query_str);
-						retval = true;
-					} else {
-						errs << Message(fatal,"MySQLConnection error: select a database before creating a query!");
-						q = nullptr;
+		bool MySQLConnection::select(Messages& errs,Query*& q,std::string query_str) {
+			bool retval = false; q=nullptr;
+			if ( isopen() ) {
+				if ( db_open ) {
+					MYSQL_STMT* statement = s->mysql_stmt_init(connectionHandle);
+					if(statement != nullptr) {
+						int status = s->mysql_stmt_prepare(statement,query_str.c_str(),query_str.size());
+						if ( status != 0) {
+							string errstr = "SQL select: ";
+							errs << Message(error, errstr + s->error(connectionHandle));
+						} else {
+							if(statement->field_count > 0) {
+								q = new MySQLQuery(s, this, connectionHandle, query_str);
+								retval = true;
+							} else {
+								errs << Message(error,"Query is not a select!");
+								retval = false;
+							}
+						}
+						s->mysql_stmt_close(statement);
 					}
 				} else {
-					errs << Message(fatal,"MySQLConnection error: Open a connection before creating a query!");
+					errs << Message(error,"MySQLConnection error: select a database before creating a query!");
+				}
+			} else {
+				errs << Message(error,"MySQLConnection error: Open a connection before creating a query!");
+			}
+			return retval;
+		}
+
+		bool MySQLConnection::query(Messages& errs,Query*& q,std::string query_str) {
+			bool retval = false; q=nullptr;
+			if ( isopen() ) {
+//			if ( q != nullptr ) delete q; -- must be deleted by containing fn.
+				if ( db_open ) {
+					q = new MySQLQuery(s, this, connectionHandle, query_str);
+					retval = true;
+				} else {
+					errs << Message(fatal,"MySQLConnection error: select a database before creating a query!");
 					q = nullptr;
 				}
-				return retval;
+			} else {
+				errs << Message(fatal,"MySQLConnection error: Open a connection before creating a query!");
+				q = nullptr;
 			}
+			return retval;
+		}
+
 
 		void MySQLConnection::dispose(Query*& qry) {
 			if(qry != nullptr) {
@@ -153,6 +184,7 @@ namespace Support {
 				qry = nullptr;
 			}
 		}
+
 
 		Query* MySQLConnection::query(Messages& errs,std::string query_str) {
 				if ( isopen() ) {

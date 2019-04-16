@@ -51,6 +51,11 @@ namespace Support {
 			const char* (*character_set_name)(MYSQL *);
 			int (*set_character_set)(MYSQL *, const char *);
 			MYSQL_RES* (*store_result)(MYSQL*);
+			MYSQL_STMT* (*mysql_stmt_init)(MYSQL*);
+			my_bool* (*mysql_stmt_close)(MYSQL_STMT*);
+			int (*mysql_stmt_execute)(MYSQL_STMT*);
+			int (*mysql_stmt_prepare)(MYSQL_STMT*, const char*, unsigned long);
+
 		public:
 			explicit MySQLService(Messages&);
 			virtual ~MySQLService();

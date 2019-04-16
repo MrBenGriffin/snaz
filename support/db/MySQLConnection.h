@@ -38,11 +38,12 @@ namespace Support {
 
 			bool last_insert_id(unsigned long long &) override;
 
-			Query *query(Messages&,std::string = "") override;
+			Query* query(Messages&,std::string = "") override;
 
 			void dispose(Query*&) override;
 
 			bool query(Messages&,Query *&, std::string = "") override;
+			bool select(Messages&,Query *&, std::string = "") override;
 
 			void escape(std::string &) override;
 

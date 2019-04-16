@@ -4,14 +4,13 @@ F showDefines	0
 
 # iForQuery
 //First one needs to be run once (for persistence to store the value)
-iForQuery 002	@iForQuery(SELECT DATABASE() as db,[@iField(db)])				[duffy]
+iForQuery 001	@iForQuery(null,@iField(ref,default))								!1!error: SQL select: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'null' at line 1
+iForQuery 002	@iForQuery(SELECT DATABASE() as db,[@iField(db)])					[builder]
+iForQuery 003	@iForQuery(update bldvar set value='bim' where name='foo',[])		!1!error: Query is not a select!
 
 // iField must be used within iForSubs or iForQuery
 # iField
-//iField 001		@iField(field)												@iField(field)
-//iField 002		⌽iField(field)												⌽iField(field)
-//iField 003		@iField(fi-eld)												error
-iField 001			@iField(ref)							!1!error: iField must be used within a context such as iForSubs or iForQuery.
+iField 001		@iField(fieldname)											!1!error: iField must be used within a context such as iForSubs or iForQuery.
 
 # iForSubs
 iForSubs ini	[@iSet(foo,@iID(!simple))@iSet(bar,@iID(!simple))]				[]
