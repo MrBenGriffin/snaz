@@ -32,6 +32,8 @@ namespace node {
 
 		Tree(string);
 		void clear();			 // empty the table.
+		size_t size() { return twNodes.size(); }
+
 		const Node *current() const;
 		const Node *root() const;
 		const Node *node(Messages &, size_t, bool= false) const; //by id.

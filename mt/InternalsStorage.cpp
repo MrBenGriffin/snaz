@@ -182,6 +182,7 @@ namespace mt {
 						if (book == nullptr) {
 							book = library.touch( repo_name );
 						}
+						book->clear();
 						vector<string> keyvals;
 						Support::tolist(keyvals,basis,p2);
 						for (const auto &keyval : keyvals) {

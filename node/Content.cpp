@@ -101,7 +101,9 @@ namespace node {
 			}
 			sql.dispose(q);
 			sql.unlock(errs);
-			nodes.find(editorial.root()->id())->second.weigh();
+			if(nodes.size() > 0) {
+				nodes.find(editorial.root()->id())->second.weigh();
+			}
 		}
 		if (times.show()) { times.use(errs, "Content Tree"); }
 //		editorial.root()->str(cout);

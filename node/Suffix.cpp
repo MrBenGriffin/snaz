@@ -104,7 +104,9 @@ namespace node {
 			}
 			sql.dispose(q);
 			sql.unlock(errs);
-			nodes.find(suffixes.root()->id())->second.weigh();
+			if(nodes.size() > 0) {
+				nodes.find(suffixes.root()->id())->second.weigh();
+			}
 		}
 		if (times.show()) { times.use(errs,"Load Suffixes"); }
 	}

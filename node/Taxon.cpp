@@ -114,7 +114,9 @@ namespace node {
 			}
 			sql.dispose(q);
 			sql.unlock(errs);
-			nodes.find(taxonomies.root()->id())->second.weigh();
+			if(nodes.size() > 0) {
+				nodes.find(taxonomies.root()->id())->second.weigh();
+			}
 		}
 		loadSubs(errs, sql, language, kind);
 		if (times.show()) { times.use(errs, "Load Taxonomies"); }

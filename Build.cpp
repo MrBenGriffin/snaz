@@ -81,9 +81,25 @@ void Build::run(Messages &errs,Connection* _sql) {
 }
 void Build::tests(Messages &errs,Connection& sql) {
 	mt::Definition::load(errs,sql,_current); // Set the internals.
+	user.load(errs,sql);
+	loadLanguages(errs,sql);
+	loadTechs(errs,sql);
+
+	node::Suffix().loadTree(errs,sql,0, _current);
+	content::Template::load(errs,sql,_current);
+	content::Segment::load(errs,sql,_current);
+	node::Taxon().loadTree(errs,sql,lang(), _current);
+	node::Content().loadTree(errs,sql,lang(),_current);
+	content::Editorial::e().set(errs,sql,lang(),_current);
+	content::Layout::load(errs,sql,tech(),_current);
+	node::Content().setLayouts(errs);
+
 	testing::group tests(errs,"tests/");        	 // Set the working directory from the Run|Edit Configurations... menu.
 	tests.title(std::cout, "Main");
 	tests.load(std::cout,  "main", false);   // Boolean turns on/off success reports.
+
+	content::Editorial::e().unload(errs,sql);
+
 	mt::Definition::shutdown(errs,sql,_current); //bld->savePersistance(); prunePersistance(); clearPersistance();
 }
 void Build::build(Messages &errs,Connection& sql) {

@@ -5,6 +5,7 @@
 !	utility/iExpr
 !	utility/iFile
 !	utility/iForIndex
+!	utility/iForQuery
 !	utility/iKV
 !	utility/iMath
 !	utility/iNull

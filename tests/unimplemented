@@ -1,7 +1,6 @@
 
 # Unimplemented Utility
 iForSubs				@iForSubs(1,2,3,4,5)					!1!error: iForSubs is not yet implemented.
-iForQuery				@iForQuery(1,2)							!1!error: iForQuery is not yet implemented.
 
 # Unimplemented Storage
 iSetCache				@iSetCache(1,2)							!1!fatal: iSetCache is not yet implemented. It requires Node support.
