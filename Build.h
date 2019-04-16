@@ -55,6 +55,7 @@ private:
 	bool setLock(Support::Messages&,Support::Db::Connection&);
 	void doParse(Support::Messages&,Support::Db::Connection&);
 
+	void tests(Support::Messages&,Support::Db::Connection&);
 	void build(Support::Messages&,Support::Db::Connection&);
 	void global(Support::Messages&,Support::Db::Connection&);
 	void langs(Support::Messages&,Support::Db::Connection&);
@@ -87,7 +88,6 @@ public:
 	bool mayDefer();
 	void list(); //for checking stuff only.
 	void close(Support::Messages&);
-
 
 private:
 	Support::buildKind _current;	//one of Final/Draft/Test/Parse

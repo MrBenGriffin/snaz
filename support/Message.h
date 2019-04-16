@@ -43,6 +43,7 @@ namespace Support {
 
 		Messages();
 		bool marked() const;
+		void reset();
 		bool suppressed() const;
 		void suppress(bool=false);
 		void prefix(Message);

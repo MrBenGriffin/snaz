@@ -26,18 +26,19 @@ namespace mt {
     Storage Internal::storage;
     Library Internal::library;
     LStore Internal::lStore;
+	Db::Connection* Internal::sql;
 
-
-	void Internal::startup(Messages& log,Db::Connection& sql,buildKind kind) {
+	void Internal::startup(Messages& log,Db::Connection& _sql,buildKind kind) {
 		Timing& times = Timing::t();
+		sql = & _sql;
 		if (times.show()) { times.set("Load Site Storage"); }
-		storage.load(log,sql,kind);
+		storage.load(log,_sql,kind);
 		if (times.show()) { times.use(log,"Load Site Storage"); }
 	}
+
 	void Internal::shutdown(Messages& log,Db::Connection& sql,buildKind kind) {
 		storage.save(log,sql,kind);
 	}
-
 
 	plist Internal::toParms(string basis,string cutter,string sort) {
 		vector<string> list;

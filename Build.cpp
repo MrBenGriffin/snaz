@@ -38,7 +38,6 @@ using namespace std;
 using namespace Support;
 using namespace Support::Db;
 
-
 Build& Build::b() {
 	static Build singleton;
 	return singleton;
@@ -69,9 +68,7 @@ void Build::run(Messages &errs,Connection* _sql) {
 	errs << Message(info,str.str());
 	switch(_current) {
 		case test: {
-			testing::group tests("tests/");        	// Set the working directory from the Run|Edit Configurations... menu.
-			tests.title(std::cout, "Main");
-			tests.load(std::cout,  "main", false);   // Boolean turns on/off success reports.
+			tests(errs,*sql);
 		} break;
 		case parse: {
 			doParse(errs,*sql);
@@ -82,7 +79,13 @@ void Build::run(Messages &errs,Connection* _sql) {
 		} break;
 	}
 }
-
+void Build::tests(Messages &errs,Connection& sql) {
+	mt::Definition::load(errs,sql,_current); // Set the internals.
+	testing::group tests(errs,"tests/");        	 // Set the working directory from the Run|Edit Configurations... menu.
+	tests.title(std::cout, "Main");
+	tests.load(std::cout,  "main", false);   // Boolean turns on/off success reports.
+	mt::Definition::shutdown(errs,sql,_current); //bld->savePersistance(); prunePersistance(); clearPersistance();
+}
 void Build::build(Messages &errs,Connection& sql) {
 	errs << Message(info,"Loading Builder Configuration");
 	user.load(errs,sql);
@@ -118,8 +121,8 @@ void Build::build(Messages &errs,Connection& sql) {
 
 void Build::global(Messages& errs,Connection& sql) {
 	Env& env = Env::e();
-	env.basedir(Scripts).makeDir(errs);
 	mt::Definition::load(errs,sql,_current); // Set the internals.
+	env.basedir(Scripts).makeDir(errs);
 	node::Suffix().loadTree(errs,sql,0, _current);
 	content::Template::load(errs,sql,_current);
 	content::Segment::load(errs,sql,_current);
@@ -140,7 +143,7 @@ void Build::global(Messages& errs,Connection& sql) {
 //SuffixVal::unload();
 //  macro::terminate();			//unload
 	content::Editorial::e().unload(errs,sql);
-	mt::Internal::shutdown(errs,sql,_current); //bld->savePersistance(); prunePersistance(); clearPersistance();
+	mt::Definition::shutdown(errs,sql,_current); //bld->savePersistance(); prunePersistance(); clearPersistance();
 //do FINAL_PROCESSING_SCRIPT stuff here if it's a full, final build..
 }
 

@@ -18,14 +18,9 @@ using namespace std;
 
 namespace testing {
 
-	struct result {
-	public:
-		string name;
-		ostringstream out;
-		result(string s) : name(s) {}
-	};
-
-	group::group(string b) : base(b) {}
+	group::group(Messages& msg,string b) : base(b) {
+		msgs = &msg;
+	}
 
 	void group::title(ostream& o,string title,int type) {
 		string head; size_t length;
@@ -131,7 +126,7 @@ namespace testing {
 						getline(infile, name);
 						name.erase(name.find_last_not_of(" \t'\"")+1);
 						title(o,name,1);
-						testing::group insert(base);
+						testing::group insert(*msgs,base);
 						insert.load(o,name,showGood);
 					} break;
 
@@ -165,8 +160,8 @@ namespace testing {
 						//Parse		code    expected
 						//P			2		1
 						string code,pcode,expected;
-						Support::Messages errs;
 						unsigned define;
+						msgs->reset();
 						infile >> ws >> define  >> ws;
 						do getline(infile, code ,'\t'); while (!infile.eof() && code.empty());
 						getline(infile, expected);
@@ -175,21 +170,21 @@ namespace testing {
 						wss(pcode,false);
 						bool advanced = mt::Definition::test_adv(code);
 						std::istringstream cStream(code);
-						mt::Driver driver(errs,cStream,advanced);
-						result expansion(name);
+						mt::Driver driver(*msgs,cStream,advanced);
+						ostringstream expansion;
 						if(define) {
-							mt::Definition macro(errs,name,pcode,0,-1,false,false,false);
-							macro.visit(expansion.out);
+							mt::Definition macro(*msgs,name,pcode,0,-1,false,false,false);
+							macro.visit(expansion);
 						} else {
-							mt::mtext structure = driver.parse(errs,false); 	//bool advanced, bool strip
-							mt::Driver::visit(structure,expansion.out);
+							mt::mtext structure = driver.parse(*msgs,false); 	//bool advanced, bool strip
+							mt::Driver::visit(structure,expansion);
 						}
-						if(errs.marked()) {
+						if(msgs->marked()) {
 							o << lred << "Parse Errors" << endl;
-							errs.str(o);
+							msgs->str(o);
 							o << norm << endl;
 						}
-						string visited=expansion.out.str();
+						string visited=expansion.str();
 						wss(pcode,true);
 						if(visited == expected) {
 							if (showGood) {
@@ -206,9 +201,9 @@ namespace testing {
 						//U	a	0	1	11	[%1]
 						//U	b	0	1	11	⌽a(⍟1)
 						//U	macroname	1	4	11 expansion (11 = strip,pstrip,preParse)
-						Support::Messages errs;
 						string expansion,bools;
 						signed long min,max;
+						msgs->reset();
 						infile >> ws;
 						getline(infile,name,'\t');
 						infile >> ws >> min >> max >> ws;
@@ -218,12 +213,12 @@ namespace testing {
 						}
 						getline(infile,expansion);
 						wss(expansion,false);
-						mt::Definition macro(errs,name,expansion,min,max,bools[0]=='1',bools[1]=='1',bools[2]=='1');
-						if(!errs.marked()) {
+						mt::Definition macro(*msgs,name,expansion,min,max,bools[0]=='1',bools[1]=='1',bools[2]=='1');
+						if(!msgs->marked()) {
 							mt::Definition::add(macro);
 						} else {
 							o << lred << "Definition Parse Error while defining " << name << endl;
-							errs.str(o);
+							msgs->str(o);
 							o << norm << endl;
 						}
 						if(showDefines) {
@@ -266,37 +261,36 @@ namespace testing {
 							}
 						}
 
-						Support::Messages errs;
+						msgs->reset();
 						pprogram = program;
 						wss(pprogram,false);
 						std::istringstream code(pprogram);
 						bool advanced = mt::Definition::test_adv(pprogram);
-						mt::Driver driver(errs,code,advanced);
-						mt::mtext structure = driver.parse(errs,false); //bool advanced, bool strip
+						mt::Driver driver(*msgs,code,advanced);
+						mt::mtext structure = driver.parse(*msgs,false); //bool advanced, bool strip
 						pexpected = expected;
 						wss(pexpected,false);
-						result expansion(name);
-						driver.expand(expansion.out,errs,name);
+						ostringstream expansion;
+						driver.expand(expansion,*msgs,name);
 						if(!error_test) {
 							bool testPassed = false;
 							if(regex_test) {
 								Support::Messages discard;
 								if (Support::Regex::available(discard)) {
-									testPassed = Support::Regex::fullMatch(discard, pexpected,
-																		expansion.out.str()); //match entire string using pcre
+									testPassed = Support::Regex::fullMatch(discard, pexpected,expansion.str()); //match entire string using pcre
 									if (discard.marked()) {
 										o << " E Error in Test Regex:" << expected << endl;
 										o << lred << "Regex Errors: ";
-										errs.str(o);
+										msgs->str(o);
 										o << norm << endl;
 									}
 								} else {
 									o << "E regex not available for test" << endl;
 								}
 							} else {
-								testPassed = expansion.out.str() == pexpected;
+								testPassed = expansion.str() == pexpected;
 							}
-							if(testPassed && !errs.marked() ) {
+							if(testPassed && !msgs->marked() ) {
 								if (showGood) {
 									title(o,name,2);
 								}
@@ -304,7 +298,7 @@ namespace testing {
 								title(o,name,3);
 								if(!testPassed) {
 									ostringstream pstuff;
-									string parsed,returned = expansion.out.str();
+									string parsed,returned = expansion.str();
 									mt::Driver::visit(structure,pstuff);
 									parsed = pstuff.str();
 									wss(returned,true); wss(parsed,true);
@@ -314,15 +308,15 @@ namespace testing {
 									o << " - returned:" << returned << endl;
 									o << " - expected:" << expected << norm << endl;
 								}
-								if(errs.marked()) {
+								if(msgs->marked()) {
 									o << lred << "Errors: ";
-									errs.str(o);
+									msgs->str(o);
 									o << norm << endl;
 								}
 							}
 						} else {
 							bool matched = false;
-							string message = errs.line(error_index);
+							string message = msgs->line(error_index);
 							if(regex_test) {
 								Support::Messages discard;
 								if(Support::Regex::available(discard)) {
@@ -348,9 +342,9 @@ namespace testing {
 								o << " E program:"  << program << endl;
 								o << " E returned:\"" << message <<  "\" on line:" << error_index  << endl;
 								o << " E expected:\"" << expected << "\"" << endl;
-								if(errs.marked()) {
+								if(msgs->marked()) {
 									o << lred << "Errors: ";
-									errs.str(o);
+									msgs->str(o);
 									o << norm << endl;
 								}
 							}

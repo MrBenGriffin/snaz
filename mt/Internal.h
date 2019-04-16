@@ -5,6 +5,7 @@
 #ifndef MACROTEXT_INTERNALS_H
 #define MACROTEXT_INTERNALS_H
 
+#include <stack>
 #include <climits>
 #include "Definition.h"
 #include "mt.h"
@@ -25,6 +26,7 @@ namespace mt {
 		static Storage storage;
 		static Library library;
 		static LStore  lStore;    //'list store'  string:multiset(string)
+		static Db::Connection* sql;
 
 		std::string _name;
 		Internal(std::string name,size_t min,size_t max) : _name(std::move(name)),minParms(min),maxParms(max) {}
@@ -34,7 +36,14 @@ namespace mt {
 		void doTrace(Support::Messages&,mstack&);
 
 	};
-//•------------ √ Utility macros
+	class FieldContext: public Internal {
+	protected:
+		FieldContext(std::string name,size_t min,size_t max) : Internal(name,min,max) {}
+	public:
+		virtual pair<bool,string> get(const string name) const = 0;
+	};
+
+	//•------------ √ Utility macros
 	struct iEq : public Internal {
 		iEq() : Internal("iEq",0,4) {}
 		void expand(Support::Messages&,mtext&,Instance&,mstack&);
@@ -71,15 +80,18 @@ namespace mt {
 		void expand(Support::Messages&,mtext&,Instance&,mstack&);
 	};
 	struct iField : public Internal {
-		iField() : Internal("iField",1,1) {}
+		static std::stack<const FieldContext*> contextStack;
+		iField() : Internal("iField",1,2) {}
 		void expand(Support::Messages&,mtext&,Instance&,mstack&);
 	};
-	struct iForSubs : public Internal {
-		iForSubs() : Internal("iForSubs",5,5) {}
+	struct iForSubs : public FieldContext {
+		iForSubs() : FieldContext("iForSubs",5,5) {}
+		pair<bool,string> get(const string name) const override;
 		void expand(Support::Messages&,mtext&,Instance&,mstack&);
 	};
-	struct iForQuery : public Internal {
-		iForQuery() : Internal("iForQuery",2,2) {}
+	struct iForQuery : public FieldContext {
+		iForQuery() : FieldContext("iForQuery",2,2) {}
+		pair<bool,string> get(const string name) const override;
 		void expand(Support::Messages&,mtext&,Instance&,mstack&);
 	};
 	struct iMath : public Internal {

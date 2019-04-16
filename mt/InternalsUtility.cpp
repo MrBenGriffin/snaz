@@ -334,24 +334,46 @@ namespace mt {
 			e << Message(error,"File "+ file.output(true) +" is not in a place to be found.");
 		}
 	}
+
+	std::stack<const FieldContext*> iField::contextStack;
 	void iField::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
-		e << Message(error,_name + " is not yet implemented.");
-		std::string left =  my.parm(1);
-		my.logic(false,1);
+		if(contextStack.empty()) {
+			e << Message(error,_name + " must be used within a context such as iForSubs or iForQuery.");
+		} else {
+			const FieldContext* context = contextStack.top();
+			auto value = context->get(my.parm(1));
+			if(value.first) {
+				my.set(value.second);
+			} else { //not found, use default value.
+				if(my.count == 2) {
+					my.set(my.parm(2));
+				}
+			}
+		}
 	}
+
 	void iForSubs::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
 		e << Message(error,_name + " is not yet implemented.");
 		std::string left =  my.parm(1);
 		my.logic(false,1);
 	}
+	pair<bool,string> iForSubs::get(const string name) const {
+		return {false,""};
+	}
 
 	void iForQuery::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
-		e << Message(error,_name + " is not yet implemented.");
-		std::string left =  my.parm(1);
-		my.logic(false,1);
+		if (sql != nullptr && sql->isopen()) {
+//		std::string left =  my.parm(1);
+//		my.logic(false,1);
+		} else {
+			e << Message(error,_name + " requires an open sql connection.");
+		}
+	}
+	pair<bool,string> iForQuery::get(const string name) const {
+		return {false,""};
 	}
 
 	void iMath::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
@@ -491,6 +513,7 @@ namespace mt {
 	}
 
 	void iNull::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
+		// Badly named, this evaluates contents but does not output text.
 		InternalInstance my(this,e,o,instance,context);
 		for (size_t i=1; i <= my.count; i++) {
 			auto unused = my.parm(i);

@@ -8,8 +8,11 @@
 #include <string>
 #include <vector>
 
+#include "support/Message.h"
+using namespace std;
+using namespace Support;
+
 namespace testing {
-    using namespace std;
 
     using test = tuple<string,string,string>;
 
@@ -44,7 +47,8 @@ namespace testing {
         vector<test> tests;
 
     public:
-        group(string);
+        Messages* msgs;
+        group(Messages&,string);
         void title(ostream&,string,int = 0);
         void load(ostream&,string,bool = false,bool = false);
     };

@@ -1,3 +1,6 @@
 
-iNull 001		[@iNull(A,X)]													[]
-iNull 002		[@iNull(@iEval({|@iSet(foo,bar)@b=rok()|}))@iGet(foo)]			!1!syntax: Bad input character @
+// Badly named, this evaluates contents but does not output text.
+
+iNull 001	[@iNull(A,X)]													[]
+iNull 002	[@iNull(@iEval({|@iSet(foo,bar)@b=rok()|}))@iGet(foo)]			[bar]
+iNull 003	[@iNull(YEP@iSet(foo,bar)B)@iGet(foo)]							[bar]

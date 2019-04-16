@@ -2,19 +2,20 @@
 F showPassed	1
 F showDefines	0
 
-# iField
-iField 001		@iField(field)													@iField(field)
-iField 002		⌽iField(field)													⌽iField(field)
-iField 003		@iField(fi-eld)													error
-
 # iForQuery
 //First one needs to be run once (for persistence to store the value)
 iForQuery 002	@iForQuery(SELECT DATABASE() as db,[@iField(db)])				[duffy]
 
+// iField must be used within iForSubs or iForQuery
+# iField
+//iField 001		@iField(field)												@iField(field)
+//iField 002		⌽iField(field)												⌽iField(field)
+//iField 003		@iField(fi-eld)												error
+iField 001			@iField(ref)							!1!error: iField must be used within a context such as iForSubs or iForQuery.
+
 # iForSubs
 iForSubs ini	[@iSet(foo,@iID(!simple))@iSet(bar,@iID(!simple))]				[]
 iForSubs 001	@iForSubs(bldvar,@iID(!simple),value,name,[@iField(name)])		[bar][foo]
-
 
 F showDefines	0
 F showPassed	0

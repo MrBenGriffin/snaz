@@ -61,6 +61,12 @@ namespace Support {
 		return _suppressed;
 	}
 
+	void Messages::reset() {
+		list.clear();
+		_suppressed = false;
+		_marked = false;
+	}
+
 	string Messages::line(size_t line_number) const {
 		if ((line_number > 0) && (line_number <= list.size())) {
 			ostringstream re;
