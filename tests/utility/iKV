@@ -34,29 +34,3 @@ iKVTech 01	@iKV(T~x,set,a,bo)@iKV(T~x,get,a)											bo
 b07 entity	@ent(nbsp)																#x00A0
 //F showPassed	1
 
-# iList New tests
-//fn: add,uadd,del,pop,has,count,size,nodes[:max],for[:max]
-//    √   √    √   √       √     √    X           √
-
-iListIni1	[@iSet(ZOO,dog;dog;cat;giraffe;thing;dog;dinosaur;cat;fry;thing;paper;dog;dog;cat;zebra;giraffe;thing;dog;cat;bar;bar;foo;dog;cat;thing)]		[]
-# iList: add  uadd
-iListIni2	[@iForIndex(;,@iGet(ZOO),*,,,@iList(U,uadd,*)@iList(Z,add,*))]				[]
-# iList: size
-iList001	@iList(U,size):@iList(Z,size)												10:25
-# iList: for
-iList002	[@iList(U,for)]																[]
-iList003	[@iList(U,for,*)]															[]
-iList004	[@iList(U,for,*,$)]															[]
-iList005	@iList(U,for,*,,[*])														[bar][cat][dinosaur][dog][foo][fry][giraffe][paper][thing][zebra]
-iList006	@iList(U,for,*,,[*:@iList(Z,count,*)])										[bar:2][cat:5][dinosaur:1][dog:7][foo:1][fry:1][giraffe:2][paper:1][thing:4][zebra:1]
-# iList: pop
-iList007	[@iList(Z,pop,thing)@iList(Z,count,thing)]									[3]
-# iList: del
-iList008	[@iList(Z,del,thing)@iList(Z,count,thing)]									[0]
-# iList: has
-iList009	@iList(Z,has,thing,True,False)												False
-iList010	@iList(Z,has,dog,True,False)												True
-# iList: exists
-iList011	@iList(Z,exists,True,False)													True
-iList012	@iList(P,exists,True,False)													False
-

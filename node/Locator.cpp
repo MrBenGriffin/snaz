@@ -13,8 +13,11 @@ using namespace Support;
 namespace node {
 
 	bool Locator::showPaths = false;
+	bool Locator::fnSet = false;
+	array<Locator::Fn, 256> Locator::fns = {&Locator::doIllegalCharacter};
 
-//-----------------------------------------------------------------------------
+
+	//-----------------------------------------------------------------------------
 //This discards the processed output. (e.g. in nodelocation)
 	void Locator::process(Messages &errs, string::const_iterator &in, string::const_iterator &out) {
 		bool done = in >= out;    // 'are we finished?' flag
@@ -55,30 +58,35 @@ namespace node {
 //string Locator::loc_path;
 
 // set the default response to be 'illegal character', which throws an exception.
-	Locator::Locator(const Node* _from) : pageNum(0), find(nullptr), from(_from), root(nullptr) {
-		root = _from->tree()->root();
-//	fns.fill(&Locator::doIllegalCharacter);
-		fns[static_cast<unsigned char>('T')] = (Fn) & Locator::doTaxonomy;
-		fns[static_cast<unsigned char>('C')] = (Fn) & Locator::doContent;
-		fns[static_cast<unsigned char>('S')] = (Fn) & Locator::doSuffix;
-		fns[static_cast<unsigned char>('!')] = (Fn) & Locator::doLinkRef;
-		fns[static_cast<unsigned char>(':')] = (Fn) & Locator::doPage;
-		fns[static_cast<unsigned char>('0')] = (Fn) & Locator::doChildLeft;
-		fns[static_cast<unsigned char>('m')] = (Fn) & Locator::doMainNode;
-		fns[static_cast<unsigned char>('n')] = (Fn) & Locator::doChildRight;
-		fns[static_cast<unsigned char>('+')] = (Fn) & Locator::doSiblingRight;
-		fns[static_cast<unsigned char>('-')] = (Fn) & Locator::doSiblingLeft;
-		fns[static_cast<unsigned char>('.')] = (Fn) & Locator::doParent;
-		for (auto c = static_cast<unsigned char>('1'); c <= static_cast<unsigned char>('9'); c++) {
-			fns[c] = (Fn) & Locator::doID;
+	Locator::Locator() : pageNum(0), find(nullptr), from(nullptr), root(nullptr) {
+		if(!fnSet) {
+			fnSet=true;
+			fns[static_cast<unsigned char>('T')] = (Fn) & Locator::doTaxonomy;
+			fns[static_cast<unsigned char>('C')] = (Fn) & Locator::doContent;
+			fns[static_cast<unsigned char>('S')] = (Fn) & Locator::doSuffix;
+			fns[static_cast<unsigned char>('!')] = (Fn) & Locator::doLinkRef;
+			fns[static_cast<unsigned char>(':')] = (Fn) & Locator::doPage;
+			fns[static_cast<unsigned char>('0')] = (Fn) & Locator::doChildLeft;
+			fns[static_cast<unsigned char>('m')] = (Fn) & Locator::doMainNode;
+			fns[static_cast<unsigned char>('n')] = (Fn) & Locator::doChildRight;
+			fns[static_cast<unsigned char>('+')] = (Fn) & Locator::doSiblingRight;
+			fns[static_cast<unsigned char>('-')] = (Fn) & Locator::doSiblingLeft;
+			fns[static_cast<unsigned char>('.')] = (Fn) & Locator::doParent;
+			for (auto c = static_cast<unsigned char>('1'); c <= static_cast<unsigned char>('9'); c++) {
+				fns[c] = (Fn) & Locator::doID;
+			}
+			fns[static_cast<unsigned char>('A')] = (Fn) & Locator::doAncestorAbsolute;
+			fns[static_cast<unsigned char>('^')] = (Fn) & Locator::doAncestorRelative;
+			fns[static_cast<unsigned char>('R')] = (Fn) & Locator::doRR;
+			fns[static_cast<unsigned char>('F')] = (Fn) & Locator::doPeerNext;
+			fns[static_cast<unsigned char>('B')] = (Fn) & Locator::doPeerLast;
+			fns[static_cast<unsigned char>('I')] = (Fn) & Locator::doStackFromInside;
+			fns[static_cast<unsigned char>('O')] = (Fn) & Locator::doStackFromOutside;
 		}
-		fns[static_cast<unsigned char>('A')] = (Fn) & Locator::doAncestorAbsolute;
-		fns[static_cast<unsigned char>('^')] = (Fn) & Locator::doAncestorRelative;
-		fns[static_cast<unsigned char>('R')] = (Fn) & Locator::doRR;
-		fns[static_cast<unsigned char>('F')] = (Fn) & Locator::doPeerNext;
-		fns[static_cast<unsigned char>('B')] = (Fn) & Locator::doPeerLast;
-		fns[static_cast<unsigned char>('I')] = (Fn) & Locator::doStackFromInside;
-		fns[static_cast<unsigned char>('O')] = (Fn) & Locator::doStackFromOutside;
+	}
+
+	Locator::Locator(node::Node const* _root, node::Node const* _from) : Locator() {
+		root = _root; from=_from;
 	}
 
 	void Locator::setdirty() {
@@ -91,8 +99,16 @@ namespace node {
 		from = node;
 	}
 
+	void Locator::setRoot(const Node* node) {
+		root = node;
+	}
+
+	const Node* Locator::get(Support::Messages&errs,const string path) {
+		return locate(errs,path.begin(),path.end());
+	}
+
 	// return the Node described by path from 'from'
-	const Node *Locator::locate(Messages &errs, string::const_iterator pin, string::const_iterator pout) {
+	const Node* Locator::locate(Messages &errs, string::const_iterator pin, string::const_iterator pout) {
 		message.str("");
 		pageNum = 0;
 		start = pin;
@@ -204,7 +220,7 @@ namespace node {
 			}
 		}
 		rootString.erase(rootString.size() - 1);
-		Locator rootLocator(from); //or should this be root?
+		Locator rootLocator(root,from); //
 		const Node *lRoot = rootLocator.locate(errs, rootString.begin(), rootString.end());
 		find = from->tree()->tw(errs, from->id(), +1, lRoot);
 		if (find == nullptr)
@@ -239,7 +255,7 @@ namespace node {
 		}
 		// trailing ')'
 		rootString.erase(rootString.size() - 1);
-		Locator rootLocator(root);
+		Locator rootLocator(root,root); //
 //	Locator::loc_path=rootString;
 		const Node *lRoot = rootLocator.locate(errs, rootString.begin(), rootString.end());
 		find = from->tree()->tw(errs, from->id(), -1, lRoot);

@@ -284,7 +284,7 @@ namespace mt {
 		void expand(Support::Messages&,mtext&,Instance&,mstack&);
 	};
 	struct iForSibs : public Internal {
-		iForSibs() : Internal("iForSibs",4,6) {}
+		iForSibs() : Internal("iForSibs",4,4) {}
 		void expand(Support::Messages&,mtext&,Instance&,mstack&);
 	};
 	struct iSize : public Internal {

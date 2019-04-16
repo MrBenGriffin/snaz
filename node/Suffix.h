@@ -40,8 +40,6 @@ namespace node {
 		size_t get(Messages&,uintValue) const override;
 		string get(Messages&,textValue) const override;
 		Date   get(Messages&,dateValue) const override;
-		const Node* current() const override;
-
 
 		void loadTree(Messages&, Connection&, size_t,buildKind = final) override;
 

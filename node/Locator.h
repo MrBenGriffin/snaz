@@ -31,20 +31,23 @@ namespace node {
 		size_t pageNum;
 		const Node *find;
 		const Node *from;
+		const Node *root;
 
 		bool nextPathSection(Messages &);
 
 		ostringstream message;
+		Locator(const Node*,const Node*);
 
 	public:
 		static bool showPaths;
 
-		const Node *root;
 		stack<bool> _dirty;
 
-		Locator(const Node *);
+		Locator();
 
 		void setFrom(const Node*);
+		void setRoot(const Node*);
+
 		void setdirty();
 
 		void track() { _dirty.push(false); }
@@ -58,6 +61,8 @@ namespace node {
 		}
 
 		size_t getFoundPageNumber() { return pageNum; }
+
+		const Node* get(Support::Messages&,const string);
 
 		const Node *locate(Support::Messages &, string::const_iterator, string::const_iterator);
 
@@ -106,7 +111,8 @@ namespace node {
 		bool doStackFromOutside(Support::Messages &);
 
 	private:
-		array<Fn, 256> fns = {&Locator::doIllegalCharacter};
+		static array<Fn, 256> fns; // = {&Locator::doIllegalCharacter};
+		static bool fnSet; // = {&Locator::doIllegalCharacter};
 
 	};
 }

@@ -6,6 +6,7 @@
 #define MACROTEXT_CURRENT_H
 
 #include "mt.h"
+#include "node/Node.h"
 
 namespace mt {
 	class Internal;
@@ -25,6 +26,7 @@ namespace mt {
 		InternalInstance(const Internal*,Support::Messages&,mtext&,Instance&,mstack&);
 
 		void generate(plist&,const mtext*,string,string);
+		void generate(vector<const node::Node *>&,const mtext*,string,string);
 
 		bool     		boolParm(size_t,bool=false); //a boolean value (with a default).
 		std::string     parm(size_t);
@@ -33,7 +35,7 @@ namespace mt {
 		void            set(std::string);
 		void            logic(bool,size_t);
 		void            logic(size_t,size_t);
-		void            logic(std::string&,size_t);
+		void            logic(const std::string&,size_t);
 		void            logic(long double,std::string,size_t);
 
 	};

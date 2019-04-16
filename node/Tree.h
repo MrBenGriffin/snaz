@@ -23,6 +23,7 @@ namespace node {
 		string name;
 		Tree() = delete;
 		const Node *_root;
+		Locator locator;
 
 	public:
 		map<size_t, const Node *> twNodes;
@@ -34,14 +35,13 @@ namespace node {
 		void clear();			 // empty the table.
 		size_t size() { return twNodes.size(); }
 
-		const Node *current() const;
-		const Node *root() const;
-		const Node *node(Messages &, size_t, bool= false) const; //by id.
-		const Node *next(Messages &, size_t) const; //treeWalk next.
-		const Node *prev(Messages &, size_t) const; //treeWalk previous
-		const Node *byRef(Messages &, string, bool= true) const;  //returns null if not content or suffix
-		const Node *byPath(Messages &,Locator&, const string &) const;    //returns null if not found
-		const Node *byPath(Messages &,Locator&, string::const_iterator, string::const_iterator) const;
+		const Node* current() const;
+		const Node* root() const;
+		const Node* node(Messages &, size_t, bool= false) const; //by id.
+		const Node* next(Messages &, size_t) const; //treeWalk next.
+		const Node* prev(Messages &, size_t) const; //treeWalk previous
+		const Node* byRef(Messages &, string, bool= true) const;  //returns null if not content or suffix
+		const Node* byPath(Messages &,const string &);    //returns null if not found
 
 		const Node *tw(Messages &, size_t, signed long,const Node* = nullptr) const; //treeWalk from offset.
 		void add(Messages &, Node*, size_t);

@@ -19,6 +19,9 @@
 #include "support/Env.h"
 #include "support/Timing.h"
 #include "Build.h"
+#include "node/Content.h"
+#include "node/Suffix.h"
+#include "node/Taxon.h"
 
 using namespace Support;
 
@@ -38,10 +41,15 @@ namespace node {
 	Node::Node(Tree& tree) : _tree(&tree),_parent(nullptr),_id(0),_tw(0),_tier(0),_weight(1),_sibling(0),idStr("") {
 	}
 
+	const Content* Node::content() const 	{ return dynamic_cast<const Content*>(this); }
+	const Taxon* Node::taxon() const 		{ return dynamic_cast<const Taxon*>(this); }
+	const Suffix* Node::suffix() const 		{ return dynamic_cast<const Suffix*>(this); }
+
 	//-------------------------------------------------------------------
 	//Read fields common to all nodes here.
 	void Node::common(Messages& errs,Db::Query* q,size_t& parent,size_t& tw) {
 		//weights will be calculated later.
+		q->readfield(errs,"id",idStr);
 		q->readfield(errs,"id",_id);
 		q->readfield(errs,"parent",parent); 		// parent is stored as a node. will be calculated by add.
 		q->readfield(errs,"tier",_tier);

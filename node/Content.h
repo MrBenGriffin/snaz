@@ -62,9 +62,11 @@ namespace node {
 
 		Content();
 
-		const Node* node(Messages&, size_t, bool= false) const override; //Node by id.
-		static const Content* content(Messages&, size_t, bool= false); //Content by id.
+		const Node* node(Messages&, size_t, bool) const override; //Node by id.
+		static const Content* content(Messages&, size_t= 0, bool= false); //Content by id.
 		static const Content* root();// { return dynamic_cast<const Content*>(editorial.root()); }
+
+		const content::Layout* layout() const { return layoutPtr; }
 
 		void generate(Messages&,buildType,buildKind,size_t,size_t) const;
 
@@ -77,12 +79,12 @@ namespace node {
 		void setLayouts(Messages &); 		//Set all the layouts for a nodetree
 		flavour cultivar() const override { return flavour::content; }
 
-/** Per language static functions **/
+		/** Per language static functions **/
 
 		static void updateBirthAndDeath(Messages&, Connection&, size_t,buildKind);
 		static void updateContent(Messages&, Connection&, size_t,buildKind);
 
-		const Node* current() const override;
+		static const Node* current();
 
 
 	};

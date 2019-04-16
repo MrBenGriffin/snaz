@@ -1,0 +1,27 @@
+# iLinkRef
+iLinkRef		@iLinkRef(19)							home
+
+# iID
+iID				@iID(!home)								19
+
+# iTW
+iTW				@iTW(!home)								3
+
+# iTitle
+iTitle					@iTitle(19)						Home Page
+
+# iTeam
+iTeam					@iTeam(19)						6
+
+# iShortTitle
+iShortTitle				@iShortTitle(19)				Home Page
+
+# iLayout
+iLayout					@iLayout(19)					24
+
+# iLayoutName
+iLayoutName				@iLayoutName(19)				Home Page
+
+# iForSibs
+iForSibs 001	@iForSibs(19,*,$,[$:@iLinkRef(*)])		[1:home][2:siteSections][3:siteFooter]
+

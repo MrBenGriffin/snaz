@@ -30,7 +30,6 @@ iExistNode				@iExistNode(1,2)						!1!error: iExistNode is not yet implemented.
 iForAncestry			@iForAncestry(1,2,3,4,5)				!1!error: iForAncestry is not yet implemented.
 iForNodes				@iForNodes(1,2,3,4,5)					!1!error: iForNodes is not yet implemented.
 iForPeers				@iForPeers(1,2,3,4,5,6)					!1!error: iForPeers is not yet implemented.
-iForSibs				@iForSibs(1,2,3,4)						!1!error: iForSibs is not yet implemented.
 iSize					@iSize(1,2)								!1!error: iSize is not yet implemented.
 
 # Unimplemented Build
@@ -41,21 +40,13 @@ iLangID					@iLangID(1,2)							!1!error: iLangID is not yet implemented.
 iFullBuild				@iFullBuild(1,2)						!1!error: iFullBuild is not yet implemented.
 
 # Unimplemented Node
-iTitle					@iTitle(1,2)							!1!error: iTitle is not yet implemented.
-iTeam					@iTeam(1,2)								!1!error: iTeam is not yet implemented.
-iSuffix					@iSuffix(1,2)							!1!error: iSuffix is not yet implemented.
-iShortTitle				@iShortTitle(1,2)						!1!error: iShortTitle is not yet implemented.
-iSegmentName			@iSegmentName(1,2)						!1!error: iSegmentName is not yet implemented.
-iLayout					@iLayout(1,2)							!1!error: iLayout is not yet implemented.
-iLayoutName				@iLayoutName(1,2)						!1!error: iLayoutName is not yet implemented.
-iLink					@iLink(1)								!1!error: iLink is not yet implemented.
-iLinkRef				@iLinkRef(1,2)							!1!error: iLinkRef is not yet implemented.
-iID						@iID(1,2)								!1!error: iID is not yet implemented.
-iBirth					@iBirth(1,2)							!1!error: iBirth is not yet implemented.
-iContent				@iContent(1,2)							!1!error: iContent is not yet implemented.
-iDeath					@iDeath(1,2)							!1!error: iDeath is not yet implemented.
-iExistContent			@iExistContent(1,2)						!1!error: iExistContent is not yet implemented.
-iTW						@iTW(1,2)								!1!error: iTW is not yet implemented.
+iSuffix					@iSuffix(19,2)							!1!error: iSuffix is not yet implemented.
+iSegmentName			@iSegmentName(19,2)						!1!error: iSegmentName is not yet implemented.
+iLink					@iLink(19)								!1!error: iLink is not yet implemented.
+iBirth					@iBirth(19,2)							!1!error: iBirth is not yet implemented.
+iContent				@iContent(19,2)							!1!error: iContent is not yet implemented.
+iDeath					@iDeath(19,2)							!1!error: iDeath is not yet implemented.
+iExistContent			@iExistContent(19,2)					!1!error: iExistContent is not yet implemented.
 
 # Unimplemented Media
 iMedia					@iMedia(1,2)							!1!error: iMedia is not yet implemented.

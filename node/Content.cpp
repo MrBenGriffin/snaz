@@ -35,7 +35,6 @@ namespace node {
 	deque<Content *> 	Content::nodeStack;    // current node - used to pass to built-in functions
 
 	Content::Content() : Node(editorial),layoutPtr(nullptr) {}
-
 	void Content::loadTree(Messages& errs, Connection& sql, size_t language,buildKind build) {
 //	This does languages, but not layouts / templates as they have not yet been done.
 //  It also doesn't do segment content, which depend upon layouts!
@@ -148,31 +147,33 @@ namespace node {
 		}
 	}
 
-	const Node* Content::current() const {
+	const Node* Content::current() {
 		if (!nodeStack.empty()) {
 			return nodeStack.back();
 		} else {
 			return editorial.root();
 		}
 	}
+
 	bool   Content::get(Messages& errs,boolValue field) const {
 		return false;
 	};
 	size_t Content::get(Messages& errs,uintValue field) const {
 		size_t result=0;
 		switch(field) {
-			case team: break;
-			case layout: break;
-			case page: break;
+			case team: result = _team; break;
+			case uintValue::layout: result = _layout; break;
+			case page: result = 0; break;
 			case templates: result=0; break;
 		}
 		return result;
 	};
+
 	string Content::get(Messages& errs,textValue field) const {
 		string result;
 		switch(field) {
-			case title: break;
-			case shortTitle: break;
+			case title: result= _title; break;
+			case shortTitle: result= _shortTitle; break;
 			case comment: break;
 			case baseFilename: result=baseFileName; break;
 			case scope: break;
@@ -182,7 +183,7 @@ namespace node {
 			case description: break;
 			case fileSuffix: break;
 			case script: break;
-			case editor: break;
+			case editor: result = _editor; break;
 		}
 		return result;
 	};
@@ -190,8 +191,8 @@ namespace node {
 		Date result;
 		switch(field) {
 			case modified: break;
-			case birth: break;
-			case death: break;
+			case birth: result = _birth; break;
+			case death: result = _death; break;
 		}
 		return result;
 	};
@@ -211,6 +212,13 @@ namespace node {
 
 	const Content* Content::content(Messages& errs, size_t id, bool silent) {
 		const Content* result =  nullptr;
+		if(id == 0) {
+			if(Content::current() != nullptr) {
+				id = current()->id();
+			} else {
+				id = root()->id();
+			}
+		}
 		auto found = nodes.find(id);
 		if(found != nodes.end()) {
 			result = &(found->second);

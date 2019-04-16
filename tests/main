@@ -3,8 +3,8 @@ F showPassed	1
 F showDefines	0
 
 # iForSubs
-iForSubs ini	[@iSet(foo,@iID(!simple))@iSet(bar,@iID(!simple))]				[]
-iForSubs 001	@iForSubs(bldvar,@iID(!simple),value,name,[@iField(name)])		[bar][foo]
+iForSubs ini	[@iSet(foo,@iID(!home))@iSet(bar,@iID(!home))]					[]
+iForSubs 001	@iForSubs(bldvar,@iID(!home),value,name,[@iField(name)])		[bar][foo]
 
 F showDefines	0
 F showPassed	0
@@ -19,6 +19,7 @@ F showPassed	0
 !	utility/_main
 !	storage/_main
 !	string/_main
+!	node/_main
 
 // !	taxonomy
 // !	media

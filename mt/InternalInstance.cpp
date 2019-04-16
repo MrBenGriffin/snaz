@@ -30,6 +30,21 @@ namespace mt {
 		}
 	}
 
+	void InternalInstance::generate(vector<const node::Node *>& nodes,const mtext* program,string ref,string count) {
+		if(program != nullptr) { // from an empty parm..
+			plist parms;
+			for(auto* node : nodes) {
+				parms.push_back({Text(node->ids())});
+			}
+			Instance i(&parms,{1,parms.size()},true); //set as generated.
+			i.iValue = ref;
+			i.iCount = count;
+			Definition macro(*program);
+			macro.expand(*errs,*output,i,*context);
+		}
+	}
+
+
 	void InternalInstance::generate(plist& list,const mtext* program,string value,string count) {
 		if(program != nullptr) { // from an empty parm..
 			Instance i(&list,{1,list.size()},true); //set as generated.
@@ -118,9 +133,9 @@ namespace mt {
 	}
 
 	//this defaults to outputting basis, unless offset is smaller than count..
-	//offset: 1-indexed parm (where basis was)
+	//offset: 1-indexed parm (where string to compare is)
 	//eg iLayout(I0,Foo,T,F). =>> logic(Foo,2)
-	void InternalInstance::logic(std::string& left,size_t offset)  {
+	void InternalInstance::logic(const std::string& left,size_t offset)  {
 		if(count < offset) {
 			set(left);
 		} else {

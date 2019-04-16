@@ -21,10 +21,6 @@ namespace node {
 	unordered_map<size_t,Suffix> Suffix::nodes;
 	unordered_map<string,Suffix*> Suffix::refs;
 
-	const Node* Suffix::current() const {
-		return suffixes.root();
-	};
-
 	Suffix::Suffix() : Node(suffixes) {}
 
 	void Suffix::loadTree(Messages& errs, Connection& sql,size_t,buildKind) {
@@ -159,6 +155,7 @@ namespace node {
 		}
 		return result;
 	};
+
 	size_t Suffix::get(Messages& errs,uintValue field) const {
 		return 0;
 	};

@@ -4,15 +4,18 @@
 #include <algorithm>
 #include <sstream>
 
-#include "Tree.h"
-#include "Node.h"
+#include "node/Tree.h"
+#include "node/Node.h"
+#include "node/Content.h"
+#include "node/Suffix.h"
+#include "node/Taxon.h"
 
 #include "support/Message.h"
 
 namespace node {
 
 //-------------------------------------------------------------------
-	Tree::Tree(string _name) : _root(nullptr),name(_name),depth(0),maxTw(0),twNodes(),refNodes() {}
+	Tree::Tree(string _name) : _root(nullptr),locator(),name(_name),depth(0),maxTw(0),twNodes(),refNodes() {}
 //-------------------------------------------------------------------
 	void Tree::clear() {
 		_root = nullptr;
@@ -25,6 +28,7 @@ namespace node {
 	void Tree::add(Messages &errs, Node* node, size_t _parent) {
 		if(_parent == 0) {
 			_root = node;
+			locator.setRoot(node);
 		} else {
 			if(_root != nullptr) {
 				const Node* parent = _root->node(errs,_parent);
@@ -49,7 +53,14 @@ namespace node {
 	}
 //-------------------------------------------------------------------
 	const Node* Tree::current() const {
-		return _root->current();
+		switch(_root->cultivar()) {
+			case flavour::content:
+				return Content::current();
+			case flavour::suffix:
+				return Suffix::suffixes.root();
+			case flavour::taxon:
+				return Taxon::taxonomies.root();
+		}
 	}
 	const Node* Tree::root() const { return _root; }
 //-------------------------------------------------------------------
@@ -109,7 +120,7 @@ namespace node {
 	 "/TS!:AI123456789" absolute (for node) initial chars
 	 "C0n+-.^RFBO" relative (for node) initial chars
 */
-	const Node* Tree::byPath(Messages &errs,Locator& locator, const string &path) const {
+	const Node* Tree::byPath(Messages &errs, const string &path) {
 		const Node *result = nullptr;
 		if ((path.size() > 0) && (_root->cultivar() == content)) {    // If specified startnode, use it
 			const string relatives = "C0n+-.^RFBO"; //yes, 0 is a relative address in this case!
@@ -131,17 +142,6 @@ namespace node {
 		result = locator.locate(errs,path.begin(),path.end());
 		if (result == nullptr) {
 			errs << Message(error, "Path: " + path + " did not find a node.");
-		}
-		return result;
-	}
-
-	//-------------------------------------------------------------------
-//return the Node described by 'path'
-	const Node* Tree::byPath(Messages &errs,Locator& locator, string::const_iterator in, string::const_iterator out) const {
-		const Node *result = nullptr;
-		if ((out - in) > 0) {    // If specified startnode, use it
-			locator.setFrom(current());
-			result = locator.locate(errs, in, out);
 		}
 		return result;
 	}

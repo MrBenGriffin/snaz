@@ -1,9 +1,12 @@
 #include "Internal.h"
 #include "InternalInstance.h"
 #include "support/Message.h"
+#include "node/Tree.h"
+#include "node/Content.h"
 
 namespace mt {
 	using namespace Support;
+	using namespace node;
 	void iNumChildren::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
 		e << Message(error,_name + " is not yet implemented.");
@@ -84,9 +87,11 @@ namespace mt {
 	}
 	void iForSibs::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
-		e << Message(error,_name + " is not yet implemented.");
-		std::string left =  my.parm(1);
-		my.logic(false,1);
+		const Node* main = node::Content::editorial.byPath(e,my.parm(1));
+		if (main != nullptr) {
+			vector<const node::Node *> sibs = std::move(main->siblings());
+			my.generate(sibs,my.praw(4),my.parm(2),my.parm(3)); //template,node*,position.
+		}
 	}
 	void iSize::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);

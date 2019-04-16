@@ -5,6 +5,7 @@
 
 // STORAGE INTERNALS TESTS
 !	storage/iSet
+!	storage/iList
 
 # Random Storage
 sto 001		@iSet(x,trot)@iGet(x)														trot

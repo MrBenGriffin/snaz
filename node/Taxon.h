@@ -60,7 +60,6 @@ namespace node {
 		string get(Messages&,textValue) const override;
 		Date   get(Messages&,dateValue) const override;
 		void 	loadTree(Messages&, Connection&, size_t, buildKind) override; //depends upon Node flavour of
-		const Node* current() const override;
 
 		static bool hasSimilar(Messages&, Connection&,const Content*);
 		static const nodeScores* getSimilar(Messages&, Connection&,const Content*);

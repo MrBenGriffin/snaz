@@ -22,6 +22,9 @@ namespace node {
 	class Node;
 	class NodeFilename;
 	class Locator;
+	class Content;
+	class Taxon;
+	class Suffix;
 
 	enum boolValue  { exec,batch,terminal,evaluate,container};
 	enum uintValue  { team,layout,page,templates};
@@ -55,7 +58,6 @@ namespace node {
 
 //construction functions
 		virtual ~Node();            //deleting a Node deletes all of it's children
-		virtual const Node* current() const = 0; //depends upon Node flavour of
 		virtual const Node* node(Messages&, size_t, bool= false) const = 0; //by id.
 		virtual void loadTree(Messages&, Db::Connection&, size_t = 0, buildKind = final) = 0; //depends upon Node flavour of
 
@@ -86,7 +88,11 @@ namespace node {
 		void str(ostream&) const;			 // show the Node..
 		void weigh();
 
-//Accessors to Value data
+		const Content* content() const; //{ return dynamic_cast<const Content*>(this); }
+		const Taxon* taxon() const ;	//{ return dynamic_cast<const Taxon*>(this); }
+		const Suffix* suffix() const; //{ return dynamic_cast<const Suffix*>(this); }
+
+		//Accessors to Value data
 		virtual bool   get(Messages&,boolValue) const = 0;
 		virtual size_t get(Messages&,uintValue) const = 0;
 		virtual string get(Messages&,textValue) const = 0;

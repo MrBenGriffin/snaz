@@ -28,7 +28,6 @@ namespace node {
 
 	Taxon::Taxon() : Node(taxonomies) {}
 
-	const Node *Taxon::current() const { return taxonomies.root(); }
 
 	void Taxon::loadTree(Messages &errs, Connection &sql, size_t language, buildKind kind) {
 		Timing &times = Timing::t();
@@ -209,6 +208,8 @@ namespace node {
 	const Node *Taxon::node(Messages &errs, size_t id, bool silent) const {
 		return taxon(errs,id,silent);
 	}
+
+
 
 	Taxon::~Taxon() {}
 
