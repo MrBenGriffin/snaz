@@ -39,6 +39,7 @@ namespace content {
 		static void load(Messages&,Connection&,size_t,buildKind);		//Per Tech.
 		static const Layout* get(Messages&,size_t);
 		static const Layout* get(Messages&,string);
+		size_t pages() const;
 
 	};
 }

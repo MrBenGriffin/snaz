@@ -11,7 +11,7 @@ namespace mt {
 	InternalInstance::InternalInstance(const Internal *thing,Messages& e,mtext &o, Instance &i, mstack &c) :
 		owner(thing),output(&o), instance(&i), context(&c), errs(&e) {
 		parms = i.parms;
-		count = parms->size();
+		count = parms->size() == 1 ? parms->front().size() : parms->size();
 		min = thing->minParms;
 		max = thing->maxParms;
 		if(!thing->inRange(count)) {
@@ -45,7 +45,7 @@ namespace mt {
 	}
 
 
-	void InternalInstance::generate(plist& list,const mtext* program,string value,string count) {
+	void InternalInstance::generate(plist& list,const mtext* program,const string value,const string count) {
 		if(program != nullptr) { // from an empty parm..
 			Instance i(&list,{1,list.size()},true); //set as generated.
 			i.iValue = value;
@@ -66,6 +66,16 @@ namespace mt {
 		}
 	}
 
+	bool InternalInstance::reverse(size_t i) {
+		if(i > count) {
+			return false;
+		} else {
+			std::ostringstream result;
+			Driver::expand((*parms)[i - 1],*errs,result, *context);
+			std::string val = result.str();
+			return !val.empty() && (val[0] == 'R' || val[0] == 'r');
+		}
+	}
 
 	std::string InternalInstance::parm(size_t i) {
 		std::ostringstream result;

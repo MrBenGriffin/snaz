@@ -8,8 +8,13 @@ F showPassed	0
 // name		code										expected result
 // example	[abcdef]									[abcdef]
 
+
+//iNumChildren
+
 //-- included files
-!	encoder/_main
+!	nodetree/_main
+X
+!	node/_main
 
 !	unimplemented
 !	grammar/_main
@@ -17,13 +22,12 @@ F showPassed	0
 !	utility/_main
 !	storage/_main
 !	string/_main
-!	node/_main
+!	encoder/_main
 
 // !	taxonomy
 // !	media
 // !	regex
 // !	utility
-// !	nodetree
 // !	nodeaccessors
 // !	encoding
 // !	obyx

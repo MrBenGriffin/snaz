@@ -25,10 +25,11 @@ namespace mt {
 		Messages*       errs;
 		InternalInstance(const Internal*,Support::Messages&,mtext&,Instance&,mstack&);
 
-		void generate(plist&,const mtext*,string,string);
+		void generate(plist&,const mtext*,const string,const string="");
 		void generate(vector<const node::Node *>&,const mtext*,string,string);
 
 		bool     		boolParm(size_t,bool=false); //a boolean value (with a default).
+		bool			reverse(size_t);
 		std::string     parm(size_t);
 		const mtext*    praw(size_t);
 		void            expand(size_t);

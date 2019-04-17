@@ -50,7 +50,12 @@ namespace mt {
 		InternalInstance my(this,e,o,instance,context);
 		const Node* interest = node::Content::editorial.byPath(e,my.parm(1));
 		if (interest != nullptr) {
-			my.logic(interest->get(e,layout),2);
+			const node::Content* content = interest->content();
+			if(content != nullptr) {
+				if(content->layout() != nullptr) {
+					my.logic(content->layout()->id,2);
+				}
+			}
 		}
 	}
 	void iLayoutName::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {

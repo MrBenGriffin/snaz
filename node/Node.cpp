@@ -38,7 +38,7 @@ namespace node {
 	const string Node::ref() 	 const	{ return _ref; }        	// unique id as a string
 	const string Node::ids() 	 const	{ return idStr; }        	// unique id as a string
 //-------------------------------------------------------------------
-	Node::Node(Tree& tree) : _tree(&tree),_parent(nullptr),_id(0),_tw(0),_tier(0),_weight(1),_sibling(0),idStr("") {
+	Node::Node(Tree& tree) : _tree(&tree),_parent(nullptr),_id(0),_tw(0),_tier(0),_weight(1),_sibling(1),idStr("") {
 	}
 
 	const Content* Node::content() const 	{ return dynamic_cast<const Content*>(this); }
@@ -63,7 +63,7 @@ namespace node {
 
 	//-------------------------------------------------------------------
 	void Node::addChild(Messages & errs,Node* node) {
-		node->_sibling = children.size();
+		node->_sibling = children.size() +1;
 		node->_parent = this;
 		children.push_back(node);
 	}
@@ -92,17 +92,15 @@ namespace node {
 		return result;
 	}
 
-	bool Node::isAncestor(const Node *anc) const {
-		const Node *cursor = this;
-		while (cursor && anc && cursor != anc && cursor->_parent != nullptr) {
-			cursor = cursor->_parent;
-		}
-		return anc && cursor == anc;
+	bool Node::hasAncestor(const Node *anc) const {
+		return anc
+		&& _tw >= anc->_tw
+		&& _tw <  (anc->_tw+anc->_weight);
 	}
 
 	vector<const Node *> Node::ancestors(const Node *anc) const {
-		const Node *cursor = this;
 		vector<const Node *> result;
+		const Node *cursor = this;
 		while ((cursor != anc) && cursor->_parent != nullptr) {
 			result.push_back(cursor);
 			cursor = cursor->_parent;
@@ -126,7 +124,7 @@ namespace node {
 	}
 
 	vector<const Node *> Node::peers(const Node *anc) const {
-		if (isAncestor(anc)) {
+		if (hasAncestor(anc)) {
 			vector<const Node *> result;
 			anc->addToPeerList(result, _tier - anc->_tier); //6-5 == 1 so it should return siblings..
 			return result;

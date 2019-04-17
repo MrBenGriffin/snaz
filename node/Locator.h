@@ -110,6 +110,8 @@ namespace node {
 
 		bool doStackFromOutside(Support::Messages &);
 
+		bool doTW(Support::Messages &);
+
 	private:
 		static array<Fn, 256> fns; // = {&Locator::doIllegalCharacter};
 		static bool fnSet; // = {&Locator::doIllegalCharacter};

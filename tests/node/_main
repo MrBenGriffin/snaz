@@ -25,3 +25,41 @@ iLayoutName				@iLayoutName(19)				Home Page
 # iForSibs
 iForSibs 001	@iForSibs(19,*,$,[$:@iLinkRef(*)])		[1:home][2:siteSections][3:siteFooter]
 
+# other Stuff
+
+NFinder 001		[@iTitle(!siteSections/n-1)]								[What is Mortar]
+NFinder 002		[@iTitle(!siteSections/n-1,Preparse nesting,T)]				[T]
+NFinder 001		[@iLinkRef(!siteSections/0+1)]								[preparse-nesting]
+
+iLink 03		@iLink(!home:2)											!2!Path: !home:2 did not find a node.
+iSuffix 01		@iSuffix(!home)											php
+iSuffix 02		@iSuffix(!home:1)										ixml
+
+iID 01			@iID(!home)												120
+
+iLink 01		@iLink(!home:0)											simple.php
+iLink 02		@iLink(!home:1)											simple_1.ixml
+iLink 04		@iLink()												simple.php
+iLink 05		@iNull(@iLink(!home:1))@iLink()							simple.php
+
+iContent 01		@iContent(!home,control)									control[crlf]OK
+iContent 02		@iContent(!home,Control)									control[crlf]OK
+
+iNumCh 001	@iNumChildren(!siteSections)									5
+iNumCh 002	@iNumChildren(!siteSections/^1)									6
+nodeAc 003	@iNumGen(!siteSections)											3
+nodeAc 004	@iNumGens()														7
+nodeAc 005	@iNumPage()														0
+nodeAc 006	@iNumPages(!siteSections/0+1)									1
+nodeAc 007	@iNumSib(!siteSections/n-1)										4
+
+iLinkRef	[@iLinkRef(!siteSections/n-1)]								[preparse-nesting]
+
+
+iExistContent	@iExistContent(!siteSections,f_seodirectory,T,F)			T
+iExistContent	@iExistContent(!siteSections,code,T,F)						F
+
+//SegmentName is done from within iContent..
+segmentName 01	@iSegmentName(foo,T,F)										!2!iSegmentName called outside an existing segment (iContent)
+
+//Errors on file not found.

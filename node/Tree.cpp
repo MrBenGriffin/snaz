@@ -15,13 +15,13 @@
 namespace node {
 
 //-------------------------------------------------------------------
-	Tree::Tree(string _name) : _root(nullptr),locator(),name(_name),depth(0),maxTw(0),twNodes(),refNodes() {}
+	Tree::Tree(string _name) : _root(nullptr),locator(),name(_name),_depth(0),maxTw(0),twNodes(),refNodes() {}
 //-------------------------------------------------------------------
 	void Tree::clear() {
 		_root = nullptr;
 		twNodes.clear();
 		refNodes.clear();
-		depth = 0;
+		_depth = 0;
 		maxTw = 0;
 	}
 //-------------------------------------------------------------------
@@ -48,7 +48,7 @@ namespace node {
 		auto tw = node->tw();
 		twNodes.emplace(tw,node);
 		refNodes.emplace(node->ref(),node);
-		depth = std::max(depth,node->tier());
+		_depth = std::max(_depth,node->tier());
 		maxTw = std::max(maxTw,tw);
 	}
 //-------------------------------------------------------------------
@@ -79,7 +79,7 @@ namespace node {
 			err << "The tree `" << name << "` was not scoped by the tree-walk value " << tw;
 			errs << Message(range,err.str());
 		} else {
-			tw = (tw + offset) % maxTw + 1;
+			tw = (tw + offset) % (maxTw + 1);
 			if(tw == 0) { tw = maxTw; }
 			auto found = twNodes.find(tw);
 			if(found != twNodes.end()) {

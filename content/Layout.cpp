@@ -20,6 +20,10 @@ namespace content {
 unordered_map<string,Layout*>  			Layout::refs;		//Pointer to layout via reference. Loaded per tech.
 unordered_map<size_t,Layout>   			Layout::layouts;	//Where the templates are stored. Loaded per tech.
 
+size_t Layout::pages() const {
+	return templates.size();
+}
+
 void Layout::compose(Messages& errs,Content& content,buildKind kind,size_t langID,size_t techID) {
 	std::ostringstream msg; msg << "Layout " << ref;
 	errs << Message(info,msg.str());

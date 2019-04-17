@@ -82,6 +82,7 @@ namespace node {
 			fns[static_cast<unsigned char>('B')] = (Fn) & Locator::doPeerLast;
 			fns[static_cast<unsigned char>('I')] = (Fn) & Locator::doStackFromInside;
 			fns[static_cast<unsigned char>('O')] = (Fn) & Locator::doStackFromOutside;
+			fns[static_cast<unsigned char>('W')] = (Fn) & Locator::doTW;
 		}
 	}
 
@@ -174,6 +175,25 @@ namespace node {
 //		find = Node::rootc->nodebypath(errs, in, out);
 		return find != nullptr;
 	}
+
+	bool Locator::doTW(Messages &errs) {
+		pair<size_t, bool> tw = znatural(++in);
+		if (!tw.second) {
+			throw BadLocatorPath(errs, start, in, out);
+		} else {
+			if (showPaths) {
+				ostringstream log; log << "tw(" << tw.first << ")";
+				errs << Message(debug,log.str());
+			}
+			find = from->tree()->tw(errs,tw.first,0);
+			if (find != nullptr) {
+				return nextPathSection(errs);
+			} else {
+				return true;
+			}
+		}
+	}
+
 
 // Taxonomy - switch over to global Taxonomy Nodetree
 	bool Locator::doTaxonomy(Messages &errs) {

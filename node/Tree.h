@@ -28,12 +28,13 @@ namespace node {
 	public:
 		map<size_t, const Node *> twNodes;
 		unordered_map<string, const Node *> refNodes;
-		size_t depth;            // maximum depth of tree.
+		size_t _depth;            // maximum depth of tree.
 		size_t maxTw;            // maximum tree-walk; it should be the same as the size of the twNodes map!
 
 		Tree(string);
 		void clear();			 // empty the table.
-		size_t size() { return twNodes.size(); }
+		size_t size() const { return twNodes.size(); }
+		size_t depth() const { return _depth; }
 
 		const Node* current() const;
 		const Node* root() const;
@@ -43,7 +44,7 @@ namespace node {
 		const Node* byRef(Messages &, string, bool= true) const;  //returns null if not content or suffix
 		const Node* byPath(Messages &,const string &);    //returns null if not found
 
-		const Node *tw(Messages &, size_t, signed long,const Node* = nullptr) const; //treeWalk from offset.
+		const Node* tw(Messages &, size_t, signed long,const Node* = nullptr) const; //treeWalk from offset.
 		void add(Messages &, Node*, size_t);
 
 	};
