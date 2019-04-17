@@ -5,9 +5,12 @@
 #include <cmath>
 #include "Comparison.h"
 #include "Convert.h"
+#include "node/Node.h"
+#include "node/Content.h"
+#include "content/Layout.h"
 
 namespace Support {
-
+	using namespace node;
 	size_t Sort::offset = 0;
 	string Sort::regex = "^.+$";
 
@@ -74,6 +77,58 @@ namespace Support {
 	}
 	bool desc_date(const string& s1, const string& s2) {
 		return asc_date(s2,s1);
+	}
+
+	//Now Nodes.
+
+	bool sortscratch(const Node *n1,const Node *n2)   {
+		bool retval = false;
+		if  ( n1 != nullptr && n2 != nullptr) {
+//			if (n1->scratch().compare(n2->scratch()) < 0) {
+//				retval = true;
+//			}
+		}
+		return retval;
+	}
+	bool sorttw(const Node *n1,const Node *n2)   {
+		return n1->tw() < n2->tw();
+	}
+	bool sorttier(const Node *n1,const Node *n2)   {
+		return n1->tier() < n2->tier();
+	}
+	bool sortfname(const Node *n1,const Node *n2)   {
+		Messages e;
+		return (n1->get(e,baseFilename).compare(n2->get(e,baseFilename)) < 0);
+	}
+	bool sortbirth(const Node *n1,const Node *n2)   {
+		Messages e;
+		return n1->get(e,birth) < n2->get(e,birth);
+	}
+	bool sortdeath(const Node *n1,const Node *n2)   {
+		Messages e;
+		return n1->get(e,death) < n2->get(e,death);
+	}
+	bool sorttitle(const Node *n1,const Node *n2)   {
+		Messages e;
+		return (n1->get(e,title).compare(n2->get(e,title)) < 0);
+	}
+	bool sorttitlei(const Node *n1,const Node *n2)   {
+		Messages e;
+		return asc_caseinsensitive(n1->get(e,title),n2->get(e,title));
+	}
+	bool sortlinkref(const Node *n1,const Node *n2)  {
+		return (n1->ref().compare(n2->ref()) < 0);
+	}
+	bool sortlinkrefi(const Node *n1,const Node *n2)  {
+		return asc_caseinsensitive(n1->ref(),n2->ref());
+	}
+	bool sortshorttitle(const Node *n1,const Node *n2)   {
+		Messages e;
+		return (n1->get(e,shortTitle).compare(n2->get(e,shortTitle)) < 0);
+	}
+	bool sortshorttitlei(const Node *n1,const Node *n2)   {
+		Messages e;
+		return asc_caseinsensitive(n1->get(e,shortTitle),n2->get(e,shortTitle));
 	}
 
 }

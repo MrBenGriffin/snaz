@@ -47,6 +47,8 @@ namespace Support {
 		std::string str();
 		const ::time_t getUTC() const;
 
+		bool operator<(const Date&) const;       // operator+()
+
 	};
 }
 

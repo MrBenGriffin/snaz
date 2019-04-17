@@ -8,8 +8,11 @@
 
 #include <string>
 #include <cctype>
+#include "node/Node.h"
+#include "support/Message.h"
 
 using namespace std;
+using namespace node;
 
 namespace Support {
 
@@ -28,7 +31,18 @@ namespace Support {
 	bool desc_numeric(const string&, const string&);
 	bool desc_date(const string&, const string&);
 
-
+	bool sortscratch(const Node *,const Node *);
+	bool sorttw(const Node *,const Node *);
+	bool sorttier(const Node *,const Node *);
+	bool sortfname(const Node *,const Node *);
+	bool sortbirth(const Node *,const Node *);
+	bool sortdeath(const Node *,const Node *);
+	bool sorttitle(const Node *,const Node *);
+	bool sorttitlei(const Node *,const Node *);
+	bool sortlinkref(const Node *,const Node *);
+	bool sortlinkrefi(const Node *,const Node *);
+	bool sortshorttitle(const Node *,const Node *);
+	bool sortshorttitlei(const Node *,const Node *);
 }
 
 

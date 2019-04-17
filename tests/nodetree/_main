@@ -19,7 +19,6 @@ iSize 001		[@iSize(!siteSections)]												[7]
 iSize 003		[@iSize(!siteSections,7,T,F)]										[T]
 iSize 004		[@iSize(!siteSections,19,T,F)]										[F]
 
-
 iNumSib 007		@iNumSib(!siteSections/n-0)										3
 iNumSib 071		@iNumSib(!siteSections/n-0,1,T,F)								F
 
@@ -54,13 +53,14 @@ iForAnc 06		@iIndex(;,@iForAncestry(!print-scss,F,L27,*,@iNumGen(*);))			6;5;4;3
 iForAnc 07		@iIndex(;,@iForAncestry(!print-scss,F,C4,*,@iNumGen(*);))			6;5;4;3
 iForAnc 08		@iIndex(;,@iForAncestry(!print-scss,F,T1,*,@iNumGen(*);))			6;5;4;3;2;1
 iForAnc 09		@iIndex(;,@iForAncestry(!print-scss,F,T3,*,@iNumGen(*);))			6;5;4;3
+iForAnc 10		@iIndex(;,@iForAncestry(!print-scss/..,F,T3,*,@iNumGen(*);))		5;4;3
 
 //@iForPeers(n,a,t1,t2,sortparm,txt)
-iForPeers		[@iSet(*Z,@iIndex(;,@iForPeers(!simple,!root,*,$,+,@iID(*);)))]		[]
+iForPeers		[@iSet(*Z,@iIndex(;,@iForPeers(!print-scss,!root,*,$,+,@iID(*);)))]		[]
 iForXXXXb		[@iGet(*Z)]															[120;121;122;29;31;14;46;18;32;65]
 
-iForPeers001	[@iIndex(;,@iForPeers(!simple,!root,*,$,+,@iNumGen(*)))]			[5555555555]
-iForPeers002	(@iIndex({,},@iForPeers(!simple,!root,*,$,+[*f_code],@iID(*){,})))	(46,14,32,65)
+iForPeers001	[@iIndex(;,@iForPeers(!print-scss/..,!root,*,$,+,@iNumGen(*)))]			[5555555555]
+iForPeers002	(@iIndex({,},@iForPeers(!print-scss,!root,*,$,+[*f_code],@iID(*){,})))	(46,14,32,65)
 
 //@iForNodes(@iGet(*Z),#,$,+s,[@iTitle($)])
 iForNodes002	[@iForNodes(@iGet(*Z),*,$,,@iLeft(@iTitle(*),1))]					[ssWCCMMJPM]

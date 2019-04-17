@@ -12,9 +12,13 @@
 #include "support/Storage.h"
 #include "support/db/Connection.h"
 #include "support/db/Query.h"
+#include "node/Node.h"
 
 namespace mt {
 	class Internal {
+	private:
+		void sortnodes(vector<const node::Node *>&,bool,char);
+
 	public:
 		bool inRange(size_t i) const { return (minParms <= i) && (i <= maxParms);}
 		std::string name() const {return _name;}
@@ -34,6 +38,7 @@ namespace mt {
 		plist toParms(string,string,string);
 		plist toParms(const listType*,string);
 		void doSort(vector<std::string>&,std::string);
+		void doSort(Support::Messages&,vector<const node::Node*>&,std::string);
 		void doTrace(Support::Messages&,mstack&);
 
 	};

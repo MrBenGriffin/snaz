@@ -12,6 +12,10 @@
 
 namespace Support {
 
+	bool Date::operator<(const Date& that) const {
+		return tt < that.tt;
+	}
+
 	Date::Date() : local(nullptr),utc(nullptr),tt(0) {
 		tt = time(&tt);
 		local = localtime(&tt);

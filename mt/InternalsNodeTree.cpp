@@ -141,17 +141,19 @@ namespace mt {
 			my.generate(nodelist,my.praw(5),my.parm(4),""); //template,node*,position.
 		}
 	}
-	void iForNodes::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
-		InternalInstance my(this,e,o,instance,context);
+	void iForPeers::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
+		//@iForPeers(n,a,t1,t2,sortparm,txt)
+		InternalInstance my(this, e, o, instance, context);
 		const Node *main = node::Content::editorial.byPath(e, my.parm(1));
+		const Node *root = node::Content::editorial.byPath(e, my.parm(2));
 		if (main != nullptr) {
-			e << Message(error, _name + " is not yet implemented.");
-			std::string left = my.parm(1);
-			my.logic(false, 1);
+			vector<const Node *> peers = main->peers(root);
+			doSort(e, peers, my.parm(5));
+			my.generate(peers, my.praw(6), my.parm(3), my.parm(4)); //template,node*,position.
 		}
 	}
-	void iForPeers::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
-		InternalInstance my(this, e, o, instance, context);
+	void iForNodes::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
+		InternalInstance my(this,e,o,instance,context);
 		const Node *main = node::Content::editorial.byPath(e, my.parm(1));
 		if (main != nullptr) {
 			e << Message(error, _name + " is not yet implemented.");
