@@ -4,12 +4,3 @@
 // All other lines are tab-delimited name,macrotext,expected result
 
 # Encoding
-
-// name			code															expected result
-iHex 001		@iHex(A)														41
-iHex 002		@iHex(A,41,T,F)											T
-iHex 003		@iHex(A,40,T,F)											F
-iDigest 01		@iDigest(A,sha256)										!2!(OPENSSL_init_crypto): symbol not found
-iUrlEncode 01	@iUrlEncode(https://www.braininjuryhub.co.uk/)			https%3A%2F%2Fwww.braininjuryhub.co.uk%2F
-iUrlEncode 02	@iUrlEncode(The Children's Trust Brain Injury Hub)		The%20Children%27s%20Trust%20Brain%20Injury%20Hub
-

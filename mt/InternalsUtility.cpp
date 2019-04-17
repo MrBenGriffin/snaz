@@ -6,10 +6,13 @@
 #include "support/Convert.h"
 #include "support/Timing.h"
 #include "support/Env.h"
+#include "node/Node.h"
+#include "node/Content.h"
 
 #include <iomanip>
 
 namespace mt {
+	using namespace Support;
 	using namespace Support;
 
 	void iEq::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
@@ -346,13 +349,44 @@ namespace mt {
 	}
 
 	void iForSubs::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
+//		ForSubs(table,Noderef,keyfield,orderfield,[context])
+//		qstr << "select * from " << table << " where " <<  keyfield << "='" << noderef << "'";
+//		if (orderfield.length() > 0) qstr << " order by " <<  orderfield;
 		InternalInstance my(this,e,o,instance,context);
-		e << Message(error,_name + " is not yet implemented.");
-		std::string left =  my.parm(1);
-		my.logic(false,1);
+		if (sql != nullptr && sql->isopen()) {
+			const node::Node* interest = node::Content::editorial.byPath(e,my.parm(2));
+			if (interest != nullptr) {
+				string table = my.parm(1); sql->escape(table);
+				string nfield = my.parm(3); sql->escape(nfield);
+				ostringstream querystring;
+				querystring << "select * from " << my.parm(1) << " where " <<  my.parm(3) << "='" << interest->id() << "'";
+				string order = my.parm(4);
+				if(!order.empty()) {
+					sql->escape(order);
+					querystring << " order by " << order;
+				}
+				if (sql->query(e,query,querystring.str())) {
+					auto foo = query->getnumfields();
+					if(query->execute(e)) {
+						iField::contextStack.push(this);
+						while(query->nextrow()) {
+							my.expand(5);
+						}
+						iField::contextStack.pop();
+					}
+				}
+				sql->dispose(query);
+			}
+		} else {
+			e << Message(error,_name + " requires an open sql connection.");
+		}
 	}
-	string iForSubs::get(Messages& e,const string name) const {
-		return "";
+	string iForSubs::get(Messages& errs,const string name) const {
+		string result;
+		if(query != nullptr) {
+			query->readfield(errs,name,result);
+		}
+		return result;
 	}
 
 	void iForQuery::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {

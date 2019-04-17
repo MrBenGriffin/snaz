@@ -1,0 +1,77 @@
+# iBase64
+//encodes/decodes text with base64 encoding. First parameter is the encoding direction. 2nd parameter is the text to be encoded.)
+// iBase64		@iBase64(1,2)							!1!error: iBase64 is not yet implemented.
+
+iBase64 01		@iBase64(e,foo)							Zm9v
+iBase64 02 		@iBase64(eb,foo)						Zm9v
+iBase64 03		@iBase64(d,Zm9v)						foo
+iBase64 04		@iBase64(e,a tiny little bit longer text to show breaking of encode)	YSB0aW55IGxpdHRsZSBiaXQgbG9uZ2VyIHRleHQgdG8gc2hvdyBicmVha2luZyBvZiBlbmNvZGU=
+iBase64 05		@iBase64(eb,a tiny little bit longer text to show breaking of encode)	YSB0aW55IGxpdHRsZSBiaXQgbG9uZ2VyIHRleHQgdG8gc2hvdyBicmVha2luZyBvZiBlbmNv␤ZGU=
+iBase64 06		@iBase64(d,~m9v)						!1!warn: base64 decoding found illegal character.
+
+
+# iDecode
+//iDecode		@iDecode(1)								!1!error: iDecode is not yet implemented.
+iDecode 01		@iDecode(&amp;)							&
+iDecode 02		@iDecode(&quot;)						"
+iDecode 03		@iDecode(&apos;)						'
+iDecode 04		@iDecode(&lt;)							<
+iDecode 05		@iDecode(&gt;)							>
+iDecode 06		@iDecode(&pound;)						&pound;
+iDecode 07		@iDecode(&)								&
+iDecode 07		@iDecode(&#39;)							'
+
+# iEncode
+//iEncode		@iEncode(1)								!1!error: iEncode is not yet implemented.
+iEncode 01		@iEncode(&)								&amp;
+iEncode 02		@iEncode(")								&quot;
+iEncode 03		@iEncode(')								&#39;
+iEncode 04		@iEncode(<)								&lt;
+iEncode 05		@iEncode(>)								&gt;
+iEncode 06		@iEncode(£)								£
+iEncode 07		@iEncode(&amp;)							&amp;amp;
+iEncode 07		@iEncode("3+4>5")						&quot;3+4&gt;5&quot;
+
+# iHex
+iHex 01			@iHex(foo)								666F6F
+iHex 02			@iHex(foo,666F6F,T,F)					T
+iHex 03			@iHex(A)								41
+iHex 04			@iHex(A,41,T,F)							T
+iHex 05			@iHex(A,40,T,F)							F
+
+# iUnHex
+iUnHex 01		@iUnHex(666F6F)							foo
+iUnHex 02		@iUnHex(666F6F,foo,T,F)					T
+iUnHex 03		@iUnHex(GX3322)							!1!warn: hex decoding found illegal character.
+iUnHex 04		@iUnHex(GX3322,666F6F,T,F)				!1!warn: hex decoding found illegal character.
+iUnHex 05		@iUnHex(7a7C6C)							z|l
+iUnHex 06		@iUnHex(7a4)							z@
+
+# iUpper
+iUpper 01		-@iUpper()-								--
+iUpper 02		@iUpper(UVWXYZ)							UVWXYZ
+iUpper 03		@iUpper(uvwxyz)							UVWXYZ
+iUpper 04		@iUpper(ༀༀXxxༀༀ)						ༀༀXXXༀༀ
+iUpper 05		@iUpper(UVw,UVW,T,F)					T
+iUpper 06		@iUpper(UVw,UvW,T,F)					F
+iUpper 07		-@iUpper(UVw,UvW,T)-					--
+
+# iLower
+iLower 01		-@iLower()-								--
+iLower 02		@iLower(UVWXYZ)							uvwxyz
+iLower 03		@iLower(uvwxyz)							uvwxyz
+iLower 04		@iLower(ༀༀXXXༀༀ)						ༀༀxxxༀༀ
+iLower 05		@iLower(UVw,uvw,T,F)					T
+iLower 06		@iLower(UVw,uvW,T,F)					F
+iLower 07		-@iLower(UVw,uvW,T)-					--
+
+
+# iUrlEncode
+iUrlEncode 01	@iUrlEncode(Test A : $b & c£d^e)						Test%20A%20%3A%20%24b%20%26%20c%C2%A3d%5Ee
+iUrlEncode 02	@iUrlEncode(https://www.braininjuryhub.co.uk/)			https%3A%2F%2Fwww.braininjuryhub.co.uk%2F
+iUrlEncode 03	@iUrlEncode(The Children's Trust Brain Injury Hub)		The%20Children%27s%20Trust%20Brain%20Injury%20Hub
+
+# iDigest
+iDigest 01		@iDigest(Flash Gordon,md4)				31D6CFE0D16AE931B73C59D7E0C089C0
+iDigest 02		@iDigest(Flash Gordon,sha256)			E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
+

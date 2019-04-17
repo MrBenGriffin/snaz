@@ -8,6 +8,7 @@
 #include "support/Definitions.h"
 #include "support/Message.h"
 #include "support/db/Connection.h"
+#include "node/Tree.h"
 #include "node/Node.h"
 #include "node/Suffix.h"
 #include "mt/mt.h"

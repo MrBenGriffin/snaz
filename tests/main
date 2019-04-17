@@ -2,20 +2,18 @@
 F showPassed	1
 F showDefines	0
 
-# iForSubs
-iForSubs ini	[@iSet(foo,@iID(!home))@iSet(bar,@iID(!home))]					[]
-iForSubs 001	@iForSubs(bldvar,@iID(!home),value,name,[@iField(name)])		[bar][foo]
-
 F showDefines	0
 F showPassed	0
 
 // name		code										expected result
 // example	[abcdef]									[abcdef]
-//!	b0rked
 
 //-- included files
+!	encoder/_main
+
 !	unimplemented
 !	grammar/_main
+
 !	utility/_main
 !	storage/_main
 !	string/_main

@@ -1,20 +1,7 @@
 
-# Unimplemented Utility
-iForSubs				@iForSubs(1,2,3,4,5)					!1!error: iForSubs is not yet implemented.
+# Utility: All implemented!
 
-# Unimplemented Storage
-iSetCache				@iSetCache(1,2)							!1!fatal: iSetCache is not yet implemented. It requires Node support.
-
-# Unimplemented Encoder
-iBase64					@iBase64(1,2)							!1!error: iBase64 is not yet implemented.
-iDecode					@iDecode(1)								!1!error: iDecode is not yet implemented.
-iEncode					@iEncode(1)								!1!error: iEncode is not yet implemented.
-iHex					@iHex(1,2)								!1!error: iHex is not yet implemented.
-iUnHex					@iUnHex(1,2)							!1!error: iUnHex is not yet implemented.
-iUpper					@iUpper(1,2)							!1!error: iUpper is not yet implemented.
-iLower					@iLower(1,2)							!1!error: iLower is not yet implemented.
-iUrlEncode				@iUrlEncode(1,2)						!1!error: iUrlEncode is not yet implemented.
-iDigest					@iDigest(1,2)							!1!error: iDigest is not yet implemented.
+# Encoder: All implemented!
 
 # Unimplemented NodeTree
 iNumChildren			@iNumChildren(1,2)						!1!error: iNumChildren is not yet implemented.
@@ -59,3 +46,6 @@ iForTax					@iForTax(1,2,3,4)						!1!error: iForTax is not yet implemented.
 iForTaxNodes			@iForTaxNodes(1,2,3,4,5)				!1!error: iForTaxNodes is not yet implemented.
 iExistSimilar			@iExistSimilar(1,2)						!1!error: iExistSimilar is not yet implemented.
 iForSimilar				@iForSimilar(1,2,3,4,5,6)				!1!error: iForSimilar is not yet implemented.
+
+# Storage: Unimplemented
+iSetCache				@iSetCache(1,2)							!1!fatal: iSetCache is not yet implemented. It requires Node support.

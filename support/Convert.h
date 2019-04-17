@@ -54,8 +54,6 @@ namespace Support {
 	void 			tolist(vector<string>&,string,const string&); //given a cutter(string) delimited set of strings, return a vector of strings.
 	void 			toSet(set<size_t>&,const string&); //given a comma-delimited set of strings, return a set of size_t.
 
-	void			tolower(string&);							//Given an mixed case string, return it in lower case. e.g. "ThIs" => "this"
-	void			toupper(string&);							//Given an mixed case string, return it in lower case. e.g. "ThIs" => "this"
 	bool			isint(const string&);
 	bool			isfloat(const string &);
 	bool			isdouble(const string &);

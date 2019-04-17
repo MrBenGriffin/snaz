@@ -7,6 +7,7 @@
 #include "support/Definitions.h"
 #include "support/Regex.h"
 #include "support/Convert.h"
+#include "support/Encode.h"
 #include "support/Fandr.h"
 #include "support/Env.h"
 

@@ -6,6 +6,7 @@
 #define MACROTEXT_ENCODE_H
 
 #include <string>
+#include "support/Message.h"
 
 namespace Support {
 	using namespace std;
@@ -13,6 +14,7 @@ namespace Support {
 
 	string xmlenc(string);
 	string xmlenc(const char*);
+
 	void xmldecode(string&);  //XML de-escape
 	void xmlencode(string&);  //XML escape
 	bool nameencode(string&); //make sure it's a legal xml name
@@ -21,13 +23,16 @@ namespace Support {
 	string hexencode(const unsigned char);
 
 	bool tohex(string&);
-	bool fromhex(string&);
+	bool fromhex(Messages&,string&);
 
-	void urldecode(string&);
 	void urlencode(string&);
+	void urldecode(Messages&,string&);
 
-	bool base64decode(string&);
 	bool base64encode(string&,bool = true);
+	bool base64decode(Messages&,string&);
+
+	void tolower(string&);							//Given an mixed case string, return it in lower case. e.g. "ThIs" => "this"
+	void toupper(string&);							//Given an mixed case string, return it in lower case. e.g. "ThIs" => "this"
 
 };
 

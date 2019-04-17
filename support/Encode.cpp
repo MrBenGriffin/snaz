@@ -3,8 +3,9 @@
 //
 
 #include <sstream>
-#include "Encode.h"
-#include "Fandr.h"
+#include "support/Encode.h"
+#include "support/Fandr.h"
+#include "support/Message.h"
 
 namespace Support {
 	using namespace std;
@@ -14,28 +15,38 @@ namespace Support {
 	//rfc2045 -- here we include a CRLF after every 72 characters.
 	//"All line breaks or other characters not found in Table 1 must be ignored by decoding software"
 	//---------------------------------------------------------------------------
-	bool base64decode(string& basis) {
+	bool base64decode(Messages& errs,string& basis) {
 		// A correct string has a length that is multiple of four.
 		// Every 4 encoded bytes corresponds to 3 decoded bytes, (or null terminated).
 		string b64ch="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+		bool warned = false;
 		size_t len = basis.size();
 		size_t pos = 0;
 		int i = 0,j = 0;
 		unsigned char encbuf[4], decbuf[3];
 		std::string ret;
-		while (len-- && ( basis[pos] != '=') && (b64ch.find(basis[pos]) != string::npos)) {
-			encbuf[i++] = basis[pos]; pos++;
-			if (i ==4) {
-				for (i = 0; i <4; i++) {
-					encbuf[i] = b64ch.find(encbuf[i]);
+		while (len-- && basis[pos] != '=') {
+			size_t ch = b64ch.find(basis[pos]);
+			if(ch == string::npos) {
+				if(!warned) {
+					errs << Message(warn,"base64 decoding found illegal character.");
+					warned = true;
 				}
-				decbuf[0] = (encbuf[0] << 2) + ((encbuf[1] & 0x30) >> 4);
-				decbuf[1] = ((encbuf[1] & 0xf) << 4) + ((encbuf[2] & 0x3c) >> 2);
-				decbuf[2] = ((encbuf[2] & 0x3) << 6) + encbuf[3];
-				for (i = 0; (i < 3); i++) {
-					ret.push_back(decbuf[i]);
+			} else {
+				encbuf[i++] = basis[pos];
+				pos++;
+				if (i == 4) {
+					for (i = 0; i < 4; i++) {
+						encbuf[i] = b64ch.find(encbuf[i]);
+					}
+					decbuf[0] = (encbuf[0] << 2) + ((encbuf[1] & 0x30) >> 4);
+					decbuf[1] = ((encbuf[1] & 0xf) << 4) + ((encbuf[2] & 0x3c) >> 2);
+					decbuf[2] = ((encbuf[2] & 0x3) << 6) + encbuf[3];
+					for (i = 0; (i < 3); i++) {
+						ret.push_back(decbuf[i]);
+					}
+					i = 0;
 				}
-				i = 0;
 			}
 		}
 		if (i) {
@@ -87,7 +98,6 @@ namespace Support {
 				line_time += 4;
 				if ( line_time >= 72) {
 					line_time = 0;
-					s.push_back('\r');
 					s.push_back('\n');
 				}
 			}
@@ -130,6 +140,17 @@ namespace Support {
 		return s;
 	}
 
+	//---------------------------------------------------------------------------
+	void tolower(string& s) {
+		for (char &i : s)
+			i = std::tolower(i);
+	}
+
+	//---------------------------------------------------------------------------
+	void toupper(string& s) {
+		for (char &i : s)
+			i = std::toupper(i);
+	}
 
 	//• --------------------------------------------------------------------------
 	bool normalise(string& container) {
@@ -286,7 +307,7 @@ namespace Support {
 		return success;
 	}
 	//---------------------------------------------------------------------------
-	bool fromhex(string& s) {
+	bool fromhex(Messages& errs,string& s) {
 		const unsigned char Aubase = 'A' - 10;
 		const unsigned char Albase = 'a' - 10;
 		bool success=true;
@@ -308,6 +329,7 @@ namespace Support {
 					} else {
 						hi = 0;
 						success = false;
+						errs << Message(warn,"hex decoding found illegal character.");
 					}
 				}
 			}
@@ -322,6 +344,7 @@ namespace Support {
 					} else {
 						lo = 0;
 						success = false;
+						errs << Message(warn,"hex decoding found illegal character.");
 					}
 				}
 			}
@@ -398,7 +421,7 @@ namespace Support {
 	}
 */
 	//---------------------------------------------------------------------------
-	void urldecode(std::string& s) {
+	void urldecode(Messages& errs,std::string& s) {
 		std::string result;
 		unsigned char c;
 		for (size_t p= 0; p < s.size(); ++p) {

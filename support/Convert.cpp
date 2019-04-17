@@ -443,17 +443,6 @@ namespace Support {
 		}
 	}
 	//---------------------------------------------------------------------------
-	void tolower(string& s) {
-		for (char &i : s)
-			i = std::tolower(i);
-	}
-
-	void toupper(string& s) {
-		for (char &i : s)
-			i = std::toupper(i);
-	}
-
-	//---------------------------------------------------------------------------
 	bool isint(const string& s) {
 		if (!s.empty()) { if (s.find_first_of("+-0123465789") == 0) return true; } return false;
 	}

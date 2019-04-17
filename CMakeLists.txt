@@ -69,4 +69,4 @@ add_executable(macrotext ${BISON_parser_OUTPUTS} ${FLEX_advanced_OUTPUTS} ${FLEX
         main.cpp test.cpp
         Build.cpp Build.h
         BuildUser.cpp BuildUser.h
-        content/Template.cpp content/Template.h content/Layout.cpp content/Layout.h content/Segment.cpp content/Segment.h content/Editorial.cpp content/Editorial.h)
+        content/Template.cpp content/Template.h content/Layout.cpp content/Layout.h content/Segment.cpp content/Segment.h content/Editorial.cpp content/Editorial.h support/Crypto.cpp support/Crypto.h)

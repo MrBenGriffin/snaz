@@ -86,6 +86,7 @@ namespace mt {
 		void expand(Support::Messages&,mtext&,Instance&,mstack&);
 	};
 	struct iForSubs : public FieldContext {
+		Support::Db::Query* query;
 		iForSubs() : FieldContext("iForSubs",5,5) {}
 		string get(Messages& e,const string name) const override;
 		void expand(Support::Messages&,mtext&,Instance&,mstack&);
@@ -199,11 +200,11 @@ namespace mt {
 		void expand(Support::Messages&,mtext&,Instance&,mstack&);
 	};
 	struct iDecode : public Internal {
-		iDecode() : Internal("iDecode",0,1) {}
+		iDecode() : Internal("iDecode",0,4) {}
 		void expand(Support::Messages&,mtext&,Instance&,mstack&);
 	};
 	struct iEncode : public Internal {
-		iEncode() : Internal("iEncode",0,1) {}
+		iEncode() : Internal("iEncode",0,4) {}
 		void expand(Support::Messages&,mtext&,Instance&,mstack&);
 	};
 	struct iHex : public Internal {
