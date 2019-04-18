@@ -5,7 +5,14 @@
 F showPassed	1
 F showDefines	1
 
-U onlyMe	0	0	00	⍟0
-03 special	[⌽onlyMe()]						[onlyMe]
+//check values are correct.
+//forNest01	@iForSibs(252,*,$,@iLeft(@iLinkRef(*),1))		vcmrhooooclm
+//forNest02	@iForSibs(252,*,$,@iNumGen(*))					555555555555
+//forNest02	@iLength(@iForSibs(252,*,$,x))					12
+//forNest03	@iForAncestry(252,R,252/^2,*,@iNumGen(*);)		3;4;5;
+//forNest05	[@iForAncestry(252,R,252/^2,NODE,@iNumGen(NODE))]	[345]
+forNest06	@iForSibs(252,*,$,[@iForAncestry(*,R,*/^2,NODE,@iNumGen(NODE))])	[345][345][345][345][345][345][345][345][345][345][345][345]
 
-X
+//Actual nested parameters..
+
+//fNest02	@iForSibs(252,*,$,[@iForAncestry(*,R,*/^2,NODE,@iNumGen(*))])	[555][555][555][555][555][555][555][555][555][555][555][555]

@@ -26,7 +26,7 @@ namespace mt {
 		InternalInstance(const Internal*,Support::Messages&,mtext&,Instance&,mstack&);
 
 		void generate(plist&,const mtext*,const string,const string="");
-		void generate(vector<const node::Node *>&,const mtext*,string,string);
+		void generate(Messages&,vector<const node::Node *>&,const mtext*,string,string);
 
 		bool     		boolParm(size_t,bool=false); //a boolean value (with a default).
 		bool			reverse(size_t);

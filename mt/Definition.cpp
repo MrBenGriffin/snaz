@@ -173,7 +173,7 @@ namespace mt {
 		context.push_front({&handler,modified});
 		if (iterated) {
 			if(modified.generated) { context.push_back({nullptr,modified}); }
-			iteration* i = &(context.front().second.it);
+			iteration* i = &(context.front().second.it); //so we are iterating front (because not all are generated).
 			for (i->first = 1; i->first <= i->second; i->first++) {
 				Driver::expand(expansion,e, o, context);
 			}

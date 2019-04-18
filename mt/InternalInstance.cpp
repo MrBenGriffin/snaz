@@ -31,7 +31,7 @@ namespace mt {
 		}
 	}
 
-	void InternalInstance::generate(vector<const node::Node *>& nodes,const mtext* program,string ref,string count) {
+	void InternalInstance::generate(Messages& e,vector<const node::Node *>& nodes,const mtext* program,string ref,string count) {
 		if(program != nullptr  && ! program->empty()) { // from an empty parm..
 			plist parms;
 			for(auto* node : nodes) {
@@ -41,7 +41,7 @@ namespace mt {
 			i.iValue = ref;
 			i.iCount = count;
 			Definition macro(*program);
-			macro.expand(*errs,*output,i,*context);
+			macro.expand(e, *output, i, *context);
 		}
 	}
 

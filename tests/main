@@ -1,9 +1,9 @@
 // Debugging / Testing
 
-//!	pending/b0rked
+!	pending/b0rked
 
 //No debugging, uncomment the following X
-//X
+X
 
 F showDefines	0
 F showPassed	0

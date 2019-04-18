@@ -91,6 +91,8 @@ namespace mt {
 		}
 	}
 
+	//Are we doing this before expansion, or during expansion?!
+	//Why not do it with the parse text -before- doing any evaluation?
 	void Text::doCountAndValue(Messages& m,mtext& result,const mstack &context) const {
 		const Instance& instance = context.back().second;
 //		const Instance& thing = context.front().second;

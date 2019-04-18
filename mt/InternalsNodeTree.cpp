@@ -138,7 +138,7 @@ namespace mt {
 			if ( my.reverse(2) ) {
 				std::reverse(nodelist.begin(), nodelist.end());
 			}
-			my.generate(nodelist,my.praw(5),my.parm(4),""); //template,node*,position.
+			my.generate(e,nodelist,my.praw(5),my.parm(4),""); //template,node*,position.
 		}
 	}
 	void iForPeers::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
@@ -149,7 +149,7 @@ namespace mt {
 		if (main != nullptr) {
 			vector<const Node *> peers = main->peers(root);
 			doSort(e, peers, my.parm(5));
-			my.generate(peers, my.praw(6), my.parm(3), my.parm(4)); //template,node*,position.
+			my.generate(e,peers, my.praw(6), my.parm(3), my.parm(4)); //template,node*,position.
 		}
 	}
 	void iForNodes::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
@@ -164,7 +164,7 @@ namespace mt {
 		const Node* main = node::Content::editorial.byPath(e,my.parm(1));
 		if (main != nullptr) {
 			vector<const node::Node *> sibs = std::move(main->siblings());
-			my.generate(sibs,my.praw(4),my.parm(2),my.parm(3)); //template,node*,position.
+			my.generate(e,sibs,my.praw(4),my.parm(2),my.parm(3)); //template,node*,position.
 		}
 	}
 	void iSize::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
