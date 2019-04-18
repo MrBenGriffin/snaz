@@ -49,6 +49,15 @@ namespace Support {
 		return result;
 	}
 
+	void LStore::get(const string& name,vector<string>& repo) const {
+		auto it = store.find(name);
+		if (it != store.end()) {
+			for(auto &i : it->second) {
+				repo.push_back(i);
+			}
+		}
+	}
+
 	bool LStore::has(const string name, const string value) const {
 		bool found = false;
 		if (name.length() > 0) {

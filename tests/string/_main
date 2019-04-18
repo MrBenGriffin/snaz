@@ -20,7 +20,7 @@ iTrim004	@iTrim(X    )									X
 iTrim005	@iTrim(   X)									X
 iTrim006	@iTrim(␉X␉)										X
 iTrim007	[@iTrim(␉␉␉)]									[]
-iTrim008	[@iTrim(␉␉)]										[]
+iTrim008	[@iTrim(␉␉)]									[]
 iTrim009	[@iTrim(␉)]										[]
 iTrim010	@iTrim(␉H␍R␉)									H␍R
 iTrim011	@iTrim(␍HR␍)										HR
@@ -113,6 +113,15 @@ iRep 101 	[@iReplace(xx,y,txxy)]							[tyy]
 iRep 102 	[@iReplace(z,,xzxzx)]							[xxx]
 iRep 103 	[@iReplace(xzxzx)]								[]
 
+U zp		0	1	01	␉[⍟1]␉
+U zs		0	1	10	␉[⍟1]␉
+U zv		0	1	00	␉[⍟1]␉
+U zb		0	1	11	␉[⍟1]␉
+U vv		0	1	00	␉[⍟1]␉
+U vp		0	1	01	␉[⍟1]␉
+U vs		0	1	10	␉[⍟1]␉
+U vb		0	1	11	␉[⍟1]␉
+
 # Strings Internals: iRembr
 iRembr0010	@zv(@iRembr(␉H␤R␉))								␉[HR]␉
 iRembr0011	@zp(@iRembr(␉H␤R␉))								␉[HR]␉
@@ -126,6 +135,9 @@ iRembrp0012	@zs(␉@iRembrp(␉H␤R␉))							[␉␉H␤R␉]
 iRembrp0013	@zb(␉@iRembrp(␉H␤R␉))							[␉H␤R␉]
 
 # Strings Internals: iRegex
+U ent		1	1	11	⌽iExists(Entities,,⌽iSet(Entities,⎡nbsp;iexcl;cent;pound;curren⎤)⌽iSet(EntCodes,⎡00A0;00A1;00A2;00A3;00A4⎤))⌽iSet(*entid,⌽iIndex(;,⌽iGet(Entities),find,⍟1))⌽iEq(⌽iGet(*entid),-1,⍟1,#x⌽iIndex(;,⌽iGet(EntCodes),get,⌽iGet(*entid)))
+U entx		1	1	11	⌽iRegex(&([a-z]+);,&⌽ent(\1);,⍟1)
+
 iRgx_001A		⌽ent(nbsp)														#x00A0
 iRgx_0019		@entx(&nbsp;)													&#x00A0;
 iRgx_0013		@iRegex((x+),[\1],txxy)											t[xx]y

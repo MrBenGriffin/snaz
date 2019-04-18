@@ -36,7 +36,9 @@ namespace mt {
 		std::string _name;
 		Internal(std::string name,size_t min,size_t max) : _name(std::move(name)),minParms(min),maxParms(max) {}
 		plist toParms(string,string,string);
-		plist toParms(const listType*,string);
+		plist toParms(const listType*,string,size_t = string::npos);
+		plist toParms(vector<string>&,string,size_t = string::npos);
+		plist toNodeParms(Messages&,vector<string>&,string,size_t = string::npos);
 		void doSort(vector<std::string>&,std::string);
 		void doSort(Support::Messages&,vector<const node::Node*>&,std::string);
 		void doTrace(Support::Messages&,mstack&);

@@ -11,7 +11,7 @@ namespace mt {
 	InternalInstance::InternalInstance(const Internal *thing,Messages& e,mtext &o, Instance &i, mstack &c) :
 		owner(thing),output(&o), instance(&i), context(&c), errs(&e) {
 		parms = i.parms;
-		count = parms->size() == 1 ? parms->front().size() : parms->size();
+		count = parms->size() == 1 ? parms->front().empty() ? 0 : 1 : parms->size();
 		min = thing->minParms;
 		max = thing->maxParms;
 		if(!thing->inRange(count)) {
@@ -27,11 +27,12 @@ namespace mt {
 				}
 			}
 			e << Message(range,err.str());
+			count = max;
 		}
 	}
 
 	void InternalInstance::generate(vector<const node::Node *>& nodes,const mtext* program,string ref,string count) {
-		if(program != nullptr) { // from an empty parm..
+		if(program != nullptr  && ! program->empty()) { // from an empty parm..
 			plist parms;
 			for(auto* node : nodes) {
 				parms.push_back({Text(node->ids())});
@@ -46,7 +47,7 @@ namespace mt {
 
 
 	void InternalInstance::generate(plist& list,const mtext* program,const string value,const string count) {
-		if(program != nullptr) { // from an empty parm..
+		if(program != nullptr && !program->empty()) { // from an empty parm..
 			Instance i(&list,{1,list.size()},true); //set as generated.
 			i.iValue = value;
 			i.iCount = count;
@@ -56,7 +57,7 @@ namespace mt {
 	}
 
 	bool InternalInstance::boolParm(size_t i,bool _default) {
-		if(i > count) {
+		if(i > count || i > parms->size()) {
 			return _default;
 		} else {
 			std::ostringstream result;
@@ -67,7 +68,7 @@ namespace mt {
 	}
 
 	bool InternalInstance::reverse(size_t i) {
-		if(i > count) {
+		if(i > count || i > parms->size()) {
 			return false;
 		} else {
 			std::ostringstream result;
@@ -79,7 +80,7 @@ namespace mt {
 
 	std::string InternalInstance::parm(size_t i) {
 		std::ostringstream result;
-		if(i > count) {
+		if(i > count || i > parms->size()) {
 			return "";
 		} else {
 			Driver::expand((*parms)[i - 1],*errs,result, *context);
@@ -89,14 +90,14 @@ namespace mt {
 
 	const mtext* InternalInstance::praw(size_t i) {
 		const mtext* m = nullptr;
-		if(count >= i) {
+		if(count >= i || parms->size() >= i ) {
 			m = &((*parms)[i - 1]);
 		}
 		return m;
 	}
 
 	void InternalInstance::expand(size_t i) {
-		if(count >= i) {
+		if(count >= i && parms->size() >= i ) {
 			Driver::expand((*parms)[i - 1], *errs, *output, *context);
 		}
 	}

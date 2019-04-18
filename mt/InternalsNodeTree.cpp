@@ -20,7 +20,7 @@ namespace mt {
 		InternalInstance my(this,e,o,instance,context);
 		const Node* main = node::Content::editorial.byPath(e,my.parm(1));
 		if (main != nullptr) {
-			my.logic(main->tier(), 2);
+			my.logic(main->tier(),2);
 		}
 	}
 	void iNumGens::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {

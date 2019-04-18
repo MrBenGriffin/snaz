@@ -54,12 +54,6 @@ U onlyMe	0	0	00	⍟0
 U commas	1	-1	010	⍟(i)⌽iEq(⍟(k),⍟(n),,⎡-⎤)
 U ucomma	1	-1	010	[⌽commas(⍟(1+))]
 
-# For testing Injection Stacks.
-U xz		0	1	10	[⌽iEq(⍟1,⍟(p2),⍟1,⍟(ps))]
-U xy		0	1	10	⌽xz(⍟1)
-U xx		0	1	10	⌽xy(⍟1)
-U xw		0	1	10	⌽xx(⍟1)
-U xv		0	1	10	⌽xw(⍟1)
 
 # For testing Trace
 U t0		0	1	10	@iConsole(t,%1)

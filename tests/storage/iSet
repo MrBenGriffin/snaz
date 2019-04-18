@@ -16,6 +16,3 @@ iExists01	@iSet(A,T)@iExists(A)														1
 iExists02	@iExists(wap)																0
 iExists03	@iExists(A,T,F)																T
 iExists04	@iExists(wap,T,F)															F
-
-b07 entity	@ent(nbsp)																	#x00A0
-b08 entity	@ent(cent)																	#x00A2

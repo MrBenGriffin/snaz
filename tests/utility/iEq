@@ -23,6 +23,12 @@ U mcommas	1	-1	10	⌽commas(⍟(1+))
 001iterated			[⌽commas(X,Y,⎡ss,uu,vv⎤,⎣⌽b0rked⎦,thin)]							[X,Y,ss,uu,vv,⌽b0rked,thin]
 002iterated			[⌽mcommas(X,Y,⎡ss,uu,vv⎤,⎣⌽b0rked⎦,thin)]							[X,Y,ss,uu,vv,⌽b0rked,thin]
 
+# For testing Injection Stacks.
+U xz		0	1	10	[⌽iEq(⍟1,⍟(p2),⍟1,⍟(ps))]
+U xy		0	1	10	⌽xz(⍟1)
+U xx		0	1	10	⌽xy(⍟1)
+U xw		0	1	10	⌽xx(⍟1)
+U xv		0	1	10	⌽xw(⍟1)
 02b stacked			⌽xv(xx)																[xx]
 
 # iEq non-evaluating (uses iSet/iGet)

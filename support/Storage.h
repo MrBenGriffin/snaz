@@ -34,6 +34,7 @@ namespace Support {
 		size_t size(std::string) const;
 
 		const listType *get(std::string) const;
+		void get(const std::string&,vector<string>&) const;
 
 		bool has(std::string, std::string) const;
 		size_t count(std::string, std::string) const;

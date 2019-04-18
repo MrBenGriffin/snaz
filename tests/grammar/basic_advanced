@@ -169,6 +169,13 @@ U uiter	1	-1	10	⌽iter(⍟(1+))
 010iter			⌽iter(X,Y,Z)							[X][Y][Z]
 020uiter		⌽uiter(X,Y,Z)							[X][Y][Z]
 
+# For testing Injection Stacks.
+U xz		0	1	10	[⌽iEq(⍟1,⍟(p2),⍟1,⍟(ps))]
+U xy		0	1	10	⌽xz(⍟1)
+U xx		0	1	10	⌽xy(⍟1)
+U xw		0	1	10	⌽xx(⍟1)
+U xv		0	1	10	⌽xw(⍟1)
+
 # Testing Stacks.
 stacked001		⌽xv()																[xz;xy;xx;xw;xv;stacked001;]
 stacked002		⌽xv(xx)																[xx]

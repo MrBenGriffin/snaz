@@ -3,21 +3,7 @@
 
 # Encoder: All implemented!
 
-# Unimplemented NodeTree
-iNumChildren			@iNumChildren(19,2)						!1!error: iNumChildren is not yet implemented.
-iNumGen					@iNumGen(19,2)							!1!error: iNumGen is not yet implemented.
-iNumGens				@iNumGens(19,2)							!1!error: iNumGens is not yet implemented.
-iNumPage				@iNumPage(19,2)							!1!error: iNumPage is not yet implemented.
-iNumPages				@iNumPages(19,2)						!1!error: iNumPages is not yet implemented.
-iNumSib					@iNumSib(19,2)							!1!error: iNumSib is not yet implemented.
-iEqFamily				@iEqFamily(19,2)						!1!error: iEqFamily is not yet implemented.
-iEqNode					@iEqNode(19,2)							!1!error: iEqNode is not yet implemented.
-iEqSibs					@iEqSibs(19,2)							!1!error: iEqSibs is not yet implemented.
-iExistNode				@iExistNode(19,2)						!1!error: iExistNode is not yet implemented.
-iForAncestry			@iForAncestry(19,2,3,4,5)				!1!error: iForAncestry is not yet implemented.
-iForNodes				@iForNodes(19,2,3,4,5)					!1!error: iForNodes is not yet implemented.
-iForPeers				@iForPeers(19,2,3,4,5,6)				!1!error: iForPeers is not yet implemented.
-iSize					@iSize(19,2)							!1!error: iSize is not yet implemented.
+# NodeTree: In progress!!
 
 # Unimplemented Build
 iTech					@iTech(1,2)								!1!error: iTech is not yet implemented.

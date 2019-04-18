@@ -8,16 +8,19 @@ F showPassed	1
 iNumCh 001		@iNumChildren(!siteSections)									3
 iNumCh 002		@iNumChildren(!siteSections/^1)									3
 
-iNumGen 003		@iNumGen(!siteSections)											3
-iNumGen 003		@iNumGen(!siteSections,3,T)										T
+iNumGen 01		@iNumGen(!siteSections)											3
+iNumGen 02		@iNumGen(!siteSections,3,T)										T
+iNumGen 03		[@iNumGen(!siteSections,4,T)]									[]
+iNumGen 04		@iNumGen(!siteSections,4,T,F)									F
+
 iNumGens 004	@iNumGens()														6
 iNumGens 004t	@iNumGens(6,T,F)												T
 iNumPages 006	@iNumPages(!home)												1
 iNumPages 061	@iNumPages(!home,1,T,F)											T
 
-iSize 001		[@iSize(!siteSections)]												[7]
-iSize 003		[@iSize(!siteSections,7,T,F)]										[T]
-iSize 004		[@iSize(!siteSections,19,T,F)]										[F]
+iSize 001		[@iSize(!siteSections)]											[7]
+iSize 003		[@iSize(!siteSections,7,T,F)]									[T]
+iSize 004		[@iSize(!siteSections,19,T,F)]									[F]
 
 iNumSib 007		@iNumSib(!siteSections/n-0)										3
 iNumSib 071		@iNumSib(!siteSections/n-0,1,T,F)								F

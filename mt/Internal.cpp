@@ -57,10 +57,14 @@ namespace mt {
 		return result;
 	}
 
-	plist Internal::toParms(const listType* orig,string sort) {
+	plist Internal::toParms(const listType* orig,string sort,size_t maxSize) {
 		vector<string> list;
+		long count = min(maxSize,list.size());
 		for(auto& i : *orig) {
-			list.push_back(i);
+			if(count > 0) {
+				list.push_back(i);
+				count--;
+			}
 		}
 		doSort(list,sort);
 		plist result;
@@ -69,6 +73,38 @@ namespace mt {
 		}
 		return result;
 	}
+
+	plist Internal::toParms(vector<string>& list,string sort,size_t maxSize) {
+		if(maxSize < list.size()) {
+			list.resize(maxSize);
+		}
+		doSort(list,sort);
+		plist result;
+		for(auto& i : list) {
+			result.push_back({Text(i)});
+		}
+		return result;
+	}
+
+	plist Internal::toNodeParms(Messages& e,vector<string>& list,string sort,size_t maxSize) {
+		if(maxSize < list.size()) {
+			list.resize(maxSize);
+		}
+		vector<const Node*> nodes;
+		for(auto& i : list) {
+			const Node* node = node::Content::editorial.byPath(e,i);
+			if(node != nullptr) {
+				nodes.push_back(node);
+			}
+		}
+		doSort(e,nodes,sort);
+		plist result;
+		for(auto& i : nodes) {
+			result.push_back({Text(i->ids())});
+		}
+		return result;
+	}
+
 
 	void Internal::doTrace(Messages& e,mstack& context) {
 		for (auto& i : context) {
@@ -140,7 +176,6 @@ namespace mt {
 			sortnodes(nodelist,backwards,'W');
 		}
 	}
-
 
 	void Internal::sortnodes(vector<const Node *>& nodelist,bool backwards,char function) {
 		switch(function) {

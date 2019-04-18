@@ -276,36 +276,25 @@ namespace mt {
 						return;
 					} break;
 					case 'n': { //forNodes
-						e << Message(fatal,"iList NODE SUPPORT is not yet implemented.");
-//						unsigned long maxItems = string::npos;
-//						pair<string,string> value = String::split(':',func);
-//						if (!value.second.empty()) { try { maxItems = stoul(value.second); }  catch (...) {} }
-//						//@iList(foo,nodes,*,t,@iTitle(*))
-//						const listType* slist = lStore.get(name);
-//						if(slist) {
-//							vector<Node*> nodes;
-//							for (auto i = slist->cbegin(); i != slist->cend(); i++ ) {
-//								size_t n_id = stoul(*i);
-//								Node* node = bld->rootc->nodebyid(n_id);
-//								if(node) {
-//									nodes.push_back(node);
-//								}
-//							}
-//							doSort(nodes,my.parm(4),output);
-//							maxItems = maxItems < nodes.size() ? maxItems: nodes.size();
-//							nodes.resize(maxItems);
-//							expand(&nodes,praw(5),my.parm(3),"");
-//						}
+						pair<string,string> value = split(':',func);
+						size_t maxItems = value.second.empty() ? string::npos : natural(value.second);
+						//@iList(foo,nodes,R,*,[*])
+						vector<string> list;
+						lStore.get(name,list);
+						if(!list.empty()) {
+							plist parms = toNodeParms(e,list,my.parm(3),maxItems);
+							my.generate(parms,my.praw(5),my.parm(4),"");
+						}
 					} break;
 					case 'f': { //for
-						unsigned long maxItems = string::npos;
 						pair<string,string> value = split(':',func);
-						if (!value.second.empty()) { try { maxItems = stoul(value.second); }  catch (...) {} }
-						//@iList(foo,for,*,i,[*])
-						const listType* list = lStore.get(name);
-						if(list) {
-							plist parms = toParms(list,my.parm(4));
-							my.generate(parms,my.praw(5),my.parm(3),my.parm(4));
+						size_t maxItems = value.second.empty() ? string::npos : natural(value.second);
+						//@iList(foo,for,R,*,[*])
+						vector<string> list;
+						lStore.get(name,list);
+						if(!list.empty()) {
+							plist parms = toParms(list,my.parm(3),maxItems);
+							my.generate(parms,my.praw(5),my.parm(4),"");
 						}
 					} break;
 				}

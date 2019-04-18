@@ -93,6 +93,8 @@ namespace mt {
 
 	void Text::doCountAndValue(Messages& m,mtext& result,const mstack &context) const {
 		const Instance& instance = context.back().second;
+//		const Instance& thing = context.front().second;
+//		size_t gross = context.size();
 		const std::string& value=instance.iValue;
 		size_t start = 0,curr,vSize = value.size();
 		size_t current = context.front().second.it.first;
@@ -110,9 +112,11 @@ namespace mt {
 				}
 			}
 			const mtext& parm = (*instance.parms)[current - 1];
-			const_cast<mstack &>(context).back().second.generated=false;
-			Driver::expand(parm,m,result,const_cast<mstack &>(context));
-			const_cast<mstack &>(context).back().second.generated=true;
+			if(!parm.empty()) {
+				const_cast<mstack &>(context).back().second.generated=false;
+				Driver::expand(parm,m,result,const_cast<mstack &>(context));
+				const_cast<mstack &>(context).back().second.generated=true;
+			}
 		}
 		string txt = text.substr(start);
 		if(!txt.empty()) {

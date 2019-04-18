@@ -163,15 +163,17 @@ namespace mt {
 										Driver::expand((*parms)[value - 1],errs, result, subContext);
 									}
 								}
+								/**
 								// else do nothing. Pop-back of empty parameters causes this.
-//								else {
-//									if(!(parmCount == 0 && value == 1)) {
-//										//This happens due to pop-back of empty parameters
-//										ostringstream estr;
-//										estr << " parameter value " << value << " is beyond current range of " << parmCount;
-//										errs << Message(debug,estr.str());
-//									}
-//								}
+								else {
+									if(!(parmCount == 0 && value == 1)) {
+										//This happens due to pop-back of empty parameters
+										ostringstream estr;
+										estr << " parameter value " << value << " is beyond current range of " << parmCount;
+										errs << Message(debug,estr.str());
+									}
+								}
+								 **/
 							}
 							break;
 						case It::current: {

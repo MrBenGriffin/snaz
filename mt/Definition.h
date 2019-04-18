@@ -34,7 +34,7 @@ namespace mt {
 
     protected:
         size_t counter;
-        mt::mtext expansion;
+        mtext expansion;
 
     public:
         std::string name() const { return _name; }
