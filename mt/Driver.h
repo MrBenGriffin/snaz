@@ -53,6 +53,7 @@ namespace mt {
 		static void expand(const mtext&,Messages&,mtext&,mstack& = empty_stack);
 		static void inject(const mtext&,Messages&,mtext&,mstack&);
 		static void subs(const mtext&,mtext&,std::vector<std::string>&,const std::string&);
+		static void doFor(const mtext&,mtext&,const forStuff&);
 
 
 	private:

@@ -20,6 +20,17 @@ namespace mt {
 	using plist=std::vector<mtext>;
 	using pos=std::pair<size_t,size_t>;
 
+	class forStuff {
+	public:
+		size_t vtSize;
+		size_t ctSize;
+		std::string valueToken; //eg *node*
+		std::string countToken; //*count*
+		std::string value; 	//354
+		std::string count; 	//12
+		forStuff(std::string&,std::string&,size_t,size_t);
+	};
+
 	class Instance {
 	public:
 		const plist *parms = nullptr;

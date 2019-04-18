@@ -214,6 +214,20 @@ namespace mt {
 		}
 	}
 
+	void Driver::doFor(const mtext& prog,mtext& out,const forStuff& stuff) {
+		for (auto &t : prog) {
+			if (std::holds_alternative<Text>(t)) {
+				std::get<Text>(t).doFor(out, stuff);
+			} else {
+				if(std::holds_alternative<Macro>(t)) {
+					std::get<Macro>(t).doFor(out, stuff);
+				} else {
+					out.push_back(t);
+				}
+			}
+		}
+	}
+
 	std::ostream& Driver::visit(const Token& j, std::ostream& o) {
 		std::visit([&o](auto&& arg){ arg.visit(o);},j);
 		return o;

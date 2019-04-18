@@ -15,8 +15,9 @@ namespace mt {
 	friend class Internals;
 	private:
 		std::string text;
-		void doCount(mtext&,const std::string&,size_t,std::string&) const;
-		void doCountAndValue(Messages&,mtext&,const mstack&) const;
+//		void doCount(mtext&,const std::string&,size_t,std::string&) const;
+//		void doCountAndValue(Messages&,mtext&,const mstack&) const;
+//		void substitute(std::string&,const std::string&,const std::string&,const size_t,size_t&) const;
 
 	public:
 		Text() = default;
@@ -28,6 +29,7 @@ namespace mt {
 		void append(std::string);
 		bool empty() const { return text.empty(); }
 		void subs(mtext&,const vector<string>&,string) const;
+		void doFor(mtext&,const forStuff&) const;
 	};
 
 };

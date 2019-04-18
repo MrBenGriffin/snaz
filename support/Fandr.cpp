@@ -8,6 +8,28 @@
 namespace Support {
 	//	fandr(s,"&amp;","&"); size_t -- returns number of replaces.
 	//• --------------------------------------------------------------------------
+	string fandr(const string& source,const vector<pair<const string,const string>>& reps,size_t pos) {
+		if(pos < reps.size()) {
+			auto& val = reps[pos];
+			size_t ssize = val.first.size();
+			if(ssize > 0  && source.size() >= ssize) {
+				string result;
+				size_t rsize = val.second.length();
+				size_t spos = source.find(val.first);
+				while ( spos != string::npos ) {
+//					string bit = text.substr(start,curr - start)
+//					source.replace(spos,bsize,replace); rep_count++;
+//					spos = source.find(basis,spos+rsize);
+				}
+				return result;
+			} else {
+				return source;
+			}
+		} else {
+			return source;
+		}
+	}
+
 	int fandr(string& source, const string basis, const string replace) {
 		int rep_count = 0;
 		size_t bsize = basis.length();
@@ -27,12 +49,10 @@ namespace Support {
 		tostring(intval,r);
 		return fandr(t,s,intval);
 	}
-
 	//• --------------------------------------------------------------------------
 	int fandr(string &t, const string s) {
 		return fandr(t,s,"");
 	}
-
 	//• --------------------------------------------------------------------------
 	bool position(string const searchtext,string const context,size_t& result) {
 		bool retval = false;

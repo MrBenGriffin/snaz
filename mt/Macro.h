@@ -26,6 +26,7 @@ namespace mt {
 		//used for expanding injections, etc. not sure if this should generate a copy or not..
 		void inject(Messages&,mtext&,mstack&) const;
 		void subs(mtext&,std::vector<std::string>& ,const std::string&) const;
+		void doFor(mtext&,const forStuff&) const;
 
 		explicit Macro(std::string);
 		void add(mtext&);
