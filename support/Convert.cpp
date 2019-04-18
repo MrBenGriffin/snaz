@@ -283,7 +283,20 @@ namespace Support {
 		return pair<std::time_t,bool>(tt,ss.good());
 	}
 	//-----------------------------------------------------------------------------
+	void toDecimalList(vector<string>& list,string basis) {
+		while (!basis.empty() ) {
+			string::size_type pos = basis.find_first_not_of("0123456789");
+			if (pos != string::npos) {
+				list.push_back(basis.substr(0, pos)); //pos says 2
+				basis = basis.substr(pos+1,string::npos);
+			} else {
+				list.push_back(basis);
+				basis.clear();
+			}
+		}
+	}
 
+	//-----------------------------------------------------------------------------
 	void tolist(vector<string>& list,string basis,const string& cutter) {
 		if (!cutter.empty()) {
 			while (!basis.empty() ) {

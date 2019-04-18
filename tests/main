@@ -1,6 +1,9 @@
-// This is a tab-delimited file of tests.
-F showPassed	1
-F showDefines	0
+// Debugging / Testing
+
+//!	pending/b0rked
+
+//No debugging, uncomment the following X
+//X
 
 F showDefines	0
 F showPassed	0
@@ -8,26 +11,12 @@ F showPassed	0
 // name		code										expected result
 // example	[abcdef]									[abcdef]
 
-
-//iNumChildren
-
-//-- included files
-//!	nodetree/_main
-//!	node/_main
-//!	storage/_main
-
 !	unimplemented
-!	grammar/_main
-!	utility/_main
-!	string/_main
 !	encoder/_main
-
-// !	taxonomy
-// !	media
-// !	regex
-// !	utility
-// !	nodeaccessors
-// !	encoding
-// !	obyx
-// !	reset
+!	grammar/_main
+!	node/_main
+!	nodetree/_main
+!	storage/_main
+!	string/_main
+!	utility/_main
 

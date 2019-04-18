@@ -154,12 +154,10 @@ namespace mt {
 	}
 	void iForNodes::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
-		const Node *main = node::Content::editorial.byPath(e, my.parm(1));
-		if (main != nullptr) {
-			e << Message(error, _name + " is not yet implemented.");
-			std::string left = my.parm(1);
-			my.logic(false, 1);
-		}
+		vector<string> nodeList;
+		toDecimalList(nodeList,my.parm(1));
+		plist parms = toNodeParms(e,nodeList,my.parm(4)); //nodes, and sorted..
+		my.generate(parms,my.praw(5),my.parm(2),my.parm(3));
 	}
 	void iForSibs::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
