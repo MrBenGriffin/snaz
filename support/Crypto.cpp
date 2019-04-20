@@ -40,8 +40,8 @@ namespace Support {
 	EVP_MD_CTX* Digest::context = nullptr;
 	const EVP_MD* Digest::md[16] = {nullptr,nullptr,nullptr,nullptr,nullptr, nullptr,nullptr,nullptr,nullptr,nullptr, nullptr,nullptr,nullptr,nullptr,nullptr, nullptr};
 	int (*Digest::OPENSSL_init_crypto)(uint64_t, void*) = nullptr;
-	EVP_MD_CTX* (*Digest::EVP_MD_CTX_create)() = nullptr;
-	void (*Digest::EVP_MD_CTX_destroy)(EVP_MD_CTX*) = nullptr;
+	EVP_MD_CTX* (*Digest::EVP_MD_CTX_new)() = nullptr;
+	void (*Digest::EVP_MD_CTX_free)(EVP_MD_CTX*) = nullptr;
 	const EVP_MD* (*Digest::EVP_get_digestbyname)(const char*) = nullptr;
 	int (*Digest::EVP_DigestInit_ex)(EVP_MD_CTX*, const EVP_MD*,ENGINE*) = nullptr;
 	int (*Digest::EVP_DigestUpdate)(EVP_MD_CTX*, const void *,size_t) = nullptr;
@@ -57,22 +57,22 @@ namespace Support {
 	}
 	bool Digest::startup(Messages& errors) {
 #ifdef __MACH__
-#define SSLPATH "/usr/local/opt/openssl@1.1/lib/"
+//#define SSLPATH "/usr/local/opt/openssl@1.1/lib/"
 #else
-#define SSLPATH ""
+//#define SSLPATH ""
 #endif
 
 		if ( ! loadattempted ) {
 			loadattempted = true;
 			loaded = false;
-			string libstr = SSLPATH; libstr.append(SO(libssl)); //directory
-			string crpstr = SSLPATH; crpstr.append(SO(libcrypto)); //directory
+			string libstr = ""; libstr.append(SO(libssl)); //directory
+			string crpstr = ""; crpstr.append(SO(libcrypto)); //directory
 			lib_handle = dlopen(libstr.c_str(),RTLD_GLOBAL | RTLD_NOW); dlerr(errors);
 			crp_handle = dlopen(crpstr.c_str(),RTLD_GLOBAL | RTLD_NOW); dlerr(errors);
 			if (!errors.marked() && lib_handle != nullptr && crp_handle != nullptr) {
 				OPENSSL_init_crypto	=(int (*)(uint64_t, void*)) dlsym(crp_handle,"OPENSSL_init_crypto"); dlerr(errors);
-				EVP_MD_CTX_create		=(EVP_MD_CTX* (*)()) dlsym(crp_handle,"EVP_MD_CTX_new"); dlerr(errors);
-				EVP_MD_CTX_destroy		=(void (*)(EVP_MD_CTX*)) dlsym(crp_handle,"EVP_MD_CTX_free"); dlerr(errors);
+				EVP_MD_CTX_new			=(EVP_MD_CTX* (*)()) dlsym(crp_handle,"EVP_MD_CTX_new"); dlerr(errors);
+				EVP_MD_CTX_free			=(void (*)(EVP_MD_CTX*)) dlsym(crp_handle,"EVP_MD_CTX_free"); dlerr(errors);
 				EVP_get_digestbyname	=(const EVP_MD* (*)(const char*)) dlsym(crp_handle,"EVP_get_digestbyname"); dlerr(errors);
 				EVP_DigestInit_ex		=(int (*)(EVP_MD_CTX*,const EVP_MD*,ENGINE*)) dlsym(crp_handle,"EVP_DigestInit_ex"); dlerr(errors);
 				EVP_DigestUpdate		=(int (*)(EVP_MD_CTX*,const void*,size_t)) dlsym(crp_handle,"EVP_DigestUpdate"); dlerr(errors);

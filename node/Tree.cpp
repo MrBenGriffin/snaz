@@ -53,14 +53,17 @@ namespace node {
 	}
 //-------------------------------------------------------------------
 	const Node* Tree::current() const {
-		switch(_root->cultivar()) {
-			case flavour::content:
-				return Content::current();
-			case flavour::suffix:
-				return Suffix::suffixes.root();
-			case flavour::taxon:
-				return Taxon::taxonomies.root();
+		if(_root != nullptr) {
+			switch (_root->cultivar()) {
+				case flavour::content:
+					return Content::current();
+				case flavour::suffix:
+					return Suffix::suffixes.root();
+				case flavour::taxon:
+					return Taxon::taxonomies.root();
+			}
 		}
+		return nullptr;
 	}
 	const Node* Tree::root() const { return _root; }
 //-------------------------------------------------------------------
@@ -122,7 +125,8 @@ namespace node {
 */
 	const Node* Tree::byPath(Messages &errs, const string &path) {
 		const Node *result = nullptr;
-		if ((path.size() > 0) && (_root->cultivar() == content)) {    // If specified startnode, use it
+
+		if ((path.size() > 0) && (_root != nullptr) && (_root->cultivar() == content)) {    // If specified startnode, use it
 			const string relatives = "C0n+-.^RFBO"; //yes, 0 is a relative address in this case!
 			if (relatives.find(path[0]) != string::npos) {
 				locator.setdirty();

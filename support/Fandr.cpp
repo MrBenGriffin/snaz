@@ -6,30 +6,38 @@
 #include "Convert.h"
 
 namespace Support {
-	//	fandr(s,"&amp;","&"); size_t -- returns number of replaces.
+
+	//	multiple find/replace over basis.
 	//• --------------------------------------------------------------------------
-	string fandr(const string& source,const vector<pair<const string,const string>>& reps,size_t pos) {
-		if(pos < reps.size()) {
-			auto& val = reps[pos];
-			size_t ssize = val.first.size();
-			if(ssize > 0  && source.size() >= ssize) {
-				string result;
-				size_t rsize = val.second.length();
-				size_t spos = source.find(val.first);
-				while ( spos != string::npos ) {
-//					string bit = text.substr(start,curr - start)
-//					source.replace(spos,bsize,replace); rep_count++;
-//					spos = source.find(basis,spos+rsize);
+	bool fandr(string& basis, const vector<pair<string,string>>& delims,size_t level) {
+		if(level < delims.size()) {
+			auto& findStr=delims[level].first;
+			auto& repStr =delims[level].second;
+			size_t fSize = findStr.size();
+			if ( fSize > 0 && (fSize <= basis.size())) {
+				size_t start = 0;
+				size_t spos = basis.find(findStr);
+				while (spos < string::npos ) {
+					string nBasis(basis,start,spos-start);
+					fandr(nBasis,delims,level+1);
+					nBasis.append(repStr);
+					basis.replace(start,(spos+fSize)-start,nBasis);
+					start+= nBasis.size();
+					spos  = basis.find(findStr,start);
 				}
-				return result;
-			} else {
-				return source;
+				if(start < basis.size()) {
+					string nBasis(basis,start,string::npos);
+					if(fandr(nBasis,delims,level+1)) {
+						basis.replace(start,string::npos,nBasis);
+					}
+				}
+				return true;
 			}
-		} else {
-			return source;
 		}
+		return false;
 	}
 
+	//• --------------------------------------------------------------------------
 	int fandr(string& source, const string basis, const string replace) {
 		int rep_count = 0;
 		size_t bsize = basis.length();

@@ -22,12 +22,7 @@ namespace mt {
 
 	class forStuff {
 	public:
-		size_t vtSize;
-		size_t ctSize;
-		std::string valueToken; //eg *node*
-		std::string countToken; //*count*
-		std::string value; 	//354
-		std::string count; 	//12
+		std::vector<std::pair<std::string,std::string>> stuff;
 		forStuff(std::string&,std::string&,size_t,size_t);
 	};
 

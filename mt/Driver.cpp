@@ -199,7 +199,7 @@ namespace mt {
 		}
 	}
 
-	// Do substitutes..
+	// Do substitutes (used by iRegex).
 	void Driver::subs(const mtext& prog,mtext& out,std::vector<std::string>& subs,const std::string& prefix) {
 		for (auto &t : prog) {
 			if (std::holds_alternative<Text>(t)) {

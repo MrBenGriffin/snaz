@@ -11,6 +11,9 @@
 #include "support/Message.h"
 #include "Service.h"
 
+#ifndef my_bool
+#define my_bool bool
+#endif
 
 namespace Support {
 	namespace Db {

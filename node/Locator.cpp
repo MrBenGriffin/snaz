@@ -375,11 +375,16 @@ namespace node {
 				ostringstream log; log << "id(" << id.first << ")";
 				errs << Message(debug,log.str());
 			}
-			find = from->tree()->node(errs,id.first);
-			if (find != nullptr) {
-				return nextPathSection(errs);
+			if(from != nullptr) {
+				find = from->tree()->node(errs,id.first);
+				if (find != nullptr) {
+					return nextPathSection(errs);
+				} else {
+					return true;
+				}
 			} else {
-				return true;
+				errs << Message(error,"from is null within node locator");
+				return false;
 			}
 		}
 	}
