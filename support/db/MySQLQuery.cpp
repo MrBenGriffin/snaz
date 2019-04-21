@@ -48,8 +48,12 @@ namespace Support {
 			return false;
 		}
 
-		void MySQLQuery::resetrows() {
-			s->row_seek(result, start);
+		void MySQLQuery::resetRows(Messages &errs) {
+			if(result == nullptr) {
+				errs << Message(error,"SQL: resetRows found with empty resultset.");
+			} else {
+				s->row_seek(result, start);
+			}
 		}
 
 		void MySQLQuery::forQuery(Messages &errs,std::string& value) {
@@ -92,6 +96,24 @@ namespace Support {
 				}
 			}
 			return retval;
+		}
+
+		const char* MySQLQuery::field(Messages &errs ,size_t i) {
+			const char* value = nullptr;
+			if (isactive && row != nullptr) {
+				auto* rpos = s->row_tell(result);
+				if (rpos != start) {
+					try {
+						fieldRangeCheck(errs, i);
+						value = row[i - 1];
+					} catch (...) {
+						ostringstream message;
+						message << "MySQLQuery readField error::  for row '" << i << "'.";
+						errs << Message(error, message.str());
+					}
+				}
+			}
+			return value;
 		}
 
 		bool MySQLQuery::readfield(Messages &errs,size_t i, long double& value) {
@@ -233,19 +255,20 @@ namespace Support {
 
 		//This is a private function used by vdb only.
 		void MySQLQuery::list_tables(Messages &errs,TableSet& ts) {
-			result = s->list_tables(queryHandle, nullptr);
-			prepareResult(errs);
-			std::string t_name;
-			while ( nextrow() ) {
-				readfield(errs,1,t_name);
-				ts.insert(t_name);
+			if (execute(errs)) {
+				while (nextrow()) {
+					const char* tname = row[0];
+					if(tname) {
+						ts.insert(move(string(tname)));
+					}
+				}
 			}
-			reset();
 		}
 
 		void MySQLQuery::listFields(Messages &errs,const std::string& table) {
-			if (isactive)
+			if (isactive) {
 				reset();
+			}
 			result = s->list_fields(queryHandle, table.c_str(), nullptr);
 			prepareResult(errs);
 		}
@@ -261,11 +284,27 @@ namespace Support {
 			Query::reset();
 		}
 
+		bool MySQLQuery::check(Messages &errs) {
+			bool value = s->my_errno(queryHandle) == 0;
+			if(!value) {
+				auto ss = queryHandle->server_status;
+				auto cs = queryHandle->status;
+
+				ostringstream str;
+				string serverError(s->error(queryHandle));
+				str << "SQL:" << serverError;
+				errs << Message(error,str.str());
+				errs << Message(info,querystr);
+				reset();
+			}
+			return value;
+		}
+
 		bool MySQLQuery::execute(Messages &errs) {
 			bool retval = false;
 			ostringstream str;
 			try {
-				if (isactive) reset();
+				if (isactive) { reset(); }
 				int err = s->real_query(queryHandle, querystr.c_str(), querystr.length());
 				if (err) {
 					string serverError(s->error(queryHandle));
@@ -276,11 +315,22 @@ namespace Support {
 					row = nullptr;
 					start = nullptr;
 					result = nullptr;
-					Query::reset();
+					reset();
 				} else {
-					result = s->store_result(queryHandle);
-					prepareResult(errs);
-					retval = true;
+					numFields = s->field_count(queryHandle);
+					if(numFields > 0) {
+						if(check(errs)) {
+							result = s->store_result(queryHandle);
+							if(check(errs)) {
+								prepareResult(errs);
+								retval = true;
+							}
+						}
+					} else {
+						if(check(errs)) {
+							retval = true;
+						}
+					}
 				}
 			}
 			catch (...) {

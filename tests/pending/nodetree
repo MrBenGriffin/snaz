@@ -68,7 +68,8 @@ iForNodes006	[@iIndex(;,@iForNodes(@iGet(*Z),*,$,+,@iLayout(*);))]				[50;50;45;
 iForNodes007	[@iIndex(;,@iForNodes(@iGet(*Z),*,$,+[*f_code],@iID(*);))]			[46;14;32;65]
 
 //@iForSibs(!simple/0+1,#,$,[@iTitle($)])
-iForSibs		[@iForSibs(!siteRoot/0+1,*,$,$:@iTW(*):@iID(*); )]				[1:3:19; 2:8:20; 3:17:21; 4:20:107; 5:22:123; 6:23:124; ]
+iForSibs	[@iForSibs(!siteRoot/0+1,*,$,$:@iTW(*):@iID(*); )]				[1:3:19; 2:8:20; 3:17:21; 4:20:107; 5:22:123; 6:23:124; ]
+bigNest		@iForSibs(93,*,≠,@iForSibs(*/^1,$,¢,@iExistNode($/0+1,@iForSibs($/0+1,€,™,[*:≠:$:¢:€:™]),[*:≠:$:¢])))	?(\[(\d+:)+\d\])+
 
 iSize 001		[@iSize(!siteRoot/0+1)]											[9]
 iSize 002		@iIndex(;,@iForAncestry(!SubChild1,R,!siteRoot,*,@iSize(*);))	43;17;7;3;1

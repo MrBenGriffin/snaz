@@ -20,26 +20,23 @@ namespace mt {
 	void Text::append(std::string right) { text.append(right); };
 
 	void Text::expand(Messages& m,mtext &mt,const mstack &context) const {
-//		if(!context.empty() && context.back().second.generated) {
-//			doCountAndValue(m,mt,context);
-//		} else {
-			if (!mt.empty()) {
-				if (std::holds_alternative<Text>(mt.back())) {
-					std::get<Text>(mt.back()).text.append(text);
-				} else {
-					if (std::holds_alternative<Wss>(mt.back())) {
-						std::string ws = std::get<Wss>(mt.back()).get();
-						mt.pop_back();
-						ws.append(text);
-						mt.emplace_back(std::move(Text(ws)));
-					} else {
-						mt.emplace_back(*this);
-					}
-				}
+		string result(text);
+		if (!mt.empty()) {
+			if (std::holds_alternative<Text>(mt.back())) {
+				std::get<Text>(mt.back()).text.append(result);
 			} else {
-				mt.emplace_back(*this);
+				if (std::holds_alternative<Wss>(mt.back())) {
+					std::string ws = std::get<Wss>(mt.back()).get();
+					mt.pop_back();
+					ws.append(result);
+					mt.emplace_back(std::move(Text(ws)));
+				} else {
+					mt.emplace_back(Text(result));
+				}
 			}
-//		}
+		} else {
+			mt.emplace_back(Text(result));
+		}
 	}
 
 	void Text::add(mtext &mt) {

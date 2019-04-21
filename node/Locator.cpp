@@ -185,7 +185,7 @@ namespace node {
 				ostringstream log; log << "tw(" << tw.first << ")";
 				errs << Message(debug,log.str());
 			}
-			find = from->tree()->tw(errs,tw.first,0);
+			find = from != nullptr ? from->tree()->tw(errs,tw.first,0) : nullptr;
 			if (find != nullptr) {
 				return nextPathSection(errs);
 			} else {
@@ -606,7 +606,7 @@ namespace node {
 		while (in != out && *in != ':' && *in != '/') in++;
 		string linkref(inx, in);
 		if (showPaths) message << "!" << linkref;
-		const Node *result = root->tree()->byRef(errs,linkref);
+		const Node *result = root != nullptr ? root->tree()->byRef(errs,linkref) : nullptr;
 		if (result != nullptr) {
 			find = result;
 		} else {

@@ -36,9 +36,9 @@ namespace content {
 	void Editorial::set(Messages &errs, Connection &sql,size_t langID, buildKind _kind) {
 		Timing &times = Timing::t();
 		if (times.show()) { times.set("Editorial Index"); }
+		sql.dispose(query); //reset.
 		if(lang != 0) {
 			storeBuilt(errs);
-			sql.dispose(query); //reset.
 			contentStore.clear();
 			qIndexes.clear();
 		}
@@ -57,20 +57,23 @@ namespace content {
 			str << " left join bldsegvalue sv on sv.id=c.pcontent where a.used in ('on','lk')";
 		}
 		str << " and a.node=n.id and s.id=l.sid and n.id=c.node and s.active='on' and s.type not in(4,11,15) and n.layout=l.lid and c.segment=l.sid"
-		" and c.language=" << lang;
-
+		" and c.language=" << lang; //limit 24 this big is too much. limit 23 is ok
 
 		// All the above is a bit mangled.. but we have the fields, the content, and the version/content alternatives.
 		// The above gives us node,segment,content,editor,pubdate for this language.
 		if (sql.dbselected() ) {
 			if(sql.query(errs,query,str.str()) && query->execute(errs)) {
 				size_t index = 1;
+				size_t rows = query->getnumrows();
 				while(query->nextrow()) {
 					pair<size_t, size_t> ident;
 					query->readfield(errs, "node", ident.first);
 					query->readfield(errs, "segment", ident.second);
 					qIndexes.emplace(ident,index++);
 				}
+				query->resetRows(errs);
+			} else {
+				sql.dispose(query);
 			}
 		}
 		if (times.show()) { times.use(errs,"Editorial Index"); }

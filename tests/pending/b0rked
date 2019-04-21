@@ -5,14 +5,31 @@
 F showPassed	1
 F showDefines	1
 
-//check values are correct.
-forNest01	@iForSibs(17,*,$,@iLeft(@iLinkRef(*),1))		vcmrhooooclm
-//forNest02	@iForSibs(17,*,$,@iNumGen(*))					555555555555
-//forNest02	@iLength(@iForSibs(17,*,$,x))					12
-//forNest03	@iForAncestry(17,R,17/^2,*,@iNumGen(*);)		3;4;5;
-//forNest05	[@iForAncestry(17,R,17/^2,NODE,@iNumGen(NODE))]	[345]
-//forNest06	@iForSibs(17,*,$,[@iForAncestry(*,R,*/^2,NODE,@iNumGen(NODE))])	[345][345][345][345][345][345][345][345][345][345][345][345]
+//iFi_100		@iForIndex(=,BIM=foo=bar,*,$,,[*:$])			[BIM:1][foo:2][bar:3]
+//iNo_100		@iExistNode(17,@iNumChildren(17/^1),X)			10
+//iFs_100		@iForSibs(17,*,$,@iLeft(@iLinkRef(*),1))		gbeffhlnpt
+//forNest01		@iForSibs(17,*,$,@iNumGen(*))					7777777777
+//forNest02		@iLength(@iForSibs(17,*,$,x))					10
+//forNest03		@iForAncestry(17,R,17/^2,*,@iNumGen(*);)		5;6;7;
+//forNest04		[@iForAncestry(17,R,17/^2,NODE,@iNumGen(NODE))]	[567]
+//forNest05		@iForSibs(17,*,$,[@iForAncestry(*,R,*/^2,NODE,@iID(NODE);)])	[567][567][567][567][567][567][567][567][567][567]
+//fNest02		@iForSibs(17,*,$,[@iForAncestry(*,R,*/^2,€,*:@iNumGen(€))])		[567][567][567][567][567][567][567][567][567][567]
 
-//Actual nested parameters..
 
-//fNest02	@iForSibs(252,*,$,[@iForAncestry(*,R,*/^2,NODE,@iNumGen(*))])	[555][555][555][555][555][555][555][555][555][555][555][555]
+//nstFor1	@iForAncestry(17,R,17/^3,*,@iID(*);)										10;14;72;17;
+//nstFor1a	[@iForAncestry(17,R,17/^3,*,@iList(X,uadd,@iID(*)))]						[]
+//nstFor1b	[@iList(X,n,+W,*,@iID(*);)]													[10;14;72;17;]
+
+//nstFor2a	@iForAncestry(17,R,17/^3,*,@iForSibs(*,€,$,[*:@iLinkRef(€)]))				[10;14;72;17;]
+//nstFor2b	@iForAncestry(17,R,17/^3,*,[@iForSibs(*,€,$,*:@iNumGen(€);)])				[10;14;72;17;]
+
+//bigNest		@iForSibs(93,*,≠,@iForSibs(*/^1,$,¢,@iExistNode($/0+1,@iForSibs($/0+1,€,™,[*:≠:$:¢:€:™]),[*:≠:$:¢])))	?(\[(\d+:)+\d\])+
+
+
+//-------------------------------------------------------------------------------
+//# NOT YET IMPLEMENTED.
+//iForNodes007	[@iIndex(;,@iForNodes(@iGet(*Z),*,$,+[*f_code],@iID(*);))]		!1!error: node sort by segment reference is not currently supported.
+//iExistContent	@iExistContent(!siteSections,f_seodirectory,T,F)				!1!error: iExistContent is not yet implemented.
+//iExistContent	@iExistContent(!siteSections,code,T,F)							!1!error: iExistContent is not yet implemented.
+//iNumPage 005	@iNumPage()														!1!error: iNumPage is not yet implemented.
+//iNumPage 015	@iNumPage(0,T,F)												!1!error: iNumPage is not yet implemented.

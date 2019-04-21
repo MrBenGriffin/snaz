@@ -49,12 +49,11 @@ namespace mt {
 		static std::ostream& visit(const Token&, std::ostream&);
 		static std::ostream& visit(const mtext&, std::ostream&);
 
+		static void doFor(const mtext&,mtext&,const forStuff&);
 		static void expand(const mtext&,Messages&,std::ostream&,mstack& = empty_stack);
 		static void expand(const mtext&,Messages&,mtext&,mstack& = empty_stack);
 		static void inject(const mtext&,Messages&,mtext&,mstack&);
 		static void subs(const mtext&,mtext&,std::vector<std::string>&,const std::string&);
-		static void doFor(const mtext&,mtext&,const forStuff&);
-
 
 	private:
 		const std::istream*			source; //only used for parse errors..

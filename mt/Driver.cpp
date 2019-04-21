@@ -178,6 +178,20 @@ namespace mt {
 		}
 	}
 
+	void Driver::doFor(const mtext& prog,mtext& out,const forStuff& stuff) {
+		for (auto &t : prog) {
+			if (std::holds_alternative<Text>(t)) {
+				std::get<Text>(t).doFor(out, stuff);
+			} else {
+				if(std::holds_alternative<Macro>(t)) {
+					std::get<Macro>(t).doFor(out, stuff);
+				} else {
+					out.push_back(t);
+				}
+			}
+		}
+	}
+
 	void Driver::expand(const mtext& object,Messages& e,mtext& x,mstack& c) {
 		for(auto& j : object) {
 			std::visit([&e,&x,&c](auto&& arg){ arg.expand(e,x,c);},j);
@@ -207,20 +221,6 @@ namespace mt {
 			} else {
 				if(std::holds_alternative<Macro>(t)) {
 					std::get<Macro>(t).subs(out,subs,prefix);
-				} else {
-					out.push_back(t);
-				}
-			}
-		}
-	}
-
-	void Driver::doFor(const mtext& prog,mtext& out,const forStuff& stuff) {
-		for (auto &t : prog) {
-			if (std::holds_alternative<Text>(t)) {
-				std::get<Text>(t).doFor(out, stuff);
-			} else {
-				if(std::holds_alternative<Macro>(t)) {
-					std::get<Macro>(t).doFor(out, stuff);
 				} else {
 					out.push_back(t);
 				}

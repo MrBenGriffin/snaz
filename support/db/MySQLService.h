@@ -42,7 +42,6 @@ namespace Support {
 			MYSQL* (*init)(MYSQL*);
 			my_ulonglong (*insert_id)(MYSQL*);
 			MYSQL_RES* (*list_fields)(MYSQL*, const char*,const char*);
-			MYSQL_RES* (*list_tables)(MYSQL*,const char*);
 			unsigned int (*num_fields)(MYSQL_RES*);
 			my_ulonglong (*num_rows)(MYSQL_RES*);
 			int	(*options)(MYSQL *,enum mysql_option,const char *);
@@ -53,6 +52,7 @@ namespace Support {
 			MYSQL_ROW_OFFSET (*row_tell)(MYSQL_RES*);
 			const char* (*character_set_name)(MYSQL *);
 			int (*set_character_set)(MYSQL *, const char *);
+			unsigned int (*field_count)(MYSQL *);
 			MYSQL_RES* (*store_result)(MYSQL*);
 			MYSQL_STMT* (*mysql_stmt_init)(MYSQL*);
 			my_bool* (*mysql_stmt_close)(MYSQL_STMT*);

@@ -93,7 +93,7 @@ void Build::tests(Messages &errs,Connection& sql) {
 	content::Editorial::e().set(errs,sql,lang(),_current);
 	content::Layout::load(errs,sql,tech(),_current);
 	node::Content().setLayouts(errs);
-
+	errs.str(cout);
 	testing::group tests(errs,"tests/");        	 // Set the working directory from the Run|Edit Configurations... menu.
 	tests.title(std::cout, "Main");
 	tests.load(std::cout,  "main", false);   // Boolean turns on/off success reports.

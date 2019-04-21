@@ -81,6 +81,19 @@ iForNodes006	[@iIndex(;,@iForNodes(@iGet(*Z),*,$,+,@iLayout(*);))]				[43;43;43;
 iForSibs		[@iForSibs(!siteRoot/0+1,*,$,$:@iTW(*):@iID(*); )]					[1:3:19; 2:6:20; 3:13:21; ]
 iForSibs 001	@iForSibs(!siteRoot/0+1,*,$,[$:@iLinkRef(*)])						[1:home][2:siteSections][3:siteFooter]
 
+//check values are correct.
+iFi_100		@iForIndex(=,BIM=foo=bar,*,$,,[*:$])			[BIM:1][foo:2][bar:3]
+iNo_100		@iExistNode(17,@iNumChildren(17/^1),X)			10
+iFs_100		@iForSibs(17,*,$,@iLeft(@iLinkRef(*),1))		gbeffhlnpt
+forNest01	@iForSibs(17,*,$,@iNumGen(*))					7777777777
+forNest02	@iLength(@iForSibs(17,*,$,x))					10
+forNest03	@iForAncestry(17,R,17/^2,*,@iNumGen(*);)		5;6;7;
+forNest04	[@iForAncestry(17,R,17/^2,NODE,@iNumGen(NODE))]	[567]
+forNest05	@iForSibs(17,*,$,[@iForAncestry(*,R,*/^2,NODE,@iNumGen(NODE))])	[567][567][567][567][567][567][567][567][567][567]
+
+//Actual nested parameters..
+fNest02	@iForSibs(17,*,$,[@iForAncestry(*,R,*/^2,NODE,@iNumGen(*))])	[555][555][555][555][555][555][555][555][555][555][555][555]
+
 //-------------------------------------------------------------------------------
 # NOT YET IMPLEMENTED.
 iForNodes007	[@iIndex(;,@iForNodes(@iGet(*Z),*,$,+[*f_code],@iID(*);))]		!1!error: node sort by segment reference is not currently supported.

@@ -17,10 +17,10 @@ namespace Support {
 				fetch_field_direct(nullptr),
 				fetch_lengths(nullptr), fetch_row(nullptr), free_result(nullptr), init(nullptr), insert_id(nullptr),
 				list_fields(nullptr),
-				list_tables(nullptr), num_fields(nullptr), num_rows(nullptr), options(nullptr), real_connect(nullptr),
+				num_fields(nullptr), num_rows(nullptr), options(nullptr), real_connect(nullptr),
 				real_escape_string(nullptr),
 				mysql_stmt_init(nullptr),mysql_stmt_close(nullptr),mysql_stmt_execute(nullptr),mysql_stmt_prepare(nullptr),
-		real_query(nullptr), row_seek(nullptr), row_tell(nullptr), set_character_set(nullptr),
+				real_query(nullptr), row_seek(nullptr), row_tell(nullptr), set_character_set(nullptr),
 				character_set_name(nullptr), store_result(nullptr) {
 			_service = false;
 			string mysqllib, ziplib;
@@ -86,11 +86,11 @@ namespace Support {
 																									  "mysql_list_fields");
 							err = dlerr(errs);
 						}
-						if (!err) {
-							list_tables = (MYSQL_RES *(*)(MYSQL *, const char *)) dlsym(mysql_lib_handle,
-																						"mysql_list_tables");
-							err = dlerr(errs);
-						}
+//						if (!err) {
+//							list_tables = (MYSQL_RES *(*)(MYSQL *, const char *)) dlsym(mysql_lib_handle,
+//																						"mysql_list_tables");
+//							err = dlerr(errs);
+//						}
 						if (!err) {
 							num_fields = (unsigned int (*)(MYSQL_RES *)) dlsym(mysql_lib_handle, "mysql_num_fields");
 							err = dlerr(errs);
@@ -158,6 +158,10 @@ namespace Support {
 						}
 						if (!err) {
 							mysql_stmt_prepare = (int (*)(MYSQL_STMT*, const char*, unsigned long)) dlsym(mysql_lib_handle, "mysql_stmt_prepare");
+							err = dlerr(errs);
+						}
+						if (!err) {
+							field_count = (unsigned int (*)(MYSQL *)) dlsym(mysql_lib_handle, "mysql_field_count");
 							err = dlerr(errs);
 						}
 						if (!err) _service = true;

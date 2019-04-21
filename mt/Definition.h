@@ -46,22 +46,21 @@ namespace mt {
         std::ostream &visit(std::ostream &);
 
         Definition(Messages&,std::string, std::string, long = 0, long = -1, bool= true, bool= true, bool= false);
-		Definition(mtext, long = 0, long = -1, bool= true, bool= true, bool= false);
-
+		Definition(const mtext&, long = 0, long = -1, bool= true, bool= true, bool= false);
         void expand(Messages&,mtext&,Instance&,mstack&);
 
         static bool test_adv(std::string &);
 
         static void add(Definition&);
 
-        static void del(std::string);
+        static void del(const std::string);
 
-        static bool has(std::string);
+        static bool has(const std::string);
 
         //By Library call..
-        static void vis(std::string,std::ostream&);
+        static void vis(const std::string,std::ostream&);
 
-        static void exp(std::string,Messages&,mtext&,Instance&,mstack&);
+        static void exp(const std::string,Messages&,mtext&,Instance&,mstack&);
 
         static void list(std::ostream&);
 

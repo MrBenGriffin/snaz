@@ -31,27 +31,25 @@ namespace mt {
 		}
 	}
 
-	void InternalInstance::generate(Messages& e,vector<const node::Node *>& nodes,const mtext* program,string ref,string count) {
-		if(program != nullptr  && ! program->empty()) { // from an empty parm..
-			plist parms;
-			for(auto* node : nodes) {
-				parms.push_back({Text(node->ids())});
+	void InternalInstance::generate(nlist& nodes,const mtext* program,const string value,const string count) {
+		if(program != nullptr && !program->empty()) { // from an empty parm..
+			Definition macro(*program,0,-1,true,false); //iterate,dont trim
+			forStuff stuff(value,count);
+			plist parameters;
+			for(auto& i: nodes) {
+				parameters.push_back({Text(i->ids())});
 			}
-			Instance i(&parms,{1,parms.size()},true); //set as generated.
-			i.iValue = ref;
-			i.iCount = count;
-			Definition macro(*program);
-			macro.expand(e, *output, i, *context);
+			Instance i(&parameters,stuff); 	//set as generated.
+			macro.expand(*errs,*output,i,*context);
 		}
 	}
 
-
-	void InternalInstance::generate(plist& list,const mtext* program,const string value,const string count) {
+	void InternalInstance::generate(plist& parameters,const mtext* program,const string value,const string count) {
+		//parms,code,vToken,cToken
 		if(program != nullptr && !program->empty()) { // from an empty parm..
-			Instance i(&list,{1,list.size()},true); //set as generated.
-			i.iValue = value;
-			i.iCount = count;
-			Definition macro(*program);
+			Definition macro(*program,0,-1,true,false); //iterate,dont trim
+			forStuff stuff(value,count);
+			Instance i(&parameters,stuff); 	//set as generated.
 			macro.expand(*errs,*output,i,*context);
 		}
 	}

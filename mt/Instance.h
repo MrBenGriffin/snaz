@@ -12,28 +12,35 @@
 #include <deque>
 
 #include "declarations.h"
+#include "node/Node.h"
 
 namespace mt {
 	using mtext=std::deque<Token>;
 	using parse_result=std::pair<bool,std::pair<mtext, bool>>;
 	using iteration=std::pair<size_t,size_t>;
 	using plist=std::vector<mtext>;
+	using nlist=vector<const node::Node *>;
 	using pos=std::pair<size_t,size_t>;
 
 	class forStuff {
 	public:
 		std::vector<std::pair<std::string,std::string>> stuff;
-		forStuff(std::string&,std::string&,size_t,size_t);
+		forStuff(const std::string&,const std::string&,size_t,size_t);
+		forStuff(const std::string&,const std::string&);
+		void set(const std::string,size_t);
 	};
 
 	class Instance {
+	private:
 	public:
 		const plist *parms = nullptr;
-		iteration it = {0, 0};
+		forStuff* myFor;
 		bool generated;     //internal generation via e.g. iForX
-		std::string iValue; //substitutes for iForX
-		std::string iCount; //substitutes for iForX
+		iteration it = {0, 0};
+		size_t size();
+
 		Instance(const plist *, iteration, bool= false);
+		Instance(const plist *, forStuff&);
 		Instance(const Instance &);
 	};
 

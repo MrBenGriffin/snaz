@@ -29,22 +29,23 @@ namespace Support {
 			std::vector<std::string> fieldnames;			//implicitly ordered by field number (for number->name lookup)
 
 			virtual void reset();									// reset the query		--used by vdb
-			virtual void resetrows()=0;								//
 			virtual bool readfield(Messages &,size_t, std::string&)=0;		// string
 			virtual bool readfield(Messages &,size_t, long&)=0;				// signed
 			virtual bool readfield(Messages &,size_t, long double&)=0;		// float
 			virtual bool readfield(Messages &,size_t, size_t&)=0;			// size_t
 			virtual bool readfield(Messages &,size_t, bool&)=0;				// bool
-
 			virtual void readFieldName(Messages &,size_t i, std::string&, std::string&)=0;
 			virtual void forQuery(Messages &,std::string& value)=0; //convert a string to make ready for query.. See Service::escape!!
 			void prepareFieldCache(Messages&);
 			virtual void listFields(Messages &,const std::string& table)=0;
 
 		public:
+			virtual const char* field(Messages &,size_t)=0;
+			virtual void resetRows(Messages &)=0;								//
 			virtual bool nextrow()=0;								//rebuild(10+)
 			virtual bool readfield(Messages &,size_t, size_t, std::string&)=0;	//module.
 			virtual void readfieldforquery(Messages&,size_t,size_t,std::string&)=0;	//module. escape values so that the result is ready for a query.
+
 			bool readfield(Messages&,const std::string&, std::string&);		//rebuild(10+)
 			bool readfield(Messages&,const std::string&, size_t&);
 			bool readfield(Messages&,const std::string&, long&);

@@ -11,6 +11,7 @@
 #include "MySQLService.h"
 #include "MySQLConnection.h"
 #include "Query.h"
+#include "Connection.h"
 
 #include "support/Message.h"
 
@@ -33,6 +34,7 @@ namespace Support {
 			void rowRangeCheck(Messages &,size_t i);
 			void fieldRangeCheck(Messages &,size_t i);
 			void rowFieldRangeCheck(Messages &,size_t i, size_t j);
+			bool check(Messages &);
 
 		private:
 			friend class Query;
@@ -43,11 +45,12 @@ namespace Support {
 			bool readfield(Messages &,size_t, long double&)  override;		//
 			bool readfield(Messages &,size_t, size_t, std::string&) override;
 			bool readfield(Messages &,size_t, bool&) override;	// bool
+			const char* field(Messages &,size_t) override;
 
 			MySQLQuery(MySQLService*, MySQLConnection*, MYSQL*&, std::string&);
 
 			bool nextrow() override;
-			void resetrows() override;
+			void resetRows(Messages &) override;
 
 			void forQuery(Messages &,std::string& value) override; //convert a string to make ready for query..
 			void readfieldforquery(Messages &,size_t i, size_t j, std::string& readString) override;

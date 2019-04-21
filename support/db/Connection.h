@@ -24,12 +24,11 @@ namespace Support {
 		private:
 			TableSet table_set;
 			TableFieldTypeMap tft_map;
-			bool tset_loaded;
 
 		public:
 			bool table_exists(Messages&,const std::string&, bool = false);
-			bool simple_result(Messages&,std::ostringstream&,std::vector<std::string>&);
-			bool simple_query(Messages&,std::ostringstream&);
+//			bool simple_result(Messages&,std::ostringstream&,std::vector<std::string>&);
+//			bool simple_query(Messages&,std::ostringstream&);
 			bool exec(Messages&,const std::string&);
 			bool field_type(Messages&,const std::string&, const std::string&, std::string&, bool=false);
 			void lock(Messages&,std::string);

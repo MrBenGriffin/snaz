@@ -43,9 +43,12 @@ namespace mt {
 		my.set(ost.str());
 	}
 	void iForIndex::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
+		/**
+		 * iForIndex(=,BIM=foo=bar,*,$,,[*:$]) (1:delimiter,2:list,3:valueToken,4:countToken,5:sort,6:code)
+		 */
 		InternalInstance my(this,e,o,instance,context);
-		plist parms=toParms(my.parm(2),my.parm(1),my.parm(5));
-		my.generate(parms,my.praw(6),my.parm(3),my.parm(4));
+		plist parms=toParms(my.parm(2),my.parm(1),my.parm(5)); //list,delimiter,sort
+		my.generate(parms,my.praw(6),my.parm(3),my.parm(4));   //parms,code,vToken,cToken
 	}
 	void iIndex::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);

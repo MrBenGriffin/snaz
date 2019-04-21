@@ -97,6 +97,7 @@ namespace Support {
 						} else {
 							conn_open = true;
 							db_open = true; //not really?!
+							connectionHandle->options.max_allowed_packet=104857600; //100mb
 						}
 					} else {
 						errs << Message(fatal,"MySQLConnection error: Possibly file '" + file + " is not valid or not found.");

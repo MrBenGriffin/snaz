@@ -34,7 +34,7 @@ namespace mt {
 			std::ostringstream str;
 			str << "select m.search,v.expansion,m.id,v.stripf='on' as strip_d,v.stripx='on' as strip_p,v.preparse='on' as pre_p,v.minparms,v.maxparms from bldmacro m,bldmacrov v where v.id=m.version and v.expansion !='internal'";
 			Db::Query* q = nullptr;
-			if (sql.query(errs,q,str.str()) && q->execute(errs)) {
+			if (sql.query(errs,q,str.str()) && q != nullptr && q->execute(errs)) {
 //				+---------+-----------+----+---------+---------+-------+----------+----------+
 //				| search  | expansion | id | strip_d | strip_p | pre_p | minparms | maxparms |
 //				+---------+-----------+----+---------+---------+-------+----------+----------+
@@ -106,7 +106,7 @@ namespace mt {
 	}
 
 	//used for pre-parsed definitions (eg in iForSibs)
-	Definition::Definition(const mtext code,
+	Definition::Definition(const mtext& code,
 		long min, long max, bool iter, bool tP, bool preEx):
 		counter(0), _name(":internal:"),iterated(iter), trimParms(tP), preExpand(preEx),expansion(code) {
 		minParms = min == -1 ? 0 : min;
@@ -139,11 +139,8 @@ namespace mt {
 		return false;
 	}
 
-
 	void Definition::expand(Support::Messages& e,mtext& o,Instance &instance, mstack &context) {
-		//Range error. 'pt' uses exactly 1 parameter but 0 were found.
-		size_t pCount = instance.parms->size() == 1 ? instance.parms->front().empty() ? 0 : 1 : instance.parms->size();
-		if(!parmCheck(e,pCount)) {
+		if(!parmCheck(e,instance.size())) {
 			return;
 		}
 		Instance modified(instance);
@@ -157,7 +154,7 @@ namespace mt {
 			for (auto &parm : mt_parms) {
 				mtext expanded;
 				auto i=rendered.size();
-				Driver::expand(parm,e,expanded, context);
+				Driver::expand(parm,e,expanded,context);
 				if(rendered.size() == i) {
 					rendered.push_back(std::move(expanded)); //each one as a separate parm!!
 				}
@@ -172,19 +169,30 @@ namespace mt {
 		Handler handler(*this);
 		context.push_front({&handler,modified});
 		if (iterated) {
-			if(modified.generated) {
-//				void Driver::doFor(const mtext& prog,mtext& out,const forStuff& stuff) {
-				context.push_back({nullptr,modified});
-			}
-			iteration* i = &(context.front().second.it); //so we are iterating front (because not all are generated).
-			for (i->first = 1; i->first <= i->second; i->first++) {
-				Driver::expand(expansion,e, o, context);
-			}
-			if(modified.generated) {
-				context.pop_back();
+			Instance& instance = context.front().second;
+			iteration* i = &(instance.it); //so we are iterating front (because not all are generated).
+			if(instance.myFor != nullptr && instance.parms != nullptr) {
+				for (i->first = 1; i->first <= i->second; i->first++) {
+					std::ostringstream value;
+					const mtext& parm = (*instance.parms)[i->first - 1];
+					Driver::expand(parm,e,value,context);
+					mtext done_parm;
+					instance.myFor->set(value.str(),i->first); value.str("");
+					Driver::doFor(expansion,done_parm,*(instance.myFor));
+					Driver::expand(done_parm,e,o,context);
+//					Driver::expand(done_parm,e,value,context);
+//					cout << "for:" ; Driver::visit(done_parm,cout); cout << endl << value.str() << endl;
+//					Text(value.str()).add(o);
+//					cout << "prm:" ; Driver::visit(parm,cout); cout << endl;
+//					cout << "exp:" ; Driver::visit(expansion,cout); cout << endl;
+				}
+			} else {
+				for (i->first = 1; i->first <= i->second; i->first++) {
+					Driver::expand(expansion,e, o, context);
+				}
 			}
 		} else {
-			Driver::expand(expansion,e, o, context);
+			Driver::expand(expansion,e,o,context);
 		}
 		context.pop_front();
 	}
@@ -207,7 +215,7 @@ namespace mt {
 		return false;
 	}
 
-	void Definition::vis(std::string name,std::ostream& o) {
+	void Definition::vis(const std::string name,std::ostream& o) {
 		auto good = Definition::library.find(name);
 		if(good != Definition::library.end()) {
 			if (std::holds_alternative<Definition>(good->second)) {
@@ -218,7 +226,7 @@ namespace mt {
 		}
 	}
 
-	void Definition::exp(std::string name,Messages& e,mtext& o,Instance& i,mt::mstack& c) {
+	void Definition::exp(const std::string name,Messages& e,mtext& o,Instance& i,mt::mstack& c) {
 		auto good = Definition::library.find(name);
 		if(good != Definition::library.end()) {
 			std::visit([&e,&o,&i,&c](auto&& arg){ arg.expand(e,o,i,c);},good->second);
@@ -230,14 +238,14 @@ namespace mt {
 	void Definition::add(Definition& macro) {
 		del(macro.name());
 		std::string name(macro.name());
-		library.emplace(macro.name(),Handler(std::move(macro)));
+		library.emplace(name,Handler(std::move(macro)));
 	}
 
-	bool Definition::has(std::string name) {
+	bool Definition::has(const std::string name) {
 		return library.find(name) != Definition::library.end();
 	}
 
-	void Definition::del(std::string name) {
+	void Definition::del(const std::string name) {
 		auto good = library.find(name);
 		if (good != library.end()) {
 			library.erase(good);
