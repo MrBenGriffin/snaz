@@ -49,6 +49,7 @@ namespace mt {
 		static std::ostream& visit(const Token&, std::ostream&);
 		static std::ostream& visit(const mtext&, std::ostream&);
 
+		static mtext parse(Messages&,const std::string&,bool = false);
 		static void doFor(const mtext&,mtext&,const forStuff&);
 		static void expand(const mtext&,Messages&,std::ostream&,mstack& = empty_stack);
 		static void expand(const mtext&,Messages&,mtext&,mstack& = empty_stack);

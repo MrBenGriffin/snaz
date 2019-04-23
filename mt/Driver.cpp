@@ -60,6 +60,13 @@ namespace mt {
 		return final;
 	}
 
+	mtext Driver::parse(Messages& errs,const std::string& code,bool strip) {
+		bool advanced = Definition::test_adv(code);
+		std::istringstream codeStream(code);
+		Driver driver(errs,codeStream,advanced);
+		return driver.parse(errs,strip);
+	}
+
 	parse_result Driver::define(Messages& errs,bool strip) {
 		bool success = false;
 		scanner->stripped=strip;
