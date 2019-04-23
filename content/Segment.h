@@ -19,19 +19,21 @@ using namespace Db;
 namespace content {
 
 	class Segment {
-		string name;
-		string kind;
-		size_t type;	//this is the numeric version of the sig.
-		string  sig;	//eg SEGTM (shoud work this out as an enum...)
-		mt::mtext nl; 	//Parsed newline.
+		size_t _id;
 
-		static unordered_map<string,Segment*>  	refs;	//pointer to layout via reference. Loaded per tech.
-		static unordered_map<size_t,Segment>   	segments;			//Where segment data is stored. Loaded once per build.
+		static unordered_map<string,Segment*>  	refs;		//pointer to layout via reference. Loaded per tech.
+		static unordered_map<size_t,Segment>   	segments;	//Where segment data is stored. Loaded once per build.
 	public:
 		static const Segment* get(Messages &,size_t);
 		static const Segment* get(Messages &,string);
-
 		static void load(Messages&,Connection&,buildKind);
+
+		size_t id() { return _id; }
+		size_t type;	//this is the numeric version of the sig.
+		string name;
+		string kind;
+		string  sig;	//eg SEGTM (shoud work this out as an enum...)
+		mt::mtext nl; 	//Parsed newline.
 
 	};
 }

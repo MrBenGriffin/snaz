@@ -41,7 +41,6 @@ namespace content {
 
 
 	void Segment::load(Messages &errs, Connection &sql,buildKind) {
-
 		//Set Segment Maps.
 		/*
 		 * cf. new bldsegtype table proposal.
@@ -67,9 +66,8 @@ namespace content {
 			if (sql.query(errs,q,select) && q->execute(errs)) {
 				while(q->nextrow()) {
 					Segment basis;
-					size_t id;
 					string newline;
-					q->readfield(errs,"id",id);
+					q->readfield(errs,"id",basis._id);
 					q->readfield(errs,"name",basis.name);
 					q->readfield(errs,"type",basis.type);
 					q->readfield(errs,"kind",basis.kind);
@@ -78,7 +76,7 @@ namespace content {
 					std::istringstream newlineCode(newline);
 					basis.nl = mt::Driver(errs,newlineCode,mt::Definition::test_adv(newline)).parse(errs,true);
 
-					auto ins = segments.emplace(id,std::move(basis));
+					auto ins = segments.emplace(basis._id,std::move(basis));
 					if(ins.second) {
 						Segment* seg = &(ins.first->second);
 						refs.emplace(seg->name,seg);
