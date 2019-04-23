@@ -19,7 +19,6 @@ using namespace Db;
 namespace content {
 
 	class Segment {
-		size_t _id;
 
 		static unordered_map<string,Segment*>  	refs;		//pointer to layout via reference. Loaded per tech.
 		static unordered_map<size_t,Segment>   	segments;	//Where segment data is stored. Loaded once per build.
@@ -28,7 +27,8 @@ namespace content {
 		static const Segment* get(Messages &,string);
 		static void load(Messages&,Connection&,buildKind);
 
-		size_t id() { return _id; }
+		//only publicly available via const..
+		size_t id;
 		size_t type;	//this is the numeric version of the sig.
 		string name;
 		string kind;

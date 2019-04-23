@@ -67,7 +67,7 @@ namespace content {
 				while(q->nextrow()) {
 					Segment basis;
 					string newline;
-					q->readfield(errs,"id",basis._id);
+					q->readfield(errs,"id",basis.id);
 					q->readfield(errs,"name",basis.name);
 					q->readfield(errs,"type",basis.type);
 					q->readfield(errs,"kind",basis.kind);
@@ -76,7 +76,7 @@ namespace content {
 					std::istringstream newlineCode(newline);
 					basis.nl = mt::Driver(errs,newlineCode,mt::Definition::test_adv(newline)).parse(errs,true);
 
-					auto ins = segments.emplace(basis._id,std::move(basis));
+					auto ins = segments.emplace(basis.id,std::move(basis));
 					if(ins.second) {
 						Segment* seg = &(ins.first->second);
 						refs.emplace(seg->name,seg);
