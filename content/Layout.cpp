@@ -58,7 +58,7 @@ const Layout* Layout::get(Messages &errs,size_t id) {
 	return result;
 }
 
-const Segment* Layout::segment(Messages &errs,string ref) {
+const Segment* Layout::segment(Messages &errs,string ref) const {
 	/*
 	 * get segment by ref. from here so we can use the local name if needs be.
 	 */

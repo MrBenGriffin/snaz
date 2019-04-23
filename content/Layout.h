@@ -40,7 +40,7 @@ namespace content {
 		static const Layout* get(Messages&,size_t);
 		static const Layout* get(Messages&,string);
 
-		const Segment* segment(Messages&,string);
+		const Segment* segment(Messages&,string) const;
 		size_t pages() const;
 
 	};
