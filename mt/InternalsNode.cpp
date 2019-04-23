@@ -105,10 +105,15 @@ namespace mt {
 		const content::Layout* layout = interest->layout();
 		if(layout) {
 			auto* segment = layout->segment(e,my.parm(2));
-			const mt::mtext* code = content::Editorial::e().get(e,interest,segment);
-			if(code) {
-				//need to set the newline here (which is in the segment).
-				Driver::expand(*code, e, o, context);
+			if(my.count == 2) {
+				const mt::mtext* code = content::Editorial::e().get(e,interest,segment);
+				if(code) {
+					mt::Wss::push(&(segment->nl));
+					Driver::expand(*code, e, o, context);
+					mt::Wss::pop();
+				}
+			} else {
+				my.set(content::Editorial::e().getMeta(e,interest,segment,my.parm(3)));
 			}
 		} else {
 			e << Message(error,_name + " has no layout.");

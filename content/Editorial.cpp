@@ -118,7 +118,6 @@ namespace content {
 			} else {
 				auto index = qIndexes.find(id);
 				if(index != qIndexes.end()) {
-					// TODO:: support editor / pub.date.
 					query->setRow(errs,index->second);
 					string content;
 					query->readfield(errs, "content", content);
@@ -126,6 +125,19 @@ namespace content {
 					auto idx = contentStore.emplace(id,std::move(stuff));
 					value = &(idx.first->second);
 				}
+			}
+		}
+		return value;
+	}
+
+	std::string Editorial::getMeta(Messages &errs, const node::Content* node, const Segment* segment,const std::string& field) {
+		std::string value;
+		key id;
+		if(sanity(errs,id,node,segment)) {
+			auto index = qIndexes.find(id);
+			if(index != qIndexes.end()) {
+				query->setRow(errs,index->second);
+				query->readfield(errs, field, value);
 			}
 		}
 		return value;

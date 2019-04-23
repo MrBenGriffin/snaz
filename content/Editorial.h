@@ -56,6 +56,7 @@ namespace content {
 		static Editorial& e();
 		void set(Messages&,Connection&,size_t,buildKind);
 		const mt::mtext* get(Messages&,const node::Content*,const Segment*);
+		std::string getMeta(Messages&,const node::Content*,const Segment*,const std::string&);
 		bool has(Messages&,const node::Content*,const Segment*);
 		void unload(Messages&,Connection&);
 	};
