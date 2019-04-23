@@ -2,21 +2,23 @@
 
 //!	storage/iList
 
-!	pending/b0rked
+//!	pending/b0rked
 
 //Not debugging, uncomment the following X
-X
+//X
 
 F showDefines	0
-F showPassed	0
+F showPassed	1
 
 // name		code										expected result
 // example	[abcdef]									[abcdef]
 
+!	node/_main
+
+X
 !	unimplemented
 !	encoder/_main
 !	grammar/_main
-!	node/_main
 !	nodetree/_main
 !	storage/_main
 !	string/_main

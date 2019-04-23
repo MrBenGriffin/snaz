@@ -10,7 +10,6 @@
 
 //#include "node/Content.h"
 //#include "node/Taxon.h"
-//#include "node/Suffix.h"
 
 //#include "mt/Driver.h"
 #include "support/File.h"
@@ -75,10 +74,6 @@ namespace node {
 
 	//-------------------------------------------------------------------
 	Node::~Node() {
-//		while (!children.empty()) {
-//			delete children.back();
-//			children.pop_back();
-//		}
 		children.clear();
 		_tree = nullptr; 	// a reference value, so do not delete here!
 		_parent = nullptr;  // a reference value - so do not delete here!
@@ -162,62 +157,6 @@ namespace node {
 		return children[x];
 	}
 
-
-
 //-------------------------------------------------------------------
 
-//	string &Node::Suffix(size_t i) const { return value->getsuffix(i); }        //This is the initial page suffix.
-//	size_t Node::Template(size_t i) const { return value->gettemplate(i); }    // list of template ID's to use
-//
-//	size_t Node::filenameCount() const { return value->tplates.size(); }
-//
-//	size_t Node::ffilenameCount() const { return value->tplates.size(); }
-//
-//	size_t Node::suffixCount() const { return value->tplates.size(); }
-//
-//	size_t Node::templateCount() const { return value->tplates.size(); }
-//
-//	void Node::scratch(string s) { value->scratchpad = s; }            //Set scratchpad.
-//	string &Node::scratch() const { return value->scratchpad; }    //get scratchpad.
-//
-//	void Node::basefilename(string s) { value->setsval(4, s); }                    //Set basefilename.
-//	void Node::incPageCount() { value->setival(2, value->getival(2) + 1); }    //increment pagecount (numpages)
-//
-//	size_t Node::team() const { return value->getival(0); }
-//
-//	size_t Node::layout() const { return value->getival(1); }
-//
-//	size_t Node::numpages() const { return value->getival(2); }
-//
-//	size_t Node::exec() const { return value->getival(0); }
-//
-//	size_t Node::batch() const { return value->getival(1); }
-//
-//	string Node::linkref() const { return value->getsval(0); }
-//
-//	string Node::title() const { return value->getsval(1); }
-//
-//	string Node::shorttitle() const { return value->getsval(2); }
-//
-//	string Node::tierref() const { return value->getsval(3); }
-//
-//	string Node::basefilename() const { return value->getsval(4); }
-//
-//	string Node::birthdate() const { return value->getsval(5); }
-//
-//	string Node::deathdate() const { return value->getsval(6); }
-//
-//	string Node::scope() const { return value->getsval(0); }
-//
-//	string Node::classcode() const { return value->getsval(3); }
-//
-//	string Node::synonyms() const { return value->getsval(4); }
-//
-//	string Node::keywords() const { return value->getsval(5); }
-//
-//	string Node::descr() const { return value->getsval(6); }
-//
-//	string Node::suffix() const { return value->getsval(0); }
-//
-//	string Node::script() const { return value->getsval(1); }
 }

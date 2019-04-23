@@ -40,7 +40,10 @@ iCNoSegRef		@iContent(22,f_seodirectory)			!1!range: There is no segment with re
 iClaySegRef		@iContent(22,Keywords)					this is the keywords
 iCsegSegRef		@iContent(22,keywords)					this is the keywords
 iCsegNotScope	[@iContent(22,code)]					[]
-iCNoSegment	@iContent(22,wibble)						!1!range: There is no segment with reference 'wibble' in layout 'Basic HTML'
+iCNoSegment		@iContent(22,wibble)					!1!range: There is no segment with reference 'wibble' in layout 'Basic HTML'
+iCsegEmpty		[@iContent(22,code)]					[]
+iCMetaE			@iContent(22,Keywords,editor)			jbuchanan
+iCMetaD			@iContent(22,keywords,pubdate)			2011 02 17 16 15 31
 
 # Not Yet Implemented.
 
@@ -52,10 +55,6 @@ iCNoSegment	@iContent(22,wibble)						!1!range: There is no segment with referen
 
 //iSuffix 01		@iSuffix(!home)											php
 //iSuffix 02		@iSuffix(!home:1)										ixml
-
-//iContent 01		@iContent(!home,control)									control[crlf]OK
-//iContent 02		@iContent(!home,Control)									control[crlf]OK
-
 
 //SegmentName is done from within iContent..
 //segmentName 01	@iSegmentName(foo,T,F)										!2!iSegmentName called outside an existing segment (iContent)

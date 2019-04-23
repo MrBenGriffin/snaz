@@ -17,9 +17,7 @@ iSuffix					@iSuffix(19,2)							!1!error: iSuffix is not yet implemented.
 iSegmentName			@iSegmentName(19,2)						!1!error: iSegmentName is not yet implemented.
 iLink					@iLink(19)								!1!error: iLink is not yet implemented.
 iBirth					@iBirth(19,2)							!1!error: iBirth is not yet implemented.
-iContent				@iContent(19,2)							!1!error: iContent is not yet implemented.
 iDeath					@iDeath(19,2)							!1!error: iDeath is not yet implemented.
-iExistContent			@iExistContent(19,2)					!1!error: iExistContent is not yet implemented.
 
 # Unimplemented Media
 iMedia					@iMedia(1,2)							!1!error: iMedia is not yet implemented.

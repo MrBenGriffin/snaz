@@ -97,8 +97,6 @@ fNest02	@iForSibs(17,*,$,[@iForAncestry(*,R,*/^2,NODE,@iNumGen(*))])	[555][555][
 //-------------------------------------------------------------------------------
 # NOT YET IMPLEMENTED.
 iForNodes007	[@iIndex(;,@iForNodes(@iGet(*Z),*,$,+[*f_code],@iID(*);))]		!1!error: node sort by segment reference is not currently supported.
-iExistContent	@iExistContent(!siteSections,f_seodirectory,T,F)				!1!error: iExistContent is not yet implemented.
-iExistContent	@iExistContent(!siteSections,code,T,F)							!1!error: iExistContent is not yet implemented.
 iNumPage 005	@iNumPage()														!1!error: iNumPage is not yet implemented.
 iNumPage 015	@iNumPage(0,T,F)												!1!error: iNumPage is not yet implemented.
 
