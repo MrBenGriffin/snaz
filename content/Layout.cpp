@@ -58,6 +58,20 @@ const Layout* Layout::get(Messages &errs,size_t id) {
 	return result;
 }
 
+const Segment* Layout::segment(Messages &errs,string ref) {
+	/*
+	 * get segment by ref. from here so we can use the local name if needs be.
+	 */
+	const Segment* value =  nullptr;
+	auto found = segRefs.find(ref);
+	if(found != segRefs.end()) {
+		value = found->second;
+	} else {
+		value = Segment::get(errs,ref);
+	}
+	return value;
+}
+
 void Layout::load(Messages &errs, Connection &sql,size_t techID, buildKind) {
 	Timing &times = Timing::t();
 	if (times.show()) { times.set("Load Layouts"); }
