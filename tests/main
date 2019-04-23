@@ -2,10 +2,10 @@
 
 //!	storage/iList
 
-//!	pending/b0rked
+!	pending/b0rked
 
 //Not debugging, uncomment the following X
-//X
+X
 
 F showDefines	0
 F showPassed	0

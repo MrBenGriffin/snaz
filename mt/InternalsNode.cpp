@@ -101,9 +101,19 @@ namespace mt {
 	}
 	void iContent::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
-		e << Message(error,_name + " is not yet implemented.");
-		std::string left =  my.parm(1);
-		my.logic(false,1);
+		const node::Content* interest = node::Content::editorial.byPath(e,my.parm(1))->content();
+		const content::Layout* layout = interest->layout();
+		if(layout) {
+			auto* segment = layout->segment(e,my.parm(2));
+			const mt::mtext* code = content::Editorial::e().get(e,interest,segment);
+			if(code) {
+				//need to set the newline here (which is in the segment).
+				Driver::expand(*code, e, o, context);
+			}
+		} else {
+			e << Message(error,_name + " has no layout.");
+			my.logic(false,3);
+		}
 	}
 	void iDeath::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);

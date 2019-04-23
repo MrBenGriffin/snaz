@@ -5,10 +5,22 @@
 F showPassed	1
 F showDefines	1
 
-iECNoSegRef		@iExistContent(22,f_seodirectory,T,F)				F
-iEClaySegRef	@iExistContent(22,Keywords,T,F)						T
-iECsegSegRef	@iExistContent(22,keywords,T,F)						T
-iExistContent	@iExistContent(22,code,T,F)							F
+//  select * from bldsegment where id=5;
+//  +----+----------+--------+
+//  | id | name     | br     |
+//  +----+----------+--------+
+//  |  5 | keywords | @wBr() |
+//  +----+----------+--------+
+
+//  select node,pcontent from bldcontent where segment=5 and  node=22;
+//  +------+----------------------+
+//  | node | pcontent             |
+//  +------+----------------------+
+//  |   22 | this is the keywords |
+//  +------+----------------------+
+
+iCsegNotScope	[@iContent(22,code)]						[]
+
 
 
 //-------------------------------------------------------------------------------

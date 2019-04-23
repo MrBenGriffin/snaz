@@ -28,6 +28,19 @@ iLayout					@iLayout(19)					24
 # iLayoutName
 iLayoutName				@iLayoutName(19)				Home Page
 
+# iExistContent
+iECNoSegRef		@iExistContent(22,f_seodirectory,T,F)	F
+iEClaySegRef	@iExistContent(22,Keywords,T,F)			T
+iECsegSegRef	@iExistContent(22,keywords,T,F)			T
+iECsegNotScope	@iExistContent(22,code,T,F)				F
+iECNoSegment	@iExistContent(22,wibble,T,F)			F
+
+# iContent
+iCNoSegRef		@iContent(22,f_seodirectory)			!1!range: There is no segment with reference 'f_seodirectory' in layout 'Basic HTML'
+iClaySegRef		@iContent(22,Keywords)					this is the keywords
+iCsegSegRef		@iContent(22,keywords)					this is the keywords
+iCsegNotScope	[@iContent(22,code)]					[]
+iCNoSegment	@iContent(22,wibble)						!1!range: There is no segment with reference 'wibble' in layout 'Basic HTML'
 
 # Not Yet Implemented.
 
@@ -43,8 +56,6 @@ iLayoutName				@iLayoutName(19)				Home Page
 //iContent 01		@iContent(!home,control)									control[crlf]OK
 //iContent 02		@iContent(!home,Control)									control[crlf]OK
 
-iExistContent	@iExistContent(!siteSections,f_seodirectory,T,F)			!1!error: iExistContent is not yet implemented.
-iExistContent	@iExistContent(!siteSections,code,T,F)						!1!error: iExistContent is not yet implemented.
 
 //SegmentName is done from within iContent..
 //segmentName 01	@iSegmentName(foo,T,F)										!2!iSegmentName called outside an existing segment (iContent)
