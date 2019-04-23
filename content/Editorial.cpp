@@ -82,8 +82,7 @@ namespace content {
 		// The above gives us node,segment,content,editor,pubdate for this language.
 		if (sql.dbselected() ) {
 			if(sql.query(errs,query,str.str()) && query->execute(errs)) {
-				size_t index = 1;
-				size_t rows = query->getnumrows();
+				size_t index = 1; //Although mysql is 0-indexed, we deal with that internally.
 				while(query->nextrow()) {
 					key ident;
 					query->readfield(errs, "node", ident.first);
@@ -109,9 +108,25 @@ namespace content {
 	}
 
 	const mt::mtext* Editorial::get(Messages &errs, const node::Content* node, const Segment* segment) {
-		const mt::mtext* value = nullptr;
+		static mt::mtext empty;
+		const mt::mtext* value = &empty;
 		key id;
 		if(sanity(errs,id,node,segment)) {
+			auto cIndex = contentStore.find(id); //unordered_map< key, mt::mtext, hash_pair> contentStore;
+			if(cIndex != contentStore.end()) {
+				value = &(cIndex->second);
+			} else {
+				auto index = qIndexes.find(id);
+				if(index != qIndexes.end()) {
+					// TODO:: support editor / pub.date.
+					query->setRow(errs,index->second);
+					string content;
+					query->readfield(errs, "content", content);
+					mt::mtext stuff = mt::Driver::parse(errs,content,false);
+					auto idx = contentStore.emplace(id,std::move(stuff));
+					value = &(idx.first->second);
+				}
+			}
 		}
 		return value;
 	}
