@@ -95,8 +95,10 @@ namespace mt {
 	}
 	void iBirth::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
-		e << Message(error,_name + " is not yet implemented.");
-		std::string left =  my.parm(1);
+		const node::Node* interest = node::Content::editorial.byPath(e,my.parm(1));
+		if(interest) {
+			my.logic(interest->get(e,birth).str(),2);
+		}
 		my.logic(false,1);
 	}
 	void iContent::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
@@ -122,8 +124,10 @@ namespace mt {
 	}
 	void iDeath::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
-		e << Message(error,_name + " is not yet implemented.");
-		std::string left =  my.parm(1);
+		const node::Node* interest = node::Content::editorial.byPath(e,my.parm(1));
+		if(interest) {
+			my.logic(interest->get(e,death).str(),2);
+		}
 		my.logic(false,1);
 	}
 	void iExistContent::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {

@@ -2,6 +2,7 @@
 // Created by Ben on 2019-03-19.
 //
 #include <sstream>
+#include <limits>
 #include <utility>
 #include <unordered_map>
 
@@ -86,7 +87,7 @@ namespace node {
 						q->readTime(errs, "incdate", birth);
 						q->readTime(errs, "outdate", death);
 						contents._birth.set(birth);
-						contents._death.set(death);
+						contents._death.set(death == 0 ? std::numeric_limits<::time_t>::max() : death);
 
 						auto ins = nodes.emplace(contents._id, std::move(contents));
 						if (ins.second) {

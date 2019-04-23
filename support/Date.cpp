@@ -9,6 +9,7 @@
 
 
 #include "Date.h"
+#include <cerrno>
 
 namespace Support {
 
@@ -123,7 +124,17 @@ namespace Support {
 
 	std::string Date::str() {
 		std::string value;
-		getNow(value);
+		local = localtime(&tt);
+		if (errno == EOVERFLOW) {
+			if(local == nullptr) {
+				return "9999-12-31 01:00:00";
+			} else {
+				if (tt == 0) {
+					local->tm_year = 0;
+				}
+			}
+		}
+		getDateStr(local,value);
 		return value;
 	}
 

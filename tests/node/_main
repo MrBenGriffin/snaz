@@ -45,6 +45,10 @@ iCsegEmpty		[@iContent(22,code)]					[]
 iCMetaE			@iContent(22,Keywords,editor)			jbuchanan
 iCMetaD			@iContent(22,keywords,pubdate)			2011 02 17 16 15 31
 
+# iBirth/iDeath
+iBirth01		@iBirth(22)								1900-01-01 01:00:00
+iDeath01		@iDeath(22)								9999-12-31 01:00:00
+
 # Not Yet Implemented.
 
 //iLink 03		@iLink(!home:2)											!2!Path: !home:2 did not find a node.
