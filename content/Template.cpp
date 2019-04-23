@@ -14,20 +14,6 @@ namespace content {
 	bool 									Template::_show = false;
 	unordered_map<size_t,Template>   		Template::templates;		//Where templates are stored. Loaded once per build.
 
-	void Template::compose(Messages& errs,Layout& layout,node::Content& content,buildKind kind,size_t langID,size_t techID) {
-		if(!code.empty()) {
-			std::ostringstream msg; msg << "Template " << name;
-			errs << Message(info,msg.str());
-			std::ostringstream content;
-			//Newline code!!? expansion completely missing at the moment.
-			//mt:Driver.pushNewline(nl);
-			mt::Driver::expand(code,errs,content);
-			//mt:Driver.popNewline();
-			//TODO:: expand code here.
-			//TODO:: expand suffix here.
-		}
-	}
-
 	const Template* Template::get(Messages &errs,size_t id) {
 		const Template* result =  nullptr;
 		auto found = templates.find(id);
@@ -60,7 +46,7 @@ namespace content {
 					q->readfield(errs, "suffix", _suffix);
 					q->readfield(errs, "macro", _macro);
 					q->readfield(errs, "break", _break);
-					basis.suffix = Suffix::ref(errs, _suffix);
+					basis.suffix = Suffix::byRef(errs, _suffix);
 					std::istringstream bodyCode(_macro);
 					basis.code = mt::Driver(errs,bodyCode,mt::Definition::test_adv(_macro)).parse(errs,true);
 					std::istringstream newlineCode(_break);

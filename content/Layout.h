@@ -30,11 +30,11 @@ namespace content {
 		size_t id;
 		string ref;
 		bool buildPoint;
-		deque<const Template*> templates;
+		vector<const Template*> templates;
 		deque<const Segment*> segments;
 		unordered_map<string,const Segment*> segRefs;  //This is the layout's specific name for a segment.
 
-		void compose(Messages&,node::Content&,buildKind,size_t,size_t);
+//		void compose(Messages&,node::Content&,buildKind,size_t,size_t) const;
 
 		static void load(Messages&,Connection&,size_t,buildKind);		//Per Tech.
 		static const Layout* get(Messages&,size_t);

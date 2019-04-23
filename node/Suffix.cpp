@@ -21,7 +21,7 @@ namespace node {
 	unordered_map<size_t,Suffix> Suffix::nodes;
 	unordered_map<string,Suffix*> Suffix::refs;
 
-	Suffix::Suffix() : Node(suffixes) {}
+	Suffix::Suffix() : Node(suffixes),last(nullptr),_output(true) {}
 
 	void Suffix::loadTree(Messages& errs, Connection& sql,size_t,buildKind) {
 		size_t baked_tw = 0;  //we won't be incrementing this as we can use the native tw. But we need to declare it.
@@ -77,6 +77,7 @@ namespace node {
 					Suffix suffix;
 					suffix.common(errs,q,parent,baked_tw);
 					// Specific Suffix Values.
+					suffix._output = (suffix._ref != "XXX");
 					q->readfield(errs,"title",suffix._title);
 					q->readfield(errs,"comment",suffix._comment);		// The comment as text
 					q->readfield(errs,"macro",suffix._macro);			// is the comment a macrotext to generate the actual suffix? (always terminal).
@@ -107,12 +108,29 @@ namespace node {
 		if (times.show()) { times.use(errs,"Load Suffixes"); }
 	}
 
+//	const Suffix* final;
+	void Suffix::weigh() {
+		_weight = 1;
+		if(_tier > 1 && _parent) {
+			const Node* suff = this;
+			while (suff->tier() > 2 ) {
+				suff = suff->parent();
+			}
+			last = suff->suffix();
+		}
+		for (auto& i : children) {
+			const_cast<Node*>(i)->weigh();
+			_weight += i->size();
+		}
+	}
+
+
 
 	const Node* Suffix::node(Messages& errs, size_t id, bool silent) const {
 		return suffix(errs,id,silent);
 	}
 
-	const Suffix* Suffix::ref(Messages& errs, string name, bool silent) {
+	const Suffix* Suffix::byRef(Messages& errs, string name, bool silent) {
 		const Suffix* result =  nullptr;
 		auto found = refs.find(name);
 		if(found != refs.end()) {

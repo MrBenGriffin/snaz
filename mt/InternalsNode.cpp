@@ -74,9 +74,10 @@ namespace mt {
 	}
 	void iLink::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
-		e << Message(error,_name + " is not yet implemented.");
-		std::string left =  my.parm(1);
-		my.logic(false,1);
+		pair<const Node*,size_t> interest = node::Content::editorial.nodePage(e,my.parm(1));
+		if (interest.first != nullptr && interest.second != UINTMAX_MAX ) {
+			my.logic(interest.first->content()->filename(e,interest.second),2);
+		}
 	}
 	void iLinkRef::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);

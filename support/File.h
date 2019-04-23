@@ -18,31 +18,9 @@ namespace Support {
 
 	class File;
 
-//	class Device {
-//	protected:
-//		string	device;				//eg C:
-//		string	root_separator;
-//
-//	public:
-//		Device();
-//
-//		explicit Device(const string&);
-//		Device(const Device &);
-//		virtual ~Device();
-//
-//		virtual void init();
-//		virtual void clear();
-//
-//		void setRootSeparator(const string &);
-//		const string getRootSeparator() const;
-//		void setDevice(const string &);
-//		const string getDevice() const;
-//		const string getDeviceName(bool=false) const;
-//		virtual const string output(bool) const;
-//	};
-
 	class Path {
 	private:
+		bool doWrite;
 		string generateTempName(const string &) const;
 	protected:
 		static std::stack<string> wdstack;
@@ -86,6 +64,8 @@ namespace Support {
 
 		void listDirs(vector<Path *>*, bool=false) const;
 
+		void setNoOutput() { doWrite = false; }
+
 		bool makeRelativeTo(const Path&);
 		bool makeAbsoluteFrom(const Path&);
 
@@ -113,8 +93,6 @@ namespace Support {
 
 		explicit File(string);
 		File(string,string);
-//		File(string,string,string);
-//		File(string,string,string,string);
 		~File()= default;
 		void clear() override;
 		File &operator=(File);
@@ -122,7 +100,7 @@ namespace Support {
 		const char getExtensionSeparator() const;
 		void setBase(string);
 		const string getBase() const;
-		void setExtension(string);
+		void setExtension(const string);
 		const string getExtension() const;
 		void setFileName(string,bool=false);
 		const string getFileName() const;
@@ -138,6 +116,8 @@ namespace Support {
 		bool copyTo(File, Messages&, bool = false) const;
 		bool copyTo(Path, Messages&, bool = false) const;
 		string readFile() const;
+		bool empty() const { return path.empty(); }
+
 
 	};
 

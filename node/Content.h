@@ -7,6 +7,7 @@
 
 #include "support/Definitions.h"
 #include "support/Message.h"
+#include "support/File.h"
 #include "support/db/Connection.h"
 #include "node/Tree.h"
 #include "node/Node.h"
@@ -38,6 +39,7 @@ namespace node {
 		Date _death;
 		const content::Layout* layoutPtr;
 
+		vector<std::string> 				finalFilenames;	//final filenames - in page order.
 		string baseFileName;
 		string scratchpad;    				// used for iForPeers <- maybe should go elsewhere..
 //		vector<string> filenames;
@@ -69,6 +71,7 @@ namespace node {
 		static const Content* root();// { return dynamic_cast<const Content*>(editorial.root()); }
 
 		const content::Layout* layout() const { return layoutPtr; }
+		const std::string filename(Messages&,size_t) const;
 
 		void generate(Messages&,buildType,buildKind,size_t,size_t) const;
 
@@ -77,7 +80,6 @@ namespace node {
 		string get(Messages&,textValue) const override;
 		Date   get(Messages&,dateValue) const override;
 		void   loadTree(Messages&, Connection&, size_t,buildKind) override; //depends upon Node flavour of
-
 		void setLayouts(Messages &); 		//Set all the layouts for a nodetree
 		flavour cultivar() const override { return flavour::content; }
 
@@ -85,7 +87,6 @@ namespace node {
 
 		static void updateBirthAndDeath(Messages&, Connection&, size_t,buildKind);
 		static void updateContent(Messages&, Connection&, size_t,buildKind);
-
 		static const Node* current();
 
 

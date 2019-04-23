@@ -43,6 +43,7 @@ namespace node {
 		const Node* prev(Messages &, size_t) const; //treeWalk previous
 		const Node* byRef(Messages &, string, bool= true) const;  //returns null if not content or suffix
 		const Node* byPath(Messages &,const string &);    //returns null if not found
+		pair<const Node*,size_t> nodePage(Messages &,const string &);    //returns null if not found
 
 		const Node* tw(Messages &, size_t, signed long,const Node* = nullptr) const; //treeWalk from offset.
 		void add(Messages &, Node*, size_t);

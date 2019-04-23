@@ -31,8 +31,6 @@ namespace content {
 		static unordered_map<size_t,Template>   	templates;		//Where templates are stored. Loaded once per build.
 		static bool _show;
 
-		void compose(Messages&,Layout&,node::Content&,buildKind,size_t,size_t);
-
 		static const Template*  get(Messages &,size_t);		//return by id,
 
 		static void load(Messages&,Connection&,buildKind);

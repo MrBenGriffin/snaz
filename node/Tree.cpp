@@ -150,6 +150,36 @@ namespace node {
 		return result;
 	}
 
+	pair<const Node*,size_t> Tree::nodePage(Messages &errs, const string &path) {
+		pair<const Node*,size_t> result = {nullptr,0};
+		if ((path.size() > 0) && (_root != nullptr) && (_root->cultivar() == content)) {    // If specified startnode, use it
+			const string relatives = "C0n+-.^RFBO"; //yes, 0 is a relative address in this case!
+			if (relatives.find(path[0]) != string::npos) {
+				locator.setdirty();
+			} else {
+				if (path.length() > 1) {
+					if (path[0] == 'I' && path[1] != '0') {
+						locator.setdirty();
+					} else {
+						if (path[0] == 'A' && path[1] != '1') {
+							locator.setdirty();
+						}
+					}
+				}
+			}
+		}
+		locator.setFrom(current());
+		result.first = locator.locate(errs,path.begin(),path.end());
+		result.second = locator.getFoundPageNumber();
+		if (result.first == nullptr) {
+			errs << Message(error, "Path: " + path + " did not find a node.");
+		}
+		if (result.second == UINTMAX_MAX) {
+			errs << Message(range, "Page was out of bounds.");
+		}
+		return result;
+	}
+
 }
 
 

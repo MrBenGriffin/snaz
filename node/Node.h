@@ -86,7 +86,7 @@ namespace node {
 		const string ref() const;	 		// linkref as a string
 
 		void str(ostream&) const;			 // show the Node..
-		void weigh();
+		virtual void weigh();
 
 		const Content* content() const; //{ return dynamic_cast<const Content*>(this); }
 		const Taxon* taxon() const ;	//{ return dynamic_cast<const Taxon*>(this); }

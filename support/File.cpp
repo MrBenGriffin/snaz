@@ -136,18 +136,19 @@ namespace Support {
 		if (chdir(wdptr) != 0) { /* report an error here. */ }
 	}
 
-	Path::Path() : path(), directory_separator("/") {
+	Path::Path() : path(), directory_separator("/"),doWrite(true) {
 	}
 
-	Path::Path(const Path &newpath) {
+	Path::Path(const Path &newpath) : doWrite(true) {
 		*this = newpath;
 	}
 
-	Path::Path(const string newpath) : path(), directory_separator("/") {
+	Path::Path(const string newpath) : doWrite(true), path(), directory_separator("/") {
 		setPath(newpath);
 	}
 
 	void Path::clear() {
+		doWrite = true;
 		path.clear();
 	}
 

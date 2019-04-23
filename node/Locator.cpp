@@ -586,7 +586,7 @@ namespace node {
 		if (page.second) {
 			if (showPaths) message << "[" << page.first << "]";
 			if (page.first >= find->get(errs,templates)) {
-				find = nullptr;    //No pages at that count.
+				pageNum = UINTMAX_MAX;    //No pages at that count.
 			} else {
 				pageNum = page.first;
 			}
@@ -594,7 +594,7 @@ namespace node {
 				throw BadLocatorPath(errs, start, in, out);
 			}
 		} else {
-			pageNum = 0;
+			pageNum = UINTMAX_MAX;
 		}
 		return true;    // stop now
 	}

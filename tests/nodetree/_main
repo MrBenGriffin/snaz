@@ -22,6 +22,9 @@ iSize 001		[@iSize(!siteSections)]											[7]
 iSize 003		[@iSize(!siteSections,7,T,F)]									[T]
 iSize 004		[@iSize(!siteSections,19,T,F)]									[F]
 
+iNumPage 005	@iNumPage()														0
+iNumPage 006	@iNumPage(0,T,F)												T
+
 iNumSib 007		@iNumSib(!siteSections/n-0)										3
 iNumSib 071		@iNumSib(!siteSections/n-0,1,T,F)								F
 
@@ -97,6 +100,3 @@ fNest02	@iForSibs(17,*,$,[@iForAncestry(*,R,*/^2,NODE,@iNumGen(*))])	[555][555][
 //-------------------------------------------------------------------------------
 # NOT YET IMPLEMENTED.
 iForNodes007	[@iIndex(;,@iForNodes(@iGet(*Z),*,$,+[*f_code],@iID(*);))]		!1!error: node sort by segment reference is not currently supported.
-iNumPage 005	@iNumPage()														!1!error: iNumPage is not yet implemented.
-iNumPage 015	@iNumPage(0,T,F)												!1!error: iNumPage is not yet implemented.
-

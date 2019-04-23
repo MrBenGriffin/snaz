@@ -1,8 +1,10 @@
 # iLink
-iLink 03		@iLink(!home:2)						!2!Path: !home:2 did not find a node.
-iLink 01		@iLink(!home:0)						simple.php
-iLink 02		@iLink(!home:1)						simple_1.ixml
-iLink 04		@iLink()							simple.php
+
+iLink 01		@iLink(!home:0)						home.html
+iLink 02		@iLink()							home.html
+iLink 03a		@iLink(147:0)						SiteSearch.obyx
+iLink 03b		@iLink(147:1)						SiteSearch_1.html
+iLink 04		@iLink(!home:2)						!1!range: Page was out of bounds.
 
 # iLinkRef
 iLinkRef 01		@iLinkRef(19)							home

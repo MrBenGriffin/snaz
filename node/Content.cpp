@@ -165,7 +165,7 @@ namespace node {
 			case team: result = _team; break;
 			case uintValue::layout: result = _layout; break;
 			case page: result = current_page; break;
-			case templates: result=0; break;
+			case templates: result= finalFilenames.size(); break;
 		}
 		return result;
 	};
@@ -204,6 +204,26 @@ namespace node {
 		for (auto i : editorial.twNodes) {
 			Content& node = nodes[i.second->id()];
 			node.layoutPtr = content::Layout::get(errs,node._layout);
+			node.finalFilenames.clear();	//final filenames - in page order.
+			if(node.layoutPtr != nullptr) {
+				size_t fileNum = 0;
+				for(auto *tmp : node.layoutPtr->templates) {
+					content::Template* t = const_cast<content::Template*>(tmp);
+					const node::Suffix* initialSuffix = t->suffix;
+					if(initialSuffix) {
+						const node::Suffix* finalSuffix = initialSuffix->last;
+						ostringstream base;
+						base << node._ref;
+						if(fileNum > 0) {
+							base << "_" << fileNum;
+						}
+						Support::File file(base.str());
+						file.setExtension(finalSuffix->ref());
+						node.finalFilenames.push_back(file.output(false));
+					}
+					fileNum++;
+				}
+			}
 		}
 		if (times.show()) { times.use(errs,"setLayouts"); }
 	}
@@ -283,6 +303,30 @@ namespace node {
 		}
 	}
 
+	const std::string Content::filename(Messages& errs,size_t page) const {
+		string value = "";
+		if(page < finalFilenames.size()) {
+			value = finalFilenames[page];
+		} else {
+			errs << Message(range,"Requested page number too high for this node");
+		}
+		return value;
+	}
+
+//	const Support::File* Content::filename(Messages& errs,size_t page,bool final) const {
+//		if(filenames[page].empty()) {
+//			return &(filenames[page]);
+//		} else {
+//			auto& templates = layoutPtr->templates;
+//			if(templates.size() > page) {
+//				auto* suffix = layoutPtr->templates[page]->suffix;
+//
+//			} else {
+//				errs << Message(range,"Range error in page number for filename");
+//			}
+//		}
+//	}
+
 	void Content::compose(Messages& errs,buildKind kind,size_t langID,size_t techID) {
 		// To get here, this node generates files
 		ostringstream msg; msg << "Composing " << _ref;
@@ -295,11 +339,10 @@ namespace node {
 				mt::Wss::pop();
 			}
 			const node::Suffix* suffix = t->suffix;
+//			mt::mtext code;
+
 			current_page++;
 		}
-
-//		layoutPtr->compose(errs,*this,kind,langID,techID);
-//		content::Layout::layouts[layoutPtr->id].compose(errs,*this,kind,langID,techID);
 	}
 	/**
 			auto nmi = templateList.find(tid);

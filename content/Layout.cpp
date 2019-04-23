@@ -24,14 +24,6 @@ size_t Layout::pages() const {
 	return templates.size();
 }
 
-void Layout::compose(Messages& errs,Content& content,buildKind kind,size_t langID,size_t techID) {
-	std::ostringstream msg; msg << "Layout " << ref;
-	errs << Message(info,msg.str());
-	for (auto* t : templates) {
-		Template::templates[t->id].compose(errs,*this,content,kind,langID,techID);
-	}
-}
-
 const Layout* Layout::get(Messages &errs,string ref) {
 	const Layout* result =  nullptr;
 	auto found = refs.find(ref);

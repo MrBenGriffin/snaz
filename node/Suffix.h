@@ -30,10 +30,9 @@ namespace node {
 		Suffix();
 		flavour cultivar() const override { return flavour::suffix; }
 
-		static constexpr auto finalSuffix 	= "A2";
 		const Node* node(Messages&, size_t, bool= false) const override; //by id.
 		static const Suffix* suffix(Messages&, size_t, bool= false); //Suffix by id.
-		static const Suffix* ref(Messages&, string, bool= false);  //Suffix by ref.
+		static const Suffix* byRef(Messages&, string, bool= false);  //Suffix by ref.
 
 
 		bool   get(Messages&,boolValue) const override;
@@ -41,12 +40,17 @@ namespace node {
 		string get(Messages&,textValue) const override;
 		Date   get(Messages&,dateValue) const override;
 
-		void loadTree(Messages&, Connection&, size_t,buildKind = final) override;
+		void loadTree(Messages&, Connection&, size_t,buildKind = Support::final) override;
 
 		// data fields here.
+
+		void weigh() override;
+
+		const Suffix* last;
 		string _title;
 		string _script;
 		string _comment;
+		bool _output;
 		bool _terminal;
 		bool _exec;
 		bool _batch;

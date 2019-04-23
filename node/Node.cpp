@@ -106,7 +106,7 @@ namespace node {
 		return result;
 	}
 
-//internal recursive function used to gather nodes at a given depth...
+	//internal recursive function used to gather nodes at a given depth...
 	void Node::addToPeerList(vector<const Node *> &result, size_t depth) const {
 		if (depth < 1) return;
 		for (auto kid: children) {
