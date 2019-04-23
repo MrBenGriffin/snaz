@@ -28,10 +28,15 @@ namespace mt {
 	}
 	void iSuffix::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
-		const Node* interest = node::Content::editorial.byPath(e,my.parm(1));
-		if (interest != nullptr) {
-			e << Message(error,_name + " is not yet implemented.");
-			my.logic("eep",2);
+		pair<const Node*,size_t> interest = node::Content::editorial.nodePage(e,my.parm(1));
+		if (interest.first != nullptr && interest.second != UINTMAX_MAX ) {
+			auto* layout = interest.first->content()->layout();
+			if(layout) {
+				auto* suffix = layout->templates[interest.second]->suffix->last;
+				if(suffix) {
+					my.logic(suffix->ref(),2);
+				}
+			}
 		}
 	}
 	void iShortTitle::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {

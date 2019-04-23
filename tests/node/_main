@@ -1,5 +1,10 @@
-# iLink
+# iSuffix
+iSuffix 01		@iSuffix(!home)						html
+iSuffix 02		@iSuffix(!home:1)					!1!range: Page was out of bounds.
+iSuffix 03a		@iSuffix(147:0)						obyx
+iSuffix 03b		@iSuffix(147:1)						html
 
+# iLink
 iLink 01		@iLink(!home:0)						home.html
 iLink 02		@iLink()							home.html
 iLink 03a		@iLink(147:0)						SiteSearch.obyx
@@ -60,8 +65,6 @@ iDeath01		@iDeath(22)								9999-12-31 01:00:00
 # Not Yet Implemented.
 
 
-//iSuffix 01		@iSuffix(!home)					php
-//iSuffix 02		@iSuffix(!home:1)				ixml
 
 //SegmentName is done from within iContent..
 //segmentName 01	@iSegmentName(foo,T,F)			!2!iSegmentName called outside an existing segment (iContent)
