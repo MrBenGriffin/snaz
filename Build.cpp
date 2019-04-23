@@ -203,13 +203,14 @@ void Build::techs(Messages& errs,Connection& sql,size_t langID) {
 void  Build::files(Messages& errs,Connection& sql,size_t langID,size_t techID) {
 //	node::Content::root()->str(cout);
 	if(requestedNodes.empty()) {
-		node::Content::root()->generate(errs,Full,_current,langID,techID);
+		node::Content::get(node::Content::root()->id()).generate(errs,Full,_current,langID,techID);
 	} else {
 		for (auto t : requestedNodes) { //t.first is the buildType.
 			for(auto n : t.second ) { // t.second is the deque of node IDs for this buildtype.
 				const node::Content* node = node::Content::content(errs,n);
 				if(node != nullptr) {
-					node->generate(errs,t.first,_current,langID,techID);
+					auto& base = node::Content::get(node->id());
+					base.generate(errs,t.first,_current,langID,techID);
 				}
 			}
 		}

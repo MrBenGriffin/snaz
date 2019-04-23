@@ -1,6 +1,7 @@
 //
 // Created by Ben on 2019-03-19.
 //
+#include <fstream>
 #include <sstream>
 #include <limits>
 #include <utility>
@@ -33,7 +34,7 @@ namespace node {
 
 	Tree Content::editorial("Content");
 	unordered_map<size_t,Content> Content::nodes;
-	deque<Content *> 	Content::nodeStack;    // current node - used to pass to built-in functions
+	deque<const Content *> 	Content::nodeStack;    // current node - used to pass to built-in functions
 
 	Content::Content() : Node(editorial),layoutPtr(nullptr),current_page(0) {}
 	void Content::loadTree(Messages& errs, Connection& sql, size_t language,buildKind build) {
@@ -208,7 +209,7 @@ namespace node {
 			if(node.layoutPtr != nullptr) {
 				size_t fileNum = 0;
 				for(auto *tmp : node.layoutPtr->templates) {
-					content::Template* t = const_cast<content::Template*>(tmp);
+					auto* t = const_cast<content::Template*>(tmp);
 					const node::Suffix* initialSuffix = t->suffix;
 					if(initialSuffix) {
 						const node::Suffix* finalSuffix = initialSuffix->last;
@@ -263,13 +264,19 @@ namespace node {
 
 //-------------------------------------------------------------------
 // All builds starts here, and then any single node build goes to compose.
-	void Content::generate(Messages& errs,buildType build,buildKind kind,size_t langID,size_t techID) const {
+	void Content::generate(Messages& errs,buildType build,buildKind kind,size_t langID,size_t techID) {
 		Build &core = Build::b();
 //		ostringstream msg;
 //		msg << string(build) << ": " << _id << ";" << _tw << ";" << _ref;
 //		errs << Message(info,msg.str());
 //		static unordered_map<size_t,Content>  nodes;
 		switch(build) {
+			case Single:
+				if(core.user.check(_team,build)) {
+					compose(errs,kind,langID,techID);
+				} else {
+					errs << Message(security,"Not allowed to build this node.");
+				} break;
 			case Full:
 				if(core.user.check(build) && this == root()) {
 					generate(errs,Branch,kind,langID,techID);
@@ -278,7 +285,7 @@ namespace node {
 				} break;
 			case Branch:
 				if(core.user.check(_team,build)) {
-					nodes[_id].compose(errs,kind,langID,techID);
+					compose(errs,kind,langID,techID);
 					generate(errs,Descendants,kind,langID,techID);
 				} else {
 					errs << Message(security,"Not allowed to branch build here.");
@@ -286,19 +293,13 @@ namespace node {
 			case Descendants:
 				if(core.user.check(_team,build)) {
 					for(auto* node : children) {
-						const Content* child = dynamic_cast<const Content *>(node);
-						if(child != nullptr && child->layoutPtr != nullptr && child->layoutPtr->buildPoint) {
-							child->generate(errs,Branch,kind,langID,techID);
+						auto& child = get(node->id());
+						if(child.layoutPtr != nullptr && child.layoutPtr->buildPoint) {
+							child.generate(errs,Branch,kind,langID,techID);
 						}
 					}
 				} else {
 					errs << Message(security,"Not allowed to descendant build here.");
-				} break;
-			case Single:
-				if(core.user.check(_team,build)) {
-					nodes[_id].compose(errs,kind,langID,techID);
-				} else {
-					errs << Message(security,"Not allowed to build this node.");
 				} break;
 		}
 	}
@@ -313,307 +314,37 @@ namespace node {
 		return value;
 	}
 
-//	const Support::File* Content::filename(Messages& errs,size_t page,bool final) const {
-//		if(filenames[page].empty()) {
-//			return &(filenames[page]);
-//		} else {
-//			auto& templates = layoutPtr->templates;
-//			if(templates.size() > page) {
-//				auto* suffix = layoutPtr->templates[page]->suffix;
-//
-//			} else {
-//				errs << Message(range,"Range error in page number for filename");
-//			}
-//		}
-//	}
-
 	void Content::compose(Messages& errs,buildKind kind,size_t langID,size_t techID) {
 		// To get here, this node generates files
+		Content::nodeStack.push_back(this);
+
 		ostringstream msg; msg << "Composing " << _ref;
 		current_page = 0;
 		for (auto* t : layoutPtr->templates) {
 			std::ostringstream content;
 			if(!t->code.empty()) {
+				auto file = finalFilenames[current_page];
+				errs << Message(info,file);
+				errs.str(cout); errs.reset();
+				if(file == "Layouts.html") {
+					errs << Message(info,"eep");
+				}
 				mt::Wss::push(&(t->nl));
 				mt::Driver::expand(t->code,errs,content);
 				mt::Wss::pop();
-			}
-			const node::Suffix* suffix = t->suffix;
-//			mt::mtext code;
+				try {
+					std::ofstream outFile(file.c_str());
+					outFile << content.str();
+					outFile.close();
+					chmod(file.c_str(),S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
+				}	//create the file!
+				catch(...) {
+					errs << Message(error,"Failed to create file") ;
+				}
 
+			}
 			current_page++;
 		}
+		Content::nodeStack.pop_back();
 	}
-	/**
-			auto nmi = templateList.find(tid);
-			if (nmi != templateList.end()) {
-				curtemplate = nmi->second.second; // My order
-				nodeStack.push_back(this); //tid
-				ostringstream tname;
-				tname << "Suffix " << tid;
-				ostringstream result;
-				string suff = mt::Driver::expand(errs, curtemplate.suffix, tname.str());
-				nodeStack.pop_back();
-				suffixes[current_page]=suff;
-				if (errs.verbosity() > 6) {
-					text << "Node " << idStr << " page " << current_page << " has suffix " << suff;
-					errs << Message(info, text.str());
-					text.str("");
-				}
-				//We need to find the ancestor suffix so that any links we create can deal with the post-processed versions!
-				const Node* x = Suffix::suffixes.byRef(errs, suff);
-				if (x == nullptr) {
-					string fname = filenames[current_page];
-					filename->getFullName(fname, suff);
-					ffilename[current_page] = fname;
-				} else {
-//						const Node *byPath(Messages &,Locator&, string::const_iterator, string::const_iterator) const;
-//						Node *vx = x->nodebypath(errs, Suffix::finalSuffix.begin(), Suffix::finalSuffix.end());
-					Locator suffixLocator(x); string suffixTop(Suffix::finalSuffix);
-					const Node *vx = Suffix::suffixes.byPath(errs,suffixLocator,suffixTop.begin(), suffixTop.end());
-					if (vx == nullptr) {
-						errs << Message(error, "Error of some sort in suffix table");
-					} else {
-						suff = vx->get(errs,fileSuffix);
-					}
-					string fname = filenames[current_page];
-					filename->getFullName(fname, suff);    //This now works!  Amazing.
-					if (errs.verbosity() > 6) {
-						text << "Node " + idStr + " page " << current_page << " is set with filename " << fname;
-						errs << Message(info, text.str());
-						text.str("");
-					}
-					ffilename[current_page] = fname;
-				}
-				current_page++;
-			} else {
-				Env env = Env::e();
-				text << "Template " << tid << " at Node " << id() << ",Technology " << build.tech()
-					 << " referenced but does not exist.";
-				errs << Message(error, text.str());
-				text.str("");
-			}
-
-***/
-//-------------------------------------------------------------------
-//This is the beginning of the node build.
-/**
-	void Content::gettextoutput(Messages &errs) {
-		Env env = Env::e();
-		Build build = Build::b();
-		Timing timing = Timing::t();
-		string in_s, baseurl_a, baseurl_s, langtech_s;
-		timing.set('N');
-		env.get("LTPATH", langtech_s);
-		bool inTeam = build.user.mayTeamEdit(get(errs,team));
-		if (errs.verbosity() > 0) {
-			ostringstream line_oss;
-			if (inTeam) {
-				baseurl_a = env.baseUrl(Editorial);
-				if (Regex::available(errs)) {
-					string editor;
-					const string pattern = "^([^0]*)0([^0]*)0([^0]*)$";
-					env.get("RS_BUILDNODEPATH", editor, "/en/nnedit.mxs?0&d&0"); //if none, keep default.
-					std::ostringstream sub;
-					sub << "\\1" << this->id() << "\\2" << build.lang() << "\\3";
-					Regex::replace(errs, pattern, sub.str(), editor);
-					line_oss << editor;
-				} else {
-					line_oss << "/en/nnedit.mxs?" << this->id() << "&d&" << build.lang();
-				}
-			}
-			string Title = get(errs,title);
-			if (Title.empty()) Title = ref();
-			baseurl_s = env.baseUrl(buildArea(build.current())); //current()
-			if (Title.length() > 60) {
-				Title = Title.substr(0, 60);
-				Title = Title.append("...");
-			}
-			bool did_url = false;
-			for (size_t i = 0; i < get(errs,templates) && !did_url; i++) {
-//				if (suffixes[i] != "XXX") {
-//					ostringstream line;
-//					if (inTeam) {
-//						line << "<a href='" << baseurl_a << line_oss.str() << "'>" << "*" << "</a>";
-//					} else {
-//						line << "+ ";
-//					}
-//					line << this->id() << " - <a href='" << baseurl_s << "/" << langtech_s << ffilename[0] << "'>"
-//						 << Title << "</a>";
-//					errs << Message(even, line.str());
-//					did_url = true;
-//				}
-			}
-			if (!did_url) {
-				ostringstream line;
-				if (inTeam) {
-					line << "<a href='" << baseurl_a << line_oss.str() << "'>" << "*" << "</a>";
-				} else {
-					line << "+ ";
-				}
-				line << this->id() << " - " << Title;
-				errs << Message(struc, line.str());
-			}
-		}
-		//--
-		string bk;
-		for (size_t i = 0; i < get(errs,templates); i++) {
-			build.setPage(i);
-			if (content::Template::_show && get(errs,templates) > 1) {
-				ostringstream text;
-				text << " Template (" << i + 1 << ")";
-				errs << Message(info, text.str());
-			}
-
-			string templatename("Undefined Template");
-//			size_t templateId = tplates[i];
-//			content::Template curtemplate;
-//			auto nmi = templateList.find(templateId);
-//			if (nmi != templateList.end()) {
-//				curtemplate = nmi->second.second;  // My order
-//				templatename = "[" + nmi->second.first + "]";  // The template's name
-//				build.setSuffix(curtemplate.suffix);
-//				in_s = curtemplate.str;  //Starter for template
-//				bk = curtemplate.br; //Template's own break.
-//			} else {
-//				ostringstream line;
-//				line << "Template " << templateId << " at Node " << this->id() << ",Technology " << build.tech()
-//					 << " referenced but does not exist.";
-//				errs << Message(warn, line.str());
-//				build.setSuffix("");
-//				in_s = "";
-//				bk = "";
-//			}
-
-			//TODO:: Finish template generation!!
-
-		Macro::environ TemplateEnv = macro::topEnv();
-		if ( bk.length() > 0 ) {
-			macro::pushEnv({false,"\n","\t"}); //do not rembr, \n  = newline, tabs are tabs.
-			nodeStack.push_back(this);
-			string crlfName = "CR:" + to_string(String::Digest::hash(bk));
-			TemplateEnv.crlf = macro::process(Logger::log,crlfName,bk);
-			nodeStack.pop_back();
-			macro::popEnv();
-		}
-		macro::pushEnv(TemplateEnv);
-		{
-			if (in_s.length() > 0) {
-				string outval;
-				if (in_s.length() > 0) {						//fandr may remove the last char!
-					nodeStack.push_back(this);
-					string tnumStr = to_string(tnum);
-					outval = macro::process(Logger::log,"Template " + tnumStr,in_s);
-					nodeStack.pop_back();
-				}
-				outputtofile(i,outval);
-			}
-			if (showTemplate && get(errs,templates) > 1 && errs.verbosity()  > 0) {
-				*Logger::log << O; //end of show template.
-			}
-			in_s.clear();
-			bk.clear();
-		}
-		macro::popEnv();
-
-		}
-		//TODO:: And the rest.
-
-	//-- This used to be in genfiles, but then happened once for each file, rather than one for each Node.
-	if (dbc->dbselected() && dbc->table_exists("bldnode") ) {
-		ostringstream qstr;
-		qstr << "UPDATE LOW_PRIORITY bldnode SET filename='" << this->Ffilename(0) << "' WHERE id=" << this->id();
-		Query* q = dbc->query(qstr.str());
-		if (! q->execute() ) {
-			errs << Message(error << "Node::gettextoutput(): DB Error" );
-		}
-		dbc.dispose(q);
-	}
-	resetNodePersistance();	//Delete *vars.
-	if (showTiming && errs.verbosity()  > 3) {
-		errs << Message(timing << Log::Ntime << " build time for node: " << linkref() );
-	}
-	if (errs.verbosity()  > 0) *Logger::log << O; //end of node.
-	}
-**/
-//-----------------------------------------------------------------
-// We shall generate each file here, and then post-process it until its suffix is at A2 of the processor tree.
-// We use A2, because we are allowed multiple suffixes!
-//-----------------------------------------------------------------
-/**
-	void Content::outputtofile(size_t page, string &out) {
-		//TODO:: Finish outputtofile.
-		File tmpScrp(scrDir);
-		File tmpFil1(tmpDir);
-		File tmpFil2(tmpDir);
-		string tfilename;
-		string suff;
-		bool postprocessed=false;
-		suff = Suffix(page);									// Starter position.
-		if (suff != "XXX") {
-			tfilename =  filenames[page];
-			if (suff == "scssi") {					// Sass internal pre-process
-				bld->scssifiles.push_back(tfilename);
-				suff = "scss";									// flipped.
-			}
-			tfilename.append(suff);
-			tmpFil1.setFileName(tfilename);					// Start off with the source..
-			if (bld->showFiling) {
-				size_t tflen =  out.length();
-				errs << Message(info << "About to output file " << tfilename << " having " << (size_t)tflen << " bytes" ) ;
-			}
-			try {
-				ofstream outFile(tmpFil1.output().c_str());
-				outFile << out;
-				outFile.close();
-				chmod(tmpFil1.output().c_str(),S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
-			}	//create the file!
-			catch(...) {
-				errs << Message(error << "Failed to create file (" << tmpFil1.output() << ")" ) ;
-			}
-			out.clear();
-			Node *x = roots->nodebylinkref(suff);		// Find the post-processor NodeSuffix.  We have the file for this now.
-			if (x != nullptr) {								// We do have a post-processing entry, so lets use it.
-				Node* y = x->nodebypath(finalsuffix.begin(),finalsuffix.end());
-				while ( x != y && x != nullptr) {					// While x is not y, and x is not null, use the scriptpath for x
-					if (!postprocessed && showFiling) {
-						errs << Message(info << "for post-processing using: " << suff << " ";
-						postprocessed = true;
-					}
-					tmpScrp.setFileName(x->script());		// Get the script name for x
-					Node *z = x->parent();
-					if (  x->batch() == 1  ) {							// this is to be batch-processed
-						if (bld->showFiling) {
-							*Logger::log << " as one of a batch." );
-						}
-						bld->batchscripts.insert(storage_map_type::value_type(tmpScrp.output(), bld->tmpDir.output() ));
-					} else {
-						string sfilename =  filenames[page] + x->suffix();
-						tmpFil1.setFileName(sfilename);
-						string dfilename =  filenames[page] + z->suffix();
-						tmpFil2.setFileName(dfilename);
-						if (bld->showFiling) *Logger::log << " -> "<< z->suffix();
-						ostringstream command;
-						string build=bld->dev ? "dev " : "live "; // + Environment::Path();
-						command << tmpScrp.output() << " " << tmpFil1.output() << " " << bld->pagePath.output(true) << " " << build << " > " << tmpFil2.output();
-						if (bld->showFiling) errs << Message(info << " About to run command:" << command.str() );
-						MLog::stream errs("exec");
-						FileUtils::exec(command.str(),errs);
-						errs.str(Logger::log);
-						if ( z->exec() == 1 ) {
-							if (bld->showFiling) *Logger::log << " (Adding exec to:" << tmpFil2.output() << ")";
-							if (bld->showFiling) errs << Message(info << " About to adjust permissions for execute." );
-							chmod(tmpFil2.output().c_str(),S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IWGRP | S_IXGRP | S_IROTH | S_IXOTH );
-						}
-						tmpFil1.removeFile();
-					}
-					x = z;
-				}
-			}
-			if (bld->showFiling && !postprocessed)  errs << Message(info << " with no post-processing";
-			if (bld->showFiling) errs << Message(end;
-		}
-	}
-**/
-
 }

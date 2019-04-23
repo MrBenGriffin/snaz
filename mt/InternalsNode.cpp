@@ -110,22 +110,26 @@ namespace mt {
 	void iContent::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
 		const node::Content* interest = node::Content::editorial.byPath(e,my.parm(1))->content();
-		const content::Layout* layout = interest->layout();
-		if(layout) {
-			auto* segment = layout->segment(e,my.parm(2));
-			if(my.count == 2) {
-				const mt::mtext* code = content::Editorial::e().get(e,interest,segment);
-				if(code) {
-					mt::Wss::push(&(segment->nl));
-					Driver::expand(*code, e, o, context);
-					mt::Wss::pop();
+		if(interest) {
+			const content::Layout* layout = interest->layout();
+			if(layout) {
+				auto* segment = layout->segment(e,my.parm(2));
+				if(my.count == 2) {
+					node::Content::nodeStack.push_back(interest);
+					const mt::mtext* code = content::Editorial::e().get(e,interest,segment);
+					if(code) { //need to do IO as well..
+						mt::Wss::push(&(segment->nl));
+						Driver::expand(*code, e, o, context);
+						mt::Wss::pop();
+					}
+					node::Content::nodeStack.pop_back();
+				} else {
+					my.set(content::Editorial::e().getMeta(e,interest,segment,my.parm(3)));
 				}
 			} else {
-				my.set(content::Editorial::e().getMeta(e,interest,segment,my.parm(3)));
+				e << Message(error,_name + " has no layout.");
+				my.logic(false,3);
 			}
-		} else {
-			e << Message(error,_name + " has no layout.");
-			my.logic(false,3);
 		}
 	}
 	void iDeath::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
@@ -139,14 +143,16 @@ namespace mt {
 	void iExistContent::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
 		const node::Content* interest = node::Content::editorial.byPath(e,my.parm(1))->content();
-		const content::Layout* layout = interest->layout();
-		if(layout) {
-			Messages suppress;
-			auto* segment = layout->segment(suppress,my.parm(2));
-			my.logic(content::Editorial::e().has(suppress,interest,segment),3);
-		} else {
-			e << Message(error,_name + " has no layout.");
-			my.logic(false,3);
+		if(interest) {
+			const content::Layout* layout = interest->layout();
+			if(layout) {
+				Messages suppress;
+				auto* segment = layout->segment(suppress,my.parm(2));
+				my.logic(content::Editorial::e().has(suppress,interest,segment),3);
+			} else {
+				e << Message(error,_name + " has no layout.");
+				my.logic(false,3);
+			}
 		}
 	}
 	void iTW::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {

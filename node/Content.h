@@ -14,6 +14,8 @@
 #include "node/Suffix.h"
 #include "mt/mt.h"
 
+#include <deque>
+
 using namespace Support;
 using namespace Db;
 
@@ -42,18 +44,6 @@ namespace node {
 		vector<std::string> 				finalFilenames;	//final filenames - in page order.
 		string baseFileName;
 		string scratchpad;    				// used for iForPeers <- maybe should go elsewhere..
-//		vector<string> filenames;
-//		vector<string> filenames;           // This is the initial page filename (includes . )
-//		vector<string> suffixes;            // This is the initial page suffix.
-//		vector<string> ffilename;           // This is the full, final filename (post-processed)
-//		vector<size_t> tplates;             // list of template ID's to use
-
-//		void addpage(Messages &, NodeFilename *);
-//		void outputtofile(size_t page, string &out);
-//Generation
-
-//		void gettextoutput(Messages &);
-//		void generateOutput(Messages &, int);
 
 		void reset();
 
@@ -62,7 +52,8 @@ namespace node {
 
 	public:
 		static Tree editorial;
-		static deque<Content *> nodeStack;    // current node - used to pass to built-in functions
+		static deque<const Content *> nodeStack;    // current node - used to pass to built-in functions
+		static Content& get(size_t i) { return nodes[i]; }
 
 		Content();
 
@@ -73,7 +64,7 @@ namespace node {
 		const content::Layout* layout() const { return layoutPtr; }
 		const std::string filename(Messages&,size_t) const;
 
-		void generate(Messages&,buildType,buildKind,size_t,size_t) const;
+		void generate(Messages&,buildType,buildKind,size_t,size_t);
 
 		bool   get(Messages&,boolValue) const override;
 		size_t get(Messages&,uintValue) const override;

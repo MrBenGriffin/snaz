@@ -718,7 +718,7 @@ namespace node {
 					//			dirtmsg << "I-Stack must be 0 Path:"+Locator::loc_path;
 				}
 				if (showPaths) message << "I" << offset.first;
-				Node *result = nullptr;
+				const node::Content *result = nullptr;
 				if (stsize < 2) { //we are in template.
 					if ((size_t) offset.first < stsize) {
 						result = Content::nodeStack[stsize - ((size_t) offset.first + 1)]; //offset=0, size=1; 1-(0+1) = 0;
@@ -753,7 +753,7 @@ namespace node {
 				size_t stsize = Content::nodeStack.size();
 				setdirty();
 				if (showPaths) message << "O" << (size_t) offset.first;
-				Node *result = nullptr;
+				const Content *result = nullptr;
 				if (stsize < 2) { //we are in template.
 					if (offset.first < stsize) {
 						result = Content::nodeStack[offset.first];

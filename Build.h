@@ -72,6 +72,7 @@ public:
 	void run(Support::Messages&,Support::Db::Connection*);
 
 	Support::buildKind current() const { return _current; }
+	bool fullBuild() const { return full; }
 	size_t page() const { return currentPage; }
 	std::string suffix() const { return currentSuffix; }
 	size_t tech() const { return technologies.empty() ? 0 : technologies.front().first; }
