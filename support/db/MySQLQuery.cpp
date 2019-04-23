@@ -56,6 +56,23 @@ namespace Support {
 			}
 		}
 
+		void MySQLQuery::setRow(Messages &errs,size_t i) {
+			if (isactive && result != nullptr) {
+				try {
+					rowRangeCheck(errs,i);
+					s->data_seek(result, i - 1); //Seeks to an arbitrary row in a query result set. The offset value is a row number.
+					row = s->fetch_row(result); //Get the next row (by cursor).
+					mysqlRowLengths = (unsigned long*)s->fetch_lengths(result);
+				} catch (...) {
+					ostringstream message;
+					message << "MySQLQuery readField error::  for row '" << i << "'";
+					errs << Message(error,message.str());
+				}
+			} else {
+				errs << Message(error,"SQL: setRow found inactive / unset");
+			}
+		}
+
 		void MySQLQuery::forQuery(Messages &errs,std::string& value) {
 			size_t len = value.size();
 			if ( (len > 0) && (len < string::npos) ) {

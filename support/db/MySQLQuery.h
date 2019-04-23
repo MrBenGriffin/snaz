@@ -50,6 +50,8 @@ namespace Support {
 			MySQLQuery(MySQLService*, MySQLConnection*, MYSQL*&, std::string&);
 
 			bool nextrow() override;
+			void setRow(Messages &,size_t) override;						//rebuild(10+)
+
 			void resetRows(Messages &) override;
 
 			void forQuery(Messages &,std::string& value) override; //convert a string to make ready for query..
