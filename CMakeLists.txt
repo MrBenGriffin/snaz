@@ -48,6 +48,7 @@ add_executable(macrotext ${BISON_parser_OUTPUTS} ${FLEX_advanced_OUTPUTS} ${FLEX
         support/Dynamic.h
         support/Comparison.cpp support/Comparison.h
         support/Convert.cpp support/Convert.h
+        support/Crypto.cpp support/Crypto.h
         support/Date.cpp support/Date.h
         support/Encode.cpp support/Encode.h
         support/Env.cpp support/Env.h
@@ -66,7 +67,11 @@ add_executable(macrotext ${BISON_parser_OUTPUTS} ${FLEX_advanced_OUTPUTS} ${FLEX
         node/Content.cpp node/Content.h
         node/Suffix.cpp node/Suffix.h
         node/Taxon.cpp node/Taxon.h
+        content/Template.cpp content/Template.h
+        content/Layout.cpp content/Layout.h
+        content/Segment.cpp content/Segment.h
+        content/Editorial.cpp content/Editorial.h
         main.cpp test.cpp
         Build.cpp Build.h
         BuildUser.cpp BuildUser.h
-        content/Template.cpp content/Template.h content/Layout.cpp content/Layout.h content/Segment.cpp content/Segment.h content/Editorial.cpp content/Editorial.h support/Crypto.cpp support/Crypto.h)
+        )

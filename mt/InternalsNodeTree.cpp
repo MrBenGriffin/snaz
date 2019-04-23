@@ -42,7 +42,11 @@ namespace mt {
 		const Node* main = node::Content::editorial.byPath(e,my.parm(1));
 		if (main != nullptr) {
 			const node::Content* content = main->content();
-			my.logic(content->layout() && content->layout()->pages(),2);
+			if(content && content->layout()) {
+				my.logic(content->layout()->pages(), 2);
+			} else {
+				my.logic(size_t(0), 2);
+			}
 		}
 	}
 	void iNumSib::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {

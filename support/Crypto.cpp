@@ -56,19 +56,17 @@ namespace Support {
 		return loaded;
 	}
 	bool Digest::startup(Messages& errors) {
-#ifdef __MACH__
-//#define SSLPATH "/usr/local/opt/openssl@1.1/lib/"
-#else
-//#define SSLPATH ""
-#endif
+
+		//use this if need to force a path.
+#define SSLPATH ""
 
 		if ( ! loadattempted ) {
 			loadattempted = true;
 			loaded = false;
-			string libstr = ""; libstr.append(SO(libssl)); //directory
-			string crpstr = ""; crpstr.append(SO(libcrypto)); //directory
-			lib_handle = dlopen(libstr.c_str(),RTLD_GLOBAL | RTLD_NOW); dlerr(errors);
-			crp_handle = dlopen(crpstr.c_str(),RTLD_GLOBAL | RTLD_NOW); dlerr(errors);
+			string libSSL = SSLPATH; libSSL.append(SO(libssl)); //directory
+			string libCrypto = SSLPATH; libCrypto.append(SO(libcrypto)); //directory
+			lib_handle = dlopen(libSSL.c_str(),RTLD_GLOBAL | RTLD_NOW); dlerr(errors);
+			crp_handle = dlopen(libCrypto.c_str(),RTLD_GLOBAL | RTLD_NOW); dlerr(errors);
 			if (!errors.marked() && lib_handle != nullptr && crp_handle != nullptr) {
 				OPENSSL_init_crypto	=(int (*)(uint64_t, void*)) dlsym(crp_handle,"OPENSSL_init_crypto"); dlerr(errors);
 				EVP_MD_CTX_new			=(EVP_MD_CTX* (*)()) dlsym(crp_handle,"EVP_MD_CTX_new"); dlerr(errors);
