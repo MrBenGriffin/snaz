@@ -34,7 +34,8 @@ namespace mt {
 		InternalInstance my(this,e,o,instance,context);
 		const Node* main = node::Content::current();
 		if (main != nullptr) {
-			e << Message(error, _name + " is not yet implemented.");
+			size_t result = main->get(e,page);
+			my.logic(result,2);
 		}
 	}
 	void iNumPages::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
