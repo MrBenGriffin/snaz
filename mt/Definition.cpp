@@ -198,7 +198,7 @@ namespace mt {
 	}
 
 
-	bool Definition::test_adv(std::string &basis) {
+	bool Definition::test_adv(const std::string &basis) {
 		//⌽E2.8C.BD ⍟E2.8D.9F ⎣E2.8E.A3 ⎡e2.8e.A1 	/** ALL START E2. (⌽ 8c bd)(⍟ 8d 9F)(⎡8e A1)(⎤ 8e A4)(⎣ 8e A3)(❫ 9D AB) **/
 		if (!basis.empty()) {
 			size_t size = basis.size();

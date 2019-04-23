@@ -49,7 +49,7 @@ namespace mt {
 		Definition(const mtext&, long = 0, long = -1, bool= true, bool= true, bool= false);
         void expand(Messages&,mtext&,Instance&,mstack&);
 
-        static bool test_adv(std::string &);
+        static bool test_adv(const std::string &);
 
         static void add(Definition&);
 
