@@ -1,3 +1,9 @@
+# iLink
+iLink 03		@iLink(!home:2)						!2!Path: !home:2 did not find a node.
+iLink 01		@iLink(!home:0)						simple.php
+iLink 02		@iLink(!home:1)						simple_1.ixml
+iLink 04		@iLink()							simple.php
+
 # iLinkRef
 iLinkRef 01		@iLinkRef(19)							home
 iLinkRef 02		[@iLinkRef(!siteSections/0+1)]			[testpages]
@@ -51,15 +57,10 @@ iDeath01		@iDeath(22)								9999-12-31 01:00:00
 
 # Not Yet Implemented.
 
-//iLink 03		@iLink(!home:2)											!2!Path: !home:2 did not find a node.
-//iLink 01		@iLink(!home:0)											simple.php
-//iLink 02		@iLink(!home:1)											simple_1.ixml
-//iLink 04		@iLink()												simple.php
-//iLink 05		@iNull(@iLink(!home:1))@iLink()							simple.php
 
-//iSuffix 01		@iSuffix(!home)											php
-//iSuffix 02		@iSuffix(!home:1)										ixml
+//iSuffix 01		@iSuffix(!home)					php
+//iSuffix 02		@iSuffix(!home:1)				ixml
 
 //SegmentName is done from within iContent..
-//segmentName 01	@iSegmentName(foo,T,F)										!2!iSegmentName called outside an existing segment (iContent)
+//segmentName 01	@iSegmentName(foo,T,F)			!2!iSegmentName called outside an existing segment (iContent)
 

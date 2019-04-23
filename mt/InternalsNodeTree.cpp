@@ -35,9 +35,11 @@ namespace mt {
 		const Node* main = node::Content::current();
 		if (main != nullptr) {
 			size_t result = main->get(e,page);
-			my.logic(result,2);
+			my.logic(result,1);
+		} else {
+			e << Message(error,_name + "; There's no current node context.");
 		}
-	}
+	};
 	void iNumPages::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
 		const Node* main = node::Content::editorial.byPath(e,my.parm(1));

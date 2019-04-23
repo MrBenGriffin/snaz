@@ -12,6 +12,8 @@ F showPassed	1
 
 // name		code										expected result
 // example	[abcdef]									[abcdef]
+iNumPage 005	@iNumPage()								0
+iNumPage 015	@iNumPage(0,T,F)						T
 
 !	node/_main
 

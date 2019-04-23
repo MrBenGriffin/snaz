@@ -35,7 +35,7 @@ namespace node {
 	unordered_map<size_t,Content> Content::nodes;
 	deque<Content *> 	Content::nodeStack;    // current node - used to pass to built-in functions
 
-	Content::Content() : Node(editorial),layoutPtr(nullptr) {}
+	Content::Content() : Node(editorial),layoutPtr(nullptr),current_page(0) {}
 	void Content::loadTree(Messages& errs, Connection& sql, size_t language,buildKind build) {
 //	This does languages, but not layouts / templates as they have not yet been done.
 //  It also doesn't do segment content, which depend upon layouts!
@@ -164,7 +164,7 @@ namespace node {
 		switch(field) {
 			case team: result = _team; break;
 			case uintValue::layout: result = _layout; break;
-			case page: result = 0; break;
+			case page: result = current_page; break;
 			case templates: result=0; break;
 		}
 		return result;
@@ -286,8 +286,20 @@ namespace node {
 	void Content::compose(Messages& errs,buildKind kind,size_t langID,size_t techID) {
 		// To get here, this node generates files
 		ostringstream msg; msg << "Composing " << _ref;
-		errs << Message(info,msg.str());
-		content::Layout::layouts[layoutPtr->id].compose(errs,*this,kind,langID,techID);
+		current_page = 0;
+		for (auto* t : layoutPtr->templates) {
+			std::ostringstream content;
+			if(!t->code.empty()) {
+				mt::Wss::push(&(t->nl));
+				mt::Driver::expand(t->code,errs,content);
+				mt::Wss::pop();
+			}
+			const node::Suffix* suffix = t->suffix;
+			current_page++;
+		}
+
+//		layoutPtr->compose(errs,*this,kind,langID,techID);
+//		content::Layout::layouts[layoutPtr->id].compose(errs,*this,kind,langID,techID);
 	}
 	/**
 			auto nmi = templateList.find(tid);

@@ -28,6 +28,7 @@ namespace node {
 		static constexpr auto rootFilename 	= "index";
 
 	//** Language Content (per node)
+		size_t current_page;
 		size_t _team;
 		size_t _layout;
 		string _shortTitle;
@@ -39,20 +40,20 @@ namespace node {
 
 		string baseFileName;
 		string scratchpad;    				// used for iForPeers <- maybe should go elsewhere..
+//		vector<string> filenames;
 //		vector<string> filenames;           // This is the initial page filename (includes . )
 //		vector<string> suffixes;            // This is the initial page suffix.
 //		vector<string> ffilename;           // This is the full, final filename (post-processed)
 //		vector<size_t> tplates;             // list of template ID's to use
 
-		void addpage(Messages &, NodeFilename *);
-		void outputtofile(size_t page, string &out);
+//		void addpage(Messages &, NodeFilename *);
+//		void outputtofile(size_t page, string &out);
 //Generation
 
-		void gettextoutput(Messages &);
-		void generateOutput(Messages &, int);
+//		void gettextoutput(Messages &);
+//		void generateOutput(Messages &, int);
 
 		void reset();
-		void doTemplates(Messages &);
 
 		// Single Node Build.
 		void compose(Messages&,buildKind,size_t,size_t);
