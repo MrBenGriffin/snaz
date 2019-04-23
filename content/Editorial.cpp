@@ -29,6 +29,25 @@ namespace content {
 		sql.dispose(query);
 	}
 
+	bool Editorial::sanity(Messages &errs, key& id, const node::Content* node, const Segment* segment) {
+		bool value = false;
+		if(node && segment) {
+			id = { node->id(), segment->id };
+			value = true;
+		} else {
+			if (node) {
+				errs << Message(error,"while looking for content, the segment was empty");
+			} else {
+				if(segment) {
+					errs << Message(error,"while looking for content, the node was empty");
+				} else {
+					errs << Message(error, "while looking for content, both node and segment were empty");
+				}
+			}
+		}
+		return value;
+	}
+
 	void Editorial::storeBuilt(Messages& errs) {
 
 	}
@@ -66,7 +85,7 @@ namespace content {
 				size_t index = 1;
 				size_t rows = query->getnumrows();
 				while(query->nextrow()) {
-					pair<size_t, size_t> ident;
+					key ident;
 					query->readfield(errs, "node", ident.first);
 					query->readfield(errs, "segment", ident.second);
 					qIndexes.emplace(ident,index++);
@@ -79,9 +98,22 @@ namespace content {
 		if (times.show()) { times.use(errs,"Editorial Index"); }
 	}
 
-	void Editorial::get(Messages &errs, const node::Content* node, const Segment* segment) {
-
+	bool Editorial::has(Messages &errs, const node::Content* node, const Segment* segment) {
+		bool value = false;
+		key id;
+		if(sanity(errs,id,node,segment)) {
+			auto idx = qIndexes.find(id);
+			value = idx != qIndexes.end();
+		}
+		return value;
 	}
 
+	const mt::mtext* Editorial::get(Messages &errs, const node::Content* node, const Segment* segment) {
+		const mt::mtext* value = nullptr;
+		key id;
+		if(sanity(errs,id,node,segment)) {
+		}
+		return value;
+	}
 
 }

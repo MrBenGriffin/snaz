@@ -67,7 +67,7 @@ const Segment* Layout::segment(Messages &errs,string ref) const {
 	if(found != segRefs.end()) {
 		value = found->second;
 	} else {
-		value = Segment::get(errs,ref);
+		value = Segment::get(errs,this,ref);
 	}
 	return value;
 }

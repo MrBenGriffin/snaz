@@ -114,7 +114,15 @@ namespace mt {
 	void iExistContent::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
 		const node::Content* interest = node::Content::editorial.byPath(e,my.parm(1))->content();
-		my.logic(Editorial::has(e,interest,content::Segment::get(e, my.parm(2))),2);
+		const content::Layout* layout = interest->layout();
+		if(layout) {
+			Messages suppress;
+			auto* segment = layout->segment(suppress,my.parm(2));
+			my.logic(content::Editorial::e().has(suppress,interest,segment),3);
+		} else {
+			e << Message(error,_name + " has no layout.");
+			my.logic(false,3);
+		}
 	}
 	void iTW::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);

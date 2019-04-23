@@ -36,16 +36,18 @@ namespace content {
 	};
 
 	class Editorial {
+		using key=pair<size_t, size_t>;
 
 	private:
 		//node/segment
-		unordered_map< pair<size_t, size_t>, mt::mtext, hash_pair> contentStore;
-		unordered_map< pair<size_t, size_t>, size_t, hash_pair> qIndexes;
+		unordered_map< key, mt::mtext, hash_pair> contentStore;
+		unordered_map< key, size_t, hash_pair> qIndexes;
 		Query* query;
 		size_t lang;
 		buildKind kind;
 
 		void storeBuilt(Messages&);
+		bool sanity(Messages &,key&,const node::Content*, const Segment*);
 
 		Editorial(); // Disallow instantiation outside of the class.
 
@@ -53,7 +55,8 @@ namespace content {
 	public:
 		static Editorial& e();
 		void set(Messages&,Connection&,size_t,buildKind);
-		void get(Messages&,const node::Content*,const Segment*);
+		const mt::mtext* get(Messages&,const node::Content*,const Segment*);
+		bool has(Messages&,const node::Content*,const Segment*);
 		void unload(Messages&,Connection&);
 	};
 }

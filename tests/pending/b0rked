@@ -5,25 +5,10 @@
 F showPassed	1
 F showDefines	1
 
-//iFi_100		@iForIndex(=,BIM=foo=bar,*,$,,[*:$])			[BIM:1][foo:2][bar:3]
-//iNo_100		@iExistNode(17,@iNumChildren(17/^1),X)			10
-//iFs_100		@iForSibs(17,*,$,@iLeft(@iLinkRef(*),1))		gbeffhlnpt
-//forNest01		@iForSibs(17,*,$,@iNumGen(*))					7777777777
-//forNest02		@iLength(@iForSibs(17,*,$,x))					10
-//forNest03		@iForAncestry(17,R,17/^2,*,@iNumGen(*);)		5;6;7;
-//forNest04		[@iForAncestry(17,R,17/^2,NODE,@iNumGen(NODE))]	[567]
-//forNest05		@iForSibs(17,*,$,[@iForAncestry(*,R,*/^2,NODE,@iID(NODE);)])	[567][567][567][567][567][567][567][567][567][567]
-//fNest02		@iForSibs(17,*,$,[@iForAncestry(*,R,*/^2,€,*:@iNumGen(€))])		[567][567][567][567][567][567][567][567][567][567]
-
-
-//nstFor1	@iForAncestry(17,R,17/^3,*,@iID(*);)										10;14;72;17;
-//nstFor1a	[@iForAncestry(17,R,17/^3,*,@iList(X,uadd,@iID(*)))]						[]
-//nstFor1b	[@iList(X,n,+W,*,@iID(*);)]													[10;14;72;17;]
-
-//nstFor2a	@iForAncestry(17,R,17/^3,*,@iForSibs(*,€,$,[*:@iLinkRef(€)]))				[10;14;72;17;]
-//nstFor2b	@iForAncestry(17,R,17/^3,*,[@iForSibs(*,€,$,*:@iNumGen(€);)])				[10;14;72;17;]
-
-//bigNest		@iForSibs(93,*,≠,@iForSibs(*/^1,$,¢,@iExistNode($/0+1,@iForSibs($/0+1,€,™,[*:≠:$:¢:€:™]),[*:≠:$:¢])))	?(\[(\d+:)+\d\])+
+iECNoSegRef		@iExistContent(22,f_seodirectory,T,F)				F
+iEClaySegRef	@iExistContent(22,Keywords,T,F)						T
+iECsegSegRef	@iExistContent(22,keywords,T,F)						T
+iExistContent	@iExistContent(22,code,T,F)							F
 
 
 //-------------------------------------------------------------------------------

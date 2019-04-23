@@ -9,9 +9,10 @@
 #include "support/Definitions.h"
 #include "support/Message.h"
 #include "support/db/Connection.h"
+#include "mt/mt.h"
 #include "node/Node.h"
 #include "node/Suffix.h"
-#include "mt/mt.h"
+#include "content/Layout.h"
 
 using namespace Support;
 using namespace Db;
@@ -24,7 +25,7 @@ namespace content {
 		static unordered_map<size_t,Segment>   	segments;	//Where segment data is stored. Loaded once per build.
 	public:
 		static const Segment* get(Messages &,size_t);
-		static const Segment* get(Messages &,string);
+		static const Segment* get(Messages &,const Layout*, string);
 		static void load(Messages&,Connection&,buildKind);
 
 		//only publicly available via const..

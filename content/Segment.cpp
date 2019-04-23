@@ -26,14 +26,14 @@ namespace content {
 		return result;
 	}
 
-	const Segment* Segment::get(Messages &errs,string ref) {
+	const Segment* Segment::get(Messages &errs,const Layout* layout,string ref) {
 		const Segment* result =  nullptr;
 		auto found = refs.find(ref);
 		if(found != refs.end()) {
 			result = found->second;
 		} else {
 			ostringstream err;
-			err << "There is no segment with reference " << ref;
+			err << "There is no segment with reference '" << ref << "' in layout '" << layout->ref << "'";
 			errs << Message(range,err.str());
 		}
 		return result;
