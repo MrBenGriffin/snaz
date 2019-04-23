@@ -4,6 +4,8 @@
 #include "node/Tree.h"
 #include "node/Content.h"
 #include "content/Layout.h"
+#include "content/Segment.h"
+#include "content/Editorial.h"
 
 namespace mt {
 	using namespace Support;
@@ -111,9 +113,8 @@ namespace mt {
 	}
 	void iExistContent::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
-		e << Message(error,_name + " is not yet implemented.");
-		std::string left =  my.parm(1);
-		my.logic(false,1);
+		const node::Content* interest = node::Content::editorial.byPath(e,my.parm(1))->content();
+		my.logic(Editorial::has(e,interest,content::Segment::get(e, my.parm(2))),2);
 	}
 	void iTW::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
