@@ -341,7 +341,8 @@ namespace testing {
 							} else {
 								title(o,name,3);
 								o << " E program:"  << program << endl;
-								o << " E returned:\"" << message <<  "\" on line:" << error_index  << endl;
+								o << " E error returned:\"" << message <<  "\" on line:" << error_index  << endl;
+								o << " E value returned:\"" << expansion.str() << "\"" << endl;
 								o << " E expected:\"" << expected << "\"" << endl;
 								if(msgs->marked()) {
 									o << lred << "Errors: ";
