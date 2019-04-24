@@ -14,6 +14,10 @@
 #include "declarations.h"
 #include "node/Node.h"
 
+namespace node {
+	struct Metrics;
+}
+
 namespace mt {
 	using mtext=std::deque<Token>;
 	using parse_result=std::pair<bool,std::pair<mtext, bool>>;
@@ -33,17 +37,21 @@ namespace mt {
 	class Instance {
 	private:
 	public:
+//
 		const plist *parms = nullptr;
 		forStuff* myFor;
-		bool generated;     //internal generation via e.g. iForX
+		bool generated;     	//internal generation via e.g. iForX
 		iteration it = {0, 0};
-		size_t size();
+		node::Metrics* metrics;
 
+		size_t size();
 		Instance(const plist *, iteration, bool= false);
 		Instance(const plist *, forStuff&);
 		Instance(const Instance &);
+		Instance(node::Metrics*);
 	};
 
+	//Handler is the variant of all token handlers..
 	using Carriage= std::pair<Handler*, Instance>;
 	using mstack=std::deque< Carriage >;
 

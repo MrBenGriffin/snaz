@@ -16,7 +16,8 @@ namespace mt {
 	}
 	void iLang::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
-		my.logic(Build::b().langName(),1);
+		auto lang = Build::b().language();
+		my.logic(lang.ref,1);
 	}
 	void iLangID::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);

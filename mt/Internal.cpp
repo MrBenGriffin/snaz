@@ -86,26 +86,6 @@ namespace mt {
 		return result;
 	}
 
-	plist Internal::toNodeParms(Messages& e,vector<string>& list,string sort,size_t maxSize) {
-		if(maxSize < list.size()) {
-			list.resize(maxSize);
-		}
-		vector<const Node*> nodes;
-		for(auto& i : list) {
-			const Node* node = node::Content::editorial.byPath(e,i);
-			if(node != nullptr) {
-				nodes.push_back(node);
-			}
-		}
-		doSort(e,nodes,sort);
-		plist result;
-		for(auto& i : nodes) {
-			result.push_back({Text(i->ids())});
-		}
-		return result;
-	}
-
-
 	void Internal::doTrace(Messages& e,mstack& context) {
 		for (auto& i : context) {
 			if(i.first != nullptr) {
@@ -131,7 +111,7 @@ namespace mt {
  |R     | RANDOM       |  -         |  -       |  -  |
  +------+--------------+------------+----------+-----+
  */
-	void Internal::doSort(Messages& e,vector<const Node*>& nodelist,string sortparm) {
+	void Internal::doSort(Messages& e,vector<const Node*>& nodelist,string sortparm) const {
 		bool ignore_non_existent = false;
 		bool backwards = false;
 		if (!sortparm.empty()) {
@@ -177,7 +157,7 @@ namespace mt {
 		}
 	}
 
-	void Internal::sortnodes(vector<const Node *>& nodelist,bool backwards,char function) {
+	void Internal::sortnodes(vector<const Node *>& nodelist,bool backwards,char function) const {
 		switch(function) {
 			case('B'): sort(nodelist.begin(), nodelist.end(), sortbirth); break;
 			case('b'): sort(nodelist.begin(), nodelist.end(), sortbirth); break;
@@ -205,7 +185,7 @@ namespace mt {
 		}
 	}
 
-	void Internal::doSort(vector<string>& idx,string sortstr) {
+	void Internal::doSort(vector<string>& idx,string sortstr) const {
 		// [+-](d|n|i|c)[(numeric offset)]
 		char dir='+',sortfn=' ';	//default = ascending,none.
 		enum stype {numeric,date,caseinsensitive,casesensitive,random,none} sorter = none;

@@ -11,38 +11,35 @@ namespace mt {
 	using namespace node;
 	void iNumChildren::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
-		const Node* main = node::Content::editorial.byPath(e,my.parm(1));
+		const Node* main = my.node(1);
 		if (main != nullptr) {
 			my.logic(main->getChildCount(),2);
 		}
 	}
 	void iNumGen::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
-		const Node* main = node::Content::editorial.byPath(e,my.parm(1));
+		const Node* main = my.node(1);
 		if (main != nullptr) {
 			my.logic(main->tier(),2);
 		}
 	}
 	void iNumGens::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
-		const Node* main = node::Content::current();
-		if (main != nullptr) {
-			my.logic(main->tree()->depth(),1);
+		Metrics* metrics = context.back().second.metrics;
+		if(metrics) {
+			my.logic(metrics->current->tree()->depth(),1);
 		}
 	}
 	void iNumPage::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
-		const Node* main = node::Content::current();
-		if (main != nullptr) {
-			size_t result = main->get(e,page);
-			my.logic(result,1);
-		} else {
-			e << Message(error,_name + "; There's no current node context.");
+		Metrics* metrics = context.back().second.metrics;
+		if(metrics) {
+			my.logic(metrics->page,1);
 		}
 	};
 	void iNumPages::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
-		const Node* main = node::Content::editorial.byPath(e,my.parm(1));
+		const Node* main = my.node(1);
 		if (main != nullptr) {
 			const node::Content* content = main->content();
 			if(content && content->layout()) {
@@ -54,7 +51,7 @@ namespace mt {
 	}
 	void iNumSib::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
-		const Node* main = node::Content::editorial.byPath(e,my.parm(1));
+		const Node* main = my.node(1);
 		if (main != nullptr) {
 			my.logic(main->sibling(), 2);
 		}
@@ -62,8 +59,8 @@ namespace mt {
 	void iEqFamily::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		//Is parameter 1 the same as or descendant of parameter 2
 		InternalInstance my(this,e,o,instance,context);
-		const Node* n1 = node::Content::editorial.byPath(e,my.parm(1));
-		const Node* n2 = node::Content::editorial.byPath(e,my.parm(2));
+		const Node* n1 = my.node(1);
+		const Node* n2 = my.node(2);
 		if (n1 != nullptr && n2 != nullptr) {
 				my.logic(n1->hasAncestor(n2),3);
 		}
@@ -71,29 +68,30 @@ namespace mt {
 	void iEqNode::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		//Is parameter 1 the same as parameter 2?
 		InternalInstance my(this,e,o,instance,context);
-		const Node* n1 = node::Content::editorial.byPath(e,my.parm(1));
-		const Node* n2 = node::Content::editorial.byPath(e,my.parm(2));
+		const Node* n1 = my.node(1);
+		const Node* n2 = my.node(2);
 		if (n1 != nullptr && n2 != nullptr) {
 			my.logic(n1->id() == n2->id(),3);
 		}
 	}
 	void iEqSibs::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
-		const Node* n1 = node::Content::editorial.byPath(e,my.parm(1));
-		const Node* n2 = node::Content::editorial.byPath(e,my.parm(2));
+		const Node* n1 = my.node(1);
+		const Node* n2 = my.node(2);
 		if (n1 != nullptr && n2 != nullptr) {
 			my.logic(n1->parent() == n2->parent(),3);
 		}
 	}
 	void iExistNode::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
-		InternalInstance my(this,e,o,instance,context);
 		Messages suppress;
-		const Node* main = node::Content::editorial.byPath(suppress,my.parm(1));
+		InternalInstance my(this,suppress,o,instance,context);
+		const Node* main = my.node(1);
+		my.errs = &e;
 		my.logic(main != nullptr, 2);
 	}
 	void iForAncestry::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
-		const Node *n = node::Content::editorial.byPath(e, my.parm(1));
+		const Node *n = my.node(1);
 		if (n != nullptr) {
 			vector<const Node*> nodelist;
 			string terminator = my.parm(3);
@@ -131,7 +129,7 @@ namespace mt {
 						nodelist.push_back(content);
 					} break;
 					default: {
-						const Node *a = node::Content::editorial.byPath(e,terminator);
+						const Node *a = my.node(terminator);
 						if(n->hasAncestor(a)) {
 							nodelist = n->ancestors(a);
 						} else {
@@ -151,8 +149,8 @@ namespace mt {
 	void iForPeers::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		//@iForPeers(n,a,t1,t2,sortparm,txt)
 		InternalInstance my(this, e, o, instance, context);
-		const Node *main = node::Content::editorial.byPath(e, my.parm(1));
-		const Node *root = node::Content::editorial.byPath(e, my.parm(2));
+		const Node *main = my.node(1);
+		const Node *root = my.node(2);
 		if (main != nullptr) {
 			vector<const Node *> peers = main->peers(root);
 			doSort(e, peers, my.parm(5));
@@ -163,12 +161,12 @@ namespace mt {
 		InternalInstance my(this,e,o,instance,context);
 		vector<string> nodeList;
 		toDecimalList(nodeList,my.parm(1));
-		plist parms = toNodeParms(e,nodeList,my.parm(4)); //nodes, and sorted..
+		plist parms = my.toNodeParms(this,nodeList,my.parm(4)); //nodes, and sorted..
 		my.generate(parms,my.praw(5),my.parm(2),my.parm(3));
 	}
 	void iForSibs::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
-		const Node* main = node::Content::editorial.byPath(e,my.parm(1));
+		const Node* main = my.node(1);
 		if (main != nullptr) {
 			vector<const node::Node *> sibs = std::move(main->siblings());
 			my.generate(sibs,my.praw(4),my.parm(2),my.parm(3)); //template,node*,position.
@@ -176,7 +174,7 @@ namespace mt {
 	}
 	void iSize::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
-		const Node* main = node::Content::editorial.byPath(e,my.parm(1));
+		const Node* main = my.node(1);
 		if (main != nullptr) {
 			my.logic(main->size(), 2);
 		}

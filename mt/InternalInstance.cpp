@@ -4,6 +4,8 @@
 
 #include <support/Convert.h>
 #include "InternalInstance.h"
+#include "node/Node.h"
+#include "node/Metrics.h"
 //#include <cmath> //for nan test.
 
 namespace mt {
@@ -14,6 +16,8 @@ namespace mt {
 		count = parms->size() == 1 ? parms->front().empty() ? 0 : 1 : parms->size();
 		min = thing->minParms;
 		max = thing->maxParms;
+		metrics = c.back().second.metrics;
+
 		if(!thing->inRange(count)) {
 			ostringstream err;
 			err << "Range Error in ‘" << thing->name() << "’; " << count << " parameters found. But this macro requires";
@@ -29,6 +33,45 @@ namespace mt {
 			e << Message(range,err.str());
 			count = max;
 		}
+	}
+
+	const node::Node* InternalInstance::node(size_t ref) {
+		return node(parm(ref));
+	}
+
+	const node::Node* InternalInstance::node(const string& ref) {
+		if(metrics) {
+			return metrics->byPath(*errs,ref);
+		} else {
+			return nullptr;
+		}
+	}
+
+	pair<const node::Node*,size_t> InternalInstance::nodePage(size_t ref) {
+		if(metrics) {
+			return metrics->nodePage(*errs,parm(ref));
+		} else {
+			return {nullptr,0};
+		}
+	}
+
+	plist InternalInstance::toNodeParms(const Internal* parent,vector<string>& list,string sort,size_t maxSize) {
+		if(maxSize < list.size()) {
+			list.resize(maxSize);
+		}
+		vector<const node::Node*> nodes;
+		for(auto& i : list) {
+			auto* node = metrics->byPath(*errs,i);
+			if(node != nullptr) {
+				nodes.push_back(node);
+			}
+		}
+		parent->doSort(*errs,nodes,sort);
+		plist result;
+		for(auto& i : nodes) {
+			result.push_back({Text(i->ids())});
+		}
+		return result;
 	}
 
 	void InternalInstance::generate(nlist& nodes,const mtext* program,const string value,const string count) {

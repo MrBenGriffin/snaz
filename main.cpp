@@ -9,12 +9,6 @@
 // LIBMYSQLCRSO=/usr/local/mysql/lib/libmysqlclient.dylib
 // SQL_CONFIG_FILE=/Users/ben/Desktop/my.cnf
 
-/**
- * 	TODO: Content load (medium / per language).
- *	TODO: Content Parse/evaluation (medium-hard - parse is language).
- *	TODO: Parse template mtext. (simple - under techs.)
-**/
-
 using namespace Support;
 int main( const int argc, const char **argv ) {
 	Env& env = Env::e();

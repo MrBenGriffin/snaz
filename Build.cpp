@@ -16,6 +16,7 @@
 #include "support/Date.h"
 #include "support/Message.h"
 #include "support/Timing.h"
+#include "support/Encode.h"
 #include "support/db/Connection.h"
 #include "support/db/Query.h"
 #include "support/Infix.h"
@@ -142,16 +143,16 @@ void Build::global(Messages& errs,Connection& sql) {
 	node::Suffix().loadTree(errs,sql,0, _current);
 	content::Template::load(errs,sql,_current);
 	content::Segment::load(errs,sql,_current);
-//	RunScript("PRE_PROCESSING_SCRIPT", "Pre Processor", errs);
+//TODO:	RunScript("PRE_PROCESSING_SCRIPT", "Pre Processor", errs);
 	langs(errs,sql);
-//	iMedia::move(errs);
+//TODO:	iMedia::move(errs);
 //
-//	storageResult script = bld->varStorage.find("FINAL_PROCESSING_SCRIPT");
+//TODO:	storageResult script = bld->varStorage.find("FINAL_PROCESSING_SCRIPT");
 //	if (script.found) {
 //		finalscript = script.result;
 //	}
 
-//	RunScript("POST_PROCESSING_SCRIPT", "Post Processor", errs);
+//TODO:	RunScript("POST_PROCESSING_SCRIPT", "Post Processor", errs);
 //	RunScript("~POST_PROCESSING_SCRIPT", "Post Processor", errs);
 //	errs.str(Logger::log);
 //	iMedia::close(); (not sure why this is here).
@@ -160,23 +161,23 @@ void Build::global(Messages& errs,Connection& sql) {
 //  macro::terminate();			//unload
 	content::Editorial::e().unload(errs,sql);
 	mt::Definition::shutdown(errs,sql,_current); //bld->savePersistance(); prunePersistance(); clearPersistance();
-//do FINAL_PROCESSING_SCRIPT stuff here if it's a full, final build..
+//TODO: do FINAL_PROCESSING_SCRIPT stuff here if it's a full, final build..
 }
 
 void Build::langs(Messages& errs,Connection& sql) {
 	Timing& times = Timing::t();
 	while (!languages.empty()) {
-		size_t langID = lang();
-		if (times.show()) { times.set("Language " + langName()); }
-		node::Taxon().loadTree(errs,sql,langID, _current);
-		node::Content::updateBirthAndDeath(errs,sql,langID,_current); //* Per Language.
-		node::Content::updateContent(errs,sql,langID,_current); //this moves the latest version into bldcontent.
+		auto lang = languages.front();
+		if (times.show()) { times.set("Language " + lang.second.name); }
+		node::Taxon().loadTree(errs,sql,lang.first, _current);
+		node::Content::updateBirthAndDeath(errs,sql,lang.first,_current); //* Per Language.
+		node::Content::updateContent(errs,sql,lang.first,_current); //this moves the latest version into bldcontent.
 		//TODO:: Content APPROVERS.
-		node::Content().loadTree(errs,sql,langID,_current);
-		content::Editorial::e().set(errs,sql,langID,_current);
-		techs(errs,sql,langID);
+		node::Content().loadTree(errs,sql,lang.first,_current);
+		content::Editorial::e().set(errs,sql,lang.first,_current);
+		techs(errs,sql,lang.first);
 		//.....
-		if (times.show()) { times.use(errs,"Language " + langName()); }
+		if (times.show()) { times.use(errs,"Language " + lang.second.name); }
 		languages.pop_front();
 	}
 }
@@ -207,7 +208,7 @@ void  Build::files(Messages& errs,Connection& sql,size_t langID,size_t techID) {
 	} else {
 		for (auto t : requestedNodes) { //t.first is the buildType.
 			for(auto n : t.second ) { // t.second is the deque of node IDs for this buildtype.
-				const node::Content* node = node::Content::content(errs,n);
+				const node::Content* node = node::Content::root()->content(errs,n);
 				if(node != nullptr) {
 					auto& base = node::Content::get(node->id());
 					base.generate(errs,t.first,_current,langID,techID);
@@ -245,6 +246,12 @@ void Build::loadLanguages(Messages &errs, Connection& dbc) {
 				query->readfield(errs,"ln",item.ln);
 				query->readfield(errs,"territory",item.territory);
 				query->readfield(errs,"encoding",item.encoding);
+				item.ref = item.ln;
+				if(!item.territory.empty()) {
+					item.ref.push_back('-');
+					item.ref.append(item.territory);
+					Support::tolower(item.ref);
+				}
 				qLangs.insert({id,item});
 			}
 //			delete query; query= nullptr;

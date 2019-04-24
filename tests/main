@@ -8,14 +8,13 @@
 //X
 
 F showDefines	0
-F showPassed	1
+F showPassed	0
 
 // name		code										expected result
 // example	[abcdef]									[abcdef]
 
+!	build
 !	node/_main
-
-X
 !	unimplemented
 !	encoder/_main
 !	grammar/_main

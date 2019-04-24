@@ -28,10 +28,12 @@ namespace Support {
 //* +----+---------+----+-----------+----------+
 
 struct Language {
+//	size_t id;
 	std::string name;
 	std::string ln;
 	std::string territory;
 	std::string encoding;
+	std::string ref;
 };
 
 class Build {
@@ -78,7 +80,8 @@ public:
 	size_t tech() const { return technologies.empty() ? 0 : technologies.front().first; }
 	std::string techName() const { return technologies.empty() ? "None" : technologies.front().second; }
 	size_t lang() const { return languages.empty() ? 0 : languages.front().first; }
-	std::string langName() const { return languages.empty() ? "None" : languages.front().second.name; }
+	const Language& language() const { return languages.front().second; }
+//	std::string langName() const { return languages.empty() ? "None" : languages.front().second.name; }
 	void setSuffix(std::string suffix) { currentSuffix = suffix; }
 	void setPage(size_t page) { currentPage = page; }
 	void setCurrent(Support::buildKind current) { _current = current; }

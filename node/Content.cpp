@@ -15,6 +15,7 @@
 #include "node/Content.h"
 #include "node/Taxon.h"
 #include "node/Suffix.h"
+#include "node/Metrics.h"
 
 #include "mt/Driver.h"
 #include "support/File.h"
@@ -26,6 +27,7 @@
 
 #include "content/Template.h"
 #include "content/Layout.h"
+#include "content/Segment.h"
 
 #include "Build.h"
 
@@ -34,9 +36,9 @@ namespace node {
 
 	Tree Content::editorial("Content");
 	unordered_map<size_t,Content> Content::nodes;
-	deque<const Content *> 	Content::nodeStack;    // current node - used to pass to built-in functions
+//	deque<const Content *> 	Content::nodeStack;    // current node - used to pass to built-in functions
 
-	Content::Content() : Node(editorial),layoutPtr(nullptr),current_page(0) {}
+	Content::Content() : Node(editorial),layoutPtr(nullptr) {}
 	void Content::loadTree(Messages& errs, Connection& sql, size_t language,buildKind build) {
 //	This does languages, but not layouts / templates as they have not yet been done.
 //  It also doesn't do segment content, which depend upon layouts!
@@ -149,15 +151,21 @@ namespace node {
 		}
 	}
 
-	const Node* Content::current() {
-		if (!nodeStack.empty()) {
-			return nodeStack.back();
-		} else {
-			return editorial.root();
-		}
-	}
-
-	bool   Content::get(Messages& errs,boolValue field) const {
+//	const Content* Content::current() const {
+//		const Content* value = nullptr;
+//		if(metrics != nullptr) {
+//			if (!metrics->nodeStack.empty()) {
+//				value = metrics->nodeStack.back();
+//			} else {
+//				auto* root=editorial.root();
+//				if(root) {
+//					value = root->content();
+//				}
+//			}
+//		}
+//		return value;
+//	}
+	bool Content::get(Messages& errs,boolValue field) const {
 		return false;
 	};
 	size_t Content::get(Messages& errs,uintValue field) const {
@@ -165,7 +173,6 @@ namespace node {
 		switch(field) {
 			case team: result = _team; break;
 			case uintValue::layout: result = _layout; break;
-			case page: result = current_page; break;
 			case templates: result= finalFilenames.size(); break;
 		}
 		return result;
@@ -232,23 +239,20 @@ namespace node {
 	void Content::reset() {
 	}
 
-	const Content* Content::content(Messages& errs, size_t id, bool silent) {
+	const Content* Content::content(Messages& errs, size_t id, bool silent) const {
 		const Content* result =  nullptr;
 		if(id == 0) {
-			if(Content::current() != nullptr) {
-				id = current()->id();
-			} else {
-				id = root()->id();
-			}
-		}
-		auto found = nodes.find(id);
-		if(found != nodes.end()) {
-			result = &(found->second);
+			result = this;
 		} else {
-			if(!silent) {
-				ostringstream err;
-				err << "There is no editorial node available with id " << id;
-				errs << Message(range,err.str());
+			auto found = nodes.find(id);
+			if (found != nodes.end()) {
+				result = &(found->second);
+			} else {
+				if (!silent) {
+					ostringstream err;
+					err << "There is no editorial node available with id " << id;
+					errs << Message(range, err.str());
+				}
 			}
 		}
 		return result;
@@ -315,22 +319,32 @@ namespace node {
 	}
 
 	void Content::compose(Messages& errs,buildKind kind,size_t langID,size_t techID) {
-		// To get here, this node generates files
-		Content::nodeStack.push_back(this);
+// To get here, this node generates files
+// Content::nodeStack.push_back(this);
+//		struct Context {
+//			stack<const content::Segment*>  segmentStack;
+//			deque<const Content *> 			nodeStack;    //current node - used to pass to built-in functions
+//		};
 
 		ostringstream msg; msg << "Composing " << _ref;
-		current_page = 0;
+		Metrics current;
+		current.nodeStack.push_back(this);
+		current.current = this;
+		current.page = 0;
+		mt::Instance control(&current);
 		for (auto* t : layoutPtr->templates) {
 			std::ostringstream content;
 			if(!t->code.empty()) {
-				auto file = finalFilenames[current_page];
+				auto file = finalFilenames[current.page];
 				errs << Message(info,file);
 				errs.str(cout); errs.reset();
 				if(file == "Layouts.html") {
 					errs << Message(info,"eep");
 				}
-				mt::Wss::push(&(t->nl));
-				mt::Driver::expand(t->code,errs,content);
+				mt::mstack context;
+				context.push_back({nullptr,control});
+				mt::Wss::push(&(t->nl)); //!!! another global.. need to add to the metrics above.
+				mt::Driver::expand(t->code,errs,content,context); //no context here... makes it hard to multi-thread.
 				mt::Wss::pop();
 				try {
 					std::ofstream outFile(file.c_str());
@@ -343,8 +357,8 @@ namespace node {
 				}
 
 			}
-			current_page++;
+			current.page++;
 		}
-		Content::nodeStack.pop_back();
+		current.nodeStack.pop_back();
 	}
 }

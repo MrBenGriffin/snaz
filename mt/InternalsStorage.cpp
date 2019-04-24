@@ -282,7 +282,7 @@ namespace mt {
 						vector<string> list;
 						lStore.get(name,list);
 						if(!list.empty()) {
-							plist parms = toNodeParms(e,list,my.parm(3),maxItems);
+							plist parms = my.toNodeParms(this,list,my.parm(3),maxItems);
 							my.generate(parms,my.praw(5),my.parm(4),"");
 						}
 					} break;

@@ -86,8 +86,13 @@ namespace node {
 		}
 	}
 
-	Locator::Locator(node::Node const* _root, node::Node const* _from) : Locator() {
+	Locator::Locator(const Metrics* m,node::Node const* _root, node::Node const* _from) : Locator() {
+		metrics = m;
 		root = _root; from=_from;
+	}
+
+	Locator::Locator(const Metrics* m) : Locator() {
+		metrics = m;
 	}
 
 	void Locator::setdirty() {
@@ -104,7 +109,7 @@ namespace node {
 		root = node;
 	}
 
-	const Node* Locator::get(Support::Messages&errs,const string path) {
+	const Node* Locator::get(Support::Messages&errs,const string& path) {
 		return locate(errs,path.begin(),path.end());
 	}
 
@@ -240,7 +245,7 @@ namespace node {
 			}
 		}
 		rootString.erase(rootString.size() - 1);
-		Locator rootLocator(root,from); //
+		Locator rootLocator(metrics,root,from); //
 		const Node *lRoot = rootLocator.locate(errs, rootString.begin(), rootString.end());
 		find = from->tree()->tw(errs, from->id(), +1, lRoot);
 		if (find == nullptr)
@@ -275,7 +280,7 @@ namespace node {
 		}
 		// trailing ')'
 		rootString.erase(rootString.size() - 1);
-		Locator rootLocator(root,root); //
+		Locator rootLocator(metrics,root,root); //
 //	Locator::loc_path=rootString;
 		const Node *lRoot = rootLocator.locate(errs, rootString.begin(), rootString.end());
 		find = from->tree()->tw(errs, from->id(), -1, lRoot);
@@ -395,7 +400,7 @@ namespace node {
 		if (showPaths) message << "m";
 		in++;
 		setdirty();
-		find = from->tree()->current();
+//TODO::		find = from->tree()->current();
 		if (find != root) {
 			return nextPathSection(errs);
 		} else {
@@ -712,7 +717,8 @@ namespace node {
 			if (!offset.second) {
 				throw BadLocatorPath(errs, start, in, out);
 			} else {
-				size_t stsize = Content::nodeStack.size();
+//TODO			size_t stsize = Content::nodeStack.size();
+				size_t stsize = 0; //DIRTY PLACEHOLDER... UNTIL NODESTACK IS NON STATIC..
 				if (offset.first != 0) {
 					setdirty();
 					//			dirtmsg << "I-Stack must be 0 Path:"+Locator::loc_path;
@@ -721,11 +727,11 @@ namespace node {
 				const node::Content *result = nullptr;
 				if (stsize < 2) { //we are in template.
 					if ((size_t) offset.first < stsize) {
-						result = Content::nodeStack[stsize - ((size_t) offset.first + 1)]; //offset=0, size=1; 1-(0+1) = 0;
+//TODO						result = Content::nodeStack[stsize - ((size_t) offset.first + 1)]; //offset=0, size=1; 1-(0+1) = 0;
 					}
 				} else {
 					if ((size_t) offset.first < (stsize - 1)) {
-						result = Content::nodeStack[stsize - ((size_t) offset.first + 1)]; //offset=0, size=1; 1-(0+1) = 0;
+//TODO						result = Content::nodeStack[stsize - ((size_t) offset.first + 1)]; //offset=0, size=1; 1-(0+1) = 0;
 					}
 				}
 				if (result != nullptr) {
@@ -750,17 +756,18 @@ namespace node {
 			if (!offset.second) {
 				throw BadLocatorPath(errs, start, in, out);
 			} else {
-				size_t stsize = Content::nodeStack.size();
+//TODO			size_t stsize = Content::nodeStack.size();
+				size_t stsize = 0; //DIRTY PLACEHOLDER... UNTIL NODESTACK IS NON STATIC..
 				setdirty();
 				if (showPaths) message << "O" << (size_t) offset.first;
 				const Content *result = nullptr;
 				if (stsize < 2) { //we are in template.
 					if (offset.first < stsize) {
-						result = Content::nodeStack[offset.first];
+//TODO						result = Content::nodeStack[offset.first];
 					}
 				} else {
 					if (1 + offset.first < stsize) {
-						result = Content::nodeStack[1 + offset.first];
+//TODO						result = Content::nodeStack[1 + offset.first];
 					}
 				}
 				if (result != nullptr) {

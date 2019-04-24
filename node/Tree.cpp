@@ -15,7 +15,7 @@
 namespace node {
 
 //-------------------------------------------------------------------
-	Tree::Tree(string _name) : _root(nullptr),locator(),name(_name),_depth(0),maxTw(0),twNodes(),refNodes() {}
+	Tree::Tree(string _name) : _root(nullptr),name(_name),_depth(0),maxTw(0),twNodes(),refNodes() {}
 //-------------------------------------------------------------------
 	void Tree::clear() {
 		_root = nullptr;
@@ -28,7 +28,7 @@ namespace node {
 	void Tree::add(Messages &errs, Node* node, size_t _parent) {
 		if(_parent == 0) {
 			_root = node;
-			locator.setRoot(node);
+//			locator.setRoot(node);
 		} else {
 			if(_root != nullptr) {
 				const Node* parent = _root->node(errs,_parent);
@@ -52,19 +52,6 @@ namespace node {
 		maxTw = std::max(maxTw,tw);
 	}
 //-------------------------------------------------------------------
-	const Node* Tree::current() const {
-		if(_root != nullptr) {
-			switch (_root->cultivar()) {
-				case flavour::content:
-					return Content::current();
-				case flavour::suffix:
-					return Suffix::suffixes.root();
-				case flavour::taxon:
-					return Taxon::taxonomies.root();
-			}
-		}
-		return nullptr;
-	}
 	const Node* Tree::root() const { return _root; }
 //-------------------------------------------------------------------
 	const Node* Tree::node(Messages &errs,size_t id,bool silent) const {
@@ -123,62 +110,63 @@ namespace node {
 	 "/TS!:AI123456789" absolute (for node) initial chars
 	 "C0n+-.^RFBO" relative (for node) initial chars
 */
-	const Node* Tree::byPath(Messages &errs, const string &path) {
-		const Node *result = nullptr;
+//	const Node* Tree::byPath(Messages &errs, const string &path, const Metrics* metrics) {
+//		const Node *result = nullptr;
+//		const Node *current = metrics == nullptr ? _root : metrics->current;
+//		if ((path.size() > 0) && (_root != nullptr) && (_root->cultivar() == content)) {    // If specified startnode, use it
+//			const string relatives = "C0n+-.^RFBO"; //yes, 0 is a relative address in this case!
+//			if (relatives.find(path[0]) != string::npos) {
+//				locator.setdirty();
+//			} else {
+//				if (path.length() > 1) {
+//					if (path[0] == 'I' && path[1] != '0') {
+//						locator.setdirty();
+//					} else {
+//						if (path[0] == 'A' && path[1] != '1') {
+//							locator.setdirty();
+//						}
+//					}
+//				}
+//			}
+//		}
+//		locator.setFrom(current);
+//		result = locator.locate(errs,path.begin(),path.end());
+//		if (result == nullptr) {
+//			errs << Message(error, "Path: " + path + " did not find a node.");
+//		}
+//		return result;
+//	}
 
-		if ((path.size() > 0) && (_root != nullptr) && (_root->cultivar() == content)) {    // If specified startnode, use it
-			const string relatives = "C0n+-.^RFBO"; //yes, 0 is a relative address in this case!
-			if (relatives.find(path[0]) != string::npos) {
-				locator.setdirty();
-			} else {
-				if (path.length() > 1) {
-					if (path[0] == 'I' && path[1] != '0') {
-						locator.setdirty();
-					} else {
-						if (path[0] == 'A' && path[1] != '1') {
-							locator.setdirty();
-						}
-					}
-				}
-			}
-		}
-		locator.setFrom(current());
-		result = locator.locate(errs,path.begin(),path.end());
-		if (result == nullptr) {
-			errs << Message(error, "Path: " + path + " did not find a node.");
-		}
-		return result;
-	}
-
-	pair<const Node*,size_t> Tree::nodePage(Messages &errs, const string &path) {
-		pair<const Node*,size_t> result = {nullptr,0};
-		if ((path.size() > 0) && (_root != nullptr) && (_root->cultivar() == content)) {    // If specified startnode, use it
-			const string relatives = "C0n+-.^RFBO"; //yes, 0 is a relative address in this case!
-			if (relatives.find(path[0]) != string::npos) {
-				locator.setdirty();
-			} else {
-				if (path.length() > 1) {
-					if (path[0] == 'I' && path[1] != '0') {
-						locator.setdirty();
-					} else {
-						if (path[0] == 'A' && path[1] != '1') {
-							locator.setdirty();
-						}
-					}
-				}
-			}
-		}
-		locator.setFrom(current());
-		result.first = locator.locate(errs,path.begin(),path.end());
-		result.second = locator.getFoundPageNumber();
-		if (result.first == nullptr) {
-			errs << Message(error, "Path: " + path + " did not find a node.");
-		}
-		if (result.second == UINTMAX_MAX) {
-			errs << Message(range, "Page was out of bounds.");
-		}
-		return result;
-	}
+//	pair<const Node*,size_t> Tree::nodePage(Messages &errs, const string &path, const Metrics* metrics) {
+//		const Node *current = metrics == nullptr ? _root : metrics->current;
+//		pair<const Node*,size_t> result = {nullptr,0};
+//		if ((path.size() > 0) && (_root != nullptr) && (_root->cultivar() == content)) {    // If specified startnode, use it
+//			const string relatives = "C0n+-.^RFBO"; //yes, 0 is a relative address in this case!
+//			if (relatives.find(path[0]) != string::npos) {
+//				locator.setdirty();
+//			} else {
+//				if (path.length() > 1) {
+//					if (path[0] == 'I' && path[1] != '0') {
+//						locator.setdirty();
+//					} else {
+//						if (path[0] == 'A' && path[1] != '1') {
+//							locator.setdirty();
+//						}
+//					}
+//				}
+//			}
+//		}
+//		locator.setFrom(current);
+//		result.first = locator.locate(errs,path.begin(),path.end());
+//		result.second = locator.getFoundPageNumber();
+//		if (result.first == nullptr) {
+//			errs << Message(error, "Path: " + path + " did not find a node.");
+//		}
+//		if (result.second == UINTMAX_MAX) {
+//			errs << Message(range, "Page was out of bounds.");
+//		}
+//		return result;
+//	}
 
 }
 

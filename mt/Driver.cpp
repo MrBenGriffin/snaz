@@ -172,7 +172,7 @@ namespace mt {
 		}
 	}
 
-	//parameter expansion..
+	//Template, Macro, and Parameters all come in here.
 	void Driver::expand(const mtext& object,Messages& e,std::ostream& o,mstack& c) {
 		mtext result;
 		expand(object,e,result,c);

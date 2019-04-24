@@ -1,0 +1,6 @@
+iTech					@iTech(1,2)								2
+iPreview				@iPreview(1,2)							2
+iLang					@iLang()								en-gb
+iLang					@iLang(en-gb,T,F)						T
+iLangID					@iLangID(1,2)							2
+iFullBuild				@iFullBuild(T,F)						F

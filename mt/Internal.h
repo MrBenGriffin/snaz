@@ -17,10 +17,11 @@
 namespace mt {
 	class Internal {
 	private:
-		void sortnodes(vector<const node::Node *>&,bool,char);
+		void sortnodes(vector<const node::Node *>&,bool,char) const;
 
 	public:
 		bool inRange(size_t i) const { return (minParms <= i) && (i <= maxParms);}
+		void doSort(Support::Messages&,vector<const node::Node*>&,std::string) const;
 		std::string name() const {return _name;}
 		size_t minParms {0}, maxParms {0};
 		static void startup(Messages&,Db::Connection&,buildKind);
@@ -38,9 +39,7 @@ namespace mt {
 		plist toParms(string,string,string);
 		plist toParms(const listType*,string,size_t = string::npos);
 		plist toParms(vector<string>&,string,size_t = string::npos);
-		plist toNodeParms(Messages&,vector<string>&,string,size_t = string::npos);
-		void doSort(vector<std::string>&,std::string);
-		void doSort(Support::Messages&,vector<const node::Node*>&,std::string);
+		void doSort(vector<std::string>&,std::string) const;
 		void doTrace(Support::Messages&,mstack&);
 
 	};

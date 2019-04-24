@@ -27,7 +27,7 @@ namespace node {
 	class Suffix;
 
 	enum boolValue  { exec,batch,terminal,evaluate,container};
-	enum uintValue  { team,layout,page,templates};
+	enum uintValue  { team,layout,templates};
 	enum textValue  { title,shortTitle,comment,baseFilename,scope,classCode,synonyms,keywords,description,fileSuffix,script,editor};
 	enum dateValue  { modified,birth,death};
 

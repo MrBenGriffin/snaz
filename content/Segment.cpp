@@ -46,10 +46,10 @@ namespace content {
 		 * cf. new bldsegtype table proposal.
 		 Segment types (as declared in blddefs) and what happens to them.
 		 name	XML encoded, expanded
-		 SEG**	√		√
-		 SEGXM	X		√
-		 SEGRE	√		X
-		 SEGRW	X		X
+		 SEG**	√				√
+		 SEGXM	X				√
+		 SEGRE	√				X //TODO: we shouldn't be evaluating these..
+		 SEGRW	X				X //TODO: we should treat them as Text()
 		 */
 		Timing &times = Timing::t();
 		if (times.show()) { times.set("Load Segments"); }

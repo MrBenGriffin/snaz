@@ -15,23 +15,27 @@
 #include "mt/mt.h"
 
 #include <deque>
+#include <stack>
+
 
 using namespace Support;
 using namespace Db;
 
 namespace content {
 	class Layout;
+	class Segment;
+	class Template;
 }
 
 namespace node {
 
+	class Metrics;
 	class Content : public Node {
 	private:
 		static unordered_map<size_t,Content>  nodes;
 		static constexpr auto rootFilename 	= "index";
 
 	//** Language Content (per node)
-		size_t current_page;
 		size_t _team;
 		size_t _layout;
 		string _shortTitle;
@@ -40,7 +44,6 @@ namespace node {
 		Date _birth;
 		Date _death;
 		const content::Layout* layoutPtr;
-
 		vector<std::string> 				finalFilenames;	//final filenames - in page order.
 		string baseFileName;
 		string scratchpad;    				// used for iForPeers <- maybe should go elsewhere..
@@ -52,13 +55,12 @@ namespace node {
 
 	public:
 		static Tree editorial;
-		static deque<const Content *> nodeStack;    // current node - used to pass to built-in functions
 		static Content& get(size_t i) { return nodes[i]; }
 
 		Content();
 
 		const Node* node(Messages&, size_t, bool) const override; //Node by id.
-		static const Content* content(Messages&, size_t= 0, bool= false); //Content by id.
+		const Content* content(Messages&, size_t= 0, bool= false) const; //Content by id.
 		static const Content* root();// { return dynamic_cast<const Content*>(editorial.root()); }
 
 		const content::Layout* layout() const { return layoutPtr; }
@@ -78,8 +80,7 @@ namespace node {
 
 		static void updateBirthAndDeath(Messages&, Connection&, size_t,buildKind);
 		static void updateContent(Messages&, Connection&, size_t,buildKind);
-		static const Node* current();
-
+//		const Content* current() const;
 
 	};
 }

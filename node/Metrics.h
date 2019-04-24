@@ -1,0 +1,45 @@
+//
+// Created by Ben on 2019-04-24.
+//
+
+#ifndef MACROTEXT_METRICS_H
+#define MACROTEXT_METRICS_H
+
+#include <stack>
+#include <deque>
+#include "support/Message.h"
+
+namespace content {
+	class Template;
+	class Segment;
+}
+namespace node {
+	class Content;
+	class Locator;
+	class Node;
+
+	using namespace Support;
+
+	class Metrics {
+		/*
+		 * A set of values which record current state during a single node's build.
+		 * By capturing them here we can use future/promises for node building (one day).
+		 *
+		 * wss breaks should be here too.. and any build-related 'statics'
+		 */
+	public:
+		const Content *current;
+		Locator* locator;
+		const content::Template *currentTemplate;
+		std::stack<const content::Segment *> segmentStack;
+		std::deque<const Content *> nodeStack;    //current node - used to pass to built-in functions
+		size_t page;
+
+		const Node* byPath(Messages &,const std::string &) const;    				//returns null if not found
+		pair<const Node*,size_t> nodePage(Messages &,const std::string &) const;    //returns null if not found
+
+
+	};
+}
+
+#endif //MACROTEXT_METRICS_H

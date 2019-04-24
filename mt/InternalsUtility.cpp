@@ -357,7 +357,7 @@ namespace mt {
 //		if (orderfield.length() > 0) qstr << " order by " <<  orderfield;
 		InternalInstance my(this,e,o,instance,context);
 		if (sql != nullptr && sql->isopen()) {
-			const node::Node* interest = node::Content::editorial.byPath(e,my.parm(2));
+			const node::Node* interest = my.node(2);
 			if (interest != nullptr) {
 				string table = my.parm(1); sql->escape(table);
 				string nfield = my.parm(3); sql->escape(nfield);
