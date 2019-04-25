@@ -16,7 +16,14 @@ namespace mt {
 		count = parms->size() == 1 ? parms->front().empty() ? 0 : 1 : parms->size();
 		min = thing->minParms;
 		max = thing->maxParms;
-		metrics = c.back().second.metrics;
+		if(!context->empty()) {
+			metrics = context->back().second.metrics;
+			if(metrics == nullptr) {
+				e << Message(warn,"context.back had no metrics, which cannot be right?");
+			}
+		} else {
+			e << Message(warn,"context was empty, which cannot be right?");
+		}
 
 		if(!thing->inRange(count)) {
 			ostringstream err;

@@ -147,21 +147,18 @@ namespace mt {
 		parm.clear();
 	}
 
-	std::string Driver::expand(Messages& e,std::string& program,std::string name) {
+	std::string Driver::expand(Messages& e,std::string& program,mstack& context) {
 		bool advanced = Definition::test_adv(program);
 		std::istringstream code(program);
 		Driver driver(e,code,advanced);
 		mtext structure = driver.parse(e,false); //no strip
 		ostringstream result;
-		driver.expand(result,e,name);
+		driver.expand(e,result,context);
 		return result.str();
 	}
 
-	void Driver::expand(std::ostream& o,Messages& e,const std::string &title) {
+	void Driver::expand(Messages& e,std::ostream& o,mstack& context) {
 		mtext result;
-		mstack context;
-		Handler handler({title}); //Implicitly constructs a Content..
-		context.push_back({&handler,{nullptr,{0,0}}});
 		expand(final,e,result,context);
 		for(auto& i : result) {
 			if (std::holds_alternative<Text>(i)) { o << std::get<Text>(i).get(); } else {

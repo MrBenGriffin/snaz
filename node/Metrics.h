@@ -28,6 +28,8 @@ namespace node {
 		 * wss breaks should be here too.. and any build-related 'statics'
 		 */
 	public:
+		Metrics();
+		~Metrics();
 		const Content *current;
 		Locator* locator;
 		const content::Template *currentTemplate;

@@ -308,7 +308,7 @@ namespace mt {
 		mt::Driver driver(e,code,advanced);
 		mt::mtext structure = driver.parse(e,false); //no strip
 		ostringstream result;
-		driver.expand(result,e,"iEval Instance");
+		driver.expand(e,result,context);
 		my.set(result.str());
 	}
 	void iFile::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
@@ -328,7 +328,7 @@ namespace mt {
 					mt::Driver driver(e,code,Definition::test_adv(contents));
 					mt::mtext structure = driver.parse(e,false); //bool advanced, bool strip
 					ostringstream result;
-					driver.expand(result,e,file.output(false));
+					driver.expand(e,result,context);
 					my.set(result.str());
 				} else {
 					my.set(contents);

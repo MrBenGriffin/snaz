@@ -17,7 +17,6 @@ iLinkRef 02		[@iLinkRef(!siteSections/0+1)]			[testpages]
 iLinkRef 03		[@iLinkRef(!siteSections/n-1)]			[whatis]
 
 # iID
-iID				@iID(!home)								19
 iID 01			@iID(!home)								19
 
 # iTW

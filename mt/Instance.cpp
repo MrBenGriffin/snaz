@@ -17,8 +17,8 @@ namespace mt {
 		parms(p),generated(true),myFor(&stuff),metrics(nullptr) {
 	}
 
-	Instance::Instance(node::Metrics*) :
-		parms(nullptr),generated(false),myFor(nullptr) {
+	Instance::Instance(node::Metrics* m) :
+		parms(nullptr),generated(false),myFor(nullptr),metrics(m) {
 	}
 
 	size_t Instance::size() {

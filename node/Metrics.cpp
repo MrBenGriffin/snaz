@@ -16,6 +16,14 @@ namespace node {
 
 	using namespace Support;
 
+	Metrics::Metrics() : current(nullptr),currentTemplate(nullptr),page(0) {
+		locator =  new Locator(this);
+		locator->setRoot(Content::root());
+	}
+	Metrics::~Metrics() {
+		delete locator;
+	}
+
 	const Node* Metrics::byPath(Messages &errs,const std::string &path) const {
 		const Node *result = nullptr;
 		if (path.size() > 0) {    // If specified startnode, use it

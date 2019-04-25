@@ -151,20 +151,6 @@ namespace node {
 		}
 	}
 
-//	const Content* Content::current() const {
-//		const Content* value = nullptr;
-//		if(metrics != nullptr) {
-//			if (!metrics->nodeStack.empty()) {
-//				value = metrics->nodeStack.back();
-//			} else {
-//				auto* root=editorial.root();
-//				if(root) {
-//					value = root->content();
-//				}
-//			}
-//		}
-//		return value;
-//	}
 	bool Content::get(Messages& errs,boolValue field) const {
 		return false;
 	};

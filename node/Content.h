@@ -80,7 +80,6 @@ namespace node {
 
 		static void updateBirthAndDeath(Messages&, Connection&, size_t,buildKind);
 		static void updateContent(Messages&, Connection&, size_t,buildKind);
-//		const Content* current() const;
 
 	};
 }

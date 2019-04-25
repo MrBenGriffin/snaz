@@ -15,6 +15,9 @@
 #include "mt/Definition.h"
 #include "mt/Internal.h"
 
+#include "node/Metrics.h"
+#include "node/Content.h"
+
 using namespace std;
 
 namespace testing {
@@ -74,6 +77,26 @@ namespace testing {
 		string newBase;
 		env.basedir(newBase,Support::Tests,true,true);
 		ifstream infile(newBase+filename);
+
+		// We need a node to be 'current'.
+		mt::mstack context;
+		node::Content& currentNode = node::Content::get(19);
+		node::Metrics current;
+		current.nodeStack.push_back(&currentNode);
+		current.current = &currentNode;
+		current.page = 0;
+		mt::Instance instance(&current);
+		context.push_back({nullptr,std::move(instance)}); //This is our context.
+		if(context.empty()) {
+			cout << "this isn't good" << endl;
+		} else {
+			auto& i = context.back().second;
+			if(context.back().second.metrics == nullptr) {
+				context.back().second.metrics = & current;
+			}
+		}
+		// We now have a valid context...
+
 		if (infile.is_open()) {
 			char c;
 			string name;
@@ -271,8 +294,8 @@ namespace testing {
 						mt::mtext structure = driver.parse(*msgs,false); //bool advanced, bool strip
 						pexpected = expected;
 						wss(pexpected,false);
-						ostringstream expansion;
-						driver.expand(expansion,*msgs,name);
+						ostringstream expansion; //need to set node!
+						driver.expand(*msgs,expansion,context);
 						if(!error_test) {
 							bool testPassed = false;
 							if(regex_test) {
