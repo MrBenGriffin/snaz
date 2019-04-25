@@ -305,14 +305,9 @@ namespace node {
 	}
 
 	void Content::compose(Messages& errs,buildKind kind,size_t langID,size_t techID) {
-// To get here, this node generates files
-// Content::nodeStack.push_back(this);
-//		struct Context {
-//			stack<const content::Segment*>  segmentStack;
-//			deque<const Content *> 			nodeStack;    //current node - used to pass to built-in functions
-//		};
-
-		ostringstream msg; msg << "Composing " << _ref;
+		Timing& times = Timing::t();
+		ostringstream msg; msg << "Node " << _ref << " build";
+		if (times.show()) { times.set(msg.str()); }
 		Metrics current;
 		current.nodeStack.push_back(this);
 		current.current = this;
@@ -324,9 +319,6 @@ namespace node {
 				auto file = finalFilenames[current.page];
 				errs << Message(info,file);
 				errs.str(cout); errs.reset();
-				if(file == "Layouts.html") {
-					errs << Message(info,"eep");
-				}
 				mt::mstack context;
 				context.push_back({nullptr,control});
 				mt::Wss::push(&(t->nl)); //!!! another global.. need to add to the metrics above.
@@ -346,5 +338,6 @@ namespace node {
 			current.page++;
 		}
 		current.nodeStack.pop_back();
+		if (times.show()) { times.use(errs,msg.str()); }
 	}
 }

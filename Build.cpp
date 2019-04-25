@@ -166,6 +166,7 @@ void Build::global(Messages& errs,Connection& sql) {
 
 void Build::langs(Messages& errs,Connection& sql) {
 	Timing& times = Timing::t();
+//	times.wait(30.0);
 	while (!languages.empty()) {
 		auto lang = languages.front();
 		if (times.show()) { times.set("Language " + lang.second.name); }

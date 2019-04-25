@@ -48,6 +48,7 @@ namespace Support {
 		void get(Messages&,std::string= "unknown",units=nat);
 		void use(Messages&,std::string= "unknown",units=nat);
 		void get(Messages&,char,std::string= "unknown",units=nat);
+		void wait(long double);
 
 	};
 }

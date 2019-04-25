@@ -42,8 +42,10 @@ namespace mt {
 	void Macro::expand(Messages& errs,mtext& result,mstack &context) const {
 		if (Definition::has(name)) {
 			iteration iter({0,parms.size()});
+//			cout << name << "[" << flush;
 			Instance instance(&parms,{0,parms.size()},context.back().second.metrics);
 			Definition::exp(name,errs,result,instance,context);
+//			cout << "]" << flush;
 		} else {
 			result.emplace_back(*this);
 		}

@@ -197,8 +197,11 @@ namespace mt {
 	}
 
 	void Driver::expand(const mtext& object,Messages& e,mtext& x,mstack& c) {
+//		size_t xs = object.size(); size_t y=0;
+//		size_t ss = c.size(); if (ss > 1000) return;
 		for(auto& j : object) {
 			std::visit([&e,&x,&c](auto&& arg){ arg.expand(e,x,c);},j);
+//			y++; if ((y > xs) || y >100000) return;
 		}
 	}
 

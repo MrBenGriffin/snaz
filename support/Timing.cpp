@@ -9,7 +9,7 @@
 #include <ctime>
 #include <cmath>
 #include <float.h>
-
+#include <thread>
 
 namespace Support {
 	using namespace std;
@@ -45,9 +45,17 @@ namespace Support {
 	long long Timing::nanos(const timecount &ts) {
 		return ts.count();
 	}
+	void Timing::wait(long double secs) {
+		auto seconds = chrono::duration<long double>(secs);
+		auto start = chrono::high_resolution_clock::now();
+		std::this_thread::sleep_for(seconds);
+		auto end = std::chrono::high_resolution_clock::now();
+		std::chrono::duration<double> elapsed = end-start;
+		std::cout << "Waited " << elapsed.count() << " s\n";
+	}
 
 	long double Timing::seconds(const timecount &ts) {
-		return chrono::duration<long double, nano>(ts).count();
+		return chrono::duration<long double>(ts).count();
 	}
 
 	timestamp Timing::timer_start() {

@@ -1,13 +1,16 @@
 // Debugging / Testing
+F showDefines	1
+F showPassed	1
 
 //!	pending/b0rked
+//iExistNode 01	@iExistNode(http://www.redsnapper.net,T,F)			F
 
 
 //Not debugging, uncomment the following X
 //X
 
 F showDefines	0
-F showPassed	0
+F showPassed	1
 
 // name		code										expected result
 // example	[abcdef]									[abcdef]
