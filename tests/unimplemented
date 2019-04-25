@@ -22,5 +22,3 @@ iForTaxNodes			@iForTaxNodes(1,2,3,4,5)				!1!error: iForTaxNodes is not yet imp
 iExistSimilar			@iExistSimilar(1,2)						!1!error: iExistSimilar is not yet implemented.
 iForSimilar				@iForSimilar(1,2,3,4,5,6)				!1!error: iForSimilar is not yet implemented.
 
-# Storage: Unimplemented
-iSetCache				@iSetCache(1,2)							!1!fatal: iSetCache is not yet implemented. It requires Node support.

@@ -37,8 +37,9 @@ sto 004		@iSet(x,bar)@iSet(x,bim)@iGet(x):@iGet(x,bar,Y,N)							bim:N
 164 iSet	@iSet(x,trot)@iGet(x)														trot
 
 # iSetCache from builderTests
-# iSetCache COMMENTED OUT - NEEDS NODES
-//iSetC 001	[@iSetCache(~A,X)@iGet(~A)]													[X]
+iSetC 001	[@iSetCache(~A,X)@iGet(~A)]													[X]
+iSetC 002	[@iSetCache(~B,@iTitle(0+1))]												!1!error: ~B was not cacheable. The variable was still set.
+
 
 # iAppend from builderTests
 24_iApp		@iSet(x,trot)@iGet(x)											trot

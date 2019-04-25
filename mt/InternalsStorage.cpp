@@ -10,6 +10,7 @@
 #include "support/Infix.h"
 #include "support/Message.h"
 #include "support/Convert.h"
+#include "node/Locator.h"
 
 namespace mt {
 	using namespace Support;
@@ -59,15 +60,13 @@ namespace mt {
 
 	void iSetCache::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);
-		e << Message(fatal,"iSetCache is not yet implemented. It requires Node support.");
-		if (my.count == 2) {
+		if (my.count == 2 && my.metrics != nullptr) {
 			string key = my.parm(1);
-//			Locator* nl =  Node::current()->locator;
-//			nl->track();
+			my.metrics->locator->track();
 			string value = my.parm(2);
-//			if(nl->untrack()) { //was dirty.
+			if(my.metrics->locator->untrack()) { //was dirty.
 				e << Message(error,key + " was not cacheable. The variable was still set.");
-//			}
+			}
 			storage.set(key,value);
 		}
 	}
