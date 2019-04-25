@@ -5,6 +5,7 @@
 F showPassed	1
 F showDefines	1
 
+
 //  select * from bldsegment where id=5;
 //  +----+----------+--------+
 //  | id | name     | br     |

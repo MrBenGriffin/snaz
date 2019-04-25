@@ -13,10 +13,8 @@
 
 #include "declarations.h"
 #include "node/Node.h"
+#include "node/Metrics.h"
 
-namespace node {
-	struct Metrics;
-}
 
 namespace mt {
 	using mtext=std::deque<Token>;
@@ -45,9 +43,9 @@ namespace mt {
 		node::Metrics* metrics;
 
 		size_t size();
-		Instance(const plist *, iteration, bool= false);
-		Instance(const plist *, forStuff&);
-		Instance(const Instance &);
+		Instance(const Instance &); //copy constructor.
+		Instance(const plist *, iteration, node::Metrics*, bool= false);
+		Instance(const plist *, forStuff&, node::Metrics*);
 		Instance(node::Metrics*);
 	};
 

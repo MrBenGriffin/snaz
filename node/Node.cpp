@@ -100,8 +100,8 @@ namespace node {
 			result.push_back(cursor);
 			cursor = cursor->_parent;
 		}
-		if (cursor == anc) {
-			result.push_back(anc);
+		if (cursor == anc || (cursor && !anc)) {
+			result.push_back(cursor);
 		}
 		return result;
 	}

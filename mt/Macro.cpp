@@ -41,7 +41,8 @@ namespace mt {
 
 	void Macro::expand(Messages& errs,mtext& result,mstack &context) const {
 		if (Definition::has(name)) {
-			Instance instance(&parms,{0,parms.size()});
+			iteration iter({0,parms.size()});
+			Instance instance(&parms,{0,parms.size()},context.back().second.metrics);
 			Definition::exp(name,errs,result,instance,context);
 		} else {
 			result.emplace_back(*this);

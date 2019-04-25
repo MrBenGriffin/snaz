@@ -31,6 +31,7 @@ namespace Support {
 			case even: 	 log << "-line"; break;
 			case struc:  log << "....."; break;
 			case link:   log << "link"; break;
+			case deprecated: log << "depr."; break;
 		}
 		log << ": " << content << flush;
 	}
@@ -88,7 +89,6 @@ namespace Support {
 	void Messages::operator<< (const Message& m ) {
 		_marked = _marked || (m.ch != info && m.ch != debug);
 		list.push_back(std::move(m));
-//		return *this;
 	}
 
 	void Messages::operator+= (Messages& msgs) {

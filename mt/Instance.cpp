@@ -7,14 +7,15 @@
 #include "support/Convert.h"
 
 namespace mt {
-	Instance::Instance(const plist *p, iteration i, bool gen) :
-	parms(p), it(i), generated(gen),myFor(nullptr),metrics(nullptr) {}
+	Instance::Instance(const plist *p, iteration i, node::Metrics* m, bool gen) :
+	parms(p), it(i), generated(gen),myFor(nullptr),metrics(m) {
+	}
 
 	Instance::Instance(const Instance &o) :
-		parms(o.parms), it(o.it), generated(o.generated),myFor(o.myFor),metrics(nullptr) {}
+		parms(o.parms), it(o.it), generated(o.generated),myFor(o.myFor),metrics(o.metrics) {}
 
-	Instance::Instance(const plist *p, forStuff& stuff) :
-		parms(p),generated(true),myFor(&stuff),metrics(nullptr) {
+	Instance::Instance(const plist *p, forStuff& stuff,node::Metrics* m) :
+		parms(p),generated(true),myFor(&stuff),metrics(m) {
 	}
 
 	Instance::Instance(node::Metrics* m) :

@@ -19,7 +19,7 @@ namespace mt {
 		if(!context->empty()) {
 			metrics = context->back().second.metrics;
 			if(metrics == nullptr) {
-				e << Message(warn,"context.back had no metrics, which cannot be right?");
+				e << Message(warn,"InternalInstance Constructor: context.back had no metrics, which cannot be right?");
 			}
 		} else {
 			e << Message(warn,"context was empty, which cannot be right?");
@@ -89,7 +89,7 @@ namespace mt {
 			for(auto& i: nodes) {
 				parameters.push_back({Text(i->ids())});
 			}
-			Instance i(&parameters,stuff); 	//set as generated.
+			Instance i(&parameters,stuff, nullptr); 	//set as generated.
 			macro.expand(*errs,*output,i,*context);
 		}
 	}
@@ -99,7 +99,7 @@ namespace mt {
 		if(program != nullptr && !program->empty()) { // from an empty parm..
 			Definition macro(*program,0,-1,true,false); //iterate,dont trim
 			forStuff stuff(value,count);
-			Instance i(&parameters,stuff); 	//set as generated.
+			Instance i(&parameters,stuff,nullptr); 	//set as generated.
 			macro.expand(*errs,*output,i,*context);
 		}
 	}

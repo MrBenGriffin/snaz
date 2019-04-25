@@ -86,16 +86,16 @@ iForSibs 001	@iForSibs(!siteRoot/0+1,*,$,[$:@iLinkRef(*)])						[1:home][2:siteS
 
 //check values are correct.
 iFi_100		@iForIndex(=,BIM=foo=bar,*,$,,[*:$])			[BIM:1][foo:2][bar:3]
-iNo_100		@iExistNode(17,@iNumChildren(17/^1),X)			10
-iFs_100		@iForSibs(17,*,$,@iLeft(@iLinkRef(*),1))		gbeffhlnpt
-forNest01	@iForSibs(17,*,$,@iNumGen(*))					7777777777
-forNest02	@iLength(@iForSibs(17,*,$,x))					10
-forNest03	@iForAncestry(17,R,17/^2,*,@iNumGen(*);)		5;6;7;
-forNest04	[@iForAncestry(17,R,17/^2,NODE,@iNumGen(NODE))]	[567]
-forNest05	@iForSibs(17,*,$,[@iForAncestry(*,R,*/^2,NODE,@iNumGen(NODE))])	[567][567][567][567][567][567][567][567][567][567]
+iNo_100		@iExistNode(19,@iNumChildren(19/^1),X)			3
+iFs_100		@iForSibs(19,*,$,@iLeft(@iLinkRef(*),1))		hss
+forNest01	@iForSibs(19,*,$,@iNumGen(*))					333
+forNest02	@iLength(@iForSibs(19,*,$,x))					3
+forNest03	@iForAncestry(19,R,,*,@iNumGen(*);)				1;2;3;
+forNest04	[@iForAncestry(19,R,19/^2,NODE,@iNumGen(NODE))]	[123]
+forNest05	@iForSibs(19,*,$,[@iForAncestry(*,R,*/^2,NODE,@iNumGen(NODE))])	[123][123][123]
 
 //Actual nested parameters..
-fNest02	@iForSibs(17,*,$,[@iForAncestry(*,R,*/^2,NODE,@iNumGen(*))])	[555][555][555][555][555][555][555][555][555][555][555][555]
+fNest02	@iForSibs(19,*,$,[@iForAncestry(*,R,*/^2,NODE,@iNumGen(*))])	[333][333][333]
 
 //-------------------------------------------------------------------------------
 # NOT YET IMPLEMENTED.

@@ -19,7 +19,9 @@
 
 #include "node/Tree.h"
 #include "node/Content.h"
+#include "node/Metrics.h"
 #include "content/Layout.h"
+#include "content/Template.h"
 
 #include "Internal.h"
 #include "InternalInstance.h"
@@ -93,6 +95,13 @@ namespace mt {
 				e << Message(trace,name);
 			}
 		}
+		auto& x = context.back().second;
+		if(x.metrics != nullptr  && (x.metrics)->currentTemplate != nullptr) {
+			e << Message(trace,x.metrics->currentTemplate->name);
+		} else {
+			e << Message(trace,"nil");
+		}
+
 	}
 
 /*

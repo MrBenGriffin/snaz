@@ -20,7 +20,15 @@ iLinkRef 03		[@iLinkRef(!siteSections/n-1)]			[whatis]
 iID 01			@iID(!home)								19
 
 # iTW
-iTW				@iTW(!home)								3
+//Legacy has /0+1 point to root, rather than the first child of root...
+# iTW
+iTW1				@iTW(/0+1/^1)							!2!error: Path: /0+1/^1 did not find a node.
+iTW2				@iTW(/0+1)								!1!depr.: 2019: /0+1 is deprecated for Root. Use I0/A1 or /
+iTW3				@iTW(/0+2)								17
+iTW4				@iTW(/0+1/0+2)							!1!depr.: 2019: /0+1 is deprecated for Root. Use I0/A1 or /
+iTW5				@iTW(/)									1
+iTW6				@iTW(!home)								3
+iTW7				@iTW(A1)								1
 
 # iTitle
 iTitle 001		@iTitle(19)													Home Page

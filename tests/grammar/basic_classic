@@ -177,5 +177,5 @@ U uiteq	1	-1	10	@iEq(%1,X,@iter(%(1+)),(%1)@iter(%(2+)))
 033uiteq		@uiteq(X,Y,Z)							[X][Y][Z]
 
 # Testing Stacks.
-stacked001		@xv()																[xz;xy;xx;xw;xv;stacked001;]
+stacked001		@xv()																[xz;xy;xx;xw;xv;nil]
 stacked002		@xv(xx)																[xx]

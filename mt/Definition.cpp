@@ -229,7 +229,11 @@ namespace mt {
 	void Definition::exp(const std::string name,Messages& e,mtext& o,Instance& i,mt::mstack& c) {
 		auto good = Definition::library.find(name);
 		if(good != Definition::library.end()) {
-			std::visit([&e,&o,&i,&c](auto&& arg){ arg.expand(e,o,i,c);},good->second);
+			std::visit(
+				[&e,&o,&i,&c](auto&& arg){arg.expand(e,o,i,c);}
+				,
+				good->second
+			);
 		} else {
 			e << Message(error,name + " not found.");
 		}

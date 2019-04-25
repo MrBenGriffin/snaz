@@ -2,6 +2,7 @@
 
 U con			1	2	11	⌽iConsole(⍟1,⍟2)
 U cdog			1	1	11	⌽con(T,⍟1)
+U ccat			1	1	11	⌽cdog(⍟1)
 
 Range 001		@iEq(T,F,W,B,C)									!1!range: Range Error in ‘iEq’; 5 parameters found. But this macro requires from 0 to 4 parameters.
 iConsole 001	[@iConsole(woot)]								!1!info: woot
@@ -12,7 +13,7 @@ iConsole I05	[@iConsole(I,woot)]								!1!info: woot
 iConsole W06	[@iConsole(W,woot)]								!1!warn: woot
 iConsole E07	[@iConsole(E,woot)]								!1!error: woot
 iConsole X08	[@iConsole(X,woot)]								!1!error: woot
-iConsole T08	[@iConsole(T,woot)]								!2!trace: iConsole T08
+iConsole T08	[@iConsole(T,woot)]								!2!trace: nil
 
 #Console in macros.
 iConsole n001	[@con(I,woot)]									!1!info: woot
@@ -26,10 +27,16 @@ iConsole nE07	[@con(E,woot)]									!1!error: woot
 iConsole nX08	[@con(X,woot)]									!1!error: woot
 
 #Trace lines.
-iConsole nT08	[@con(T,woot)]									!2!trace: con
 iConsole nT91	[@cdog(woot)]									!1!<<<<<: woot
+iConsole nT08	[@con(T,woot)]									!2!trace: con
 iConsole nT92	[@cdog(woot)]									!2!trace: con
 iConsole nT93	[@cdog(woot)]									!3!trace: cdog
+iCo1			[@ccat(woot)]									!2!trace: con
+iCo2			[@ccat(woot)]									!3!trace: cdog
+iCo3			[@ccat(woot)]									!4!trace: ccat
 
 ~con
 ~cdog
+~ccat
+
+

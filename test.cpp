@@ -80,22 +80,13 @@ namespace testing {
 
 		// We need a node to be 'current'.
 		mt::mstack context;
-		node::Content& currentNode = node::Content::get(19);
+		node::Content& currentNode = node::Content::get(19); //This is a random test node.
 		node::Metrics current;
 		current.nodeStack.push_back(&currentNode);
 		current.current = &currentNode;
 		current.page = 0;
 		mt::Instance instance(&current);
-		context.push_back({nullptr,std::move(instance)}); //This is our context.
-		if(context.empty()) {
-			cout << "this isn't good" << endl;
-		} else {
-			auto& i = context.back().second;
-			if(context.back().second.metrics == nullptr) {
-				context.back().second.metrics = & current;
-			}
-		}
-		// We now have a valid context...
+		context.push_back({nullptr,instance}); //This is our context.
 
 		if (infile.is_open()) {
 			char c;

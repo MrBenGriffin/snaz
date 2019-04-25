@@ -4,6 +4,8 @@
 
 #include "mt.h"
 #include "Definition.h"
+#include "node/Metrics.h"
+#include "content/Template.h"
 
 namespace mt {
 
@@ -137,6 +139,12 @@ namespace mt {
 						if(s.first!= nullptr) {
 							std::visit([&result](auto const &a){ result.push_back(Text(a.name() + ";")); },*(s.first));
 						}
+					}
+					auto& x = context.back().second;
+					if(x.metrics != nullptr  && (x.metrics)->currentTemplate != nullptr) {
+						result.push_back(Text(x.metrics->currentTemplate->name));
+					} else {
+						result.push_back(Text("nil"));
 					}
 				}
 				if (list) {

@@ -47,6 +47,7 @@ namespace node {
 		if (result == nullptr) {
 			errs << Message(error, "Path: " + path + " did not find a node.");
 		}
+		locator->setRoot(Content::root());
 		return result;
 	}
 
@@ -77,6 +78,7 @@ namespace node {
 		if (result.second == UINTMAX_MAX) {
 			errs << Message(range, "Page was out of bounds.");
 		}
+		locator->setRoot(Content::root());
 		return result;
 	}
 

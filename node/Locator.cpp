@@ -7,6 +7,8 @@
 #include "node/Locator.h"
 #include "node/BadLocatorPath.h"
 #include "node/Content.h"
+#include "node/Taxon.h"
+#include "node/Suffix.h"
 #include "support/Convert.h"
 
 using namespace Support;
@@ -123,9 +125,8 @@ namespace node {
 		if ((in < out) && (*in == '/')) {
 			if (showPaths) message << "/";
 			from = root;
+			find = root;
 			in++;
-		} else {
-//			from = fromref;
 		}
 		try {
 			process(errs, in, out);
@@ -171,16 +172,6 @@ namespace node {
 		}
 	}
 
-// Content - switch over to global Content Nodetree (the default)
-	bool Locator::doContent(Messages &errs) {
-		if (showPaths) message << "C";
-		in++;
-		errs << Message(error,"Locator:: doContent not yet implemented.");
-//		from = Node::rootc;
-//		find = Node::rootc->nodebypath(errs, in, out);
-		return find != nullptr;
-	}
-
 	bool Locator::doTW(Messages &errs) {
 		pair<size_t, bool> tw = znatural(++in);
 		if (!tw.second) {
@@ -199,25 +190,32 @@ namespace node {
 		}
 	}
 
+// Content - switch over to global Content Nodetree (the default)
+	bool Locator::doContent(Messages &errs) {
+		if (showPaths) message << "C";
+		in++;
+		from = Content::editorial.root();
+		find = nullptr;
+		return nextPathSection(errs);
+	}
 
-// Taxonomy - switch over to global Taxonomy Nodetree
+
+	// Taxonomy - switch over to global Taxonomy Nodetree
 	bool Locator::doTaxonomy(Messages &errs) {
 		if (showPaths) message << "T";
 		in++;
-		errs << Message(error,"Locator:: doTaxonomy not yet implemented.");
-//		from = Node::roott;
-//		find = Node::roott->nodebypath(errs, in, out);
-		return find != nullptr;
+		from = Taxon::taxonomies.root();
+		find = nullptr;
+		return nextPathSection(errs);
 	}
 
 // Content - switch over to global Suffix Nodetree
 	bool Locator::doSuffix(Messages &errs) {
 		if (showPaths) message << "S";
 		in++;
-		errs << Message(error,"Locator:: doSuffix not yet implemented.");
-//		from = Node::roots;
-//		find = Node::roots->nodebypath(errs, in, out);
-		return find != nullptr;
+		from = Suffix::suffixes.root();
+		find = nullptr;
+		return nextPathSection(errs);
 	}
 
 // next peer according to specified criteria
@@ -400,7 +398,7 @@ namespace node {
 		if (showPaths) message << "m";
 		in++;
 		setdirty();
-//TODO::		find = from->tree()->current();
+		find = metrics->current;
 		if (find != root) {
 			return nextPathSection(errs);
 		} else {
@@ -498,7 +496,7 @@ namespace node {
 // i-th child from left
 	bool Locator::doChildLeft(Messages &errs) {
 		if (showPaths) message << "0";
-		if (from == nullptr) from = root;
+//		if (from == nullptr) from = root;
 		in++;
 		if (in == out) {
 			throw BadLocatorPath(errs, start, in, out);
@@ -512,13 +510,18 @@ namespace node {
 							throw BadLocatorPath(errs, start, in, out);
 						} else {
 							if (showPaths) message << "[" << sibnum.first << "]";
-							if (sibnum.first < 1 || sibnum.first > from->getChildCount()) {
-								find = nullptr;
-								return true; //RANGE error
+							if (sibnum.first == 1 && from == root) {
+								find = root; //This IS a bit weird.
+								errs << Message(deprecated,"2019: /0+1 is deprecated for Root. Use I0/A1 or /");
+							} else {
+								if (sibnum.first < 1 || sibnum.first > from->getChildCount()) {
+									find = nullptr;
+									return true; //RANGE error
+								}
+								find = (from->child(errs, sibnum.first - 1));
+								if (find == nullptr) { return true; }
+								if (showPaths) { message << "={" << find->id() << "}"; }
 							}
-							find = (from->child(errs, sibnum.first - 1));
-							if (find == nullptr) { return true; }
-							if (showPaths) { message << "={" << find->id() << "}"; }
 						}
 					} else {
 						throw BadLocatorPath(errs, start, in, out);
@@ -682,12 +685,8 @@ namespace node {
 			} else {
 				if (showPaths) message << "^L[" << ilayout.first << "]";
 				find = from;
-				while (find->get(errs,layout) != ilayout.first) { //this assumes that the node is actually content!
+				while (find->get(errs,layout) != ilayout.first && find != nullptr) { //this assumes that the node is actually content!
 					find = find->parent();
-					if (find == root) {
-						find = nullptr;
-						return true;
-					}
 				}
 			}
 		} else {
@@ -697,13 +696,9 @@ namespace node {
 			} else {
 				if (showPaths) message << "^[" << up.first << "]";
 				find = from;
-				while (up.first > 0) {
+				while (up.first > 0 && find != nullptr) {
 					up.first--;
 					find = find->parent();
-					if (find == root) {
-						find = nullptr;
-						return true;
-					}
 				}
 			}
 		}

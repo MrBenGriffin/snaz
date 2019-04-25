@@ -177,6 +177,6 @@ U xw		0	1	10	⌽xx(⍟1)
 U xv		0	1	10	⌽xw(⍟1)
 
 # Testing Stacks.
-stacked001		⌽xv()																[xz;xy;xx;xw;xv;stacked001;]
+stacked001		⌽xv()																[xz;xy;xx;xw;xv;nil]
 stacked002		⌽xv(xx)																[xx]
 
