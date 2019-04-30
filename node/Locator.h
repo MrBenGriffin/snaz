@@ -27,8 +27,6 @@ namespace node {
 		string::const_iterator in;
 		string::const_iterator out;
 
-		typedef bool (Locator::*Fn)(Support::Messages &); //A fn returns false if it failed, otherwise true.
-
 		size_t pageNum;
 		const Metrics *metrics;
 		const Node *find;
@@ -46,7 +44,7 @@ namespace node {
 
 		stack<bool> _dirty;
 
-		Locator(const Metrics *);
+		explicit Locator(const Metrics *);
 
 		void setFrom(const Node*);
 		void setRoot(const Node*);
@@ -95,8 +93,6 @@ namespace node {
 		bool doTW(Support::Messages &);
 
 	private:
-		static array<Fn, 256> fns; // = {&Locator::doIllegalCharacter};
-		static bool fnSet; // = {&Locator::doIllegalCharacter};
 
 	};
 }

@@ -15,18 +15,44 @@ using namespace Support;
 namespace node {
 
 	bool Locator::showPaths = false;
-	bool Locator::fnSet = false;
-	array<Locator::Fn, 256> Locator::fns = {&Locator::doIllegalCharacter};
-
 
 	//-----------------------------------------------------------------------------
 //This discards the processed output. (e.g. in nodelocation)
 	void Locator::process(Messages &errs, string::const_iterator &in, string::const_iterator &out) {
 		bool done = in >= out;    // 'are we finished?' flag
 		while (!done) {
-			unsigned char fni = *in;
-			while (in < out && fns[fni] == nullptr) in++;
-			done = (this->*(fns[fni]))(errs);
+			switch(*in) {
+				case '!':done = doLinkRef(errs); break;
+				case '+':done = doSiblingRight(errs); break;
+				case '-':done = doSiblingLeft(errs); break;
+				case '.':done = doParent(errs); break;
+				case '0':done = doChildLeft(errs); break;
+				case '1':
+				case '2':
+				case '3':
+				case '4':
+				case '5':
+				case '6':
+				case '7':
+				case '8':
+				case '9':done = doID(errs); break;
+				case ':':done = doPage(errs); break;
+				case '^':done = doAncestorRelative(errs); break;
+				case 'A':done = doAncestorAbsolute(errs); break;
+				case 'B':done = doPeerLast(errs); break;
+				case 'C':done = doContent(errs); break;
+				case 'F':done = doPeerNext(errs); break;
+				case 'I':done = doStackFromInside(errs); break;
+				case 'm':done = doMainNode(errs); break;
+				case 'n':done = doChildRight(errs); break;
+				case 'O':done = doStackFromOutside(errs); break;
+				case 'R':done = doRR(errs); break;
+				case 'S':done = doSuffix(errs); break;
+				case 'T':done = doTaxonomy(errs); break;
+				case 'W':done = doTW(errs); break;
+				default:
+					done = doIllegalCharacter(errs);
+			}
 		}
 	}
 
@@ -60,33 +86,7 @@ namespace node {
 //string Locator::loc_path;
 
 // set the default response to be 'illegal character', which throws an exception.
-	Locator::Locator() : pageNum(0), find(nullptr), from(nullptr), root(nullptr) {
-		if(!fnSet) {
-			fnSet=true;
-			fns[static_cast<unsigned char>('T')] = (Fn) & Locator::doTaxonomy;
-			fns[static_cast<unsigned char>('C')] = (Fn) & Locator::doContent;
-			fns[static_cast<unsigned char>('S')] = (Fn) & Locator::doSuffix;
-			fns[static_cast<unsigned char>('!')] = (Fn) & Locator::doLinkRef;
-			fns[static_cast<unsigned char>(':')] = (Fn) & Locator::doPage;
-			fns[static_cast<unsigned char>('0')] = (Fn) & Locator::doChildLeft;
-			fns[static_cast<unsigned char>('m')] = (Fn) & Locator::doMainNode;
-			fns[static_cast<unsigned char>('n')] = (Fn) & Locator::doChildRight;
-			fns[static_cast<unsigned char>('+')] = (Fn) & Locator::doSiblingRight;
-			fns[static_cast<unsigned char>('-')] = (Fn) & Locator::doSiblingLeft;
-			fns[static_cast<unsigned char>('.')] = (Fn) & Locator::doParent;
-			for (auto c = static_cast<unsigned char>('1'); c <= static_cast<unsigned char>('9'); c++) {
-				fns[c] = (Fn) & Locator::doID;
-			}
-			fns[static_cast<unsigned char>('A')] = (Fn) & Locator::doAncestorAbsolute;
-			fns[static_cast<unsigned char>('^')] = (Fn) & Locator::doAncestorRelative;
-			fns[static_cast<unsigned char>('R')] = (Fn) & Locator::doRR;
-			fns[static_cast<unsigned char>('F')] = (Fn) & Locator::doPeerNext;
-			fns[static_cast<unsigned char>('B')] = (Fn) & Locator::doPeerLast;
-			fns[static_cast<unsigned char>('I')] = (Fn) & Locator::doStackFromInside;
-			fns[static_cast<unsigned char>('O')] = (Fn) & Locator::doStackFromOutside;
-			fns[static_cast<unsigned char>('W')] = (Fn) & Locator::doTW;
-		}
-	}
+	Locator::Locator() : pageNum(0), find(nullptr), from(nullptr), root(nullptr) {}
 
 	Locator::Locator(const Metrics* m,node::Node const* _root, node::Node const* _from) : Locator() {
 		metrics = m;
@@ -712,32 +712,34 @@ namespace node {
 			if (!offset.second) {
 				throw BadLocatorPath(errs, start, in, out);
 			} else {
-//TODO			size_t stsize = Content::nodeStack.size();
-				size_t stsize = 0; //DIRTY PLACEHOLDER... UNTIL NODESTACK IS NON STATIC..
-				if (offset.first != 0) {
-					setdirty();
-					//			dirtmsg << "I-Stack must be 0 Path:"+Locator::loc_path;
-				}
-				if (showPaths) message << "I" << offset.first;
-				const node::Content *result = nullptr;
-				if (stsize < 2) { //we are in template.
-					if ((size_t) offset.first < stsize) {
-//TODO						result = Content::nodeStack[stsize - ((size_t) offset.first + 1)]; //offset=0, size=1; 1-(0+1) = 0;
+				if(metrics != nullptr) {
+					size_t stackSize = metrics->nodeStack.size();
+					if (offset.first != 0) {
+						setdirty();
+					}
+					if (showPaths) message << "I" << offset.first;
+					const node::Content *result = nullptr;
+					if (stackSize == 0) { //we are in template.
+						if ((size_t) offset.first < stackSize) {
+							result = metrics->current;
+						}
+					} else {
+						if ((size_t) offset.first <= stackSize) {
+							result = metrics->nodeStack[stackSize - offset.first]; //offset=0, size=1; 1-(0+1) = 0;
+						}
+					}
+					if (result != nullptr) {
+						find = result;
+						return nextPathSection(errs);
+					} else {
+						find = nullptr;
+						return true;
 					}
 				} else {
-					if ((size_t) offset.first < (stsize - 1)) {
-//TODO						result = Content::nodeStack[stsize - ((size_t) offset.first + 1)]; //offset=0, size=1; 1-(0+1) = 0;
-					}
-				}
-				if (result != nullptr) {
-					find = result;
-				} else {
-					find = nullptr;
+					errs << Message(fatal,"Metrics are necessary for node location");
 					return true;
 				}
 			}
-			return nextPathSection(errs);
-
 		} else {
 			errs << Message(error,"I{number} can only be used while parsing Content locations.");
 			throw BadLocatorPath(errs, start, in, out);
@@ -751,24 +753,30 @@ namespace node {
 			if (!offset.second) {
 				throw BadLocatorPath(errs, start, in, out);
 			} else {
-//TODO			size_t stsize = Content::nodeStack.size();
-				size_t stsize = 0; //DIRTY PLACEHOLDER... UNTIL NODESTACK IS NON STATIC..
-				setdirty();
-				if (showPaths) message << "O" << (size_t) offset.first;
-				const Content *result = nullptr;
-				if (stsize < 2) { //we are in template.
-					if (offset.first < stsize) {
-//TODO						result = Content::nodeStack[offset.first];
+				if(metrics != nullptr) {
+					size_t stackSize = metrics->nodeStack.size();
+					setdirty();
+					if (showPaths) message << "O" << (size_t) offset.first;
+					const Content *result = nullptr;
+					if (stackSize == 0) { //we are in template.
+						if ((size_t) offset.first < stackSize) {
+							result = metrics->current;
+						}
+					} else {
+						if ((size_t) offset.first < stackSize) {
+							result = metrics->nodeStack[offset.first]; //offset=0, size=1; 1-(0+1) = 0;
+						}
 					}
-				} else {
-					if (1 + offset.first < stsize) {
-//TODO						result = Content::nodeStack[1 + offset.first];
+					if (result != nullptr) {
+						find = result;
+						return nextPathSection(errs);
+					} else {
+						find = nullptr;
+						return true;
 					}
-				}
-				if (result != nullptr) {
-					find = result;
+
 				} else {
-					find = nullptr;
+					errs << Message(fatal,"Metrics are necessary for node location");
 					return true;
 				}
 			}
