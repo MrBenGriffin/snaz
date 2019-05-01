@@ -2,4 +2,17 @@
 // Created by Ben on 2019-05-01.
 //
 
-#include "Handler.h"
+#include "mt/Handler.h"
+#include "mt/Instance.h"
+
+namespace mt {
+	void Handler::expand(Messages&,mtext&,Instance&,mstack&) const {}
+	std::ostream& Handler::visit(std::ostream& o) const { return o;}
+	void Handler::inject(Messages&,mtext&,mstack&) const {}
+	void Handler::doFor(mtext&,const forStuff&) const {}
+	void Handler::subs(mtext&,std::vector<std::string>& ,const std::string&) const {}
+	void Handler::add(mtext&) {}
+	bool Handler::inRange(size_t) const { return false; };
+	std::string Handler::name() const { return ""; }
+
+}

@@ -36,7 +36,19 @@ namespace mt {
     LStore Internal::lStore;
 	Db::Connection* Internal::sql;
 
-	void Internal::startup(Messages& log,Db::Connection& _sql,buildKind kind) {
+	Internal::Internal(std::string name, size_t min, size_t max) :
+		Handler(),_name(std::move(name)),minParms(min),maxParms(max) {}
+
+	bool Internal::inRange(size_t i) const {
+		return (minParms <= i) && (i <= maxParms);
+	}
+//	struct iList : public Internal {
+
+	std::string Internal::name() const {
+		return _name;
+	}
+
+void Internal::startup(Messages& log,Db::Connection& _sql,buildKind kind) {
 		Timing& times = Timing::t();
 		sql = & _sql;
 		if (times.show()) { times.set("Load Site Storage"); }
@@ -48,7 +60,7 @@ namespace mt {
 		storage.save(log,sql,kind);
 	}
 
-	plist Internal::toParms(string basis,string cutter,string sort) {
+	plist Internal::toParms(string basis,string cutter,string sort) const {
 		vector<string> list;
 		Support::tolist(list,basis,cutter);
 		doSort(list,sort);
@@ -59,7 +71,7 @@ namespace mt {
 		return result;
 	}
 
-	plist Internal::toParms(const listType* orig,string sort,size_t maxSize) {
+	plist Internal::toParms(const listType* orig,string sort,size_t maxSize) const {
 		vector<string> list;
 		long count = min(maxSize,list.size());
 		for(auto& i : *orig) {
@@ -76,7 +88,7 @@ namespace mt {
 		return result;
 	}
 
-	plist Internal::toParms(vector<string>& list,string sort,size_t maxSize) {
+	plist Internal::toParms(vector<string>& list,string sort,size_t maxSize) const {
 		if(maxSize < list.size()) {
 			list.resize(maxSize);
 		}
@@ -88,11 +100,10 @@ namespace mt {
 		return result;
 	}
 
-	void Internal::doTrace(Messages& e,mstack& context) {
+	void Internal::doTrace(Messages& e,mstack& context) const {
 		for (auto& i : context) {
 			if(i.first != nullptr) {
-				std::string name = std::visit([](auto&& arg) -> std::string { return arg.name();},*(i.first));
-				e << Message(trace,name);
+				e << Message(trace,i.first->name());
 			}
 		}
 		auto& x = context.back().second;

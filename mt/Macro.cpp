@@ -40,14 +40,16 @@ namespace mt {
 	}
 
 	void Macro::expand(Messages& errs,mtext& result,mstack &context) const {
-		if (Definition::has(name)) {
+		auto good = Definition::library.find(name);
+		if(good != Definition::library.end()) {
 			iteration iter({0,parms.size()});
-//			cout << name << "[" << flush;
 			Instance instance(&parms,{0,parms.size()},context.back().second.metrics);
-			Definition::exp(name,errs,result,instance,context);
-//			cout << "]" << flush;
+			auto& macro = good->second;
+			string ref = macro->name();
+			(macro)->expand(errs,result,instance,context);
 		} else {
 			result.emplace_back(*this);
+			errs << Message(error,name + " not found.");
 		}
 	}
 

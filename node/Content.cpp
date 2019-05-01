@@ -183,13 +183,11 @@ namespace node {
 		return result;
 	};
 	Date   Content::get(Messages& errs,dateValue field) const {
-		Date result;
 		switch(field) {
-			case modified: break;
-			case birth: result = _birth; break;
-			case death: result = _death; break;
+			case modified: return Date();
+			case birth: return _birth;
+			case death: return _death;
 		}
-		return result;
 	};
 
 	void Content::setLayouts(Messages &errs) {
@@ -306,7 +304,7 @@ namespace node {
 
 	void Content::compose(Messages& errs,buildKind kind,size_t langID,size_t techID) {
 		Timing& times = Timing::t();
-		ostringstream msg; msg << "Node " << _ref << " build";
+		ostringstream msg; msg << "id " << idStr << " `" << _ref << "` ";
 		if (times.show()) { times.set(msg.str()); }
 		Metrics current;
 		current.nodeStack.push_back(this);
@@ -317,7 +315,7 @@ namespace node {
 			std::ostringstream content;
 			if(!t->code.empty()) {
 				auto file = finalFilenames[current.page];
-				errs << Message(info,file);
+//				errs << Message(info,file);
 				errs.str(cout); errs.reset();
 				mt::mstack context;
 				context.push_back({nullptr,control});

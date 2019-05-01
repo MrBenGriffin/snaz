@@ -51,7 +51,7 @@ namespace mt {
 	};
 
 	//Handler is the variant of all token handlers..
-	using Carriage= std::pair<Handler*, Instance>;
+	using Carriage= std::pair<const Handler*, Instance>;
 	using mstack=std::deque< Carriage >;
 
 }

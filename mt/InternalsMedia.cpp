@@ -6,7 +6,7 @@
 
 namespace mt {
 	using namespace Support;
-	void iMedia::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
+	void iMedia::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		Media* media = Build::b().media();
 		if(media != nullptr) {
@@ -20,7 +20,7 @@ namespace mt {
 			e << Message(error," media support was not found.");
 		}
 	}
-	void iEmbed::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
+	void iEmbed::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		const Media* media = Build::b().media();
 		if(media != nullptr) {
@@ -30,7 +30,7 @@ namespace mt {
 			e << Message(error," media support was not found.");
 		}
 	}
-	void iExistMedia::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
+	void iExistMedia::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		const Media* media = Build::b().media();
 		if(media != nullptr) {

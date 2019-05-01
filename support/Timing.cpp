@@ -122,11 +122,12 @@ namespace Support {
 
 	void Timing::get(Messages& ostr,char timer_c,const string name,units style) {
 		ostringstream repo;
+		auto base = 50;
 		switch(timer_c) {
-			case 'b': repo << setw(18) << "Build:"; break;
-			case 'n': repo << setw(18) << "Node:"; break;
-			case 'l': repo << setw(11) << name << " (lap):"; break;
-			case 'c': repo << setw(17) << name << ":"; break;
+			case 'b': repo << setw(base+7) << "Build:"; break;
+			case 'n': repo << setw(base+7) << "Node:"; break;
+			case 'l': repo << setw(base+0) << name << " (lap):"; break;
+			case 'c': repo << setw(base+6) << name << ":"; break;
 		}
 		get(repo,timer_c,name,style);
 		ostr << Message(timing,repo.str());

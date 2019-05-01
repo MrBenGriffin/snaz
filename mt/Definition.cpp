@@ -19,8 +19,11 @@
 
 namespace mt {
 
-	std::unordered_map<std::string, Handler> Definition::library;
+	std::unordered_map<std::string, std::unique_ptr<const Handler> > Definition::library;
 
+	std::string Definition::name() const {
+		return _name;
+	}
 
 //Load from database.
 	void Definition::load(Messages& errs,Db::Connection& sql,buildKind kind) {
@@ -58,13 +61,14 @@ namespace mt {
 						errs << Message(error,"macro with id " + macro_id + " has no name!");
 					} else {
 						Messages log;
-						Definition macro(log,name,expansion,min,max,stripDef==1,stripParms==1,pre==1);
+						Definition* macro = new Definition(log,name,expansion,min,max,stripDef==1,stripParms==1,pre==1);
 						if(log.marked()) {
 							str.str(""); str << "Define `" << name << "` failed while parsing `" << expansion << "`";
 							errs << Message(error,str.str());
 							errs += log;
 						} else {
-							add(macro);
+							del(name);
+							library.emplace(name,macro);
 						}
 					}
 				}
@@ -84,7 +88,7 @@ namespace mt {
 	Definition::Definition(
 			Messages& errs,std::string name_i, std::string expansion_i,
 			long min, long max, bool strip, bool trimParms_i, bool preExpand_i)
-			: counter(0), _name(std::move(name_i)), trimParms(trimParms_i), preExpand(preExpand_i) {
+			: Handler(), counter(0), _name(std::move(name_i)), trimParms(trimParms_i), preExpand(preExpand_i) {
 		minParms = min == -1 ? 0 : min;
 		maxParms = max == -1 ? INT_MAX : max;
 		if(expansion_i.empty()) {
@@ -107,7 +111,7 @@ namespace mt {
 
 	//used for pre-parsed definitions (eg in iForSibs)
 	Definition::Definition(const mtext& code,
-		long min, long max, bool iter, bool tP, bool preEx):
+		long min, long max, bool iter, bool tP, bool preEx): Handler(),
 		counter(0), _name(":internal:"),iterated(iter), trimParms(tP), preExpand(preEx),expansion(code) {
 		minParms = min == -1 ? 0 : min;
 		maxParms = max == -1 ? INT_MAX : max;
@@ -139,7 +143,7 @@ namespace mt {
 		return false;
 	}
 
-	void Definition::expand(Support::Messages& e,mtext& o,Instance &instance, mstack &context) {
+	void Definition::expand(Support::Messages& e,mtext& o,Instance &instance, mstack &context) const {
 		if(!parmCheck(e,instance.size())) {
 			return;
 		}
@@ -166,8 +170,7 @@ namespace mt {
 			}
 			modified.it = {0,rendered.size()};
 		}
-		Handler handler(*this);
-		context.push_front({&handler,modified});
+		context.push_front({this,modified});
 		if (iterated) {
 			Instance& instance = context.front().second;
 			iteration* i = &(instance.it); //so we are iterating front (because not all are generated).
@@ -192,7 +195,6 @@ namespace mt {
 		context.pop_front();
 	}
 
-
 	bool Definition::test_adv(const std::string &basis) {
 		//⌽E2.8C.BD ⍟E2.8D.9F ⎣E2.8E.A3 ⎡e2.8e.A1 	/** ALL START E2. (⌽ 8c bd)(⍟ 8d 9F)(⎡8e A1)(⎤ 8e A4)(⎣ 8e A3)(❫ 9D AB) **/
 		if (!basis.empty()) {
@@ -213,31 +215,19 @@ namespace mt {
 	void Definition::vis(const std::string name,std::ostream& o) {
 		auto good = Definition::library.find(name);
 		if(good != Definition::library.end()) {
-			if (std::holds_alternative<Definition>(good->second)) {
-				std::get<Definition>(good->second).visit(o);
-			} else {
-				o << "«" << name << "»";
-			}
+			good->second->visit(o);
+		} else {
+			o << "«" << name << "»";
 		}
 	}
 
 	void Definition::exp(const std::string name,Messages& e,mtext& o,Instance& i,mt::mstack& c) {
 		auto good = Definition::library.find(name);
 		if(good != Definition::library.end()) {
-			std::visit(
-				[&e,&o,&i,&c](auto&& arg){arg.expand(e,o,i,c);}
-				,
-				good->second
-			);
+			good->second->expand(e,o,i,c);
 		} else {
 			e << Message(error,name + " not found.");
 		}
-	}
-
-	void Definition::add(Definition& macro) {
-		del(macro.name());
-		std::string name(macro.name());
-		library.emplace(name,Handler(std::move(macro)));
 	}
 
 	bool Definition::has(const std::string name) {
@@ -247,7 +237,9 @@ namespace mt {
 	void Definition::del(const std::string name) {
 		auto good = library.find(name);
 		if (good != library.end()) {
+			auto* ptr = good->second.release();
 			library.erase(good);
+			delete ptr;
 		}
 	}
 
@@ -259,8 +251,7 @@ namespace mt {
 		}
 	}
 
-
-	std::ostream &Definition::visit(std::ostream &o) {
+	std::ostream &Definition::visit(std::ostream &o) const {
 		return Driver::visit(expansion, o);
 	}
 
@@ -280,108 +271,108 @@ namespace mt {
 		if (times.show()) { times.set("Load Internal Macros"); }
 
 //•------------  Utility macros
-		library.emplace("iEq",Handler(std::move(iEq())));
-		library.emplace("iIndex",Handler(std::move(iIndex())));
-		library.emplace("iForIndex",Handler(std::move(iForIndex())));
-		library.emplace("iExpr",Handler(std::move(iExpr())));
-		library.emplace("iConsole",Handler(std::move(iConsole())));
-		library.emplace("iDate",Handler(std::move(iDate())));
-		library.emplace("iEval",Handler(std::move(iEval())));
-		library.emplace("iFile",Handler(std::move(iFile())));
-		library.emplace("iField",Handler(std::move(iField())));
-		library.emplace("iForSubs",Handler(std::move(iForSubs())));
-		library.emplace("iForQuery",Handler(std::move(iForQuery())));
-		library.emplace("iMath",Handler(std::move(iMath())));
-		library.emplace("iNull",Handler(std::move(iNull())));
-		library.emplace("iTiming",Handler(std::move(iTiming())));
+		library.emplace("iEq",new iEq());
+		library.emplace("iIndex",new iIndex());
+		library.emplace("iForIndex",new iForIndex());
+		library.emplace("iExpr",new iExpr());
+		library.emplace("iConsole",new iConsole());
+		library.emplace("iDate",new iDate());
+		library.emplace("iEval",new iEval());
+		library.emplace("iFile",new iFile());
+		library.emplace("iField",new iField());
+		library.emplace("iForSubs",new iForSubs());
+		library.emplace("iForQuery",new iForQuery());
+		library.emplace("iMath",new iMath());
+		library.emplace("iNull",new iNull());
+		library.emplace("iTiming",new iTiming());
 
 //•------------  Storage macros
-		library.emplace("iExists",Handler(std::move(iExists())));
-		library.emplace("iSet",Handler(std::move(iSet())));
-		library.emplace("iGet",Handler(std::move(iGet())));
-		library.emplace("iAppend",Handler(std::move(iAppend())));
-		library.emplace("iKV",Handler(std::move(iKV())));
-		library.emplace("iList",Handler(std::move(iList())));
-		library.emplace("iReset",Handler(std::move(iReset())));
-		library.emplace("iSetCache",Handler(std::move(iSetCache())));
-		library.emplace("iSig",Handler(std::move(iSig())));
-		library.emplace("iUse",Handler(std::move(iUse())));
+		library.emplace("iExists",new iExists());
+		library.emplace("iSet",new iSet());
+		library.emplace("iGet",new iGet());
+		library.emplace("iAppend",new iAppend());
+		library.emplace("iKV",new iKV());
+		library.emplace("iList",new iList());
+		library.emplace("iReset",new iReset());
+		library.emplace("iSetCache",new iSetCache());
+		library.emplace("iSig",new iSig());
+		library.emplace("iUse",new iUse());
 
 //•------------  String macros
-		library.emplace("iLeft",Handler(std::move(iLeft())));
-		library.emplace("iLength",Handler(std::move(iLength())));
-		library.emplace("iMid",Handler(std::move(iMid())));
-		library.emplace("iPosition",Handler(std::move(iPosition())));
-		library.emplace("iRegex",Handler(std::move(iRegex())));
-		library.emplace("iRembr",Handler(std::move(iRembr())));
-		library.emplace("iRembrp",Handler(std::move(iRembrp())));
-		library.emplace("iReplace",Handler(std::move(iReplace())));
-		library.emplace("iRight",Handler(std::move(iRight())));
-		library.emplace("iTrim",Handler(std::move(iTrim())));
+		library.emplace("iLeft",new iLeft());
+		library.emplace("iLength",new iLength());
+		library.emplace("iMid",new iMid());
+		library.emplace("iPosition",new iPosition());
+		library.emplace("iRegex",new iRegex());
+		library.emplace("iRembr",new iRembr());
+		library.emplace("iRembrp",new iRembrp());
+		library.emplace("iReplace",new iReplace());
+		library.emplace("iRight",new iRight());
+		library.emplace("iTrim",new iTrim());
 
 //•------------ Encoder macros
-		library.emplace("iBase64",Handler(std::move(iBase64())));
-		library.emplace("iDecode",Handler(std::move(iDecode())));
-		library.emplace("iEncode",Handler(std::move(iEncode())));
-		library.emplace("iHex",Handler(std::move(iHex())));
-		library.emplace("iUnHex",Handler(std::move(iUnHex())));
-		library.emplace("iUpper",Handler(std::move(iUpper())));
-		library.emplace("iLower",Handler(std::move(iLower())));
-		library.emplace("iUrlEncode",Handler(std::move(iUrlEncode())));
-		library.emplace("iDigest",Handler(std::move(iDigest())));
+		library.emplace("iBase64",new iBase64());
+		library.emplace("iDecode",new iDecode());
+		library.emplace("iEncode",new iEncode());
+		library.emplace("iHex",new iHex());
+		library.emplace("iUnHex",new iUnHex());
+		library.emplace("iUpper",new iUpper());
+		library.emplace("iLower",new iLower());
+		library.emplace("iUrlEncode",new iUrlEncode());
+		library.emplace("iDigest",new iDigest());
 
 //•------------ NodeTree
-		library.emplace("iNumChildren",Handler(std::move(iNumChildren())));
-		library.emplace("iNumGen",Handler(std::move(iNumGen())));
-		library.emplace("iNumGens",Handler(std::move(iNumGens())));
-		library.emplace("iNumPage",Handler(std::move(iNumPage())));
-		library.emplace("iNumPages",Handler(std::move(iNumPages())));
-		library.emplace("iNumSib",Handler(std::move(iNumSib())));
-		library.emplace("iEqFamily",Handler(std::move(iEqFamily())));
-		library.emplace("iEqNode",Handler(std::move(iEqNode())));
-		library.emplace("iEqSibs",Handler(std::move(iEqSibs())));
-		library.emplace("iExistNode",Handler(std::move(iExistNode())));
-		library.emplace("iForAncestry",Handler(std::move(iForAncestry())));
-		library.emplace("iForNodes",Handler(std::move(iForNodes())));
-		library.emplace("iForPeers",Handler(std::move(iForPeers())));
-		library.emplace("iForSibs",Handler(std::move(iForSibs())));
-		library.emplace("iSize",Handler(std::move(iSize())));
+		library.emplace("iNumChildren",new iNumChildren());
+		library.emplace("iNumGen",new iNumGen());
+		library.emplace("iNumGens",new iNumGens());
+		library.emplace("iNumPage",new iNumPage());
+		library.emplace("iNumPages",new iNumPages());
+		library.emplace("iNumSib",new iNumSib());
+		library.emplace("iEqFamily",new iEqFamily());
+		library.emplace("iEqNode",new iEqNode());
+		library.emplace("iEqSibs",new iEqSibs());
+		library.emplace("iExistNode",new iExistNode());
+		library.emplace("iForAncestry",new iForAncestry());
+		library.emplace("iForNodes",new iForNodes());
+		library.emplace("iForPeers",new iForPeers());
+		library.emplace("iForSibs",new iForSibs());
+		library.emplace("iSize",new iSize());
 
 //•------------ BuildAccessors
-		library.emplace("iTech",Handler(std::move(iTech())));
-		library.emplace("iPreview",Handler(std::move(iPreview())));
-		library.emplace("iLang",Handler(std::move(iLang())));
-		library.emplace("iLangID",Handler(std::move(iLangID())));
-		library.emplace("iFullBuild",Handler(std::move(iFullBuild())));
+		library.emplace("iTech",new iTech());
+		library.emplace("iPreview",new iPreview());
+		library.emplace("iLang",new iLang());
+		library.emplace("iLangID",new iLangID());
+		library.emplace("iFullBuild",new iFullBuild());
 
 //•------------ NodeAccessors
-		library.emplace("iTitle",Handler(std::move(iTitle())));
-		library.emplace("iTeam",Handler(std::move(iTeam())));
-		library.emplace("iSuffix",Handler(std::move(iSuffix())));
-		library.emplace("iShortTitle",Handler(std::move(iShortTitle())));
-		library.emplace("iSegmentName",Handler(std::move(iSegmentName())));
-		library.emplace("iLayout",Handler(std::move(iLayout())));
-		library.emplace("iLayoutName",Handler(std::move(iLayoutName())));
-		library.emplace("iLink",Handler(std::move(iLink())));
-		library.emplace("iLinkRef",Handler(std::move(iLinkRef())));
-		library.emplace("iID",Handler(std::move(iID())));
-		library.emplace("iBirth",Handler(std::move(iBirth())));
-		library.emplace("iContent",Handler(std::move(iContent())));
-		library.emplace("iDeath",Handler(std::move(iDeath())));
-		library.emplace("iExistContent",Handler(std::move(iExistContent())));
-		library.emplace("iTW",Handler(std::move(iTW())));
+		library.emplace("iTitle",new iTitle());
+		library.emplace("iTeam",new iTeam());
+		library.emplace("iSuffix",new iSuffix());
+		library.emplace("iShortTitle",new iShortTitle());
+		library.emplace("iSegmentName",new iSegmentName());
+		library.emplace("iLayout",new iLayout());
+		library.emplace("iLayoutName",new iLayoutName());
+		library.emplace("iLink",new iLink());
+		library.emplace("iLinkRef",new iLinkRef());
+		library.emplace("iID",new iID());
+		library.emplace("iBirth",new iBirth());
+		library.emplace("iContent",new iContent());
+		library.emplace("iDeath",new iDeath());
+		library.emplace("iExistContent",new iExistContent());
+		library.emplace("iTW",new iTW());
 
 //•------------ Media
-		library.emplace("iMedia",Handler(std::move(iMedia())));
-		library.emplace("iEmbed",Handler(std::move(iEmbed())));
-		library.emplace("iExistMedia",Handler(std::move(iExistMedia())));
+		library.emplace("iMedia",new iMedia());
+		library.emplace("iEmbed",new iEmbed());
+		library.emplace("iExistMedia",new iExistMedia());
 
 //•------------ Taxonomy
-		library.emplace("iTax",Handler(std::move(iTax())));
-		library.emplace("iForTax",Handler(std::move(iForTax())));
-		library.emplace("iForTaxNodes",Handler(std::move(iForTaxNodes())));
-		library.emplace("iExistSimilar",Handler(std::move(iExistSimilar())));
-		library.emplace("iForSimilar",Handler(std::move(iForSimilar())));
+		library.emplace("iTax",new iTax());
+		library.emplace("iForTax",new iForTax());
+		library.emplace("iForTaxNodes",new iForTaxNodes());
+		library.emplace("iExistSimilar",new iExistSimilar());
+		library.emplace("iForSimilar",new iForSimilar());
 
 
 //•------------ FINISHED

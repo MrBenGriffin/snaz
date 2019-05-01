@@ -1,29 +1,26 @@
 // Debugging / Testing
-F showDefines	1
+F showDefines	0
 F showPassed	1
-
-//!	pending/b0rked
-//iExistNode 01	@iExistNode(http://www.redsnapper.net,T,F)			F
 
 
 //Not debugging, uncomment the following X
 //X
 
 F showDefines	0
-F showPassed	1
+F showPassed	0
 
 // name		code										expected result
 // example	[abcdef]									[abcdef]
 
-!	build
-!	media/_main
-X
-!	node/_main
+
+!	grammar/_main
 !	unimplemented
 !	encoder/_main
-!	grammar/_main
 !	nodetree/_main
+!	node/_main
 !	storage/_main
 !	string/_main
 !	utility/_main
+!	build
+!	media/_main
 

@@ -8,7 +8,7 @@
 namespace mt {
 	using namespace Support;
 
-	void iLeft::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
+	void iLeft::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		string string_to_cut = my.parm(1);
 		string chars_to_keep = my.parm(2);
@@ -24,7 +24,7 @@ namespace mt {
 		my.logic(result,3); // @iLeft(text,term,?,T,F)
 	}
 
-	void iLength::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
+	void iLength::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		size_t value=0;
 		if(Support::length(my.parm(1),value)) {
@@ -34,7 +34,7 @@ namespace mt {
 		}
 	}
 
-	void iMid::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
+	void iMid::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		string string_to_cut = my.parm(1);
 		auto start = integer(my.parm(2));
@@ -56,7 +56,7 @@ namespace mt {
 		}
 	}
 
-	void iPosition::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
+	void iPosition::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		size_t value=0;
 		if(Support::position(my.parm(2),my.parm(1),value)) {
@@ -66,7 +66,7 @@ namespace mt {
 		}
 	}
 
-	void iRegex::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
+	void iRegex::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		if(Regex::available(e)) {
 			InternalInstance my(this,e,o,instance,context);
 			if(my.count > 2) { //otherwise there's nothing to do.
@@ -153,18 +153,18 @@ namespace mt {
 		}
 	}
 
-	void iRembr::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
+	void iRembr::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		string result = my.parm(1);
 		tabstrip(result); 	//should we strip out crlf also?!
 		fandr(result,"\n"); //Should this be here?!
 		my.set(result);
 	}
-	void iRembrp::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
+	void iRembrp::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		my.set(my.parm(1));
 	}
-	void iReplace::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
+	void iReplace::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		if(my.count > 2) { //otherwise there's nothing to do. It's legal, but nothing to do this time.
 			string search = my.parm(1);
@@ -177,7 +177,7 @@ namespace mt {
 		}
 	}
 
-	void iRight::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
+	void iRight::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		string string_to_cut = my.parm(1);
 		string chars_to_keep = my.parm(2);
@@ -193,7 +193,7 @@ namespace mt {
 		my.logic(result,3); // @iRight(text,term,?,T,F)
 	}
 
-	void iTrim::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
+	void iTrim::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		string stringToTrim = my.parm(1);
 		Support::trim(stringToTrim);

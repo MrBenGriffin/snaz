@@ -228,9 +228,10 @@ namespace testing {
 						}
 						getline(infile,expansion);
 						wss(expansion,false);
-						mt::Definition macro(*msgs,name,expansion,min,max,bools[0]=='1',bools[1]=='1',bools[2]=='1');
+						mt::Definition* macro = new mt::Definition(*msgs,name,expansion,min,max,bools[0]=='1',bools[1]=='1',bools[2]=='1');
 						if(!msgs->marked()) {
-							mt::Definition::add(macro);
+							mt::Definition::del(name);
+							mt::Definition::library.emplace(name,macro);
 						} else {
 							o << lred << "Definition Parse Error while defining " << name << endl;
 							msgs->str(o);

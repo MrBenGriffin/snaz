@@ -137,7 +137,8 @@ namespace mt {
 				if (stack) {
 					for(auto& s : context) {
 						if(s.first!= nullptr) {
-							std::visit([&result](auto const &a){ result.push_back(Text(a.name() + ";")); },*(s.first));
+							std::string macroName = (s.first)->name() + ";";
+							result.push_back(Text(macroName));
 						}
 					}
 					auto& x = context.back().second;
@@ -159,10 +160,12 @@ namespace mt {
 					switch (type) {
 						case It::plain:
 							if(value == 0) {
-								std::visit([&result](auto const &a){ result.push_back(Text(a.name())); },*contextMacro);
+								std::string macroName = contextMacro->name(); // + ";";
+								result.push_back(Text(macroName));
+//								std::visit([&result](auto const &a){ result.push_back(Text(a.name())); },*contextMacro);
 							} else {
-								bool legal=false; size_t index=value;
-								std::visit([&legal,&index](auto const &a){ legal = a.inRange(index); },*contextMacro);
+								bool legal = contextMacro->inRange(value);
+//								std::visit([&legal,&index](auto const &a){ legal = a.inRange(index); },*contextMacro);
 								if(legal && (value <= parmCount)) {
 									if (sValue == 0) {
 										Driver::expand((*parms)[value - 1],errs, result, context);
@@ -196,7 +199,8 @@ namespace mt {
 								}
 							} else {
 								if (posi == 0) {
-									std::visit([&result](auto const &a){ result.push_back(Text(a.name())); },*contextMacro);
+									std::string macroName = contextMacro->name(); // + ";";
+									result.push_back(Text(macroName));
 								} else {
 									//Do nothing, I guess.
 								}

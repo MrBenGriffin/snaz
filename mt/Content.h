@@ -6,20 +6,17 @@
 #define MACROTEXT_CONTENT_H
 
 #include <string>
-#include "mt.h"
+#include "mt/mt.h"
+#include "mt/Handler.h"
 
 namespace mt {
     using namespace Support;
-    struct Content {
+    class Content : public Handler {
         std::string _name;
-        std::string name() const { return _name; }
-        bool inRange(size_t i) const { return  i == 0;}
-        Content(std::string name) : _name(name) {}
-        std::ostream &visit(std::ostream &o ) { return o; }
-        void expand(Messages&,mtext&,Instance&,mstack&) {}
-
-    };
-
+        std::string name() const;
+        bool inRange(size_t i) const;
+        Content(std::string name);
+      };
 }
 
 #endif //MACROTEXT_CONTENT_H

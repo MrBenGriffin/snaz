@@ -123,7 +123,7 @@ namespace mt {
 	class iExistSimilar;
 	class iForSimilar;
 
-	using Handler=std::variant<
+	using oHandler=std::variant<
 	        Content,Definition,
 			//•------------ Utility
 			iEq,iExpr,iIndex,iForIndex,iConsole,iDate,iEval,iFile,iField,iForSubs,iForQuery,iMath,iNull,iTiming,
