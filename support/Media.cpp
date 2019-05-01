@@ -19,6 +19,7 @@
 #include "mt/Driver.h"
 #include "mt/Instance.h"
 #include "mt/Definition.h"
+#include "content/Segment.h"
 
 namespace Support {
 
@@ -42,10 +43,18 @@ namespace Support {
 		if ((ref.size() > 3) && (ref[0]=='C') && (ref[1]=='M') && (ref[2]=='_')) {
 			size_t endpos=ref.find('_',3);
 			auto nodeId = natural(ref.substr(3,endpos-3));
-//			string segId  =ref.substr(endpos+1,string::npos);
+			auto segId  = natural(ref.substr(endpos+1,string::npos));
 			const node::Content* n = node::Content::root()->content(errs, nodeId, true); //Content by id. suppressed.
 			if (n != nullptr) {
 				imgbase = n->ref();
+				auto nodeLayout = n->layout();
+				if(nodeLayout != nullptr) {
+					imgbase.push_back('_');
+					string segName = nodeLayout->segRef(errs,segId);
+					fileEncode(segName);
+					imgbase.append(segName);
+				}
+
 			} else {
 				media->readfield(errs,"imgbase",imgbase);
 			}
@@ -421,6 +430,17 @@ namespace Support {
 	}
 
 //-----------------------------------------------------------------------------
+	void Media::setFilenames(Messages& errs) {
+		/**
+		 * Must happen after layouts are assigned to content.
+		 * This means that maybe we need to generate media (or some media) after each technology.
+		 */
+		filenames.clear();
+		for(auto& i : mediamap) {
+			filenames.insert({i.first,setfile(errs,i.first,i.second)});
+		}
+	}
+//-----------------------------------------------------------------------------
 	void Media::loadMedia(Messages& errs,Db::Connection* c,Query*& query,unordered_map<string,size_t>& store,bool embedded) {
 		store.clear();
 		if (c->table_exists(errs,"bldmedian") && c->table_exists(errs,"bldmediav") && c->table_exists(errs,"bldmediacat")) {
@@ -432,7 +452,7 @@ namespace Support {
 				while(query->nextrow()) {
 					query->readfield(errs, "ref",f_ref);	//discarding bool.
 					store.insert({f_ref,idx});
-					filenames.insert({f_ref,setfile(errs,f_ref,idx)});
+//					filenames.insert({f_ref,setfile(errs,f_ref,idx)});
 					idx++;
 				}
 			} else {

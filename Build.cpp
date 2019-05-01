@@ -87,7 +87,7 @@ void Build::run(Messages &errs,Connection* _sql) {
 	}
 }
 void Build::tests(Messages &errs,Connection& sql) {
-	mt::Definition::load(errs,sql,_current); // Set the internals.
+	mt::Definition::load(errs,sql,_current); // This is quite slow.
 	user.load(errs,sql);
 	loadLanguages(errs,sql);
 	loadTechs(errs,sql);
@@ -96,21 +96,22 @@ void Build::tests(Messages &errs,Connection& sql) {
 	node::Suffix().loadTree(errs,sql,0, _current);
 	content::Template::load(errs,sql,_current);
 	content::Segment::load(errs,sql,_current);
-	node::Taxon().loadTree(errs,sql,language, _current);
-	node::Content().loadTree(errs,sql,language,_current);
+	node::Taxon().loadTree(errs,sql,language, _current); 		//This is slow.
+	node::Content().loadTree(errs,sql,language,_current);		//This is fast.
 	content::Editorial::e().set(errs,sql,language,_current);
-
 	_media->load(errs,&sql,language);
 
 	content::Layout::load(errs,sql,tech(),_current);
 	node::Content().setLayouts(errs);
+	_media->setFilenames(errs);
+
 	errs.str(cout);
 	testing::group tests(errs,"tests/");        	 // Set the working directory from the Run|Edit Configurations... menu.
 	tests.title(std::cout, "Main");
 	tests.load(std::cout,  "main", false);   // Boolean turns on/off success reports.
+	_media->close();
 
 	content::Editorial::e().unload(errs,sql);
-	_media->close();
 
 	mt::Definition::shutdown(errs,sql,_current); //bld->savePersistance(); prunePersistance(); clearPersistance();
 }
@@ -207,6 +208,7 @@ void Build::techs(Messages& errs,Connection& sql,size_t langID) {
 		if (times.show()) { times.set("Tech " + techName()); }
 		content::Layout::load(errs,sql,techID,_current);
 		node::Content().setLayouts(errs);
+		_media->setFilenames(errs);
 		//.....
 		try {
 			files(errs, sql, langID, techID);

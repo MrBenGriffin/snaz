@@ -74,4 +74,4 @@ add_executable(macrotext ${BISON_parser_OUTPUTS} ${FLEX_advanced_OUTPUTS} ${FLEX
         main.cpp test.cpp
         Build.cpp Build.h
         BuildUser.cpp BuildUser.h
-        node/Metrics.cpp node/Metrics.h support/Media.cpp support/Media.h)
+        node/Metrics.cpp node/Metrics.h support/Media.cpp support/Media.h mt/Handler.cpp mt/Handler.h)

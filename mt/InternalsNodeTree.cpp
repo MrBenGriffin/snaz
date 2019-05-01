@@ -83,10 +83,11 @@ namespace mt {
 		}
 	}
 	void iExistNode::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
-		e.suppress();
+		e.suppress(true);
 		InternalInstance my(this,e,o,instance,context);
 		const Node* main = my.node(1);
 		my.logic(main != nullptr, 2);
+		e.suppress(false);
 	}
 	void iForAncestry::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
 		InternalInstance my(this,e,o,instance,context);

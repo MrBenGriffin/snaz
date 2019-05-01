@@ -10,6 +10,8 @@
 #include <string>
 #include <unordered_map>
 
+#include "support/Convert.h"
+#include "support/Encode.h"
 #include "support/Timing.h"
 #include "support/Message.h"
 #include "support/db/Connection.h"
@@ -35,62 +37,43 @@ namespace node {
 		if (sql.dbselected() && sql.table_exists(errs, "bldtax") && sql.table_exists(errs, "bldtaxlang")) {
 			sql.lock(errs, "bldtax n read,bldtaxlang l read,bldtax t read,bldtax g read");
 			std::ostringstream str;
-			str << "select n.id,ifnull(n.p,0) as parent,n.tw,n.nc-n.tw as size,n.t as tier,n.team,n.classcode,"
-				   "n.scope,l.title,l.navtitle as shorttitle,l.synonyms,l.keywords,l.descr,"
-				   "trim(concat(if(t.classcode is null,'',concat(t.classcode,':')),if(g.classcode is null,'',concat(g.classcode,':')),l.title)) as ref,"
-				   "l.container='on' as container,l.moddate,l.editor,l.used='on' as active "
-				   " from bldtaxlang l,bldtax n left join bldtax t on (t.tw < n.tw and t.nc > n.tw and t.t=2) "
-				   "left join bldtax g on (g.tw < n.tw and g.nc > n.tw and g.t=3) "
-				   "where l.node=n.id and l.used='on' and l.language=" << language << " order by n.tw";
+			//The following query is super inefficient.
+			str << "select n.id,ifnull(n.p,0) as parent,n.tw,n.nc-n.tw as size,n.t as tier,n.team,n.classcode,n.scope,"
+		  			"concat(n.id,':',l.title) as ref,"
+		  			"l.title,l.navtitle as shorttitle,l.synonyms,l.keywords,l.descr,l.container='on' as container,"
+	   				"l.moddate,l.editor,l.used='on' as active from bldtaxlang l,bldtax n "
+					"where l.node=n.id and l.language=" << language << " and l.used='on' order by n.tw";
 			Db::Query *q = nullptr;
 			if (sql.query(errs, q, str.str()) && q->execute(errs)) {
-				/**
-				 *
-				 * +----+--------+----+------+------+------------+---------------------------+---------+-------+----------+-------------+------+-------+
-				 * | id | parent | tw | size | tier | ref        | title                     | comment | macro | terminal | script      | exec | batch |
-				 * +----+--------+----+------+------+------------+---------------------------+---------+-------+----------+-------------+------+-------+
-				 * |  1 |      0 |  1 |   30 |    1 | ---        | Root                      | xxx     |     0 |        0 | none        |    0 |     0 |
-				 * |  2 |      1 |  2 |    3 |    2 | html       | XHTML 1.1                 | xxx     |     0 |        1 | NULL        |    0 |     0 |
-				 * |  3 |      2 |  3 |    1 |    3 | mxhtml     | mxs-xhtml                 | xxx     |     0 |        0 | mxs2html    |    0 |     0 |
-				 * | 23 |      2 |  4 |    1 |    3 | html.dirty | dirty html                | xxx     |     0 |        0 | cleanHTML   |    0 |     0 |
-				 * |  4 |      1 |  5 |    1 |    2 | mxs        | Medusa Parsed             | xxx     |     0 |        1 | NULL        |    0 |     0 |
-				 * |  5 |      1 |  6 |    2 |    2 | css        | Stylesheet                | xxx     |     0 |        1 | NULL        |    0 |     0 |
-				 * | 29 |      5 |  7 |    1 |    3 | scssi      | scss->css                 | xxx     |     0 |        0 |             |    0 |     0 |
-				 * |  6 |      1 |  8 |    1 |    2 | smxs       | Secure Medusa Executable  | xxx     |     0 |        1 | NULL        |    0 |     0 |
-				 * |  7 |      1 |  9 |    1 |    2 | sxhtml     | Secure XHTML              | xxx     |     0 |        1 | NULL        |    0 |     0 |
-				 * |  8 |      1 | 10 |    1 |    2 | php        | PHP                       | xxx     |     0 |        1 | NULL        |    0 |     0 |
-				 * |  9 |      1 | 11 |    1 |    2 | phtml      | Parsed HTML               | xxx     |     0 |        1 | NULL        |    0 |     0 |
-				 * | 10 |      1 | 12 |    1 |    2 | dmxs       | FAQ mxs page              | xxx     |     0 |        1 | NULL        |    0 |     0 |
-				 * | 11 |      1 | 13 |    3 |    2 | jpg        | JPEG Image                | xxx     |     0 |        1 | NULL        |    0 |     0 |
-				 * | 12 |     11 | 14 |    1 |    3 | svgj       | SVG for JPG conv          | xxx     |     0 |        0 | svg2jpg     |    0 |     0 |
-				 * | 14 |     11 | 15 |    1 |    3 | svg        | Batch SVG conversion      | xxx     |     0 |        0 | batchsvgjpg |    0 |     1 |
-				 * | 13 |      1 | 16 |    1 |    2 | svgc       | SVG file                  | xxx     |     0 |        1 | NULL        |    0 |     0 |
-				 * | 15 |      1 | 17 |    1 |    2 | txt        | Raw Text                  | xxx     |     0 |        1 | NULL        |    0 |     0 |
-				 * | 16 |      1 | 18 |    1 |    2 | htc        | htc for windows png       | xxx     |     0 |        1 | NULL        |    0 |     0 |
-				 * | 17 |      1 | 19 |    2 |    2 | js         | Javascript                | xxx     |     0 |        1 | NULL        |    0 |     0 |
-				 * | 30 |     17 | 20 |    1 |    3 | jsx        | expanded js for squishing | xxx     |     0 |        0 | jssquish    |    0 |     1 |
-				 * | 18 |      1 | 21 |    1 |    2 | qxml       | Context                   | xxx     |     0 |        1 | NULL        |    0 |     0 |
-				 * | 19 |      1 | 22 |    1 |    2 | xml        | Generic xml file          | xxx     |     0 |        1 | NULL        |    0 |     0 |
-				 * | 20 |      1 | 23 |    2 |    2 | ixml       | included context          | xxx     |     0 |        1 | NULL        |    0 |     0 |
-				 * | 25 |     20 | 24 |    1 |    3 | ixml.dirty | Dirty IXML                | xxx     |     0 |        0 | cleanHTML   |    0 |     0 |
-				 * | 21 |      1 | 25 |    1 |    2 | XXX        | removed file              | xxx     |     0 |        1 | NULL        |    0 |     0 |
-				 * | 22 |      1 | 26 |    1 |    2 | obyx       | obyx files                | xxx     |     0 |        1 | NULL        |    0 |     0 |
-				 * | 26 |      1 | 27 |    2 |    2 | acl        | [ACL] htaccess            | xxx     |     0 |        1 | NULL        |    0 |     0 |
-				 * | 27 |     26 | 28 |    1 |    3 | aclm       | [ACL] local htaccess      | xxx     |     0 |        0 | mvhtaccess  |    0 |     1 |
-				 * | 28 |      1 | 29 |    1 |    2 | scss       | scss source               | xxx     |     0 |        1 | NULL        |    0 |     0 |
-				 * | 28 |      1 | 30 |    1 |    2 | arb        | scss source               | @arb()  |     1 |        1 | NULL        |    1 |     0 |
-				 * +----+--------+----+------+------+------------+---------------------------+---------+-------+----------+-------------+------+-------+
-				 **/
 				size_t parent = 0;
 				size_t active_tw = 1;  //we cannot use the native tw as we will be skipping used..
+				string taxonomy;
 				while (q->nextrow()) {
+
+	/**
+	* +------+--------+------+------+------+------+-----------+---------+------------------------------------------------+------------------+----------+----------+--------------------------------------+-----------+------------+----------+--------+
+	* | id   | parent | tw   | size | tier | team | classcode | scope   | title                                          | shorttitle       | synonyms | keywords | descr                                | container | moddate    | editor   | active |
+	* +------+--------+------+------+------+------+-----------+---------+------------------------------------------------+------------------+----------+----------+--------------------------------------+-----------+------------+----------+--------+
+	* | 4214 |      0 |    1 | 4636 |    1 |    1 |           |         | Subject Editing                                | Subject Editing  |          |          | All taxonomies hang from here.       |      NULL | 1047491436 | bgriffin |      1 |
+	* | 4215 |   4214 |    2 | 4214 |    2 |    1 |           | LOCSH   | Library of Congress                            | LOCSH            |          |          | Library of Congress Subject Headings |      NULL | 1022001799 | bgriffin |      1 |
+	* |    1 |   4215 |    3 |   31 |    3 |    1 | A         |         | general works                                  | general works    | NULL     | NULL     | NULL                                 |      NULL | 1021983832 | bgriffin |      1 |
+	* |    2 |      1 |    4 |    5 |    4 |    1 | AC        | 1-999   | collections, series, collected works           | collections      | NULL     | NULL     | NULL                                 |      NULL | 1021983832 | bgriffin |      1 |
+	* |    3 |      2 |    5 |    1 |    5 |    1 | AC        | 1-195   | collections of monographs, essays, etc.        | collections of m | NULL     | NULL     | NULL                                 |      NULL | 1021983832 | bgriffin |      1 |
+	* |    4 |      2 |    6 |    1 |    5 |    1 | AC        | 801-895 | inaugural and program dissertations            | inaugural and pr | NULL     | NULL     | NULL                                 |      NULL | 1021983832 | bgriffin |      1 |
+	* |    5 |      2 |    7 |    1 |    5 |    1 | AC        | 901-995 | pamphlet collections                           | pamphlet collect | NULL     | NULL     | NULL                                 |      NULL | 1021983832 | bgriffin |      1 |
+	* |    6 |      2 |    8 |    1 |    5 |    1 | AC        | 999     | scrapbooks                                     | scrapbooks       | NULL     | NULL     | NULL                                 |      NULL | 1021983832 | bgriffin |      1 |
+	* |    7 |      1 |    9 |    1 |    4 |    1 | AE        | 1-90    | encyclopedias                                  | encyclopedias    | NULL     | NULL     | general                              |      NULL | 1021983832 | bgriffin |      1 |
+	* |    8 |      1 |   10 |    8 |    4 |    1 | AG        | 1-600   | dictionaries and other general reference works | dictionaries and | NULL     | NULL     | NULL                                 |      NULL | 1021983832 | bgriffin |      1 |
+	* |    9 |      8 |   11 |    1 |    5 |    1 | AG        | 1-90    | dictionaries, minor encyclopedias              | dictionaries     | NULL     | NULL     | NULL                                 |      NULL | 1021983832 | bgriffin |      1 |
+	* |   10 |      8 |   12 |    1 |    5 |    1 | AG        | 103-190 | general works, pocketbooks, receipts, etc.     | general works    | NULL     | NULL     | NULL                                 |      NULL | 1021983832 | bgriffin |      1 |
+	* +------+--------+------+------+------+------+-----------+---------+------------------------------------------------+------------------+----------+----------+--------------------------------------+-----------+------------+----------+--------+
+	**/
+
 					Taxon taxon;
 					//id, parent,tier,ref,tw
 					taxon.common(errs, q, parent, active_tw);
-
 					// Specific Suffix Values.
 					::time_t _modified;
-
 					q->readfield(errs, "team", taxon._team);
 					q->readfield(errs, "classcode", taxon._classcode);
 					q->readfield(errs, "scope", taxon._scope);
@@ -103,7 +86,21 @@ namespace node {
 					q->readfield(errs, "container", taxon._container);
 					q->readTime(errs, "modified", _modified);
 					taxon._modified.set(_modified);
-
+					if(taxon._tier == 2 ) {
+						taxonomy = taxon._scope;
+						if(!taxonomy.empty()) {
+							taxonomy.push_back(':');
+						}
+					}
+					taxon._ref=taxonomy;
+					trim(taxon._title);
+					trim(taxon._shortTitle);
+					if(!taxon._title.empty()) {
+						taxon._ref.append(taxon._title);
+					} else {
+						taxon._ref.append(taxon._shortTitle);
+					}
+					fileEncode(taxon._ref);
 					auto ins = nodes.emplace(taxon._id, std::move(taxon));
 					if (ins.second) {
 						Taxon *node = &(ins.first->second);

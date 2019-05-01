@@ -4,6 +4,7 @@
 
 #include "Segment.h"
 #include "support/Timing.h"
+#include "support/Encode.h"
 
 using namespace node;
 using namespace Support;
@@ -72,6 +73,8 @@ namespace content {
 					q->readfield(errs,"type",basis.type);
 					q->readfield(errs,"kind",basis.kind);
 					q->readfield(errs,"sign",basis.sig);
+//					basis.ref = basis.name;
+//					fileEncode(basis.ref);
 					q->readfield(errs,"br",newline); //newline macrotext.
 					std::istringstream newlineCode(newline);
 					basis.nl = mt::Driver(errs,newlineCode,mt::Definition::test_adv(newline)).parse(errs,true);

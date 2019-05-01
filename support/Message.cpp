@@ -87,8 +87,10 @@ namespace Support {
 	}
 
 	void Messages::operator<< (const Message& m ) {
-		_marked = _marked || (m.ch != info && m.ch != debug);
-		list.push_back(std::move(m));
+		if(!_suppressed) {
+			_marked = _marked || (m.ch != info && m.ch != debug);
+			list.push_back(std::move(m));
+		}
 	}
 
 	void Messages::operator+= (Messages& msgs) {

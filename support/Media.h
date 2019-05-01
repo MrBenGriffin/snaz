@@ -67,9 +67,12 @@ namespace Support {
 		void	doTransforms(Messages&,string&,const Path&,const Path&,const string&,std::time_t,MediaInfo&,bool);
 		map<size_t,size_t> loadBinaries(Messages&,Db::Query*&);
 
+
 	public:
 		Media();
 		void	load(Messages&,Db::Connection*,size_t);
+		void	setFilenames(Messages&);
+
 		void	save(Messages&,Db::Connection*,size_t,bool);
 		void	move(Messages&,bool);
 		void	close();

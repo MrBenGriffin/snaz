@@ -31,6 +31,7 @@ namespace content {
 		//only publicly available via const..
 		size_t id;
 		size_t type;	//this is the numeric version of the sig.
+//		string ref;
 		string name;
 		string kind;
 		string  sig;	//eg SEGTM (shoud work this out as an enum...)

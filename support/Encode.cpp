@@ -152,6 +152,20 @@ namespace Support {
 			i = std::toupper(i);
 	}
 
+	//---------------------------------------------------------------------------
+	void fileEncode(string& str) { //remove all tabs.
+		tolower(str);
+		vector<pair<string,string>> subs = {{"-",""},{" ","-"},{"_",""}};
+		fandr(str,subs);
+		string fileCh=":-abcdefghijklmnopqrstuvwxyz0123456789";
+		auto chars = fileCh.c_str();
+		string::size_type wsi = str.find_first_not_of(chars);
+		while ( wsi != string::npos ) {
+			string::size_type wso = str.find_first_of(chars,wsi);
+			str.erase(wsi,wso-wsi);
+			wsi = str.find_first_not_of(chars);
+		}
+	}
 	//• --------------------------------------------------------------------------
 	bool normalise(string& container) {
 		bool retval = true;

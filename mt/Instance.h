@@ -11,7 +11,8 @@
 #include <vector>
 #include <deque>
 
-#include "declarations.h"
+#include "mt/declarations.h"
+#include "mt/Handler.h"
 #include "node/Node.h"
 #include "node/Metrics.h"
 
@@ -29,7 +30,7 @@ namespace mt {
 		std::vector<std::pair<std::string,std::string>> stuff;
 		forStuff(const std::string&,const std::string&,size_t,size_t);
 		forStuff(const std::string&,const std::string&);
-		void set(const std::string,size_t);
+		void set(const std::string&,size_t);
 	};
 
 	class Instance {
@@ -46,7 +47,7 @@ namespace mt {
 		Instance(const Instance &); //copy constructor.
 		Instance(const plist *, iteration, node::Metrics*, bool= false);
 		Instance(const plist *, forStuff&, node::Metrics*);
-		Instance(node::Metrics*);
+		explicit Instance(node::Metrics*);
 	};
 
 	//Handler is the variant of all token handlers..

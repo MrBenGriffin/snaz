@@ -40,7 +40,7 @@ namespace mt {
 		};
 	}
 
-	void forStuff::set(const std::string value,size_t count) {
+	void forStuff::set(const std::string& value,size_t count) {
 		stuff[0].second = value;
 		stuff[1].second = Support::tostring(count);
 	}

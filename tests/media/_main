@@ -3,14 +3,25 @@
 iEm 01	[@iExistMedia(X)]									[0]
 iEm 02	@iExistMedia(X)										0
 iEm 03	[@iExistMedia(i,T,F)]								[F]
-iEm 04	@iExistMedia(cute_kitten,T,F)						T
-iEm 05	@iExistMedia(cute_kitten,T)							T
-iEm 06	@iExistMedia(cute_kitten)							1
+iEm 04	@iExistMedia(NAVEDITx,T,F)							T
+iEm 05	@iExistMedia(NAVEDITx,T)							T
+iEm 06	@iExistMedia(NAVEDITx)								1
 
 # iMedia
-iMed 01	@iMedia(cute_kitten)								/media/images/cute-kitten-eyes.jpg
-iMed 02	@iMedia(cute_kitten,mime)							image/jpeg
-iMed 03	@iMedia(cute_kitten,editor)							builderdemo
-iMed 04	@iMedia(cute_kitten,width)							400
-iMed 05	@iMedia(cute_kitten,height)							392
-iMed 06	@iMedia(cute_kitten:bar)							/media/images/cute-kitten-eyes_bar_3C162B9D544E81C7D30C4EDC736D2775.png
+iMed 00	@iMedia(NAVEDITx)								/media/images/navedit.gif
+iMed 01	@iMedia(CM_2_34)								/media/images/admin-searchicon.gif
+iMed 02	@iMedia(NAVEDITx,mime)							image/gif
+iMed 03	@iMedia(NAVEDITx,editor)						bgriffin
+iMed 04	@iMedia(NAVEDITx,width)							15
+iMed 05	@iMedia(NAVEDITx,height)						16
+iMed 06	@iMedia(NAVEDITx:trans)							/media/images/navedit_trans_247C0CC880DF995DA6044B09E1842469.png
+iMed 07	@iMedia(NAVEDITx:x400(100,200))					/media/images/navedit_x400_14183A48ADBE17CFB941C20630F860BD.gif
+iMed 08	@iMedia(NAVEDITx:x400(100,250))					/media/images/navedit_x400_65CF771F8F17D244C3BC369BBA8F39E4.gif
+
+
+//+----+-------+------+-----------------------------+-------------+---------------------+
+//| id | name  | ext  | transform                   | comment     | ts                  |
+//+----+-------+------+-----------------------------+-------------+---------------------+
+//|  4 | x400  |      | -adaptive-resize ⍟1x⍟2      |             | 2014-07-17 17:12:42 |
+//|  5 | trans | png  | -alpha on -background none  | svgpng_test | 2015-03-17 12:04:14 |
+//+----+-------+------+-----------------------------+-------------+---------------------+

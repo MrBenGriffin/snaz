@@ -12,6 +12,8 @@ namespace Support {
 	using namespace std;
 	bool normalise(string&); //utf-8 normalise
 
+	void fileEncode(string&);
+
 	string xmlenc(string);
 	string xmlenc(const char*);
 
