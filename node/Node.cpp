@@ -81,8 +81,12 @@ namespace node {
 
 	vector<const Node *> Node::siblings() const {
 		vector<const Node *> result;
-		for (auto kid: _parent->children) {
-			result.push_back(kid);
+		if(_parent != nullptr) {
+			for (auto kid: _parent->children) {
+				result.push_back(kid);
+			}
+		} else {
+			result.push_back(this);
 		}
 		return result;
 	}

@@ -16,6 +16,8 @@ F showPassed	1
 // example	[abcdef]									[abcdef]
 
 !	build
+!	media/_main
+X
 !	node/_main
 !	unimplemented
 !	encoder/_main

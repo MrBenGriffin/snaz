@@ -8,7 +8,7 @@
 
 namespace mt {
 	Instance::Instance(const plist *p, iteration i, node::Metrics* m, bool gen) :
-	parms(p), it(i), generated(gen),myFor(nullptr),metrics(m) {
+		parms(p), it(i), generated(gen),myFor(nullptr),metrics(m) {
 	}
 
 	Instance::Instance(const Instance &o) :

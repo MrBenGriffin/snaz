@@ -35,14 +35,6 @@ namespace Support {
 		string wd();
 
 		Env(); // Disallow instantiation outside of the class.
-//		bool IsFinal; //is this draft or final.
-//		bool FullBuild;
-//		bool AllTechs;
-//		bool AllLangs;
-
-//		deque<tech>   technologies; //queue holding all information about the build
-//		deque<size_t> nodelist;     //things to build.
-//		bool ParseOnly;
 
 		bool ParseAdvanced;
 		bool ParseLegacy;

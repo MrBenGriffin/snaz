@@ -46,7 +46,6 @@ namespace mt {
 		void setPos(pos& p) {position = std::move(p);}
 
 		static std::string expand(Messages&,std::string&,mstack&);
-//		static std::string expand(std::string&,Messages&,mstack&); //syntactic sugar.
 		static std::ostream& visit(const Token&, std::ostream&);
 		static std::ostream& visit(const mtext&, std::ostream&);
 

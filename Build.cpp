@@ -20,6 +20,7 @@
 #include "support/db/Connection.h"
 #include "support/db/Query.h"
 #include "support/Infix.h"
+#include "support/Media.h"
 
 #include "node/Node.h"
 #include "node/Suffix.h"
@@ -44,7 +45,12 @@ Build& Build::b() {
 	return singleton;
 }
 
-Build::Build() : _current(final),lock(true),full(false),allTechs(false),allLangs(false),sql(nullptr),user() {
+Build::Build() : _current(final),lock(true),full(false),allTechs(false),allLangs(false),sql(nullptr),_media(nullptr),user() {
+	_media = new Media();
+}
+
+Build::~Build() {
+	delete _media;
 }
 
 Build& Build::b(Messages &errs) {
@@ -85,13 +91,17 @@ void Build::tests(Messages &errs,Connection& sql) {
 	user.load(errs,sql);
 	loadLanguages(errs,sql);
 	loadTechs(errs,sql);
+	auto language = lang();
 
 	node::Suffix().loadTree(errs,sql,0, _current);
 	content::Template::load(errs,sql,_current);
 	content::Segment::load(errs,sql,_current);
-	node::Taxon().loadTree(errs,sql,lang(), _current);
-	node::Content().loadTree(errs,sql,lang(),_current);
-	content::Editorial::e().set(errs,sql,lang(),_current);
+	node::Taxon().loadTree(errs,sql,language, _current);
+	node::Content().loadTree(errs,sql,language,_current);
+	content::Editorial::e().set(errs,sql,language,_current);
+
+	_media->load(errs,&sql,language);
+
 	content::Layout::load(errs,sql,tech(),_current);
 	node::Content().setLayouts(errs);
 	errs.str(cout);
@@ -100,6 +110,7 @@ void Build::tests(Messages &errs,Connection& sql) {
 	tests.load(std::cout,  "main", false);   // Boolean turns on/off success reports.
 
 	content::Editorial::e().unload(errs,sql);
+	_media->close();
 
 	mt::Definition::shutdown(errs,sql,_current); //bld->savePersistance(); prunePersistance(); clearPersistance();
 }
@@ -159,6 +170,7 @@ void Build::global(Messages& errs,Connection& sql) {
 
 //SuffixVal::unload();
 //  macro::terminate();			//unload
+	_media->close();
 	content::Editorial::e().unload(errs,sql);
 	mt::Definition::shutdown(errs,sql,_current); //bld->savePersistance(); prunePersistance(); clearPersistance();
 //TODO: do FINAL_PROCESSING_SCRIPT stuff here if it's a full, final build..
@@ -176,7 +188,12 @@ void Build::langs(Messages& errs,Connection& sql) {
 		//TODO:: Content APPROVERS.
 		node::Content().loadTree(errs,sql,lang.first,_current);
 		content::Editorial::e().set(errs,sql,lang.first,_current);
+		////bld->all_techs && bld->fullBuild
+
+
+		_media->load(errs,&sql,lang.first);
 		techs(errs,sql,lang.first);
+		_media->save(errs,&sql,lang.first, allTechs && full); //Condition for full reset.
 		//.....
 		if (times.show()) { times.use(errs,"Language " + lang.second.name); }
 		languages.pop_front();
@@ -239,10 +256,10 @@ void Build::loadLanguages(Messages &errs, Connection& dbc) {
 	* +----+---------+----+-----------+----------+
  */
 		if(dbc.query(errs,query,str.str()) && query->execute(errs)) {
-			Language item; size_t id;
+			Language item;
 			while(query->nextrow()) {
-				size_t id; string name;
-				query->readfield(errs,"id",id);
+				string name;
+				query->readfield(errs,"id",item.id);
 				query->readfield(errs,"name",item.name);
 				query->readfield(errs,"ln",item.ln);
 				query->readfield(errs,"territory",item.territory);
@@ -253,7 +270,7 @@ void Build::loadLanguages(Messages &errs, Connection& dbc) {
 					item.ref.append(item.territory);
 					Support::tolower(item.ref);
 				}
-				qLangs.insert({id,item});
+				qLangs.insert({item.id,item});
 			}
 //			delete query; query= nullptr;
 		}

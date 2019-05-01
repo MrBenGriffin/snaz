@@ -1,6 +1,7 @@
 #include "Internal.h"
 #include "InternalInstance.h"
 #include "support/Message.h"
+#include "support/Media.h"
 #include "Build.h"
 #include "BuildUser.h"
 

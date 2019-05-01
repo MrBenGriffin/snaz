@@ -85,6 +85,7 @@ namespace node {
 /////////////////////////////////////////////////////////////
 //string Locator::loc_path;
 
+
 // set the default response to be 'illegal character', which throws an exception.
 	Locator::Locator() : pageNum(0), find(nullptr), from(nullptr), root(nullptr) {}
 
@@ -95,6 +96,10 @@ namespace node {
 
 	Locator::Locator(const Metrics* m) : Locator() {
 		metrics = m;
+	}
+
+	Locator::Locator(const Locator* o,const Metrics* m) :
+		pageNum(o->pageNum),find(o->find),from(o->from),root(o->root),metrics(m) {
 	}
 
 	void Locator::setdirty() {
@@ -511,8 +516,18 @@ namespace node {
 						} else {
 							if (showPaths) message << "[" << sibnum.first << "]";
 							if (sibnum.first == 1 && from == root) {
-								find = root; //This IS a bit weird.
-								errs << Message(deprecated,"2019: /0+1 is deprecated for Root. Use I0/A1 or /");
+								string test(start,out);
+								if(test == "/0+1") {
+									find = root; //This IS a bit weird.
+									errs << Message(deprecated,"2019: /0+1 is deprecated for Root. Use I0/A1 or /");
+								} else {
+									if (sibnum.first < 1 || sibnum.first > from->getChildCount()) {
+										find = nullptr;
+										return true; //RANGE error
+									}
+									find = (from->child(errs, sibnum.first - 1));
+									if (find == nullptr) { return true; }
+								}
 							} else {
 								if (sibnum.first < 1 || sibnum.first > from->getChildCount()) {
 									find = nullptr;
@@ -520,8 +535,8 @@ namespace node {
 								}
 								find = (from->child(errs, sibnum.first - 1));
 								if (find == nullptr) { return true; }
-								if (showPaths) { message << "={" << find->id() << "}"; }
 							}
+							if (showPaths) { message << "={" << find->id() << "}"; }
 						}
 					} else {
 						throw BadLocatorPath(errs, start, in, out);
@@ -725,7 +740,7 @@ namespace node {
 						}
 					} else {
 						if ((size_t) offset.first <= stackSize) {
-							result = metrics->nodeStack[stackSize - offset.first]; //offset=0, size=1; 1-(0+1) = 0;
+							result = metrics->nodeStack[stackSize - (offset.first+1)]; //offset=0, size=1; 1-(0+1) = 0;
 						}
 					}
 					if (result != nullptr) {

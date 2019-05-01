@@ -40,6 +40,7 @@ namespace node {
 		Locator(const Metrics *,const Node*,const Node*);
 
 	public:
+		Locator(const Locator *,const Metrics*);
 		static bool showPaths;
 
 		stack<bool> _dirty;
@@ -48,6 +49,7 @@ namespace node {
 
 		void setFrom(const Node*);
 		void setRoot(const Node*);
+		void setMetrics(const Metrics *m) {this->metrics = m;}
 
 		void setdirty();
 

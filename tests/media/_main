@@ -1,0 +1,16 @@
+//	void iExistMedia::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
+# iExistMedia
+iEm 01	[@iExistMedia(X)]									[0]
+iEm 02	@iExistMedia(X)										0
+iEm 03	[@iExistMedia(i,T,F)]								[F]
+iEm 04	@iExistMedia(cute_kitten,T,F)						T
+iEm 05	@iExistMedia(cute_kitten,T)							T
+iEm 06	@iExistMedia(cute_kitten)							1
+
+# iMedia
+iMed 01	@iMedia(cute_kitten)								/media/images/cute-kitten-eyes.jpg
+iMed 02	@iMedia(cute_kitten,mime)							image/jpeg
+iMed 03	@iMedia(cute_kitten,editor)							builderdemo
+iMed 04	@iMedia(cute_kitten,width)							400
+iMed 05	@iMedia(cute_kitten,height)							392
+iMed 06	@iMedia(cute_kitten:bar)							/media/images/cute-kitten-eyes_bar_3C162B9D544E81C7D30C4EDC736D2775.png

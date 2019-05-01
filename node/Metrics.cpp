@@ -15,7 +15,6 @@
 namespace node {
 
 	using namespace Support;
-
 	Metrics::Metrics() : current(nullptr),currentTemplate(nullptr),page(0) {
 		locator =  new Locator(this);
 		locator->setRoot(Content::root());
@@ -23,6 +22,16 @@ namespace node {
 	Metrics::~Metrics() {
 		delete locator;
 	}
+
+	Metrics::Metrics(const Metrics* o) : locator(nullptr) {
+		current = o->current;
+		locator = new Locator(o->locator,this);
+		currentTemplate = o->currentTemplate;
+		segmentStack = o->segmentStack;
+		nodeStack = o->nodeStack;
+		page = o->page;
+	}
+
 
 	const Node* Metrics::byPath(Messages &errs,const std::string &path) const {
 		const Node *result = nullptr;

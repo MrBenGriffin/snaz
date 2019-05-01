@@ -10,12 +10,14 @@
 #include <set>
 #include <unordered_map>
 #include <map>
-#include "support/Env.h"
-#include "support/Message.h"
 
+#include "support/Message.h"
 #include "BuildUser.h"
 
 namespace Support {
+
+	class Media;
+
 	namespace Db {
 		class Connection;
 	}
@@ -28,7 +30,7 @@ namespace Support {
 //* +----+---------+----+-----------+----------+
 
 struct Language {
-//	size_t id;
+	size_t id;
 	std::string name;
 	std::string ln;
 	std::string territory;
@@ -50,8 +52,10 @@ private:
 	Support::Db::Connection* sql;
 	std::deque< std::pair<size_t,Language> > languages;
 	std::deque< std::pair<size_t,std::string> > technologies;
+	Support::Media* _media;
 
 	Build();
+	~Build();
 	void loadLanguages(Support::Messages&,Support::Db::Connection&);
 	void loadTechs(Support::Messages&,Support::Db::Connection&);
 	bool setLock(Support::Messages&,Support::Db::Connection&);
@@ -63,7 +67,6 @@ private:
 	void langs(Support::Messages&,Support::Db::Connection&);
 	void techs(Support::Messages&,Support::Db::Connection&,size_t);
 	void files(Support::Messages&,Support::Db::Connection&,size_t,size_t);
-
 
 	static void releaseLock(int);
 
@@ -81,11 +84,11 @@ public:
 	std::string techName() const { return technologies.empty() ? "None" : technologies.front().second; }
 	size_t lang() const { return languages.empty() ? 0 : languages.front().first; }
 	const Language& language() const { return languages.front().second; }
-//	std::string langName() const { return languages.empty() ? "None" : languages.front().second.name; }
 	void setSuffix(std::string suffix) { currentSuffix = suffix; }
 	void setPage(size_t page) { currentPage = page; }
 	void setCurrent(Support::buildKind current) { _current = current; }
 	void setNodes(Support::buildType,std::deque<size_t>&);
+	Support::Media* media() const { return _media; }
 
 	void breakLock() { lock = false; }
 

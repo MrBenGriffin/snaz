@@ -10,8 +10,15 @@
 #include <set>
 #include <unordered_map>
 #include <map>
-#include "support/Env.h"
+
+#include "support/Definitions.h"
 #include "support/Message.h"
+
+namespace Support {
+	namespace Db {
+		class Connection;
+	}
+}
 
 struct UserMay {
 	bool edit;

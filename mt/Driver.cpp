@@ -171,14 +171,20 @@ namespace mt {
 
 	//Template, Macro, and Parameters all come in here.
 	void Driver::expand(const mtext& object,Messages& e,std::ostream& o,mstack& c) {
-		mtext result;
-		expand(object,e,result,c);
-		for(auto& i : result) {
-			if (std::holds_alternative<Text>(i)) { o << std::get<Text>(i).get(); } else {
-				if (std::holds_alternative<Wss>(i)) { o << std::get<Wss>(i).get(); } else {
-					std::visit([&o](auto&& arg){ arg.visit(o);},i);
+		try {
+			mtext result;
+			expand(object, e, result, c);
+			for (auto &i : result) {
+				if (std::holds_alternative<Text>(i)) { o << std::get<Text>(i).get(); }
+				else {
+					if (std::holds_alternative<Wss>(i)) { o << std::get<Wss>(i).get(); }
+					else {
+						std::visit([&o](auto &&arg) { arg.visit(o); }, i);
+					}
 				}
 			}
+		} catch (exception ex) {
+			e << Message(fatal,ex.what());
 		}
 	}
 
@@ -197,11 +203,8 @@ namespace mt {
 	}
 
 	void Driver::expand(const mtext& object,Messages& e,mtext& x,mstack& c) {
-//		size_t xs = object.size(); size_t y=0;
-//		size_t ss = c.size(); if (ss > 1000) return;
 		for(auto& j : object) {
 			std::visit([&e,&x,&c](auto&& arg){ arg.expand(e,x,c);},j);
-//			y++; if ((y > xs) || y >100000) return;
 		}
 	}
 

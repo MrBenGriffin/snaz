@@ -70,7 +70,7 @@ namespace Support {
 		}
 		switch (space) {
 			case Built:		break;
-			case Media:		dirbit.append("/media"); break;
+			case Blobs:		dirbit.append("/media"); break;
 			case Temporary:	{
 			} break;
 			case Scripts: {

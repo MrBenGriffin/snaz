@@ -24,10 +24,14 @@
 #include <fcntl.h>         // open
 #endif
 
-#include "File.h"
-#include "Message.h"
-#include "Regex.h"
-#include "Date.h"
+#include "support/File.h"
+#include "support/Message.h"
+#include "support/Regex.h"
+#include "support/Date.h"
+#include "support/Env.h"
+#include "support/Fandr.h"
+#include "support/Convert.h"
+#include "support/Encode.h"
 
 namespace Support {
 	using namespace std;
@@ -152,12 +156,9 @@ namespace Support {
 		path.clear();
 	}
 
-	Path &Path::operator=(const Path &newpath) {
-		clear();
-		for (auto it : newpath.path) {
-			path.push_back(it);
-		}
-		directory_separator = newpath.directory_separator;
+	Path &Path::operator=(const Path &o) {
+		path = o.path;
+		directory_separator = o.directory_separator;
 		return *this;
 	}
 
@@ -677,10 +678,63 @@ namespace Support {
 		return i >= 10000 ? false : true;
 	}
 
+
+	string File::exec(Messages& errs,const string& cmd) {
+		string result;
+		if (exists()) {
+			ostringstream execute;
+			execute << output(true) << " " << cmd << " 2>&1";
+			const int max_buffer = 256;
+			char buffer[max_buffer];
+			FILE* pipe = popen(execute.str().c_str(),"r");
+			while (!feof(pipe)) {
+				char* size = fgets(buffer, max_buffer, pipe);
+				if(size) {
+					result.append(buffer);
+				}
+			}
+			pclose(pipe);
+		} else {
+			string name = output(false);
+			errs << Message(error,name + " does not exist.");
+		}
+		vector<string> lines;
+		tolist(lines,result,"\n");
+		for(auto &line : lines) {
+			channel kind = debug;
+			trim(line);
+			if(line.size() > 4) {
+				string uline=line;
+				toupper(uline);
+				if((uline.find("FATAL") != string::npos)) kind = fatal;
+				if(kind==debug && (uline.find("SYNTAX") != string::npos)) kind = 	syntax;
+				if(kind==debug && (uline.find("PARSE") != string::npos))  kind = 	syntax;
+				if(kind==debug && (uline.find("ERROR") != string::npos)) kind =  	error;
+				if(kind==debug && (uline.find("WARN") != string::npos))  kind =  	warn;
+				if(kind==debug && (uline.find("UNEXPECTED") != string::npos)) kind= warn;
+				if(kind==debug && (uline.find("DEPRECATED") != string::npos)) kind= deprecated;
+			}
+			errs << Message(kind,line);
+		}
+		return result;
+	}
+
+
 	//-------------------------------------------------------------------------
 	// Basic Constructor
 	//-------------------------------------------------------------------------
 	File::File() : Path(),extension_separator('.') {
+	}
+
+	//Assignment operator.
+	File &File::operator=(const File &o) {
+		if (this != &o) {
+			Path::operator=(o);
+			base = o.base;
+			extension_separator = o.extension_separator;
+			extension = o.extension;
+		}
+		return *this;
 	}
 
 	//-------------------------------------------------------------------------
@@ -755,13 +809,13 @@ namespace Support {
 	//-------------------------------------------------------------------------
 	// Copies the contents from the specified File
 	//-------------------------------------------------------------------------
-	File &File::operator=(const File newfile) {
-		Path::operator=(newfile);
-		base = newfile.base;
-		extension_separator = newfile.extension_separator;
-		extension = newfile.extension;
-		return *this;
-	}
+//	File &File::operator=(const File newfile) {
+//		Path::operator=(newfile);
+//		base = newfile.base;
+//		extension_separator = newfile.extension_separator;
+//		extension = newfile.extension;
+//		return *this;
+//	}
 
 
 	//-------------------------------------------------------------------------
@@ -945,8 +999,8 @@ namespace Support {
 	//-------------------------------------------------------------------------
 	// Gets the creation date of the current File
 	//-------------------------------------------------------------------------
-	time_t File::getCreateDate() const {
-		time_t result = 0;
+	::time_t File::getCreateDate() const {
+		::time_t result = 0;
 		struct stat buf{};
 		result = stat(output().c_str(), &buf);
 		if (result == 0 && buf.st_mode & S_IFREG) {
@@ -958,8 +1012,8 @@ namespace Support {
 	//-------------------------------------------------------------------------
 	// Gets the last modification date of the current File
 	//-------------------------------------------------------------------------
-	time_t File::getModDate() const {
-		time_t result = 0;
+	::time_t File::getModDate() const {
+		::time_t result = 0;
 		struct stat buf{};
 		if ((stat(output().c_str(), &buf) == 0) && (buf.st_mode & S_IFREG)) {
 			result = buf.st_mtime;

@@ -180,11 +180,6 @@ namespace mt {
 					instance.myFor->set(value.str(),i->first); value.str("");
 					Driver::doFor(expansion,done_parm,*(instance.myFor));
 					Driver::expand(done_parm,e,o,context);
-//					Driver::expand(done_parm,e,value,context);
-//					cout << "for:" ; Driver::visit(done_parm,cout); cout << endl << value.str() << endl;
-//					Text(value.str()).add(o);
-//					cout << "prm:" ; Driver::visit(parm,cout); cout << endl;
-//					cout << "exp:" ; Driver::visit(expansion,cout); cout << endl;
 				}
 			} else {
 				for (i->first = 1; i->first <= i->second; i->first++) {

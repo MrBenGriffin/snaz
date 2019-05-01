@@ -11,9 +11,7 @@
 SegmentName			@iSegmentName(19,2)						!1!error: iSegmentName is not yet implemented.
 
 # Unimplemented Media
-iMedia					@iMedia(1,2)							!1!error: iMedia is not yet implemented.
 iEmbed					@iEmbed(1,2)							!1!error: iEmbed is not yet implemented.
-iExistMedia				@iExistMedia(1,2)						!1!error: iExistMedia is not yet implemented.
 
 # Unimplemented Taxonomy
 iTax					@iTax(1,2)								!1!error: iTax is not yet implemented.

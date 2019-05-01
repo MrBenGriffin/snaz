@@ -30,6 +30,8 @@ namespace node {
 	public:
 		Metrics();
 		~Metrics();
+		Metrics(const Metrics*);
+
 		const Content *current;
 		Locator* locator;
 		const content::Template *currentTemplate;
@@ -37,6 +39,7 @@ namespace node {
 		std::deque<const Content *> nodeStack;    //current node - used to pass to built-in functions
 		size_t page;
 
+		void setLocator(Locator* l) { locator = l; }
 		const Node* byPath(Messages &,const std::string &) const;    				//returns null if not found
 		pair<const Node*,size_t> nodePage(Messages &,const std::string &) const;    //returns null if not found
 

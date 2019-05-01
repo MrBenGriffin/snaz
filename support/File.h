@@ -95,7 +95,6 @@ namespace Support {
 		File(string,string);
 		~File()= default;
 		void clear() override;
-		File &operator=(File);
 		void setExtensionSeparator(char);
 		const char getExtensionSeparator() const;
 		void setBase(string);
@@ -117,6 +116,10 @@ namespace Support {
 		bool copyTo(Path, Messages&, bool = false) const;
 		string readFile() const;
 		bool empty() const { return path.empty(); }
+		string exec(Messages&,const string&);
+		File &operator=(const File &o);
+
+
 
 
 	};
