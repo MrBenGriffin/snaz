@@ -27,6 +27,8 @@ namespace mt {
 
         std::ostream& visit(std::ostream&) const override;
         void expand(Messages&,mtext&,mstack&) const override;
+		void inject(Messages&,mtext&,mstack&) const override;
+		void subs(mtext&,const std::vector<std::string>&,const std::string&) const override;
 
         bool empty() const override;
         static void push(const mtext*);

@@ -23,21 +23,21 @@ namespace mt {
 	};
 
 	std::string Text::get() const { return text; }
+
 	void Text::append(std::string right) { text.append(std::move(right)); };
 
 	void Text::expand(Messages& m,mtext &mt,mstack &context) const {
-		string result(text);
 		if (!mt.empty()) {
 			Token *back = mt.back().get();
 			Text *textPtr = dynamic_cast<Text *>(back);
 			if (textPtr != nullptr) {
-				textPtr->text.append(result);
+				textPtr->text.append(text);
 			} else {
 				Wss *wss = dynamic_cast<Wss *>(back);
 				if (wss != nullptr) {
 					std::string ws = wss->get();
 					mt.pop_back();
-					ws.append(result);
+					ws.append(text);
 					mt.emplace_back(new Text(ws));
 				} else {
 					mt.emplace_back(new Text(text));
@@ -75,5 +75,16 @@ namespace mt {
 		Support::fandr(basis,stuff.stuff);
 		add(new Text(basis),result);
 	}
+
+	void Text::inject(Messages&,mtext& out,mstack&) const {
+		out.emplace_back(new Text(text));
+	}
+
+//	void Token::subs(mtext& out,const std::vector<std::string>&,const std::string&) const {
+////-->		out.emplace_back(new <Token*>(this));
+//	}
+//	void Token::inject(Messages&,mtext& out,mstack&) const {
+////-->		out.emplace_back(const_cast<Token*>(this));
+//	}
 
 }

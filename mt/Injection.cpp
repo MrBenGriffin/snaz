@@ -141,6 +141,11 @@ namespace mt {
 		visit(o);
 	}
 
+	void Injection::subs(mtext& out,const std::vector<std::string>&,const std::string&) const {
+		throw logic_error("shouldn't get to Injection::subs!");
+//		out.emplace_back(new Injection(basis));
+	}
+
 	void Injection::expand(Messages& errs,mtext &result,mstack &context) const {
 		if (type == It::text) {
 			Text(basis).expand(errs,result,context);

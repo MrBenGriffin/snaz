@@ -21,8 +21,6 @@ namespace mt {
 		//virtual
 		virtual void expand(Messages&,mtext&,mstack&) const;
 		virtual void doFor(mtext&,const forStuff&) const;
-		virtual void inject(Messages&,mtext&,mstack&) const;
-		virtual void subs(mtext&,const std::vector<std::string>&,const std::string&) const;
 		virtual bool empty() const;
 
 		//pure virtual
@@ -30,6 +28,8 @@ namespace mt {
 		virtual std::string get() const =0;             	 //return text final rendered.
 		virtual std::ostream& visit(std::ostream&) const =0; //return text version of token.
 		virtual void final(std::ostream&) const=0;           //return text final rendered.
+		virtual void inject(Messages&,mtext&,mstack&) const = 0;
+		virtual void subs(mtext&,const std::vector<std::string>&,const std::string&) const =0;
 
 		// My function!!
 		static void add(Token*,mtext&);

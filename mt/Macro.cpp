@@ -9,6 +9,11 @@ namespace mt {
 
 	Macro::Macro(std::string n) : _name(std::move(n)) {};
 
+	Macro::Macro(const Macro* o) {
+		_name  = o->_name;
+		parms = o->parms;
+	}
+
 	void Macro::final(std::ostream& o) const {
 		visit(o);
 	}
@@ -59,7 +64,7 @@ namespace mt {
 			auto& macro = good->second;
 			macro->expand(errs,result,instance,context);
 		} else {
-			result.emplace_back(const_cast<Macro*>(this)); //Because the method is const, 'this' is a const*
+			result.emplace_back(new Macro(this)); //Because the method is const, 'this' is a const*
 			errs << Message(error,_name + " not found.");
 		}
 	}

@@ -47,7 +47,7 @@ namespace mt {
 					if (textPtr != nullptr) {
 						textPtr->append(text);
 					} else {
-						mt.emplace_back(const_cast<Wss*>(this)); //because this method is const, this holds const.
+						mt.emplace_back(new Wss(text)); //because this method is const, this holds const.
 					}
 				}
 			} else {
@@ -73,9 +73,18 @@ namespace mt {
 				}
 			}
         } else {
-            mt.emplace_back(const_cast<Wss*>(this));
+            mt.emplace_back(new Wss(text));
         }
     }
+
+	void Wss::inject(Messages&,mtext& out,mstack&) const {
+		out.emplace_back(new Wss(text));
+	}
+
+	void Wss::subs(mtext& out,const std::vector<std::string>&,const std::string&) const {
+		out.emplace_back(new Wss(text));
+	}
+
 
 }
 

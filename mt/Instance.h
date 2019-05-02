@@ -28,13 +28,14 @@ namespace mt {
 		void copy(const plist *);
 	public:
 		plist parms;			//std::vector<mtext>
-		forStuff* myFor;
 		bool generated;     	//internal generation via e.g. iForX
 		iteration it = {0, 0};
+		forStuff* myFor;
 		node::Metrics* metrics;
 
 		size_t size();
 		Instance(const Instance &) = default;
+		~Instance();
 		Instance(plist, iteration, node::Metrics*, bool= false);
 		Instance(plist, forStuff&, node::Metrics*);
 		explicit Instance(node::Metrics*);

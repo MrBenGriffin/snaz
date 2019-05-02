@@ -35,6 +35,7 @@ namespace mt {
 
 	void doFor(mtext&,const forStuff&) const override;
 	void subs(mtext&,const std::vector<std::string>&,const std::string&) const override;
+	void inject(Messages&,mtext&,mstack&) const override;
 
 	void append(std::string);
 	bool empty() const override;

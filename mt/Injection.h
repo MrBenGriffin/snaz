@@ -39,7 +39,7 @@ namespace mt {
 		Injection();
         explicit Injection(std::string);
 		~Injection() override = default;
-//		Injection(const Injection& ) = default;
+		Injection(const Injection& ) = default;
 
 		std::string get() const override;             //return text.
 		bool empty() const override;
@@ -47,7 +47,7 @@ namespace mt {
 		std::ostream& visit(std::ostream&) const override;
 		void inject(Messages&,mtext&,mstack&) const override;
 		void expand(Messages&,mtext&,mstack&) const override;
-//		void add(mtext&) override;
+		void subs(mtext&,const std::vector<std::string>&,const std::string&) const override;
 		std::string name() const override { return "`injection`"; }
 
 

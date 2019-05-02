@@ -366,8 +366,8 @@ namespace testing {
 								}
 							}
 						}
-						cout << "--" << endl;
-						mt::Driver::visit(structure,cout);
+//						cout << "- name -" << endl;
+//						mt::Driver::visit(structure,cout);
 						structure.clear();
 					}
 				}

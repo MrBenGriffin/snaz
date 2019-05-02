@@ -319,9 +319,9 @@ namespace node {
 				errs.str(cout); errs.reset();
 				mt::mstack context;
 				context.push_back({nullptr,control});
-//				mt::Wss::push(&(t->nl)); //!!! another global.. need to add to the metrics above.
+				mt::Wss::push(&(t->nl)); //!!! another global.. need to add to the metrics above.
 				mt::Driver::expand(errs,t->code,content,context); //no context here... makes it hard to multi-thread.
-//				mt::Wss::pop();
+				mt::Wss::pop();
 				try {
 					std::ofstream outFile(file.c_str());
 					outFile << content.str();

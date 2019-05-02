@@ -31,6 +31,11 @@ namespace mt {
 		}
 	}
 
+	Instance::~Instance() {
+		metrics = nullptr;
+		delete myFor;
+		parms.clear();
+	}
 
 	forStuff::forStuff(const std::string& vt,const std::string& ct,size_t v,size_t c) {
 		stuff = {
