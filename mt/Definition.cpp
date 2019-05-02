@@ -153,18 +153,18 @@ namespace mt {
 			modified.parms.clear();
 			if (trimParms) { trim(mt_parms); }
 			modified.generated = false;
-			context.push_back({nullptr,modified}); //This is done for injections like %(1+).
+			context.push_back({nullptr,std::move(modified)}); //This is done for injections like %(1+).
 			for (auto &parm : mt_parms) {
 				mtext expanded;
-				auto i=modified.parms.size();
+				auto i=context.back().second.parms.size();
 				for(auto& token : parm) {
 					token->expand(e,expanded,context);
 				}
-//				Driver::expand(e, parm, expanded, context);
-				if(modified.parms.size() == i) {
-					modified.parms.push_back(std::move(expanded)); //each one as a separate parm!!
+				if(context.back().second.parms.size() == i) {
+					context.back().second.parms.push_back(std::move(expanded)); //each one as a separate parm!!
 				}
 			}
+			modified = std::move(context.back().second);
 			context.pop_back();
 			modified.generated = instance.generated;
 			while (!modified.parms.empty() && modified.parms.back().empty()) {

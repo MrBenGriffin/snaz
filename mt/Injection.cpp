@@ -8,6 +8,7 @@
 #include "Definition.h"
 #include "node/Metrics.h"
 #include "content/Template.h"
+#include "mt/Token.h"
 
 namespace mt {
 
@@ -143,7 +144,6 @@ namespace mt {
 
 	void Injection::subs(mtext& out,const std::vector<std::string>&,const std::string&) const {
 		throw logic_error("shouldn't get to Injection::subs!");
-//		out.emplace_back(new Injection(basis));
 	}
 
 	void Injection::expand(Messages& errs,mtext &result,mstack &context) const {
@@ -171,11 +171,12 @@ namespace mt {
 					}
 				}
 				if (list) {
-					auto p_parms = const_cast <plist *>(&context.back().second.parms);
 					for(size_t i=value; i <= parmCount; i++) {
 						mtext tmp ;
-						Driver::inject(parms[i - 1],errs,tmp,context);
-						p_parms->emplace_back(tmp); //plist is a std::vector<mtext>;
+						for(auto& j : parms[i - 1]) {
+							j->inject(errs,tmp,context);
+						}
+						context.back().second.parms.emplace_back(std::move(tmp)); //plist is a std::vector<mtext>;
 					}
 				}
 				if(!stack && !list) {

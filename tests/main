@@ -2,15 +2,8 @@
 F showDefines	0
 F showPassed	1
 
-//!	grammar/_main
-# Testing Injection Iterations.
-U iter		0	-1	11	[⍟(i)]
-U uiter	1	-1	10	⌽iter(A,⍟(1+))
-
-020uiter		⌽uiter(X,Y,Z)							[A][X][Y][Z]
-
 //Not debugging, uncomment the following X
-X
+//X
 
 F showDefines	0
 F showPassed	0
