@@ -31,7 +31,7 @@ namespace mt {
 		void subs(mtext&,const std::vector<std::string>&,const std::string&) const override;
 		void expand(Messages&,mtext&,mstack&) const override;
 		std::string name() const override { return _name; }
-		void add(mtext&) override;
+//		void add(mtext&) override;
 
 		//used for expanding injections, etc. not sure if this should generate a copy or not..
 

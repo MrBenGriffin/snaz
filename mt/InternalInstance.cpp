@@ -113,7 +113,7 @@ namespace mt {
 			return _default;
 		} else {
 			std::ostringstream result;
-			Driver::expand((*parms)[i - 1],*errs,result, *context);
+			Driver::expand(*errs,(*parms)[i - 1],result, *context);
 			std::string val = result.str();
 			return val == "true" || val == "1";
 		}
@@ -124,7 +124,7 @@ namespace mt {
 			return false;
 		} else {
 			std::ostringstream result;
-			Driver::expand((*parms)[i - 1],*errs,result, *context);
+			Driver::expand(*errs,(*parms)[i - 1],result, *context);
 			std::string val = result.str();
 			return !val.empty() && (val[0] == 'R' || val[0] == 'r');
 		}
@@ -135,7 +135,7 @@ namespace mt {
 		if(i > count || i > parms->size()) {
 			return "";
 		} else {
-			Driver::expand((*parms)[i - 1],*errs,result, *context);
+			Driver::expand(*errs,(*parms)[i - 1],result, *context);
 			return result.str();
 		}
 	}
@@ -150,7 +150,10 @@ namespace mt {
 
 	void InternalInstance::expand(size_t i) {
 		if(count >= i && parms->size() >= i ) {
-			Driver::expand((*parms)[i - 1], *errs, *output, *context);
+			for(auto& token: (*parms)[i - 1]) {
+				token->expand(*errs,*output, *context);
+			}
+//			Driver::expand(*errs, (*parms)[i - 1], *output, *context);
 		}
 	}
 

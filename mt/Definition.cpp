@@ -157,7 +157,10 @@ namespace mt {
 			for (auto &parm : mt_parms) {
 				mtext expanded;
 				auto i=modified.parms.size();
-				Driver::expand(parm,e,expanded,context);
+				for(auto& token : parm) {
+					token->expand(e,expanded,context);
+				}
+//				Driver::expand(e, parm, expanded, context);
 				if(modified.parms.size() == i) {
 					modified.parms.push_back(std::move(expanded)); //each one as a separate parm!!
 				}
@@ -177,19 +180,28 @@ namespace mt {
 				for (i->first = 1; i->first <= i->second; i->first++) {
 					std::ostringstream value;
 					const mtext& parm = specific.parms[i->first - 1];
-					Driver::expand(parm,e,value,context);
+					Driver::expand(e,parm,value,context);
 					mtext done_parm;
 					specific.myFor->set(value.str(),i->first); value.str("");
 					Driver::doFor(expansion,done_parm,*(specific.myFor));
-					Driver::expand(done_parm,e,o,context);
+					for(auto& token : done_parm) {
+						token->expand(e,o,context);
+					}
+//					Driver::expand(e, done_parm, o, context);
 				}
 			} else {
 				for (i->first = 1; i->first <= i->second; i->first++) {
-					Driver::expand(expansion,e, o, context);
+					for(auto& token: expansion) {
+						token->expand(e,o,context);
+					}
+//					Driver::expand(e, expansion, o, context);
 				}
 			}
 		} else {
-			Driver::expand(expansion,e,o,context);
+			for(auto& token: expansion) {
+				token->expand(e,o,context);
+			}
+//			Driver::expand(e, expansion, o, context);
 		}
 		context.pop_front();
 	}

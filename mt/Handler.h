@@ -28,7 +28,7 @@ namespace mt {
 		virtual void inject(Messages&,mtext&,mstack&) const;
 		virtual void doFor(mtext&,const forStuff&) const;
 		virtual void subs(mtext&,std::vector<std::string>& ,const std::string&) const;
-		virtual void add(mtext&);
+//		virtual void add(mtext&);
 		virtual std::string name() const;
 	};
 

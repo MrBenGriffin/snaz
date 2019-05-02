@@ -2,9 +2,8 @@
 F showDefines	0
 F showPassed	1
 
-
-U a			0	1	00	[⍟1]
-Basic1			⌽a(+⌽a(A))													[+[A]]
+//!	grammar/_main
+strips0002		␉H␍R␉														␉H␍R␉
 
 //Not debugging, uncomment the following X
 X

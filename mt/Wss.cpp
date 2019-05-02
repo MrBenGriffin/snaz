@@ -77,17 +77,5 @@ namespace mt {
         }
     }
 
-    void Wss::add(mtext& mt) {
-		if (!mt.empty()) {
-			auto back = mt.back();
-			Wss *ptr = dynamic_cast<Wss *>(back.get());
-			if (ptr != nullptr) {
-				text = ptr->text + text;
-				mt.pop_back();
-			}
-		}
-		mt.emplace_back(this);
-    }
-
 }
 

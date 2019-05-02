@@ -125,7 +125,10 @@ namespace mt {
 					const mt::mtext* code = content::Editorial::e().get(e,interest,segment);
 					if(code) { //need to do IO as well..
 						mt::Wss::push(&(segment->nl));
-						Driver::expand(*code, e, o, context);
+						for(auto& token: *code) {
+							token->expand(e,o,context);
+						}
+//						Driver::expand(e, *code, o, context);
 						mt::Wss::pop();
 					}
 					if(metrics) { //eep

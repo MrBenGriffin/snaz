@@ -43,19 +43,9 @@ namespace mt {
 					mt.emplace_back(new Text(text));
 				}
 			}
+		} else {
+			mt.emplace_back(new Text(text));
 		}
-	}
-
-	void Text::add(mtext &mt) {
-		if (!mt.empty()) {
-			auto back = mt.back();
-			Text *textPtr = dynamic_cast<Text *>(back.get());
-			if (textPtr != nullptr) {
-				text = textPtr->text + text;
-				mt.pop_back();
-			}
-		}
-		mt.emplace_back(this);
 	}
 
 	void Text::subs(mtext& result,const vector<string>& list,const string& prefix) const {
@@ -77,13 +67,13 @@ namespace mt {
 		if(start < text.size()) {
 			valStr.append(text.substr(start));
 		}
-		(new Text(valStr))->add(result);
+		add(new Text(valStr),result);
 	}
 
 	void Text::doFor(mtext& result,const forStuff& stuff) const {
 		string basis(text);
 		Support::fandr(basis,stuff.stuff);
-		(new Text(basis))->add(result);
+		add(new Text(basis),result);
 	}
 
 }

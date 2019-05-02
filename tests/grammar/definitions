@@ -2,8 +2,8 @@
 // 111 expansion (111 = strip,ptrim,preparse) newline:[␤ ␊ ␍] tab:␉
 // macro 'a' is used as a simple [] wrapper in various tests
 
-F showDefines	0
-F showPassed	0
+U hw		0	0	00	Hello world
+Basic0		[⌽hw()]													[Hello world]
 
 U a			0	1	00	[⍟1]
 Basic1			⌽a(+⌽a(A))													[+[A]]

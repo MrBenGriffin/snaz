@@ -133,10 +133,6 @@ namespace mt {
 		return basis.empty();
 	}
 
-	void Injection::add(mtext&) {
-		throw std::logic_error("Should never get to Injection::add!");
-	}
-
 	void Injection::inject(Messages& errs,mtext &result,mstack &context) const {
 		expand(errs,result,context);
 	}
@@ -189,10 +185,16 @@ namespace mt {
 //								std::visit([&legal,&index](auto const &a){ legal = a.inRange(index); },*contextMacro);
 								if(legal && (value <= parmCount)) {
 									if (sValue == 0) {
-										Driver::expand(parms[value - 1],errs, result, context);
+										for(auto& token: parms[value - 1]) {
+											token->expand(errs,result,context);
+										}
+//										Driver::expand(errs, parms[value - 1], result, context);
 									} else {
 										mstack subContext(context.begin() + sValue, context.end());
-										Driver::expand(parms[value - 1],errs, result, subContext);
+										for(auto& token: parms[value - 1]) {
+											token->expand(errs,result,subContext);
+										}
+//										Driver::expand(errs, parms[value - 1], result, subContext);
 									}
 								}
 								/**
@@ -213,10 +215,16 @@ namespace mt {
 							adjust(posi);
 							if ( (0 < posi) &&  (posi <=  parmCount)) {
 								if (sValue == 0) {
-									Driver::expand(parms[posi - 1],errs, result, context);
+									for(auto& token: parms[posi - 1]) {
+										token->expand(errs,result,context);
+									}
+//									Driver::expand(errs, parms[posi - 1], result, context);
 								} else {
 									mstack subContext(context.begin() + sValue, context.end());
-									Driver::expand(parms[posi - 1],errs, result, subContext);
+									for(auto& token: parms[posi - 1]) {
+										token->expand(errs,result,subContext);
+									}
+//									Driver::expand(errs, parms[posi - 1], result, subContext);
 								}
 							} else {
 								if (posi == 0) {

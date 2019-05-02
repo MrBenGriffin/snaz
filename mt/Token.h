@@ -30,7 +30,9 @@ namespace mt {
 		virtual std::string get() const =0;             	 //return text final rendered.
 		virtual std::ostream& visit(std::ostream&) const =0; //return text version of token.
 		virtual void final(std::ostream&) const=0;           //return text final rendered.
-		virtual void add(mtext&)=0;
+
+		// My function!!
+		static void add(Token*,mtext&);
 
 
 	};

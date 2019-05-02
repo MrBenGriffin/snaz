@@ -47,7 +47,7 @@ namespace mt {
 		std::ostream& visit(std::ostream&) const override;
 		void inject(Messages&,mtext&,mstack&) const override;
 		void expand(Messages&,mtext&,mstack&) const override;
-		void add(mtext&) override;
+//		void add(mtext&) override;
 		std::string name() const override { return "`injection`"; }
 
 

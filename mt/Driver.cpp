@@ -15,11 +15,10 @@
 namespace mt {
 
 	using namespace Support;
-	mstack	Driver::empty_stack {};
 	int 	Driver::accept = 0;
 
 	Driver::Driver(Messages& errs,std::istream &stream,bool advanced) :
-		iterated(false) {
+			iterated(false) {
 		if (stream.good() && !stream.eof()) {
 			source = &stream; //only used for parse errors..
 			if(advanced) {
@@ -57,7 +56,7 @@ namespace mt {
 			parseError(errs);
 		}
 		delete parser; parser= nullptr;
-		return final;
+		return std::move(final);
 	}
 
 	mtext Driver::parse(Messages& errs,const std::string& code,bool strip) {
@@ -81,7 +80,7 @@ namespace mt {
 //			scanner.
 		}
 		delete parser; parser= nullptr;
-		return {success, {final,iterated}};
+		return {success, {std::move(final),iterated}};
 	}
 
 	/*
@@ -103,9 +102,9 @@ namespace mt {
 		if(!str.empty()) {
 			auto* text = new Text(str);
 			if ( macro_stack.empty()) {
-				text->add(final);
+				Token::add(text,final);
 			} else {
-				text->add(parm);
+				Token::add(text,parm);
 			}
 		}
 	}
@@ -114,9 +113,9 @@ namespace mt {
 		if(!str.empty()) {
 			auto* wss = new Wss(str);
 			if ( macro_stack.empty()) {
-				wss->add(final);
+				Token::add(wss,final);
 			} else {
-				wss->add(parm);
+				Token::add(wss,parm);
 			}
 		}
 	}
@@ -161,77 +160,67 @@ namespace mt {
 	 * So that's it for the parser methods.
 	 * */
 
-std::string Driver::expand(Messages& e,std::string& program,mstack& context) {
-	bool advanced = Definition::test_adv(program);
-	std::istringstream code(program);
-	Driver driver(e,code,advanced);
-	mtext structure = driver.parse(e,false); //no strip
-	ostringstream result;
-	driver.expand(e,result,context);
-	return result.str();
-}
-
-//Used by test..
-void Driver::expand(Messages& e,std::ostream& o,mstack& context) {
-	expand(final,e,o,context);
-}
+	std::string Driver::expand(Messages& e,std::string& program,mstack& context) {
+		bool advanced = Definition::test_adv(program);
+		std::istringstream code(program);
+		Driver driver(e,code,advanced);
+		mtext structure = driver.parse(e,false); //no strip
+		ostringstream result;
+		driver.expand(e,structure,result,context);
+		return result.str();
+	}
 
 //Template, Macro, and Parameters all come in here.
-void Driver::expand(const mtext &object, Messages &e, std::ostream &o, mstack &context) {
-	try {
-		mtext result;
-		for(auto& j : object) {
-			j->expand(e,result,context);
+	void Driver::expand(Messages &e, const mtext &object, std::ostream &o, mstack &context) {
+		try {
+			mtext result;
+			for(auto& j : object) {
+				j->expand(e,result,context);
+			}
+			for (auto &i : result) {
+				i->final(o);
+			}
+		} catch (exception ex) {
+			e << Message(fatal, ex.what());
 		}
-		for (auto &i : result) {
-			i->final(o);
+	}
+
+	void Driver::doFor(const mtext& prog,mtext& out,const forStuff& stuff) {
+		for (auto &t : prog) {
+			t->doFor(out, stuff);
 		}
-	} catch (exception ex) {
-		e << Message(fatal, ex.what());
 	}
-}
-
-void Driver::doFor(const mtext& prog,mtext& out,const forStuff& stuff) {
-	for (auto &t : prog) {
-		t->doFor(out, stuff);
-	}
-}
-
-void Driver::expand(const mtext& object,Messages& e,mtext& x,mstack& c) {
-	for(auto& j : object) {
-		j->expand(e,x,c);
-	}
-}
 
 // Evaluate ONLY injections.
-void Driver::inject(const mtext& object,Messages& e,mtext& x,mstack& c) {
-	for(auto& i : object) {
-		i->inject(e,x,c);
+	void Driver::inject(const mtext& object,Messages& e,mtext& x,mstack& c) {
+		for(auto& i : object) {
+			i->inject(e,x,c);
+		}
 	}
-}
 
 // Do substitutes (used by iRegex).
-void Driver::subs(const mtext& code,mtext& out,const std::vector<std::string>& subs,const std::string& prefix) {
-	for (auto &i : code) {
-		i->subs(out, subs, prefix);
+	void Driver::subs(const mtext& code,mtext& out,const std::vector<std::string>& subs,const std::string& prefix) {
+		for (auto &i : code) {
+			i->subs(out, subs, prefix);
+		}
 	}
-}
 
-std::ostream& Driver::visit(const Token& i, std::ostream& o) {
-	return i.visit(o);
-}
-
-std::ostream& Driver::visit(const mtext& object, std::ostream& o) {
-	for (auto& i : object) {
-		i->visit(o);
+	std::ostream& Driver::visit(const Token& i, std::ostream& o) {
+		return i.visit(o);
 	}
-	return o;
-}
 
-Driver::~Driver() {
-	delete (scanner); scanner = nullptr;
-	delete (parser); parser = nullptr;
-}
+	std::ostream& Driver::visit(const mtext& object, std::ostream& o) {
+		for (auto& i : object) {
+			i->visit(o);
+		}
+		return o;
+	}
+
+	Driver::~Driver() {
+		parm.clear();
+		delete (scanner); scanner = nullptr;
+		delete (parser); parser = nullptr;
+	}
 
 }
 

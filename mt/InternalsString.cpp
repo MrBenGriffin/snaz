@@ -104,13 +104,11 @@ namespace mt {
 								matchend++;
 							}
 							if (matchend <= base_len) {
-								Text part(string(scope, start, matchend - start));
-								part.add(result);
+								Token::add(new Text(string(scope, start, matchend - start)),result);
 							}
 							start = matchend;
 						} else {
-							Text part(string(scope, start, matchstart - start));
-							part.add(result);
+							Token::add(new Text(string(scope, start, matchstart - start)),result);
 							vector<string> subs;
 							for (size_t n = 0; n < 10; n++) {
 								string substr;
@@ -136,13 +134,12 @@ namespace mt {
 						count++;
 					}
 					if (count != 0 && start < base_len) {
-						Text part(string(scope, start, base_len - start));
-						part.add(result);
+						Token::add(new Text(string(scope, start, base_len - start)),result);
 					}
 					delete[] ov;
 					if(!result.empty()) {
 						std::ostringstream expr;
-						Driver::expand(result, e, expr, context);
+						Driver::expand(e, result, expr, context);
 						final = expr.str();
 					}
 				}

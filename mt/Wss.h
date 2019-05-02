@@ -15,8 +15,8 @@ namespace mt {
     using namespace Support;
     class Wss : public Token {
     private:
-
-   	static std::stack<const mtext*> newline;
+		friend class Token;
+   		static std::stack<const mtext*> newline;
         std::string text;
     public:
         explicit Wss(std::string );
@@ -27,7 +27,6 @@ namespace mt {
 
         std::ostream& visit(std::ostream&) const override;
         void expand(Messages&,mtext&,mstack&) const override;
-        void add(mtext&) override;
 
         bool empty() const override;
         static void push(const mtext*);

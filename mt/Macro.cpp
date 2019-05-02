@@ -76,9 +76,5 @@ namespace mt {
 		return result;
 	}
 
-	void Macro::add(mtext& mt) {
-		mt.emplace_back(this);
-	}
-
 }
 

@@ -287,7 +287,7 @@ namespace testing {
 						pexpected = expected;
 						wss(pexpected,false);
 						ostringstream expansion; //need to set node!
-						driver.expand(*msgs,expansion,context);
+						driver.expand(*msgs,structure,expansion,context);
 						if(!error_test) {
 							bool testPassed = false;
 							if(regex_test) {
@@ -366,6 +366,9 @@ namespace testing {
 								}
 							}
 						}
+						cout << "--" << endl;
+						mt::Driver::visit(structure,cout);
+						structure.clear();
 					}
 				}
 			}

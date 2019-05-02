@@ -107,7 +107,9 @@ namespace Support {
 				mt::mtext resultTokens;
 				mt::mstack empty;
 				transform->second.expand(errs,resultTokens,instance,empty);
-				mt::Driver::expand(resultTokens,errs,result);
+				for (auto &i : resultTokens) {
+					i->final(result);
+				}
 				transformCode = result.str();
 			} else {
 				ostringstream msg;

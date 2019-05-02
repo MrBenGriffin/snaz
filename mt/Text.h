@@ -15,7 +15,8 @@ namespace mt {
 	using namespace Support;
 
 	class Text : public Token {
-	friend class Internals;
+//	friend class Internals;
+	friend class Token;
 	private:
 		std::string text;
 
@@ -29,7 +30,7 @@ namespace mt {
 
 	std::ostream& visit(std::ostream&) const override;
 	void expand(Messages&,mtext&,mstack&) const override;
-	void add(mtext&) override;
+//	void add(mtext&) override;
 	std::string name() const override { return "`text`"; }
 
 	void doFor(mtext&,const forStuff&) const override;
