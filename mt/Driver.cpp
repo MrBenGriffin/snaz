@@ -89,171 +89,149 @@ namespace mt {
 	 * adding up (which happens because of state changes).  So, we append a string when we find it.
 	 * This could possibly be done a bit more tidily - and though it looks slow, it's far better to manage this
 	 * in the parse than it is in the expansion.
+	 *
+	 * These are the Parser Methods
+	 * driver.store($1); }
+	 * driver.storeWss($1); }
+	 * driver.inject($1); }
+	 * driver.store_macro(); }
+	 * driver.new_macro($1); }
+	 * driver.add_parm(); }
+	 *
 	 * */
 	void Driver::store(const std::string &str) {
 		if(!str.empty()) {
-			Text text(str);
+			auto* text = new Text(str);
 			if ( macro_stack.empty()) {
-				text.add(final);
+				text->add(final);
 			} else {
-				text.add(parm);
+				text->add(parm);
 			}
 		}
 	}
 
 	void Driver::storeWss(const std::string &str) {
 		if(!str.empty()) {
-			Wss wss(str);
+			auto* wss = new Wss(str);
 			if ( macro_stack.empty()) {
-				wss.add(final);
+				wss->add(final);
 			} else {
-				wss.add(parm);
+				wss->add(parm);
 			}
 		}
 	}
 
 	void Driver::inject(const std::string &word) {
-		Injection i(word);
-		iterated = iterated || i.iterator;
+		auto i = new Injection(word);
+		iterated = iterated || i->iterator;
 		if ( macro_stack.empty()) {
-			final.emplace_back(std::move(i));
+			final.emplace_back(i);
 		} else {
-			parm.emplace_back(std::move(i));
+			parm.emplace_back(i);
 		}
 	}
 
 	void Driver::store_macro() {
-		Macro mac = macro_stack.front();
+		//std::forward_list< std::unique_ptr<Macro> >	macro_stack;
+		auto mac = std::move(macro_stack.front());
 		macro_stack.pop_front();
 		if (macro_stack.empty()) {
-			final.emplace_back(std::move(mac));
+			final.emplace_back(mac.release());
 		} else {
-			parm = macro_stack.front().parms.back();
-			macro_stack.front().parms.pop_back();
-			parm.emplace_back(std::move(mac));
+			parm = macro_stack.front()->parms.back();
+			macro_stack.front()->parms.pop_back();
+			parm.emplace_back(mac.release());
 		}
 	}
 
 	void Driver::new_macro(const std::string &word) {
 		if (!macro_stack.empty()) {
-			macro_stack.front().parms.emplace_back(parm);
+			macro_stack.front()->parms.emplace_back(parm);
 			parm.clear();
 		}
-		macro_stack.emplace_front(std::move(Macro(word)));
+		macro_stack.emplace_front(new Macro(word));
 	}
 
 	void Driver::add_parm() {
-		macro_stack.front().parms.emplace_back(parm);
+		macro_stack.front()->parms.emplace_back(parm);
 		parm.clear();
 	}
 
-	std::string Driver::expand(Messages& e,std::string& program,mstack& context) {
-		bool advanced = Definition::test_adv(program);
-		std::istringstream code(program);
-		Driver driver(e,code,advanced);
-		mtext structure = driver.parse(e,false); //no strip
-		ostringstream result;
-		driver.expand(e,result,context);
-		return result.str();
-	}
+	/*
+	 * So that's it for the parser methods.
+	 * */
 
-	void Driver::expand(Messages& e,std::ostream& o,mstack& context) {
+std::string Driver::expand(Messages& e,std::string& program,mstack& context) {
+	bool advanced = Definition::test_adv(program);
+	std::istringstream code(program);
+	Driver driver(e,code,advanced);
+	mtext structure = driver.parse(e,false); //no strip
+	ostringstream result;
+	driver.expand(e,result,context);
+	return result.str();
+}
+
+//Used by test..
+void Driver::expand(Messages& e,std::ostream& o,mstack& context) {
+	expand(final,e,o,context);
+}
+
+//Template, Macro, and Parameters all come in here.
+void Driver::expand(const mtext &object, Messages &e, std::ostream &o, mstack &context) {
+	try {
 		mtext result;
-		expand(final,e,result,context);
-		for(auto& i : result) {
-			if (std::holds_alternative<Text>(i)) { o << std::get<Text>(i).get(); } else {
-				if (std::holds_alternative<Wss>(i)) { o << std::get<Wss>(i).get(); } else {
-					std::visit([&o](auto&& arg){ arg.visit(o);},i);
-				}
-			}
-		}
-	}
-
-	//Template, Macro, and Parameters all come in here.
-	void Driver::expand(const mtext& object,Messages& e,std::ostream& o,mstack& c) {
-		try {
-			mtext result;
-			expand(object, e, result, c);
-			for (auto &i : result) {
-				if (std::holds_alternative<Text>(i)) { o << std::get<Text>(i).get(); }
-				else {
-					if (std::holds_alternative<Wss>(i)) { o << std::get<Wss>(i).get(); }
-					else {
-						std::visit([&o](auto &&arg) { arg.visit(o); }, i);
-					}
-				}
-			}
-		} catch (exception ex) {
-			e << Message(fatal,ex.what());
-		}
-	}
-
-	void Driver::doFor(const mtext& prog,mtext& out,const forStuff& stuff) {
-		for (auto &t : prog) {
-			if (std::holds_alternative<Text>(t)) {
-				std::get<Text>(t).doFor(out, stuff);
-			} else {
-				if(std::holds_alternative<Macro>(t)) {
-					std::get<Macro>(t).doFor(out, stuff);
-				} else {
-					out.push_back(t);
-				}
-			}
-		}
-	}
-
-	void Driver::expand(const mtext& object,Messages& e,mtext& x,mstack& c) {
 		for(auto& j : object) {
-			std::visit([&e,&x,&c](auto&& arg){ arg.expand(e,x,c);},j);
+			j->expand(e,result,context);
 		}
-	}
-
-	// Evaluate ONLY injections.
-	void Driver::inject(const mtext& object,Messages& e,mtext& x,mstack& c) {
-		for(auto& i : object) {
-			if (std::holds_alternative<Injection>(i)) {
-				std::visit([&e,&x,&c](auto&& arg){ arg.expand(e,x,c);},i);
-			} else {
-				if(std::holds_alternative<Macro>(i)) {
-					std::get<Macro>(i).inject(e,x,c);
-				} else {
-					x.push_back(i);
-				}
-			}
+		for (auto &i : result) {
+			i->final(o);
 		}
+	} catch (exception ex) {
+		e << Message(fatal, ex.what());
 	}
+}
 
-	// Do substitutes (used by iRegex).
-	void Driver::subs(const mtext& prog,mtext& out,std::vector<std::string>& subs,const std::string& prefix) {
-		for (auto &t : prog) {
-			if (std::holds_alternative<Text>(t)) {
-				std::get<Text>(t).subs(out, subs, prefix);
-			} else {
-				if(std::holds_alternative<Macro>(t)) {
-					std::get<Macro>(t).subs(out,subs,prefix);
-				} else {
-					out.push_back(t);
-				}
-			}
-		}
+void Driver::doFor(const mtext& prog,mtext& out,const forStuff& stuff) {
+	for (auto &t : prog) {
+		t->doFor(out, stuff);
 	}
+}
 
-	std::ostream& Driver::visit(const Token& j, std::ostream& o) {
-		std::visit([&o](auto&& arg){ arg.visit(o);},j);
-		return o;
+void Driver::expand(const mtext& object,Messages& e,mtext& x,mstack& c) {
+	for(auto& j : object) {
+		j->expand(e,x,c);
 	}
+}
 
-	std::ostream& Driver::visit(const mtext& object, std::ostream& o) {
-		for (auto& j : object) {
-			std::visit([&o](auto&& arg){ arg.visit(o);},j); o << std::flush;
-		}
-		return o;
+// Evaluate ONLY injections.
+void Driver::inject(const mtext& object,Messages& e,mtext& x,mstack& c) {
+	for(auto& i : object) {
+		i->inject(e,x,c);
 	}
+}
 
-	Driver::~Driver() {
-		delete (scanner); scanner = nullptr;
-		delete (parser); parser = nullptr;
+// Do substitutes (used by iRegex).
+void Driver::subs(const mtext& code,mtext& out,const std::vector<std::string>& subs,const std::string& prefix) {
+	for (auto &i : code) {
+		i->subs(out, subs, prefix);
 	}
+}
+
+std::ostream& Driver::visit(const Token& i, std::ostream& o) {
+	return i.visit(o);
+}
+
+std::ostream& Driver::visit(const mtext& object, std::ostream& o) {
+	for (auto& i : object) {
+		i->visit(o);
+	}
+	return o;
+}
+
+Driver::~Driver() {
+	delete (scanner); scanner = nullptr;
+	delete (parser); parser = nullptr;
+}
 
 }
 

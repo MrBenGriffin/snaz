@@ -7,24 +7,30 @@
 #include "support/Convert.h"
 
 namespace mt {
-	Instance::Instance(const plist *p, iteration i, node::Metrics* m, bool gen) :
-		parms(p), it(i), generated(gen),myFor(nullptr),metrics(m) {
+	Instance::Instance(plist p, iteration i, node::Metrics* m, bool gen) :
+		parms(std::move(p)), it(i), generated(gen),myFor(nullptr),metrics(m) {
 	}
 
-	Instance::Instance(const Instance &o) :
-		parms(o.parms), it(o.it), generated(o.generated),myFor(o.myFor),metrics(o.metrics) {}
-
-	Instance::Instance(const plist *p, forStuff& stuff,node::Metrics* m) :
-		parms(p),generated(true),myFor(&stuff),metrics(m) {
+	Instance::Instance(plist p, forStuff& stuff,node::Metrics* m) :
+		parms(std::move(p)),generated(true),myFor(&stuff),metrics(m) {
 	}
 
 	Instance::Instance(node::Metrics* m) :
-		parms(nullptr),generated(false),myFor(nullptr),metrics(m) {
+		generated(false),myFor(nullptr),metrics(m) {
 	}
 
 	size_t Instance::size() {
-		return parms ? (parms->size() == 1 ? (parms->front().empty() ? 0 : 1) : parms->size()) : 0;
+		return parms.size() == 1 ? (parms.front().empty() ? 0 : 1) : parms.size();
 	}
+
+	void Instance::copy(const plist *p) {
+		if(p != nullptr) {
+			for (const auto i : *p) {
+				parms.push_back(i);
+			}
+		}
+	}
+
 
 	forStuff::forStuff(const std::string& vt,const std::string& ct,size_t v,size_t c) {
 		stuff = {

@@ -54,7 +54,7 @@ namespace mt {
 		static void expand(const mtext&,Messages&,std::ostream&,mstack& = empty_stack);
 		static void expand(const mtext&,Messages&,mtext&,mstack& = empty_stack);
 		static void inject(const mtext&,Messages&,mtext&,mstack&);
-		static void subs(const mtext&,mtext&,std::vector<std::string>&,const std::string&);
+		static void subs(const mtext&,mtext&,const std::vector<std::string>&,const std::string&);
 
 	private:
 		const std::istream*			source; //only used for parse errors..
@@ -64,7 +64,7 @@ namespace mt {
 		bool						iterated;
 		mtext						final;
 		mtext						parm;
-		std::forward_list<Macro>	macro_stack;
+		std::forward_list< std::unique_ptr<Macro> >	macro_stack;
 
 		Parser  *parser   = nullptr;
 		Scanner *scanner  = nullptr;

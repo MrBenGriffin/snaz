@@ -5,24 +5,31 @@
 #ifndef MACROTEXT_WSS_H
 #define MACROTEXT_WSS_H
 
-#include<stack>
+#include <stack>
 #include <string>
-#include "mt.h"
-
+#include "support/Message.h"
+#include "Token.h"
+#include "mt/using.h"
 
 namespace mt {
     using namespace Support;
-    class Wss {
+    class Wss : public Token {
     private:
-    	static std::stack<const mtext*> newline;
+
+   	static std::stack<const mtext*> newline;
         std::string text;
     public:
-        Wss(const std::string &);
-        std::string get();
-        std::ostream& visit(std::ostream&) const;
-        void expand(Messages&,mtext&,const mstack&) const;
-        void add(mtext&);
-        bool empty() const { return text.empty(); }
+        explicit Wss(std::string );
+		~Wss() override = default;
+		std::string get() const override;             //return text.
+		void final(std::ostream&) const override;     //return final text.
+		std::string name() const override { return "`wss`"; }
+
+        std::ostream& visit(std::ostream&) const override;
+        void expand(Messages&,mtext&,mstack&) const override;
+        void add(mtext&) override;
+
+        bool empty() const override;
         static void push(const mtext*);
 		static void pop();
 

@@ -96,9 +96,13 @@ namespace Support {
 			if (transform != transforms.end()) {
 				tolist(parms,parmList,",");
 				mt::plist parameters;
-				for(auto& i: parms) { parameters.push_back({mt::Text(i)});}
+				for(auto& i: parms) {
+					mt::mtext parm;
+					parm.emplace_back(new mt::Text(i));
+					parameters.emplace_back(std::move(parm));
+				}
 				node::Metrics iMetrics(metrics);
-				mt::Instance instance(&parameters,{0,parameters.size()},&iMetrics); // we don't want to generate here.
+				mt::Instance instance(parameters,{0,parameters.size()},&iMetrics); // we don't want to generate here.
 				std::ostringstream result;
 				mt::mtext resultTokens;
 				mt::mstack empty;

@@ -6,12 +6,14 @@
 #define MACROTEXT_INJECTION_H
 
 #include <string>
-#include "mt.h"
+#include "support/Message.h"
+#include "Token.h"
+#include "mt/using.h"
 
 namespace mt {
 
     using namespace Support;
-    class Injection {
+    class Injection : public Token {
 
     private:
         enum class It { plain,text,current,count,size }; //not iteration,not injection,i,j,k,n respectively
@@ -32,13 +34,21 @@ namespace mt {
         void parseParent();
 
     public:
-        Injection();
-        Injection(std::string);
-        Injection(const Injection& ) = default;
-        bool iterator;      // This is injection defines the macro as an iterator.
-        std::ostream& visit(std::ostream&) const;
-        void expand(Messages&,mtext&,mstack&) const;
-        bool empty() const { return false; }
+		bool iterator;      // This is injection defines the macro as an iterator.
+
+		Injection();
+        explicit Injection(std::string);
+		~Injection() override = default;
+//		Injection(const Injection& ) = default;
+
+		std::string get() const override;             //return text.
+		bool empty() const override;
+		void final(std::ostream&) const override;     //return final text.
+		std::ostream& visit(std::ostream&) const override;
+		void inject(Messages&,mtext&,mstack&) const override;
+		void expand(Messages&,mtext&,mstack&) const override;
+		void add(mtext&) override;
+		std::string name() const override { return "`injection`"; }
 
 
     };

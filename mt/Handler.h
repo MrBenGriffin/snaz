@@ -10,18 +10,13 @@
 #include <vector>
 
 #include "support/Message.h"
-#include "mt/declarations.h"
+#include "mt/using.h"
 
 using namespace Support;
 
 namespace mt {
 
-	using mtext=std::deque<Token>;
 	class forStuff;
-	class Instance;
-	class Handler;
-	using Carriage= std::pair<const Handler*, Instance>;
-	using mstack=std::deque< Carriage >;
 
 	class Handler {
 	public:

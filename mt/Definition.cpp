@@ -147,41 +147,40 @@ namespace mt {
 		if(!parmCheck(e,instance.size())) {
 			return;
 		}
-		Instance modified(instance);
-		plist rendered;
+		Instance modified(instance); //really not sure why we are copy-constructing this here.
 		if (!preExpand) {
-			plist mt_parms = *instance.parms;
+			plist mt_parms = std::move(modified.parms);
+			modified.parms.clear();
 			if (trimParms) { trim(mt_parms); }
-			modified.parms = &rendered;
 			modified.generated = false;
 			context.push_back({nullptr,modified}); //This is done for injections like %(1+).
 			for (auto &parm : mt_parms) {
 				mtext expanded;
-				auto i=rendered.size();
+				auto i=modified.parms.size();
 				Driver::expand(parm,e,expanded,context);
-				if(rendered.size() == i) {
-					rendered.push_back(std::move(expanded)); //each one as a separate parm!!
+				if(modified.parms.size() == i) {
+					modified.parms.push_back(std::move(expanded)); //each one as a separate parm!!
 				}
 			}
 			context.pop_back();
 			modified.generated = instance.generated;
-			while (!rendered.empty() && rendered.back().empty()) {
-				rendered.pop_back();
+			while (!modified.parms.empty() && modified.parms.back().empty()) {
+				modified.parms.pop_back();
 			}
-			modified.it = {0,rendered.size()};
+			modified.it = {0,modified.parms.size()};
 		}
 		context.push_front({this,modified});
 		if (iterated) {
-			Instance& instance = context.front().second;
-			iteration* i = &(instance.it); //so we are iterating front (because not all are generated).
-			if(instance.myFor != nullptr && instance.parms != nullptr) {
+			Instance& specific = context.front().second;
+			iteration* i = &(specific.it); //so we are iterating front (because not all are generated).
+			if(specific.myFor != nullptr) {
 				for (i->first = 1; i->first <= i->second; i->first++) {
 					std::ostringstream value;
-					const mtext& parm = (*instance.parms)[i->first - 1];
+					const mtext& parm = specific.parms[i->first - 1];
 					Driver::expand(parm,e,value,context);
 					mtext done_parm;
-					instance.myFor->set(value.str(),i->first); value.str("");
-					Driver::doFor(expansion,done_parm,*(instance.myFor));
+					specific.myFor->set(value.str(),i->first); value.str("");
+					Driver::doFor(expansion,done_parm,*(specific.myFor));
 					Driver::expand(done_parm,e,o,context);
 				}
 			} else {
@@ -255,12 +254,12 @@ namespace mt {
 		return Driver::visit(expansion, o);
 	}
 
-	void Definition::trim(plist &bobs) {
-		for (auto &j : bobs) { //each parameter.
-			while (!j.empty() && std::holds_alternative<Wss>(j.front())) {
+	void Definition::trim(plist& bobs) {
+		for (auto& j : bobs) { //each parameter.
+			while (!j.empty() && (dynamic_cast<Wss *>(j.front().get()) != nullptr) ) {
 				j.pop_front();
 			}
-			while (!j.empty() && std::holds_alternative<Wss>(j.back())) {
+			while (!j.empty() && (dynamic_cast<Wss *>(j.back().get()) != nullptr) ) {
 				j.pop_back();
 			}
 		}

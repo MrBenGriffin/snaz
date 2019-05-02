@@ -12,7 +12,7 @@ namespace mt {
 
 	InternalInstance::InternalInstance(const Internal *thing,Messages& e,mtext &o, Instance &i, mstack &c) :
 		owner(thing),output(&o), instance(&i), context(&c), errs(&e) {
-		parms = i.parms;
+		parms = &i.parms;
 		count = parms->size() == 1 ? parms->front().empty() ? 0 : 1 : parms->size();
 		min = thing->minParms;
 		max = thing->maxParms;
@@ -74,9 +74,11 @@ namespace mt {
 			}
 		}
 		parent->doSort(*errs,nodes,sort);
-		plist result;
+		plist result; //using plist=std::vector<mtext>;
 		for(auto& i : nodes) {
-			result.push_back({Text(i->ids())});
+			mtext parm;
+			parm.emplace_back(new Text(i->ids()));
+			result.emplace_back(std::move(parm));
 		}
 		return result;
 	}
@@ -87,9 +89,11 @@ namespace mt {
 			forStuff stuff(value,count);
 			plist parameters;
 			for(auto& i: nodes) {
-				parameters.push_back({Text(i->ids())});
+				mtext parm;
+				parm.emplace_back(new Text(i->ids()));
+				parameters.emplace_back(std::move(parm));
 			}
-			Instance i(&parameters,stuff, nullptr); 	//set as generated.
+			Instance i(parameters,stuff, nullptr); 	//set as generated.
 			macro.expand(*errs,*output,i,*context);
 		}
 	}
@@ -99,7 +103,7 @@ namespace mt {
 		if(program != nullptr && !program->empty()) { // from an empty parm..
 			Definition macro(*program,0,-1,true,false); //iterate,dont trim
 			forStuff stuff(value,count);
-			Instance i(&parameters,stuff,nullptr); 	//set as generated.
+			Instance i(parameters,stuff,nullptr); 	//set as generated.
 			macro.expand(*errs,*output,i,*context);
 		}
 	}
@@ -151,7 +155,7 @@ namespace mt {
 	}
 
 	void InternalInstance::set(std::string str) {
-		output->emplace_back(Text(str));
+		output->emplace_back(new Text(str));
 	}
 
 	//offset points at the position of the TRUE parm.

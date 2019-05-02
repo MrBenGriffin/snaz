@@ -6,24 +6,14 @@
 #define MACROTEXT_INSTANCE_H
 
 #include <string>
-#include <variant>
 #include <ostream>
 #include <vector>
-#include <deque>
 
-#include "mt/declarations.h"
-#include "mt/Handler.h"
+#include "mt/using.h"
 #include "node/Node.h"
 #include "node/Metrics.h"
 
-
 namespace mt {
-	using mtext=std::deque<Token>;
-	using parse_result=std::pair<bool,std::pair<mtext, bool>>;
-	using iteration=std::pair<size_t,size_t>;
-	using plist=std::vector<mtext>;
-	using nlist=vector<const node::Node *>;
-	using pos=std::pair<size_t,size_t>;
 
 	class forStuff {
 	public:
@@ -35,25 +25,20 @@ namespace mt {
 
 	class Instance {
 	private:
+		void copy(const plist *);
 	public:
-//
-		const plist *parms = nullptr;
+		plist parms;			//std::vector<mtext>
 		forStuff* myFor;
 		bool generated;     	//internal generation via e.g. iForX
 		iteration it = {0, 0};
 		node::Metrics* metrics;
 
 		size_t size();
-		Instance(const Instance &); //copy constructor.
-		Instance(const plist *, iteration, node::Metrics*, bool= false);
-		Instance(const plist *, forStuff&, node::Metrics*);
+		Instance(const Instance &) = default;
+		Instance(plist, iteration, node::Metrics*, bool= false);
+		Instance(plist, forStuff&, node::Metrics*);
 		explicit Instance(node::Metrics*);
 	};
-
-	//Handler is the variant of all token handlers..
-	using Carriage= std::pair<const Handler*, Instance>;
-	using mstack=std::deque< Carriage >;
-
 }
 
 

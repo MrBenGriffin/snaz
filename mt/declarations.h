@@ -5,14 +5,12 @@
 #ifndef MACROTEXT_DECLARATIONS_H
 #define MACROTEXT_DECLARATIONS_H
 
+#include <deque>
+
 namespace mt {
 
 	//The following are Token classes.
-	class Macro;
-	class Injection;
-	class Wss;
-	class Text;
-	using Token=std::variant<Macro,Wss,Injection,Text>;
+	class Token;
 
 	//The following are Handler classes.
 	//Remember to add these to  Definition::initialise() on line 180 of Definition.cpp
@@ -122,28 +120,6 @@ namespace mt {
 	class iForTaxNodes;
 	class iExistSimilar;
 	class iForSimilar;
-
-	using oHandler=std::variant<
-	        Content,Definition,
-			//•------------ Utility
-			iEq,iExpr,iIndex,iForIndex,iConsole,iDate,iEval,iFile,iField,iForSubs,iForQuery,iMath,iNull,iTiming,
-			//•------------ Storage
-			iSet,iGet,iExists,iAppend,iKV,iList,iReset,iSetCache,iSig,iUse,
-			//•------------ String
-			iLeft,iLength,iMid,iPosition,iRegex,iRembr,iRembrp,iReplace,iRight,iTrim,
-			//•------------ Encoder
-			iBase64,iDecode,iEncode,iHex,iUnHex,iUpper,iLower,iUrlEncode,iDigest,
-			//•------------ NodeTree
-			iNumChildren,iNumGen,iNumGens,iNumPage,iNumPages,iNumSib,iEqFamily,iEqNode,iEqSibs,iExistNode,iForAncestry,iForNodes,iForPeers,iForSibs,iSize,
-			//•------------ Build
-			iTech,iPreview,iLang,iLangID,iFullBuild,
-			//•------------ Node
-			iTitle,iTeam,iSuffix,iShortTitle,iSegmentName,iLayout,iLayoutName,iLink,iLinkRef,iID,iBirth,iContent,iDeath,iExistContent,iTW,
-			//•------------ Media
-			iMedia,iEmbed,iExistMedia,
-			//•------------ Taxonomy
-			iTax,iForTax,iForTaxNodes,iExistSimilar,iForSimilar
-	>;
 
 }
 

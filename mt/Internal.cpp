@@ -66,7 +66,9 @@ void Internal::startup(Messages& log,Db::Connection& _sql,buildKind kind) {
 		doSort(list,sort);
 		plist result;
 		for(auto& i : list) {
-			result.push_back({Text(i)});
+			mtext parm;
+			parm.emplace_back(new Text(i));
+			result.emplace_back(std::move(parm));
 		}
 		return result;
 	}
@@ -83,7 +85,9 @@ void Internal::startup(Messages& log,Db::Connection& _sql,buildKind kind) {
 		doSort(list,sort);
 		plist result;
 		for(auto& i : list) {
-			result.push_back({Text(i)});
+			mtext parm;
+			parm.emplace_back(new Text(i));
+			result.emplace_back(std::move(parm));
 		}
 		return result;
 	}
@@ -95,7 +99,9 @@ void Internal::startup(Messages& log,Db::Connection& _sql,buildKind kind) {
 		doSort(list,sort);
 		plist result;
 		for(auto& i : list) {
-			result.push_back({Text(i)});
+			mtext parm;
+			parm.emplace_back(new Text(i));
+			result.emplace_back(std::move(parm));
 		}
 		return result;
 	}

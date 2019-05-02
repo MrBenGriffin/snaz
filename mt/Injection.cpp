@@ -1,3 +1,5 @@
+#include <utility>
+
 //
 // Created by Ben on 2019-01-23.
 //
@@ -89,7 +91,6 @@ namespace mt {
 			}
 		}
 	}
-
 	void Injection::parseBrackets() {
 		basis.erase(0, 1);
 		basis.pop_back();
@@ -117,11 +118,31 @@ namespace mt {
 			modulus(false), stack(false), list(false), iterator(false), basis("") {
 	}
 
-	Injection::Injection(const std::string src) :
+	Injection::Injection(std::string src) :
 			type(It::plain), value(0), sValue(0), offset(0),
-			modulus(false), stack(false), list(false), iterator(false), basis(src) {
+			modulus(false), stack(false), list(false), iterator(false), basis(std::move(src)) {
 		// ⍟^*([ijk]|[0-9]+|\(^*([ijkn]([.+-][0-9]+)?|[0-9]++?|(p(s|[0-9]?)))\))
 		parseStart();
+	}
+
+	std::string Injection::get() const {
+		return basis; //not sure this is correct.
+	}
+
+	bool Injection::empty() const {
+		return basis.empty();
+	}
+
+	void Injection::add(mtext&) {
+		throw std::logic_error("Should never get to Injection::add!");
+	}
+
+	void Injection::inject(Messages& errs,mtext &result,mstack &context) const {
+		expand(errs,result,context);
+	}
+
+	void Injection::final(std::ostream& o) const {
+		visit(o);
 	}
 
 	void Injection::expand(Messages& errs,mtext &result,mstack &context) const {
@@ -133,27 +154,27 @@ namespace mt {
 				auto &instance = context[sValue].second;
 				auto &parms = instance.parms;
 				auto &iter = instance.it;
-				size_t parmCount = parms->size();
+				size_t parmCount = parms.size();
 				if (stack) {
 					for(auto& s : context) {
 						if(s.first!= nullptr) {
 							std::string macroName = (s.first)->name() + ";";
-							result.push_back(Text(macroName));
+							result.emplace_back(new Text(macroName));
 						}
 					}
 					auto& x = context.back().second;
 					if(x.metrics != nullptr  && (x.metrics)->currentTemplate != nullptr) {
-						result.push_back(Text(x.metrics->currentTemplate->name));
+						result.emplace_back(new Text(x.metrics->currentTemplate->name));
 					} else {
-						result.push_back(Text("nil"));
+						result.emplace_back(new Text("nil"));
 					}
 				}
 				if (list) {
-					plist* p_parms = const_cast <plist *>(context.back().second.parms);
+					auto p_parms = const_cast <plist *>(&context.back().second.parms);
 					for(size_t i=value; i <= parmCount; i++) {
-						mtext tmp;
-						Driver::inject((*parms)[i - 1],errs,tmp,context);
-						p_parms->push_back(std::move(tmp));
+						mtext tmp ;
+						Driver::inject(parms[i - 1],errs,tmp,context);
+						p_parms->emplace_back(tmp); //plist is a std::vector<mtext>;
 					}
 				}
 				if(!stack && !list) {
@@ -161,17 +182,17 @@ namespace mt {
 						case It::plain:
 							if(value == 0) {
 								std::string macroName = contextMacro->name(); // + ";";
-								result.push_back(Text(macroName));
+								result.emplace_back(new Text(macroName));
 //								std::visit([&result](auto const &a){ result.push_back(Text(a.name())); },*contextMacro);
 							} else {
 								bool legal = contextMacro->inRange(value);
 //								std::visit([&legal,&index](auto const &a){ legal = a.inRange(index); },*contextMacro);
 								if(legal && (value <= parmCount)) {
 									if (sValue == 0) {
-										Driver::expand((*parms)[value - 1],errs, result, context);
+										Driver::expand(parms[value - 1],errs, result, context);
 									} else {
 										mstack subContext(context.begin() + sValue, context.end());
-										Driver::expand((*parms)[value - 1],errs, result, subContext);
+										Driver::expand(parms[value - 1],errs, result, subContext);
 									}
 								}
 								/**
@@ -192,15 +213,15 @@ namespace mt {
 							adjust(posi);
 							if ( (0 < posi) &&  (posi <=  parmCount)) {
 								if (sValue == 0) {
-									Driver::expand((*parms)[posi - 1],errs, result, context);
+									Driver::expand(parms[posi - 1],errs, result, context);
 								} else {
 									mstack subContext(context.begin() + sValue, context.end());
-									Driver::expand((*parms)[posi - 1],errs, result, subContext);
+									Driver::expand(parms[posi - 1],errs, result, subContext);
 								}
 							} else {
 								if (posi == 0) {
 									std::string macroName = contextMacro->name(); // + ";";
-									result.push_back(Text(macroName));
+									result.emplace_back(new Text(macroName));
 								} else {
 									//Do nothing, I guess.
 								}
@@ -208,16 +229,16 @@ namespace mt {
 						}  break;
 						case It::count: {
 							std::ostringstream a;
-							size_t value = iter.first;
-							adjust(value);
-							a << value;
+							size_t number = iter.first;
+							adjust(number);
+							a << number;
 							Text(a.str()).expand(errs,result,context);
 						} break;
 						case It::size: {
 							std::ostringstream a;
-							size_t value = iter.second;
-							adjust(value);
-							a << value;
+							size_t number = iter.second;
+							adjust(number);
+							a << number;
 							Text(a.str()).expand(errs,result,context);
 						} break;
 						default:

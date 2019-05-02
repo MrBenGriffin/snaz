@@ -3,8 +3,11 @@ F showDefines	0
 F showPassed	1
 
 
+U a			0	1	00	[⍟1]
+Basic1			⌽a(+⌽a(A))													[+[A]]
+
 //Not debugging, uncomment the following X
-//X
+X
 
 F showDefines	0
 F showPassed	0

@@ -6,8 +6,9 @@
 #define MACROTEXT_MACRO_H
 
 #include <string>
-#include "mt.h"
-
+#include "support/Message.h"
+#include "Token.h"
+#include "mt/using.h"
 
 namespace mt {
 	using namespace Support;
@@ -16,20 +17,26 @@ namespace mt {
 		* It may be PART of a usermacro definition.
 		* With a context, it can be evaluete
 	**/
-	class Macro {
+	class Macro : public Token {
 	public:
-		std::string name;
+		std::string _name;
 		plist parms;        /* parsed parms */
-		void expand(Messages&,mtext&,mstack&) const;
-		std::ostream& visit(std::ostream&) const;
+
+		std::string get() const override;             //return text.
+		bool empty() const override;
+		void final(std::ostream&) const override;     //return final text.
+		std::ostream& visit(std::ostream&) const override;
+		void inject(Messages&,mtext&,mstack&) const override;
+		void doFor(mtext&,const forStuff&) const override;
+		void subs(mtext&,const std::vector<std::string>&,const std::string&) const override;
+		void expand(Messages&,mtext&,mstack&) const override;
+		std::string name() const override { return _name; }
+		void add(mtext&) override;
 
 		//used for expanding injections, etc. not sure if this should generate a copy or not..
-		void inject(Messages&,mtext&,mstack&) const;
-		void doFor(mtext&,const forStuff&) const;
-		void subs(mtext&,std::vector<std::string>& ,const std::string&) const;
 
 		explicit Macro(std::string);
-		void add(mtext&);
+		~Macro() override = default;
 	};
 }
 

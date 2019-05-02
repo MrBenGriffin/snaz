@@ -9,45 +9,56 @@
 
 namespace mt {
 
-	Text::Text(const std::string &w) : text(w) {}
+	Text::Text(std::string w) : text(std::move(w)) {}
+
+	bool Text::empty() const { return text.empty(); }
 
 	std::ostream &Text::visit(std::ostream &o) const {
 		o << "“" << text << "”" << std::flush;
 		return o;
 	}
 
-	std::string Text::get() const { return text; }
-	void Text::append(std::string right) { text.append(right); };
+	void Text::final(std::ostream& o) const {
+		o << text;
+	};
 
-	void Text::expand(Messages& m,mtext &mt,const mstack &context) const {
+	std::string Text::get() const { return text; }
+	void Text::append(std::string right) { text.append(std::move(right)); };
+
+	void Text::expand(Messages& m,mtext &mt,mstack &context) const {
 		string result(text);
 		if (!mt.empty()) {
-			if (std::holds_alternative<Text>(mt.back())) {
-				std::get<Text>(mt.back()).text.append(result);
+			Token *back = mt.back().get();
+			Text *textPtr = dynamic_cast<Text *>(back);
+			if (textPtr != nullptr) {
+				textPtr->text.append(result);
 			} else {
-				if (std::holds_alternative<Wss>(mt.back())) {
-					std::string ws = std::get<Wss>(mt.back()).get();
+				Wss *wss = dynamic_cast<Wss *>(back);
+				if (wss != nullptr) {
+					std::string ws = wss->get();
 					mt.pop_back();
 					ws.append(result);
-					mt.emplace_back(std::move(Text(ws)));
+					mt.emplace_back(new Text(ws));
 				} else {
-					mt.emplace_back(Text(result));
+					mt.emplace_back(new Text(text));
 				}
 			}
-		} else {
-			mt.emplace_back(Text(result));
 		}
 	}
 
 	void Text::add(mtext &mt) {
-		if (!mt.empty() && std::holds_alternative<Text>(mt.back())) {
-			text = std::get<Text>(mt.back()).text + text;
-			mt.pop_back();
+		if (!mt.empty()) {
+			auto back = mt.back();
+			Text *textPtr = dynamic_cast<Text *>(back.get());
+			if (textPtr != nullptr) {
+				text = textPtr->text + text;
+				mt.pop_back();
+			}
 		}
-		mt.emplace_back(std::move(*this));
+		mt.emplace_back(this);
 	}
 
-	void Text::subs(mtext& result,const vector<string>& list,const string prefix) const {
+	void Text::subs(mtext& result,const vector<string>& list,const string& prefix) const {
 		size_t start = 0, curr, psize = prefix.size();
 		string valStr;
 		while ((curr=text.find(prefix,start)) != string::npos) {
@@ -66,13 +77,13 @@ namespace mt {
 		if(start < text.size()) {
 			valStr.append(text.substr(start));
 		}
-		Text(valStr).add(result);
+		(new Text(valStr))->add(result);
 	}
 
 	void Text::doFor(mtext& result,const forStuff& stuff) const {
 		string basis(text);
 		Support::fandr(basis,stuff.stuff);
-		Text(basis).add(result);
+		(new Text(basis))->add(result);
 	}
 
 }
