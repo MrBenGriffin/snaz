@@ -51,9 +51,12 @@ namespace mt {
 
 	void iSegmentName::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
-		e << Message(error,_name + " is not yet implemented.");
-		std::string left =  my.parm(1);
-		my.logic(false,1);
+		if(my.metrics->segmentStack.empty()) {
+			e << Message(error,_name + " called outside any segment context.");
+		} else {
+			auto* segment = my.metrics->segmentStack.top();
+			my.logic(segment->name,1);
+		}
 	}
 
 	void iLayout::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
@@ -121,16 +124,19 @@ namespace mt {
 				if(my.count == 2) {
 					if(metrics) { //eep
 						metrics->nodeStack.push_back(interest);
+						metrics->segmentStack.push(segment);
 					}
 					const mt::mtext* code = content::Editorial::e().get(e,interest,segment);
 					if(code) { //need to do IO as well..
 						mt::Wss::push(&(segment->nl));
+
 						for(auto& token: *code) {
 							token->expand(e,o,context);
 						}
 						mt::Wss::pop();
 					}
 					if(metrics) { //eep
+						metrics->segmentStack.pop();
 						metrics->nodeStack.pop_back();
 					}
 				} else {

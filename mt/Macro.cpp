@@ -60,7 +60,7 @@ namespace mt {
 		auto good = Definition::library.find(_name);
 		if(good != Definition::library.end()) {
 			iteration iter({0,parms.size()});
-			Instance instance(parms,{0,parms.size()},context.back().second.metrics);
+			Instance instance(parms,iter,context.back().second.metrics);
 			auto& macro = good->second;
 			macro->expand(errs,result,instance,context);
 		} else {

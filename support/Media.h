@@ -78,7 +78,7 @@ namespace Support {
 		void	close();
 		bool	exists(Messages&,const string&) const;
 		string file(Messages&,const node::Metrics*,const string&);
-		string embed(Messages&,const string&,bool);
+		string embed(Messages&,const string&,bool) const;
 		string attribute(Messages&,const string&,const string&,bool = false);
 	};
 }

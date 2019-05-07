@@ -102,7 +102,8 @@ namespace Support {
 					parameters.emplace_back(std::move(parm));
 				}
 				node::Metrics iMetrics(metrics);
-				mt::Instance instance(parameters,{0,parameters.size()},&iMetrics); // we don't want to generate here.
+				mt::iteration it = {0,parameters.size()};
+				mt::Instance instance(parameters,it,&iMetrics); // we don't want to generate here.
 				std::ostringstream result;
 				mt::mtext resultTokens;
 				mt::mstack empty;
@@ -139,7 +140,7 @@ namespace Support {
 	}
 
 //-----------------------------------------------------------------------------
-	string Media::embed(Messages& errs,const string& ref,bool encode) {
+	string Media::embed(Messages& errs,const string& ref,bool encode) const {
 		string result;
 		pair<string,string> mtrans = getRef(ref);
 		auto mi = embedmap.find(mtrans.first);

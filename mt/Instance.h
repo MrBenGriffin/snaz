@@ -16,7 +16,10 @@
 namespace mt {
 
 	class forStuff {
+	private:
+		forStuff() = default;
 	public:
+		~forStuff();
 		std::vector<std::pair<std::string,std::string>> stuff;
 		forStuff(const std::string&,const std::string&,size_t,size_t);
 		forStuff(const std::string&,const std::string&);
@@ -30,15 +33,17 @@ namespace mt {
 		plist parms;			//std::vector<mtext>
 		bool generated;     	//internal generation via e.g. iForX
 		iteration it = {0, 0};
-		forStuff* myFor;
+		std::shared_ptr<forStuff> myFor;
 		node::Metrics* metrics;
 
 		size_t size();
 		Instance(const Instance &) = default;
 		~Instance();
 		Instance(plist, iteration, node::Metrics*, bool= false);
-		Instance(plist, forStuff&, node::Metrics*);
+		Instance(plist, std::shared_ptr<forStuff>, node::Metrics*);
 		explicit Instance(node::Metrics*);
+
+		Instance(std::shared_ptr<forStuff> myFor);
 	};
 }
 

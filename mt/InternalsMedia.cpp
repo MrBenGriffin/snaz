@@ -22,10 +22,13 @@ namespace mt {
 	}
 	void iEmbed::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
-		const Media* media = Build::b().media();
+		Media* media = Build::b().media();
 		if(media != nullptr) {
-			e << Message(error," iEmbed not yet implemented.");
-			my.logic(media->exists(e,my.parm(1)),2);
+			if (my.count == 1) {
+				my.set(media->embed(e,my.parm(1),false));
+			} else {
+				my.set(media->attribute(e,my.parm(1),my.parm(2)));
+			}
 		} else {
 			e << Message(error," media support was not found.");
 		}

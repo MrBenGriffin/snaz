@@ -106,14 +106,17 @@ namespace Support {
 	}
 
 	//---------------------------------------------------------------------------
-	void xmldecode(string& s) {  //XML de-escape
-		if (! s.empty() ) {
-			fandr(s,"&amp;","&");
-			fandr(s,"&lt;","<");
-			fandr(s,"&gt;",">");
-			fandr(s,"&#39;","'"); //&apos; MSIE doesn't know apos
-			fandr(s,"&apos;","'");
-			fandr(s,"&quot;","\"");
+	void xmldecode(string& basis) {  //XML de-escape
+		static const vector<pair<string,string>> conversions = {
+			  {"&lt;"  ,"<" },
+			  {"&gt;"  ,">" },
+			  {"&#39;" ,"'" },
+			  {"&apos;","'" },
+			  {"&quot;","\""},
+			  {"&amp;" ,"&" }
+		  };
+		if (! basis.empty() ) {
+			fandr(basis,conversions);
 		}
 	}
 	//---------------------------------------------------------------------------

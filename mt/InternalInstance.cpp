@@ -86,14 +86,14 @@ namespace mt {
 	void InternalInstance::generate(nlist& nodes,const mtext* program,const string value,const string count) {
 		if(program != nullptr && !program->empty()) { // from an empty parm..
 			Definition macro(*program,0,-1,true,false); //iterate,dont trim
-			forStuff stuff(value,count);
+			auto stuff = make_shared<forStuff>(value,count);
 			plist parameters;
 			for(auto& i: nodes) {
 				mtext parm;
 				parm.emplace_back(new Text(i->ids()));
 				parameters.emplace_back(std::move(parm));
 			}
-			Instance i(parameters,stuff, nullptr); 	//set as generated.
+			Instance i(parameters,stuff,nullptr); 	//set as generated.
 			macro.expand(*errs,*output,i,*context);
 		}
 	}
@@ -102,7 +102,7 @@ namespace mt {
 		//parms,code,vToken,cToken
 		if(program != nullptr && !program->empty()) { // from an empty parm..
 			Definition macro(*program,0,-1,true,false); //iterate,dont trim
-			forStuff stuff(value,count);
+			auto stuff = make_shared<forStuff>(value,count);
 			Instance i(parameters,stuff,nullptr); 	//set as generated.
 			macro.expand(*errs,*output,i,*context);
 		}

@@ -11,8 +11,8 @@ namespace mt {
 		parms(std::move(p)), it(i), generated(gen),myFor(nullptr),metrics(m) {
 	}
 
-	Instance::Instance(plist p, forStuff& stuff,node::Metrics* m) :
-		parms(std::move(p)),generated(true),myFor(&stuff),metrics(m) {
+	Instance::Instance(plist p, shared_ptr<forStuff> stuff,node::Metrics* m) :
+		parms(std::move(p)),generated(true),myFor(std::move(stuff)),metrics(m) {
 	}
 
 	Instance::Instance(node::Metrics* m) :
@@ -31,11 +31,18 @@ namespace mt {
 		}
 	}
 
+	forStuff::~forStuff() {
+		stuff.clear();
+	}
+
 	Instance::~Instance() {
 		metrics = nullptr;
-		delete myFor;
+		myFor = nullptr;
 		parms.clear();
 	}
+
+	Instance::Instance(shared_ptr<forStuff> myFor) : myFor(std::move(myFor)) {}
+
 
 	forStuff::forStuff(const std::string& vt,const std::string& ct,size_t v,size_t c) {
 		stuff = {

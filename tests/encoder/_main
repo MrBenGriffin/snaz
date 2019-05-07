@@ -11,26 +11,50 @@ iBase64 06		@iBase64(d,~m9v)						!1!warn: base64 decoding found illegal charact
 
 
 # iDecode
-//iDecode		@iDecode(1)								!1!error: iDecode is not yet implemented.
-iDecode 01		@iDecode(&amp;)							&
-iDecode 02		@iDecode(&quot;)						"
-iDecode 03		@iDecode(&apos;)						'
-iDecode 04		@iDecode(&lt;)							<
-iDecode 05		@iDecode(&gt;)							>
-iDecode 06		@iDecode(&pound;)						&pound;
-iDecode 07		@iDecode(&)								&
-iDecode 07		@iDecode(&#39;)							'
+//iDecode		@iDecode(1)											!1!error: iDecode is not yet implemented.
+iDecode 01		@iDecode(&amp;)										&
+iDecode 02		@iDecode(&quot;)									"
+iDecode 03		@iDecode(&apos;)									'
+iDecode 04		@iDecode(&lt;)										<
+iDecode 05		@iDecode(&gt;)										>
+iDecode 06		@iDecode(&pound;)									&pound;
+iDecode 07		@iDecode(&)											&
+iDecode 07		@iDecode(&#39;)										'
+iDecode 01		@iDecode(&quot;&apos;&lt;&gt;&pound;&amp;)			"'<>&pound;&
+iDecode 101		@iDecode(&quot;&apos;&lt;&gt;&pound;&amp;)			"'<>&pound;&
+iDecode 102		@iDecode(&amp;&amp;&amp;&amp;&amp;&amp;)			&&&&&&
+iDecode 103		@iDecode(B&amp;B&amp;B&amp;B&amp;B&amp;B&amp;B)		B&B&B&B&B&B&B
+iDecode 104		@iDecode(&amp;B&amp;B&amp;B&amp;B&amp;B&amp;)		&B&B&B&B&B&
+iDecode 105		@iDecode(ableB&amp;ableB&amp;ableB&amp;)			ableB&ableB&ableB&
+iDecode 106		@iDecode(&amp;ableB&amp;ableB&amp;ableB&amp;)		&ableB&ableB&ableB&
+iDecode 107		@iDecode(&amp;ableB&amp;ableB&amp;ableB)			&ableB&ableB&ableB
+iDecode 108		@iDecode(&amp;012345&amp;012345&amp;012345)			&012345&012345&012345
+iDecode 109		@iDecode(&amp;0123456&amp;0123456&amp;0123456)		&0123456&0123456&0123456
+iDecode 110		@iDecode(0123456&amp;0123456&amp;0123456&amp;)		0123456&0123456&0123456&
+iDecode 111		@iDecode(0123456&amp;0123456&amp;0123456&&amp;)		0123456&0123456&0123456&&
 
 # iEncode
-//iEncode		@iEncode(1)								!1!error: iEncode is not yet implemented.
-iEncode 01		@iEncode(&)								&amp;
-iEncode 02		@iEncode(")								&quot;
-iEncode 03		@iEncode(')								&#39;
-iEncode 04		@iEncode(<)								&lt;
-iEncode 05		@iEncode(>)								&gt;
-iEncode 06		@iEncode(£)								£
-iEncode 07		@iEncode(&amp;)							&amp;amp;
-iEncode 07		@iEncode("3+4>5")						&quot;3+4&gt;5&quot;
+//iEncode		@iEncode(1)											!1!error: iEncode is not yet implemented.
+iEncode 01		@iEncode(&)											&amp;
+iEncode 02		@iEncode(")											&quot;
+iEncode 03		@iEncode(')											&#39;
+iEncode 04		@iEncode(<)											&lt;
+iEncode 05		@iEncode(>)											&gt;
+iEncode 06		@iEncode(£)											£
+iEncode 07		@iEncode(&amp;)										&amp;amp;
+iEncode 07		@iEncode("3+4>5")									&quot;3+4&gt;5&quot;
+iEncode 101		@iEncode("'<>&pound;&)								&quot;&#39;&lt;&gt;&amp;pound;&amp;
+iEncode 102		@iEncode(&&&&&&)									&amp;&amp;&amp;&amp;&amp;&amp;
+iEncode 103		@iEncode(B&B&B&B&B&B&B)								B&amp;B&amp;B&amp;B&amp;B&amp;B&amp;B
+iEncode 104		@iEncode(&B&B&B&B&B&)								&amp;B&amp;B&amp;B&amp;B&amp;B&amp;
+iEncode 105		@iEncode(ableB&ableB&ableB&)						ableB&amp;ableB&amp;ableB&amp;
+iEncode 106		@iEncode(&ableB&ableB&ableB&)						&amp;ableB&amp;ableB&amp;ableB&amp;
+iEncode 107		@iEncode(&ableB&ableB&ableB)						&amp;ableB&amp;ableB&amp;ableB
+iEncode 108		@iEncode(&012345&012345&012345)						&amp;012345&amp;012345&amp;012345
+iEncode 109		@iEncode(&0123456&0123456&0123456)					&amp;0123456&amp;0123456&amp;0123456
+iEncode 110		@iEncode(0123456&0123456&0123456&)					0123456&amp;0123456&amp;0123456&amp;
+iEncode 111		@iEncode(0123456&0123456&0123456&&)					0123456&amp;0123456&amp;0123456&amp;&amp;
+
 
 # iHex
 iHex 01			@iHex(foo)								666F6F

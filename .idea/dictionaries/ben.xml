@@ -2,12 +2,15 @@
   <dictionary name="ben">
     <words>
       <w>cultivar</w>
+      <w>delims</w>
+      <w>fandr</w>
       <w>imagick</w>
       <w>paramete</w>
       <w>parms</w>
       <w>posi</w>
       <w>readfield</w>
       <w>retval</w>
+      <w>spos</w>
       <w>std::string</w>
       <w>taxon</w>
       <w>taxonom</w>
