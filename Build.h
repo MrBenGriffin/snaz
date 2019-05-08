@@ -61,19 +61,19 @@ private:
 	bool setLock(Support::Messages&,Support::Db::Connection&);
 	void doParse(Support::Messages&,Support::Db::Connection&);
 
-	void tests(Support::Messages&,Support::Db::Connection&);
-	void build(Support::Messages&,Support::Db::Connection&);
-	void global(Support::Messages&,Support::Db::Connection&);
-	void langs(Support::Messages&,Support::Db::Connection&);
-	void techs(Support::Messages&,Support::Db::Connection&,size_t);
-	void files(Support::Messages&,Support::Db::Connection&,size_t,size_t);
+	void tests(Support::Messages&);
+	void build(Support::Messages&);
+	void global(Support::Messages&);
+	void langs(Support::Messages&);
+	void techs(Support::Messages&);
+	void files(Support::Messages&);
 
 	static void releaseLock(int);
 
 public:
 	BuildUser	user;
 	static Build& b();
-	static Build& b(Support::Messages&);
+//	static Build& b(Timing&);
 	void run(Support::Messages&,Support::Db::Connection*);
 
 	Support::buildKind current() const { return _current; }

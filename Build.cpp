@@ -53,11 +53,10 @@ Build::~Build() {
 	delete _media;
 }
 
-Build& Build::b(Messages &errs) {
-	Build& bld = b();
-	Timing& timer = Timing::t(); //initialise.
-	return bld;
-}
+//Build& Build::b(Timing& timer) {
+//	timer = Timing::t(); //initialise.
+//	return b();
+//}
 
 void Build::run(Messages &errs,Connection* _sql) {
 	if (_sql == nullptr) {
@@ -75,33 +74,33 @@ void Build::run(Messages &errs,Connection* _sql) {
 	errs << Message(info,str.str());
 	switch(_current) {
 		case test: {
-			tests(errs,*sql);
+			tests(errs);
 		} break;
 		case parse: {
 			doParse(errs,*sql);
 		} break;
 		case draft:
 		case final: {
-			build(errs,*sql);
+			build(errs);
 		} break;
 	}
 }
-void Build::tests(Messages &errs,Connection& sql) {
-	mt::Definition::load(errs,sql,_current); // This is quite slow.
-	user.load(errs,sql);
-	loadLanguages(errs,sql);
-	loadTechs(errs,sql);
+void Build::tests(Messages &errs) {
+	mt::Definition::load(errs,*sql,_current); // This is quite slow.
+	user.load(errs,*sql);
+	loadLanguages(errs,*sql);
+	loadTechs(errs,*sql);
 	auto language = lang();
 
-	node::Suffix().loadTree(errs,sql,0, _current);
-	content::Template::load(errs,sql,_current);
-	content::Segment::load(errs,sql,_current);
-	node::Taxon().loadTree(errs,sql,language, _current); 		//This is slow.
-	node::Content().loadTree(errs,sql,language,_current);		//This is fast.
-	content::Editorial::e().set(errs,sql,language,_current);
-	_media->load(errs,&sql,language);
+	node::Suffix().loadTree(errs,*sql,0, _current);
+	content::Template::load(errs,*sql,_current);
+	content::Segment::load(errs,*sql,_current);
+	node::Taxon().loadTree(errs,*sql,language, _current); 		//This is slow.
+	node::Content().loadTree(errs,*sql,language,_current);		//This is fast.
+	content::Editorial::e().set(errs,*sql,language,_current);
+	_media->load(errs,sql,language);
 
-	content::Layout::load(errs,sql,tech(),_current);
+	content::Layout::load(errs,*sql,tech(),_current);
 	node::Content().setLayouts(errs);
 	_media->setFilenames(errs);
 
@@ -111,19 +110,19 @@ void Build::tests(Messages &errs,Connection& sql) {
 	tests.load(std::cout,  "main", false);   // Boolean turns on/off success reports.
 	_media->close();
 
-	content::Editorial::e().unload(errs,sql);
+	content::Editorial::e().unload(errs,*sql);
 
-	mt::Definition::shutdown(errs,sql,_current); //bld->savePersistance(); prunePersistance(); clearPersistance();
+	mt::Definition::shutdown(errs,*sql,_current); //bld->savePersistance(); prunePersistance(); clearPersistance();
 }
-void Build::build(Messages &errs,Connection& sql) {
+void Build::build(Messages &errs) {
 	errs << Message(info,"Loading Builder Configuration");
-	user.load(errs,sql);
-	loadLanguages(errs,sql);
-	loadTechs(errs,sql);
+	user.load(errs,*sql);
+	loadLanguages(errs,*sql);
+	loadTechs(errs,*sql);
 	full = allLangs && allTechs && requestedNodes.empty();
 	if( (_current == final && ((full && user.may.final) || user.may.finalDown)) ||
 		(_current == draft && ((full && user.may.draft) || user.may.draftDown)) ) {
-		if(setLock(errs,sql)) {
+		if(setLock(errs,*sql)) {
 			if(full) {
 				errs << Message(info,"This is a full build.");
 			} else {
@@ -134,7 +133,7 @@ void Build::build(Messages &errs,Connection& sql) {
 				log << ".";
 				errs << Message(info,log.str());
 			}
-			global(errs,sql);
+			global(errs);
 			releaseLock(0);
 		} else {
 			ostringstream err;
@@ -148,15 +147,15 @@ void Build::build(Messages &errs,Connection& sql) {
 	}
 }
 
-void Build::global(Messages& errs,Connection& sql) {
+void Build::global(Messages& errs) {
 	Env& env = Env::e();
-	mt::Definition::load(errs,sql,_current); // Set the internals.
+	mt::Definition::load(errs,*sql,_current); // Set the internals.
 	env.basedir(Scripts).makeDir(errs);
-	node::Suffix().loadTree(errs,sql,0, _current);
-	content::Template::load(errs,sql,_current);
-	content::Segment::load(errs,sql,_current);
+	node::Suffix().loadTree(errs,*sql,0, _current);
+	content::Template::load(errs,*sql,_current);
+	content::Segment::load(errs,*sql,_current);
 //TODO:	RunScript("PRE_PROCESSING_SCRIPT", "Pre Processor", errs);
-	langs(errs,sql);
+	langs(errs);
 //TODO:	iMedia::move(errs);
 //
 //TODO:	storageResult script = bld->varStorage.find("FINAL_PROCESSING_SCRIPT");
@@ -172,46 +171,44 @@ void Build::global(Messages& errs,Connection& sql) {
 //SuffixVal::unload();
 //  macro::terminate();			//unload
 	_media->close();
-	content::Editorial::e().unload(errs,sql);
-	mt::Definition::shutdown(errs,sql,_current); //bld->savePersistance(); prunePersistance(); clearPersistance();
+	content::Editorial::e().unload(errs,*sql);
+	mt::Definition::shutdown(errs,*sql,_current); //bld->savePersistance(); prunePersistance(); clearPersistance();
 //TODO: do FINAL_PROCESSING_SCRIPT stuff here if it's a full, final build..
 }
 
-void Build::langs(Messages& errs,Connection& sql) {
+void Build::langs(Messages& errs) {
 	Timing& times = Timing::t();
 //	times.wait(30.0);
 	while (!languages.empty()) {
 		auto lang = languages.front();
 		if (times.show()) { times.set("Language " + lang.second.name); }
-		node::Taxon().loadTree(errs,sql,lang.first, _current);
-		node::Content::updateBirthAndDeath(errs,sql,lang.first,_current); //* Per Language.
-		node::Content::updateContent(errs,sql,lang.first,_current); //this moves the latest version into bldcontent.
+		node::Taxon().loadTree(errs,*sql,lang.first, _current);
+		node::Content::updateBirthAndDeath(errs,*sql,lang.first,_current); //* Per Language.
+		node::Content::updateContent(errs,*sql,lang.first,_current); //this moves the latest version into bldcontent.
 		//TODO:: Content APPROVERS.
-		node::Content().loadTree(errs,sql,lang.first,_current);
-		content::Editorial::e().set(errs,sql,lang.first,_current);
+		node::Content().loadTree(errs,*sql,lang.first,_current);
+		content::Editorial::e().set(errs,*sql,lang.first,_current);
 		////bld->all_techs && bld->fullBuild
-
-
-		_media->load(errs,&sql,lang.first);
-		techs(errs,sql,lang.first);
-		_media->save(errs,&sql,lang.first, allTechs && full); //Condition for full reset.
+		_media->load(errs,sql,lang.first);
+		techs(errs);
+		_media->save(errs,sql,lang.first, allTechs && full); //Condition for full reset.
 		//.....
 		if (times.show()) { times.use(errs,"Language " + lang.second.name); }
 		languages.pop_front();
 	}
 }
 
-void Build::techs(Messages& errs,Connection& sql,size_t langID) {
+void Build::techs(Messages& errs) {
 	Timing& times = Timing::t();
 	while (!technologies.empty()) {
 		size_t techID = tech();
 		if (times.show()) { times.set("Tech " + techName()); }
-		content::Layout::load(errs,sql,techID,_current);
+		content::Layout::load(errs,*sql,techID,_current);
 		node::Content().setLayouts(errs);
 		_media->setFilenames(errs);
 		//.....
 		try {
-			files(errs, sql, langID, techID);
+			files(errs);
 		} catch (...) {
 			errs << Message(fatal,"exception thrown.");
 		}
@@ -221,17 +218,17 @@ void Build::techs(Messages& errs,Connection& sql,size_t langID) {
 	}
 }
 
-void  Build::files(Messages& errs,Connection& sql,size_t langID,size_t techID) {
+void  Build::files(Messages& errs) {
 //	node::Content::root()->str(cout);
 	if(requestedNodes.empty()) {
-		node::Content::get(node::Content::root()->id()).generate(errs,Full,_current,langID,techID);
+		node::Content::get(node::Content::root()->id()).generate(errs,Full);
 	} else {
 		for (auto t : requestedNodes) { //t.first is the buildType.
 			for(auto n : t.second ) { // t.second is the deque of node IDs for this buildtype.
 				const node::Content* node = node::Content::root()->content(errs,n);
 				if(node != nullptr) {
 					auto& base = node::Content::get(node->id());
-					base.generate(errs,t.first,_current,langID,techID);
+					base.generate(errs,t.first);
 				}
 			}
 		}

@@ -236,6 +236,7 @@ namespace testing {
 							o << lred << "Definition Parse Error while defining " << name << endl;
 							msgs->str(o);
 							o << norm << endl;
+							delete macro;
 						}
 						if(showDefines) {
 							o << "Defined " << name << ":" ;

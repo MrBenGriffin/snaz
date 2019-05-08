@@ -4,6 +4,7 @@
 
 #include "support/Env.h"
 #include "support/Message.h"
+#include "support/Timing.h"
 
 // Currently using the following environment variables...
 // LIBMYSQLCRSO=/usr/local/mysql/lib/libmysqlclient.dylib
@@ -17,7 +18,8 @@ int main( const int argc, const char **argv ) {
 	if (argc == 2 && argv[1][0]=='-' && argv[1][1]=='V') {
 		std::cout << "Builder v" << std::setprecision(16) << Build::version << ". Build: " << __DATE__ << "; " << __TIME__  << std::endl;
 	} else {
-		Build &build = Build::b(log);
+		Timing::t(); //initialise.
+		Build &build = Build::b();
 		build.run(log,services.second);
 		build.close(log);
 	}
