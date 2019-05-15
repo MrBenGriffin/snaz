@@ -14,12 +14,8 @@ namespace Support {
 
 	void fileEncode(string&);
 
-	string xmlenc(string);
-	string xmlenc(const char*);
-
 	void xmldecode(string&);  //XML de-escape
 	void xmlencode(string&);  //XML escape
-	bool nameencode(string&); //make sure it's a legal xml name
 	bool fileencode(string&); //make sure it's a legal xml name
 
 	string hexencode(const unsigned char);

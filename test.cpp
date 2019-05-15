@@ -80,12 +80,12 @@ namespace testing {
 
 		// We need a node to be 'current'.
 		mt::mstack context;
-		node::Content& currentNode = node::Content::get(19); //This is a random test node.
-		node::Metrics current;
-		current.nodeStack.push_back(&currentNode);
-		current.current = &currentNode;
-		current.page = 0;
-		mt::Instance instance(&current);
+		auto* currentNode = node::Content::root()->content(*msgs,2);
+		node::Metrics metrics;
+		metrics.nodeStack.push_back(currentNode);
+		metrics.current = currentNode;
+		metrics.page = 0;
+		mt::Instance instance(&metrics);
 		context.push_back({nullptr,instance}); //This is our context.
 
 		if (infile.is_open()) {
@@ -162,6 +162,17 @@ namespace testing {
 						}
 						if (setting == "showDefines") {
 							showDefines = (value == 1);
+						}
+						if (setting == "pushNode") {
+							auto* node = node::Content::root()->content(*msgs,value);
+							metrics.nodeStack.push_back(node);
+							metrics.current = metrics.nodeStack.back();
+							metrics.page = 0;
+						}
+						if (setting == "popNode") {
+							metrics.nodeStack.pop_back();
+							metrics.current = metrics.nodeStack.back();
+							metrics.page = 0;
 						}
 					} break;
 

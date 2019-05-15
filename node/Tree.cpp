@@ -60,8 +60,30 @@ namespace node {
 			return _root->node(errs,id,silent);
 		}
 	}
+
 //-------------------------------------------------------------------
-	const Node* Tree::tw(Messages& errs,size_t tw,signed long offset,const Node* localRoot) const {
+	const Node* Tree::peer(Messages& errs, const Node* current, signed long offset, const Node* root) const {
+		/**
+		 * find the offset peer of a node based on it's root.
+		 */
+		const Node* result =  nullptr;
+		if(current != nullptr) {
+			root = root ? root : _root;
+			if (current->hasAncestor(root)) { //FYI, I am my own ancestor.
+				pair<size_t,vector<const Node *>> list =  current->peers(root);
+				signed long pos = offset + list.first;  // list.first is 0-indexed.
+				if(pos > 0 && pos <= list.second.size()) {
+					result = list.second[pos];
+				} // else nullptr / out of range;
+			} else {
+				errs << Message(range,"supplied root node is not an ancestor of current node");
+			}
+		}
+		return result;
+	}
+
+//-------------------------------------------------------------------
+	const Node* Tree::tw(Messages& errs,size_t tw,signed long offset) const {
 		const Node* result =  nullptr;
 		if(tw > maxTw || tw < 1) {
 			ostringstream err;

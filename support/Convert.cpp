@@ -141,9 +141,9 @@ namespace Support {
 			ostringstream ans;
 			switch(format) {
 				case('i'): ans << static_cast<long long>(answer); break;
-				case('f'): ans << fixed << setprecision(dp) << answer; break;
+				case('f'): ans << fixed << setprecision((int)dp) << answer; break;
 				case('x'): ans << std::hex << static_cast<long long>(answer); break;
-				default: ans << std::fixed << setprecision(dp) <<  answer; break;
+				default: ans << std::fixed << setprecision((int)dp) <<  answer; break;
 			}
 			return ans.str();
 		} else {
@@ -411,7 +411,7 @@ namespace Support {
 		return real( i );
 	}
 	//---------------------------------------------------------------------------
-	size_t hex(string::const_iterator& i,double& val) {
+	size_t hex(string::const_iterator& i,long double& val) {
 		string::const_iterator j(i); //Start position as copy constructor.
 		val = 0;
 		bool ended = false;

@@ -117,7 +117,7 @@ namespace Support {
 			default:
 				return;
 		}
-		str(ostr,uname,the_timer,style);
+		str(ostr,the_timer,style);
 	}
 
 	void Timing::get(Messages& ostr,char timer_c,const string name,units style) {
@@ -177,7 +177,7 @@ namespace Support {
 		}
 	}
 
-	void Timing::str(ostream& ostr,string name,timecount t,units style) {
+	void Timing::str(ostream& ostr,timecount t,units style) {
 		ostr << fixed;
 		chrono::nanoseconds	ticks[6]={3600s,   60s  ,1s   ,1ms  ,1us  ,1ns};
 		string			  	times[6]={"h ", "m ","s ","ms","µs","ns"};

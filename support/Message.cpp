@@ -78,8 +78,8 @@ namespace Support {
 	}
 
 	void Messages::enscope(string s) {
-		list.push_front(std::move(Message(scope,s)));
-		list.push_back(std::move(Message(endsc,"")));
+		list.push_front(Message(scope,s));
+		list.push_back(Message(endsc,""));
 	}
 
 	void Messages::prefix(Message m) {

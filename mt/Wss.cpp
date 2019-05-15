@@ -10,15 +10,7 @@
 namespace mt {
 	std::stack<const mtext*> Wss::newline;
 
-	Wss::Wss(std::string w) : text(std::move(w)) {}
-
-	bool Wss::empty() const { return text.empty(); }
-
-    std::string Wss::get() const { return text; }
-
-	void Wss::final(std::ostream& o) const {
-		o << text;
-	}
+	Wss::Wss(std::string w) : Script(std::move(w)) {}
 
 	std::ostream& Wss::visit(std::ostream& o) const {
         o << "‘" << text << "’" << std::flush;
@@ -43,7 +35,7 @@ namespace mt {
 				if (wssPtr != nullptr) {
 					wssPtr->text.append(text);
 				} else {
-					Text *textPtr = dynamic_cast<Text *>(back);
+					auto *textPtr = dynamic_cast<Script *>(back);
 					if (textPtr != nullptr) {
 						textPtr->append(text);
 					} else {
@@ -57,7 +49,7 @@ namespace mt {
 					if (wssPtr != nullptr) {
 						wssPtr->text.append(i);
 					} else {
-						auto* textPtr = dynamic_cast<Text *>(back);
+						auto* textPtr = dynamic_cast<Script *>(back);
 						if (textPtr != nullptr) {
 							textPtr->append(i);
 						} else {

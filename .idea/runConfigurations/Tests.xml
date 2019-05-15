@@ -1,8 +1,8 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Tests" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="-tests" WORKING_DIR="file://$PROJECT_DIR$" PASS_PARENT_ENVS_2="true" PROJECT_NAME="macrotext" TARGET_NAME="macrotext" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="macrotext" RUN_TARGET_NAME="macrotext">
+  <configuration default="false" name="Tests" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="-tests" WORKING_DIR="file://$PROJECT_DIR$" PASS_PARENT_ENVS_2="false" PROJECT_NAME="macrotext" TARGET_NAME="macrotext" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="macrotext" RUN_TARGET_NAME="macrotext">
     <envs>
       <env name="LIBMYSQLCRSO" value="/usr/local/mysql/lib/libmysqlclient.dylib" />
-      <env name="SQL_CONFIG_FILE" value="$USER_HOME$/Desktop/my.cnf" />
+      <env name="SQL_CONFIG_FILE" value="$USER_HOME$/Desktop/tests.cnf" />
       <env name="REMOTE_USER" value="bgriffin" />
       <env name="RS_SITENAME" value="testBuild" />
     </envs>

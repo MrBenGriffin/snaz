@@ -48,7 +48,7 @@ namespace Support {
 	long			integer(string::const_iterator&);			//Given a const string, returns an integer -BIGINT ... 0 ... +BIGINT
 	double			real(string::const_iterator&);				//Given a string, returns a double.
 	double			real(const string&);						//Given a const string, returns a double (floating point).
-	size_t	hex(string::const_iterator&,double&); 		//input e.g. x32dda outputs a hex double. error needs NaN returns bytes used
+	size_t	hex(string::const_iterator&,long double&); 		//input e.g. x32dda outputs a hex double. error needs NaN returns bytes used
 	void 			toDecimalList(vector<string>&,string);
 	void			tolist(deque<size_t>&,const string &); //given a comma delimited set of naturals, returns a deque of naturals
 	void			tolist(vector<size_t>&,const string &); //given a comma delimited set of naturals, returns a vector of naturals

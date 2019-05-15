@@ -93,12 +93,12 @@ void Build::tests(Messages &errs) {
 	auto language = lang();
 
 	node::Suffix().loadTree(errs,*sql,0, _current);
-	content::Template::load(errs,*sql,_current);
+	content::Template::load(errs,*sql);
 	content::Segment::load(errs,*sql,_current);
 	node::Taxon().loadTree(errs,*sql,language, _current); 		//This is slow.
 	node::Content().loadTree(errs,*sql,language,_current);		//This is fast.
 	content::Editorial::e().set(errs,*sql,language,_current);
-	_media->load(errs,sql,language);
+	_media->load(errs,sql);
 
 	content::Layout::load(errs,*sql,tech(),_current);
 	node::Content().setLayouts(errs);
@@ -152,7 +152,7 @@ void Build::global(Messages& errs) {
 	mt::Definition::load(errs,*sql,_current); // Set the internals.
 	env.basedir(Scripts).makeDir(errs);
 	node::Suffix().loadTree(errs,*sql,0, _current);
-	content::Template::load(errs,*sql,_current);
+	content::Template::load(errs,*sql);
 	content::Segment::load(errs,*sql,_current);
 //TODO:	RunScript("PRE_PROCESSING_SCRIPT", "Pre Processor", errs);
 	langs(errs);
@@ -189,9 +189,9 @@ void Build::langs(Messages& errs) {
 		node::Content().loadTree(errs,*sql,lang.first,_current);
 		content::Editorial::e().set(errs,*sql,lang.first,_current);
 		////bld->all_techs && bld->fullBuild
-		_media->load(errs,sql,lang.first);
+		_media->load(errs,sql);
 		techs(errs);
-		_media->save(errs,sql,lang.first, allTechs && full); //Condition for full reset.
+		_media->save(errs,sql,allTechs && full); //Condition for full reset.
 		//.....
 		if (times.show()) { times.use(errs,"Language " + lang.second.name); }
 		languages.pop_front();

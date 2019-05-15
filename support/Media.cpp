@@ -181,7 +181,7 @@ namespace Support {
 	}
 
 //-----------------------------------------------------------------------------
-	bool Media::exists(Messages& errs,const string& ref) const {
+	bool Media::exists(Messages&,const string& ref) const {
 		pair<string,string> mtrans = getRef(ref); // media / trans
 		//not M.mt or not E.mt = found in M or found in E.
 		if (mediamap.find(mtrans.first) != mediamap.end()) return true;
@@ -244,7 +244,7 @@ namespace Support {
 		}
 	}
 
-	void Media::save(Messages& errs,Db::Connection* c,size_t language,bool reset) {
+	void Media::save(Messages& errs,Db::Connection* c,bool reset) {
 		if(!mediaUsed.empty()) {
 			errs << Message(warn,"Media::save needs to be implemented.");
 			//TODO:: set this up in the proper place.
@@ -300,8 +300,8 @@ namespace Support {
 
 	void Media::doTransforms(Messages& errs,string& ref,const Path& outPath,const Path& orgPath,const string& t_origin,std::time_t orgdate,MediaInfo& filebits,bool reset) {
 		if(instances.find(ref) != instances.end()) {
-			unordered_map<string,string>& transforms = instances[ref]; //And get any transforms.
-			for (auto trn : transforms) {
+			unordered_map<string,string>& mediaTransforms = instances[ref]; //And get any transforms.
+			for (auto trn : mediaTransforms) {
 				File trOrgFile(orgPath);
 				File trOutFile(outPath);
 				trOrgFile.setFileName(trn.first,true); //ignore leading slash.
@@ -356,13 +356,13 @@ namespace Support {
 	}
 
 //-----------------------------------------------------------------------------
-	void Media::load(Messages& errs,Db::Connection* c,size_t language) {
+	void Media::load(Messages& errs,Db::Connection* c) {
 		Timing& times = Timing::t();
 		if (times.show()) { times.set("Media load"); }
-			normalise(errs,c);
-			loadTransforms(errs,c);
-			loadMedia(errs,c,media,mediamap,false);
-			loadMedia(errs,c,emedia,embedmap,true);
+		normalise(errs,c);
+		loadTransforms(errs,c);
+		loadMedia(errs,c,media,mediamap,false);
+		loadMedia(errs,c,emedia,embedmap,true);
 		if (times.show()) { times.use(errs,"Media load"); }
 
 	}

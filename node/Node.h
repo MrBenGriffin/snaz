@@ -36,16 +36,16 @@ namespace node {
 	class Node {                    // build the tree..
 	private:
 
-		void addToPeerList(vector<const Node *> &, size_t) const; //internal recursion function used by peers().
+		void addToPeerList(pair<size_t,vector<const Node *>> &, const Node*) const; //internal recursion function used by peers().
 
 	protected:
 		Tree* _tree;						// The tree I belong to.
-		Node* _parent;      				// parent
-		size_t _id;        					// unique id
-		size_t _tw;                			// treewalk value
-		size_t _tier;            			// tier of Node
-		size_t _sibling;         			// my number from 1 to n (NOT a zero prefixed array!) - this can be derived from where I am in my parents children.
-		size_t _weight;						// size of my branch.
+		Node* _parent;      		// parent
+		size_t _id;        			// unique id
+		size_t _tw;             // treewalk value
+		size_t _tier;           // tier of Node
+		size_t _sibling;        // my number from 1 to n (NOT a zero prefixed array!) - this can be derived from where I am in my parents children.
+		size_t _weight;					// size of my branch.
 		string _ref;						// Unique reference string (eg, LinkRef.
 		string idStr;						// As we get this from the database, we may as well store the string 'for free'.
 		vector<const Node *> children;      // List of children
@@ -66,9 +66,9 @@ namespace node {
 //Node-tree (within a node context).
 		void addChild(Messages&,Node*);
 		size_t getChildCount() const;        //accessor
-		vector<const Node *> siblings() const;
 		vector<const Node *> ancestors(const Node* = nullptr) const;
-		vector<const Node *> peers(const Node* = nullptr) const;
+		pair<size_t,vector<const Node *>> siblings() const;
+		pair<size_t,vector<const Node *>> peers(const Node* = nullptr) const;
 
 		const Node* parent() const { return _parent; }
 		const Tree* tree() const { return _tree; }

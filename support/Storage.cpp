@@ -318,7 +318,8 @@ namespace Support {
 		sql.dispose(q);
 	}
 
-	void Storage::save(Messages& log,Db::Connection& sql,buildKind kind) {
+	void Storage::save(Messages& log,Db::Connection&,buildKind) {
+		log << Message(error,"Storage::save is not yet implemented.");
 //		Query *qi = sql.query();
 //		for (auto &it : store) {
 //			string name = it.first;

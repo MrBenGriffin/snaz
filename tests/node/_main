@@ -1,3 +1,6 @@
+
+!	node/locator
+
 # iSuffix
 iSuffix 01		@iSuffix(!home)						html
 iSuffix 02		@iSuffix(!home:1)					!1!range: Page was out of bounds.

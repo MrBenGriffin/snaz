@@ -16,30 +16,35 @@ namespace mt {
 	bool Token::empty() const { return true; }
 
 	void Token::add(Token* token,mtext& mt) {
-		Wss  *w = dynamic_cast<Wss *>(token);
-		if(w != nullptr) {
-			if (!mt.empty()) {
-				auto back = mt.back();
-				Wss *ptr = dynamic_cast<Wss *>(back.get());
-				if (ptr != nullptr) {
-					w->text = ptr->text + w->text;
-					mt.pop_back();
-				}
-			}
-		} else {
+		if (token != nullptr) {
 			Text *t = dynamic_cast<Text *>(token);
-			if(t != nullptr) {
+			if (t != nullptr) {
 				if (!mt.empty()) {
 					auto back = mt.back();
 					Text *ptr = dynamic_cast<Text *>(back.get());
 					if (ptr != nullptr) {
-						t->text = ptr->text + t->text;
+						t->text.swap(ptr->text);
+						t->text.append(ptr->text);
 						mt.pop_back();
 					}
 				}
+			} else {
+				Wss *w = dynamic_cast<Wss *>(token);
+				if (w != nullptr) {
+					if (!mt.empty()) {
+						auto back = mt.back();
+						Wss *ptr = dynamic_cast<Wss *>(back.get());
+						if (ptr != nullptr) {
+							w->text.swap(ptr->text);
+							w->text.append(ptr->text);
+							mt.pop_back();
+						}
+					}
+				} else {
+					mt.emplace_back(token);
+				}
 			}
-		}
-		mt.emplace_back(token);
-	}
 
+		}
+	}
 }

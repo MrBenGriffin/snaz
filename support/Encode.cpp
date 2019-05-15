@@ -106,41 +106,32 @@ namespace Support {
 	}
 
 	//---------------------------------------------------------------------------
-	void xmldecode(string& basis) {  //XML de-escape
+	void xmlencode(string& basis) {  //XML escape
 		static const vector<pair<string,string>> conversions = {
-			  {"&lt;"  ,"<" },
-			  {"&gt;"  ,">" },
-			  {"&#39;" ,"'" },
-			  {"&apos;","'" },
-			  {"&quot;","\""},
-			  {"&amp;" ,"&" }
-		  };
+				{"&" ,"&amp;" },
+				{"<" ,"&lt;"  },
+				{">" ,"&gt;"  },
+				{"'" ,"&#39;" }, // &apos; MSIE doesn't know apos
+				{"\"","&quot;"}
+		};
 		if (! basis.empty() ) {
 			fandr(basis,conversions);
 		}
 	}
-	//---------------------------------------------------------------------------
-	string xmlenc(const char* i) {  //XML escape
-		string s(i);
-		xmldecode(s); //Normalise
-		fandr(s,"&","&amp;");
-		fandr(s,"<","&lt;");
-		fandr(s,">","&gt;");
-		fandr(s,"\"","&quot;");
-		fandr(s,"'","&#39;"); // &apos; MSIE doesn't know apos
-		return s;
-	}
-	//---------------------------------------------------------------------------
 
-	string xmlenc(const string i) {  //XML escape
-		string s(i);
-//		xmldecode(s); //Normalise
-		fandr(s,"&","&amp;");
-		fandr(s,"<","&lt;");
-		fandr(s,">","&gt;");
-		fandr(s,"\"","&quot;");
-		fandr(s,"'","&#39;"); // &apos; MSIE doesn't know apos
-		return s;
+	//---------------------------------------------------------------------------
+	void xmldecode(string& basis) {  //XML de-escape
+		static const vector<pair<string,string>> conversions = {
+				{"&amp;" ,"&" },
+				{"&lt;"  ,"<" },
+				{"&gt;"  ,">" },
+				{"&#39;" ,"'" },
+				{"&apos;","'" },
+				{"&quot;","\""}
+		};
+		if (! basis.empty() ) {
+			fandr(basis,conversions);
+		}
 	}
 
 	//---------------------------------------------------------------------------
@@ -194,57 +185,6 @@ namespace Support {
 		return retval;
 	}
 
-//--------------------------------------------------------------------------------
-//xml name encoding http://www.w3.org/TR/REC-xml/#NT-Name
-//	[4]   	NameChar   ::=   	 Letter | '_' | ':' | Digit | '.' | '-' | CombiningChar | Extender
-//  [5a]    NameInit   ::=       Letter | '_' | ':'
-//	[5]   	Name	   ::=   	 (NameInit) (NameChar)*
-//---------------------------------------------------------------------------------
-	//Letters = 'A-Za-z'
-	bool nameencode(string& s) {  //xml name encoding returns false if it can't return a valid name.
-		bool retval=true;
-		std::string result;
-		unsigned char c;
-		string::size_type q=s.size();
-		if ( q > 0) {
-			string::size_type p;
-			for (p=0 ; p < q; p++) { //while we don't have a good initial character, carry on
-				c=s[p];
-				if (
-						(c >= 'A' && c <= 'Z') ||
-						(c >= 'a' && c <= 'z') ||
-						(c == '_' ) || (c == ':' )
-						) {
-					result += c;
-					break;
-				}
-			}
-			if ( p >= q) { //no legal initial character...
-				retval=false;
-			} else {
-				//we now have a NameInit
-				for (p++; p < q; p++) {  //carry p on from where it left off.
-					c=s[p];
-					if (
-							(c >= 'A' && c <= 'Z') ||
-							(c >= 'a' && c <= 'z') ||
-							(c == '_' )  || (c == ':' ) ||
-							(c >= '0' && c <= '9') ||
-							(c == '.' ) ||
-							(c == '-' )
-							) {
-						result += c;
-					}
-				}
-			}
-		} else {
-			retval=false;
-		}
-		//we now have a NameInit (NameChar)* or false.
-		s = result;
-		return retval;
-	}
-
 	//---------------------------------------------------------------------------
 	//file
 	//	[4]   	FileChar   ::=   	 Letter | '_' | Digit | '.' | '-' | CombiningChar | Extender
@@ -274,17 +214,6 @@ namespace Support {
 		}
 		s = result;
 		return retval;
-	}
-	//---------------------------------------------------------------------------
-	void xmlencode(string& s) {  //XML escape
-		if (! s.empty() ) {
-//			xmldecode(s); //Normalise
-			fandr(s,"&","&amp;");
-			fandr(s,"<","&lt;");
-			fandr(s,">","&gt;");
-			fandr(s,"\"","&quot;");
-			fandr(s,"'","&#39;"); // &apos; MSIE doesn't know apos
-		}
 	}
 	//---------------------------------------------------------------------------
 	string hexencode(const unsigned char c) {
@@ -438,7 +367,7 @@ namespace Support {
 	}
 */
 	//---------------------------------------------------------------------------
-	void urldecode(Messages& errs,std::string& s) {
+	void urldecode(Messages&,std::string& s) {
 		std::string result;
 		unsigned char c;
 		for (size_t p= 0; p < s.size(); ++p) {

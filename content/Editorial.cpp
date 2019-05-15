@@ -23,7 +23,7 @@ namespace content {
 		return singleton;
 	}
 
-	void Editorial::unload(Messages &errs, Connection &sql) {
+	void Editorial::unload(Messages &, Connection &sql) {
 		contentStore.clear();
 		qIndexes.clear();
 		sql.dispose(query);
@@ -49,7 +49,7 @@ namespace content {
 	}
 
 	void Editorial::storeBuilt(Messages& errs) {
-
+		errs << Message(error,"Editorial::storeBuilt is not yet implemented.");
 	}
 
 	void Editorial::set(Messages &errs, Connection &sql,size_t langID, buildKind _kind) {
@@ -107,23 +107,28 @@ namespace content {
 		return value;
 	}
 
-	const mt::mtext* Editorial::get(Messages &errs, const node::Content* node, const Segment* segment) {
+	pair<bool,const mt::mtext*> Editorial::get(Messages &errs, const node::Content* node, const Segment* segment) {
 		static mt::mtext empty;
-		const mt::mtext* value = &empty;
+		pair<bool,const mt::mtext*> value = { true, &empty};
 		key id;
 		if(sanity(errs,id,node,segment)) {
 			auto cIndex = contentStore.find(id); //unordered_map< key, mt::mtext, hash_pair> contentStore;
 			if(cIndex != contentStore.end()) {
-				value = &(cIndex->second);
+				value.first  = cIndex->second.first;
+				value.second = &(cIndex->second.second);
 			} else {
 				auto index = qIndexes.find(id);
 				if(index != qIndexes.end()) {
 					query->setRow(errs,index->second);
 					string content;
 					query->readfield(errs, "content", content);
+					pair<bool,mt::mtext> toCache;
 					mt::mtext stuff = mt::Driver::parse(errs,content,false);
-					auto idx = contentStore.emplace(id,std::move(stuff));
-					value = &(idx.first->second);
+					toCache.first=(stuff.size() == 1 && dynamic_cast<const mt::Text*>(stuff.front().get()) != nullptr);
+					toCache.second = std::move(stuff);
+					auto idx = contentStore.emplace(id,std::move(toCache));
+					value.first  = idx.first->second.first;
+					value.second = &idx.first->second.second;
 				}
 			}
 		}

@@ -33,7 +33,7 @@ namespace content {
 
 		static const Template*  get(Messages &,size_t);		//return by id,
 
-		static void load(Messages&,Connection&,buildKind);
+		static void load(Messages&,Connection&);
 		static void show(bool Show = true) { _show = Show; }
 
 	};

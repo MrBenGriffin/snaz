@@ -120,24 +120,24 @@ namespace mt {
 			const content::Layout* layout = interest->layout();
 			if(layout) {
 				auto* segment = layout->segment(e,my.parm(2));
-				Metrics* metrics = context.back().second.metrics;
 				if(my.count == 2) {
-					if(metrics) { //eep
+					auto code = content::Editorial::e().get(e,interest,segment);
+					if(!code.first) { //need to do IO as well..
+						auto* metrics = const_cast<Metrics*>(my.metrics);
 						metrics->nodeStack.push_back(interest);
 						metrics->segmentStack.push(segment);
-					}
-					const mt::mtext* code = content::Editorial::e().get(e,interest,segment);
-					if(code) { //need to do IO as well..
 						mt::Wss::push(&(segment->nl));
-
-						for(auto& token: *code) {
+						for(auto& token: *(code.second)) {
 							token->expand(e,o,context);
 						}
 						mt::Wss::pop();
-					}
-					if(metrics) { //eep
 						metrics->segmentStack.pop();
 						metrics->nodeStack.pop_back();
+					} else {
+						auto* text = code.second;
+						if(!text->empty()) {
+							Token::add(text->front().get(),o);
+						}
 					}
 				} else {
 					my.set(content::Editorial::e().getMeta(e,interest,segment,my.parm(3)));

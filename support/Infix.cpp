@@ -224,7 +224,7 @@ namespace Support {
 		bool Evaluate::get(string::const_iterator& x,long double& v) {
 			bool retval(false);
 			if (*x == '0' && *(x+1) == 'x') {
-				double hexResult;
+				long double hexResult;
 				x++; x++;
 				Support::hex(x,hexResult);
 				v = hexResult;

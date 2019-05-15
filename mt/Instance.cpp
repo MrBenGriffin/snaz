@@ -25,7 +25,7 @@ namespace mt {
 
 	void Instance::copy(const plist *p) {
 		if(p != nullptr) {
-			for (const auto i : *p) {
+			for (const auto& i : *p) {
 				parms.push_back(i);
 			}
 		}
@@ -46,9 +46,9 @@ namespace mt {
 
 	forStuff::forStuff(const std::string& vt,const std::string& ct,size_t v,size_t c) {
 		stuff = {
-			{vt,std::move(Support::tostring(v))}
+				{vt,Support::tostring(v)}
 			,
-			{ct,std::move(Support::tostring(c))}
+				{ct,Support::tostring(c)}
 		};
 	}
 

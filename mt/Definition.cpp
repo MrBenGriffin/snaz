@@ -45,7 +45,7 @@ namespace mt {
 //				+---------+-----------+----+---------+---------+-------+----------+----------+
 				std::string name,expansion,macro_id;
 				signed long min,max;
-				size_t id,pre,stripDef,stripParms;
+				size_t pre,stripDef,stripParms;
 //				str.str(""); str << "Found " << q->getnumrows() << " macro Definitions";
 //				errs << Message(debug,str.str());
 				while(q->nextrow()) {
@@ -147,13 +147,12 @@ namespace mt {
 		if(!parmCheck(e,instance.size())) {
 			return;
 		}
-		Instance modified(instance); //really not sure why we are copy-constructing this here.
 		if (!preExpand) {
-			plist mt_parms = std::move(modified.parms);
-			modified.parms.clear();
+			plist mt_parms = std::move(instance.parms);
+			instance.parms.clear();
 			if (trimParms) { trim(mt_parms); }
-			modified.generated = false;
-			context.push_back({nullptr,std::move(modified)}); //This is done for injections like %(1+).
+			instance.generated = false;
+			context.push_back({nullptr,std::move(instance)}); //This is done for injections like %(1+).
 			for (auto &parm : mt_parms) {
 				mtext expanded;
 				auto i=context.back().second.parms.size();
@@ -164,15 +163,14 @@ namespace mt {
 					context.back().second.parms.push_back(std::move(expanded)); //each one as a separate parm!!
 				}
 			}
-			modified = std::move(context.back().second);
+			instance = std::move(context.back().second);
 			context.pop_back();
-			modified.generated = instance.generated;
-			while (!modified.parms.empty() && modified.parms.back().empty()) {
-				modified.parms.pop_back();
+			while (!instance.parms.empty() && instance.parms.back().empty()) {
+				instance.parms.pop_back();
 			}
-			modified.it = {0,modified.parms.size()};
+			instance.it = {0,instance.parms.size()};
 		}
-		context.push_front({this,modified});
+		context.push_front({this,instance});
 		if (iterated) {
 			Instance& specific = context.front().second;
 			iteration* i = &(specific.it); //so we are iterating front (because not all are generated).

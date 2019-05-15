@@ -61,7 +61,7 @@ namespace node {
 	}
 
 	//-------------------------------------------------------------------
-	void Node::addChild(Messages & errs,Node* node) {
+	void Node::addChild(Messages&,Node* node) {
 		node->_sibling = children.size() +1;
 		node->_parent = this;
 		children.push_back(node);
@@ -79,22 +79,27 @@ namespace node {
 		_parent = nullptr;  // a reference value - so do not delete here!
 	}
 
-	vector<const Node *> Node::siblings() const {
-		vector<const Node *> result;
+
+	pair<size_t,vector<const Node *>> Node::siblings() const {
+		pair<size_t,vector<const Node *>> result;
 		if(_parent != nullptr) {
 			for (auto kid: _parent->children) {
-				result.push_back(kid);
+				if(kid->_id == _id) { //zero-indexed position of self
+					result.first = result.second.size();
+				}
+				result.second.push_back(kid);
 			}
 		} else {
-			result.push_back(this);
+			result.first = 0; //zero-indexed position of self
+			result.second.push_back(this);
 		}
 		return result;
 	}
 
 	bool Node::hasAncestor(const Node *anc) const {
 		return anc
-		&& _tw >= anc->_tw
-		&& _tw <  (anc->_tw+anc->_weight);
+			   && _tw >= anc->_tw
+			   && _tw <  (anc->_tw+anc->_weight);
 	}
 
 	vector<const Node *> Node::ancestors(const Node *anc) const {
@@ -111,30 +116,36 @@ namespace node {
 	}
 
 	//internal recursive function used to gather nodes at a given depth...
-	void Node::addToPeerList(vector<const Node *> &result, size_t depth) const {
-		if (depth < 1) return;
-		for (auto kid: children) {
-			if (depth == 1) {
-				result.push_back(kid);
-			} else {
-				kid->addToPeerList(result, depth - 1);
+	void Node::addToPeerList(pair<size_t,vector<const Node *>> &result,const Node *orig) const {
+		if ( orig->_tier == _tier + 1) {
+			for (auto kid: children) {
+				if(kid->_id == orig->_id) {  //zero-indexed position of self
+					result.first = result.second.size();
+				}
+				result.second.push_back(kid);
+			}
+		} else {
+			for (auto kid: children) {
+				kid->addToPeerList(result,orig);
 			}
 		}
 	}
 
-	vector<const Node *> Node::peers(const Node *anc) const {
+	pair<size_t,vector<const Node *>> Node::peers(const Node *anc) const {
+		pair<size_t, vector<const Node *>> result;
 		if (hasAncestor(anc)) {
-			vector<const Node *> result;
-			anc->addToPeerList(result, _tier - anc->_tier); //6-5 == 1 so it should return siblings..
-			return result;
-		} else {
-			return siblings();
+			if(anc->_id != _id) {
+				anc->addToPeerList(result, this); // All the nodes that are at my tier.
+			} else {
+				result = {0, {this}};
+			};
 		}
+		return result;
 	}
 
 	void Node::str(ostream& o) const {
 		std::setfill('-');
-		o << std::setw(6+ _tier) << " tier:" << _tier << " weight:" << _weight << " tw:" << _tw  << " id:" << _id << " ref:" << _ref << endl;
+		o << std::setw(_tier + 6) << " tier:" << _tier << " weight:" << _weight << " tw:" << _tw  << " id:" << _id << " ref:" << _ref << endl;
 		for (auto& i : children) {
 			i->str(o);
 		}
@@ -151,14 +162,14 @@ namespace node {
 //-------------------------------------------------------------------
 // Contextual Navigation functions follow
 //-------------------------------------------------------------------
-	 const Node* Node::child(Messages &errs, size_t x) const {
-		if (x >= children.size()) {
+	const Node* Node::child(Messages &errs, size_t x) const { //This is 1-indexed!!
+		if ( x == 0 || x > children.size()) {
 			ostringstream text;
-			text << "A child index was greater than the number of children. Index:" << x << " Children: " << children.size();
-			errs << Message(error, text.str());
+			text << "A child index outside the number of children. Index:" << x << " Children: " << children.size();
+			errs << Message(range, text.str());
 			return nullptr;
 		}
-		return children[x];
+		return children[x-1];
 	}
 
 //-------------------------------------------------------------------

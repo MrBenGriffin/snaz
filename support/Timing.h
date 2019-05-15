@@ -37,7 +37,7 @@ namespace Support {
 		timecount timer_diff(const timestamp &);
 		long long nanos(const timecount &);
 		long double seconds(const timecount &);
-		void str(std::ostream&,std::string,timecount,units=nat);
+		void str(std::ostream&,timecount,units=nat);
 		bool smaller(const timecount &, const timecount &);
 
 		void set(char,std::string= "unknown");

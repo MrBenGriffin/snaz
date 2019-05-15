@@ -143,8 +143,8 @@ namespace Support {
 						size_t length = mysqlRowLengths[i - 1];
 						if (field != nullptr && length > 0 )  {
 							retval = true;
-							char* end = row[i - 1] + length;
-							value = strtold(field,&end);
+							char* chEnd = row[i - 1] + length;
+							value = strtold(field,&chEnd);
 						}
 					} catch (...) {
 						ostringstream message;
@@ -276,7 +276,7 @@ namespace Support {
 				while (nextrow()) {
 					const char* tname = row[0];
 					if(tname) {
-						ts.insert(move(string(tname)));
+						ts.insert(string(tname));
 					}
 				}
 			}
@@ -304,8 +304,8 @@ namespace Support {
 		bool MySQLQuery::check(Messages &errs) {
 			bool value = s->my_errno(queryHandle) == 0;
 			if(!value) {
-				auto ss = queryHandle->server_status;
-				auto cs = queryHandle->status;
+//				auto ss = queryHandle->server_status;
+//				auto cs = queryHandle->status;
 
 				ostringstream str;
 				string serverError(s->error(queryHandle));

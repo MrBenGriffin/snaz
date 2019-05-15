@@ -1,0 +1,72 @@
+F pushNode	312
+
+loc01	@iShortTitle(I0)							Node Location
+loc02	@iShortTitle()								Node Location
+loc03	@iShortTitle(T4215)							House Tax
+loc04	@iShortTitle(C105)							Node Locator
+loc05	@iLinkRef(S2)								html
+loc06	@iShortTitle(!NodeLocator)					Node Locator
+lop11	@iSuffix(:0)								NULL
+lop02	@iSuffix(!NodeLocator:0)					html
+loc08	@iShortTitle(!nltba/^1)						NL Test B
+loc09	@iShortTitle(+1)							Bracketing
+loc10	@iShortTitle(-1)							Media
+
+F pushNode	105
+// +-----+------+------+------+------+--------+-----------------+
+// | id  | p    | tw   | nc   | t    | layout | lnkref          |
+// +-----+------+------+------+------+--------+-----------------+
+// | 105 |  312 |  111 |  129 |    3 |     33 | NodeLocator     |
+// | 108 |  105 |  112 |  116 |    4 |     53 | NodeLocateTestA |
+// | 111 |  108 |  113 |  114 |    5 |     53 | NLTAa           |
+// | 112 |  108 |  114 |  115 |    5 |     53 | NLTAb           |
+// | 113 |  108 |  115 |  116 |    5 |     53 | NLTAc           |
+// | 109 |  105 |  116 |  120 |    4 |     53 | NodeLocateTestB |
+// | 114 |  109 |  117 |  118 |    5 |     53 | nltba           |
+// | 115 |  109 |  118 |  119 |    5 |     53 | NLTBB           |
+// | 116 |  109 |  119 |  120 |    5 |     53 | NLTBc           |
+// | 110 |  105 |  120 |  124 |    4 |     53 | NLTC            |
+// | 117 |  110 |  121 |  122 |    5 |     33 | NLTCa           |
+// | 118 |  110 |  122 |  123 |    5 |     53 | NLTCb           |
+// | 119 |  110 |  123 |  124 |    5 |     53 | NLTCc           |
+// | 120 |  105 |  124 |  125 |    4 |     33 | NodeLocateErrors|
+// | 290 |  105 |  125 |  129 |    4 |     33 | Stack0          |
+// | 291 |  290 |  126 |  129 |    5 |     33 | Stack1          |
+// | 292 |  291 |  127 |  129 |    6 |     33 | Stack2          |
+// | 293 |  292 |  128 |  129 |    7 |     33 | D               |
+// +-----+------+------+------+------+--------+-----------------+
+
+lop03	@iSuffix(:0)								html
+loc11	@iShortTitle(n-0)							Stack0
+loc12	@iShortTitle(n-1)							NL Errors
+loc13	@iShortTitle(!NLTC/0L33)					CA NL Test
+loc14	@iShortTitle(0+1)							NL Test A
+loc15	@iShortTitle(0+2)							NL Test B
+loc16	@iShortTitle(..)							Node Location
+loc17	@iShortTitle(A1)							BuildTest
+loc18	@iShortTitle(A2)							Node Location
+loc19	@iShortTitle(^1)							Node Location
+loc20	@iShortTitle(^0)							Node Locator
+lol01	@iShortTitle(^L59)							Node Location
+lol02	@iShortTitle(^1/^L33)						BuildTest
+loc22	@iShortTitle(RL53)							NL Test A
+loc23	@iShortTitle(!NLTC/RL33)					CA NL Test
+loc24	@iShortTitle(!NLTC/RLN)						CB NL Test
+loc25	@iShortTitle(!NLTC/RL33/RLN)				NL Errors
+loc26	@iLinkRef(R)								NodeLocateTestA
+loc27	@iLinkRef(R+)								NodeLocateTestA
+loc28	@iLinkRef(R-)								NodeLocation
+loc29	@iLinkRef(!nltba/B(105))					NLTAc
+loc30	@iShortTitle(!NLTBB/B(105))					BA NL Test
+loc31	@iShortTitle(!NLTBc/B(105))					bb nl test
+loc32	@iShortTitle(!nltba/B(W1))					AC NL Test
+loc33	@iShortTitle(!nltba/F(105))					bb nl test
+loc34	@iShortTitle(!NLTBB/F(105))					BC NL Test
+loc35	@iShortTitle(!NLTBc/F(105))					CA NL Test
+loc36	@iShortTitle(!NLTBc/F(W1))					CA NL Test
+
+loc37	@iShortTitle(105)							Node Locator
+loc38	@iShortTitle(W1)							BuildTest
+loc39	@iShortTitle(/0+1/0+1)						Individual Internals
+F popNode	105
+F popNode	312

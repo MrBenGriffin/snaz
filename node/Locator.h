@@ -34,10 +34,12 @@ namespace node {
 		const Node *root;
 
 		bool nextPathSection(Messages &);
+		const Node* peerPrep(Messages &);
 
 		ostringstream message;
 		Locator();
 		Locator(const Metrics *,const Node*,const Node*);
+		void process(Support::Messages &);
 
 	public:
 		Locator(const Locator *,const Metrics*);
@@ -67,9 +69,7 @@ namespace node {
 
 		const Node* get(Support::Messages&,const string&);
 
-		const Node *locate(Support::Messages &, string::const_iterator, string::const_iterator);
-
-		void process(Support::Messages &, string::const_iterator &in, string::const_iterator &out);
+		const Node *locate(Support::Messages&,string::const_iterator,string::const_iterator);
 
 		//TextAdaptor Functions
 		bool doID(Support::Messages &);

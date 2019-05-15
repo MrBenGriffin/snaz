@@ -20,25 +20,25 @@
 namespace mt {
 	using namespace Support;
 
-    class Definition : public Handler {
-    public:
-        static void startup(Messages&);
+	class Definition : public Handler {
+	public:
+		static void startup(Messages&);
 		static void load(Messages&,Db::Connection&,buildKind);
 		static void shutdown(Messages&,Db::Connection&,buildKind);
 
 		static std::unordered_map<std::string, std::unique_ptr<const Handler> > library;
 	private:
-        size_t minParms, maxParms;
-        std::string _name;
+		size_t minParms, maxParms;
+		std::string _name;
 
 		static void trim(plist&);
 
-    protected:
-        size_t counter;
-        mtext expansion;
+	protected:
+		size_t counter;
+		mtext expansion;
 
-    public:
-        bool iterated, trimParms, preExpand;
+	public:
+		bool iterated, trimParms, preExpand;
 
 		Definition(Messages&,std::string, std::string, long = 0, long = -1, bool= true, bool= true, bool= false);
 		Definition(const mtext&, long = 0, long = -1, bool= true, bool= true, bool= false);
@@ -47,21 +47,21 @@ namespace mt {
 		bool inRange(size_t) const override;
 		bool parmCheck(Messages&,size_t) const;
 		std::ostream &visit(std::ostream &) const override;
-        void expand(Messages&,mtext&,Instance&,mstack&) const override;
+		void expand(Messages&,mtext&,Instance&,mstack&) const override;
 
 		std::string name() const override;
 		static bool test_adv(const std::string &);
-//        static void add(Definition&);
-        static void del(const std::string);
-        static bool has(const std::string);
+		//        static void add(Definition&);
+		static void del(const std::string);
+		static bool has(const std::string);
 
-        //By Library call..
-        static void vis(const std::string,std::ostream&);
-        static void exp(const std::string,Messages&,mtext&,Instance&,mstack&);
-        static void list(std::ostream&);
+		//By Library call..
+		static void vis(const std::string,std::ostream&);
+		static void exp(const std::string,Messages&,mtext&,Instance&,mstack&);
+		static void list(std::ostream&);
 
 
-    };
+	};
 }
 
 #endif //DEFINITION_H

@@ -369,7 +369,6 @@ namespace mt {
 					querystring << " order by " << order;
 				}
 				if (sql->query(e,query,querystring.str())) {
-					auto foo = query->getnumfields();
 					if(query->execute(e)) {
 						iField::contextStack.push(this);
 						while(query->nextrow()) {
@@ -424,8 +423,8 @@ namespace mt {
 		InternalInstance my(this,e,o,instance,context);
 		ostringstream msg;
 		long double nan = numeric_limits<long double>::signaling_NaN();
-		auto x = 0.0;
-		auto y = 0.0;
+		long double x = 0.0;
+		long double y = 0.0;
 		string operation = my.parm(1);
 		string operandx = my.parm(2);
 		string operandy;
@@ -446,12 +445,12 @@ namespace mt {
 		}
 		if(my.count > 2) {
 			operandy = my.parm(3);
-			string::const_iterator a = operandy.begin();
-			if ((*a == 'x') || (*a == 'X')) {
-				auto cc = Support::hex(++a,y);
+			string::const_iterator yi = operandy.begin();
+			if ((*yi == 'x') || (*yi == 'X')) {
+				auto cc = Support::hex(++yi,y);
 				if ( cc + 1 != operandy.size() ) y = nan;
 			} else {
-				y = Support::real(a);
+				y = Support::real(yi);
 			}
 		}
 		long double answer = nan;
@@ -495,11 +494,11 @@ namespace mt {
 					else answer = 0;
 					break;
 				case '|':
-					if (x || y) answer = 1;
+					if (std::fpclassify(x) == FP_NORMAL || std::fpclassify(y) == FP_NORMAL) answer = 1;
 					else answer = 0;
 					break;
 				case 'A':
-					if (x && y) answer = 1;
+					if (std::fpclassify(x) == FP_NORMAL && std::fpclassify(y) == FP_NORMAL) answer = 1;
 					else answer = 0;
 					break;
 				case 'U':
@@ -524,7 +523,7 @@ namespace mt {
 				} break;
 				case '&': {
 					if ((operation.compare("&amp;") == 0)) {
-						if (x && y) { answer = 1; } else { answer = 0; }
+						if (std::fpclassify(x) == FP_NORMAL && std::fpclassify(y) == FP_NORMAL) { answer = 1; } else { answer = 0; }
 					}
 					if ((operation.compare("&lt;") == 0)) {
 						if (x < y) { answer = 1; } else { answer = 0; }

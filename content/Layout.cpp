@@ -50,33 +50,33 @@ const Layout* Layout::get(Messages &errs,size_t id) {
 	return result;
 }
 
-string Layout::segRef(Messages& errs,size_t segID) const {
-	string value;
-	auto found = segIDRefs.find(segID);
-	if(found != segIDRefs.end()) {
-		value = found->second;
-	} else {
-		const content::Segment* s = content::Segment::get(errs,segID);
-		if(s != nullptr) {
-			value = s->name;
+	string Layout::segRef(Messages& errs,size_t segID) const {
+		string value;
+		auto found = segIDRefs.find(segID);
+		if(found != segIDRefs.end()) {
+			value = found->second;
+		} else {
+			const content::Segment* s = content::Segment::get(errs,segID);
+			if(s != nullptr) {
+				value = s->name;
+			}
 		}
+		return value;
 	}
-	return value;
-}
 
-const Segment* Layout::segment(Messages &errs,string ref) const {
-	/*
-	 * get segment by ref. from here so we can use the local name if needs be.
-	 */
-	const Segment* value =  nullptr;
-	auto found = segRefs.find(ref);
-	if(found != segRefs.end()) {
-		value = found->second;
-	} else {
-		value = content::Segment::get(errs,this,ref);
+	const Segment* Layout::segment(Messages &errs,string segmentRef) const {
+		/*
+		 * get segment by ref. from here so we can use the local name if needs be.
+		 */
+		const Segment* value =  nullptr;
+		auto found = segRefs.find(segmentRef);
+		if(found != segRefs.end()) {
+			value = found->second;
+		} else {
+			value = content::Segment::get(errs,this,segmentRef);
+		}
+		return value;
 	}
-	return value;
-}
 
 void Layout::load(Messages &errs, Connection &sql,size_t techID, buildKind) {
 	Timing &times = Timing::t();

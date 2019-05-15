@@ -142,7 +142,7 @@ namespace mt {
 		visit(o);
 	}
 
-	void Injection::subs(mtext& out,const std::vector<std::string>&,const std::string&) const {
+	void Injection::subs(mtext&,const std::vector<std::string>&,const std::string&) const {
 		throw logic_error("shouldn't get to Injection::subs!");
 	}
 

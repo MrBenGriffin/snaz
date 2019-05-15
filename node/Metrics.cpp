@@ -32,7 +32,6 @@ namespace node {
 		page = o->page;
 	}
 
-
 	const Node* Metrics::byPath(Messages &errs,const std::string &path) const {
 		const Node *result = nullptr;
 		if (path.size() > 0) {    // If specified startnode, use it
@@ -50,13 +49,15 @@ namespace node {
 					}
 				}
 			}
+			locator->setFrom(current);
+			result = locator->locate(errs,path.begin(),path.end());
+			if (result == nullptr) {
+				errs << Message(error, "Path: " + path + " did not find a node.");
+			}
+			locator->setRoot(Content::root());
+		} else {
+			result = current;
 		}
-		locator->setFrom(current);
-		result = locator->locate(errs,path.begin(),path.end());
-		if (result == nullptr) {
-			errs << Message(error, "Path: " + path + " did not find a node.");
-		}
-		locator->setRoot(Content::root());
 		return result;
 	}
 

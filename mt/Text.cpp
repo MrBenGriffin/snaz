@@ -9,27 +9,17 @@
 
 namespace mt {
 
-	Text::Text(std::string w) : text(std::move(w)) {}
-
-	bool Text::empty() const { return text.empty(); }
+	Text::Text(std::string w) : Script(std::move(w)) {}
 
 	std::ostream &Text::visit(std::ostream &o) const {
 		o << "“" << text << "”" << std::flush;
 		return o;
 	}
 
-	void Text::final(std::ostream& o) const {
-		o << text;
-	};
-
-	std::string Text::get() const { return text; }
-
-	void Text::append(std::string right) { text.append(std::move(right)); };
-
 	void Text::expand(Messages& m,mtext &mt,mstack &context) const {
 		if (!mt.empty()) {
 			Token *back = mt.back().get();
-			Text *textPtr = dynamic_cast<Text *>(back);
+			auto *textPtr = dynamic_cast<Text *>(back);
 			if (textPtr != nullptr) {
 				textPtr->text.append(text);
 			} else {
@@ -80,11 +70,5 @@ namespace mt {
 		out.emplace_back(new Text(text));
 	}
 
-//	void Token::subs(mtext& out,const std::vector<std::string>&,const std::string&) const {
-////-->		out.emplace_back(new <Token*>(this));
-//	}
-//	void Token::inject(Messages&,mtext& out,mstack&) const {
-////-->		out.emplace_back(const_cast<Token*>(this));
-//	}
 
 }

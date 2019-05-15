@@ -56,8 +56,8 @@ void Internal::startup(Messages& log,Db::Connection& _sql,buildKind kind) {
 		if (times.show()) { times.use(log,"Load Site Storage"); }
 	}
 
-	void Internal::shutdown(Messages& log,Db::Connection& sql,buildKind kind) {
-		storage.save(log,sql,kind);
+	void Internal::shutdown(Messages& log,Db::Connection&,buildKind kind) {
+		storage.save(log,*sql,kind);
 	}
 
 	plist Internal::toParms(string basis,string cutter,string sort) const {
@@ -138,7 +138,7 @@ void Internal::startup(Messages& log,Db::Connection& _sql,buildKind kind) {
  +------+--------------+------------+----------+-----+
  */
 	void Internal::doSort(Messages& e,vector<const Node*>& nodelist,string sortparm) const {
-		bool ignore_non_existent = false;
+//		bool ignore_non_existent = false;
 		bool backwards = false;
 		if (!sortparm.empty()) {
 			if (sortparm[0] == '-') {
@@ -152,7 +152,7 @@ void Internal::startup(Messages& log,Db::Connection& _sql,buildKind kind) {
 			if ((sortparm[0] == '[') && (sortparm.length() > 2)) { 			// This is a segment reference. +[aaa]
 				string seg_ref=sortparm.substr(1,sortparm.length()-2);       //take off 1 from the start + 1 from the end, =2
 				if(seg_ref[0] == '*') {
-					ignore_non_existent = true;
+//					ignore_non_existent = true;
 					seg_ref.erase(0,1);
 				}
 				vector<Node *> deadlist;

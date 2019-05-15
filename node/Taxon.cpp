@@ -39,10 +39,10 @@ namespace node {
 			std::ostringstream str;
 			//The following query is super inefficient.
 			str << "select n.id,ifnull(n.p,0) as parent,n.tw,n.nc-n.tw as size,n.t as tier,n.team,n.classcode,n.scope,"
-		  			"concat(n.id,':',l.title) as ref,"
-		  			"l.title,l.navtitle as shorttitle,l.synonyms,l.keywords,l.descr,l.container='on' as container,"
-	   				"l.moddate,l.editor,l.used='on' as active from bldtaxlang l,bldtax n "
-					"where l.node=n.id and l.language=" << language << " and l.used='on' order by n.tw";
+				   "concat(n.id,':',l.title) as ref,"
+				   "l.title,l.navtitle as shorttitle,l.synonyms,l.keywords,l.descr,l.container='on' as container,"
+				   "l.moddate,l.editor,l.used='on' as active from bldtaxlang l,bldtax n "
+				   "where l.node=n.id and l.language=" << language << " and l.used='on' order by n.tw";
 			Db::Query *q = nullptr;
 			if (sql.query(errs, q, str.str()) && q->execute(errs)) {
 				size_t parent = 0;
@@ -50,30 +50,30 @@ namespace node {
 				string taxonomy;
 				while (q->nextrow()) {
 
-	/**
-	* +------+--------+------+------+------+------+-----------+---------+------------------------------------------------+------------------+----------+----------+--------------------------------------+-----------+------------+----------+--------+
-	* | id   | parent | tw   | size | tier | team | classcode | scope   | title                                          | shorttitle       | synonyms | keywords | descr                                | container | moddate    | editor   | active |
-	* +------+--------+------+------+------+------+-----------+---------+------------------------------------------------+------------------+----------+----------+--------------------------------------+-----------+------------+----------+--------+
-	* | 4214 |      0 |    1 | 4636 |    1 |    1 |           |         | Subject Editing                                | Subject Editing  |          |          | All taxonomies hang from here.       |      NULL | 1047491436 | bgriffin |      1 |
-	* | 4215 |   4214 |    2 | 4214 |    2 |    1 |           | LOCSH   | Library of Congress                            | LOCSH            |          |          | Library of Congress Subject Headings |      NULL | 1022001799 | bgriffin |      1 |
-	* |    1 |   4215 |    3 |   31 |    3 |    1 | A         |         | general works                                  | general works    | NULL     | NULL     | NULL                                 |      NULL | 1021983832 | bgriffin |      1 |
-	* |    2 |      1 |    4 |    5 |    4 |    1 | AC        | 1-999   | collections, series, collected works           | collections      | NULL     | NULL     | NULL                                 |      NULL | 1021983832 | bgriffin |      1 |
-	* |    3 |      2 |    5 |    1 |    5 |    1 | AC        | 1-195   | collections of monographs, essays, etc.        | collections of m | NULL     | NULL     | NULL                                 |      NULL | 1021983832 | bgriffin |      1 |
-	* |    4 |      2 |    6 |    1 |    5 |    1 | AC        | 801-895 | inaugural and program dissertations            | inaugural and pr | NULL     | NULL     | NULL                                 |      NULL | 1021983832 | bgriffin |      1 |
-	* |    5 |      2 |    7 |    1 |    5 |    1 | AC        | 901-995 | pamphlet collections                           | pamphlet collect | NULL     | NULL     | NULL                                 |      NULL | 1021983832 | bgriffin |      1 |
-	* |    6 |      2 |    8 |    1 |    5 |    1 | AC        | 999     | scrapbooks                                     | scrapbooks       | NULL     | NULL     | NULL                                 |      NULL | 1021983832 | bgriffin |      1 |
-	* |    7 |      1 |    9 |    1 |    4 |    1 | AE        | 1-90    | encyclopedias                                  | encyclopedias    | NULL     | NULL     | general                              |      NULL | 1021983832 | bgriffin |      1 |
-	* |    8 |      1 |   10 |    8 |    4 |    1 | AG        | 1-600   | dictionaries and other general reference works | dictionaries and | NULL     | NULL     | NULL                                 |      NULL | 1021983832 | bgriffin |      1 |
-	* |    9 |      8 |   11 |    1 |    5 |    1 | AG        | 1-90    | dictionaries, minor encyclopedias              | dictionaries     | NULL     | NULL     | NULL                                 |      NULL | 1021983832 | bgriffin |      1 |
-	* |   10 |      8 |   12 |    1 |    5 |    1 | AG        | 103-190 | general works, pocketbooks, receipts, etc.     | general works    | NULL     | NULL     | NULL                                 |      NULL | 1021983832 | bgriffin |      1 |
-	* +------+--------+------+------+------+------+-----------+---------+------------------------------------------------+------------------+----------+----------+--------------------------------------+-----------+------------+----------+--------+
-	**/
+					/**
+					* +------+--------+------+------+------+------+-----------+---------+------------------------------------------------+------------------+----------+----------+--------------------------------------+-----------+------------+----------+--------+
+					* | id   | parent | tw   | size | tier | team | classcode | scope   | title                                          | shorttitle       | synonyms | keywords | descr                                | container | moddate    | editor   | active |
+					* +------+--------+------+------+------+------+-----------+---------+------------------------------------------------+------------------+----------+----------+--------------------------------------+-----------+------------+----------+--------+
+					* | 4214 |      0 |    1 | 4636 |    1 |    1 |           |         | Subject Editing                                | Subject Editing  |          |          | All taxonomies hang from here.       |      NULL | 1047491436 | bgriffin |      1 |
+					* | 4215 |   4214 |    2 | 4214 |    2 |    1 |           | LOCSH   | Library of Congress                            | LOCSH            |          |          | Library of Congress Subject Headings |      NULL | 1022001799 | bgriffin |      1 |
+					* |    1 |   4215 |    3 |   31 |    3 |    1 | A         |         | general works                                  | general works    | NULL     | NULL     | NULL                                 |      NULL | 1021983832 | bgriffin |      1 |
+					* |    2 |      1 |    4 |    5 |    4 |    1 | AC        | 1-999   | collections, series, collected works           | collections      | NULL     | NULL     | NULL                                 |      NULL | 1021983832 | bgriffin |      1 |
+					* |    3 |      2 |    5 |    1 |    5 |    1 | AC        | 1-195   | collections of monographs, essays, etc.        | collections of m | NULL     | NULL     | NULL                                 |      NULL | 1021983832 | bgriffin |      1 |
+					* |    4 |      2 |    6 |    1 |    5 |    1 | AC        | 801-895 | inaugural and program dissertations            | inaugural and pr | NULL     | NULL     | NULL                                 |      NULL | 1021983832 | bgriffin |      1 |
+					* |    5 |      2 |    7 |    1 |    5 |    1 | AC        | 901-995 | pamphlet collections                           | pamphlet collect | NULL     | NULL     | NULL                                 |      NULL | 1021983832 | bgriffin |      1 |
+					* |    6 |      2 |    8 |    1 |    5 |    1 | AC        | 999     | scrapbooks                                     | scrapbooks       | NULL     | NULL     | NULL                                 |      NULL | 1021983832 | bgriffin |      1 |
+					* |    7 |      1 |    9 |    1 |    4 |    1 | AE        | 1-90    | encyclopedias                                  | encyclopedias    | NULL     | NULL     | general                              |      NULL | 1021983832 | bgriffin |      1 |
+					* |    8 |      1 |   10 |    8 |    4 |    1 | AG        | 1-600   | dictionaries and other general reference works | dictionaries and | NULL     | NULL     | NULL                                 |      NULL | 1021983832 | bgriffin |      1 |
+					* |    9 |      8 |   11 |    1 |    5 |    1 | AG        | 1-90    | dictionaries, minor encyclopedias              | dictionaries     | NULL     | NULL     | NULL                                 |      NULL | 1021983832 | bgriffin |      1 |
+					* |   10 |      8 |   12 |    1 |    5 |    1 | AG        | 103-190 | general works, pocketbooks, receipts, etc.     | general works    | NULL     | NULL     | NULL                                 |      NULL | 1021983832 | bgriffin |      1 |
+					* +------+--------+------+------+------+------+-----------+---------+------------------------------------------------+------------------+----------+----------+--------------------------------------+-----------+------------+----------+--------+
+					**/
 
 					Taxon taxon;
 					//id, parent,tier,ref,tw
 					taxon.common(errs, q, parent, active_tw);
 					// Specific Suffix Values.
-					::time_t _modified;
+					::time_t modified;
 					q->readfield(errs, "team", taxon._team);
 					q->readfield(errs, "classcode", taxon._classcode);
 					q->readfield(errs, "scope", taxon._scope);
@@ -84,8 +84,8 @@ namespace node {
 					q->readfield(errs, "descr", taxon._descr);
 					q->readfield(errs, "editor", taxon._editor);
 					q->readfield(errs, "container", taxon._container);
-					q->readTime(errs, "modified", _modified);
-					taxon._modified.set(_modified);
+					q->readTime(errs, "modified", modified);
+					taxon._modified.set(modified);
 					if(taxon._tier == 2 ) {
 						taxonomy = taxon._scope;
 						if(!taxonomy.empty()) {
@@ -118,7 +118,7 @@ namespace node {
 		if (times.show()) { times.use(errs, "Load Taxonomies"); }
 	}
 
-	bool Taxon::get(Messages &errs, boolValue field) const {
+	bool Taxon::get(Messages &, boolValue field) const {
 		bool result = false;
 		switch (field) {
 			case container:
@@ -130,7 +130,7 @@ namespace node {
 		return result;
 	};
 
-	size_t Taxon::get(Messages &errs, uintValue field) const {
+	size_t Taxon::get(Messages&, uintValue field) const {
 		bool result = 0;
 		switch (field) {
 			case team:
@@ -142,7 +142,7 @@ namespace node {
 		return result;
 	};
 
-	string Taxon::get(Messages &errs, textValue field) const {
+	string Taxon::get(Messages&, textValue field) const {
 		string result;
 		switch (field) {
 			case classCode:
@@ -175,7 +175,7 @@ namespace node {
 		return result;
 	};
 
-	Date Taxon::get(Messages &errs, dateValue field) const {
+	Date Taxon::get(Messages &, dateValue field) const {
 		Date result;
 		switch (field) {
 			case modified:

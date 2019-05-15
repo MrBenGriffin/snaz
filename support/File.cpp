@@ -610,18 +610,18 @@ namespace Support {
 	// Makes the path relative to a specified path.
 	//-------------------------------------------------------------------------
 	bool Path::makeRelativeTo(const Path &newpath) {
-			// relative path must be a subset of the current path
-			if (path.size() < newpath.path.size())
+		// relative path must be a subset of the current path
+		if (path.size() < newpath.path.size())
+			return false;
+		int count;
+		// Find out when the paths diverge
+		for (count = 0; count < newpath.getPathCount(); count++) {
+			if (getPath(count) != newpath.getPath(count))
 				return false;
-			int count;
-			// Find out when the paths diverge
-			for (count = 0; count < newpath.getPathCount(); count++) {
-				if (getPath(count) != newpath.getPath(count))
-					return false;
-			}
-			// Removes the relative path elements
-			path.erase(path.begin(), path.begin() + count);
-			return true;
+		}
+		// Removes the relative path elements
+		path.erase(path.begin(), path.begin() + count);
+		return true;
 	}
 
 	//-------------------------------------------------------------------------
@@ -937,7 +937,7 @@ namespace Support {
 	//-------------------------------------------------------------------------
 	// Moves the current File to the specified File
 	//-------------------------------------------------------------------------
-	bool File::moveTo(Messages& e,const File file) const {
+	bool File::moveTo(Messages&,const File file) const {
 		if (file.exists())
 			return false;
 		File newfile = file;
@@ -956,7 +956,7 @@ namespace Support {
 	//-------------------------------------------------------------------------
 	// Moves the current File to the specified Path
 	//-------------------------------------------------------------------------
-	bool File::moveTo(Messages& e,const Path newpath) const {
+	bool File::moveTo(Messages&,const Path newpath) const {
 		if (!newpath.exists())
 			return false;
 		File file1(newpath, getFileName());
@@ -1025,7 +1025,7 @@ namespace Support {
 	// Copies the current File to the specified File
 	// overwrite = true, overwrites the dest
 	//-------------------------------------------------------------------------
-	bool File::copyTo(const File newfile, Messages& errstream, bool overwrite) const {
+	bool File::copyTo(const File newfile, Messages&, bool overwrite) const {
 		bool retval = false;
 		string from_path = output();
 		string dest_path = newfile.output();

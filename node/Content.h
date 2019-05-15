@@ -51,7 +51,7 @@ namespace node {
 		void reset();
 
 		// Single Node Build.
-		void compose(Messages&,buildKind,size_t,size_t);
+		void compose(Messages&);
 
 	public:
 		static Tree editorial;
@@ -66,7 +66,7 @@ namespace node {
 		const content::Layout* layout() const { return layoutPtr; }
 		const std::string filename(Messages&,size_t) const;
 
-		void generate(Messages&,buildType,buildKind,size_t,size_t);
+		void generate(Messages&,buildType);
 
 		bool   get(Messages&,boolValue) const override;
 		size_t get(Messages&,uintValue) const override;

@@ -40,7 +40,7 @@ namespace content {
 
 	private:
 		//node/segment
-		unordered_map< key, mt::mtext, hash_pair> contentStore;
+		unordered_map< key, pair<bool,mt::mtext>, hash_pair> contentStore;
 		unordered_map< key, size_t, hash_pair> qIndexes;
 		Query* query;
 		size_t lang;
@@ -55,7 +55,7 @@ namespace content {
 	public:
 		static Editorial& e();
 		void set(Messages&,Connection&,size_t,buildKind);
-		const mt::mtext* get(Messages&,const node::Content*,const Segment*);
+		pair<bool,const mt::mtext*> get(Messages&,const node::Content*,const Segment*);
 		std::string getMeta(Messages&,const node::Content*,const Segment*,const std::string&);
 		bool has(Messages&,const node::Content*,const Segment*);
 		void unload(Messages&,Connection&);

@@ -11,18 +11,14 @@
 namespace mt {
 
 	InternalInstance::InternalInstance(const Internal *thing,Messages& e,mtext &o, Instance &i, mstack &c) :
-		owner(thing),output(&o), instance(&i), context(&c), errs(&e) {
+			owner(thing),output(&o), instance(&i), context(&c), errs(&e) {
 		parms = &i.parms;
 		count = parms->size() == 1 ? parms->front().empty() ? 0 : 1 : parms->size();
 		min = thing->minParms;
 		max = thing->maxParms;
-		if(!context->empty()) {
-			metrics = context->back().second.metrics;
-			if(metrics == nullptr) {
-				e << Message(warn,"InternalInstance Constructor: context.back had no metrics, which cannot be right?");
-			}
-		} else {
-			e << Message(warn,"context was empty, which cannot be right?");
+		metrics = instance->metrics; //context->back().second.metrics;
+		if(metrics == nullptr) {
+			e << Message(warn,"InternalInstance Constructor: instance had no metrics, which cannot be right?");
 		}
 
 		if(!thing->inRange(count)) {
@@ -83,10 +79,10 @@ namespace mt {
 		return result;
 	}
 
-	void InternalInstance::generate(nlist& nodes,const mtext* program,const string value,const string count) {
+	void InternalInstance::generate(nlist& nodes,const mtext* program,const string value,const string countStr) {
 		if(program != nullptr && !program->empty()) { // from an empty parm..
 			Definition macro(*program,0,-1,true,false); //iterate,dont trim
-			auto stuff = make_shared<forStuff>(value,count);
+			auto stuff = make_shared<forStuff>(value,countStr);
 			plist parameters;
 			for(auto& i: nodes) {
 				mtext parm;
@@ -98,11 +94,11 @@ namespace mt {
 		}
 	}
 
-	void InternalInstance::generate(plist& parameters,const mtext* program,const string value,const string count) {
+	void InternalInstance::generate(plist& parameters,const mtext* program,const string value,const string countStr) {
 		//parms,code,vToken,cToken
 		if(program != nullptr && !program->empty()) { // from an empty parm..
 			Definition macro(*program,0,-1,true,false); //iterate,dont trim
-			auto stuff = make_shared<forStuff>(value,count);
+			auto stuff = make_shared<forStuff>(value,countStr);
 			Instance i(parameters,stuff,nullptr); 	//set as generated.
 			macro.expand(*errs,*output,i,*context);
 		}

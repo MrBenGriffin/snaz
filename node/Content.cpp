@@ -151,10 +151,10 @@ namespace node {
 		}
 	}
 
-	bool Content::get(Messages& errs,boolValue field) const {
+	bool Content::get(Messages&,boolValue) const {
 		return false;
 	};
-	size_t Content::get(Messages& errs,uintValue field) const {
+	size_t Content::get(Messages&,uintValue field) const {
 		size_t result=0;
 		switch(field) {
 			case team: result = _team; break;
@@ -164,7 +164,7 @@ namespace node {
 		return result;
 	};
 
-	string Content::get(Messages& errs,textValue field) const {
+	string Content::get(Messages&,textValue field) const {
 		string result;
 		switch(field) {
 			case title: result= _title; break;
@@ -182,7 +182,7 @@ namespace node {
 		}
 		return result;
 	};
-	Date   Content::get(Messages& errs,dateValue field) const {
+	Date   Content::get(Messages&,dateValue field) const {
 		switch(field) {
 			case modified: return Date();
 			case birth: return _birth;
@@ -252,7 +252,7 @@ namespace node {
 
 //-------------------------------------------------------------------
 // All builds starts here, and then any single node build goes to compose.
-	void Content::generate(Messages& errs,buildType build,buildKind kind,size_t langID,size_t techID) {
+	void Content::generate(Messages& errs,buildType build) {
 		Build &core = Build::b();
 //		ostringstream msg;
 //		msg << string(build) << ": " << _id << ";" << _tw << ";" << _ref;
@@ -261,20 +261,20 @@ namespace node {
 		switch(build) {
 			case Single:
 				if(core.user.check(_team,build)) {
-					compose(errs,kind,langID,techID);
+					compose(errs);
 				} else {
 					errs << Message(security,"Not allowed to build this node.");
 				} break;
 			case Full:
 				if(core.user.check(build) && this == root()) {
-					generate(errs,Branch,kind,langID,techID);
+					generate(errs,Branch);
 				} else {
 					errs << Message(security,"Not root or not allowed to full build.");
 				} break;
 			case Branch:
 				if(core.user.check(_team,build)) {
-					compose(errs,kind,langID,techID);
-					generate(errs,Descendants,kind,langID,techID);
+					compose(errs);
+					generate(errs,Descendants);
 				} else {
 					errs << Message(security,"Not allowed to branch build here.");
 				} break;
@@ -283,7 +283,7 @@ namespace node {
 					for(auto* node : children) {
 						auto& child = get(node->id());
 						if(child.layoutPtr != nullptr && child.layoutPtr->buildPoint) {
-							child.generate(errs,Branch,kind,langID,techID);
+							child.generate(errs,Branch);
 						}
 					}
 				} else {
@@ -302,7 +302,7 @@ namespace node {
 		return value;
 	}
 
-	void Content::compose(Messages& errs,buildKind kind,size_t langID,size_t techID) {
+	void Content::compose(Messages& errs) {
 		Timing& times = Timing::t();
 		ostringstream msg; msg << "id " << idStr << " `" << _ref << "` ";
 		if (times.show()) { times.set(msg.str()); }

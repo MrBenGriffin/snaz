@@ -31,8 +31,8 @@ namespace node {
 			sql.lock(errs,"bldscript read");
 			std::ostringstream str;
 			str << "select id,ifnull(p,0) as parent,tw,nc-tw as size,t as tier,"
-		  		"suffix as ref,name as title,comment,ex='on' and t=2 as macro,t=2 as terminal,"
-				"scriptpath as script,ex='on' as exec,pp='on' as batch from bldscript order by tw";
+				   "suffix as ref,name as title,comment,ex='on' and t=2 as macro,t=2 as terminal,"
+				   "scriptpath as script,ex='on' as exec,pp='on' as batch from bldscript order by tw";
 			Db::Query* q = nullptr;
 			if (sql.query(errs,q,str.str()) && q->execute(errs)) {
 				/**
@@ -88,8 +88,8 @@ namespace node {
 						q->readfield(errs,"batch",suffix._batch);		// Batch process?
 					}
 					if(suffix._macro) {
-						std::istringstream code(suffix._comment);
-						suffix.code = mt::Driver(errs,code,mt::Definition::test_adv(suffix._comment)).parse(errs,true);
+						std::istringstream program(suffix._comment);
+						suffix.code = mt::Driver(errs,program,mt::Definition::test_adv(suffix._comment)).parse(errs,true);
 					}
 					auto ins = nodes.emplace(suffix._id,std::move(suffix));
 					if(ins.second) {
@@ -162,7 +162,7 @@ namespace node {
 
 	Suffix::~Suffix() {}
 
-	bool Suffix::get(Messages& errs,boolValue field) const {
+	bool Suffix::get(Messages&,boolValue field) const {
 		bool result=false;
 		switch(field) {
 			case exec: result = _exec; break;
@@ -174,10 +174,10 @@ namespace node {
 		return result;
 	};
 
-	size_t Suffix::get(Messages& errs,uintValue field) const {
+	size_t Suffix::get(Messages&,uintValue) const {
 		return 0;
 	};
-	string Suffix::get(Messages& errs,textValue field) const {
+	string Suffix::get(Messages&,textValue field) const {
 		string result;
 		switch(field) {
 			case title: result = _title; break;
@@ -187,7 +187,7 @@ namespace node {
 		}
 		return result;
 	};
-	Date Suffix::get(Messages& errs,dateValue field) const {
+	Date Suffix::get(Messages&,dateValue) const {
 		Date result;
 		return result;
 	};

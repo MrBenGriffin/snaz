@@ -29,10 +29,9 @@ namespace content {
 	}
 
 	//Must happen after suffixes are loaded.
-	void Template::load(Messages &errs, Connection &sql, buildKind kind) {
+	void Template::load(Messages &errs, Connection &sql) {
 		Timing &times = Timing::t();
 		if (times.show()) { times.set("Load Templates"); }
-		Query* q = nullptr;
 		if (sql.dbselected() && sql.table_exists(errs, "bldtemplate")) {
 			string str = "select id,comment as name,templatemacro as macro,suffix,break from bldtemplate";
 			Query* q = nullptr;

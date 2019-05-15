@@ -10,6 +10,7 @@
 #include "node/Taxon.h"
 #include "node/Suffix.h"
 #include "support/Convert.h"
+#include "content/Layout.h"
 
 using namespace Support;
 namespace node {
@@ -18,7 +19,7 @@ namespace node {
 
 	//-----------------------------------------------------------------------------
 //This discards the processed output. (e.g. in nodelocation)
-	void Locator::process(Messages &errs, string::const_iterator &in, string::const_iterator &out) {
+	void Locator::process(Messages &errs) {
 		bool done = in >= out;    // 'are we finished?' flag
 		while (!done) {
 			switch(*in) {
@@ -99,7 +100,7 @@ namespace node {
 	}
 
 	Locator::Locator(const Locator* o,const Metrics* m) :
-		pageNum(o->pageNum),find(o->find),from(o->from),root(o->root),metrics(m) {
+			pageNum(o->pageNum),find(o->find),from(o->from),root(o->root),metrics(m) {
 	}
 
 	void Locator::setdirty() {
@@ -134,7 +135,7 @@ namespace node {
 			in++;
 		}
 		try {
-			process(errs, in, out);
+			process(errs);
 		}
 		catch (BadLocatorPath &e) {
 			find = nullptr;
@@ -200,8 +201,9 @@ namespace node {
 		if (showPaths) message << "C";
 		in++;
 		from = Content::editorial.root();
+		root = from;
 		find = nullptr;
-		return nextPathSection(errs);
+		return false;
 	}
 
 
@@ -210,8 +212,9 @@ namespace node {
 		if (showPaths) message << "T";
 		in++;
 		from = Taxon::taxonomies.root();
+		root = from;
 		find = nullptr;
-		return nextPathSection(errs);
+		return false;
 	}
 
 // Content - switch over to global Suffix Nodetree
@@ -219,14 +222,12 @@ namespace node {
 		if (showPaths) message << "S";
 		in++;
 		from = Suffix::suffixes.root();
+		root = from;
 		find = nullptr;
-		return nextPathSection(errs);
+		return false;
 	}
 
-// next peer according to specified criteria
-	bool Locator::doPeerNext(Messages &errs) {
-		if (showPaths) message << "F";
-		in++;    // F
+	const Node* Locator::peerPrep(Messages &errs) {
 		// compulsory brackets
 		if (in == out || *in != '(') {
 			throw BadLocatorPath(errs, start, in, out);
@@ -249,8 +250,15 @@ namespace node {
 		}
 		rootString.erase(rootString.size() - 1);
 		Locator rootLocator(metrics,root,from); //
-		const Node *lRoot = rootLocator.locate(errs, rootString.begin(), rootString.end());
-		find = from->tree()->tw(errs, from->id(), +1, lRoot);
+		return rootLocator.locate(errs, rootString.begin(), rootString.end());
+	}
+
+// next peer according to specified criteria
+	bool Locator::doPeerNext(Messages &errs) {
+		if (showPaths) { message << "F"; }
+		in++;    // F
+		const Node *lRoot = peerPrep(errs);
+		find = from->tree()->peer(errs, from , +1, lRoot);
 		if (find == nullptr)
 			return true;
 		else
@@ -261,32 +269,8 @@ namespace node {
 	bool Locator::doPeerLast(Messages &errs) {
 		if (showPaths) message << "B";
 		in++;    // B
-		// compulsory brackets
-		if (in == out || *in != '(') {
-			throw BadLocatorPath(errs, start, in, out);
-		}
-		in++;
-
-		// brackets must be balanced
-		string rootString;
-		for (int level = 1; level > 0;) {
-			if (in == out) {
-				throw BadLocatorPath(errs, start, in, out);
-			} else {
-				if (*in == '(')
-					level++;
-				else if (*in == ')')
-					level--;
-				rootString += *in;
-				in++;
-			}
-		}
-		// trailing ')'
-		rootString.erase(rootString.size() - 1);
-		Locator rootLocator(metrics,root,root); //
-//	Locator::loc_path=rootString;
-		const Node *lRoot = rootLocator.locate(errs, rootString.begin(), rootString.end());
-		find = from->tree()->tw(errs, from->id(), -1, lRoot);
+		const Node *lRoot = peerPrep(errs);
+		find = from->tree()->peer(errs, from, -1, lRoot);
 		if (find == nullptr)
 			return true;
 		else
@@ -298,17 +282,17 @@ namespace node {
 	bool Locator::doRR(Messages &errs) {
 		in++;    // R
 		if (in == out) {
-			find = from->tree()->tw(errs,from->id(),+1); //nodebytw(errs, +1);
+			find = from->offset(errs,+1);
 		} else {
 			switch (*in) {
 				case '-':
 					if (showPaths) message << "R-";
 					in++;
-					find = from->tree()->tw(errs,from->id(),-1);
+					find = from->offset(errs,-1);
 					break;
 				case '+':
 					if (showPaths) message << "R+";
-					find = from->tree()->tw(errs,from->id(),+1);
+					find = from->offset(errs,+1);
 					in++;
 					break;
 				case 'L': { //find first node with matching layout in descendents of current node (depth first traversal).
@@ -331,36 +315,41 @@ namespace node {
 							if (showPaths) message << "RL" << layoutId;
 						}
 					}
-					//at this point we have some sort of layoutId.
-					find = from->tree()->tw(errs,from->id(),+1);  //next node..
-
-					if (showPaths) message << "(" << find->id() << "; " << layoutId << ")";
-					if (next) { //carry on..
-						while (find->id() != from->id() && find->get(errs,layout) != layoutId) {
-							find = find->tree()->tw(errs, find->id(), +1); //next node..
-							if (showPaths) message << "(" << find->id() << "; " << find->get(errs,layout) << ")";
-						}
-						//at this point either find = from or find has a layout..
-						if (find->id() == from->id()) {
-							if (showPaths)
-								message << ";RLN [from " << from->id() << ", with layout " << layout << "] Not found";
-							find = nullptr;
+					auto* layout = content::Layout::get(errs,layoutId);
+					if (layout != nullptr) {
+						//at this point we have some sort of layoutId.
+						auto* content = from->offset(errs,+1)->content();
+						if (showPaths) message << "(" << content->id() << "; " << layoutId << ")";
+						if (next) { //carry on..
+							while (content->id() != from->id() && content->layout()->id != layoutId) {
+								content = content->offset(errs,+1)->content();
+								if (showPaths) message << "(" << content->id() << "; " << content->layout()->id << ")";
+							}
+							//at this point either content = from or content has a layout..
+							if (content->id() == from->id()) {
+								if (showPaths)
+									message << ";RLN [from " << from->id() << ", with layout " << layout << "] Not found";
+								throw BadLocatorPath(errs, start, in, out);
+							} else {
+								if (showPaths)
+									message << ";RLN [from " << from->id() << ", with layout " << layout << "] found at "
+											<< content->id();
+							}
 						} else {
-							if (showPaths)
-								message << ";RLN [from " << from->id() << ", with layout " << layout << "] found at "
-										<< find->id();
+							while (content->tier() > from->tier() && content->layout()->id != layout->id) {
+								content = content->offset(errs,+1)->content();
+								if (showPaths) message << "(" << content->id() << "; " << content->layout()->id << ")";
+							}
+							if (content->tier() <= from->tier()) {
+								if (showPaths) message << ";RL" << layout << "[from " << from->id() << "] Not found";
+								throw BadLocatorPath(errs, start, in, out);
+							} else {
+								if (showPaths) message << ";RL" << layout << " found at " << content->id();
+							}
 						}
+						find = content;
 					} else {
-						while (find->tier() > from->tier() && find->get(errs,layout) != layoutId) {
-							find = find->tree()->tw(errs, find->id(), +1); //next node..
-							if (showPaths) message << "(" << find->id() << "; " << find->get(errs,layout) << ")";
-						}
-						if (find->tier() <= from->tier()) {
-							if (showPaths) message << ";RL" << layout << "[from " << from->id() << "] Not found";
-							find = nullptr;
-						} else {
-							if (showPaths) message << ";RL" << layout << " found at " << find->id();
-						}
+						throw BadLocatorPath(errs, start, in, out);
 					}
 				}
 					break;
@@ -525,7 +514,7 @@ namespace node {
 										find = nullptr;
 										return true; //RANGE error
 									}
-									find = (from->child(errs, sibnum.first - 1));
+									find = (from->child(errs, sibnum.first));
 									if (find == nullptr) { return true; }
 								}
 							} else {
@@ -533,7 +522,7 @@ namespace node {
 									find = nullptr;
 									return true; //RANGE error
 								}
-								find = (from->child(errs, sibnum.first - 1));
+								find = (from->child(errs, sibnum.first));
 								if (find == nullptr) { return true; }
 							}
 							if (showPaths) { message << "={" << find->id() << "}"; }
@@ -553,7 +542,7 @@ namespace node {
 							if (showPaths) message << "0L[" << ilayout.first << "]";
 							find = nullptr; // not found yet
 							size_t kids = from->getChildCount();
-							for (size_t i = 0; i < kids; i++) {
+							for (size_t i = 1; i <= kids; i++) {
 								const Node *cn = from->child(errs, i);
 								if (cn->get(errs,layout) == ilayout.first) {
 									find = cn;
@@ -591,11 +580,7 @@ namespace node {
 		} else {
 			if (showPaths) message << "[" << offset.first << "]";
 			size_t sibnum = from->getChildCount() - offset.first;
-			if (sibnum < 1 || sibnum > from->getChildCount()) {
-				find = nullptr;
-				return true;
-			}
-			find = from->child(errs, sibnum - 1);
+			find = from->child(errs, sibnum);
 			if (find == nullptr) { return true; }
 		}
 		return nextPathSection(errs);
@@ -803,7 +788,7 @@ namespace node {
 	}
 
 // illegal character
-	bool Locator::doIllegalCharacter(Messages &errs) {
+	bool Locator::doIllegalCharacter(Messages &) {
 		if (showPaths) message << "(illegal character)";
 		find = nullptr;
 		return true;

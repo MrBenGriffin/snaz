@@ -32,6 +32,8 @@ namespace Support {
 					}
 				}
 				return true;
+			} else {
+				fandr(basis,delims,level+1);
 			}
 		}
 		return false;

@@ -25,17 +25,11 @@ namespace mt {
 	}
 	void iNumGens::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
-		Metrics* metrics = context.back().second.metrics;
-		if(metrics) {
-			my.logic(metrics->current->tree()->depth(),1);
-		}
+		my.logic(my.metrics->current->tree()->depth(),1);
 	}
 	void iNumPage::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
-		Metrics* metrics = context.back().second.metrics;
-		if(metrics) {
-			my.logic(metrics->page,1);
-		}
+		my.logic(my.metrics->page,1);
 	};
 	void iNumPages::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
@@ -152,9 +146,9 @@ namespace mt {
 		const Node *main = my.node(1);
 		const Node *root = my.node(2);
 		if (main != nullptr) {
-			vector<const Node *> peers = main->peers(root);
-			doSort(e, peers, my.parm(5));
-			my.generate(peers,my.praw(6),my.parm(3),my.parm(4));   //parms,code,vToken,cToken
+			auto peers = main->peers(root);
+			doSort(e, peers.second, my.parm(5));
+			my.generate(peers.second,my.praw(6),my.parm(3),my.parm(4));   //parms,code,vToken,cToken
 		}
 	}
 	void iForNodes::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
@@ -168,8 +162,8 @@ namespace mt {
 		InternalInstance my(this,e,o,instance,context);
 		const Node* main = my.node(1);
 		if (main != nullptr) {
-			vector<const node::Node *> sibs = std::move(main->siblings());
-			my.generate(sibs,my.praw(4),my.parm(2),my.parm(3)); //template,node*,position.
+			auto sibs = main->siblings();
+			my.generate(sibs.second,my.praw(4),my.parm(2),my.parm(3)); //template,node*,position.
 		}
 	}
 	void iSize::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
