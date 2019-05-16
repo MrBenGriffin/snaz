@@ -1,13 +1,9 @@
 // Debugging / Testing
-F showDefines	0
+F showDefines	1
 F showPassed	1
 
-// name		code															expected result
-U hw		0	1	00	Hello world (%1)
-Basic0		[⌽hw(1)]												[Hello world]
-
 //Not debugging, uncomment the following X
-X
+//X
 
 F showDefines	0
 F showPassed	0

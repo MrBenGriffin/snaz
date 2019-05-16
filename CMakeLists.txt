@@ -3,11 +3,18 @@ project(macrotext)
 
 #cf. https://github.com/Genivia/RE-flex for a new version of flex..
 
-find_package(BISON 3.2)
+# This needs openssl, pcre, flex, bison...
+
+SET(BISON_EXECUTABLE "/usr/local/bin/bison")
+SET(FLEX_EXECUTABLE "/usr/local/bin/flex")
+
+find_package(BISON 3.3)
 find_package(FLEX 2.6)
+
 set(CMAKE_CXX_STANDARD 17)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR};${CMAKE_CURRENT_BINARY_DIR};/usr/local/include;/usr/local/mysql/include;/usr/include/mysql)
+include_directories(SYSTEM /usr/local/include;/usr/local/mysql/include;/usr/include/mysql)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR};${CMAKE_CURRENT_BINARY_DIR})
 #find_library(MYSQLCLIENT libmysqlclient HINTS "/usr/local/mysql/lib" )
 #MESSAGE("MYSQL LIB: " ${MYSQLCLIENT})
 

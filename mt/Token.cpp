@@ -27,7 +27,7 @@ namespace mt {
 						t->text.append(ptr->text);
 						mt.pop_back();
 					}
-				}
+ 				}
 			} else {
 				Wss *w = dynamic_cast<Wss *>(token);
 				if (w != nullptr) {
@@ -40,11 +40,9 @@ namespace mt {
 							mt.pop_back();
 						}
 					}
-				} else {
-					mt.emplace_back(token);
 				}
 			}
-
-		}
+            mt.emplace_back(token);
+        }
 	}
 }
