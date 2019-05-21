@@ -17,7 +17,7 @@ namespace mt {
 
 	void Token::add(TokenPtr& token,mtext& mt) {
 		if (token != nullptr) {
-			Text *t = dynamic_cast<Text *>(token->get());
+			Text *t = dynamic_cast<Text *>(token.get());
 			if (t != nullptr) {
 				if (!mt.empty()) {
 					auto back = mt.back();
@@ -29,7 +29,7 @@ namespace mt {
 					}
  				}
 			} else {
-				Wss *w = dynamic_cast<Wss *>(token->get());
+				Wss *w = dynamic_cast<Wss *>(token.get());
 				if (w != nullptr) {
 					if (!mt.empty()) {
 						auto back = mt.back();

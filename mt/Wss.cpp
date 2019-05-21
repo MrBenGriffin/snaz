@@ -39,7 +39,8 @@ namespace mt {
 					if (textPtr != nullptr) {
 						textPtr->append(text);
 					} else {
-						mt.emplace_back(new Wss(text)); //because this method is const, this holds const.
+						shared_ptr<Token> ptr = make_shared<Wss>(text);
+						mt.emplace_back(ptr);
 					}
 				}
 			} else {
@@ -53,7 +54,8 @@ namespace mt {
 						if (textPtr != nullptr) {
 							textPtr->append(i);
 						} else {
-							mt.emplace_back(new Text(i));
+							shared_ptr<Token> ptr = make_shared<Wss>(text);
+							mt.emplace_back(ptr);
 						}
 					}
 					if (i != notNL.back() && !newline.empty() && (newline.top() != nullptr)) {
@@ -65,16 +67,19 @@ namespace mt {
 				}
 			}
         } else {
-            mt.emplace_back(new Wss(text));
+			shared_ptr<Token> ptr = make_shared<Wss>(text);
+            mt.emplace_back(ptr);
         }
     }
 
 	void Wss::inject(Messages&,mtext& out,mstack&) const {
-		out.emplace_back(new Wss(text));
+		shared_ptr<Token> ptr = make_shared<Wss>(text);
+		out.emplace_back(ptr);
 	}
 
 	void Wss::subs(mtext& out,const std::vector<std::string>&,const std::string&) const {
-		out.emplace_back(new Wss(text));
+		shared_ptr<Token> ptr = make_shared<Wss>(text);
+		out.emplace_back(ptr);
 	}
 
 

@@ -35,15 +35,17 @@ namespace content {
 			id = { node->id(), segment->id };
 			value = true;
 		} else {
+			ostringstream errstr;
 			if (node) {
-				errs << Message(error,"while looking for content, the segment was empty");
+				errstr << "While looking for content with node " << node->ref() << ", a segment was empty";
 			} else {
 				if(segment) {
-					errs << Message(error,"while looking for content, the node was empty");
+					errstr << "While looking for content with segment " << segment->name << " the node was empty";
 				} else {
-					errs << Message(error, "while looking for content, both node and segment were empty");
+					errstr << "While looking for content with segment, both node and segment were empty";
 				}
 			}
+			errs << Message(error,errstr.str());
 		}
 		return value;
 	}
@@ -107,9 +109,9 @@ namespace content {
 		return value;
 	}
 
-	pair<bool,const mt::mtext*> Editorial::get(Messages &errs, const node::Content* node, const Segment* segment) {
+	pair<bool,mt::mtext*> Editorial::get(Messages &errs, const node::Content* node, const Segment* segment) {
 		static mt::mtext empty;
-		pair<bool,const mt::mtext*> value = { true, &empty};
+		pair<bool,mt::mtext*> value = { true, &empty};
 		key id;
 		if(sanity(errs,id,node,segment)) {
 			auto cIndex = contentStore.find(id); //unordered_map< key, mt::mtext, hash_pair> contentStore;

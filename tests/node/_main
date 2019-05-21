@@ -1,79 +1,95 @@
 
 !	node/locator
 
+// | 105 |  312 |  111 |  129 |    3 |     33 | NodeLocator      | No Node Locator        | Node Locator |
+F pushNode	312
 # iSuffix
-iSuffix 01		@iSuffix(!home)						html
-iSuffix 02		@iSuffix(!home:1)					!1!range: Page was out of bounds.
-iSuffix 03a		@iSuffix(147:0)						obyx
-iSuffix 03b		@iSuffix(147:1)						html
+iSuffix 01		@iSuffix(!NodeLocator)				html
+iSuffix 02		@iSuffix(!NodeLocator:1)			!1!range: Page was out of bounds.
+iSuffix 03a		@iSuffix(232:0)						qxml
+iSuffix 03b		@iSuffix(232:1)						xml
 
 # iLink
-iLink 01		@iLink(!home:0)						home.html
-iLink 02		@iLink()							home.html
-iLink 03a		@iLink(147:0)						SiteSearch.obyx
-iLink 03b		@iLink(147:1)						SiteSearch_1.html
-iLink 04		@iLink(!home:2)						!1!range: Page was out of bounds.
+iLink 01		@iLink(!NodeLocator:0)				nodelocator.html
+iLink 02		@iLink()							nodelocator.html
+iLink 03a		@iLink(232:0)						zappendtest.qxml
+iLink 03b		@iLink(232:1)						zappendtest_1.xml
+iLink 04		@iLink(232:2)						!1!range: Page was out of bounds.
 
 # iLinkRef
-iLinkRef 01		@iLinkRef(19)							home
-iLinkRef 02		[@iLinkRef(!siteSections/0+1)]			[testpages]
-iLinkRef 03		[@iLinkRef(!siteSections/n-1)]			[whatis]
+iLinkRef 01		@iLinkRef(312)							NodeLocation
+iLinkRef 02		[@iLinkRef(!NodeLocator/0+1)]			[NodeLocateTestA]
+iLinkRef 03		[@iLinkRef(!NodeLocator/n-1)]			[NodeLocateErrors]
 
 # iID
-iID 01			@iID(!home)								19
+iID 01			@iID(!NodeLocator)								105
+iID 02			@iID()											312
+iID 03			@iID(I0)										312
 
 # iTW
 //Legacy has /0+1 point to root, rather than the first child of root...
-# iTW
-iTW1				@iTW(/0+1/^1)							!2!error: Path: /0+1/^1 did not find a node.
+iTW1				@iTW(/0+1/^1)							1
 iTW2				@iTW(/0+1)								!1!depr.: 2019: /0+1 is deprecated for Root. Use I0/A1 or /
-iTW3				@iTW(/0+2)								17
-iTW4				@iTW(/0+1/0+2)							!1!depr.: 2019: /0+1 is deprecated for Root. Use I0/A1 or /
+iTW3				@iTW(/0+2)								104
+iTW4				@iTW(/0+1/0+2)							98
 iTW5				@iTW(/)									1
-iTW6				@iTW(!home)								3
+iTW5c				@iLinkRef(/)							BuildTest
+iTW6				@iTW(!BuildTest)						1
 iTW7				@iTW(A1)								1
+iTW8				@iTW(W121)								121
+
+F popNode	312
 
 # iTitle
-iTitle 001		@iTitle(19)													Home Page
-iTitle 002		[@iTitle(!siteSections/n-1)]								[What is Mortar]
-iTitle 003		[@iTitle(!siteSections/n-1,What is Mortar,T)]				[T]
-iTitle 004		[@iTitle(!siteSections/n-1,Preparse nesting,T,F)]			[F]
+iTitle 001		@iTitle(312)								Node Location
+iTitle 002		[@iTitle(312/n-0)]							[No Node Locator]
+iTitle 003		[@iTitle(312/n-0,No Node Locator,T)]		[T]
+iTitle 004		[@iTitle(312,No Node Locator,T,F)]			[F]
+iTitle 005		[@iTitle(!NodeLocateTestB/n-4)]				!1!range: A child index was outside the number of children. Index:-1 Children: 3
+iTitle 006		[@iTitle(!NodeLocateTestB/n-3)]				!1!range: A child index was outside the number of children. Index:0 Children: 3
+iTitle 007		[@iTitle(!NodeLocateTestB/n-2)]				[BA Node Locate Test BA]
+iTitle 008		[@iTitle(!NodeLocateTestB/n-1)]				[bb node locate test BB]
+iTitle 009		[@iTitle(!NodeLocateTestB/n-0)]				[BC Node Locate Test BC]
+
+//
 
 # iTeam
-iTeam					@iTeam(19)						6
+iTeam					@iTeam(312)						4
 
 # iShortTitle
-iShortTitle				@iShortTitle(19)				Home Page
+iShortTitle				@iShortTitle(312)				Node Location
 
 # iLayout
-iLayout					@iLayout(19)					24
+iLayout					@iLayout(312)					59
 
 # iLayoutName
-iLayoutName				@iLayoutName(19)				Home Page
+iLayoutName				@iLayoutName(312)				Structural
 
 # iExistContent
-iECNoSegRef		@iExistContent(22,f_seodirectory,T,F)	F
-iEClaySegRef	@iExistContent(22,Keywords,T,F)			T
-iECsegSegRef	@iExistContent(22,keywords,T,F)			T
-iECsegNotScope	@iExistContent(22,code,T,F)				F
-iECNoSegment	@iExistContent(22,wibble,T,F)			F
+iECNoSegRef		@iExistContent(312,f_seodirectory,T,F)		F
+iEClaySegRef	@iExistContent(312,Keywords,T,F)			T
+iECsegSegRef	@iExistContent(312,keywords,T,F)			T
+iECsegNotScope	@iExistContent(312,code,T,F)				F
+iECNoSegment	@iExistContent(312,wibble,T,F)				F
 
 # iContent
-iCNoSegRef		@iContent(22,f_seodirectory)			!1!range: There is no segment with reference 'f_seodirectory' in layout 'Basic HTML'
-iClaySegRef		@iContent(22,Keywords)					this is the keywords
-iCsegSegRef		@iContent(22,keywords)					this is the keywords
-iCsegNotScope	[@iContent(22,code)]					[]
-iCNoSegment		@iContent(22,wibble)					!1!range: There is no segment with reference 'wibble' in layout 'Basic HTML'
-iCsegEmpty		[@iContent(22,code)]					[]
-iCMetaE			@iContent(22,Keywords,editor)			jbuchanan
-iCMetaD			@iContent(22,keywords,pubdate)			2011 02 17 16 15 31
+iCNoSegScope	@iContent(294,BreakTestA)			!1!range: The segment with reference 'BreakTestA' is not used by layout 'SEGTEST'
+
+#The Stuff/Code content tests iSegmentName.
+F pushNode	294
+iClaySeg294		@iContent(294,Stuff)				Stuff T T F
+iCsegSeg294		@iContent(294,Code)					Stuff T T F
+F popNode	294
+iClaySeg105		@iContent(294,Stuff)				Stuff T T F
+iCsegSeg105		@iContent(294,Code)					Stuff T T F
+
+iSNOutofScope	@iSegmentName(Stuff,T,F)			!1!error: iSegmentName called outside any segment context.
+iCNoSegment		@iContent(294,wibble)				!1!range: There is no segment with reference 'wibble' in layout 'SEGTEST'
+iCsegEmpty		[@iContent(294,Empty)]				[]
+iCsegEmpty		[@iContent(294,Copy)]				[]
+iCMetaE			@iContent(294,Code,editor)			bgriffin
+iCMetaD			@iContent(294,EventStart)			2021 12 11 01 02 03
 
 # iBirth/iDeath
-iBirth01		@iBirth(22)								1900-01-01 01:00:00
-iDeath01		@iDeath(22)								9999-12-31 01:00:00
-
-# Not Yet Implemented.
-
-//SegmentName is done from within iContent..
-//segmentName 01	@iSegmentName(foo,T,F)			!2!iSegmentName called outside an existing segment (iContent)
-
+iBirth01		@iBirth(294)						1988-02-21 00:00:00
+iDeath01		@iDeath(294)						2031-01-22 00:00:00

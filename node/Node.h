@@ -72,7 +72,7 @@ namespace node {
 
 		const Node* parent() const { return _parent; }
 		const Tree* tree() const { return _tree; }
-		const Node* child(Messages&, size_t) const;
+		const Node* child(Messages&, long long) const;
 		bool hasAncestor(const Node* = nullptr) const;
 		const Node* offset(Messages&, signed long) const; 		//a tw offset from current node
 

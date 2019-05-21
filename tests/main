@@ -2,8 +2,13 @@
 F showDefines	1
 F showPassed	1
 
+//TODO: add segment sort, with node elimination when there is no segment present..
+iForP24	@iForPeers(!NLTAa,!NLTAa/^2,*,,,[@iContent(*,EventStart)])	!1!fooo
+
+
+//NODETREE/IFORPEERS
 //Not debugging, uncomment the following X
-//X
+X
 
 F showDefines	0
 F showPassed	0

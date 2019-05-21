@@ -12,13 +12,13 @@ ident 000		[@iShortTitle()]											[NL Test B]
 // name		code															expected result
 iNumCh 001		@iNumChildren(!NodeLocateTestB)									3
 iNumCh 002		@iNumChildren(!NodeLocateTestB/^1)								5
-iNumCh 003			@iNumChildren()													3
-iNumCh 004			@iNumChildren(I0)												3
+iNumCh 003		@iNumChildren()													3
+iNumCh 004		@iNumChildren(I0)												3
 
-iNumGen 01		@iNumGen(!NodeLocateTestB)											4
-iNumGen 02		@iNumGen(!NodeLocateTestB,4,T)										T
-iNumGen 03		[@iNumGen(!NodeLocateTestB,3,T)]									[]
-iNumGen 04		@iNumGen(!NodeLocateTestB,3,T,F)									F
+iNumGen 01		@iNumGen(!NodeLocateTestB)										4
+iNumGen 02		@iNumGen(!NodeLocateTestB,4,T)									T
+iNumGen 03		[@iNumGen(!NodeLocateTestB,3,T)]								[]
+iNumGen 04		@iNumGen(!NodeLocateTestB,3,T,F)								F
 
 iNumGens 004	@iNumGens()														7
 iNumGens 004t	@iNumGens(7,T,F)												T
@@ -29,15 +29,15 @@ iNumPages 03	@iNumPages(!NodeLocateTestB/0+1)								1
 iNumPages 04	@iNumPages(!zappendtest)										2
 
 
-iSize 001		[@iSize(!NodeLocateTestB)]											[4]
-iSize 003		[@iSize(!NodeLocateTestB,4,T,F)]									[T]
-iSize 004		[@iSize(!NodeLocateTestB,19,T,F)]									[F]
+iSize 001		[@iSize(!NodeLocateTestB)]										[4]
+iSize 003		[@iSize(!NodeLocateTestB,4,T,F)]								[T]
+iSize 004		[@iSize(!NodeLocateTestB,19,T,F)]								[F]
 
 iNumPage 005	@iNumPage()														0
 iNumPage 006	@iNumPage(0,T,F)												T
 
-iNumSib 007		@iNumSib(!NodeLocateTestB/n-0)										3
-iNumSib 071		@iNumSib(!NodeLocateTestB/n-0,1,T,F)								F
+iNumSib 007		@iNumSib(!NodeLocateTestB/n-0)									3
+iNumSib 071		@iNumSib(!NodeLocateTestB/n-0,1,T,F)							F
 
 //iEqFamily Node family equivalence test. Is parameter 1 the same as or descendant of parameter 2.
 
@@ -52,10 +52,10 @@ iEqNode 02		@iEqNode(!NodeLocateTestB/n-1,!BuildTest,T,F)					F
 iEqNode 03		@iEqNode(W1,/,T,F)												T
 iEqNode 04		@iEqNode(W1,/0+1,T,F)											!1!depr.: 2019: /0+1 is deprecated for Root. Use I0/A1 or /
 
-iEqSibs 01		@iEqSibs(!NodeLocateTestB/n-1,!NodeLocateTestB/0+1,T,F)				T
-iEqSibs 02		@iEqSibs(!NodeLocateTestB/n-1,!NodeLocateTestB,T,F)					F
+iEqSibs 01		@iEqSibs(!NodeLocateTestB/n-1,!NodeLocateTestB/0+1,T,F)			T
+iEqSibs 02		@iEqSibs(!NodeLocateTestB/n-1,!NodeLocateTestB,T,F)				F
 
-iExistNode 01	@iExistNode(!NodeLocateTestB/n-1,T,F)								T
+iExistNode 01	@iExistNode(!NodeLocateTestB/n-1,T,F)							T
 iExistNode 02	@iExistNode(!soo\*ty/n-1,T,F)									F
 
 //-------------------------------------------------------------------------------
@@ -79,32 +79,32 @@ iForAnc E3		@iIndex(;,@iForAncestry(!D,F,!W,*,@iID(*);))				!1!error: Path: !W d
 F popNode	147
 
 //@iForNodes(@iGet(*Z),#,$,+s,[@iTitle($)])
-iForNodes002	[@iForNodes(@iGet(*Z),*,$,,@iLeft(@iTitle(*),1))]					[LTEPHFSBC]
-iForNodes002	[@iForNodes(@iGet(*Z),*,$,+,@iLeft(@iTitle(*),1))]					[LTEPHFSBC]
-iForNodes002	[@iForNodes(@iGet(*Z),*,$,-,@iLeft(@iTitle(*),1))]					[CBSFHPETL]
-iForNodes001a	[@iForNodes(@iGet(*Z),*,$,+t,@iLeft(@iTitle(*),1))]					[BCEFHLPST]
-iForNodes001b	[@iForNodes(@iGet(*Z),*,$,+T,@iLeft(@iTitle(*),1))]					[BCEFHLPST]
-iForNodes003	[@iForNodes(@iGet(*Z),*,$,C,@iLeft(@iNumGen(*),1))]					[666666666]
-iForNodes004	[@iForNodes(@iGet(*Z),*,$,-C,@iLeft(@iNumGen(*),1))]				[666666666]
-iForNodes005	[@iIndex(;,@iForNodes(@iGet(*Z),*,$,W,@iTW(*);))]					[87;88;89;90;91;92;93;96;97]
-iForNodes006	[@iIndex(;,@iForNodes(@iGet(*Z),*,$,+,@iLayout(*);))]				[43;43;43;43;43;43;43;43;43]
+iForNodes002	[@iForNodes(@iGet(*Z),*,$,,@iLeft(@iTitle(*),1))]					[AAABbBCCCS]
+iForNodes002	[@iForNodes(@iGet(*Z),*,$,+,@iLeft(@iTitle(*),1))]					[AAABbBCCCS]
+iForNodes002	[@iForNodes(@iGet(*Z),*,$,-,@iLeft(@iTitle(*),1))]					[SCCCBbBAAA]
+iForNodes001a	[@iForNodes(@iGet(*Z),*,$,+t,@iLeft(@iTitle(*),1))]					[AAABbBCCCS]
+iForNodes001b	[@iForNodes(@iGet(*Z),*,$,+T,@iLeft(@iTitle(*),1))]					[AAABBCCCSb]
+iForNodes003	[@iForNodes(@iGet(*Z),*,$,C,@iLeft(@iNumGen(*),1))]					[5555555555]
+iForNodes004	[@iForNodes(@iGet(*Z),*,$,-C,@iLeft(@iNumGen(*),1))]				[5555555555]
+iForNodes005	[@iIndex(;,@iForNodes(@iGet(*Z),*,$,W,@iTW(*);))]					[113;114;115;117;118;119;121;122;123;126]
+iForNodes006	[@iIndex(;,@iForNodes(@iGet(*Z),*,$,+,@iLayout(*);))]				[53;53;53;53;53;53;33;53;53;33]
 
-//@iForSibs(!simple/0+1,#,$,[@iTitle($)])
-iForSibs		[@iForSibs(!siteRoot/0+1,*,$,$:@iTW(*):@iID(*); )]					[1:3:19; 2:6:20; 3:13:21; ]
-iForSibs 001	@iForSibs(!siteRoot/0+1,*,$,[$:@iLinkRef(*)])						[1:home][2:NodeLocateTestB][3:siteFooter]
+//@iForSibs(!NodeLocateTestB/0+1,#,$,[@iTitle($)])
+iForSibs		[@iForSibs(!NodeLocateTestB/0+1,*,$,$:@iTW(*):@iID(*); )]			[1:117:114; 2:118:115; 3:119:116; ]
+iForSibs 001	@iForSibs(!NodeLocateTestB/0+1,*,$,[$:@iLinkRef(*)])				[1:nltba][2:NLTBB][3:NLTBc]
 
 //check values are correct.
 iFi_100		@iForIndex(=,BIM=foo=bar,*,$,,[*:$])			[BIM:1][foo:2][bar:3]
-iNo_100		@iExistNode(19,@iNumChildren(19/^1),X)			3
-iFs_100		@iForSibs(19,*,$,@iLeft(@iLinkRef(*),1))		hss
-forNest01	@iForSibs(19,*,$,@iNumGen(*))					333
-forNest02	@iLength(@iForSibs(19,*,$,x))					3
-forNest03	@iForAncestry(19,R,,*,@iNumGen(*);)				1;2;3;
-forNest04	[@iForAncestry(19,R,19/^2,NODE,@iNumGen(NODE))]	[123]
-forNest05	@iForSibs(19,*,$,[@iForAncestry(*,R,*/^2,NODE,@iNumGen(NODE))])	[123][123][123]
+iNo_100		@iExistNode(W113,@iNumChildren(W113/^1),X)		3
+iFs_100		@iForSibs(W113,*,$,@iLeft(@iTitle(*),1))		AAA
+forNest01	@iForSibs(W113,*,$,@iNumGen(*))					555
+forNest02	@iLength(@iForSibs(W113,*,$,x))					3
+forNest03	@iForAncestry(W113,R,,*,@iNumGen(*);)			1;2;3;4;5;
+forNest04	[@iForAncestry(W113,R,W113/^2,NODE,@iNumGen(NODE))]	[345]
+forNest05	@iForSibs(W113,*,$,[@iForAncestry(*,R,*/^2,NODE,@iNumGen(NODE))])	[345][345][345]
 
 //Actual nested parameters..
-fNest02	@iForSibs(19,*,$,[@iForAncestry(*,R,*/^2,NODE,@iNumGen(*))])	[333][333][333]
+fNest02	@iForSibs(W113,*,$,[@iForAncestry(*,R,*/^2,NODE,@iNumGen(*))])	[555][555][555]
 
 //-------------------------------------------------------------------------------
 # NOT YET IMPLEMENTED.

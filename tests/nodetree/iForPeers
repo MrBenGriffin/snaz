@@ -6,20 +6,20 @@
 // +-----+------+------+------+------+--------+------------------+------------------------+--------------+
 // | 105 |  312 |  111 |  129 |    3 |     33 | NodeLocator      | No Node Locator        | Node Locator |
 // | 108 |  105 |  112 |  116 |    4 |     53 | NodeLocateTestA  | NL Node Locate TestA   | NL Test A    |
-// | 111 |  108 |  113 |  114 |    5 |     53 | NLTAa            | AA Node Locate Test aa | AA NL Test   |
-// | 112 |  108 |  114 |  115 |    5 |     53 | NLTAb            | AB Node Locate Test AB | AB NL Test   |
-// | 113 |  108 |  115 |  116 |    5 |     53 | NLTAc            | AC Node Locate Test AC | AC NL Test   |
+//-| 111 |  108 |  113 |  114 |    5 |     53 | NLTAa            | AA Node Locate Test aa | AA NL Test   |
+//-| 112 |  108 |  114 |  115 |    5 |     53 | NLTAb            | AB Node Locate Test AB | AB NL Test   |
+//-| 113 |  108 |  115 |  116 |    5 |     53 | NLTAc            | AC Node Locate Test AC | AC NL Test   |
 // | 109 |  105 |  116 |  120 |    4 |     53 | NodeLocateTestB  | NL Node Locate Test B  | NL Test B    |
-// | 114 |  109 |  117 |  118 |    5 |     53 | nltba            | BA Node Locate Test BA | BA NL Test   |
-// | 115 |  109 |  118 |  119 |    5 |     53 | NLTBB            | bb node locate test BB | bb nl test   |
-// | 116 |  109 |  119 |  120 |    5 |     53 | NLTBc            | BC Node Locate Test BC | BC NL Test   |
+//-| 114 |  109 |  117 |  118 |    5 |     53 | nltba            | BA Node Locate Test BA | BA NL Test   |
+//-| 115 |  109 |  118 |  119 |    5 |     53 | NLTBB            | bb node locate test BB | bb nl test   |
+//-| 116 |  109 |  119 |  120 |    5 |     53 | NLTBc            | BC Node Locate Test BC | BC NL Test   |
 // | 110 |  105 |  120 |  124 |    4 |     53 | NLTC             | NL Node Locate Test C  | NL Test C    |
-// | 117 |  110 |  121 |  122 |    5 |     33 | NLTCa            | CA Node Locate Test CA | CA NL Test   |
-// | 118 |  110 |  122 |  123 |    5 |     53 | NLTCb            | CB Node Locate Test CB | CB NL Test   |
-// | 119 |  110 |  123 |  124 |    5 |     53 | NLTCc            | CC Node Locate Test CC | CC NL Test   |
+//-| 117 |  110 |  121 |  122 |    5 |     33 | NLTCa            | CA Node Locate Test CA | CA NL Test   |
+//-| 118 |  110 |  122 |  123 |    5 |     53 | NLTCb            | CB Node Locate Test CB | CB NL Test   |
+//-| 119 |  110 |  123 |  124 |    5 |     53 | NLTCc            | CC Node Locate Test CC | CC NL Test   |
 // | 120 |  105 |  124 |  125 |    4 |     33 | NodeLocateErrors | NL Node Locate Errors  | NL Errors    |
 // | 290 |  105 |  125 |  129 |    4 |     33 | Stack0           | S0 Stack0              | Stack0       |
-// | 291 |  290 |  126 |  129 |    5 |     33 | Stack1           | S1 Stack1              | Stack1       |
+//-| 291 |  290 |  126 |  129 |    5 |     33 | Stack1           | S1 Stack1              | Stack1       |
 // | 292 |  291 |  127 |  129 |    6 |     33 | Stack2           | S2 Stack2              | Stack2       |
 // | 293 |  292 |  128 |  129 |    7 |     33 | D                | S3 Stack3              | D            |
 // +-----+------+------+------+------+--------+------------------+------------------------+--------------+
@@ -41,19 +41,19 @@
 // +-----+------+------+------+----+--------+----------+------------------------+--------------+
 
 
-//iForPeers		[@iSet(*Z,@iIndex(;,@iForPeers(!NLTBB,!NLTBB/^2,*,$,+,@iTW(*);)))]		[]
-//iForXXXXb		[@iGet(*Z)]					[113;114;115;117;118;119;121;122;123;126]
-//
-//iForP01	@iForPeers(!NodeLocateTestB,!NodeLocateTestB/^0,*,#,,[#:@iTW(*)])			[1:116]
-//iForP02	@iForPeers(!NodeLocateTestB,!NodeLocateTestB/^0,*,,,[@iTW(*)])				[116]
-//iForP03	@iForPeers(!NLTBB,!NLTBB/^0,*,#,,[#:@iTW(*)])								[1:118]
-//iForP04	@iForPeers(!NLTBB,!NodeLocateTestB,*,#,,[#:@iTW(*)])						[1:117][2:118][3:119]
-//iForP26	@iForPeers(!NLTBB,!NodeLocateTestB,*,#,-,[#:@iTW(*)])						[1:119][2:118][3:117]
-//iForP05	@iForPeers(!NLTBB,!NLTBB/^1,*,#,,[#:@iTW(*)])								[1:117][2:118][3:119]
-//iForP06	@iForPeers(!NLTBB,!NLTBB/^1,*,,,[@iTW(*)])									[117][118][119]
-//iForP07	@iForPeers(!NLTBB,!NLTBB/^1,*,,+,[@iTW(*)])									[117][118][119]
-//iForP08	@iForPeers(!NLTBB,!NLTBB/^1,*,,-,[@iTW(*)])									[119][118][117]
-//iForP09	@iForPeers(!NLTBB,!NLTBB/^2,*,,,[@iTW(*)])									[113][114][115][117][118][119][121][122][123][126]
+iForPeers		[@iSet(*Z,@iIndex(;,@iForPeers(!NLTBB,!NLTBB/^2,*,$,+,@iTW(*);)))]		[]
+iForXXXXb		[@iGet(*Z)]					[111;112;113;115;116;117;119;120;121;124]
+
+iForP01	@iForPeers(!NodeLocateTestB,!NodeLocateTestB/^0,*,#,,[#:@iTW(*)])			[1:114]
+iForP02	@iForPeers(!NodeLocateTestB,!NodeLocateTestB/^0,*,,,[@iTW(*)])				[114]
+iForP03	@iForPeers(!NLTBB,!NLTBB/^0,*,#,,[#:@iTW(*)])								[1:116]
+iForP04	@iForPeers(!NLTBB,!NodeLocateTestB,*,#,,[#:@iTW(*)])						[1:115][2:116][3:117]
+iForP26	@iForPeers(!NLTBB,!NodeLocateTestB,*,#,-,[#:@iTW(*)])						[1:117][2:116][3:115]
+iForP05	@iForPeers(!NLTBB,!NLTBB/^1,*,#,,[#:@iTW(*)])								[1:115][2:116][3:117]
+iForP06	@iForPeers(!NLTBB,!NLTBB/^1,*,,,[@iTW(*)])									[115][116][117]
+iForP07	@iForPeers(!NLTBB,!NLTBB/^1,*,,+,[@iTW(*)])									[115][116][117]
+iForP08	@iForPeers(!NLTBB,!NLTBB/^1,*,,-,[@iTW(*)])									[117][116][115]
+iForP09	@iForPeers(!NLTBB,!NLTBB/^2,*,,,[@iTW(*)])									[111][112][113][115][116][117][119][120][121][124]
 
 // Sorts
 // +------+--------------+
@@ -71,53 +71,28 @@
 // |R     | RANDOM       |
 // +------+--------------+
 
-//iForP10	@iForPeers(!NLTBB,!NLTBB/^2,*,,+t,@iLeft(@iTitle(*),2))					AAABACBAbbBCCACBCCS1
-//iForP11	@iForPeers(!NLTBB,!NLTBB/^2,*,,-t,@iLeft(@iTitle(*),2))					S1CCCBCABCbbBAACABAA
-//iForP12	@iForPeers(!NLTBB,!NLTBB/^2,*,,+T,@iLeft(@iTitle(*),2))					AAABACBABCCACBCCS1bb
-//iForP13	@iForPeers(!NLTBB,!NLTBB/^2,*,,-T,@iLeft(@iTitle(*),2))					bbS1CCCBCABCBAACABAA
-//iForP14	@iForPeers(!NLTBB,!NLTBB/^2,*,,+l,@iRight(@iLinkRef(*),2))				AaAbAcbaBBBcCaCbCck1
-//iForP15	@iForPeers(!NLTBB,!NLTBB/^2,*,,-l,@iRight(@iLinkRef(*),2))				k1CcCbCaBcBBbaAcAbAa
-//iForP16	@iForPeers(!NLTBB,!NLTBB/^2,*,,+L,@iRight(@iLinkRef(*),2))				AaAbAcBBBcCaCbCck1ba
-//iForP17	@iForPeers(!NLTBB,!NLTBB/^2,*,,-L,@iRight(@iLinkRef(*),2))				bak1CcCbCaBcBBAcAbAa
-//iForP18	@iForPeers(!NLTBB,!NLTBB/^2,*,,+s,@iLeft(@iShortTitle(*),2))				AAABACBAbbBCCACBCCSt
-//iForP19	@iForPeers(!NLTBB,!NLTBB/^2,*,,-s,@iLeft(@iShortTitle(*),2))				StCCCBCABCbbBAACABAA
-//iForP20	@iForPeers(!NLTBB,!NLTBB/^2,*,,+S,@iLeft(@iShortTitle(*),2))				AAABACBABCCACBCCStbb
-//iForP21	@iForPeers(!NLTBB,!NLTBB/^2,*,,-S,@iLeft(@iShortTitle(*),2))				bbStCCCBCABCBAACABAA
-//iForP22	@iForPeers(!NLTBB,!NLTBB/^2,*,,+S,@iLeft(@iShortTitle(*),2))				AAABACBABCCACBCCStbb
-//iForP23	@iForPeers(!NLTBB,!NLTBB/^2,*,,-S,@iLeft(@iShortTitle(*),2))				bbStCCCBCABCBAACABAA
-iForP24	@iForPeers(!NLTBB,!NLTBB/^2,*,,+[EventStart],[@iContent(*,EventStart)])		[1999 02 01 00 00 00][2001 04 01 00 00 00][2002 01 04 00 00 00][1981 04 01 00 00 00][2011 03 01 02 15 30][2006 05 01 00 00 00][][2002 03 01 00 00 00][2001 06 01 00 00 00][]
-//iForP25	@iForPeers(!NLTBB,!NLTBB/^2,*,,-[EventStart],[@iContent(*,EventStart)])		[][2001 06 01 00 00 00][2002 03 01 00 00 00][][2006 05 01 00 00 00][2011 03 01 02 15 30][1981 04 01 00 00 00][2002 01 04 00 00 00][2001 04 01 00 00 00][1999 02 01 00 00 00]
+iForP10	@iForPeers(!NLTBB,!NLTBB/^2,*,,+t,@iRight(@iTitle(*),2))				aaABACBABBBCCACBCCk1
+iForP11	@iForPeers(!NLTBB,!NLTBB/^2,*,,-t,@iRight(@iTitle(*),2))				k1CCCBCABCBBBAACABaa
+iForP12	@iForPeers(!NLTBB,!NLTBB/^2,*,,+T,@iRight(@iTitle(*),2))				ABACBABCCACBCCaak1BB
+iForP13	@iForPeers(!NLTBB,!NLTBB/^2,*,,-T,@iRight(@iTitle(*),2))				BBk1aaCCCBCABCBAACAB
+iForP14	@iForPeers(!NLTBB,!NLTBB/^2,*,,+l,@iRight(@iLinkRef(*),2))				AaAbAcbaBBBcCaCbCck1
+iForP15	@iForPeers(!NLTBB,!NLTBB/^2,*,,-l,@iRight(@iLinkRef(*),2))				k1CcCbCaBcBBbaAcAbAa
+iForP16	@iForPeers(!NLTBB,!NLTBB/^2,*,,+L,@iRight(@iLinkRef(*),2))				AaAbAcBBBcCaCbCck1ba
+iForP17	@iForPeers(!NLTBB,!NLTBB/^2,*,,-L,@iRight(@iLinkRef(*),2))				bak1CcCbCaBcBBAcAbAa
+iForP18	@iForPeers(!NLTBB,!NLTBB/^2,*,,+s,@iLeft(@iShortTitle(*),2))			AAABACBAbbBCCACBCCSt
+iForP19	@iForPeers(!NLTBB,!NLTBB/^2,*,,-s,@iLeft(@iShortTitle(*),2))			StCCCBCABCbbBAACABAA
+iForP20	@iForPeers(!NLTBB,!NLTBB/^2,*,,+S,@iLeft(@iShortTitle(*),2))			AAABACBABCCACBCCStbb
+iForP21	@iForPeers(!NLTBB,!NLTBB/^2,*,,-S,@iLeft(@iShortTitle(*),2))			bbStCCCBCABCBAACABAA
+iForP22	@iForPeers(!NLTBB,!NLTBB/^2,*,,+S,@iLeft(@iShortTitle(*),2))			AAABACBABCCACBCCStbb
+iForP23	@iForPeers(!NLTBB,!NLTBB/^2,*,,-S,@iLeft(@iShortTitle(*),2))			bbStCCCBCABCBAACABAA
+iForP24	@iForPeers(!NLTAa,!NLTAa/^2,*,,,[@iContent(*,EventStart)])	[1999 02 01 00 00 00][2001 04 01 00 00 00][2002 01 04 00 00 00][1981 04 01 00 00 00][2011 03 01 02 15 30][2006 05 01 00 00 00][][2002 03 01 00 00 00][2001 06 01 00 00 00][]
 
-X
+//iForP25	@iForPeers(!NodeLocateTestB,!NLTBB/^2,*,,+[EventStart],[@iContent(*,EventStart)])		[1999 02 01 00 00 00][2001 04 01 00 00 00][2002 01 04 00 00 00][1981 04 01 00 00 00][2011 03 01 02 15 30][2006 05 01 00 00 00][][2002 03 01 00 00 00][2001 06 01 00 00 00][]
+//iForP26	@iForPeers(!NodeLocateTestB,!NLTBB/^2,*,,-[EventStart],[@iContent(*,EventStart)])		[][2001 06 01 00 00 00][2002 03 01 00 00 00][][2006 05 01 00 00 00][2011 03 01 02 15 30][1981 04 01 00 00 00][2002 01 04 00 00 00][2001 04 01 00 00 00][1999 02 01 00 00 00]
+
 iForPeers		[@iSet(*Z,@iIndex(;,@iForPeers(!NLTBB,!NLTBB/^2,*,$,+,@iID(*);)))]		[]
 iForXXXXb		[@iGet(*Z)]					[111;112;113;114;115;116;117;118;119;291]
 
-iForP01	@iForPeers(!NodeLocateTestB,!NodeLocateTestB/^0,*,#,,#@bit(*))			1eL
-iForP02	@iForPeers(!NodeLocateTestB,!NodeLocateTestB/^0,*,,,@bit(*))			eL
-iForP03	@iForPeers(!NLTBB,!NLTBB/^0,*,#,,#@bit(*))								1BB
-iForP04	@iForPeers(!NLTBB,!NodeLocateTestB,*,#,,#@bit(*))						1ba2BB3Bc
-iForP05	@iForPeers(!NLTBB,!NLTBB/^1,*,#,,#@bit(*))								1ba2BB3Bc
-iForP06	@iForPeers(!NLTBB,!NLTBB/^1,*,,,@bit(*))								baBBBc
-iForP07	@iForPeers(!NLTBB,!NLTBB/^1,*,,+,@bit(*))								baBBBc
-iForP08	@iForPeers(!NLTBB,!NLTBB/^1,*,,-,@bit(*))								cBBBab
-iForP09	@iForPeers(!NLTBB,!NLTBB/^2,*,,,@bit(*))								AaAbAcbaBBBcCaCbCc
-iForP10	@iForPeers(!NLTBB,!NLTBB/^2,*,,+t,@bit(*))								AaAbAcbaBBBcCaCbCc
-iForP11	@iForPeers(!NLTBB,!NLTBB/^2,*,,-t,@bit(*))								CcCbCaBcBBbaAcAbAa
-iForP12	@iForPeers(!NLTBB,!NLTBB/^2,*,,+T,@bit(*))								AbAcbaBcCaCbCcAaBB
-iForP13	@iForPeers(!NLTBB,!NLTBB/^2,*,,-T,@bit(*))								BBAaCcCbCaBcbaAcAb
-iForP14	@iForPeers(!NLTBB,!NLTBB/^2,*,,+l,@bit(*))								AaAbAcbaBBBcCaCbCc
-iForP15	@iForPeers(!NLTBB,!NLTBB/^2,*,,-l,@bit(*))								CcCbCaBcBBbaAcAbAa
-iForP16	@iForPeers(!NLTBB,!NLTBB/^2,*,,+L,@bit(*))								AaAbAcBBBcCaCbCcba
-iForP17	@iForPeers(!NLTBB,!NLTBB/^2,*,,-L,@bit(*))								baCcCbCaBcBBAcAbAa
-iForP18	@iForPeers(!NLTBB,!NLTBB/^2,*,,+s,@bit(*))								AaAbAcbaBBBcCaCbCc
-iForP19	@iForPeers(!NLTBB,!NLTBB/^2,*,,-s,@bit(*))								CcCbCaBcBBbaAcAbAa
-iForP20	@iForPeers(!NLTBB,!NLTBB/^2,*,,+S,@bit(*))								AaAbAcbaBcCaCbCcBB
-iForP21	@iForPeers(!NLTBB,!NLTBB/^2,*,,-S,@bit(*))								BBCcCbCaBcbaAcAbAa
-iForP22	@iForPeers(!NLTBB,!NLTBB/^2,*,,+S,@bit(*))								AaAbAcbaBcCaCbCcBB
-iForP23	@iForPeers(!NLTBB,!NLTBB/^2,*,,-S,@bit(*))								BBCcCbCaBcbaAcAbAa
-iForP24	@iForPeers(!NLTBB,!NLTBB/^2,*,,+[EventStart],@day(*))					(dates)
-iForP25	@iForPeers(!NLTBB,!NLTBB/^2,*,,-[EventStart],[@iContent(*,EventStart)])	(dates)
-
-iForPeers001	[@iIndex(;,@iForPeers(!print-scss/..,!print-scss/^2,*,$,+,@iNumGen(*)))]			[555555555555]
-iForPeers002	(@iIndex({,},@iForPeers(!print-scss,!print-scss/^2,*,$,+L,@iLinkRef(*){,})))		(blog-scss,category-scss,editorial-scss,footer-scss,header-scss,layout-scss,print-scss,slick-scss,typography-scss)
-iForPeers003	(@iIndex({,},@iForPeers(!print-scss,!print-scss/^2,*,$,+[*f_code],@iID(*){,})))		!1!error: node sort by segment reference is not currently supported.
+iForPeers001	[@iIndex(;,@iForPeers(!NLTBB,!NLTBB/^2,*,$,+,@iNumGen(*)))]				[5555555555]
+iForPeers002	(@iIndex({,},@iForPeers(!NLTBB,!NLTBB/^2,*,$,+L,@iLinkRef(*){,})))		(NLTAa,NLTAb,NLTAc,NLTBB,NLTBc,NLTCa,NLTCb,NLTCc,Stack1,nltba)
+iForPeers003	(@iIndex({,},@iForPeers(!NLTBB,!NLTBB/^2,*,$,+l,@iLinkRef(*){,})))		(NLTAa,NLTAb,NLTAc,nltba,NLTBB,NLTBc,NLTCa,NLTCb,NLTCc,Stack1)

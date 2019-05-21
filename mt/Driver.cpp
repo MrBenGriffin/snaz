@@ -100,7 +100,7 @@ namespace mt {
 	 * */
 	void Driver::store(const std::string &str) {
 		if(!str.empty()) {
-			auto* text = new Text(str);
+			shared_ptr<Token> text = make_shared<Text>(str);
 			if ( macro_stack.empty()) {
 				Token::add(text,final);
 			} else {
@@ -111,7 +111,7 @@ namespace mt {
 
 	void Driver::storeWss(const std::string &str) {
 		if(!str.empty()) {
-			auto* wss = new Wss(str);
+			shared_ptr<Token> wss = make_shared<Wss>(str);
 			if ( macro_stack.empty()) {
 				Token::add(wss,final);
 			} else {

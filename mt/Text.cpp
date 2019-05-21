@@ -28,13 +28,16 @@ namespace mt {
 					std::string ws = wss->get();
 					mt.pop_back();
 					ws.append(text);
-					mt.emplace_back(new Text(ws));
+					shared_ptr<Token> ptr = make_shared<Text>(ws);
+					mt.emplace_back(ptr);
 				} else {
-					mt.emplace_back(new Text(text));
+					shared_ptr<Token> ptr = make_shared<Text>(text);
+					mt.emplace_back(ptr);
 				}
 			}
 		} else {
-			mt.emplace_back(new Text(text));
+			shared_ptr<Token> ptr = make_shared<Text>(text);
+			mt.emplace_back(ptr);
 		}
 	}
 
@@ -57,17 +60,20 @@ namespace mt {
 		if(start < text.size()) {
 			valStr.append(text.substr(start));
 		}
-		add(std::make_shared<TokenPtr>(Text(valStr)),result);
+		shared_ptr<Token> ptr = make_shared<Text>(valStr);
+		add(ptr,result);
 	}
 
 	void Text::doFor(mtext& result,const forStuff& stuff) const {
 		string basis(text);
 		Support::fandr(basis,stuff.stuff);
-		add(std::make_shared<TokenPtr>(Text(basis)),result);
+		shared_ptr<Token> ptr = make_shared<Text>(basis);
+		add(ptr,result);
 	}
 
 	void Text::inject(Messages&,mtext& out,mstack&) const {
-		out.emplace_back(new Text(text));
+		shared_ptr<Token> ptr = make_shared<Text>(text);
+		out.emplace_back(ptr);
 	}
 
 

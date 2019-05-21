@@ -660,7 +660,7 @@ namespace node {
 			} else {
 				if (showPaths) message << "A[" << itier.first << "]";
 				find = from;
-				while ((find->tier() > itier.first) && (find != root)) {
+				while ( find != nullptr && (find->tier() > itier.first) ) {
 					find = find->parent();
 				}
 			}

@@ -18,6 +18,9 @@ iMed 06	@iMedia(NAVEDITx:trans)							/media/images/navedit_trans_247C0CC880DF99
 iMed 07	@iMedia(NAVEDITx:x400(100,200))					/media/images/navedit_x400_14183A48ADBE17CFB941C20630F860BD.gif
 iMed 08	@iMedia(NAVEDITx:x400(100,250))					/media/images/navedit_x400_65CF771F8F17D244C3BC369BBA8F39E4.gif
 
+# iEmbed
+iEmbed	[@iEmbed(embedtext)]							[This is the embedded message.]
+
 
 //+----+-------+------+-----------------------------+-------------+---------------------+
 //| id | name  | ext  | transform                   | comment     | ts                  |

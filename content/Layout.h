@@ -31,9 +31,9 @@ namespace content {
 		string ref;
 		bool buildPoint;
 		vector<const Template*> templates;
-		deque<const Segment*> segments;
+		unordered_map<size_t,const Segment*> segments; //This is the layout's set of segments.
 		unordered_map<string,const Segment*> segRefs;  //This is the layout's specific name for a segment.
-		unordered_map<size_t,string> segIDRefs;       //This is the layout's specific name for a segment, via segment's id.
+		unordered_map<size_t,string> segIDRefs;        //This is the layout's specific name for a segment, via segment's id.
 
 //		void compose(Messages&,node::Content&,buildKind,size_t,size_t) const;
 

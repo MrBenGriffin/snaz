@@ -1,6 +1,7 @@
 #include "Internal.h"
 #include "InternalInstance.h"
 #include "support/Message.h"
+#include "support/Encode.h"
 #include "node/Tree.h"
 #include "node/Content.h"
 #include "content/Layout.h"
@@ -54,8 +55,13 @@ namespace mt {
 		if(my.metrics->segmentStack.empty()) {
 			e << Message(error,_name + " called outside any segment context.");
 		} else {
-			auto* segment = my.metrics->segmentStack.top();
-			my.logic(segment->name,1);
+// Errors will be shown for segments that are out of context for the layout.
+// Should this only work with the topmost current_node/segment?
+// What about if this is in a segment of another segment?
+// We DO have both the metrics segmentStack and the nodeStack..
+			auto* layout = my.metrics->current->layout();
+			auto* segment = layout->segment(e,my.parm(1));
+			my.logic(segment != nullptr && segment->id == my.metrics->segmentStack.top()->id,2);
 		}
 	}
 
@@ -124,6 +130,7 @@ namespace mt {
 					auto code = content::Editorial::e().get(e,interest,segment);
 					if(!code.first) { //need to do IO as well..
 						auto* metrics = const_cast<Metrics*>(my.metrics);
+						metrics->current  = interest;
 						metrics->nodeStack.push_back(interest);
 						metrics->segmentStack.push(segment);
 						mt::Wss::push(&(segment->nl));
@@ -136,7 +143,7 @@ namespace mt {
 					} else {
 						auto* text = code.second;
 						if(!text->empty()) {
-							Token::add(text->front().get(),o);
+							Token::add(text->front(),o);
 						}
 					}
 				} else {

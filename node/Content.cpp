@@ -21,6 +21,7 @@
 #include "support/File.h"
 #include "support/Regex.h"
 #include "support/Convert.h"
+#include "support/Encode.h"
 #include "support/Env.h"
 #include "support/Timing.h"
 #include "support/db/Query.h"
@@ -205,7 +206,9 @@ namespace node {
 					if(initialSuffix) {
 						const node::Suffix* finalSuffix = initialSuffix->last;
 						ostringstream base;
-						base << node._ref;
+						std::string refName = node._ref;
+						Support::fileEncode(refName);
+						base << refName;
 						if(fileNum > 0) {
 							base << "_" << fileNum;
 						}

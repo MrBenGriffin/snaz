@@ -162,10 +162,10 @@ namespace node {
 //-------------------------------------------------------------------
 // Contextual Navigation functions follow
 //-------------------------------------------------------------------
-	const Node* Node::child(Messages &errs, size_t x) const { //This is 1-indexed!!
-		if ( x == 0 || x > children.size()) {
+	const Node* Node::child(Messages &errs, long long x) const { //This is 1-indexed!!
+		if ( x <= 0 || x > children.size()) {
 			ostringstream text;
-			text << "A child index outside the number of children. Index:" << x << " Children: " << children.size();
+			text << "A child index was outside the number of children. Index:" << x << " Children: " << children.size();
 			errs << Message(range, text.str());
 			return nullptr;
 		}

@@ -104,12 +104,13 @@ namespace mt {
 								matchend++;
 							}
 							if (matchend <= base_len) {
-
-								Token::add(std::make_shared<Token>(Text(string(scope, start, matchend - start))),result);
+								shared_ptr<Token> text = make_shared<Text>(string(scope, start, matchend - start));
+								Token::add(text,result);
 							}
 							start = matchend;
 						} else {
-							Token::add(new Text(string(scope, start, matchstart - start)),result);
+							shared_ptr<Token> text = make_shared<Text>(string(scope, start, matchstart - start));
+							Token::add(text,result);
 							vector<string> subs;
 							for (size_t n = 0; n < 10; n++) {
 								string substr;
@@ -135,7 +136,9 @@ namespace mt {
 						count++;
 					}
 					if (count != 0 && start < base_len) {
-						Token::add(new Text(string(scope, start, base_len - start)),result);
+						shared_ptr<Token> text = make_shared<Text>(string(scope, start, base_len - start));
+						Token::add(text,result);
+//						Token::add(new Text(string(scope, start, base_len - start)),result);
 					}
 					delete[] ov;
 					if(!result.empty()) {

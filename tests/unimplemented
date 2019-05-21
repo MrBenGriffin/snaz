@@ -10,9 +10,6 @@
 # Unimplemented Node
 SegmentName			@iSegmentName(19,2)						!1!error: iSegmentName is not yet implemented.
 
-# Unimplemented Media
-iEmbed					@iEmbed(1,2)							!1!error: iEmbed not yet implemented.
-
 # Unimplemented Taxonomy
 iTax					@iTax(1,2)								!1!error: iTax is not yet implemented.
 iForTax					@iForTax(1,2,3,4)						!1!error: iForTax is not yet implemented.

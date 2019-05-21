@@ -10,7 +10,7 @@
 
 namespace mt {
 
-	Script::Script(std::string w) : text(std::move(w)) {}
+	Script::Script(std::string w) : Token(),text(std::move(w)) {}
 
 	bool Script::empty() const {
 		return text.empty();

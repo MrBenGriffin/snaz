@@ -74,6 +74,12 @@ const Layout* Layout::get(Messages &errs,size_t id) {
 			value = found->second;
 		} else {
 			value = content::Segment::get(errs,this,segmentRef);
+			if(value != nullptr && segments.find(value->id) == segments.end()) {
+				ostringstream err;
+				err << "The segment with reference '" << segmentRef << "' is not used by layout '" << ref << "'";
+				errs << Message(range,err.str());
+				value = nullptr;
+			}
 		}
 		return value;
 	}
@@ -128,19 +134,19 @@ void Layout::load(Messages &errs, Connection &sql,size_t techID, buildKind) {
 			while(q->nextrow()) {
 				size_t id;
 				size_t seg;
-				string segRef;
+				string localRef;
 				q->readfield(errs, "lid", id);
 				q->readfield(errs, "sid", seg);
-				q->readfield(errs, "comment", segRef);
+				q->readfield(errs, "comment",localRef);
 				auto found = layouts.find(id);
 				if(found != layouts.end()) {
 					Layout& layout = found->second;
 					const Segment* segment = Segment::get(errs,seg);
 					if(segment != nullptr) {
-						layout.segments.push_back(segment);
-						if(!segRef.empty()) {
-							layout.segRefs.emplace(segRef,segment);
-							layout.segIDRefs.emplace(seg,segRef);
+						layout.segments.emplace(seg,segment);
+						if(!localRef.empty()) {
+							layout.segRefs.emplace(localRef,segment);
+							layout.segIDRefs.emplace(seg,localRef);
 						}
 					}
 				}
