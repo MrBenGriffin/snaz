@@ -15,9 +15,9 @@ namespace mt {
 	void Token::doFor(mtext&,const forStuff&) const {}
 	bool Token::empty() const { return true; }
 
-	void Token::add(Token* token,mtext& mt) {
+	void Token::add(TokenPtr& token,mtext& mt) {
 		if (token != nullptr) {
-			Text *t = dynamic_cast<Text *>(token);
+			Text *t = dynamic_cast<Text *>(token->get());
 			if (t != nullptr) {
 				if (!mt.empty()) {
 					auto back = mt.back();
@@ -29,7 +29,7 @@ namespace mt {
 					}
  				}
 			} else {
-				Wss *w = dynamic_cast<Wss *>(token);
+				Wss *w = dynamic_cast<Wss *>(token->get());
 				if (w != nullptr) {
 					if (!mt.empty()) {
 						auto back = mt.back();

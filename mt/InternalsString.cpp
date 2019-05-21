@@ -104,7 +104,8 @@ namespace mt {
 								matchend++;
 							}
 							if (matchend <= base_len) {
-								Token::add(new Text(string(scope, start, matchend - start)),result);
+
+								Token::add(std::make_shared<Token>(Text(string(scope, start, matchend - start))),result);
 							}
 							start = matchend;
 						} else {

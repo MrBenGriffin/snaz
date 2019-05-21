@@ -16,16 +16,18 @@ namespace node {
 
 	using namespace Support;
 	Metrics::Metrics() : current(nullptr),currentTemplate(nullptr),page(0) {
-		locator =  new Locator(this);
+		locator =  std::make_shared<Locator>(this);
 		locator->setRoot(Content::root());
 	}
 	Metrics::~Metrics() {
-		delete locator;
+//		delete locator;
 	}
 
 	Metrics::Metrics(const Metrics* o) : locator(nullptr) {
 		current = o->current;
-		locator = new Locator(o->locator,this);
+        locator =  std::make_shared<Locator>(o->locator.get(),this);
+
+//        locator = new Locator(o->locator,this);
 		currentTemplate = o->currentTemplate;
 		segmentStack = o->segmentStack;
 		nodeStack = o->nodeStack;

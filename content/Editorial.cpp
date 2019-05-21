@@ -122,10 +122,8 @@ namespace content {
 					query->setRow(errs,index->second);
 					string content;
 					query->readfield(errs, "content", content);
-					pair<bool,mt::mtext> toCache;
-					mt::mtext stuff = mt::Driver::parse(errs,content,false);
-					toCache.first=(stuff.size() == 1 && dynamic_cast<const mt::Text*>(stuff.front().get()) != nullptr);
-					toCache.second = std::move(stuff);
+					pair<bool,mt::mtext> toCache={ false, mt::Driver::parse(errs,content,false) };
+					toCache.first=(toCache.second.size() == 1 && dynamic_cast<const mt::Text*>(toCache.second.front().get()) != nullptr);
 					auto idx = contentStore.emplace(id,std::move(toCache));
 					value.first  = idx.first->second.first;
 					value.second = &idx.first->second.second;

@@ -32,7 +32,7 @@ namespace mt {
 		virtual void subs(mtext&,const std::vector<std::string>&,const std::string&) const =0;
 
 		// My function!!
-		static void add(Token*,mtext&);
+		static void add(TokenPtr&,mtext&);
 
 
 	};

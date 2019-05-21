@@ -296,8 +296,6 @@ namespace testing {
 						bool advanced = mt::Definition::test_adv(pprogram);
 						mt::Driver driver(*msgs,code,advanced);
 						mt::mtext structure = driver.parse(*msgs,false); //bool advanced, bool strip
- //                       driver.visit(structure,cout);
-
                         pexpected = expected;
 						wss(pexpected,false);
 						ostringstream expansion; //need to set node!

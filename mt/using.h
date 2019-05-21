@@ -17,7 +17,8 @@ namespace mt {
 	class Instance;
 	class forStuff;    //inside Instance.h
 	class Handler;
-	using mtext=		std::deque<std::shared_ptr<Token>>;
+	using TokenPtr=     std::shared_ptr<Token>;
+	using mtext=		std::deque<TokenPtr>;
 	using parse_result=	std::pair<bool,std::pair<mtext, bool>>;
 	using iteration=	std::pair<size_t,size_t>;
 	using plist=		std::vector<mtext>;

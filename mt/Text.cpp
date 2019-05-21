@@ -57,13 +57,13 @@ namespace mt {
 		if(start < text.size()) {
 			valStr.append(text.substr(start));
 		}
-		add(new Text(valStr),result);
+		add(std::make_shared<TokenPtr>(Text(valStr)),result);
 	}
 
 	void Text::doFor(mtext& result,const forStuff& stuff) const {
 		string basis(text);
 		Support::fandr(basis,stuff.stuff);
-		add(new Text(basis),result);
+		add(std::make_shared<TokenPtr>(Text(basis)),result);
 	}
 
 	void Text::inject(Messages&,mtext& out,mstack&) const {
