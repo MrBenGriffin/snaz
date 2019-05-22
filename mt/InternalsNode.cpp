@@ -130,20 +130,16 @@ namespace mt {
 					auto code = content::Editorial::e().get(e,interest,segment);
 					if(!code.first) { //need to do IO as well..
 						auto* metrics = const_cast<Metrics*>(my.metrics);
-						metrics->current  = interest;
-						metrics->nodeStack.push_back(interest);
-						metrics->segmentStack.push(segment);
-						mt::Wss::push(&(segment->nl));
+						metrics->push(interest,segment);
 						for(auto& token: *(code.second)) {
 							token->expand(e,o,context);
 						}
-						mt::Wss::pop();
-						metrics->segmentStack.pop();
-						metrics->nodeStack.pop_back();
+						metrics->pop();
 					} else {
 						auto* text = code.second;
 						if(!text->empty()) {
-							Token::add(text->front(),o);
+							shared_ptr<Token> ptr = make_shared<Text>(text->front()->get());
+							Token::add(ptr,o);
 						}
 					}
 				} else {

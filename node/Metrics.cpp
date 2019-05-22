@@ -20,14 +20,25 @@ namespace node {
 		locator->setRoot(Content::root());
 	}
 	Metrics::~Metrics() {
-//		delete locator;
+	}
+
+	//		void push(const Content*,const Segment* = nullptr);
+	void Metrics::push(const Content* node,const content::Segment* segment){
+		nodeStack.push_back(node);
+		current  = node;
+		segmentStack.push(segment);
+		mt::Wss::push(&(segment->nl));
+	}
+	void Metrics::pop() {
+		segmentStack.pop();
+		mt::Wss::pop();
+		nodeStack.pop_back();
+		current = nodeStack.back();
 	}
 
 	Metrics::Metrics(const Metrics* o) : locator(nullptr) {
 		current = o->current;
         locator =  std::make_shared<Locator>(o->locator.get(),this);
-
-//        locator = new Locator(o->locator,this);
 		currentTemplate = o->currentTemplate;
 		segmentStack = o->segmentStack;
 		nodeStack = o->nodeStack;

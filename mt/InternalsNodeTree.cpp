@@ -147,7 +147,7 @@ namespace mt {
 		const Node *root = my.node(2);
 		if (main != nullptr) {
 			auto peers = main->peers(root);
-			doSort(e, peers.second, my.parm(5));
+			doSort(e, peers.second, my.parm(5),&context, const_cast<Metrics*>(my.metrics));
 			my.generate(peers.second,my.praw(6),my.parm(3),my.parm(4));   //parms,code,vToken,cToken
 		}
 	}

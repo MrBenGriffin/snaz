@@ -18,7 +18,6 @@ namespace mt {
 		* With a context, it can be evaluete
 	**/
 	class Macro : public Token {
-		explicit Macro(const Macro* o);
 
 	public:
 		std::string _name;
@@ -37,6 +36,7 @@ namespace mt {
 		//used for expanding injections, etc. not sure if this should generate a copy or not..
 
 		explicit Macro(std::string);
+		Macro(std::string,plist);
 		~Macro() override = default;
 	};
 }

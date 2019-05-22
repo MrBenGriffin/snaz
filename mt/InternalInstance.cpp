@@ -73,34 +73,44 @@ namespace mt {
 		plist result; //using plist=std::vector<mtext>;
 		for(auto& i : nodes) {
 			mtext parm;
-			parm.emplace_back(new Text(i->ids()));
-			result.emplace_back(std::move(parm));
+			shared_ptr<Token> ptr = make_shared<Text>(i->ids());
+			parm.emplace_back(ptr);
 		}
 		return result;
 	}
 
 	void InternalInstance::generate(nlist& nodes,const mtext* program,const string value,const string countStr) {
 		if(program != nullptr && !program->empty()) { // from an empty parm..
-			Definition macro(*program,0,-1,true,false); //iterate,dont trim
-			auto stuff = make_shared<forStuff>(value,countStr);
-			plist parameters;
+			forStuff stuff(value,countStr);
+			size_t count = 1;
 			for(auto& i: nodes) {
-				mtext parm;
-				parm.emplace_back(new Text(i->ids()));
-				parameters.emplace_back(std::move(parm));
+				stuff.set(i->ids(),count);
+				mtext paramOut;  //this will be the program, substituted correctly.
+				Driver::doFor(*program,paramOut,stuff);
+				for(auto& j : paramOut) {
+					j->expand(*errs,*output,*context);
+				}
+				count++;
 			}
-			Instance i(parameters,stuff,nullptr); 	//set as generated.
-			macro.expand(*errs,*output,i,*context);
 		}
 	}
 
 	void InternalInstance::generate(plist& parameters,const mtext* program,const string value,const string countStr) {
 		//parms,code,vToken,cToken
 		if(program != nullptr && !program->empty()) { // from an empty parm..
-			Definition macro(*program,0,-1,true,false); //iterate,dont trim
-			auto stuff = make_shared<forStuff>(value,countStr);
-			Instance i(parameters,stuff,nullptr); 	//set as generated.
-			macro.expand(*errs,*output,i,*context);
+			forStuff stuff(value,countStr);
+			size_t count = 1;
+			for(auto& paramIn: parameters) {
+				ostringstream result;
+				Driver::expand(*errs,paramIn,result,*context);
+				stuff.set(result.str(),count);
+				mtext paramOut;  //this will be the program, substituted correctly.
+				Driver::doFor(*program,paramOut,stuff);
+				for(auto& j : paramOut) {
+					j->expand(*errs,*output,*context);
+				}
+				count++;
+			}
 		}
 	}
 
@@ -154,7 +164,8 @@ namespace mt {
 	}
 
 	void InternalInstance::set(std::string str) {
-		output->emplace_back(new Text(str));
+		shared_ptr<Token> ptr = make_shared<Text>(str);
+		output->emplace_back(ptr);
 	}
 
 	//offset points at the position of the TRUE parm.

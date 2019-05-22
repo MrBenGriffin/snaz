@@ -109,9 +109,10 @@ namespace content {
 		return value;
 	}
 
-	pair<bool,mt::mtext*> Editorial::get(Messages &errs, const node::Content* node, const Segment* segment) {
+
+	pair<bool,const mt::mtext*> Editorial::get(Messages &errs, const node::Content* node, const Segment* segment) {
 		static mt::mtext empty;
-		pair<bool,mt::mtext*> value = { true, &empty};
+		pair<bool,const mt::mtext*> value = { true, &empty};
 		key id;
 		if(sanity(errs,id,node,segment)) {
 			auto cIndex = contentStore.find(id); //unordered_map< key, mt::mtext, hash_pair> contentStore;

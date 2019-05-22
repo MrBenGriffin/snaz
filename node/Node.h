@@ -48,6 +48,7 @@ namespace node {
 		size_t _weight;					// size of my branch.
 		string _ref;						// Unique reference string (eg, LinkRef.
 		string idStr;						// As we get this from the database, we may as well store the string 'for free'.
+		string _comment;		//comment, used by content as 'scratch'.
 		vector<const Node *> children;      // List of children
 		void common(Messages&,Db::Query*,size_t&,size_t&);
 
@@ -70,6 +71,7 @@ namespace node {
 		pair<size_t,vector<const Node *>> siblings() const;
 		pair<size_t,vector<const Node *>> peers(const Node* = nullptr) const;
 
+		void  setComment(std::string);
 		const Node* parent() const { return _parent; }
 		const Tree* tree() const { return _tree; }
 		const Node* child(Messages&, long long) const;
@@ -82,8 +84,9 @@ namespace node {
 		size_t tier() const;	 	// my tier number from 1 to n
 		size_t sibling() const;		// my sibling number from 1 to n
 		size_t size() const;
-		const string ids() const;	 		// unique id as a string
-		const string ref() const;	 		// linkref as a string
+		const string ids() const;	// unique id as a string
+		const string ref() const;	// linkref as a string
+		const string comm() const;	// comment as a string
 
 		void str(ostream&) const;			 // show the Node..
 		virtual void weigh();

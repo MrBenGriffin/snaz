@@ -46,7 +46,6 @@ namespace node {
 		const content::Layout* layoutPtr;
 		vector<std::string> 				finalFilenames;	//final filenames - in page order.
 		string baseFileName;
-		string scratchpad;    				// used for iForPeers <- maybe should go elsewhere..
 
 		void reset();
 
@@ -57,8 +56,8 @@ namespace node {
 		static Tree editorial;
 		static Content& get(size_t i) { return nodes[i]; }
 
-		Content();
 
+		Content();
 		const Node* node(Messages&, size_t, bool) const override; //Node by id.
 		const Content* content(Messages&, size_t= 0, bool= false) const; //Content by id.
 		static const Content* root();// { return dynamic_cast<const Content*>(editorial.root()); }

@@ -124,8 +124,6 @@ namespace node {
 		}
 	}
 
-
-
 	const Node* Suffix::node(Messages& errs, size_t id, bool silent) const {
 		return suffix(errs,id,silent);
 	}
@@ -182,7 +180,7 @@ namespace node {
 		switch(field) {
 			case title: result = _title; break;
 			case script: result = _script; break;
-			case comment: result = _comment; break;
+//			case comment: result = _comment; break;
 			default: break;
 		}
 		return result;

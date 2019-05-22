@@ -13,7 +13,11 @@
 #include "support/Storage.h"
 #include "support/db/Connection.h"
 #include "support/db/Query.h"
-#include "node/Node.h"
+
+namespace node {
+	class Node;
+	class Metrics;
+}
 
 namespace mt {
 	class Internal : public Handler {
@@ -22,7 +26,7 @@ namespace mt {
 
 	public:
 		bool inRange(size_t) const override;
-		void doSort(Support::Messages&,vector<const node::Node*>&,std::string) const;
+		void doSort(Support::Messages&,vector<const node::Node*>&,std::string,mstack* = nullptr,node::Metrics* = nullptr) const;
 		std::string name() const override;
 		size_t minParms {0}, maxParms {0};
 		static void startup(Messages&,Db::Connection&,buildKind);

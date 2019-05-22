@@ -164,14 +164,13 @@ namespace node {
 		}
 		return result;
 	};
-
 	string Content::get(Messages&,textValue field) const {
 		string result;
 		switch(field) {
-			case title: result= _title; break;
-			case shortTitle: result= _shortTitle; break;
-			case comment: break;
-			case baseFilename: result=baseFileName; break;
+			case title: 		result= _title; break;
+			case shortTitle: 	result= _shortTitle; break;
+			case comment: 		result= _comment; break;
+			case baseFilename: 	result=baseFileName; break;
 			case scope: break;
 			case classCode: break;
 			case synonyms: break;
@@ -253,7 +252,7 @@ namespace node {
 		return content(errs,id,silent);
 	}
 
-//-------------------------------------------------------------------
+	//-------------------------------------------------------------------
 // All builds starts here, and then any single node build goes to compose.
 	void Content::generate(Messages& errs,buildType build) {
 		Build &core = Build::b();

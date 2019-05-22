@@ -36,7 +36,9 @@ namespace node {
 	size_t Node::getChildCount() const  { return children.size(); }
 	const string Node::ref() 	 const	{ return _ref; }        	// unique id as a string
 	const string Node::ids() 	 const	{ return idStr; }        	// unique id as a string
-//-------------------------------------------------------------------
+	const string Node::comm() 	 const	{ return _comment; }		// comment as a string
+
+	//-------------------------------------------------------------------
 	Node::Node(Tree& tree) : _tree(&tree),_parent(nullptr),_id(0),_tw(0),_tier(0),_weight(1),_sibling(1),idStr("") {
 	}
 
@@ -141,6 +143,10 @@ namespace node {
 			};
 		}
 		return result;
+	}
+
+	void Node::setComment(std::string str) {
+		_comment = std::move(str);
 	}
 
 	void Node::str(ostream& o) const {

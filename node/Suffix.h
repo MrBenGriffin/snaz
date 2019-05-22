@@ -49,7 +49,6 @@ namespace node {
 		const Suffix* last;
 		string _title;
 		string _script;
-		string _comment;
 		bool _output;
 		bool _terminal;
 		bool _exec;

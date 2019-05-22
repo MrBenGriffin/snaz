@@ -9,10 +9,7 @@ namespace mt {
 
 	Macro::Macro(std::string n) : _name(std::move(n)) {};
 
-	Macro::Macro(const Macro* o) {
-		_name  = o->_name;
-		parms = o->parms;
-	}
+	Macro::Macro(std::string n,plist p) : _name(std::move(n)),parms(std::move(p)) {}
 
 	void Macro::final(std::ostream& o) const {
 		visit(o);
@@ -27,31 +24,31 @@ namespace mt {
 	}
 
 	void Macro::doFor(mtext& result,const forStuff& stuff) const {
-		Macro* ret = new Macro(_name);
+		auto ret = make_shared<Macro>(_name);
 		for(auto& parm : parms) {
 			mtext nParm;
 			Driver::doFor(parm,nParm,stuff);
-			ret->parms.emplace_back(nParm);
+			ret.get()->parms.emplace_back(nParm);
 		}
 		result.emplace_back(ret);
 	}
 
 	void Macro::inject(Messages& e,mtext& result,mstack &context) const {
-		Macro* ret = new Macro(_name);
+		auto ret = make_shared<Macro>(_name);
 		for(auto& parm : parms) {
 			mtext nParm;
 			Driver::inject(parm,e,nParm,context);
-			ret->parms.emplace_back(nParm);
+			ret.get()->parms.emplace_back(nParm);
 		}
 		result.emplace_back(ret);
 	}
 
 	void Macro::subs(mtext& result,const std::vector<std::string>& subs,const std::string& prefix) const {
-		Macro* ret = new Macro(_name);
+		auto ret = make_shared<Macro>(_name);
 		for(auto& parm : parms) {
 			mtext nParm;
 			Driver::subs(parm,nParm,subs,prefix);
-			ret->parms.emplace_back(nParm);
+			ret.get()->parms.emplace_back(nParm);
 		}
 		result.emplace_back(ret);
 	}
@@ -64,7 +61,8 @@ namespace mt {
 			auto& macro = good->second;
 			macro->expand(errs,result,instance,context);
 		} else {
-			result.emplace_back(new Macro(this)); //Because the method is const, 'this' is a const*
+			auto macro = make_shared<Macro>(_name,parms);
+			result.emplace_back(macro); //Because the method is const, 'this' is a const*
 			errs << Message(error,_name + " not found.");
 		}
 	}

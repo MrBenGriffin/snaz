@@ -17,11 +17,13 @@
 #include "support/Convert.h"
 #include "support/Timing.h"
 
+#include "node/Node.h"
 #include "node/Tree.h"
 #include "node/Content.h"
 #include "node/Metrics.h"
 #include "content/Layout.h"
 #include "content/Template.h"
+#include "content/Editorial.h"
 
 #include "Internal.h"
 #include "InternalInstance.h"
@@ -137,8 +139,7 @@ void Internal::startup(Messages& log,Db::Connection& _sql,buildKind kind) {
  |R     | RANDOM       |  -         |  -       |  -  |
  +------+--------------+------------+----------+-----+
  */
-	void Internal::doSort(Messages& e,vector<const Node*>& nodelist,string sortparm) const {
-//		bool ignore_non_existent = false;
+	void Internal::doSort(Messages& e,vector<const Node*>& nodelist,string sortparm,mstack* context,Metrics* metrics) const {
 		bool backwards = false;
 		if (!sortparm.empty()) {
 			if (sortparm[0] == '-') {
@@ -150,29 +151,47 @@ void Internal::startup(Messages& log,Db::Connection& _sql,buildKind kind) {
 				}
 			}
 			if ((sortparm[0] == '[') && (sortparm.length() > 2)) { 			// This is a segment reference. +[aaa]
+				Messages suppress;
+				Messages* errs;
 				string seg_ref=sortparm.substr(1,sortparm.length()-2);       //take off 1 from the start + 1 from the end, =2
 				if(seg_ref[0] == '*') {
-//					ignore_non_existent = true;
+					errs = &suppress;
 					seg_ref.erase(0,1);
+				} else {
+					errs = &e;
 				}
-				vector<Node *> deadlist;
-				e << Message(error,"node sort by segment reference is not currently supported.");
-//				for (auto i : nodelist) {
-//					pairtype cp(i->id(),seg_ref);
-//					content_map_type::iterator it = ContentVal::content_map.find(cp);
-//					if(it != ContentVal::content_map.end()) {
-//						i->scratch(it->second[0]); //set the scratch field to the contents of the segment.
-//					} else {
-//						if(!ignore_non_existent) {
-//							output << message(warn,"Node " + i->linkref() + " has no segment " + seg_ref + ". It will be removed. Suppress this message by adding a * as in '[*" + seg_ref + "]' in the sort parameter.");
-//						}
-//						deadlist.push_back(i);
-//					}
-//				}
-				if(! deadlist.empty()) {
-					vector<const Node *> goodNodes;
-					set_difference(nodelist.begin(), nodelist.end(), deadlist.begin(), deadlist.end(), back_inserter(goodNodes));
-					nodelist = goodNodes;
+				vector<const Node *>nodes(nodelist); //used by segment sort..
+				nodelist.clear();
+				auto& edit = content::Editorial::e();
+				for (auto* item : nodes) {
+					auto *node = const_cast<node::Content *>(item->content());
+					if (node && node->layout()) {
+						const content::Segment *segment = node->layout()->segment(*errs, seg_ref);
+						if (segment) { //"NLTBB"
+							auto code = edit.get(*errs, node, segment);
+							if (!code.first) { //need to do IO as well..
+								if (context && metrics) {
+									mtext result;
+									metrics->push(node, segment);
+									for (auto &token: *(code.second)) {
+										token->expand(*errs, result, *context);
+									}
+									metrics->pop();
+									if (!result.empty()) {
+										node->setComment(result.front()->get());
+										nodelist.push_back(node);
+									}
+								}
+							} else {
+								auto *result = code.second;
+								if (!result->empty()) {
+									node->setComment(result->front()->get());
+									nodelist.push_back(node);
+								}
+							}
+
+						}
+					}
 				}
 			}
 		}

@@ -82,13 +82,8 @@ namespace Support {
 	//Now Nodes.
 
 	bool sortscratch(const Node *n1,const Node *n2)   {
-		bool retval = false;
-		if  ( n1 != nullptr && n2 != nullptr) {
-//			if (n1->scratch().compare(n2->scratch()) < 0) {
-//				retval = true;
-//			}
-		}
-		return retval;
+		Messages e;
+		return (n1->comm().compare(n2->comm()) < 0);
 	}
 	bool sorttw(const Node *n1,const Node *n2)   {
 		return n1->tw() < n2->tw();

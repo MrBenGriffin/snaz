@@ -41,7 +41,8 @@ namespace node {
  		void setLocator(std::shared_ptr<Locator> l) { locator = l; }
 		const Node* byPath(Messages &,const std::string &) const;    				//returns null if not found
 		pair<const Node*,size_t> nodePage(Messages &,const std::string &) const;    //returns null if not found
-
+		void push(const Content*,const content::Segment*);
+		void pop();
 
 	};
 }
