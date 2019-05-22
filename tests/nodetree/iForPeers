@@ -40,10 +40,6 @@
 // | 291 |  290 |  126 |  129 |  5 |     33 | Stack1   | S1 Stack1              | Stack1       |
 // +-----+------+------+------+----+--------+----------+------------------------+--------------+
 
-
-iForPeers		[@iSet(*Z,@iIndex(;,@iForPeers(!NLTBB,!NLTBB/^2,*,$,+,@iTW(*);)))]		[]
-iForXXXXb		[@iGet(*Z)]					[111;112;113;115;116;117;119;120;121;124]
-
 iForP01	@iForPeers(!NodeLocateTestB,!NodeLocateTestB/^0,*,#,,[#:@iTW(*)])			[1:114]
 iForP02	@iForPeers(!NodeLocateTestB,!NodeLocateTestB/^0,*,,,[@iTW(*)])				[114]
 iForP03	@iForPeers(!NLTBB,!NLTBB/^0,*,#,,[#:@iTW(*)])								[1:116]
@@ -92,9 +88,6 @@ iForP26	@iForPeers(!NodeLocateTestB,!NLTBB/^2,*,,-[*EventStart],[@iContent(*,Eve
 iForP27	@iForPeers(!NLTAa,!NLTAa/^2,*,,[*EventStart],[@iContent(*,EventStart)])		[1981 04 01 00 00 00][1999 02 01 00 00 00][2001 04 01 00 00 00][2001 06 01 00 00 00][2002 01 04 00 00 00][2002 03 01 00 00 00][2006 05 01 00 00 00][2011 03 01 02 15 30]
 iForP28	@iForPeers(!NLTAa,!NLTAa/^2,*,,+[*EventStart],[@iContent(*,EventStart)])	[1981 04 01 00 00 00][1999 02 01 00 00 00][2001 04 01 00 00 00][2001 06 01 00 00 00][2002 01 04 00 00 00][2002 03 01 00 00 00][2006 05 01 00 00 00][2011 03 01 02 15 30]
 iForP29	@iForPeers(!NLTAa,!NLTAa/^2,*,,-[*EventStart],[@iContent(*,EventStart)])	[2011 03 01 02 15 30][2006 05 01 00 00 00][2002 03 01 00 00 00][2002 01 04 00 00 00][2001 06 01 00 00 00][2001 04 01 00 00 00][1999 02 01 00 00 00][1981 04 01 00 00 00]
-
-iForPeers		[@iSet(*Z,@iIndex(;,@iForPeers(!NLTBB,!NLTBB/^2,*,$,+,@iID(*);)))]		[]
-iForXXXXb		[@iGet(*Z)]					[111;112;113;114;115;116;117;118;119;291]
 
 iForPeers001	[@iIndex(;,@iForPeers(!NLTBB,!NLTBB/^2,*,$,+,@iNumGen(*)))]				[5555555555]
 iForPeers002	(@iIndex({,},@iForPeers(!NLTBB,!NLTBB/^2,*,$,+L,@iLinkRef(*){,})))		(NLTAa,NLTAb,NLTAc,NLTBB,NLTBc,NLTCa,NLTCb,NLTCc,Stack1,nltba)

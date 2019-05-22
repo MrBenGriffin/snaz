@@ -7,6 +7,8 @@ F pushNode	109
 
 !	nodetree/iForPeers
 
+
+
 ident 000		[@iShortTitle()]											[NL Test B]
 
 // name		code															expected result
@@ -78,25 +80,31 @@ iForAnc E2		@iIndex(;,@iForAncestry(!W,F,!D,*,@iID(*);))				!1!error: Path: !W d
 iForAnc E3		@iIndex(;,@iForAncestry(!D,F,!W,*,@iID(*);))				!1!error: Path: !W did not find a node.
 F popNode	147
 
+iForPeers		[@iForPeers(!NLTBB,!NLTBB/^2,*,,,@iList(Nodes,add,*))]		[]
+iSetList		[@iSet(*Z,@iIndex({,},@iList(Nodes,n,+,*,{@iID(*),})))]		[]
+iGetList		@iGet(*Z)													111,112,113,114,115,116,117,118,119,291
+
+iForNodes002	[@iForNodes(@iGet(*Z),*,$,,@iRight(@iTitle(*),1))]					[aBCABCABC1]
+
 //@iForNodes(@iGet(*Z),#,$,+s,[@iTitle($)])
-iForNodes002	[@iForNodes(@iGet(*Z),*,$,,@iLeft(@iTitle(*),1))]					[AAABbBCCCS]
-iForNodes002	[@iForNodes(@iGet(*Z),*,$,+,@iLeft(@iTitle(*),1))]					[AAABbBCCCS]
-iForNodes002	[@iForNodes(@iGet(*Z),*,$,-,@iLeft(@iTitle(*),1))]					[SCCCBbBAAA]
-iForNodes001a	[@iForNodes(@iGet(*Z),*,$,+t,@iLeft(@iTitle(*),1))]					[AAABbBCCCS]
-iForNodes001b	[@iForNodes(@iGet(*Z),*,$,+T,@iLeft(@iTitle(*),1))]					[AAABBCCCSb]
-iForNodes003	[@iForNodes(@iGet(*Z),*,$,C,@iLeft(@iNumGen(*),1))]					[5555555555]
-iForNodes004	[@iForNodes(@iGet(*Z),*,$,-C,@iLeft(@iNumGen(*),1))]				[5555555555]
-iForNodes005	[@iIndex(;,@iForNodes(@iGet(*Z),*,$,W,@iTW(*);))]					[113;114;115;117;118;119;121;122;123;126]
+iForNodes022	[@iForNodes(@iGet(*Z),*,$,,@iRight(@iTitle(*),1))]					[aBCABCABC1]
+iForNodes032	[@iForNodes(@iGet(*Z),*,$,+,@iRight(@iTitle(*),1))]					[aBCABCABC1]
+iForNodes042	[@iForNodes(@iGet(*Z),*,$,-,@iRight(@iTitle(*),1))]					[1CBACBACBa]
+iForNodes001a	[@iForNodes(@iGet(*Z),*,$,+t,@iRight(@iTitle(*),1))]				[aBCABCABC1]
+iForNodes001b	[@iForNodes(@iGet(*Z),*,$,+T,@iRight(@iTitle(*),1))]				[BCACABCa1B]
+iForNodes003	[@iForNodes(@iGet(*Z),*,$,C,@iNumGen(*))]							[5555555555]
+iForNodes004	[@iForNodes(@iGet(*Z),*,$,-C,@iNumGen(*))]							[5555555555]
+iForNodes005	[@iIndex(;,@iForNodes(@iGet(*Z),*,$,W,@iTW(*);))]					[111;112;113;115;116;117;119;120;121;124]
 iForNodes006	[@iIndex(;,@iForNodes(@iGet(*Z),*,$,+,@iLayout(*);))]				[53;53;53;53;53;53;33;53;53;33]
 
 //@iForSibs(!NodeLocateTestB/0+1,#,$,[@iTitle($)])
-iForSibs		[@iForSibs(!NodeLocateTestB/0+1,*,$,$:@iTW(*):@iID(*); )]			[1:117:114; 2:118:115; 3:119:116; ]
+iForSibs		[@iForSibs(!NodeLocateTestB/0+1,*,$,$:@iTW(*):@iID(*); )]			[1:115:114; 2:116:115; 3:117:116; ]
 iForSibs 001	@iForSibs(!NodeLocateTestB/0+1,*,$,[$:@iLinkRef(*)])				[1:nltba][2:NLTBB][3:NLTBc]
 
 //check values are correct.
 iFi_100		@iForIndex(=,BIM=foo=bar,*,$,,[*:$])			[BIM:1][foo:2][bar:3]
 iNo_100		@iExistNode(W113,@iNumChildren(W113/^1),X)		3
-iFs_100		@iForSibs(W113,*,$,@iLeft(@iTitle(*),1))		AAA
+iFs_100		@iForSibs(W113,*,$,@iLeft(@iTitle(*),1))		NNN
 forNest01	@iForSibs(W113,*,$,@iNumGen(*))					555
 forNest02	@iLength(@iForSibs(W113,*,$,x))					3
 forNest03	@iForAncestry(W113,R,,*,@iNumGen(*);)			1;2;3;4;5;
@@ -108,5 +116,5 @@ fNest02	@iForSibs(W113,*,$,[@iForAncestry(*,R,*/^2,NODE,@iNumGen(*))])	[555][555
 
 //-------------------------------------------------------------------------------
 # NOT YET IMPLEMENTED.
-iForNodes007	[@iIndex(;,@iForNodes(@iGet(*Z),*,$,+[*f_code],@iID(*);))]		!1!error: node sort by segment reference is not currently supported.
+iForNodes007	[@iIndex(;,@iForNodes(@iGet(*Z),*,$,+[*EventStart],@iID(*);))]		[114;111;112;119;113;118;116;115]
 F popNode	167

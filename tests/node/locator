@@ -38,7 +38,7 @@ F pushNode	105
 // +-----+------+------+------+------+--------+-----------------+
 
 lop03	@iSuffix(:0)								html
-loc11	@iShortTitle(n-0)							Stack0
+loc11	@iShortTitle(n-0)							NL Stack
 loc12	@iShortTitle(n-1)							NL Errors
 loc13	@iShortTitle(!NLTC/0L33)					CA NL Test
 loc14	@iShortTitle(0+1)							NL Test A

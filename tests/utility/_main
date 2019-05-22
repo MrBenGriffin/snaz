@@ -11,6 +11,9 @@
 !	utility/iNull
 !	utility/iTiming
 
+iIndex001		@iIndex(;,3;4;5;6;,n)		3;4;5;6
+
+
 # iForSubs
 // For this to work, need to insert two records into bldvar with names 'Broad19' and 'Node19' having the value 19.
 iForSubs 001	@iForSubs(bldvar,@iID(!home),value,name,[@iField(name)])	[Broad19][Node19]

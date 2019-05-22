@@ -75,6 +75,7 @@ namespace mt {
 			mtext parm;
 			shared_ptr<Token> ptr = make_shared<Text>(i->ids());
 			parm.emplace_back(ptr);
+			result.emplace_back(parm);
 		}
 		return result;
 	}
