@@ -118,11 +118,11 @@ namespace Support {
 //		if (! basis.empty() ) {
 //			fandr(basis,conversions);
 //		}
+        fandr(basis,"&" ,"&amp;" ); //must be first.
 		fandr(basis,"<" ,"&lt;"  );
 		fandr(basis,">" ,"&gt;"  );
 		fandr(basis,"'" ,"&#39;" );
 		fandr(basis,"\"","&quot;");
-		fandr(basis,"&" ,"&amp;" ); //must be last.
 
 	}
 
@@ -132,7 +132,8 @@ namespace Support {
 			fandr(basis,"&lt;"  ,"<");
 			fandr(basis,"&gt;"  ,">");
 			fandr(basis,"&#39;" ,"'");
-			fandr(basis,"&apos;","'");
+ 			fandr(basis,"&apos;","'");
+            fandr(basis,"&quot;","\"");
 			fandr(basis,"&amp;" ,"&"); //must be last.
 		}
 //		static const vector<pair<string,string>> conversions = {

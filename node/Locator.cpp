@@ -725,7 +725,8 @@ namespace node {
 							result = metrics->current;
 						}
 					} else {
-						if ((size_t) offset.first <= stackSize) {
+						if ((size_t) offset.first < stackSize) {
+						    //stack =2, offset = 2, offset
 							result = metrics->nodeStack[stackSize - (offset.first+1)]; //offset=0, size=1; 1-(0+1) = 0;
 						}
 					}

@@ -84,15 +84,15 @@ namespace mt {
 	void InternalInstance::generate(nlist& nodes,const mtext* program,const string value,const string countStr) {
 		if(program != nullptr && !program->empty()) { // from an empty parm..
 			forStuff stuff(value,countStr);
-			size_t count = 1;
 			for(auto& i: nodes) {
 				stuff.set(i->ids(),count);
 				mtext paramOut;  //this will be the program, substituted correctly.
-				Driver::doFor(*program,paramOut,stuff);
-				for(auto& j : paramOut) {
-					j->expand(*errs,*output,*context);
-				}
-				count++;
+                auto& code = *program;
+                Driver::doFor(code,paramOut,stuff);
+                for(auto& j : paramOut) {
+                    j->expand(*errs,*output,*context);
+                }
+ 				count++;
 			}
 		}
 	}
@@ -149,11 +149,7 @@ namespace mt {
 	}
 
 	const mtext* InternalInstance::praw(size_t i) {
-		const mtext* m = nullptr;
-		if(count >= i || parms->size() >= i ) {
-			m = &((*parms)[i - 1]);
-		}
-		return m;
+        return (count >= i || parms->size() >= i ) ? &(*parms)[i -1] : nullptr;
 	}
 
 	void InternalInstance::expand(size_t i) {
@@ -161,7 +157,6 @@ namespace mt {
 			for(auto& token: (*parms)[i - 1]) {
 				token->expand(*errs,*output, *context);
 			}
-//			Driver::expand(*errs, (*parms)[i - 1], *output, *context);
 		}
 	}
 
