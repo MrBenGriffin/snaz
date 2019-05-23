@@ -12,7 +12,6 @@ namespace mt {
 		if(media != nullptr) {
 			if (my.count == 1) {
 				my.set(media->file(e,my.metrics,my.parm(1)));
-
 			} else {
 				my.set(media->attribute(e,my.parm(1),my.parm(2)));
 			}

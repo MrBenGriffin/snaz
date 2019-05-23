@@ -80,7 +80,7 @@ namespace testing {
 
 		// We need a node to be 'current'.
 		mt::mstack context;
-		auto* currentNode = node::Content::root()->content(*msgs,2);
+		auto* currentNode = node::Content::root();
 		node::Metrics metrics;
 		metrics.nodeStack.push_back(currentNode);
 		metrics.current = currentNode;

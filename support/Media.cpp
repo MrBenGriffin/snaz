@@ -30,35 +30,52 @@ namespace Support {
 	}
 
 	MediaInfo Media::setfile(Messages& errs,const std::string &ref,size_t index) {
+
 		string fpath,directory,imgbase,extension;
 		::time_t modified;
 		size_t version;
 		bool use_id;
+
+		//Set up a context for contextual macro expansion.
+		node::Metrics metrics;
+		metrics.push(node::Content::root(),nullptr);
+		mt::Instance instance(&metrics);
+		mt::mstack context;
+		context.push_back({nullptr,instance}); //This is our context.
+
 		media->setRow(errs,index);
 		media->readfield(errs,"version", version);   // not sure why we do it this way...
 		media->readfield(errs,"downloads", use_id);  // is this in a downloads-only category?
 		media->readfield(errs,"directory",directory);
 		media->readfield(errs,"ext",extension);
 		media->readfield(errs,"udate",modified);
+
 		if ((ref.size() > 3) && (ref[0]=='C') && (ref[1]=='M') && (ref[2]=='_')) {
 			size_t endpos=ref.find('_',3);
 			auto nodeId = natural(ref.substr(3,endpos-3));
 			auto segId  = natural(ref.substr(endpos+1,string::npos));
-			const node::Content* n = node::Content::root()->content(errs, nodeId, true); //Content by id. suppressed.
-			if (n != nullptr) {
-				imgbase = n->ref();
-				auto nodeLayout = n->layout();
-				if(nodeLayout != nullptr) {
+			const node::Content* node = node::Content::root()->content(errs, nodeId, true); //Content by id. suppressed.
+			if (node != nullptr) {
+				imgbase = node->ref();
+				auto* nodeLayout = node->layout();
+				string segName = nodeLayout->segRef(errs,segId);
+				auto scopedSegment = nodeLayout->segmentInScope(errs,segName);
+				if(scopedSegment.first) {
 					imgbase.push_back('_');
-					string segName = nodeLayout->segRef(errs,segId);
 					fileEncode(segName);
 					imgbase.append(segName);
+					metrics.push(node,scopedSegment.second);
+				} else {
+					metrics.push(node,nullptr);
 				}
-
+				directory = mt::Driver::expand(errs,directory,context);
+				metrics.pop();
 			} else {
+				directory = mt::Driver::expand(errs,directory,context);
 				media->readfield(errs,"imgbase",imgbase);
 			}
 		} else {
+			directory = mt::Driver::expand(errs,directory,context);
 			media->readfield(errs,"imgbase",imgbase);
 		}
 		wsstrip(directory);
@@ -74,6 +91,8 @@ namespace Support {
 		}
 		directory.insert(0,"/media/");
 		directory.append("/");
+
+		metrics.pop();
 		return {version,modified,directory,imgbase,extension};
 	}
 
@@ -162,21 +181,35 @@ namespace Support {
 		if(mi == mediamap.end()) {
 			mi = embedmap.find(mtrans.first);
 			if(mi == embedmap.end()) {
-				errs << Message(error,mtrans.first + " was not found as a file-based media.");
+				errs << Message(error,mtrans.first + " was not found in as media.");
 				return "";
+			} else {
+				size_t index = mi->second;
+				string mime,text,result;
+				if ((ref.size() < 4) || (ref[0]!='C') || (ref[1]!='M') || (ref[2]!='_')) {
+					errs << Message(warn, mtrans.first + " is embedded. Use iEmbedMedia.");
+				}
+				emedia->setRow(errs,index);
+				emedia->readfield(errs,"mime",mime);
+				emedia->readfield(errs,"img",result);
+				if(!left(mime,4,text) || text != "text") {
+					base64encode(result);
+				}
+				return result;
 			}
-		}
-		size_t index = mi->second;
-		if(!mtrans.second.empty()) { //has a transform..
-			return transFile(errs,metrics,mtrans,index);
 		} else {
-			string filename,extension;
-			media->setRow(errs,index);
-			media->readfield(errs, "ext", extension);     //not sure why we do it this way...
-			MediaInfo& filebits = filenames[mtrans.first];
-			filename = filebits.dir + filebits.base + "." + extension;
-			mediaUsed.emplace(mtrans.first);
-			return filename;
+			size_t index = mi->second;
+			if (!mtrans.second.empty()) { //has a transform..
+				return transFile(errs, metrics, mtrans, index);
+			} else {
+				string filename, extension;
+				media->setRow(errs, index);
+				media->readfield(errs, "ext", extension);     //not sure why we do it this way...
+				MediaInfo &filebits = filenames[mtrans.first];
+				filename = filebits.dir + filebits.base + "." + extension;
+				mediaUsed.emplace(mtrans.first);
+				return filename;
+			}
 		}
 	}
 
@@ -459,7 +492,6 @@ namespace Support {
 				while(query->nextrow()) {
 					query->readfield(errs, "ref",f_ref);	//discarding bool.
 					store.insert({f_ref,idx});
-//					filenames.insert({f_ref,setfile(errs,f_ref,idx)});
 					idx++;
 				}
 			} else {

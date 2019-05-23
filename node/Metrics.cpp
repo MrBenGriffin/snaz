@@ -33,7 +33,9 @@ namespace node {
 		segmentStack.pop();
 		mt::Wss::pop();
 		nodeStack.pop_back();
-		current = nodeStack.back();
+		current = nodeStack.empty() ?
+			nullptr :
+			nodeStack.back();
 	}
 
 	Metrics::Metrics(const Metrics* o) : locator(nullptr) {

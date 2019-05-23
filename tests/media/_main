@@ -1,26 +1,98 @@
 //	void iExistMedia::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
+
+// +----+-------------------+----------+-----------+--------------------------+----------------------+
+// | id | ref               | embedded | imglength | imgtype                  | imgbase              |
+// +----+-------------------+----------+-----------+--------------------------+----------------------+
+// | 47 | ben               |          |      2191 | image/jpeg               | bengriffin           |
+// | 88 | CM_282_56         | on       |      5506 | image/jpeg               | Picture2             |
+// | 90 | CM_288_56         |          |     72245 | image/png                | cyber                |
+// | 91 | CM_295_56         |          |     23475 | image/png                | pop                  |
+// | 46 | embedtext         | on       |        29 | text/plain               | embedded             |
+// | 75 | excelmimetest     |          |      6656 | text/html                | foo                  |
+// | 68 | excelref          |          |     21379 | image/jpeg               | xcelref              |
+// | 72 | exceltableXSL     | on       |      2231 | text/xml                 | exceltotables        |
+// | 67 | excelxmldemo      | on       |     35724 | text/xml                 | foo                  |
+// | 69 | excelxmlfootball  | on       |    588845 | text/xml                 | MP6v01FrancePortugal |
+// | 71 | FrancePortugalXML | on       |    588845 | text/xml                 | MP6v01FrancePortugal |
+// | 77 | frportxsl         |          |    197120 | application/vnd.ms-excel | MP6FrancePortugal    |
+// | 80 | indiacricket      | on       |     25894 | text/xml                 | indiacricket         |
+// | 73 | JBexcel           | on       |      3140 | text/xml                 | jbexcel              |
+// | 74 | JBtable1          | on       |      6572 | text/xml                 | table1               |
+// | 61 | mod-png-bus       |          |     55218 | image/png                | bus1                 |
+// | 62 | mod-png-busR      |          |     80062 | image/png                | bus2                 |
+// | 60 | mod-png-sky       |          |    101822 | image/png                | sky                  |
+// | 59 | mod_style_a       |          |       179 | image/png                | a                    |
+// | 49 | mod_style_i       |          |       166 | image/png                | i                    |
+// | 50 | mod_style_il      |          |       177 | image/png                | il                   |
+// | 51 | mod_style_it      |          |       173 | image/png                | it                   |
+// | 52 | mod_style_kl      |          |       171 | image/png                | kl                   |
+// | 53 | mod_style_kt      |          |       169 | image/png                | kt                   |
+// | 54 | mod_style_l       |          |       166 | image/png                | l                    |
+// | 55 | mod_style_s       |          |       168 | image/png                | s                    |
+// | 57 | mod_style_si      |          |       173 | image/png                | si                   |
+// | 58 | mod_style_so      |          |       170 | image/png                | so                   |
+// | 56 | mod_style_t       |          |       164 | image/png                | t                    |
+// | 48 | p                 |          |        43 | image/gif                | p                    |
+// | 66 | simpleimage       |          |     92339 | image/png                | simpleimage          |
+// | 82 | test1             |          |       131 | image/gif                | 1                    |
+// | 83 | test2             |          |       164 | image/gif                | 2                    |
+// | 84 | test3             |          |       175 | image/gif                | 3                    |
+// | 85 | test4             |          |       147 | image/gif                | 4                    |
+// | 81 | wednesday         | on       |     13319 | text/xml                 | wednesday            |
+// | 78 | zipped_excel      |          |     23528 | application/zip          | MP6v01FrancePortugal |
+// +----+-------------------+----------+-----------+--------------------------+----------------------+
+
 # iExistMedia
-iEm 01	[@iExistMedia(X)]									[0]
-iEm 02	@iExistMedia(X)										0
-iEm 03	[@iExistMedia(i,T,F)]								[F]
-iEm 04	@iExistMedia(NAVEDITx,T,F)							T
-iEm 05	@iExistMedia(NAVEDITx,T)							T
-iEm 06	@iExistMedia(NAVEDITx)								1
+
+iEm 01	@iExistMedia(X)							0
+iEm 03	@iExistMedia(i,T,F)						F
+iEm 04	@iExistMedia(p,T,F)						T
+iEm 05	@iExistMedia(p,T)						T
+iEm 06	@iExistMedia(p)							1
+
+# iMedia (Node)
+// +----+-------------------+----------+-----------+--------------------------+----------------------+
+// | id | ref               | embedded | imglength | imgtype                  | imgbase              |
+// +----+-------------------+----------+-----------+--------------------------+----------------------+
+// | 88 | CM_282_56         | on       |      5506 | image/jpeg               | Picture2             |
+// | 90 | CM_288_56         |          |     72245 | image/png                | cyber                |
+// | 91 | CM_295_56         |          |     23475 | image/png                | pop                  |
+// +----+-------------------+----------+-----------+--------------------------+----------------------+
+// Nodes..
+// +-----+------+------+------+------+------+--------+----------------------+-----------------+
+// | id  | p    | tw   | nc   | f    | t    | layout | filename             | lnkref          |
+// +-----+------+------+------+------+------+--------+----------------------+-----------------+
+// | 282 |  261 |  157 |  158 |    0 |    3 |     33 | mediadefaultdir.html | mediadefaultdir |
+// | 288 |  289 |  100 |  101 |    0 |    5 |     33 | inner.html           | inner           |
+// | 295 |  289 |  101 |  102 |    0 |    5 |     33 | other.html           | other           |
+// +-----+------+------+------+------+------+--------+----------------------+-----------------+
+// +----+-----------+--------+--------+
+// | id | name      | active | optdir |
+// +----+-----------+--------+--------+
+// | 56 | testmedia | on     | @odd() |
+// +----+-----------+--------+--------+
+// +---------+------------------------------------+
+// | macro   | expansion                          |
+// +---------+------------------------------------+
+// |  @odd() | @iEqNode(%1,!inner,private,public) |
+// +---------+-------------------------------------
+
+iMNode 282	@iMedia(CM_282_56)							Frenetic Abstractions of Peacefulness.
+iMNode 288	@iMedia(CM_288_56)							/media/private/inner-testmedia.png
+iMNode 295	@iMedia(CM_295_56)							/media/public/other-testmedia.png
 
 # iMedia
-iMed 00	@iMedia(NAVEDITx)								/media/images/navedit.gif
-iMed 01	@iMedia(CM_2_34)								/media/images/admin-searchicon.gif
-iMed 02	@iMedia(NAVEDITx,mime)							image/gif
-iMed 03	@iMedia(NAVEDITx,editor)						bgriffin
-iMed 04	@iMedia(NAVEDITx,width)							15
-iMed 05	@iMedia(NAVEDITx,height)						16
-iMed 06	@iMedia(NAVEDITx:trans)							/media/images/navedit_trans_247C0CC880DF995DA6044B09E1842469.png
-iMed 07	@iMedia(NAVEDITx:x400(100,200))					/media/images/navedit_x400_14183A48ADBE17CFB941C20630F860BD.gif
-iMed 08	@iMedia(NAVEDITx:x400(100,250))					/media/images/navedit_x400_65CF771F8F17D244C3BC369BBA8F39E4.gif
+iMed 00	@iMedia(mod_style_a)							/media/images/a.png
+iMed 02	@iMedia(mod_style_a,mime)						image/png
+iMed 03	@iMedia(mod_style_a,editor)						bgriffin
+iMed 04	@iMedia(mod_style_a,width)						9
+iMed 05	@iMedia(mod_style_a,height)						40
+iMed 06	@iMedia(mod_style_a:trans)						/media/images/navedit_trans_247C0CC880DF995DA6044B09E1842469.png
+iMed 07	@iMedia(mod_style_a:x400(100,200))				/media/images/navedit_x400_14183A48ADBE17CFB941C20630F860BD.gif
+iMed 08	@iMedia(mod_style_a:x400(100,250))				/media/images/navedit_x400_65CF771F8F17D244C3BC369BBA8F39E4.gif
 
 # iEmbed
 iEmbed	[@iEmbed(embedtext)]							[This is the embedded message.]
-
 
 //+----+-------+------+-----------------------------+-------------+---------------------+
 //| id | name  | ext  | transform                   | comment     | ts                  |
