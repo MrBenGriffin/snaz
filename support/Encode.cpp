@@ -108,40 +108,52 @@ namespace Support {
 
 	//---------------------------------------------------------------------------
 	void xmlencode(string& basis) {  //XML escape
-		static const vector<pair<string,string>> conversions = {
-				{"&" ,"&amp;" },
-				{"<" ,"&lt;"  },
-				{">" ,"&gt;"  },
-				{"'" ,"&#39;" }, // &apos; MSIE doesn't know apos
-				{"\"","&quot;"}
-		};
-		if (! basis.empty() ) {
-			fandr(basis,conversions);
-		}
+//		static const vector<pair<string,string>> conversions = {
+//				{"&" ,"&amp;" },
+//				{"<" ,"&lt;"  },
+//				{">" ,"&gt;"  },
+//				{"'" ,"&#39;" }, // &apos; MSIE doesn't know apos
+//				{"\"","&quot;"}
+//		};
+//		if (! basis.empty() ) {
+//			fandr(basis,conversions);
+//		}
+		fandr(basis,"<" ,"&lt;"  );
+		fandr(basis,">" ,"&gt;"  );
+		fandr(basis,"'" ,"&#39;" );
+		fandr(basis,"\"","&quot;");
+		fandr(basis,"&" ,"&amp;" ); //must be last.
+
 	}
 
 	//---------------------------------------------------------------------------
 	void xmldecode(string& basis) {  //XML de-escape
-		static const vector<pair<string,string>> conversions = {
-				{"&amp;" ,"&" },
-				{"&lt;"  ,"<" },
-				{"&gt;"  ,">" },
-				{"&#39;" ,"'" },
-				{"&apos;","'" },
-				{"&quot;","\""}
-		};
-		if (! basis.empty() ) {
+		if(basis.find("&") != string::npos) {
+			fandr(basis,"&lt;"  ,"<");
+			fandr(basis,"&gt;"  ,">");
+			fandr(basis,"&#39;" ,"'");
+			fandr(basis,"&apos;","'");
+			fandr(basis,"&amp;" ,"&"); //must be last.
+		}
+//		static const vector<pair<string,string>> conversions = {
+//				{"&amp;" ,"&" },
+//				{"&lt;"  ,"<" },
+//				{"&gt;"  ,">" },
+//				{"&#39;" ,"'" },
+//				{"&apos;","'" },
+//				{"&quot;","\""}
+//		};
+//		if (! basis.empty() ) {
 //			string orig(basis);
 //			Timing& watch = Timing::t();
 //			auto mark = watch.timer_start();
-			fandr(basis,conversions);
 //			auto secs = watch.seconds(mark);
 //			if (secs > 0.1) {
 //				cout << endl << "-------------------" << endl << orig << endl << flush;
 //				cout << endl << "-------------------" << endl << basis << endl << flush;
 //				cout << "-------------------" << endl << endl << flush;
 //			}
-		}
+//		}
 	}
 
 	//---------------------------------------------------------------------------

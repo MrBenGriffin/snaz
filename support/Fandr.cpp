@@ -40,17 +40,37 @@ namespace Support {
 	}
 
 	//• --------------------------------------------------------------------------
-	int fandr(string& source, const string basis, const string replace) {
+	int fandr(string& data, const string toSearch, const string replaceStr) {
 		int rep_count = 0;
-		size_t bsize = basis.length();
-		if ( ( source.length() >= bsize ) && ( bsize > 0 ) ) {
-			size_t rsize = replace.length();
-			size_t spos = source.find(basis);
-			while (  spos != string::npos ) {
-				source.replace(spos,bsize,replace); rep_count++;
-				spos = source.find(basis,spos+rsize);
+		if(!data.empty()) {
+			size_t dSize = data.size();
+			size_t sSize = toSearch.size();
+			size_t pos = data.find(toSearch);
+			// Repeat till end is reached
+			while (pos != std::string::npos) {
+				rep_count++;
+				pos = data.find(toSearch, pos + sSize);
+			}
+			if (rep_count > 0) {
+				size_t rSize = replaceStr.size();
+				data.reserve(dSize + (rep_count * (rSize - sSize)));
+				pos = data.find(toSearch);
+				while (pos != std::string::npos) {
+					data.replace(pos, sSize, replaceStr);
+					pos = data.find(toSearch, pos + rSize);
+				}
 			}
 		}
+//		int rep_count = 0;
+//		size_t bsize = basis.size();
+//		if ( ( source.size() >= bsize ) && ( bsize > 0 ) ) {
+//			size_t rsize = replace.size();
+//			size_t spos = source.find(basis);
+//			while (  spos != string::npos ) {
+//				source.replace(spos,bsize,replace); rep_count++;
+//				spos = source.find(basis,spos+rsize);
+//			}
+//		}
 		return rep_count;
 	}
 	//• --------------------------------------------------------------------------
