@@ -1,7 +1,9 @@
 // Debugging / Testing
 F showDefines	1
 F showPassed	1
-//X
+
+!   internals
+X
 
 F showDefines	0
 F showPassed	0

@@ -27,7 +27,7 @@ namespace node {
 		nodeStack.push_back(node);
 		current  = node;
 		segmentStack.push(segment);
-		mt::Wss::push(&(segment->nl));
+        mt::Wss::push(segment != nullptr ? &(segment->nl) : nullptr);
 	}
 	void Metrics::pop() {
 		segmentStack.pop();

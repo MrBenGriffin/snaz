@@ -59,7 +59,9 @@ namespace mt {
 			iteration iter({0,parms.size()});
 			Instance instance(parms,iter,context.back().second.metrics);
 			auto& macro = good->second;
-			macro->expand(errs,result,instance,context);
+			try {
+				macro->expand(errs,result,instance,context);
+			} catch (...) {}
 		} else {
 			auto macro = make_shared<Macro>(_name,parms);
 			result.emplace_back(macro); //Because the method is const, 'this' is a const*

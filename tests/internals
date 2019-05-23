@@ -1,0 +1,8 @@
+iPosition			@iPosition()				!1!range: Range Error in ‘iPosition’; 0 parameters found. But this macro requires from 2 to 5 parameters.
+iForAncestry		@iForAncestry() 	!1!range: Range Error in ‘iForAncestry’; 0 parameters found. But this macro requires exactly 5 parameters.
+iForPeers			@iForPeers()		!1!range: Range Error in ‘iForPeers’; 0 parameters found. But this macro requires exactly 6 parameters.
+iForSibs			@iForSibs()			!1!range: Range Error in ‘iForSibs’; 0 parameters found. But this macro requires exactly 4 parameters.
+iForSimilar			@iForSimilar()		!1!range: Range Error in ‘iForSimilar’; 0 parameters found. But this macro requires exactly 6 parameters.
+iForSubs			@iForSubs()			!1!range: Range Error in ‘iForSubs’; 0 parameters found. But this macro requires exactly 5 parameters.
+iForTax				@iForTax()			!1!range: Range Error in ‘iForTax’; 0 parameters found. But this macro requires exactly 4 parameters.
+iForXML				@iForXML()			!1!error: iForXML not found.

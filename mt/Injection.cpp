@@ -183,24 +183,22 @@ namespace mt {
 					switch (type) {
 						case It::plain:
 							if(value == 0) {
-								std::string macroName = contextMacro->name(); // + ";";
-								result.emplace_back(new Text(macroName));
-//								std::visit([&result](auto const &a){ result.push_back(Text(a.name())); },*contextMacro);
+								if(contextMacro != nullptr) {
+									std::string macroName = contextMacro->name(); // + ";";
+									result.emplace_back(new Text(macroName));
+								}
 							} else {
 								bool legal = contextMacro->inRange(value);
-//								std::visit([&legal,&index](auto const &a){ legal = a.inRange(index); },*contextMacro);
 								if(legal && (value <= parmCount)) {
 									if (sValue == 0) {
 										for(auto& token: parms[value - 1]) {
 											token->expand(errs,result,context);
 										}
-//										Driver::expand(errs, parms[value - 1], result, context);
 									} else {
 										mstack subContext(context.begin() + sValue, context.end());
 										for(auto& token: parms[value - 1]) {
 											token->expand(errs,result,subContext);
 										}
-//										Driver::expand(errs, parms[value - 1], result, subContext);
 									}
 								}
 								/**

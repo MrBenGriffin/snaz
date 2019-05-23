@@ -2,6 +2,7 @@
 // Created by Ben on 2019-01-29.
 //
 
+#include <stdexcept>
 #include <support/Convert.h>
 #include "InternalInstance.h"
 #include "node/Node.h"
@@ -19,6 +20,7 @@ namespace mt {
 		metrics = instance->metrics; //context->back().second.metrics;
 		if(metrics == nullptr) {
 			e << Message(warn,"InternalInstance Constructor: instance had no metrics, which cannot be right?");
+			throw runtime_error("No Metrics.");
 		}
 
 		if(!thing->inRange(count)) {
@@ -35,6 +37,7 @@ namespace mt {
 			}
 			e << Message(range,err.str());
 			count = max;
+			throw runtime_error("No Metrics.");
 		}
 	}
 

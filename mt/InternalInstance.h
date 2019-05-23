@@ -19,7 +19,6 @@ namespace mt {
 	public:
 		const Internal* owner;
 		const node::Metrics* metrics;// = context.back().second.metrics;
-
 		size_t          min{0}, max{0}, count {0};
 		mtext*          output {nullptr};
 		Instance*       instance {nullptr};
@@ -45,6 +44,8 @@ namespace mt {
 		const node::Node*					node(size_t);
 		const node::Node* 					node(const string&);
 		pair<const node::Node*,size_t>		nodePage(size_t);
+
+
 	};
 
 }
