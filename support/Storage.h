@@ -22,6 +22,10 @@ namespace Support {
 	using item = list_map_type::const_iterator;
 
 	class LStore {
+		/**
+		 * LStore is a string-keyed map of string-multisets ('lists').
+		 * we need to eliminate list members, but also need to eliminate lists.
+		 */
 	protected:
 		list_map_type store;
 	public:
@@ -43,6 +47,7 @@ namespace Support {
 		void erase(std::string, std::string);
 		void pop(std::string, std::string);
 		bool exists(std::string) const;
+		void erase(std::string);
 		void clear();
 	};
 

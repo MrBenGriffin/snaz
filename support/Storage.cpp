@@ -3,8 +3,8 @@
 #include <vector>
 #include <iterator>
 
-#include "Storage.h"
-#include "Regex.h"
+#include "support/Storage.h"
+#include "support/Regex.h"
 
 #include "db/Query.h"
 
@@ -121,7 +121,15 @@ namespace Support {
 		}
 	}
 
-	//remove all.
+	//remove a list.
+	void LStore::erase(const string name) {
+		auto listIterator = store.find(name);
+		if (listIterator != store.end()) {
+			store.erase(listIterator);
+		}
+	}
+
+	//remove values from a list.
 	void LStore::erase(const string name, const string value) {
 		if (name.length() > 0) {
 			auto ppit = store.find(name);

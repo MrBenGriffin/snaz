@@ -16,6 +16,36 @@
 iIndex001		@iIndex(;,3;4;5;6;,n)		3;4;5;6
 
 
-# iForSubs
-// For this to work, need to insert two records into bldvar with names 'Broad19' and 'Node19' having the value 19.
-iForSubs 001	@iForSubs(bldvar,@iID(!home),value,name,[@iField(name)])	[Broad19][Node19]
+//Node 294
+//+-----+------+------+------+------+------+--------+--------------+------+--------------+----------+--------+--------+
+//| id  | p    | tw   | nc   | f    | t    | layout | defchdlayout | team | filename     | lnkref   | editor | tstamp |
+//+-----+------+------+------+------+------+--------+--------------+------+--------------+----------+--------+--------+
+//| 294 |    2 |  158 |  160 |    0 |    2 |     57 |         NULL |    4 | segtests.txt | SEGTESTS |        | NULL   |
+//+-----+------+------+------+------+------+--------+--------------+------+--------------+----------+--------+--------+
+
+// Layout
+//+----+---------+------------+
+//| id | name    | buildpoint |
+//+----+---------+------------+
+//| 57 | SEGTEST | on         |
+//+----+---------+------------+
+
+// Layout Segments (custom names)
+// +-----+-----+-----------+------------+--------+------+
+// | lid | sid | Custom    | name       | br     | type |
+// +-----+-----+-----------+------------+--------+------+
+// |  57 |   1 | Empty     | Copy       | @wBr() |    0 |
+// |  57 |   2 | Stuff     | Code       | @r()   |    0 |
+// |  57 |  52 | TheDate   | EventStart | @wBr() |    5 |
+// |  57 |  57 | XML       | XMLTA      |        |    8 |
+// |  57 |  58 | Protected | POTA       |        |    0 |
+// |  57 |  59 | Raw       | RAWTA      |        |    7 |
+// +-----+-----+-----------+------------+--------+------+
+
+
+# iForSubs (table,node,node_fieldname,orderby_fieldname,content_to_evaluate)
+F pushNode	294
+iForSubs 001	@iForSubs(bldcontent,I0,node,segment,[@iField(segment)])	[2][52][57][58][59]
+iForSubs 002	@iForSubs(bldcontent,I0,node,segment,[@iField(moddate)])	[1558445276][1558444854][1326195197][1326195201][1326195224]
+F popNode	294
+

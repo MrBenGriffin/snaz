@@ -10,6 +10,7 @@
 #include "support/Infix.h"
 #include "support/Message.h"
 #include "support/Convert.h"
+#include "support/Encode.h"
 #include "node/Locator.h"
 
 namespace mt {
@@ -244,18 +245,23 @@ namespace mt {
 		string name = my.parm(1);
 		if (!name.empty()) {
 			string func = my.parm(2);
+			tolower(func);
 			if (!func.empty()) {
 				switch (func[0]) {
 					case 'a': { //add
 						lStore.add(name,my.parm(3));
 					} break;
 					case 'c': { //count instances of value in store.
-						size_t count = lStore.count(name,my.parm(3));
-						my.logic(count,4); //@iList(foo,count,bar,[?,T,F])
+						size_t count = lStore.count(name, my.parm(3));
+						my.logic(count, 4); //@iList(foo,count,bar,[?,T,F])
 						return;
-					} break;
+					}
 					case 'd': { //delete
-						lStore.erase(name,my.parm(3));
+						if(my.count == 2) {
+							lStore.erase(name);
+						} else {
+							lStore.erase(name, my.parm(3));
+						}
 					} break;
 					case 'p': { //pop (remove 1).
 						lStore.pop(name,my.parm(3));

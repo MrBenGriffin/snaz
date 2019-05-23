@@ -3,6 +3,30 @@ F showDefines	1
 F showPassed	1
 
 
+// Peers
+// +-----+------+------+------+------+--------+-------------+--------------+---------------------+
+// | id  | p    | tw   | nc   | t    | layout | lnkref      | navtitle     | title               |
+// +-----+------+------+------+------+--------+-------------+--------------+---------------------+
+//R| 105 |  312 |  111 |  129 |    3 |     33 | NodeLocator | Node Locator | Node Locator        |
+// +-----+------+------+------+------+--------+-------------+--------------+---------------------+
+// | 111 |  108 |  113 |  114 |    5 |     53 | NLTAa       | AA NL Test   | Node Locate Test aa |
+// | 112 |  108 |  114 |  115 |    5 |     53 | NLTAb       | AB NL Test   | Node Locate Test AB |
+// | 113 |  108 |  115 |  116 |    5 |     53 | NLTAc       | AC NL Test   | Node Locate Test AC |
+// | 114 |  109 |  117 |  118 |    5 |     53 | nltba       | BA NL Test   | Node Locate Test BA |
+// | 115 |  109 |  118 |  119 |    5 |     53 | NLTBB       | bb nl test   | node locate test BB |
+// | 116 |  109 |  119 |  120 |    5 |     53 | NLTBc       | BC NL Test   | Node Locate Test BC |
+// | 117 |  110 |  121 |  122 |    5 |     33 | NLTCa       | CA NL Test   | Node Locate Test CA |
+// | 118 |  110 |  122 |  123 |    5 |     53 | NLTCb       | CB NL Test   | Node Locate Test CB |
+// | 119 |  110 |  123 |  124 |    5 |     53 | NLTCc       | CC NL Test   | Node Locate Test CC |
+// +-----+------+------+------+------+--------+-------------+--------------+---------------------+
+//X| 291 |  290 |  126 |  129 |    5 |     33 | Stack1      | Stack1       | Stack1              |
+// +-----+------+------+------+------+--------+-------------+--------------+---------------------+
+
+//setNodesList	[@iList(Nodes,del)@iForPeers(!NLTBB,!NLTBB/^2,*,,,@iList(Nodes,add,*))]		[]
+//kays02		@iList(Nodes,s):@iList(Nodes,d,291)@iList(Nodes,s)					10:9
+//kays07a		@iList(Nodes,n:2,+T,*,[@iTitle(*)])									[Node Locate Test AB][Node Locate Test AC]
+//kays07b		@iList(Nodes,n:2,+t,*,[@iTitle(*)])									[Node Locate Test aa][Node Locate Test AB]
+
 //X
 
 F showDefines	0

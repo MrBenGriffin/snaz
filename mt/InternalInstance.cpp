@@ -59,9 +59,6 @@ namespace mt {
 	}
 
 	plist InternalInstance::toNodeParms(const Internal* parent,vector<string>& list,string sort,size_t maxSize) {
-		if(maxSize < list.size()) {
-			list.resize(maxSize);
-		}
 		vector<const node::Node*> nodes;
 		for(auto& i : list) {
 			auto* node = metrics->byPath(*errs,i);
@@ -70,6 +67,10 @@ namespace mt {
 			}
 		}
 		parent->doSort(*errs,nodes,sort);
+		//resize after sort!
+		if(maxSize < nodes.size()) {
+			nodes.resize(maxSize);
+		}
 		plist result; //using plist=std::vector<mtext>;
 		for(auto& i : nodes) {
 			mtext parm;
