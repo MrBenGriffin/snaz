@@ -6,6 +6,7 @@
 #include "support/Encode.h"
 #include "support/Fandr.h"
 #include "support/Message.h"
+#include "support/Timing.h"
 
 namespace Support {
 	using namespace std;
@@ -130,7 +131,16 @@ namespace Support {
 				{"&quot;","\""}
 		};
 		if (! basis.empty() ) {
+//			string orig(basis);
+//			Timing& watch = Timing::t();
+//			auto mark = watch.timer_start();
 			fandr(basis,conversions);
+//			auto secs = watch.seconds(mark);
+//			if (secs > 0.1) {
+//				cout << endl << "-------------------" << endl << orig << endl << flush;
+//				cout << endl << "-------------------" << endl << basis << endl << flush;
+//				cout << "-------------------" << endl << endl << flush;
+//			}
 		}
 	}
 

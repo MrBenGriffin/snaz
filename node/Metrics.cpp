@@ -16,7 +16,7 @@ namespace node {
 
 	using namespace Support;
 	Metrics::Metrics() : current(nullptr),currentTemplate(nullptr),page(0) {
-		locator =  std::make_shared<Locator>(this);
+		locator =  std::make_unique<Locator>(this);
 		locator->setRoot(Content::root());
 	}
 	Metrics::~Metrics() {
@@ -40,7 +40,7 @@ namespace node {
 
 	Metrics::Metrics(const Metrics* o) : locator(nullptr) {
 		current = o->current;
-        locator =  std::make_shared<Locator>(o->locator.get(),this);
+        locator =  std::make_unique<Locator>(o->locator.get(),this);
 		currentTemplate = o->currentTemplate;
 		segmentStack = o->segmentStack;
 		nodeStack = o->nodeStack;

@@ -163,7 +163,7 @@ namespace mt {
 					context.back().second.parms.push_back(std::move(expanded)); //each one as a separate parm!!
 				}
 			}
-			instance = std::move(context.back().second);
+			instance = context.back().second;
 			context.pop_back();
 			while (!instance.parms.empty() && instance.parms.back().empty()) {
 				instance.parms.pop_back();

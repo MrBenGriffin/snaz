@@ -31,14 +31,14 @@ namespace node {
 		Metrics();
 		~Metrics();
 		Metrics(const Metrics*);
-        std::shared_ptr<Locator> locator;
+        std::unique_ptr<Locator> locator;
 
 		const Content *current;
 		const content::Template *currentTemplate;
 		std::stack<const content::Segment *> segmentStack;
 		std::deque<const Content *> nodeStack;    //current node - used to pass to built-in functions
 		size_t page;
- 		void setLocator(std::shared_ptr<Locator> l) { locator = l; }
+// 		void setLocator(std::unique_ptr<Locator> l) { locator = l; }
 		const Node* byPath(Messages &,const std::string &) const;    				//returns null if not found
 		pair<const Node*,size_t> nodePage(Messages &,const std::string &) const;    //returns null if not found
 		void push(const Content*,const content::Segment*);

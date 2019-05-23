@@ -58,6 +58,10 @@ namespace Support {
 		return chrono::duration<long double>(ts).count();
 	}
 
+	long double Timing::seconds(const timestamp &ts) {
+		return chrono::duration<long double>(chrono::high_resolution_clock::now() - ts).count();
+	}
+
 	timestamp Timing::timer_start() {
 		return chrono::high_resolution_clock::now();
 	}
