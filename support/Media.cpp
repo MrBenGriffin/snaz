@@ -139,14 +139,14 @@ namespace Support {
 		}
 
 		MediaInfo& filebits = filenames[ref.first];
-		string media_uniq= filebits.base;
+		string media_uniq= filebits.dir + filebits.base + "." + filebits.ext;
 		string extension=filebits.ext;
 		auto tx = trExtensions.find(transName);
 		if(tx != trExtensions.end()) {
 			extension=tx->second;
 		}
 		//uniqueness requires version_id and the evaluation of this particular transform (including parameters).
-		string tr_hash = Digest::hash(media_uniq + "@" + transformCode,errs);
+		string tr_hash = Digest::hash(media_uniq + "@" + transName + "@" + transformCode,errs);
 		string filename = filebits.dir + filebits.base + "_" + transName + "_" + tr_hash + "." + extension;
 		mediaUsed.emplace(ref.first);
 		auto it = instances.find(ref.first);
