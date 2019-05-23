@@ -508,7 +508,7 @@ namespace node {
 								string test(start,out);
 								if(test == "/0+1") {
 									find = root; //This IS a bit weird.
-									errs << Message(deprecated,"2019: /0+1 is deprecated for Root. Use I0/A1 or /");
+									errs << Message(deprecated,"2019: /0+1 is deprecated for Root. Use W1 or A1 or /");
 								} else {
 									if (sibnum.first < 1 || sibnum.first > from->getChildCount()) {
 										find = nullptr;
@@ -522,6 +522,7 @@ namespace node {
 									find = nullptr;
 									return true; //RANGE error
 								}
+								//FYI. the node::child() method is 1-indexed!
 								find = (from->child(errs, sibnum.first));
 								if (find == nullptr) { return true; }
 							}

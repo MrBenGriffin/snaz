@@ -7,8 +7,7 @@ F pushNode	109
 
 !	nodetree/iForPeers
 
-
-
+# Nodetree Main
 ident 000		[@iShortTitle()]											[NL Test B]
 
 // name		code															expected result
@@ -52,7 +51,7 @@ iEqFamily 05	@iEqFamily(!NodeLocation,!Internals,T,F)						F
 iEqNode 01		@iEqNode(!NodeLocator/0+2,!NodeLocateTestB,T,F)					T
 iEqNode 02		@iEqNode(!NodeLocateTestB/n-1,!BuildTest,T,F)					F
 iEqNode 03		@iEqNode(W1,/,T,F)												T
-iEqNode 04		@iEqNode(W1,/0+1,T,F)											!1!depr.: 2019: /0+1 is deprecated for Root. Use I0/A1 or /
+iEqNode 04		@iEqNode(W1,/0+1,T,F)											!1!depr.: 2019: /0+1 is deprecated for Root. Use W1 or A1 or /
 
 iEqSibs 01		@iEqSibs(!NodeLocateTestB/n-1,!NodeLocateTestB/0+1,T,F)			T
 iEqSibs 02		@iEqSibs(!NodeLocateTestB/n-1,!NodeLocateTestB,T,F)				F

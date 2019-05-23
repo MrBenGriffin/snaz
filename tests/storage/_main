@@ -7,7 +7,9 @@
 !	storage/iSet
 !	storage/iList
 
-# Random Storage
+# Storage Main
+
+# Quick Tests
 sto 001		@iSet(x,trot)@iGet(x)														trot
 sto 002		@iExists(x,T,F)																T
 sto 003		@iExists(wap,T,F)															F

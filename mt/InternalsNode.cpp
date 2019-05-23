@@ -165,9 +165,8 @@ namespace mt {
 		if(interest) {
 			const content::Layout* layout = interest->layout();
 			if(layout) {
-				Messages suppress;
-				auto* segment = layout->segment(suppress,my.parm(2));
-				my.logic(content::Editorial::e().has(suppress,interest,segment),3);
+				auto segment = layout->segmentInScope(e,my.parm(2));
+				my.logic(segment.first,3);
 			} else {
 				e << Message(error,_name + " has no layout.");
 				my.logic(false,3);

@@ -22,7 +22,7 @@ namespace content {
 		} else {
 			ostringstream err;
 			err << "There is no segment with id " << id;
-			errs << Message(range,err.str());
+			errs << Message(error,err.str());
 		}
 		return result;
 	}
@@ -34,8 +34,8 @@ namespace content {
 			result = found->second;
 		} else {
 			ostringstream err;
-			err << "There is no segment with reference '" << ref << "' in layout '" << layout->ref << "'";
-			errs << Message(range,err.str());
+			err << "There is no segment with reference '" << ref << "' or aliased by layout '" << layout->ref << "'";
+			errs << Message(error,err.str());
 		}
 		return result;
 	}

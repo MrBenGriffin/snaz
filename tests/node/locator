@@ -14,28 +14,29 @@ loc09	@iShortTitle(+1)							Bracketing
 loc10	@iShortTitle(-1)							Media
 
 F pushNode	105
-// +-----+------+------+------+------+--------+-----------------+
-// | id  | p    | tw   | nc   | t    | layout | lnkref          |
-// +-----+------+------+------+------+--------+-----------------+
-// | 105 |  312 |  111 |  129 |    3 |     33 | NodeLocator     |
-// | 108 |  105 |  112 |  116 |    4 |     53 | NodeLocateTestA |
-// | 111 |  108 |  113 |  114 |    5 |     53 | NLTAa           |
-// | 112 |  108 |  114 |  115 |    5 |     53 | NLTAb           |
-// | 113 |  108 |  115 |  116 |    5 |     53 | NLTAc           |
-// | 109 |  105 |  116 |  120 |    4 |     53 | NodeLocateTestB |
-// | 114 |  109 |  117 |  118 |    5 |     53 | nltba           |
-// | 115 |  109 |  118 |  119 |    5 |     53 | NLTBB           |
-// | 116 |  109 |  119 |  120 |    5 |     53 | NLTBc           |
-// | 110 |  105 |  120 |  124 |    4 |     53 | NLTC            |
-// | 117 |  110 |  121 |  122 |    5 |     33 | NLTCa           |
-// | 118 |  110 |  122 |  123 |    5 |     53 | NLTCb           |
-// | 119 |  110 |  123 |  124 |    5 |     53 | NLTCc           |
-// | 120 |  105 |  124 |  125 |    4 |     33 | NodeLocateErrors|
-// | 290 |  105 |  125 |  129 |    4 |     33 | Stack0          |
-// | 291 |  290 |  126 |  129 |    5 |     33 | Stack1          |
-// | 292 |  291 |  127 |  129 |    6 |     33 | Stack2          |
-// | 293 |  292 |  128 |  129 |    7 |     33 | D               |
-// +-----+------+------+------+------+--------+-----------------+
+// +-----+------+------+------+--------+------------------+---------------+---------------------+
+// | id  | p    | t    | tw   | layout | lnkref           | navtitle      | title               |
+// +-----+------+------+------+--------+------------------+---------------+---------------------+
+// | 312 |    2 |    2 |  110 |     59 | NodeLocation     | Node Location | Node Location       |
+// | 105 |  312 |    3 |  111 |     33 | NodeLocator      | Node Locator  | Node Locator        |
+// | 108 |  105 |    4 |  112 |     53 | NodeLocateTestA  | NL Test A     | Node Locate TestA   |
+// | 111 |  108 |    5 |  113 |     53 | NLTAa            | AA NL Test    | Node Locate Test aa |
+// | 112 |  108 |    5 |  114 |     53 | NLTAb            | AB NL Test    | Node Locate Test AB |
+// | 113 |  108 |    5 |  115 |     53 | NLTAc            | AC NL Test    | Node Locate Test AC |
+// | 109 |  105 |    4 |  116 |     53 | NodeLocateTestB  | NL Test B     | Node Locate Test B  |
+// | 114 |  109 |    5 |  117 |     53 | nltba            | BA NL Test    | Node Locate Test BA |
+// | 115 |  109 |    5 |  118 |     53 | NLTBB            | bb nl test    | node locate test BB |
+// | 116 |  109 |    5 |  119 |     53 | NLTBc            | BC NL Test    | Node Locate Test BC |
+// | 110 |  105 |    4 |  120 |     53 | NLTC             | NL Test C     | Node Locate Test C  |
+// | 117 |  110 |    5 |  121 |     33 | NLTCa            | CA NL Test    | Node Locate Test CA |
+// | 118 |  110 |    5 |  122 |     53 | NLTCb            | CB NL Test    | Node Locate Test CB |
+// | 119 |  110 |    5 |  123 |     53 | NLTCc            | CC NL Test    | Node Locate Test CC |
+// | 120 |  105 |    4 |  124 |     33 | NodeLocateErrors | NL Errors     | Node Locate Errors  |
+// | 290 |  105 |    4 |  125 |     33 | Stack0           | NL Stack      | NL Stack            |
+// | 291 |  290 |    5 |  126 |     33 | Stack1           | Stack1        | Stack1              |
+// | 292 |  291 |    6 |  127 |     33 | Stack2           | Stack2        | Stack2              |
+// | 293 |  292 |    7 |  128 |     33 | D                | D             | D                   |
+// +-----+------+------+------+--------+------------------+---------------+---------------------+
 
 lop03	@iSuffix(:0)								html
 loc11	@iShortTitle(n-0)							NL Stack

@@ -1,6 +1,8 @@
 
 !	node/locator
 
+# Node Main
+
 // | 105 |  312 |  111 |  129 |    3 |     33 | NodeLocator      | No Node Locator        | Node Locator |
 F pushNode	312
 # iSuffix
@@ -28,63 +30,164 @@ iID 03			@iID(I0)										312
 
 # iTW
 //Legacy has /0+1 point to root, rather than the first child of root...
-iTW1				@iTW(/0+1/^1)							1
-iTW2				@iTW(/0+1)								!1!depr.: 2019: /0+1 is deprecated for Root. Use I0/A1 or /
-iTW3				@iTW(/0+2)								104
-iTW4				@iTW(/0+1/0+2)							98
-iTW5				@iTW(/)									1
-iTW5c				@iLinkRef(/)							BuildTest
-iTW6				@iTW(!BuildTest)						1
-iTW7				@iTW(A1)								1
-iTW8				@iTW(W121)								121
+// Note that the DATABASE tw is not the same as the builder tw, due to nodes that are turned off.
+// +-----+------+------+------------------------------+
+// | id  | par  | tier | lnkref                       |
+// +-----+------+------+------------------------------+
+// |   2 | NULL |    1 | BuildTest                    | /
+// | 100 |    2 |    2 | Internals                    | //0+1
+// | 121 |  100 |    3 | IndividualInternals          | /0+1/0+1
+// | 122 |  100 |    3 | IntNodeAccess                |
+// | 103 |  100 |    3 | InternalParameterCountErrors | /0+2?
+// | 104 |  100 |    3 | InternalNodeLocatorErrors    |
+// | 101 |    2 |    2 | UserMacros                   |
+// | 187 |  101 |    3 | editor commas                |
+// | 260 |  101 |    3 | rebuildbugs                  |
+// | 284 |  101 |    3 | parameters                   |
+// | 102 |    2 |    2 | Media                        | //0+2
+// | 278 |  102 |    3 | moremedia                    |
+// +-----+------+------+------------------------------+
+
+iTWxxx				@iLinkRef(/)							BuildTest
+iTW01x				@iTW(/0+1)								!1!depr.: 2019: /0+1 is deprecated for Root. Use W1 or A1 or /
+iTW02a				@iTW(/0+1/^1)							1
+iTW02b				@iTW(W1)								1
+iTW02c				@iTW(I0/A1)								1
+iTW02d				@iTW(/)									1
+iTW02e				@iTW(A1)								1
+iTW02f				@iTW(!BuildTest)						1
+iTW03a				@iID(/0+2):@iTW(/0+2)					101:102
+iTW04a				@iID(/0+1/0+2):@iTW(/0+1/0+2)			122:96
+iTW08a				@iTW(W121)								121
+
+
+// +----------+------+------+------+--------+------------------+---------------+---------------------+
+// | id       | p    | t    | tw   | layout | lnkref           | navtitle      | title               |
+// +----------+------+------+------+--------+------------------+---------------+---------------------+
+// | 312      |    2 |    2 |  110 |     59 | NodeLocation     | Node Location | Node Location       |
+// | >105     |  312 |    3 |  111 |     33 | NodeLocator      | Node Locator  | Node Locator        |
+// |  >108    |  105 |    4 |  112 |     53 | NodeLocateTestA  | NL Test A     | Node Locate TestA   |
+// |   >111   |  108 |    5 |  113 |     53 | NLTAa            | AA NL Test    | Node Locate Test aa |
+// |   >112   |  108 |    5 |  114 |     53 | NLTAb            | AB NL Test    | Node Locate Test AB |
+// |   >113   |  108 |    5 |  115 |     53 | NLTAc            | AC NL Test    | Node Locate Test AC |
+// |  >109    |  105 |    4 |  116 |     53 | NodeLocateTestB  | NL Test B     | Node Locate Test B  |
+// |   >114   |  109 |    5 |  117 |     53 | nltba            | BA NL Test    | Node Locate Test BA |
+// |   >115   |  109 |    5 |  118 |     53 | NLTBB            | bb nl test    | node locate test BB |
+// |   >116   |  109 |    5 |  119 |     53 | NLTBc            | BC NL Test    | Node Locate Test BC |
+// |  >110    |  105 |    4 |  120 |     53 | NLTC             | NL Test C     | Node Locate Test C  |
+// |   >117   |  110 |    5 |  121 |     33 | NLTCa            | CA NL Test    | Node Locate Test CA |
+// |   >118   |  110 |    5 |  122 |     53 | NLTCb            | CB NL Test    | Node Locate Test CB |
+// |   >119   |  110 |    5 |  123 |     53 | NLTCc            | CC NL Test    | Node Locate Test CC |
+// |  >120    |  105 |    4 |  124 |     33 | NodeLocateErrors | NL Errors     | Node Locate Errors  |
+// |  >290    |  105 |    4 |  125 |     33 | Stack0           | NL Stack      | NL Stack            |
+// |   >291   |  290 |    5 |  126 |     33 | Stack1           | Stack1        | Stack1              |
+// |    >292  |  291 |    6 |  127 |     33 | Stack2           | Stack2        | Stack2              |
+// |     >293 |  292 |    7 |  128 |     33 | D                | D             | D                   |
+// +----------+------+------+------+--------+------------------+---------------+---------------------+
+
+# iTitle
+iTitle 010		@iTitle(312)								Node Location
+iTitle 020		[@iTitle(312/n-0)]							[Node Locator]
+iTitle 025		[@iTitle(312/n-0/n-0)]						[NL Stack]
+iTitle 030		[@iTitle(312/n-0,Node Locator,T)]			[T]
+iTitle 040		[@iTitle(312,Node Locator,T,F)]				[F]
+iTitle 050		[@iTitle(!NodeLocateTestB/n-4)]				!1!range: A child index was outside the number of children. Index:-1 Children: 3
+iTitle 060		[@iTitle(!NodeLocateTestB/n-3)]				!1!range: A child index was outside the number of children. Index:0 Children: 3
+iTitle 070		[@iTitle(!NodeLocateTestB/n-2)]				[Node Locate Test BA]
+iTitle 080		[@iTitle(!NodeLocateTestB/n-1)]				[node locate test BB]
+iTitle 090		[@iTitle(!NodeLocateTestB/n-0)]				[Node Locate Test BC]
+
+
+# iTeam
+iTeam1			@iTeam(312)						4
+iTeam2			@iTeam()						4
+
+# iShortTitle
+iShortTitle1	@iShortTitle(312)				Node Location
+iShortTitle2	@iShortTitle()					Node Location
+
+# iLayout
+iLayout1		@iLayout(312)					59
+iLayout2		@iLayout()						59
+
+# iLayoutName
+iLayoutName1	@iLayoutName(312)				Structural
+iLayoutName2	@iLayoutName()					Structural
+
 
 F popNode	312
 
-# iTitle
-iTitle 001		@iTitle(312)								Node Location
-iTitle 002		[@iTitle(312/n-0)]							[No Node Locator]
-iTitle 003		[@iTitle(312/n-0,No Node Locator,T)]		[T]
-iTitle 004		[@iTitle(312,No Node Locator,T,F)]			[F]
-iTitle 005		[@iTitle(!NodeLocateTestB/n-4)]				!1!range: A child index was outside the number of children. Index:-1 Children: 3
-iTitle 006		[@iTitle(!NodeLocateTestB/n-3)]				!1!range: A child index was outside the number of children. Index:0 Children: 3
-iTitle 007		[@iTitle(!NodeLocateTestB/n-2)]				[BA Node Locate Test BA]
-iTitle 008		[@iTitle(!NodeLocateTestB/n-1)]				[bb node locate test BB]
-iTitle 009		[@iTitle(!NodeLocateTestB/n-0)]				[BC Node Locate Test BC]
+F pushNode	294
 
-//
+//Node 294
+//+-----+------+------+------+------+------+--------+--------------+------+--------------+----------+--------+--------+
+//| id  | p    | tw   | nc   | f    | t    | layout | defchdlayout | team | filename     | lnkref   | editor | tstamp |
+//+-----+------+------+------+------+------+--------+--------------+------+--------------+----------+--------+--------+
+//| 294 |    2 |  158 |  160 |    0 |    2 |     57 |         NULL |    4 | segtests.txt | SEGTESTS |        | NULL   |
+//+-----+------+------+------+------+------+--------+--------------+------+--------------+----------+--------+--------+
 
-# iTeam
-iTeam					@iTeam(312)						4
+// Layout
+//+----+---------+------------+
+//| id | name    | buildpoint |
+//+----+---------+------------+
+//| 57 | SEGTEST | on         |
+//+----+---------+------------+
 
-# iShortTitle
-iShortTitle				@iShortTitle(312)				Node Location
+// Layout Segments (custom names)
+// +-----+-----+-----------+------------+--------+------+
+// | lid | sid | Custom    | name       | br     | type |
+// +-----+-----+-----------+------------+--------+------+
+// |  57 |   1 | Empty     | Copy       | @wBr() |    0 |
+// |  57 |   2 | Stuff     | Code       | @r()   |    0 |
+// |  57 |  52 | TheDate   | EventStart | @wBr() |    5 |
+// |  57 |  57 | XML       | XMLTA      |        |    8 |
+// |  57 |  58 | Protected | POTA       |        |    0 |
+// |  57 |  59 | Raw       | RAWTA      |        |    7 |
+// +-----+-----+-----------+------------+--------+------+
 
-# iLayout
-iLayout					@iLayout(312)					59
-
-# iLayoutName
-iLayoutName				@iLayoutName(312)				Structural
+// Segment NOT used in layout 57
+// +-----+-----+-----------+------------+--------+------+
+// |     | 56  |           | testmedia  | @wBr() |    3 |
+// +-----+-----+-----------+------------+--------+------+
 
 # iExistContent
-iECNoSegRef		@iExistContent(312,f_seodirectory,T,F)		F
-iEClaySegRef	@iExistContent(312,Keywords,T,F)			T
-iECsegSegRef	@iExistContent(312,keywords,T,F)			T
-iECsegNotScope	@iExistContent(312,code,T,F)				F
-iECNoSegment	@iExistContent(312,wibble,T,F)				F
+iECNoSegRef		@iExistContent(,testmedia,T,F)			F
+
+iECGood01a		@iExistContent(,Empty,T,F)				T
+iECGood02a		@iExistContent(,Copy,T,F)				T
+iECGood01c		@iExistContent(,Stuff,T,F)				T
+iECGood02c		@iExistContent(,Code,T,F)				T
+iECGood01e		@iExistContent(,TheDate,T,F)				T
+iECGood02e		@iExistContent(,EventStart,T,F)			T
+iECGood01g		@iExistContent(,XML,T,F)					T
+iECGood02g		@iExistContent(,XMLTA,T,F)				T
+iECGood01i		@iExistContent(,Protected,T,F)			T
+iECGood02i		@iExistContent(,POTA,T,F)				T
+iECGood01k		@iExistContent(,Raw,T,F)					T
+iECGood02k		@iExistContent(,RAWTA,T,F)				T
+
+iECBadSegRef	@iExistContent(,wibble,T,F)				!1!error: There is no segment with reference 'wibble' or aliased by layout 'SEGTEST'
+
+//cf. iCNoSegScope below for the error that occurs using a segment out of context.
+iECNoSegRef		@iExistContent(,testmedia,T,F)			F
+
+//the content for empty is not saved, and should appear true (but empty)
+iECEmptyContent	@iExistContent(,Empty,T,F)				T
 
 # iContent
-iCNoSegScope	@iContent(294,BreakTestA)			!1!range: The segment with reference 'BreakTestA' is not used by layout 'SEGTEST'
+iCNoSegScope	@iContent(,BreakTestA)			!1!range: The segment with reference 'BreakTestA' is not used by layout 'SEGTEST'
 
-#The Stuff/Code content tests iSegmentName.
-F pushNode	294
+# iSegmentName
+iSOutofScope	@iSegmentName(Stuff,T,F)			!1!error: iSegmentName called outside any segment context.
+# The Stuff/Code content tests iSegmentName on node 294
+iClaySeg29C		@iContent(,Stuff)					Stuff T T F
 iClaySeg294		@iContent(294,Stuff)				Stuff T T F
 iCsegSeg294		@iContent(294,Code)					Stuff T T F
-F popNode	294
+
 iClaySeg105		@iContent(294,Stuff)				Stuff T T F
 iCsegSeg105		@iContent(294,Code)					Stuff T T F
 
-iSNOutofScope	@iSegmentName(Stuff,T,F)			!1!error: iSegmentName called outside any segment context.
-iCNoSegment		@iContent(294,wibble)				!1!range: There is no segment with reference 'wibble' in layout 'SEGTEST'
+iCNoSegment		@iContent(294,wibble)				!1!error: There is no segment with reference 'wibble' or aliased by layout 'SEGTEST'
 iCsegEmpty		[@iContent(294,Empty)]				[]
 iCsegEmpty		[@iContent(294,Copy)]				[]
 iCMetaE			@iContent(294,Code,editor)			bgriffin
@@ -93,3 +196,4 @@ iCMetaD			@iContent(294,EventStart)			2021 12 11 01 02 03
 # iBirth/iDeath
 iBirth01		@iBirth(294)						1988-02-21 00:00:00
 iDeath01		@iDeath(294)						2031-01-22 00:00:00
+F popNode	294

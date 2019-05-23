@@ -8,7 +8,6 @@
 # Build: All implemented!
 
 # Unimplemented Node
-SegmentName			@iSegmentName(19,2)						!1!error: iSegmentName is not yet implemented.
 
 # Unimplemented Taxonomy
 iTax					@iTax(1,2)								!1!error: iTax is not yet implemented.

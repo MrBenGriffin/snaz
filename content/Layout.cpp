@@ -64,24 +64,35 @@ const Layout* Layout::get(Messages &errs,size_t id) {
 		return value;
 	}
 
+	pair<bool,const Segment*> Layout::segmentInScope(Messages &errs,string segmentRef) const {
+		/*
+		 * get segment by ref. from here so we can use the local name if needs be.
+		 */
+		pair<bool,const Segment*> value{false, nullptr};
+		auto found = segRefs.find(segmentRef);
+		if (found != segRefs.end()) {
+			value.first = true;
+			value.second = found->second;
+		} else {
+			value.second = content::Segment::get(errs, this, segmentRef);
+			value.first  = value.second != nullptr && segments.find(value.second->id) != segments.end();
+		}
+		return value;
+	}
+
+
 	const Segment* Layout::segment(Messages &errs,string segmentRef) const {
 		/*
 		 * get segment by ref. from here so we can use the local name if needs be.
 		 */
-		const Segment* value =  nullptr;
-		auto found = segRefs.find(segmentRef);
-		if(found != segRefs.end()) {
-			value = found->second;
-		} else {
-			value = content::Segment::get(errs,this,segmentRef);
-			if(value != nullptr && segments.find(value->id) == segments.end()) {
+		auto value = segmentInScope(errs,segmentRef);
+		if (!value.first) {
 				ostringstream err;
 				err << "The segment with reference '" << segmentRef << "' is not used by layout '" << ref << "'";
 				errs << Message(range,err.str());
-				value = nullptr;
-			}
+			value.second = nullptr;
 		}
-		return value;
+		return value.second;
 	}
 
 void Layout::load(Messages &errs, Connection &sql,size_t techID, buildKind) {
