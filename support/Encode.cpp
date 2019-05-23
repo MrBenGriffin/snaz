@@ -107,53 +107,231 @@ namespace Support {
 	}
 
 	//---------------------------------------------------------------------------
-	void xmlencode(string& basis) {  //XML escape
-//		static const vector<pair<string,string>> conversions = {
-//				{"&" ,"&amp;" },
-//				{"<" ,"&lt;"  },
-//				{">" ,"&gt;"  },
-//				{"'" ,"&#39;" }, // &apos; MSIE doesn't know apos
-//				{"\"","&quot;"}
-//		};
-//		if (! basis.empty() ) {
-//			fandr(basis,conversions);
-//		}
-        fandr(basis,"&" ,"&amp;" ); //must be first.
-		fandr(basis,"<" ,"&lt;"  );
-		fandr(basis,">" ,"&gt;"  );
-		fandr(basis,"'" ,"&#39;" );
-		fandr(basis,"\"","&quot;");
+	void xmlencode(string& in) {  //XML escape
+		const unsigned char calcFinalSize[] =
+				{
+						1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,
+						1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,
+						1,   1,   6,   1,   1,   1,   5,   5,   1,   1,   1,   1,   1,   1,   1,   1,
+						1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   4,   1,   4,   1,
+						1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,
+						1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,
+						1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,
+						1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,
+						1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,
+						1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,
+						1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,
+						1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,
+						1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,
+						1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,
+						1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,
+						1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1,   1
+		};
 
+		const char* dataIn = in.data();
+		size_t sizeIn = in.size();
+
+		const char* dataInCurrent = dataIn;
+		const char* dataInEnd = dataIn + sizeIn;
+		size_t outSize = 0;
+		while (dataInCurrent < dataInEnd)
+		{
+			outSize += calcFinalSize[static_cast<uint8_t>(*dataInCurrent)];
+			dataInCurrent++;
+		}
+		if (outSize == sizeIn)
+		{
+			return;
+		}
+		std::string out;
+		out.resize(outSize);
+
+		dataInCurrent = dataIn;
+		char* dataOut = &out[0];
+		while (dataInCurrent < dataInEnd)
+		{
+			switch (*dataInCurrent) {
+				case '&':
+					memcpy(dataOut, "&amp;", sizeof("&amp;") - 1);
+					dataOut += sizeof("&amp;") - 1;
+					break;
+				case '\'':
+					memcpy(dataOut, "&#39;", sizeof("&#39;") - 1);
+					dataOut += sizeof("&#39;") - 1;
+					break;
+				case '\"':
+					memcpy(dataOut, "&quot;", sizeof("&quot;") - 1);
+					dataOut += sizeof("&quot;") - 1;
+					break;
+				case '>':
+					memcpy(dataOut, "&gt;", sizeof("&gt;") - 1);
+					dataOut += sizeof("&gt;") - 1;
+					break;
+				case '<':
+					memcpy(dataOut, "&lt;", sizeof("&lt;") - 1);
+					dataOut += sizeof("&lt;") - 1;
+					break;
+				default:
+					*dataOut++ = *dataInCurrent;
+			}
+			dataInCurrent++;
+		}
+		in.swap(out);
 	}
 
 	//---------------------------------------------------------------------------
-	void xmldecode(string& basis) {  //XML de-escape
-		if(basis.find("&") != string::npos) {
-			fandr(basis,"&lt;"  ,"<");
-			fandr(basis,"&gt;"  ,">");
-			fandr(basis,"&#39;" ,"'");
- 			fandr(basis,"&apos;","'");
-            fandr(basis,"&quot;","\"");
-			fandr(basis,"&amp;" ,"&"); //must be last.
-		}
-//		static const vector<pair<string,string>> conversions = {
-//				{"&amp;" ,"&" },
-//				{"&lt;"  ,"<" },
-//				{"&gt;"  ,">" },
-//				{"&#39;" ,"'" },
-//				{"&apos;","'" },
-//				{"&quot;","\""}
-//		};
-//		if (! basis.empty() ) {
-//			string orig(basis);
-//			Timing& watch = Timing::t();
-//			auto mark = watch.timer_start();
-//			auto secs = watch.seconds(mark);
-//			if (secs > 0.1) {
-//				cout << endl << "-------------------" << endl << orig << endl << flush;
-//				cout << endl << "-------------------" << endl << basis << endl << flush;
-//				cout << "-------------------" << endl << endl << flush;
+//	size_t calcEntity(const char*& curr,const char* strEnd) {
+//		size_t value = 0;
+//		if(curr < (strEnd - 3)) {
+//			size_t charsLeft(strEnd - curr);
+//			switch(curr[1]) {
+//				case 'a': {
+//					if(charsLeft >3 ) {
+//						if(curr[2]=='m') {
+//							if (curr[3]=='p' && curr[4]==';') {
+//								value = 4;
+//							}
+//						} else {
+//							if (charsLeft >4 && curr[2]=='p' && curr[3]=='o' && curr[4] == 's' && curr[5] == ';') {
+//								value = 5;
+//							}
+//						}
+//					}
+//				} break;
+//				case '#': { if(charsLeft > 3 && curr[2]=='3' && curr[3]=='9' && curr[4] == ';') {
+//						value = 4;
+//					}
+//				}  break;
+//				case 'q': { if(charsLeft > 3 && curr[2]=='u' && curr[3]=='o' && curr[4] == 't' && curr[5] == ';') {
+//						value = 5;
+//					}
+//				}  break;
+//				case 'l' : { if(curr[2]=='t' && curr[3] == ';') {
+//						value = 3;
+//					}
+//				}  break;
+//				case 'g' : { if(curr[2]=='t' && curr[3] == ';') {
+//						value = 3;
+//					}
+//				}  break;
 //			}
+//		curr += value;
+//		return value;
+//	}
+
+//√			fandr(basis,"&lt;"  ,"<"); 3
+//√			fandr(basis,"&gt;"  ,">"); 3
+//√			fandr(basis,"&#39;" ,"'"); 4
+// 			fandr(basis,"&apos;","'"); 5
+//√         fandr(basis,"&quot;","\"");5
+//			fandr(basis,"&amp;" ,"&"); 4
+
+	//---------------------------------------------------------------------------
+	void xmldecode(string& in) {  //XML de-escape
+		if(in.find('&') == string::npos) {
+			return;
+		}
+		const char* dataIn = in.data();
+		size_t sizeIn = in.size();
+		const char* curr = dataIn;
+		const char* dataInEnd = dataIn + sizeIn;
+		std::string out;
+		out.reserve(in.size());
+		curr = dataIn;
+		while (curr < dataInEnd) {
+			if(*curr == '&') {
+				size_t remains(dataInEnd - curr);
+				if(remains > 3) {
+					switch(curr[1]) {
+						case 'a': {
+							if(remains >3 ) {
+								if(curr[2]=='m') {
+									if (curr[3]=='p' && curr[4]==';') {
+										out.push_back('&'); curr+=4;
+									} else {
+										out.push_back(*curr);
+									}
+								} else {
+									if (remains >4 && curr[2]=='p' && curr[3]=='o' && curr[4] == 's' && curr[5] == ';') {
+										out.push_back('\''); curr+=5;
+									} else {
+										out.push_back(*curr);
+									}
+								}
+							} else {
+								out.push_back(*curr);
+							}
+						} break;
+						case '#': { if(remains > 3 && curr[2]=='3' && curr[3]=='9' && curr[4] == ';') {
+								out.push_back('\''); curr+=4;
+							} else {
+								out.push_back(*curr);
+							}
+						}  break;
+						case 'q': { if(remains > 3 && curr[2]=='u' && curr[3]=='o' && curr[4] == 't' && curr[5] == ';') {
+								out.push_back('"'); curr+=5;
+							} else {
+								out.push_back(*curr);
+							}
+						}  break;
+						case 'l' : { if(curr[2]=='t' && curr[3] == ';') {
+								out.push_back('<'); curr+=3;
+							} else {
+								out.push_back(*curr);
+							}
+						}  break;
+						case 'g' : { if(curr[2]=='t' && curr[3] == ';') {
+								out.push_back('>'); curr+=3;
+							} else {
+								out.push_back(*curr);
+							}
+						} break;
+						default : {
+							out.push_back(*curr);
+						}
+					}
+				} else {
+					out.push_back(*curr);
+				}
+			} else {
+				out.push_back(*curr);
+			}
+//		}
+//			switch (*curr) {
+//				case '&':
+//					memcpy(dataOut, "&amp;", sizeof("&amp;") - 1);
+//					dataOut += sizeof("&amp;") - 1;
+//					break;
+//				case '\'':
+//					memcpy(dataOut, "&apos;", sizeof("&apos;") - 1);
+//					dataOut += sizeof("&apos;") - 1;
+//					break;
+//				case '\"':
+//					memcpy(dataOut, "&quot;", sizeof("&quot;") - 1);
+//					dataOut += sizeof("&quot;") - 1;
+//					break;
+//				case '>':
+//					memcpy(dataOut, "&gt;", sizeof("&gt;") - 1);
+//					dataOut += sizeof("&gt;") - 1;
+//					break;
+//				case '<':
+//					memcpy(dataOut, "&lt;", sizeof("&lt;") - 1);
+//					dataOut += sizeof("&lt;") - 1;
+//					break;
+//				default:
+//			}
+			curr++;
+		}
+		in.swap(out);
+
+
+//		if(basis.find("&") != string::npos) {
+//			fandr(basis,"&lt;"  ,"<");
+//			fandr(basis,"&gt;"  ,">");
+//			fandr(basis,"&#39;" ,"'");
+// 			fandr(basis,"&apos;","'");
+//            fandr(basis,"&quot;","\"");
+//			fandr(basis,"&amp;" ,"&"); //must be last.
 //		}
 	}
 

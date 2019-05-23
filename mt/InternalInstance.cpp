@@ -104,17 +104,17 @@ namespace mt {
 		//parms,code,vToken,cToken
 		if(program != nullptr && !program->empty()) { // from an empty parm..
 			forStuff stuff(value,countStr);
-			size_t count = 1;
+			size_t parmCount = 1;
 			for(auto& paramIn: parameters) {
 				ostringstream result;
 				Driver::expand(*errs,paramIn,result,*context);
-				stuff.set(result.str(),count);
+				stuff.set(result.str(),parmCount);
 				mtext paramOut;  //this will be the program, substituted correctly.
 				Driver::doFor(*program,paramOut,stuff);
 				for(auto& j : paramOut) {
 					j->expand(*errs,*output,*context);
 				}
-				count++;
+				parmCount++;
 			}
 		}
 	}

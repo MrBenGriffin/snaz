@@ -14,6 +14,7 @@ namespace Support {
 
 	void fileEncode(string&);
 
+//	size_t calcEntity(const char*&,const char*);
 	void xmldecode(string&);  //XML de-escape
 	void xmlencode(string&);  //XML escape
 	bool fileencode(string&); //make sure it's a legal xml name

@@ -396,7 +396,6 @@ namespace mt {
 		InternalInstance my(this,e,o,instance,context);
 		if (sql != nullptr && sql->isopen()) {
 			if (sql->select(e,query,my.parm(1))) {
-				auto foo = query->getnumfields();
 				if(query->execute(e)) {
 					iField::contextStack.push(this);
 					while(query->nextrow()) {

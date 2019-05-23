@@ -63,7 +63,7 @@ namespace Support {
 		void	loadTransforms(Messages&,Db::Connection*);
 		void 	normalise(Messages&,Db::Connection*);
 		void	writeMedia(Messages&,Db::Query*&,size_t,const string&);
-		void  doSave(Messages&,Db::Connection*,const Path&,const Path&,bool);
+		void    doSave(Messages&,Db::Connection*,const Path&,const Path&,bool);
 		void	doTransforms(Messages&,string&,const Path&,const Path&,const string&,std::time_t,MediaInfo&,bool);
 		map<size_t,size_t> loadBinaries(Messages&,Db::Query*&);
 
@@ -79,7 +79,7 @@ namespace Support {
 		bool	exists(Messages&,const string&) const;
 		string file(Messages&,const node::Metrics*,const string&);
 		string embed(Messages&,const string&,bool) const;
-		string attribute(Messages&,const string&,const string&,bool = false);
+		string attribute(Messages&,const string&,const string&);
 	};
 }
 

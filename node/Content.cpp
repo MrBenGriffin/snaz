@@ -304,44 +304,40 @@ namespace node {
 		return value;
 	}
 
-	void Content::compose(Messages& errs) {
-		Timing& times = Timing::t();
-		ostringstream msg; msg << "id " << idStr << " `" << _ref << "` ";
-		if (times.show()) { times.set(msg.str()); }
-		Metrics current;
-		current.nodeStack.push_back(this);
-		current.current = this;
-		current.page = 0;
-		mt::Instance control(&current);
-		for (auto* t : layoutPtr->templates) {
-			std::ostringstream content;
-			if(!t->code.empty()) {
-				if(!finalFilenames.empty()) {
-						auto file = finalFilenames[current.page];
-//				errs << Message(info,file);
-						errs.str(cout);
-						errs.reset();
-						mt::mstack context;
-						context.push_back({nullptr, control});
-						mt::Wss::push(&(t->nl)); //!!! another global.. need to add to the metrics above.
-						mt::Driver::expand(errs, t->code, content,
-										   context); //no context here... makes it hard to multi-thread.
-						mt::Wss::pop();
-						try {
-							std::ofstream outFile(file.c_str());
-							outFile << content.str();
-							outFile.close();
-							chmod(file.c_str(), S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
-						}    //create the file!
-						catch (...) {
-							errs << Message(error, "Failed to create file");
-						}
-				}
-
-			}
-			current.page++;
-		}
-		current.nodeStack.pop_back();
-		if (times.show()) { times.use(errs,msg.str()); }
-	}
+    void Content::compose(Messages& errs) {
+        Timing& times = Timing::t();
+        ostringstream msg; msg << "id " << idStr << " `" << _ref << "` ";
+        if (times.show()) { times.set(msg.str()); }
+        Metrics current;
+        current.nodeStack.push_back(this);
+        current.current = this;
+        current.page = 0;
+        mt::Instance control(&current);
+        for (auto* t : layoutPtr->templates) {
+            std::ostringstream content;
+            if(!t->code.empty() && !finalFilenames.empty()) {
+                auto file = finalFilenames[current.page];
+                //                errs << Message(info,file);
+                errs.str(cout);
+                errs.reset();
+                mt::mstack context;
+                context.push_back({nullptr, control});
+                mt::Wss::push(&(t->nl)); //!!! another global.. need to add to the metrics above.
+                mt::Driver::expand(errs, t->code, content, context); //no context here...
+                mt::Wss::pop();
+                try {
+                    std::ofstream outFile(file.c_str());
+                    outFile << content.str();
+                    outFile.close();
+                    chmod(file.c_str(), S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
+                }    //create the file!
+                catch (...) {
+                    errs << Message(error, "Failed to create file");
+                }
+            }
+            current.page++;
+        }
+        current.nodeStack.pop_back();
+        if (times.show()) { times.use(errs,msg.str()); }
+    }
 }

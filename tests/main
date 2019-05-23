@@ -2,8 +2,9 @@
 F showDefines	1
 F showPassed	1
 
-!   internals
-X
+//!   internals
+
+//X
 
 F showDefines	0
 F showPassed	0

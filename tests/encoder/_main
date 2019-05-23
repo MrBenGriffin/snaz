@@ -13,6 +13,8 @@ iBase64 06		@iBase64(d,~m9v)						!1!warn: base64 decoding found illegal charact
 # iDecode
 //iDecode		@iDecode(1)											!1!error: iDecode is not yet implemented.
 iDecode 01		@iDecode(&amp;)										&
+iDecode 01a		@iDecode(x&amp;)									x&
+iDecode 01b		@iDecode(&amp;x)									&x
 iDecode 02		@iDecode(&quot;)									"
 iDecode 03		@iDecode(&apos;)									'
 iDecode 04		@iDecode(&lt;)										<

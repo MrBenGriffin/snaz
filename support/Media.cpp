@@ -222,7 +222,7 @@ namespace Support {
 	}
 
 //-----------------------------------------------------------------------------
-	string Media::attribute(Messages& errs,const string& ref,const string& attr,bool embedded) {
+	string Media::attribute(Messages& errs,const string& ref,const string& attr) {
 		string result;
 		pair<string,string> mtrans = getRef(ref);
 		auto mi = mediamap.find(mtrans.first);
