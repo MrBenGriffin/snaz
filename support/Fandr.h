@@ -13,7 +13,7 @@ namespace Support {
 
 	unsigned const int MAX_MATCH = 9;		//maximum regexp matches
 
-	bool fandr(string&,const vector<pair<string,string>>&,size_t=0);
+//	bool fandr(string&,const vector<pair<string,string>>&,size_t=0);
 	int fandr(string&, string);				    //find and replace with emptystring
 	int fandr(string&, string, size_t i);  //find and replace with integer
 	int fandr(string&, string, string);    //find and replace with substitute string

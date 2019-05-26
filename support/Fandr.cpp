@@ -9,40 +9,40 @@ namespace Support {
 
 	//	multiple find/replace over basis.
 	//• --------------------------------------------------------------------------
-	bool fandr(string& basis, const vector<pair<string,string>>& delims,size_t level) {
-		if(level < delims.size()) {
-			auto& findStr=delims[level].first;
-			auto& repStr =delims[level].second;
-			size_t fSize = findStr.size();
-			if ( fSize > 0 && (fSize <= basis.size())) {
-				size_t start = 0;
-				size_t spos = basis.find(findStr);
-				while (spos < string::npos ) {
-					string nBasis(basis,start,spos-start);
-					fandr(nBasis,delims,level+1);
-					nBasis.append(repStr);
-					basis.replace(start,(spos+fSize)-start,nBasis);
-					start+= nBasis.size();
-					spos  = basis.find(findStr,start);
-				}
-				if(start < basis.size()) {
-					string nBasis(basis,start,string::npos);
-					if(fandr(nBasis,delims,level+1)) {
-						basis.replace(start,string::npos,nBasis);
-					}
-				}
-				return true;
-			} else {
-				fandr(basis,delims,level+1);
-			}
-		}
-		return false;
-	}
+//	bool fandr(string& basis, const vector<pair<string,string>>& delims,size_t level) {
+//		if(level < delims.size()) {
+//			auto& findStr=delims[level].first;
+//			auto& repStr =delims[level].second;
+//			size_t fSize = findStr.size();
+//			if ( fSize > 0 && (fSize <= basis.size())) {
+//				size_t start = 0;
+//				size_t spos = basis.find(findStr);
+//				while (spos < string::npos ) {
+//					string nBasis(basis,start,spos-start);
+//					fandr(nBasis,delims,level+1);
+//					nBasis.append(repStr);
+//					basis.replace(start,(spos+fSize)-start,nBasis);
+//					start+= nBasis.size();
+//					spos  = basis.find(findStr,start);
+//				}
+//				if(start < basis.size()) {
+//					string nBasis(basis,start,string::npos);
+//					if(fandr(nBasis,delims,level+1)) {
+//						basis.replace(start,string::npos,nBasis);
+//					}
+//				}
+//				return true;
+//			} else {
+//				fandr(basis,delims,level+1);
+//			}
+//		}
+//		return false;
+//	}
 
 	//• --------------------------------------------------------------------------
 	int fandr(string& data, const string toSearch, const string replaceStr) {
 		int rep_count = 0;
-		if(!data.empty()) {
+		if(!data.empty() && !toSearch.empty()) {
 			size_t dSize = data.size();
 			size_t sSize = toSearch.size();
 			size_t pos = data.find(toSearch);

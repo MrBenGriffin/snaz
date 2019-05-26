@@ -350,8 +350,9 @@ namespace Support {
 	//---------------------------------------------------------------------------
 	void fileEncode(string& str) { //remove all tabs.
 		tolower(str);
-		vector<pair<string,string>> subs = {{"-",""},{" ","-"},{"_",""}};
-		fandr(str,subs);
+		fandr(str,"-");
+		fandr(str,"_");
+		fandr(str," ","-");
 		string fileCh=":-abcdefghijklmnopqrstuvwxyz0123456789";
 		auto chars = fileCh.c_str();
 		string::size_type wsi = str.find_first_not_of(chars);
