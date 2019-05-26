@@ -64,9 +64,10 @@ namespace mt {
 		add(ptr,result);
 	}
 
-	void Text::doFor(mtext& result,const forStuff& stuff) const {
+	void Text::doFor(mtext& result,const forStuff& s) const {
 		string basis(text);
-		Support::fandr(basis,stuff.stuff);
+		Support::fandr(basis,s.stuff[0].first,s.stuff[0].second);
+		Support::fandr(basis,s.stuff[1].first,s.stuff[1].second);
 		shared_ptr<Token> ptr = make_shared<Text>(basis);
 		add(ptr,result);
 	}
