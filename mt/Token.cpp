@@ -15,6 +15,20 @@ namespace mt {
 	void Token::doFor(mtext&,const forStuff&) const {}
 	bool Token::empty() const { return true; }
 
+	void Token::add(std::string text,mtext& mt) {
+		if (!mt.empty()) {
+			auto back = mt.back();
+			Text *ptr = dynamic_cast<Text *>(back.get());
+			if (ptr != nullptr) {
+				ptr->text.append(text);
+			} else {
+				mt.emplace_back(make_shared<Text>(text));
+			}
+		} else {
+			mt.emplace_back(make_shared<Text>(text));
+		}
+	}
+
 	void Token::add(TokenPtr& token,mtext& mt) {
 		if (token != nullptr) {
 			Text *t = dynamic_cast<Text *>(token.get());

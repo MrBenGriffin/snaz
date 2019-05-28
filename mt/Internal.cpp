@@ -69,7 +69,7 @@ void Internal::startup(Messages& log,Db::Connection& _sql,buildKind kind) {
 		plist result;
 		for(auto& i : list) {
 			mtext parm;
-			parm.emplace_back(new Text(i));
+			Token::add(i,parm);
 			result.emplace_back(std::move(parm));
 		}
 		return result;
@@ -88,7 +88,7 @@ void Internal::startup(Messages& log,Db::Connection& _sql,buildKind kind) {
 		plist result;
 		for(auto& i : list) {
 			mtext parm;
-			parm.emplace_back(new Text(i));
+			Token::add(i,parm);
 			result.emplace_back(std::move(parm));
 		}
 		return result;
@@ -102,7 +102,8 @@ void Internal::startup(Messages& log,Db::Connection& _sql,buildKind kind) {
 		plist result;
 		for(auto& i : list) {
 			mtext parm;
-			parm.emplace_back(new Text(i));
+			Token::add(i,parm);
+//			parm.emplace_back(new Text(i));
 			result.emplace_back(std::move(parm));
 		}
 		return result;
@@ -115,8 +116,8 @@ void Internal::startup(Messages& log,Db::Connection& _sql,buildKind kind) {
 			}
 		}
 		auto& x = context.back().second;
-		if(x.metrics != nullptr  && (x.metrics)->currentTemplate != nullptr) {
-			e << Message(trace,x.metrics->currentTemplate->name);
+		if(x->metrics != nullptr  && (x->metrics)->currentTemplate != nullptr) {
+			e << Message(trace,x->metrics->currentTemplate->name);
 		} else {
 			e << Message(trace,"nil");
 		}

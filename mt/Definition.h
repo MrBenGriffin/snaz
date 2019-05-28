@@ -47,17 +47,17 @@ namespace mt {
 		bool inRange(size_t) const override;
 		bool parmCheck(Messages&,size_t) const;
 		std::ostream &visit(std::ostream &) const override;
-		void expand(Messages&,mtext&,Instance&,mstack&) const override;
+		void expand(Messages&,mtext&,shared_ptr<Instance>&,mstack&) const override;
 
 		std::string name() const override;
 		static bool test_adv(const std::string &);
 		//        static void add(Definition&);
-		static void del(const std::string);
-		static bool has(const std::string);
+		static void del(const std::string&);
+		static bool has(const std::string&);
 
 		//By Library call..
-		static void vis(const std::string,std::ostream&);
-		static void exp(const std::string,Messages&,mtext&,Instance&,mstack&);
+		static void vis(const std::string&,std::ostream&);
+		static void exp(const std::string,Messages&,mtext&,shared_ptr<Instance>&,mstack&);
 		static void list(std::ostream&);
 
 

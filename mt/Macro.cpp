@@ -56,8 +56,7 @@ namespace mt {
 	void Macro::expand(Messages& errs,mtext& result,mstack &context) const {
 		auto good = Definition::library.find(_name);
 		if(good != Definition::library.end()) {
-			iteration iter({0,parms.size()});
-			Instance instance(parms,iter,context.back().second.metrics);
+			auto instance = make_shared<Instance>(parms,context.back().second->metrics);
 			auto& macro = good->second;
 			try {
 				macro->expand(errs,result,instance,context);

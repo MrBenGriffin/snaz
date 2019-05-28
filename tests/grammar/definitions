@@ -39,8 +39,11 @@ U wtagi		1	2	11	⌽wt(⍟1⍟2)
 U wtago		1	1	11	⌽wt(/⍟1)
 U wtag		2	3	00	⌽wtagi(⍟1,⍟2)⍟3⌽wtago(⍟1)
 U wstag		1	2	00	⌽wt(⍟1⍟2 /)
+U wTable	1	2	11	⌽wtag(table,⍟1,⍟2)
 U wTr		1	2	11	⌽wtag(tr,⍟1,⍟2)
 U wTd		1	2	11	⌽wtag(td,⍟1,⍟2)
+U t2Row		2	2	11	⌽wTr(,⌽wTd(,⍟1)⌽wTd(,⍟2))
+
 U ent		1	1	11	⌽iExists(Entities,,⌽iSet(Entities,⎡nbsp;iexcl;cent;pound;curren⎤)⌽iSet(EntCodes,⎡00A0;00A1;00A2;00A3;00A4⎤))⌽iSet(*entid,⌽iIndex(;,⌽iGet(Entities),find,⍟1))⌽iEq(⌽iGet(*entid),-1,⍟1,#x⌽iIndex(;,⌽iGet(EntCodes),get,⌽iGet(*entid)))
 U entx		1	1	11	⌽iRegex(&([a-z]+);,&⌽ent(\1);,⍟1)
 

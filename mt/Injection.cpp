@@ -148,27 +148,28 @@ namespace mt {
 
 	void Injection::expand(Messages& errs,mtext &result,mstack &context) const {
 		if (type == It::text) {
-			Text(basis).expand(errs,result,context);
+			Token::add(basis,result);
 		} else {
-			if(sValue < context.size()) {
+			if(!context.empty() && sValue < context.size()) {
 				auto &contextMacro = context[sValue].first;
 				auto &instance = context[sValue].second;
-				auto &parms = instance.parms;
-				auto &iter = instance.it;
+				auto &parms = instance->parms;
+				auto &iter = instance->it;
 				size_t parmCount = parms.size();
 				if (stack) {
 					for(auto& s : context) {
 						if(s.first!= nullptr) {
 							std::string macroName = (s.first)->name() + ";";
-							result.emplace_back(new Text(macroName));
+							Token::add(macroName,result);
 						}
 					}
 					auto& x = context.back().second;
-					if(x.metrics != nullptr  && (x.metrics)->currentTemplate != nullptr) {
-						result.emplace_back(new Text(x.metrics->currentTemplate->name));
+					if(x->metrics != nullptr  && (x->metrics)->currentTemplate != nullptr) {
+						Token::add(x->metrics->currentTemplate->name,result);
 					} else {
-						result.emplace_back(new Text("nil"));
+						Token::add("nil",result);
 					}
+
 				}
 				if (list) {
 					for(size_t i=value; i <= parmCount; i++) {
@@ -176,7 +177,7 @@ namespace mt {
 						for(auto& j : parms[i - 1]) {
 							j->inject(errs,tmp,context);
 						}
-						context.back().second.parms.emplace_back(std::move(tmp)); //plist is a std::vector<mtext>;
+						context.back().second->parms.emplace_back(std::move(tmp)); //plist is a std::vector<mtext>;
 					}
 				}
 				if(!stack && !list) {
@@ -184,8 +185,7 @@ namespace mt {
 						case It::plain:
 							if(value == 0) {
 								if(contextMacro != nullptr) {
-									std::string macroName = contextMacro->name(); // + ";";
-									result.emplace_back(new Text(macroName));
+									Token::add(contextMacro->name(),result);
 								}
 							} else {
 								bool legal = contextMacro->inRange(value);
@@ -222,18 +222,15 @@ namespace mt {
 									for(auto& token: parms[posi - 1]) {
 										token->expand(errs,result,context);
 									}
-//									Driver::expand(errs, parms[posi - 1], result, context);
 								} else {
 									mstack subContext(context.begin() + sValue, context.end());
 									for(auto& token: parms[posi - 1]) {
 										token->expand(errs,result,subContext);
 									}
-//									Driver::expand(errs, parms[posi - 1], result, subContext);
 								}
 							} else {
 								if (posi == 0) {
-									std::string macroName = contextMacro->name(); // + ";";
-									result.emplace_back(new Text(macroName));
+									Token::add(contextMacro->name(),result);
 								} else {
 									//Do nothing, I guess.
 								}

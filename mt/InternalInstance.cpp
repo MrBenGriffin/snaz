@@ -11,9 +11,9 @@
 
 namespace mt {
 
-	InternalInstance::InternalInstance(const Internal *thing,Messages& e,mtext &o, Instance &i, mstack &c) :
-			owner(thing),output(&o), instance(&i), context(&c), errs(&e) {
-		parms = &i.parms;
+	InternalInstance::InternalInstance(const Internal *thing,Messages& e,mtext &o, shared_ptr<Instance>&i, mstack &c) :
+			owner(thing),output(&o), instance(i), context(&c), errs(&e) {
+		parms = &(i->parms);
 		count = parms->size() == 1 ? parms->front().empty() ? 0 : 1 : parms->size();
 		min = thing->minParms;
 		max = thing->maxParms;
@@ -77,8 +77,7 @@ namespace mt {
 		plist result; //using plist=std::vector<mtext>;
 		for(auto& i : nodes) {
 			mtext parm;
-			shared_ptr<Token> ptr = make_shared<Text>(i->ids());
-			parm.emplace_back(ptr);
+			Token::add(i->ids(),parm);
 			result.emplace_back(parm);
 		}
 		return result;
@@ -87,15 +86,16 @@ namespace mt {
 	void InternalInstance::generate(nlist& nodes,const mtext* program,const string value,const string countStr) {
 		if(program != nullptr && !program->empty()) { // from an empty parm..
 			forStuff stuff(value,countStr);
+			size_t parmCount = 1;
 			for(auto& i: nodes) {
-				stuff.set(i->ids(),count);
+				stuff.set(i->ids(),parmCount);
 				mtext paramOut;  //this will be the program, substituted correctly.
                 auto& code = *program;
                 Driver::doFor(code,paramOut,stuff);
                 for(auto& j : paramOut) {
                     j->expand(*errs,*output,*context);
                 }
- 				count++;
+				parmCount++;
 			}
 		}
 	}
@@ -164,8 +164,7 @@ namespace mt {
 	}
 
 	void InternalInstance::set(std::string str) {
-		shared_ptr<Token> ptr = make_shared<Text>(str);
-		output->emplace_back(ptr);
+		Token::add(str,*output);
 	}
 
 	//offset points at the position of the TRUE parm.

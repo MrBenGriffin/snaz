@@ -1,7 +1,8 @@
 
 # iEq from builderTests
 iEq 001		-⌽iEq(X)-															-0-
-iEq 002		-⌽iEq(X,Y,)-														--
+//The following (002) may differ from existing implementations, but parms are being optimised away.
+iEq 002		-⌽iEq(X,Y,)-														-0-
 iEq 003		⌽iEq(X,X,YY)														YY
 iEq 004		⌽iEq(X,Y,YY,NN)														NN
 iEq 005		⌽iEq(1,2,3,4)														4

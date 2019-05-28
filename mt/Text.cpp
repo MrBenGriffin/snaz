@@ -16,11 +16,16 @@ namespace mt {
 		return o;
 	}
 
-	void Text::expand(Messages& m,mtext &mt,mstack &context) const {
+	void Text::expand(Messages& m,mtext &mt,mstack &) const {
+//		if(text.size() > 0x100000) {
+//			assert(true);
+//		}
 		if (!mt.empty()) {
 			Token *back = mt.back().get();
 			auto *textPtr = dynamic_cast<Text *>(back);
 			if (textPtr != nullptr) {
+				size_t newSize = textPtr->text.size() + text.size();
+				textPtr->text.reserve(newSize);
 				textPtr->text.append(text);
 			} else {
 				Wss *wss = dynamic_cast<Wss *>(back);
@@ -36,8 +41,7 @@ namespace mt {
 				}
 			}
 		} else {
-			shared_ptr<Token> ptr = make_shared<Text>(text);
-			mt.emplace_back(ptr);
+			Token::add(text,mt);
 		}
 	}
 
@@ -60,21 +64,18 @@ namespace mt {
 		if(start < text.size()) {
 			valStr.append(text.substr(start));
 		}
-		shared_ptr<Token> ptr = make_shared<Text>(valStr);
-		add(ptr,result);
+		Token::add(valStr,result);
 	}
 
 	void Text::doFor(mtext& result,const forStuff& s) const {
 		string basis(text);
 		Support::fandr(basis,s.stuff[0].first,s.stuff[0].second);
 		Support::fandr(basis,s.stuff[1].first,s.stuff[1].second);
-		shared_ptr<Token> ptr = make_shared<Text>(basis);
-		add(ptr,result);
+		Token::add(basis,result);
 	}
 
 	void Text::inject(Messages&,mtext& out,mstack&) const {
-		shared_ptr<Token> ptr = make_shared<Text>(text);
-		out.emplace_back(ptr);
+		Token::add(text,out);
 	}
 
 

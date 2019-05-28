@@ -1,0 +1,8 @@
+#Various Recursion
+// wTr		1	2	11	⌽wtag(tr,⍟1,⍟2)
+// wTd		1	2	11	⌽wtag(td,⍟1,⍟2)
+// t2Row	2	2	11	⌽wTr(,⌽wTd(,⍟1)⌽wTd(,⍟2))
+
+recBase		@t2Row(a,b)							<tr><td>a</td><td>b</td></tr>
+rec001		@t2Row(@wTable(,@t2Row(a,b)),c)		<tr><td><table><tr><td>a</td><td>b</td></tr></table></td><td>c</td></tr>
+rec002		@t2Row(@t2Row(a,b),@t2Row(c,d))		<tr><td><tr><td>a</td><td>b</td></tr></td><td><tr><td>c</td><td>d</td></tr></td></tr>

@@ -23,6 +23,7 @@ namespace mt {
 		std::vector<std::pair<std::string,std::string>> stuff;
 		forStuff(const std::string&,const std::string&,size_t,size_t);
 		forStuff(const std::string&,const std::string&);
+		forStuff(const std::vector<std::pair<std::string,std::string>>&);
 		void set(const std::string&,size_t);
 	};
 
@@ -33,17 +34,19 @@ namespace mt {
 		plist parms;			//std::vector<mtext>
 		bool generated;     	//internal generation via e.g. iForX
 		iteration it = {0, 0};
-		std::shared_ptr<forStuff> myFor;
+		std::unique_ptr<forStuff> myFor;
 		node::Metrics* metrics;
 
 		size_t size();
-		Instance(const Instance &) = default;
+		Instance(const Instance &);
 		~Instance();
-		Instance(plist, iteration, node::Metrics*, bool= false);
-		Instance(plist, std::shared_ptr<forStuff>, node::Metrics*);
+		Instance(plist,node::Metrics*, bool= false);
+//		Instance(plist, iteration, node::Metrics*, bool= false);
+		Instance(plist, std::unique_ptr<forStuff>&, node::Metrics*);
 		explicit Instance(node::Metrics*);
+		void tidy();
 
-		Instance(std::shared_ptr<forStuff> myFor);
+		Instance(std::unique_ptr<forStuff>&);
 	};
 }
 

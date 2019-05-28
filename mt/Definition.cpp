@@ -143,38 +143,47 @@ namespace mt {
 		return false;
 	}
 
-	void Definition::expand(Support::Messages& e,mtext& o,Instance &instance, mstack &context) const {
-		if(!parmCheck(e,instance.size())) {
+	void Definition::expand(Support::Messages& e,mtext& o,shared_ptr<Instance>& instance, mstack &context) const {
+		if(!parmCheck(e,instance->size())) {
 			return;
 		}
-		if (!preExpand) {
-			plist mt_parms = std::move(instance.parms);
-			instance.parms.clear();
-			if (trimParms) { trim(mt_parms); }
-			instance.generated = false;
-			context.push_back({nullptr,std::move(instance)}); //This is done for injections like %(1+).
-			for (auto &parm : mt_parms) {
+		if (!preExpand && ! instance->parms.empty()) {
+			//We are evaluating the parms within the context of the calling macro.
+			plist passedParms = std::move(instance->parms);
+			instance->parms.clear();
+			if (trimParms) { trim(passedParms); }
+			instance->generated = false;
+			//We push this back in order to pass lists to it...
+			context.emplace_back(make_pair(nullptr,instance)); //This is done for injections like %(1+).
+			for (auto &parm : passedParms) {
 				mtext expanded;
-				auto i=context.back().second.parms.size();
+				auto i= instance->size();
 				for(auto& token : parm) {
 					token->expand(e,expanded,context);
 				}
-				if(context.back().second.parms.size() == i) {
-					context.back().second.parms.push_back(std::move(expanded)); //each one as a separate parm!!
+				if(instance->size() == i) {
+					instance->parms.emplace_back(std::move(expanded)); //each one as a separate parm!!
 				}
 			}
-			instance = context.back().second;
 			context.pop_back();
-			while (!instance.parms.empty() && instance.parms.back().empty()) {
-				instance.parms.pop_back();
-			}
-			instance.it = {0,instance.parms.size()};
+			instance->tidy();
 		}
-		context.push_front({this,instance});
+		context.emplace_front(make_pair(this,instance));
 		if (iterated) {
-			Instance& specific = context.front().second;
-			iteration* i = &(specific.it); //so we are iterating front (because not all are generated).
-			if(specific.myFor != nullptr) {
+			if(instance->myFor == nullptr) {
+				auto& i = context.front().second->it;
+				while ( i.first <= i.second) {
+					for(auto& token: expansion) {
+						token->expand(e,o,context);
+					}
+					i.first++;
+				}
+			} else {
+				assert(false);
+				/**
+				 * doFor is now done elsewhere, and this is not needed, I think!!
+				Instance specific(instance);
+				iteration* i = &(specific.it); //so we are iterating front (because not all are generated).
 				for (i->first = 1; i->first <= i->second; i->first++) {
 					std::ostringstream value;
 					const mtext& parm = specific.parms[i->first - 1];
@@ -185,21 +194,15 @@ namespace mt {
 					for(auto& token : done_parm) {
 						token->expand(e,o,context);
 					}
-//					Driver::expand(e, done_parm, o, context);
 				}
-			} else {
-				for (i->first = 1; i->first <= i->second; i->first++) {
-					for(auto& token: expansion) {
-						token->expand(e,o,context);
-					}
-//					Driver::expand(e, expansion, o, context);
-				}
+				 */
 			}
 		} else {
 			for(auto& token: expansion) {
+				size_t foo = context.size();
+				assert(foo > 0);
 				token->expand(e,o,context);
 			}
-//			Driver::expand(e, expansion, o, context);
 		}
 		context.pop_front();
 	}
@@ -221,7 +224,7 @@ namespace mt {
 		return false;
 	}
 
-	void Definition::vis(const std::string name,std::ostream& o) {
+	void Definition::vis(const std::string& name,std::ostream& o) {
 		auto good = Definition::library.find(name);
 		if(good != Definition::library.end()) {
 			good->second->visit(o);
@@ -229,8 +232,7 @@ namespace mt {
 			o << "«" << name << "»";
 		}
 	}
-
-	void Definition::exp(const std::string name,Messages& e,mtext& o,Instance& i,mt::mstack& c) {
+	void Definition::exp(const std::string name,Messages& e,mtext& o,shared_ptr<Instance>& i,mt::mstack& c) {
 		auto good = Definition::library.find(name);
 		if(good != Definition::library.end()) {
 			good->second->expand(e,o,i,c);
@@ -239,11 +241,11 @@ namespace mt {
 		}
 	}
 
-	bool Definition::has(const std::string name) {
+	bool Definition::has(const std::string& name) {
 		return library.find(name) != Definition::library.end();
 	}
 
-	void Definition::del(const std::string name) {
+	void Definition::del(const std::string& name) {
 		auto good = library.find(name);
 		if (good != library.end()) {
 			auto* ptr = good->second.release();

@@ -23,6 +23,7 @@
 
 namespace Support {
 
+	using namespace mt;
 	Media::Media() {
 		string magicPath;
 		Env::e().get("IMAGEMAGICK",magicPath,"/usr/bin/convert -background none");
@@ -39,8 +40,8 @@ namespace Support {
 		//Set up a context for contextual macro expansion.
 		node::Metrics metrics;
 		metrics.push(node::Content::root(),nullptr);
-		mt::Instance instance(&metrics);
 		mt::mstack context;
+		auto instance = make_shared<mt::Instance>(&metrics);
 		context.push_back({nullptr,instance}); //This is our context.
 
 		media->setRow(errs,index);
@@ -114,18 +115,17 @@ namespace Support {
 			auto transform = transforms.find(transName);
 			if (transform != transforms.end()) {
 				tolist(parms,parmList,",");
-				mt::plist parameters;
+				plist parameters;
 				for(auto& i: parms) {
-					mt::mtext parm;
-					parm.emplace_back(new mt::Text(i));
+					mtext parm;
+					Token::add(i,parm);
 					parameters.emplace_back(std::move(parm));
 				}
 				node::Metrics iMetrics(metrics);
-				mt::iteration it = {0,parameters.size()};
-				mt::Instance instance(parameters,it,&iMetrics); // we don't want to generate here.
+				auto instance = make_shared<Instance>(parameters,&iMetrics);
 				std::ostringstream result;
-				mt::mtext resultTokens;
-				mt::mstack empty;
+				mtext resultTokens;
+				mstack empty;
 				transform->second.expand(errs,resultTokens,instance,empty);
 				for (auto &i : resultTokens) {
 					i->final(result);

@@ -24,7 +24,8 @@ namespace mt {
 	using plist=		std::vector<mtext>;
 	using nlist=		std::vector<const node::Node *>;
 	using pos=			std::pair<size_t,size_t>;
-	using Carriage=		std::pair<const Handler*, Instance>;
+	//Instance needs to be a shared ptr, because of subcontexts in injections.
+	using Carriage=		std::pair<const Handler*, std::shared_ptr<Instance> >;
 	using mstack=		std::deque< Carriage >;
 
 }

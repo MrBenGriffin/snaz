@@ -231,13 +231,12 @@ namespace Support {
 		if(in.find('&') == string::npos) {
 			return;
 		}
-		const char* dataIn = in.data();
-		size_t sizeIn = in.size();
-		const char* curr = dataIn;
-		const char* dataInEnd = dataIn + sizeIn;
+		const char* dataIn(in.data());
+		size_t sizeIn(in.size());
+		const char* curr(dataIn);
+		const char* dataInEnd(dataIn + sizeIn);
 		std::string out;
 		out.reserve(in.size());
-		curr = dataIn;
 		while (curr < dataInEnd) {
 			if(*curr == '&') {
 				size_t remains(dataInEnd - curr);

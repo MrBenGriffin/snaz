@@ -100,11 +100,10 @@ namespace mt {
 	 * */
 	void Driver::store(const std::string &str) {
 		if(!str.empty()) {
-			shared_ptr<Token> text = make_shared<Text>(str);
 			if ( macro_stack.empty()) {
-				Token::add(text,final);
+				Token::add(str,final);
 			} else {
-				Token::add(text,parm);
+				Token::add(str,parm);
 			}
 		}
 	}
@@ -148,7 +147,7 @@ namespace mt {
 			macro_stack.front()->parms.emplace_back(parm);
 			parm.clear();
 		}
-		macro_stack.emplace_front(new Macro(word));
+		macro_stack.emplace_front(make_unique<Macro>(word)); // new Macro(word));
 	}
 
 	void Driver::add_parm() {

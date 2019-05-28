@@ -33,6 +33,7 @@ namespace mt {
 
 		// My function!!
 		static void add(TokenPtr&,mtext&);
+		static void add(std::string,mtext&);
 
 
 	};
