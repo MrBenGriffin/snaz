@@ -29,7 +29,7 @@ namespace content {
 		sql.dispose(query);
 	}
 
-	bool Editorial::sanity(Messages &errs, key& id, const node::Content* node, const Segment* segment) {
+	bool Editorial::sanity(Messages &errs, key& id, const node::Content* node, const Segment* segment) const {
 		bool value = false;
 		if(node && segment) {
 			id = { node->id(), segment->id };
@@ -99,7 +99,7 @@ namespace content {
 		if (times.show()) { times.use(errs,"Editorial Index"); }
 	}
 
-	bool Editorial::has(Messages &errs, const node::Content* node, const Segment* segment) {
+	bool Editorial::has(Messages &errs, const node::Content* node, const Segment* segment) const {
 		bool value = false;
 		key id;
 		if(sanity(errs,id,node,segment)) {
@@ -136,7 +136,7 @@ namespace content {
 		return value;
 	}
 
-	std::string Editorial::getMeta(Messages &errs, const node::Content* node, const Segment* segment,const std::string& field) {
+	std::string Editorial::getMeta(Messages &errs, const node::Content* node, const Segment* segment,const std::string& field) const {
 		std::string value;
 		key id;
 		if(sanity(errs,id,node,segment)) {

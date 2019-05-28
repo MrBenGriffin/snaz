@@ -17,14 +17,19 @@ namespace mt {
 	using namespace Support;
 	class Script : public Token {
 	protected:
-		std::string text;
+		size_t size;
+		std::ostringstream text;
 	public:
-		explicit Script(std::string);
+		explicit Script(const std::string&);
+		explicit Script(const std::ostringstream&);
 		~Script() override = default;
-		void append(std::string);
+		void append(const std::string&);
+		void append(const std::ostringstream&);
 		void final(std::ostream&) const override;     //return final text.
 		std::string get() const override;             //return text.
 		bool empty() const override;
+		void inject(Messages&,mtext&,mstack&) const override;
+		const std::ostringstream& stream() const { return text;}             //return text.
 
 	};
 }

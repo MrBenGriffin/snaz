@@ -47,7 +47,7 @@ namespace content {
 		buildKind kind;
 
 		void storeBuilt(Messages&);
-		bool sanity(Messages &,key&,const node::Content*, const Segment*);
+		bool sanity(Messages &,key&,const node::Content*, const Segment*) const;
 
 		Editorial(); // Disallow instantiation outside of the class.
 
@@ -56,8 +56,8 @@ namespace content {
 		static Editorial& e();
 		void set(Messages&,Connection&,size_t,buildKind);
 		pair<bool,const mt::mtext*> get(Messages&,const node::Content*,const Segment*);
-		std::string getMeta(Messages&,const node::Content*,const Segment*,const std::string&);
-		bool has(Messages&,const node::Content*,const Segment*);
+		std::string getMeta(Messages&,const node::Content*,const Segment*,const std::string&) const;
+		bool has(Messages&,const node::Content*,const Segment*) const;
 		void unload(Messages&,Connection&);
 	};
 }

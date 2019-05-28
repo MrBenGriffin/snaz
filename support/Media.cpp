@@ -122,15 +122,16 @@ namespace Support {
 					parameters.emplace_back(std::move(parm));
 				}
 				node::Metrics iMetrics(metrics);
-				auto instance = make_shared<Instance>(parameters,&iMetrics);
 				std::ostringstream result;
 				mtext resultTokens;
 				mstack empty;
+				auto instance = make_shared<Instance>(parameters,&iMetrics);
 				transform->second.expand(errs,resultTokens,instance,empty);
 				for (auto &i : resultTokens) {
 					i->final(result);
 				}
 				transformCode = result.str();
+				assert(instance.use_count() == 1);
 			} else {
 				ostringstream msg;
 				msg << "Media transform " << transName << " is not known.";

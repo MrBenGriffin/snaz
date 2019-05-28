@@ -15,12 +15,27 @@ namespace mt {
 	void Token::doFor(mtext&,const forStuff&) const {}
 	bool Token::empty() const { return true; }
 
+	void Token::add(const Script* text,mtext& mt) {
+		if (!mt.empty()) {
+			auto back = mt.back();
+			Text *ptr = dynamic_cast<Text *>(back.get());
+			if (ptr != nullptr) {
+				ptr->append(text->stream());
+			} else {
+				mt.emplace_back(make_shared<Text>(text->stream()));
+			}
+		} else {
+			auto txt = make_shared<Text>(text->stream());
+			mt.emplace_back(move(txt));
+		}
+	}
+
 	void Token::add(std::string text,mtext& mt) {
 		if (!mt.empty()) {
 			auto back = mt.back();
 			Text *ptr = dynamic_cast<Text *>(back.get());
 			if (ptr != nullptr) {
-				ptr->text.append(text);
+				ptr->append(text);
 			} else {
 				mt.emplace_back(make_shared<Text>(text));
 			}
@@ -28,7 +43,7 @@ namespace mt {
 			mt.emplace_back(make_shared<Text>(text));
 		}
 	}
-
+	
 	void Token::add(TokenPtr& token,mtext& mt) {
 		if (token != nullptr) {
 			Text *t = dynamic_cast<Text *>(token.get());
@@ -37,11 +52,12 @@ namespace mt {
 					auto back = mt.back();
 					Text *ptr = dynamic_cast<Text *>(back.get());
 					if (ptr != nullptr) {
-						t->text.swap(ptr->text);
-						t->text.append(ptr->text);
+						t->append(ptr->stream());
+//						t->text.swap(ptr->text);
+//						t->text.append(ptr->text);
 						mt.pop_back();
 					}
- 				}
+				}
 			} else {
 				Wss *w = dynamic_cast<Wss *>(token.get());
 				if (w != nullptr) {
@@ -49,14 +65,16 @@ namespace mt {
 						auto back = mt.back();
 						Wss *ptr = dynamic_cast<Wss *>(back.get());
 						if (ptr != nullptr) {
-							w->text.swap(ptr->text);
-							w->text.append(ptr->text);
+							w->append(ptr->stream());
+//							w->text.swap(ptr->text);
+//							w->text.append(ptr->text);
 							mt.pop_back();
 						}
 					}
 				}
 			}
-            mt.emplace_back(token);
-        }
+			mt.emplace_back(token);
+		}
 	}
+
 }

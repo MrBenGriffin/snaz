@@ -72,7 +72,7 @@ namespace node {
 		string get(Messages&,textValue) const override;
 		Date   get(Messages&,dateValue) const override;
 		void   loadTree(Messages&, Connection&, size_t,buildKind) override; //depends upon Node flavour of
-		void setLayouts(Messages &); 		//Set all the layouts for a nodetree
+		void 	setLayouts(Messages &); 		//Set all the layouts for a nodetree
 		flavour cultivar() const override { return flavour::content; }
 
 		/** Per language static functions **/

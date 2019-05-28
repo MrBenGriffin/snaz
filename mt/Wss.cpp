@@ -10,12 +10,13 @@
 namespace mt {
 	std::stack<const mtext*> Wss::newline;
 
-	Wss::Wss(std::string w) : Script(std::move(w)) {}
+	Wss::Wss(const std::string& w) : Script(w) {}
+	Wss::Wss(const std::ostringstream& s) : Script(s) {}
 
-	std::ostream& Wss::visit(std::ostream& o) const {
-        o << "‘" << text << "’" << std::flush;
-        return o;
-    }
+	std::ostream &Wss::visit(std::ostream &o) const {
+		o << "‘" << text.str() << "‘" << std::flush;
+		return o;
+	}
 
 	void Wss::push(const mtext* nl) {
 		newline.push(nl);
@@ -25,15 +26,15 @@ namespace mt {
 		newline.pop();
 	}
 
-    void Wss::expand(Messages&,mtext &mt, mstack &) const {
-        if (!mt.empty()) {
+	void Wss::expand(Messages&,mtext &mt, mstack &) const {
+		if (!mt.empty()) {
 			Token *back = mt.back().get();
 			vector<string> notNL;
-			Support::tolist(notNL, text, "\n");
+			Support::tolist(notNL, text.str(), "\n");
 			if(notNL.size() == 1) {
 				Wss *wssPtr = dynamic_cast<Wss *>(back);
 				if (wssPtr != nullptr) {
-					wssPtr->text.append(text);
+					wssPtr->append(text);
 				} else {
 					auto *textPtr = dynamic_cast<Script *>(back);
 					if (textPtr != nullptr) {
@@ -48,7 +49,7 @@ namespace mt {
 					back = mt.back().get();
 					auto* wssPtr = dynamic_cast<Wss *>(back);
 					if (wssPtr != nullptr) {
-						wssPtr->text.append(i);
+						wssPtr->append(i);
 					} else {
 						auto* textPtr = dynamic_cast<Script *>(back);
 						if (textPtr != nullptr) {
@@ -66,15 +67,10 @@ namespace mt {
 					}
 				}
 			}
-        } else {
+		} else {
 			shared_ptr<Token> ptr = make_shared<Wss>(text);
-            mt.emplace_back(ptr);
-        }
-    }
-
-	void Wss::inject(Messages&,mtext& out,mstack&) const {
-		shared_ptr<Token> ptr = make_shared<Wss>(text);
-		out.emplace_back(ptr);
+			mt.emplace_back(ptr);
+		}
 	}
 
 	void Wss::subs(mtext& out,const std::vector<std::string>&,const std::string&) const {

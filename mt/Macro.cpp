@@ -61,6 +61,7 @@ namespace mt {
 			try {
 				macro->expand(errs,result,instance,context);
 			} catch (...) {}
+			assert(instance.use_count() == 1);
 		} else {
 			auto macro = make_shared<Macro>(_name,parms);
 			result.emplace_back(macro); //Because the method is const, 'this' is a const*

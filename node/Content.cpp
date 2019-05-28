@@ -312,7 +312,8 @@ namespace node {
         current.nodeStack.push_back(this);
         current.current = this;
         current.page = 0;
-		auto control = make_shared<mt::Instance>(&current);
+				mt::mstack context;
+				context.emplace_back(make_pair(nullptr,make_shared<mt::Instance>(&current)));
         for (auto* t : layoutPtr->templates) {
             std::ostringstream content;
             if(!t->code.empty() && !finalFilenames.empty()) {
@@ -320,8 +321,6 @@ namespace node {
                 //                errs << Message(info,file);
                 errs.str(cout);
                 errs.reset();
-                mt::mstack context;
-                context.push_back({nullptr,control});
                 mt::Wss::push(&(t->nl)); //!!! another global.. need to add to the metrics above.
                 mt::Driver::expand(errs, t->code, content, context); //no context here...
                 mt::Wss::pop();
@@ -334,9 +333,11 @@ namespace node {
                 catch (...) {
                     errs << Message(error, "Failed to create file");
                 }
-            }
+           }
             current.page++;
         }
+				context.pop_back();
+				assert(context.empty());
         current.nodeStack.pop_back();
         if (times.show()) { times.use(errs,msg.str()); }
     }

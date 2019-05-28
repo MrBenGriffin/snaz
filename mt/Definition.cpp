@@ -199,8 +199,6 @@ namespace mt {
 			}
 		} else {
 			for(auto& token: expansion) {
-				size_t foo = context.size();
-				assert(foo > 0);
 				token->expand(e,o,context);
 			}
 		}

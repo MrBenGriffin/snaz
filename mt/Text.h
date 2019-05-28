@@ -15,22 +15,20 @@ namespace mt {
 	using namespace Support;
 
 	class Text : public Script {
-	friend class Token;
+		friend class Token;
 	public:
-	Text() = default;
-	~Text() override = default;
-	explicit Text(std::string);
-
-	std::ostream& visit(std::ostream&) const override;
-	void expand(Messages&,mtext&,mstack&) const override;
-	std::string name() const override { return "`text`"; }
-
-	void doFor(mtext&,const forStuff&) const override;
-	void subs(mtext&,const std::vector<std::string>&,const std::string&) const override;
-	void inject(Messages&,mtext&,mstack&) const override;
-
-
-};
+		Text() = default;
+		~Text() override = default;
+		explicit Text(const std::string&);
+		explicit Text(const std::ostringstream&);
+		
+		std::ostream& visit(std::ostream&) const override;
+		void expand(Messages&,mtext&,mstack&) const override;
+		std::string name() const override { return "`text`"; }
+		
+		void doFor(mtext&,const forStuff&) const override;
+		void subs(mtext&,const std::vector<std::string>&,const std::string&) const override;
+	};
 
 }
 

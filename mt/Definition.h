@@ -30,12 +30,12 @@ namespace mt {
 	private:
 		size_t minParms, maxParms;
 		std::string _name;
+		mtext expansion;
 
 		static void trim(plist&);
 
 	protected:
 		size_t counter;
-		mtext expansion;
 
 	public:
 		bool iterated, trimParms, preExpand;

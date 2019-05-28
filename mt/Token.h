@@ -13,6 +13,7 @@
 using namespace Support;
 
 namespace mt {
+	class Script;
 	class Token {
 	public:
 		Token() = default;
@@ -34,7 +35,8 @@ namespace mt {
 		// My function!!
 		static void add(TokenPtr&,mtext&);
 		static void add(std::string,mtext&);
-
+		static void add(std::ostream&,mtext&);
+		static void add(const Script*,mtext&);
 
 	};
 }

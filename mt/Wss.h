@@ -14,24 +14,25 @@
 namespace mt {
     using namespace Support;
 
-    class Wss : public Script {
-    private:
+	class Wss : public Script {
+	private:
 		friend class Token;
-   		static std::stack<const mtext*> newline;
-    public:
-        explicit Wss(std::string );
+		static std::stack<const mtext*> newline;
+	public:
+		explicit Wss(const std::string&);
+		explicit Wss(const std::ostringstream&);
 		~Wss() override = default;
 		std::string name() const override { return "`wss`"; }
-
-        std::ostream& visit(std::ostream&) const override;
-        void expand(Messages&,mtext&,mstack&) const override;
-		void inject(Messages&,mtext&,mstack&) const override;
+		
+		std::ostream& visit(std::ostream&) const override;
+		void expand(Messages&,mtext&,mstack&) const override;
 		void subs(mtext&,const std::vector<std::string>&,const std::string&) const override;
-
-        static void push(const mtext*);
+		
+		static void push(const mtext*);
 		static void pop();
+		
+	};
 
-    };
 }
 
 #endif //MACROTEXT_WSS_H
