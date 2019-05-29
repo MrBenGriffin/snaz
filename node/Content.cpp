@@ -312,8 +312,9 @@ namespace node {
         current.nodeStack.push_back(this);
         current.current = this;
         current.page = 0;
-				mt::mstack context;
-				context.emplace_back(make_pair(nullptr,make_shared<mt::Instance>(&current)));
+		mt::mstack context;
+		mt::Instance instance(&current);
+		context.emplace_back(make_pair(nullptr,&instance)); //Make the carriage.
         for (auto* t : layoutPtr->templates) {
             std::ostringstream content;
             if(!t->code.empty() && !finalFilenames.empty()) {
@@ -336,8 +337,8 @@ namespace node {
            }
             current.page++;
         }
-				context.pop_back();
-				assert(context.empty());
+		context.pop_back();
+		assert(context.empty());
         current.nodeStack.pop_back();
         if (times.show()) { times.use(errs,msg.str()); }
     }

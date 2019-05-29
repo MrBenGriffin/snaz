@@ -23,7 +23,7 @@ namespace mt {
 		Handler() = default;
 		virtual ~Handler() = default;
 		virtual bool inRange(size_t) const;
-		virtual void expand(Messages&,mtext&,shared_ptr<Instance>&,mstack&) const;
+		virtual void expand(Messages&,mtext&,Instance&,mstack&) const = 0;
 		virtual std::ostream& visit(std::ostream&) const;
 		virtual void inject(Messages&,mtext&,mstack&) const;
 		virtual void doFor(mtext&,const forStuff&) const;

@@ -7,7 +7,7 @@
 
 namespace mt {
 
-	void Handler::expand(Messages&,mtext&,shared_ptr<Instance>&,mstack&) const {}
+//	void Handler::expand(Messages&,mtext&,const Instance*,mstack&) const = 0;
 	std::ostream& Handler::visit(std::ostream& o) const { return o;}
 	void Handler::inject(Messages&,mtext&,mstack&) const {}
 	void Handler::doFor(mtext&,const forStuff&) const {}

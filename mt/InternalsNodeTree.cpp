@@ -9,29 +9,29 @@
 namespace mt {
 	using namespace Support;
 	using namespace node;
-	void iNumChildren::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iNumChildren::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		const Node* main = my.node(1);
 		if (main != nullptr) {
 			my.logic(main->getChildCount(),2);
 		}
 	}
-	void iNumGen::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iNumGen::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		const Node* main = my.node(1);
 		if (main != nullptr) {
 			my.logic(main->tier(),2);
 		}
 	}
-	void iNumGens::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iNumGens::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		my.logic(my.metrics->current->tree()->depth(),1);
 	}
-	void iNumPage::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iNumPage::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		my.logic(my.metrics->page,1);
 	};
-	void iNumPages::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iNumPages::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		const Node* main = my.node(1);
 		if (main != nullptr) {
@@ -43,14 +43,14 @@ namespace mt {
 			}
 		}
 	}
-	void iNumSib::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iNumSib::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		const Node* main = my.node(1);
 		if (main != nullptr) {
 			my.logic(main->sibling(), 2);
 		}
 	}
-	void iEqFamily::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iEqFamily::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		//Is parameter 1 the same as or descendant of parameter 2
 		InternalInstance my(this,e,o,instance,context);
 		const Node* n1 = my.node(1);
@@ -59,7 +59,7 @@ namespace mt {
 				my.logic(n1->hasAncestor(n2),3);
 		}
 	}
-	void iEqNode::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iEqNode::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		//Is parameter 1 the same as parameter 2?
 		InternalInstance my(this,e,o,instance,context);
 		const Node* n1 = my.node(1);
@@ -68,7 +68,7 @@ namespace mt {
 			my.logic(n1->id() == n2->id(),3);
 		}
 	}
-	void iEqSibs::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iEqSibs::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		const Node* n1 = my.node(1);
 		const Node* n2 = my.node(2);
@@ -76,14 +76,14 @@ namespace mt {
 			my.logic(n1->parent() == n2->parent(),3);
 		}
 	}
-	void iExistNode::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iExistNode::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		e.suppress(true);
 		InternalInstance my(this,e,o,instance,context);
 		const Node* main = my.node(1);
 		my.logic(main != nullptr, 2);
 		e.suppress(false);
 	}
-	void iForAncestry::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iForAncestry::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		const Node *n = my.node(1);
 		if (n != nullptr) {
@@ -140,7 +140,7 @@ namespace mt {
 			my.generate(nodelist,my.praw(5),my.parm(4));   //parms,code,vToken,cToken
 		}
 	}
-	void iForPeers::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iForPeers::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		//@iForPeers(n,a,t1,t2,sortparm,txt)
 		InternalInstance my(this, e, o, instance, context);
 		const Node *main = my.node(1);
@@ -151,14 +151,14 @@ namespace mt {
 			my.generate(peers.second,my.praw(6),my.parm(3),my.parm(4));   //parms,code,vToken,cToken
 		}
 	}
-	void iForNodes::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iForNodes::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		vector<string> nodeList;
 		toDecimalList(nodeList,my.parm(1));
 		plist parms = my.toNodeParms(this,nodeList,my.parm(4)); //nodes, and sorted..
 		my.generate(parms,my.praw(5),my.parm(2),my.parm(3));
 	}
-	void iForSibs::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iForSibs::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		const Node* main = my.node(1);
 		if (main != nullptr) {
@@ -166,7 +166,7 @@ namespace mt {
 			my.generate(sibs.second,my.praw(4),my.parm(2),my.parm(3)); //template,node*,position.
 		}
 	}
-	void iSize::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iSize::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		const Node* main = my.node(1);
 		if (main != nullptr) {

@@ -3,7 +3,7 @@ F showDefines	1
 F showPassed	1
 
 //U hw		0	0	00	Hello world
-//Basic0		[⌽hw()]													[Hello world]
+//Basic0		[⌽hw()]								[Hello world]
 
 //X
 

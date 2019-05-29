@@ -56,7 +56,8 @@ namespace mt {
 	void Macro::expand(Messages& errs,mtext& result,mstack &context) const {
 		auto librarian = Definition::library.find(_name);
 		if(librarian != Definition::library.end()) {
-			auto instance = make_shared<Instance>(parms,context.back().second->metrics);
+			// Expand passes by reference. Instance& (P5)
+			Instance instance(parms,context.back().second->metrics);
 			try {
 				librarian->second->expand(errs,result,instance,context);
 			} catch (...) {}

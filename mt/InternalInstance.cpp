@@ -11,13 +11,13 @@
 
 namespace mt {
 
-	InternalInstance::InternalInstance(const Internal *thing,Messages& e,mtext &o, shared_ptr<Instance>&i, mstack &c) :
-			owner(thing),output(&o), instance(i), context(&c), errs(&e) {
-		parms = &(i->parms);
+	InternalInstance::InternalInstance(const Internal *thing,Messages& e,mtext &o, Instance& i, mstack &c) :
+			owner(thing),output(&o), instancePtr(&i), context(&c), errs(&e) {
+		parms = &(instancePtr->parms);
 		count = parms->size() == 1 ? parms->front().empty() ? 0 : 1 : parms->size();
 		min = thing->minParms;
 		max = thing->maxParms;
-		metrics = instance->metrics; //context->back().second.metrics;
+		metrics = instancePtr->metrics; //context->back().second.metrics;
 		if(metrics == nullptr) {
 			e << Message(warn,"InternalInstance Constructor: instance had no metrics, which cannot be right?");
 			throw runtime_error("No Metrics.");

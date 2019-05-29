@@ -43,10 +43,10 @@ namespace mt {
 		Instance(plist,node::Metrics*, bool= false);
 //		Instance(plist, iteration, node::Metrics*, bool= false);
 		Instance(plist, std::unique_ptr<forStuff>&, node::Metrics*);
+		Instance(std::unique_ptr<forStuff>&);
 		explicit Instance(node::Metrics*);
 		void tidy();
 
-		Instance(std::unique_ptr<forStuff>&);
 	};
 }
 

@@ -40,9 +40,9 @@ namespace Support {
 		//Set up a context for contextual macro expansion.
 		node::Metrics metrics;
 		metrics.push(node::Content::root(),nullptr);
-		mt::mstack context;
-		auto instance = make_shared<mt::Instance>(&metrics);
-		context.push_back({nullptr,instance}); //This is our context.
+		mstack context;
+		auto instance =Instance(&metrics);
+		context.push_back({nullptr,&instance}); //This is our context.
 
 		media->setRow(errs,index);
 		media->readfield(errs,"version", version);   // not sure why we do it this way...
@@ -69,14 +69,14 @@ namespace Support {
 				} else {
 					metrics.push(node,nullptr);
 				}
-				directory = mt::Driver::expand(errs,directory,context);
+				directory = Driver::expand(errs,directory,context);
 				metrics.pop();
 			} else {
-				directory = mt::Driver::expand(errs,directory,context);
+				directory = Driver::expand(errs,directory,context);
 				media->readfield(errs,"imgbase",imgbase);
 			}
 		} else {
-			directory = mt::Driver::expand(errs,directory,context);
+			directory = Driver::expand(errs,directory,context);
 			media->readfield(errs,"imgbase",imgbase);
 		}
 		wsstrip(directory);
@@ -125,13 +125,12 @@ namespace Support {
 				std::ostringstream result;
 				mtext resultTokens;
 				mstack empty;
-				auto instance = make_shared<Instance>(parameters,&iMetrics);
+				Instance instance(parameters,&iMetrics);
 				transform->second.expand(errs,resultTokens,instance,empty);
 				for (auto &i : resultTokens) {
 					i->final(result);
 				}
 				transformCode = result.str();
-				assert(instance.use_count() == 1);
 			} else {
 				ostringstream msg;
 				msg << "Media transform " << transName << " is not known.";

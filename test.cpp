@@ -85,8 +85,8 @@ namespace testing {
 		metrics.nodeStack.push_back(currentNode);
 		metrics.current = currentNode;
 		metrics.page = 0;
-		auto control = make_shared<mt::Instance>(&metrics);
-		context.push_back({nullptr,control}); //This is our context.
+		mt::Instance instance(&metrics);
+		context.push_back({nullptr,&instance}); //This is our context.
 
 		if (infile.is_open()) {
 			char c;

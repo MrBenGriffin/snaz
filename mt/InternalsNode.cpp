@@ -12,7 +12,7 @@ namespace mt {
 	using namespace Support;
 	using namespace node;
 
-	void iTitle::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iTitle::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 
 		const Node* interest = my.node(1);
@@ -21,14 +21,14 @@ namespace mt {
 			my.logic(result,2);
 		}
 	}
-	void iTeam::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iTeam::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		const Node* interest = my.node(1);
 		if (interest != nullptr) {
 			my.logic(interest->get(e,team),2);
 		}
 	}
-	void iSuffix::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iSuffix::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		pair<const Node*,size_t> interest = my.nodePage(1);
 		if (interest.first != nullptr && interest.second != UINTMAX_MAX ) {
@@ -41,7 +41,7 @@ namespace mt {
 			}
 		}
 	}
-	void iShortTitle::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iShortTitle::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		const Node* interest = my.node(1);
 		if (interest != nullptr) {
@@ -50,7 +50,7 @@ namespace mt {
 		}
 	}
 
-	void iSegmentName::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iSegmentName::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		if(my.metrics->segmentStack.empty()) {
 			e << Message(error,_name + " called outside any segment context.");
@@ -65,7 +65,7 @@ namespace mt {
 		}
 	}
 
-	void iLayout::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iLayout::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		const Node* interest = my.node(1);
 		if (interest != nullptr) {
@@ -77,7 +77,7 @@ namespace mt {
 			}
 		}
 	}
-	void iLayoutName::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iLayoutName::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		const Node* interest = my.node(1);
 		if (interest != nullptr) {
@@ -89,14 +89,14 @@ namespace mt {
 			}
 		}
 	}
-	void iLink::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iLink::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		pair<const Node*,size_t> interest = my.nodePage(1);
 		if (interest.first != nullptr && interest.second != UINTMAX_MAX ) {
 			my.logic(interest.first->content()->filename(e,interest.second),2);
 		}
 	}
-	void iLinkRef::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iLinkRef::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		const Node* interest = my.node(1);
 		if (interest != nullptr) {
@@ -104,14 +104,14 @@ namespace mt {
 			my.logic(value,2);
 		}
 	}
-	void iID::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iID::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		const Node* interest = my.node(1);
 		if (interest != nullptr) {
 			my.logic(interest->id(),2);
 		}
 	}
-	void iBirth::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iBirth::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		const node::Node* interest = my.node(1);
 		if(interest) {
@@ -119,7 +119,7 @@ namespace mt {
 		}
 		my.logic(false,1);
 	}
-	void iContent::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iContent::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		const node::Content* interest = my.node(1)->content();
 		if(interest) {
@@ -150,7 +150,7 @@ namespace mt {
 			}
 		}
 	}
-	void iDeath::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iDeath::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		const node::Node* interest = my.node(1);
 		if(interest) {
@@ -158,7 +158,7 @@ namespace mt {
 		}
 		my.logic(false,1);
 	}
-	void iExistContent::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iExistContent::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		const node::Content* interest = my.node(1)->content();
 		if(interest) {
@@ -172,7 +172,7 @@ namespace mt {
 			}
 		}
 	}
-	void iTW::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iTW::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		const Node* interest = my.node(1);
 		if (interest != nullptr) {

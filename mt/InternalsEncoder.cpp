@@ -7,7 +7,7 @@
 namespace mt {
 	using namespace Support;
 
-	void iBase64::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iBase64::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		// @iBase64({e[b]/d},{text})
 		string way = my.parm(1);
@@ -20,49 +20,49 @@ namespace mt {
 		}
 		my.set(basis);
 	}
-	void iDecode::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iDecode::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		std::string basis =  my.parm(1);
 		xmldecode(basis);
 		my.logic(basis,2);
 	}
-	void iEncode::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iEncode::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		std::string basis =  my.parm(1);
 		xmlencode(basis);
 		my.logic(basis,2);
 	}
-	void iHex::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iHex::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		std::string basis =  my.parm(1);
 		tohex(basis);
 		my.logic(basis,2);
 	}
-	void iUnHex::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iUnHex::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		std::string basis =  my.parm(1);
 		fromhex(e,basis);
 		my.logic(basis,2);
 	}
-	void iUpper::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iUpper::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		std::string basis =  my.parm(1);
 		toupper(basis);
 		my.logic(basis,2);
 	}
-	void iLower::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iLower::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		std::string basis =  my.parm(1);
 		tolower(basis);
 		my.logic(basis,2);
 	}
-	void iUrlEncode::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iUrlEncode::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		std::string basis =  my.parm(1);
 		urlencode(basis);
 		my.logic(basis,2);
 	}
-	void iDigest::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iDigest::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 //		size_t my.count = calledParameters.size();
 		std::string basis;

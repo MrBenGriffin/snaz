@@ -15,13 +15,13 @@ namespace mt {
 	using namespace Support;
 	using namespace Support;
 
-	void iEq::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iEq::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		std::string left =  my.parm(1);
 		std::string right = my.count > 1 ? my.parm(2): "";
 		my.logic(left == right,3);
 	}
-	void iExpr::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iExpr::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		Infix::Evaluate expression;
 		auto expr=my.parm(1);
@@ -42,7 +42,7 @@ namespace mt {
 		std::ostringstream ost; ost << value;
 		my.set(ost.str());
 	}
-	void iForIndex::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iForIndex::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		/**
 		 * iForIndex(=,BIM=foo=bar,*,$,,[*:$]) (1:delimiter,2:list,3:valueToken,4:countToken,5:sort,6:code)
 		 */
@@ -50,7 +50,7 @@ namespace mt {
 		plist parms=toParms(my.parm(2),my.parm(1),my.parm(5)); //list,delimiter,sort
 		my.generate(parms,my.praw(6),my.parm(3),my.parm(4));   //parms,code,vToken,cToken
 	}
-	void iIndex::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iIndex::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		enum optype {resize,ifempty,normalise,get,size,set,push,erase,find,back,append,drop,reverse,uappend,upush,pop,retrieve,remove,contains} op = normalise;
 		string result,delimiter = my.parm(1);
@@ -233,7 +233,7 @@ namespace mt {
 		}
 		my.set(result);
 	}
-	void iConsole::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iConsole::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 //		enum channel { fatal, error, syntax, range, parms, warn, info, debug, usage, timing, trace, code };
 		channel type = info;
@@ -266,7 +266,7 @@ namespace mt {
 		}
 		e << Message(type,message);
 	}
-	void iDate::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iDate::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		ostringstream calculation;
 		string stime = my.parm(1);
@@ -293,7 +293,7 @@ namespace mt {
 		calculation << put_time(gmtime(&tt),format.c_str());
 		my.set(calculation.str());
 	}
-	void iEval::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iEval::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		std::stringstream code;
 		bool advanced = false;
@@ -311,7 +311,7 @@ namespace mt {
 		driver.expand(e,structure,result,context);
 		my.set(result.str());
 	}
-	void iFile::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iFile::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		//second parameter is 'true' or 'false' - (default = false) and represents whether
 		//or not to treat the file as macrotext.
 		InternalInstance my(this,e,o,instance,context);
@@ -342,7 +342,7 @@ namespace mt {
 	}
 
 	std::stack<const FieldContext*> iField::contextStack;
-	void iField::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iField::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		if(contextStack.empty()) {
 			e << Message(error,_name + " must be used within a context such as iForSubs or iForQuery.");
@@ -351,7 +351,7 @@ namespace mt {
 		}
 	}
 
-	void iForSubs::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iForSubs::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 //		ForSubs(table,Noderef,keyfield,orderfield,[context])
 //		qstr << "select * from " << table << " where " <<  keyfield << "='" << noderef << "'";
 //		if (orderfield.length() > 0) qstr << " order by " <<  orderfield;
@@ -392,7 +392,7 @@ namespace mt {
 		return result;
 	}
 
-	void iForQuery::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iForQuery::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		if (sql != nullptr && sql->isopen()) {
 			if (sql->select(e,query,my.parm(1))) {
@@ -418,7 +418,7 @@ namespace mt {
 		return result;
 	}
 
-	void iMath::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iMath::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		ostringstream msg;
 		long double nan = numeric_limits<long double>::signaling_NaN();
@@ -554,14 +554,14 @@ namespace mt {
 		}
 	}
 
-	void iNull::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iNull::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		// Badly named, this evaluates contents but does not output text.
 		InternalInstance my(this,e,o,instance,context);
 		for (size_t i=1; i <= my.count; i++) {
 			auto unused = my.parm(i);
 		}
 	}
-	void iTiming::expand(Messages& e,mtext& o,shared_ptr<Instance>& instance,mstack& context) const {
+	void iTiming::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		Timing& timer = Timing::t();
 		std::string timerParm = my.parm(1);

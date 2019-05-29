@@ -152,7 +152,7 @@ namespace mt {
 		} else {
 			if(!context.empty() && sValue < context.size()) {
 				auto &contextMacro = context[sValue].first;
-				auto &instance = context[sValue].second;
+				auto* instance = context[sValue].second;  //Carriage passes instance by pointer.
 				auto &parms = instance->parms;
 				auto &iter = instance->it;
 				size_t parmCount = parms.size();

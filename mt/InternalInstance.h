@@ -21,11 +21,11 @@ namespace mt {
 		const node::Metrics* metrics;// = context.back().second.metrics;
 		size_t          min{0}, max{0}, count {0};
 		mtext*          output {nullptr};
-		shared_ptr<Instance>  instance {nullptr};
+		Instance*  		instancePtr {nullptr};
 		const plist*    parms {nullptr};
 		mstack*         context {nullptr};
 		Messages*       errs;
-		InternalInstance(const Internal*,Support::Messages&,mtext&,shared_ptr<Instance>&,mstack&);
+		InternalInstance(const Internal*,Support::Messages&,mtext&,Instance&,mstack&);
 
 		void generate(plist&,const mtext*,const string,const string="");
 		void generate(nlist&,const mtext*,const string,const string="");

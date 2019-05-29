@@ -146,34 +146,34 @@ namespace mt {
 		return false;
 	}
 
-	void Definition::expand(Support::Messages& e,mtext& o,shared_ptr<Instance>& instance, mstack &context) const {
-		if(!parmCheck(e,instance->size())) {
+	void Definition::expand(Support::Messages& e,mtext& o,Instance& instance, mstack &context) const {
+		if(!parmCheck(e,instance.size())) {
 			return;
 		}
-		if (!preExpand && ! instance->parms.empty()) {
+		if (!preExpand && ! instance.parms.empty()) {
 			//We are evaluating the parms within the context of the calling macro.
-			plist passedParms = std::move(instance->parms);
-			instance->parms.clear();
+			plist passedParms = std::move(instance.parms);
+			instance.parms.clear();
 			if (trimParms) { trim(passedParms); }
-			instance->generated = false;
+			instance.generated = false;
 			//We push this back in order to pass lists to it...
-			context.emplace_back(make_pair(nullptr,instance)); //This is done for injections like %(1+).
+			context.emplace_back(make_pair(nullptr,&instance)); //Construct the Carriage for injections like %(1+).
 			for (auto &parm : passedParms) {
 				mtext expanded;
-				auto i= instance->size();
+				auto i= instance.size();
 				for(auto& token : parm) {
 					token->expand(e,expanded,context);
 				}
-				if(instance->size() == i) {
-					instance->parms.emplace_back(std::move(expanded)); //each one as a separate parm!!
+				if(instance.size() == i) {
+					instance.parms.emplace_back(std::move(expanded)); //each one as a separate parm!!
 				}
 			}
 			context.pop_back();
-			instance->tidy();
+			instance.tidy();
 		}
-		context.emplace_front(make_pair(this,instance));
+		context.emplace_front(make_pair(this,&instance)); //Construct the Carriage for this.
 		if (iterated) {
-			if(instance->myFor == nullptr) {
+			if(instance.myFor == nullptr) {
 				auto& i = context.front().second->it;
 				while ( i.first <= i.second) {
 					for(auto& token: expansion) {
@@ -233,7 +233,7 @@ namespace mt {
 			o << "«" << name << "»";
 		}
 	}
-	void Definition::exp(const std::string name,Messages& e,mtext& o,shared_ptr<Instance>& i,mt::mstack& c) {
+	void Definition::exp(const std::string name,Messages& e,mtext& o,Instance& i,mt::mstack& c) {
 		auto good = Definition::library.find(name);
 		if(good != Definition::library.end()) {
 			good->second->expand(e,o,i,c);
