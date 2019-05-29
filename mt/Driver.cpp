@@ -134,7 +134,7 @@ namespace mt {
 		auto mac = std::move(macro_stack.front());
 		macro_stack.pop_front();
 		if (macro_stack.empty()) {
-			final.emplace_back(mac.release());
+			final.emplace_back(mac.release()); //This releases the macro to final.
 		} else {
 			parm = macro_stack.front()->parms.back();
 			macro_stack.front()->parms.pop_back();

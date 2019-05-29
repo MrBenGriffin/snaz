@@ -54,14 +54,12 @@ namespace mt {
 	}
 
 	void Macro::expand(Messages& errs,mtext& result,mstack &context) const {
-		auto good = Definition::library.find(_name);
-		if(good != Definition::library.end()) {
+		auto librarian = Definition::library.find(_name);
+		if(librarian != Definition::library.end()) {
 			auto instance = make_shared<Instance>(parms,context.back().second->metrics);
-			auto& macro = good->second;
 			try {
-				macro->expand(errs,result,instance,context);
+				librarian->second->expand(errs,result,instance,context);
 			} catch (...) {}
-			assert(instance.use_count() == 1);
 		} else {
 			auto macro = make_shared<Macro>(_name,parms);
 			result.emplace_back(macro); //Because the method is const, 'this' is a const*

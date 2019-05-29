@@ -19,7 +19,7 @@
 
 namespace mt {
 
-	std::unordered_map<std::string, std::unique_ptr<const Handler> > Definition::library;
+	std::unordered_map<std::string, std::unique_ptr<Handler> > Definition::library;
 
 	std::string Definition::name() const {
 		return _name;
@@ -61,14 +61,16 @@ namespace mt {
 						errs << Message(error,"macro with id " + macro_id + " has no name!");
 					} else {
 						Messages log;
-						Definition* macro = new Definition(log,name,expansion,min,max,stripDef==1,stripParms==1,pre==1);
+						auto macro = make_unique<Definition>(log,name,expansion,min,max,stripDef==1,stripParms==1,pre==1);
+//						Definition* macro = new Definition(log,name,expansion,min,max,stripDef==1,stripParms==1,pre==1);
 						if(log.marked()) {
 							str.str(""); str << "Define `" << name << "` failed while parsing `" << expansion << "`";
 							errs << Message(error,str.str());
 							errs += log;
+							macro.reset();
 						} else {
 							del(name);
-							library.emplace(name,macro);
+							library.emplace(name,move(macro));
 						}
 					}
 				}
@@ -83,6 +85,7 @@ namespace mt {
 
 	void Definition::shutdown(Messages& errs,Db::Connection& sql,buildKind kind) {
 		mt::Internal::shutdown(errs,sql,kind); //savePersistance();
+		library.clear();  //May need to do this (if there are internal dependencies) because it's a static.
 	}
 
 	Definition::Definition(
@@ -280,109 +283,108 @@ namespace mt {
 		if (times.show()) { times.set("Load Internal Macros"); }
 
 //•------------  Utility macros
-		library.emplace("iEq",new iEq());
-		library.emplace("iIndex",new iIndex());
-		library.emplace("iForIndex",new iForIndex());
-		library.emplace("iExpr",new iExpr());
-		library.emplace("iConsole",new iConsole());
-		library.emplace("iDate",new iDate());
-		library.emplace("iEval",new iEval());
-		library.emplace("iFile",new iFile());
-		library.emplace("iField",new iField());
-		library.emplace("iForSubs",new iForSubs());
-		library.emplace("iForQuery",new iForQuery());
-		library.emplace("iMath",new iMath());
-		library.emplace("iNull",new iNull());
-		library.emplace("iTiming",new iTiming());
+		library.emplace("iEq",make_unique<iEq>());
+		library.emplace("iIndex",make_unique<iIndex>());
+		library.emplace("iForIndex",make_unique<iForIndex>());
+		library.emplace("iExpr",make_unique<iExpr>());
+		library.emplace("iConsole",make_unique<iConsole>());
+		library.emplace("iDate",make_unique<iDate>());
+		library.emplace("iEval",make_unique<iEval>());
+		library.emplace("iFile",make_unique<iFile>());
+		library.emplace("iField",make_unique<iField>());
+		library.emplace("iForSubs",make_unique<iForSubs>());
+		library.emplace("iForQuery",make_unique<iForQuery>());
+		library.emplace("iMath",make_unique<iMath>());
+		library.emplace("iNull",make_unique<iNull>());
+		library.emplace("iTiming",make_unique<iTiming>());
 
 //•------------  Storage macros
-		library.emplace("iExists",new iExists());
-		library.emplace("iSet",new iSet());
-		library.emplace("iGet",new iGet());
-		library.emplace("iAppend",new iAppend());
-		library.emplace("iKV",new iKV());
-		library.emplace("iList",new iList());
-		library.emplace("iReset",new iReset());
-		library.emplace("iSetCache",new iSetCache());
-		library.emplace("iSig",new iSig());
-		library.emplace("iUse",new iUse());
+		library.emplace("iExists",make_unique<iExists>());
+		library.emplace("iSet",make_unique<iSet>());
+		library.emplace("iGet",make_unique<iGet>());
+		library.emplace("iAppend",make_unique<iAppend>());
+		library.emplace("iKV",make_unique<iKV>());
+		library.emplace("iList",make_unique<iList>());
+		library.emplace("iReset",make_unique<iReset>());
+		library.emplace("iSetCache",make_unique<iSetCache>());
+		library.emplace("iSig",make_unique<iSig>());
+		library.emplace("iUse",make_unique<iUse>());
 
 //•------------  String macros
-		library.emplace("iLeft",new iLeft());
-		library.emplace("iLength",new iLength());
-		library.emplace("iMid",new iMid());
-		library.emplace("iPosition",new iPosition());
-		library.emplace("iRegex",new iRegex());
-		library.emplace("iRembr",new iRembr());
-		library.emplace("iRembrp",new iRembrp());
-		library.emplace("iReplace",new iReplace());
-		library.emplace("iRight",new iRight());
-		library.emplace("iTrim",new iTrim());
+		library.emplace("iLeft",make_unique<iLeft>());
+		library.emplace("iLength",make_unique<iLength>());
+		library.emplace("iMid",make_unique<iMid>());
+		library.emplace("iPosition",make_unique<iPosition>());
+		library.emplace("iRegex",make_unique<iRegex>());
+		library.emplace("iRembr",make_unique<iRembr>());
+		library.emplace("iRembrp",make_unique<iRembrp>());
+		library.emplace("iReplace",make_unique<iReplace>());
+		library.emplace("iRight",make_unique<iRight>());
+		library.emplace("iTrim",make_unique<iTrim>());
 
 //•------------ Encoder macros
-		library.emplace("iBase64",new iBase64());
-		library.emplace("iDecode",new iDecode());
-		library.emplace("iEncode",new iEncode());
-		library.emplace("iHex",new iHex());
-		library.emplace("iUnHex",new iUnHex());
-		library.emplace("iUpper",new iUpper());
-		library.emplace("iLower",new iLower());
-		library.emplace("iUrlEncode",new iUrlEncode());
-		library.emplace("iDigest",new iDigest());
+		library.emplace("iBase64",make_unique<iBase64>());
+		library.emplace("iDecode",make_unique<iDecode>());
+		library.emplace("iEncode",make_unique<iEncode>());
+		library.emplace("iHex",make_unique<iHex>());
+		library.emplace("iUnHex",make_unique<iUnHex>());
+		library.emplace("iUpper",make_unique<iUpper>());
+		library.emplace("iLower",make_unique<iLower>());
+		library.emplace("iUrlEncode",make_unique<iUrlEncode>());
+		library.emplace("iDigest",make_unique<iDigest>());
 
 //•------------ NodeTree
-		library.emplace("iNumChildren",new iNumChildren());
-		library.emplace("iNumGen",new iNumGen());
-		library.emplace("iNumGens",new iNumGens());
-		library.emplace("iNumPage",new iNumPage());
-		library.emplace("iNumPages",new iNumPages());
-		library.emplace("iNumSib",new iNumSib());
-		library.emplace("iEqFamily",new iEqFamily());
-		library.emplace("iEqNode",new iEqNode());
-		library.emplace("iEqSibs",new iEqSibs());
-		library.emplace("iExistNode",new iExistNode());
-		library.emplace("iForAncestry",new iForAncestry());
-		library.emplace("iForNodes",new iForNodes());
-		library.emplace("iForPeers",new iForPeers());
-		library.emplace("iForSibs",new iForSibs());
-		library.emplace("iSize",new iSize());
+		library.emplace("iNumChildren",make_unique<iNumChildren>());
+		library.emplace("iNumGen",make_unique<iNumGen>());
+		library.emplace("iNumGens",make_unique<iNumGens>());
+		library.emplace("iNumPage",make_unique<iNumPage>());
+		library.emplace("iNumPages",make_unique<iNumPages>());
+		library.emplace("iNumSib",make_unique<iNumSib>());
+		library.emplace("iEqFamily",make_unique<iEqFamily>());
+		library.emplace("iEqNode",make_unique<iEqNode>());
+		library.emplace("iEqSibs",make_unique<iEqSibs>());
+		library.emplace("iExistNode",make_unique<iExistNode>());
+		library.emplace("iForAncestry",make_unique<iForAncestry>());
+		library.emplace("iForNodes",make_unique<iForNodes>());
+		library.emplace("iForPeers",make_unique<iForPeers>());
+		library.emplace("iForSibs",make_unique<iForSibs>());
+		library.emplace("iSize",make_unique<iSize>());
 
 //•------------ BuildAccessors
-		library.emplace("iTech",new iTech());
-		library.emplace("iPreview",new iPreview());
-		library.emplace("iLang",new iLang());
-		library.emplace("iLangID",new iLangID());
-		library.emplace("iFullBuild",new iFullBuild());
+		library.emplace("iTech",make_unique<iTech>());
+		library.emplace("iPreview",make_unique<iPreview>());
+		library.emplace("iLang",make_unique<iLang>());
+		library.emplace("iLangID",make_unique<iLangID>());
+		library.emplace("iFullBuild",make_unique<iFullBuild>());
 
 //•------------ NodeAccessors
-		library.emplace("iTitle",new iTitle());
-		library.emplace("iTeam",new iTeam());
-		library.emplace("iSuffix",new iSuffix());
-		library.emplace("iShortTitle",new iShortTitle());
-		library.emplace("iSegmentName",new iSegmentName());
-		library.emplace("iLayout",new iLayout());
-		library.emplace("iLayoutName",new iLayoutName());
-		library.emplace("iLink",new iLink());
-		library.emplace("iLinkRef",new iLinkRef());
-		library.emplace("iID",new iID());
-		library.emplace("iBirth",new iBirth());
-		library.emplace("iContent",new iContent());
-		library.emplace("iDeath",new iDeath());
-		library.emplace("iExistContent",new iExistContent());
-		library.emplace("iTW",new iTW());
+		library.emplace("iTitle",make_unique<iTitle>());
+		library.emplace("iTeam",make_unique<iTeam>());
+		library.emplace("iSuffix",make_unique<iSuffix>());
+		library.emplace("iShortTitle",make_unique<iShortTitle>());
+		library.emplace("iSegmentName",make_unique<iSegmentName>());
+		library.emplace("iLayout",make_unique<iLayout>());
+		library.emplace("iLayoutName",make_unique<iLayoutName>());
+		library.emplace("iLink",make_unique<iLink>());
+		library.emplace("iLinkRef",make_unique<iLinkRef>());
+		library.emplace("iID",make_unique<iID>());
+		library.emplace("iBirth",make_unique<iBirth>());
+		library.emplace("iContent",make_unique<iContent>());
+		library.emplace("iDeath",make_unique<iDeath>());
+		library.emplace("iExistContent",make_unique<iExistContent>());
+		library.emplace("iTW",make_unique<iTW>());
 
 //•------------ Media
-		library.emplace("iMedia",new iMedia());
-		library.emplace("iEmbed",new iEmbed());
-		library.emplace("iExistMedia",new iExistMedia());
+		library.emplace("iMedia",make_unique<iMedia>());
+		library.emplace("iEmbed",make_unique<iEmbed>());
+		library.emplace("iExistMedia",make_unique<iExistMedia>());
 
 //•------------ Taxonomy
-		library.emplace("iTax",new iTax());
-		library.emplace("iForTax",new iForTax());
-		library.emplace("iForTaxNodes",new iForTaxNodes());
-		library.emplace("iExistSimilar",new iExistSimilar());
-		library.emplace("iForSimilar",new iForSimilar());
-
+		library.emplace("iTax",make_unique<iTax>());
+		library.emplace("iForTax",make_unique<iForTax>());
+		library.emplace("iForTaxNodes",make_unique<iForTaxNodes>());
+		library.emplace("iExistSimilar",make_unique<iExistSimilar>());
+		library.emplace("iForSimilar",make_unique<iForSimilar>());
 
 //•------------ FINISHED
 		if (times.show()) { times.use(log,"Load Internal Macros"); }

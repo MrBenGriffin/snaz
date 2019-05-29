@@ -20,13 +20,15 @@
 namespace mt {
 	using namespace Support;
 
+	//'user macro definitions'
 	class Definition : public Handler {
 	public:
 		static void startup(Messages&);
 		static void load(Messages&,Db::Connection&,buildKind);
 		static void shutdown(Messages&,Db::Connection&,buildKind);
 
-		static std::unordered_map<std::string, std::unique_ptr<const Handler> > library;
+		//this library should belong to the Handler class....
+		static std::unordered_map<std::string, std::unique_ptr<Handler>> library;
 	private:
 		size_t minParms, maxParms;
 		std::string _name;
