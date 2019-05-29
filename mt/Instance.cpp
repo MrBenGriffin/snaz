@@ -8,26 +8,27 @@
 
 namespace mt {
 
-	Instance::Instance(plist p, node::Metrics* m, bool gen) :
-		parms(std::move(p)), generated(gen),myFor(nullptr),metrics(m) {
-		tidy();
+	Instance::Instance(const plist* p, node::Metrics* m, bool gen) :
+		generated(gen),myFor(nullptr),metrics(m) {
+		copy(p); tidy();
 	}
 
-//	Instance::Instance(plist p, iteration i, node::Metrics* m, bool gen) :
-//		parms(std::move(p)), it(i), generated(gen),myFor(nullptr),metrics(m) {
-//		tidy();
-//	}
-
-	Instance::Instance(plist p, unique_ptr<forStuff>& stuff,node::Metrics* m) :
-		parms(std::move(p)),generated(true),myFor(std::move(stuff)),metrics(m) {
-		tidy();
+	Instance::Instance(const plist* p, unique_ptr<forStuff>& stuff,node::Metrics* m) :
+		generated(true),myFor(std::move(stuff)),metrics(m) {
+		copy(p); tidy();
 	}
 
 	Instance::Instance(node::Metrics* m) :
 		generated(false),myFor(nullptr),metrics(m) {
 	}
 
-	Instance::Instance(const Instance & o) : myFor(nullptr),parms(o.parms),generated(o.generated),it(o.it) {
+	Instance::Instance(const Instance & o) : myFor(nullptr),generated(o.generated),it(o.it) {
+		for(auto& parm : o.parms) {
+			MacroText nParm;
+			nParm.add(parm);
+			parms.emplace_back(move(nParm));
+		}
+
 		metrics = o.metrics;
 		if(o.myFor != nullptr) {
 			myFor = make_unique<forStuff>(o.myFor->stuff);
@@ -39,17 +40,17 @@ namespace mt {
 	}
 
 	void Instance::tidy() {
-		while (!parms.empty() && parms.back().empty()) {
-			parms.pop_back();
-		}
 		size_t pSize = size();
 		it = {pSize == 0 ? 0 : 1, pSize };
 	}
 
-	void Instance::copy(const plist *p) {
-		if(p != nullptr) {
-			for (const auto& i : *p) {
-				parms.push_back(i);
+	void Instance::copy(const plist *parms) {
+		// std::vector<MacroText>
+		if(parms != nullptr) {
+			for(auto& parm : *parms) {
+				MacroText nParm;
+				nParm.add(parm);
+				parms.emplace_back(move(nParm));
 			}
 		}
 	}
@@ -64,7 +65,7 @@ namespace mt {
 		parms.clear();
 	}
 
-	Instance::Instance(unique_ptr<forStuff>& myFor) : myFor(std::move(myFor)) {}
+//	Instance::Instance(unique_ptr<forStuff>& myFor) : myFor(std::move(myFor)) {}
 
 
 	forStuff::forStuff(const std::string& vt,const std::string& ct,size_t v,size_t c) {
@@ -75,9 +76,9 @@ namespace mt {
 		};
 	}
 
-	forStuff::forStuff(const std::vector<std::pair<std::string,std::string>>& other) {
-		stuff = other;
-	}
+//	forStuff::forStuff(const std::vector<std::pair<std::string,std::string>>& other) {
+//		stuff = other;
+//	}
 
 	forStuff::forStuff(const std::string& vt,const std::string& ct) {
 		stuff = {

@@ -323,7 +323,7 @@ namespace node {
                 errs.str(cout);
                 errs.reset();
                 mt::Wss::push(&(t->nl)); //!!! another global.. need to add to the metrics above.
-                mt::Driver::expand(errs, t->code, content, context); //no context here...
+                t->code.expand(errs, content, context); //no context here...
                 mt::Wss::pop();
                 try {
                     std::ofstream outFile(file.c_str());

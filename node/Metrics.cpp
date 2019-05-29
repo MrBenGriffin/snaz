@@ -22,16 +22,23 @@ namespace node {
 	Metrics::~Metrics() {
 	}
 
-	//		void push(const Content*,const Segment* = nullptr);
 	void Metrics::push(const Content* node,const content::Segment* segment){
 		nodeStack.push_back(node);
 		current  = node;
-		segmentStack.push(segment);
-        mt::Wss::push(segment != nullptr ? &(segment->nl) : nullptr);
+		auto segNull = segment == nullptr;
+		nullStack.push(segNull);
+		if(!segNull) {
+			segmentStack.push(segment);
+			mt::Wss::push(&(segment->nl));
+		}
 	}
 	void Metrics::pop() {
-		segmentStack.pop();
-		mt::Wss::pop();
+		auto segNull = nullStack.top();
+		nullStack.pop();
+		if(!segNull) {
+			segmentStack.pop();
+			mt::Wss::pop();
+		}
 		nodeStack.pop_back();
 		current = nodeStack.empty() ?
 			nullptr :

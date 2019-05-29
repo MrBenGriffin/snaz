@@ -50,6 +50,8 @@ namespace node {
 
 		static Tree taxonomies;
 		Taxon();
+		Taxon(Taxon &&) = default; //ensure that we do not use a copy constructor on move..
+		Taxon(const Taxon&) = delete;
 
 		flavour cultivar() const override { return flavour::taxon; }
 		virtual ~Taxon();            //deleting a Node deletes all of it's children

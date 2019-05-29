@@ -37,7 +37,7 @@ namespace mt {
 		bool iterator;      // This is injection defines the macro as an iterator.
 
 		Injection();
-        explicit Injection(std::string);
+    explicit Injection(std::string);
 		~Injection() override = default;
 		Injection(const Injection& ) = default;
 
@@ -45,11 +45,11 @@ namespace mt {
 		bool empty() const override;
 		void final(std::ostream&) const override;     //return final text.
 		std::ostream& visit(std::ostream&) const override;
-		void inject(Messages&,mtext&,mstack&) const override;
-		void expand(Messages&,mtext&,mstack&) const override;
-		void subs(mtext&,const std::vector<std::string>&,const std::string&) const override;
+		void inject(Messages&,MacroText&,mstack&) const override;
+		void expand(Messages&,MacroText&,mstack&) const override;
+		void subs(const std::vector<std::string>&,const std::string&) override;
 		std::string name() const override { return "`injection`"; }
-
+		unique_ptr<Token> clone() const override;
 
     };
 }

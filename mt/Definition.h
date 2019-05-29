@@ -13,9 +13,10 @@
 #include "support/db/Connection.h"
 #include "support/Message.h"
 
-#include "mt/Handler.h"
 #include "mt/mt.h"
+#include "mt/Handler.h"
 #include "mt/Internal.h"
+#include "mt/MacroText.h"
 
 namespace mt {
 	using namespace Support;
@@ -32,7 +33,7 @@ namespace mt {
 	private:
 		size_t minParms, maxParms;
 		std::string _name;
-		mtext expansion;
+		MacroText expansion;
 
 		static void trim(plist&);
 
@@ -43,13 +44,13 @@ namespace mt {
 		bool iterated, trimParms, preExpand;
 
 		Definition(Messages&,std::string, std::string, long = 0, long = -1, bool= true, bool= true, bool= false);
-		Definition(const mtext&, long = 0, long = -1, bool= true, bool= true, bool= false);
+		Definition(MacroText&, long = 0, long = -1, bool= true, bool= true, bool= false);
 
 		// Handler virtuals.
 		bool inRange(size_t) const override;
 		bool parmCheck(Messages&,size_t) const;
 		std::ostream &visit(std::ostream &) const override;
-		void expand(Messages&,mtext&,Instance&,mstack&) const override;
+		void expand(Messages&,MacroText&,Instance&,mstack&) const override;
 
 		std::string name() const override;
 		static bool test_adv(const std::string &);
@@ -59,7 +60,7 @@ namespace mt {
 
 		//By Library call..
 		static void vis(const std::string&,std::ostream&);
-		static void exp(const std::string,Messages&,mtext&,Instance&,mstack&);
+		static void exp(const std::string,Messages&,MacroText&,Instance&,mstack&);
 		static void list(std::ostream&);
 
 

@@ -16,6 +16,7 @@
 #include "mt/mt.h"
 #include "mt/Internal.h"
 #include "mt/Internals.h"
+#include "mt/MacroText.h"
 
 namespace mt {
 
@@ -95,14 +96,14 @@ namespace mt {
 		minParms = min == -1 ? 0 : min;
 		maxParms = max == -1 ? INT_MAX : max;
 		if(expansion_i.empty()) {
-			expansion = {};
+//			expansion.reset();
 			iterated = false;
 		} else {
 			std::istringstream code(expansion_i);
 			bool advanced = test_adv(expansion_i);
 			Driver driver(errs,code,advanced);
 			parse_result result = driver.define(errs,strip);
-			expansion = result.second.first;
+			expansion.adopt(result.second.first);
 			iterated = result.second.second;
 			if(! result.first ) {
 				ostringstream str;
@@ -113,9 +114,10 @@ namespace mt {
 	}
 
 	//used for pre-parsed definitions (eg in iForSibs)
-	Definition::Definition(const mtext& code,
+	Definition::Definition(MacroText& code,
 		long min, long max, bool iter, bool tP, bool preEx): Handler(),
-		counter(0), _name(":internal:"),iterated(iter), trimParms(tP), preExpand(preEx),expansion(code) {
+		counter(0), _name(":internal:"),iterated(iter), trimParms(tP), preExpand(preEx) {
+		expansion.adopt(code);
 		minParms = min == -1 ? 0 : min;
 		maxParms = max == -1 ? INT_MAX : max;
 	}
@@ -146,10 +148,11 @@ namespace mt {
 		return false;
 	}
 
-	void Definition::expand(Support::Messages& e,mtext& o,Instance& instance, mstack &context) const {
+	void Definition::expand(Support::Messages& e,MacroText& o,Instance& instance, mstack &context) const {
 		if(!parmCheck(e,instance.size())) {
 			return;
 		}
+		//const plist* parms;	//std::vector<MacroText>*
 		if (!preExpand && ! instance.parms.empty()) {
 			//We are evaluating the parms within the context of the calling macro.
 			plist passedParms = std::move(instance.parms);
@@ -159,11 +162,9 @@ namespace mt {
 			//We push this back in order to pass lists to it...
 			context.emplace_back(make_pair(nullptr,&instance)); //Construct the Carriage for injections like %(1+).
 			for (auto &parm : passedParms) {
-				mtext expanded;
+				MacroText expanded;
 				auto i= instance.size();
-				for(auto& token : parm) {
-					token->expand(e,expanded,context);
-				}
+				parm.expand(e,expanded,context);
 				if(instance.size() == i) {
 					instance.parms.emplace_back(std::move(expanded)); //each one as a separate parm!!
 				}
@@ -174,11 +175,9 @@ namespace mt {
 		context.emplace_front(make_pair(this,&instance)); //Construct the Carriage for this.
 		if (iterated) {
 			if(instance.myFor == nullptr) {
-				auto& i = context.front().second->it;
+				iteration& i = context.front().second->it;
 				while ( i.first <= i.second) {
-					for(auto& token: expansion) {
-						token->expand(e,o,context);
-					}
+					expansion.expand(e,o,context);
 					i.first++;
 				}
 			} else {
@@ -189,9 +188,9 @@ namespace mt {
 				iteration* i = &(specific.it); //so we are iterating front (because not all are generated).
 				for (i->first = 1; i->first <= i->second; i->first++) {
 					std::ostringstream value;
-					const mtext& parm = specific.parms[i->first - 1];
+					const MacroText& parm = specific.parms[i->first - 1];
 					Driver::expand(e,parm,value,context);
-					mtext done_parm;
+					MacroText done_parm;
 					specific.myFor->set(value.str(),i->first); value.str("");
 					Driver::doFor(expansion,done_parm,*(specific.myFor));
 					for(auto& token : done_parm) {
@@ -201,9 +200,7 @@ namespace mt {
 				 */
 			}
 		} else {
-			for(auto& token: expansion) {
-				token->expand(e,o,context);
-			}
+			expansion.expand(e,o,context);
 		}
 		context.pop_front();
 	}
@@ -233,7 +230,7 @@ namespace mt {
 			o << "«" << name << "»";
 		}
 	}
-	void Definition::exp(const std::string name,Messages& e,mtext& o,Instance& i,mt::mstack& c) {
+	void Definition::exp(const std::string name,Messages& e,MacroText& o,Instance& i,mt::mstack& c) {
 		auto good = Definition::library.find(name);
 		if(good != Definition::library.end()) {
 			good->second->expand(e,o,i,c);
@@ -264,17 +261,12 @@ namespace mt {
 	}
 
 	std::ostream &Definition::visit(std::ostream &o) const {
-		return Driver::visit(expansion, o);
+		return expansion.visit(o);
 	}
 
-	void Definition::trim(plist& bobs) {
-		for (auto& j : bobs) { //each parameter.
-			while (!j.empty() && (dynamic_cast<Wss *>(j.front().get()) != nullptr) ) {
-				j.pop_front();
-			}
-			while (!j.empty() && (dynamic_cast<Wss *>(j.back().get()) != nullptr) ) {
-				j.pop_back();
-			}
+	void Definition::trim(plist& parameters) {
+		for (auto& parm : parameters) { //each parameter.
+			parm.trim();
 		}
 	}
 

@@ -110,12 +110,12 @@ namespace content {
 	}
 
 
-	pair<bool,const mt::mtext*> Editorial::get(Messages &errs, const node::Content* node, const Segment* segment) {
-		static mt::mtext empty;
-		pair<bool,const mt::mtext*> value = { true, &empty};
+	pair<bool,const mt::MacroText*> Editorial::get(Messages &errs, const node::Content* node, const Segment* segment) {
+		static mt::MacroText empty;
+		pair<bool,const mt::MacroText*> value = { true, &empty};
 		key id;
 		if(sanity(errs,id,node,segment)) {
-			auto cIndex = contentStore.find(id); //unordered_map< key, mt::mtext, hash_pair> contentStore;
+			auto cIndex = contentStore.find(id); //unordered_map< key, MacroText, hash_pair> contentStore;
 			if(cIndex != contentStore.end()) {
 				value.first  = cIndex->second.first;
 				value.second = &(cIndex->second.second);
@@ -125,8 +125,8 @@ namespace content {
 					query->setRow(errs,index->second);
 					string content;
 					query->readfield(errs, "content", content);
-					pair<bool,mt::mtext> toCache={ false, mt::Driver::parse(errs,content,false) };
-					toCache.first=(toCache.second.size() == 1 && dynamic_cast<const mt::Text*>(toCache.second.front().get()) != nullptr);
+					pair<bool,mt::MacroText> toCache={ false, mt::Driver::parse(errs,content,false) };
+					toCache.first=(toCache.second.simple());
 					auto idx = contentStore.emplace(id,std::move(toCache));
 					value.first  = idx.first->second.first;
 					value.second = &idx.first->second.second;

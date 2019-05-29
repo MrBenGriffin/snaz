@@ -40,20 +40,20 @@ namespace mt {
 	 *
 	 * Actions.
 	 * √ On load / initiate the mt system, we be hold all Handlers as unique_ptr and
-	 * returning const Handler* (if necessary) because they should never be changed by anything else.
+	 *   returning const Handler* (if necessary) because they should never be changed by anything else.
 	 *
-	 * Instances should be unique to their context, and referenced via a const*, therefore they do
-	 * not need to be managed using smart pointers.  As, however, they may be amended by the evaluator,
-	 * and pass by reference has a cost, it may be better just to use a * (eep!!) - but NOT to store it.
+	 * √ Instances should be unique to their context, and referenced via a const*, therefore they do
+	 *   not need to be managed using smart pointers.  As, however, they may be amended by the evaluator,
+	 *   and pass by reference has a cost, it may be better just to use a * (eep!!) - but NOT to store it.
 	 *
 	 * (2) Add a MacroText class for token management, and use 'add' or << methods for token management.
 	 *
-	 * Parameter rules.
-	 * (P1) Pass by value when the function does not want to modify the parameter and the value is easy to copy (ints, doubles, char, bool, etc... simple types. std::string, std::vector, and all other STL containers are NOT simple types.)
-	 * (P2) Pass by const pointer when the value is expensive to copy AND the function does not want to modify the value pointed to AND NULL is a valid, expected value that the function handles.
-	 * (P3) Pass by non-const pointer when the value is expensive to copy AND the function wants to modify the value pointed to AND NULL is a valid, expected value that the function handles.
-	 * (P4) Pass by const reference when the value is expensive to copy AND the function does not want to modify the value referred to AND NULL would not be a valid value if a pointer was used instead.
-	 * (P5) Pass by non-const reference when the value is expensive to copy AND the function wants to modify the value referred to AND NULL would not be a valid value if a pointer was used instead.	 *
+	 * Parameter rules: Pass by...
+	 * (P1) .. value when the function does not want to modify the parameter and the value is easy to copy (ints, doubles, char, bool, etc... simple types. std::string, std::vector, and all other STL containers are NOT simple types.)
+	 * (P2) .. const pointer when the value is expensive to copy AND the function does not want to modify the value pointed to AND NULL is a valid, expected value that the function handles.
+	 * (P3) .. non-const pointer when the value is expensive to copy AND the function wants to modify the value pointed to AND NULL is a valid, expected value that the function handles.
+	 * (P4) .. const reference when the value is expensive to copy AND the function does not want to modify the value referred to AND NULL would not be a valid value if a pointer was used instead.
+	 * (P5) .. non-const reference when the value is expensive to copy AND the function wants to modify the value referred to AND NULL would not be a valid value if a pointer was used instead.	 *
 	 *
 	 *
 	 **/
@@ -61,11 +61,11 @@ namespace mt {
 	class Instance;
 	class forStuff;    //inside Instance.h
 	class Handler;
-	using TokenPtr=     std::shared_ptr<Token>;
-	using mtext=		std::deque<TokenPtr>;
-	using parse_result=	std::pair<bool,std::pair<mtext, bool>>;
+	class MacroText;
+//	using MacroText=		MacroText;
+	using parse_result=	std::pair<bool,std::pair<MacroText, bool>>;
 	using iteration=	std::pair<size_t,size_t>;
-	using plist=		std::vector<mtext>;
+	using plist=		std::vector<MacroText>;
 	using nlist=		std::vector<const node::Node *>;
 	using pos=			std::pair<size_t,size_t>;
 	//Instances need to be shared, because of subcontexts in injections.

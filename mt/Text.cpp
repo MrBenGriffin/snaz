@@ -11,41 +11,30 @@ namespace mt {
 
 	Text::Text(std::string w) : Script(std::move(w)) {}
 
+	Text::Text(const Text* o) : Script(o->text) {
+		if(o->text.empty()) {
+			throw bad_alloc();
+		}
+	}
+
 	std::ostream &Text::visit(std::ostream &o) const {
 		o << "“" << text << "”" << std::flush;
 		return o;
 	}
 
-	void Text::expand(Messages& m,mtext &mt,mstack &) const {
-//		if(text.size() > 0x100000) {
-//			assert(true);
-//		}
-		if (!mt.empty()) {
-			Token *back = mt.back().get();
-			auto *textPtr = dynamic_cast<Text *>(back);
-			if (textPtr != nullptr) {
-				size_t newSize = textPtr->text.size() + text.size();
-				textPtr->text.reserve(newSize);
-				textPtr->text.append(text);
-			} else {
-				Wss *wss = dynamic_cast<Wss *>(back);
-				if (wss != nullptr) {
-					std::string ws = wss->get();
-					mt.pop_back();
-					ws.append(text);
-					shared_ptr<Token> ptr = make_shared<Text>(ws);
-					mt.emplace_back(ptr);
-				} else {
-					shared_ptr<Token> ptr = make_shared<Text>(text);
-					mt.emplace_back(ptr);
-				}
-			}
-		} else {
-			Token::add(text,mt);
+	void Text::expand(Messages&,MacroText &mt,mstack &) const {
+		if(!text.empty()) {
+			auto token=make_unique<Text>(this->text);
+			mt.emplace(token);
 		}
 	}
+	
+	unique_ptr<Token> Text::clone() const {
+		std::unique_ptr<Token>derived = std::make_unique<Text>(this);
+		return derived;
+	}
 
-	void Text::subs(mtext& result,const vector<string>& list,const string& prefix) const {
+	void Text::subs(const vector<string>& list,const string& prefix) {
 		size_t start = 0, curr, psize = prefix.size();
 		string valStr;
 		while ((curr=text.find(prefix,start)) != string::npos) {
@@ -64,19 +53,25 @@ namespace mt {
 		if(start < text.size()) {
 			valStr.append(text.substr(start));
 		}
-		Token::add(valStr,result);
+		swap(text,valStr);
 	}
 
-	void Text::doFor(mtext& result,const forStuff& s) const {
+	void Text::doFor(MacroText& result,const forStuff& s) const {
 		string basis(text);
 		Support::fandr(basis,s.stuff[0].first,s.stuff[0].second);
 		Support::fandr(basis,s.stuff[1].first,s.stuff[1].second);
-		Token::add(basis,result);
+
+		if(!basis.empty()) {
+			auto token=make_unique<Text>((basis));
+			result.emplace(token);
+		}
 	}
 
-	void Text::inject(Messages&,mtext& out,mstack&) const {
-		Token::add(text,out);
+	void Text::inject(Messages&,MacroText& out,mstack&) const {
+		if(!text.empty()) {
+			auto token=make_unique<Text>(this->text);
+			out.emplace(token);
+		}
 	}
-
 
 }

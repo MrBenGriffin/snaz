@@ -61,6 +61,20 @@ namespace node {
 			_tw = tw++;
 		}
 	}
+	
+	Node::Node(Node && rhs) noexcept {
+		_tree = rhs._tree;
+		_parent = rhs._parent;
+		_id = rhs._id;
+		_tw = rhs._tw;
+		_tier = rhs._tier;
+		_sibling = rhs._sibling;
+		_weight = rhs._weight;
+		_ref=std::move(rhs._ref);
+		idStr=std::move(rhs.idStr);
+		_comment=std::move(rhs._comment);
+		children=std::move(rhs.children);
+	}
 
 	//-------------------------------------------------------------------
 	void Node::addChild(Messages&,Node* node) {

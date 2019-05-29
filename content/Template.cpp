@@ -48,9 +48,9 @@ namespace content {
 					q->readfield(errs, "break", _break);
 					basis.suffix = Suffix::byRef(errs, _suffix);
 					std::istringstream bodyCode(_macro);
-					basis.code = mt::Driver(errs,bodyCode,mt::Definition::test_adv(_macro)).parse(errs,true);
+					mt::Driver(errs,bodyCode,mt::Definition::test_adv(_macro)).parse(errs,basis.code,true);
 					std::istringstream newlineCode(_break);
-					basis.nl = mt::Driver(errs,newlineCode,mt::Definition::test_adv(_break)).parse(errs,true);
+					mt::Driver(errs,newlineCode,mt::Definition::test_adv(_break)).parse(errs,basis.nl,true);
 					templates.emplace(basis.id,std::move(basis));
 				}
 			}

@@ -17,6 +17,7 @@ namespace mt {
 	using namespace Support;
 	class Script : public Token {
 	protected:
+		friend class MacroText;
 		std::string text;
 	public:
 		explicit Script(std::string);

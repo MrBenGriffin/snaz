@@ -1,4 +1,4 @@
-//	void iExistMedia::expand(Messages& e,mtext& o,Instance& instance,mstack& context) {
+//	void iExistMedia::expand(Messages& e,MacroText& o,Instance& instance,mstack& context) {
 
 // +----+-------------------+----------+-----------+--------------------------+----------------------+
 // | id | ref               | embedded | imglength | imgtype                  | imgbase              |

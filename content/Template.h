@@ -24,8 +24,8 @@ namespace content {
 	public:
 		size_t id;
 		string name;
-		mt::mtext code; //Parsed template.
-		mt::mtext nl; 	//Parsed newline.
+		mt::MacroText code; //Parsed template.
+		mt::MacroText nl; 	//Parsed newline.
 		const node::Suffix* suffix;
 
 		static unordered_map<size_t,Template>   	templates;		//Where templates are stored. Loaded once per build.

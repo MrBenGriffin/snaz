@@ -134,19 +134,24 @@ namespace mt {
 		return basis.empty();
 	}
 
-	void Injection::inject(Messages& errs,mtext &result,mstack &context) const {
+	void Injection::inject(Messages& errs,MacroText &result,mstack &context) const {
 		expand(errs,result,context);
+	}
+
+	unique_ptr<Token> Injection::clone() const {
+		std::unique_ptr<Token>derived = std::make_unique<Injection>(this);
+		return derived;
 	}
 
 	void Injection::final(std::ostream& o) const {
 		visit(o);
 	}
 
-	void Injection::subs(mtext&,const std::vector<std::string>&,const std::string&) const {
+	void Injection::subs(const std::vector<std::string>&,const std::string&) {
 		throw logic_error("shouldn't get to Injection::subs!");
 	}
 
-	void Injection::expand(Messages& errs,mtext &result,mstack &context) const {
+	void Injection::expand(Messages& errs,MacroText &result,mstack &context) const {
 		if (type == It::text) {
 			Token::add(basis,result);
 		} else {
@@ -173,11 +178,11 @@ namespace mt {
 				}
 				if (list) {
 					for(size_t i=value; i <= parmCount; i++) {
-						mtext tmp ;
+						MacroText tmp ;
 						for(auto& j : parms[i - 1]) {
 							j->inject(errs,tmp,context);
 						}
-						context.back().second->parms.emplace_back(std::move(tmp)); //plist is a std::vector<mtext>;
+						context.back().second->parms.emplace_back(std::move(tmp)); //plist is a std::vector<MacroText>;
 					}
 				}
 				if(!stack && !list) {

@@ -10,6 +10,7 @@
 #include "support/Message.h"
 #include "mt/using.h"
 
+
 using namespace Support;
 
 namespace mt {
@@ -19,8 +20,8 @@ namespace mt {
 		virtual ~Token() = default;
 
 		//virtual
-		virtual void expand(Messages&,mtext&,mstack&) const;
-		virtual void doFor(mtext&,const forStuff&) const;
+		virtual void expand(Messages&,MacroText&,mstack&) const;
+		virtual void doFor(MacroText&,const forStuff&) const;
 		virtual bool empty() const;
 
 		//pure virtual
@@ -28,13 +29,9 @@ namespace mt {
 		virtual std::string get() const =0;             	 //return text final rendered.
 		virtual std::ostream& visit(std::ostream&) const =0; //return text version of token.
 		virtual void final(std::ostream&) const=0;           //return text final rendered.
-		virtual void inject(Messages&,mtext&,mstack&) const = 0;
-		virtual void subs(mtext&,const std::vector<std::string>&,const std::string&) const =0;
-
-		// My function!!
-		static void add(TokenPtr&,mtext&);
-		static void add(std::string,mtext&);
-
+		virtual void inject(Messages&,MacroText&,mstack&) const = 0;
+		virtual unique_ptr<Token> clone() const = 0;
+		virtual void subs(const std::vector<std::string>&,const std::string&) =0;
 
 	};
 }

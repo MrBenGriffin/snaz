@@ -24,6 +24,9 @@ namespace content {
 		static unordered_map<string,Segment*>  	refs;		//pointer to layout via reference. Loaded per tech.
 		static unordered_map<size_t,Segment>   	segments;	//Where segment data is stored. Loaded once per build.
 	public:
+		Segment()= default;
+		Segment(const Segment&) = delete;
+		Segment(Segment &&) noexcept; //ensure that we do not use a copy constructor on move..
 		static const Segment* get(Messages &,size_t);
 		static const Segment* get(Messages &,const Layout*, string);
 		static void load(Messages&,Connection&,buildKind);
@@ -35,7 +38,7 @@ namespace content {
 		string name;
 		string kind;
 		string  sig;	//eg SEGTM (shoud work this out as an enum...)
-		mt::mtext nl; 	//Parsed newline.
+		mt::MacroText nl; 	//Parsed newline.
 
 	};
 }

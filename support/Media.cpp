@@ -19,6 +19,7 @@
 #include "mt/Driver.h"
 #include "mt/Instance.h"
 #include "mt/Definition.h"
+#include "mt/MacroText.h"
 #include "content/Segment.h"
 
 namespace Support {
@@ -69,14 +70,14 @@ namespace Support {
 				} else {
 					metrics.push(node,nullptr);
 				}
-				directory = Driver::expand(errs,directory,context);
+				directory = MacroText::expand(errs,directory,context);
 				metrics.pop();
 			} else {
-				directory = Driver::expand(errs,directory,context);
+				directory = MacroText::expand(errs,directory,context);
 				media->readfield(errs,"imgbase",imgbase);
 			}
 		} else {
-			directory = Driver::expand(errs,directory,context);
+			directory = MacroText::expand(errs,directory,context);
 			media->readfield(errs,"imgbase",imgbase);
 		}
 		wsstrip(directory);
@@ -117,19 +118,17 @@ namespace Support {
 				tolist(parms,parmList,",");
 				plist parameters;
 				for(auto& i: parms) {
-					mtext parm;
-					Token::add(i,parm);
+					MacroText parm;
+					parm.add(i);
 					parameters.emplace_back(std::move(parm));
 				}
 				node::Metrics iMetrics(metrics);
 				std::ostringstream result;
-				mtext resultTokens;
+				MacroText resultTokens;
 				mstack empty;
-				Instance instance(parameters,&iMetrics);
+				Instance instance(&parameters,&iMetrics);
 				transform->second.expand(errs,resultTokens,instance,empty);
-				for (auto &i : resultTokens) {
-					i->final(result);
-				}
+				resultTokens.expand(errs,result,empty);
 				transformCode = result.str();
 			} else {
 				ostringstream msg;

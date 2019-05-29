@@ -14,6 +14,15 @@ namespace content {
 	unordered_map<string,Segment*>  		Segment::refs;				//pointer to layout via reference. Loaded per tech.
 	unordered_map<size_t,Segment>   		Segment::segments;			//Where templates are stored. Loaded once per build.
 
+	Segment::Segment(Segment && rhs) noexcept {
+		id = rhs.id;
+		type = rhs.type;
+		name=std::move(rhs.name);
+		kind=std::move(rhs.kind);
+		sig=std::move(rhs.sig);	//eg SEGTM (shoud work this out as an enum...)
+		nl.adopt(rhs.nl); 	//Parsed newline.
+	}
+
 	const Segment* Segment::get(Messages &errs,size_t id) {
 		const Segment* result =  nullptr;
 		auto found = segments.find(id);
@@ -77,8 +86,7 @@ namespace content {
 //					fileEncode(basis.ref);
 					q->readfield(errs,"br",newline); //newline macrotext.
 					std::istringstream newlineCode(newline);
-					basis.nl = mt::Driver(errs,newlineCode,mt::Definition::test_adv(newline)).parse(errs,true);
-
+					mt::Driver(errs,newlineCode,mt::Definition::test_adv(newline)).parse(errs,basis.nl,true);
 					auto ins = segments.emplace(basis.id,std::move(basis));
 					if(ins.second) {
 						Segment* seg = &(ins.first->second);

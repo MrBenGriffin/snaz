@@ -2,14 +2,19 @@
 // Created by Ben on 2019-01-23.
 //
 
-#include "mt.h"
-#include "Definition.h"
+#include "mt/mt.h"
+#include "mt/Definition.h"
+#include "mt/MacroText.h"
 
 namespace mt {
 
 	Macro::Macro(std::string n) : _name(std::move(n)) {};
 
-	Macro::Macro(std::string n,plist p) : _name(std::move(n)),parms(std::move(p)) {}
+	Macro::Macro(std::string n,plist p) : _name(std::move(n)),parms(std::move(p)) {
+		while (!parms.empty() && parms.back().empty()) {
+			parms.pop_back();
+		}
+	}
 
 	void Macro::final(std::ostream& o) const {
 		visit(o);
@@ -22,49 +27,60 @@ namespace mt {
 	bool Macro::empty() const {
 		return false;
 	}
-
-	void Macro::doFor(mtext& result,const forStuff& stuff) const {
-		auto ret = make_shared<Macro>(_name);
-		for(auto& parm : parms) {
-			mtext nParm;
-			Driver::doFor(parm,nParm,stuff);
-			ret.get()->parms.emplace_back(nParm);
+	
+	Macro::Macro(const Macro* other) : _name(other->_name) {
+		for(auto& parm : other->parms) {
+			MacroText nParm;
+			nParm.add(parm);
+			parms.emplace_back(move(nParm));
 		}
-		result.emplace_back(ret);
+	}
+	
+	unique_ptr<Token> Macro::clone() const {
+		std::unique_ptr<Token>derived = std::make_unique<Macro>(this);
+		return derived;
 	}
 
-	void Macro::inject(Messages& e,mtext& result,mstack &context) const {
-		auto ret = make_shared<Macro>(_name);
+	void Macro::doFor(MacroText& result,const forStuff& stuff) const {
+		auto token=make_unique<Macro>(_name);
 		for(auto& parm : parms) {
-			mtext nParm;
-			Driver::inject(parm,e,nParm,context);
-			ret.get()->parms.emplace_back(nParm);
+			MacroText nParm;
+			parm.doFor(nParm,stuff);
+			token->parms.emplace_back(move(nParm));
 		}
-		result.emplace_back(ret);
+		result.emplace(token);
 	}
 
-	void Macro::subs(mtext& result,const std::vector<std::string>& subs,const std::string& prefix) const {
-		auto ret = make_shared<Macro>(_name);
+	void Macro::inject(Messages& e,MacroText& result,mstack &context) const {
+		auto token=make_unique<Macro>(_name);
 		for(auto& parm : parms) {
-			mtext nParm;
-			Driver::subs(parm,nParm,subs,prefix);
-			ret.get()->parms.emplace_back(nParm);
+			MacroText nParm;
+			parm.inject(e,nParm,context);
+			token->parms.emplace_back(move(nParm));
 		}
-		result.emplace_back(ret);
+		result.emplace(token);
 	}
 
-	void Macro::expand(Messages& errs,mtext& result,mstack &context) const {
+	void Macro::subs(const std::vector<std::string>& subs,const std::string& prefix) {
+		for(auto& parm : parms) {
+			parm.subs(subs,prefix);
+		}
+	}
+
+	void Macro::expand(Messages& errs,MacroText& result,mstack &context) const {
 		auto librarian = Definition::library.find(_name);
 		if(librarian != Definition::library.end()) {
-			// Expand passes by reference. Instance& (P5)
-			Instance instance(parms,context.back().second->metrics);
 			try {
+				// Expand passes by reference. Instance& (P5)
+				Instance instance(&parms,context.back().second->metrics);
 				librarian->second->expand(errs,result,instance,context);
 			} catch (...) {}
 		} else {
-			auto macro = make_shared<Macro>(_name,parms);
-			result.emplace_back(macro); //Because the method is const, 'this' is a const*
-			errs << Message(error,_name + " not found.");
+			ostringstream err;
+			err << "The macro instance '" << flush;
+			visit(err);
+			err << flush << "' was not recognised. It will be skipped.";
+			errs << Message(error,err.str());
 		}
 	}
 
@@ -72,9 +88,7 @@ namespace mt {
 		result << "⸠" << _name;
 		for (auto &p : parms) {
 			result << "「";
-			if (!p.empty()) {
-				Driver::visit(p, result);
-			}
+			p.visit(result);
 			result << "」";
 		}
 		return result;

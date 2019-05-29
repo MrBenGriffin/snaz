@@ -68,7 +68,7 @@ void Internal::startup(Messages& log,Db::Connection& _sql,buildKind kind) {
 		doSort(list,sort);
 		plist result;
 		for(auto& i : list) {
-			mtext parm;
+			MacroText parm;
 			Token::add(i,parm);
 			result.emplace_back(std::move(parm));
 		}
@@ -87,7 +87,7 @@ void Internal::startup(Messages& log,Db::Connection& _sql,buildKind kind) {
 		doSort(list,sort);
 		plist result;
 		for(auto& i : list) {
-			mtext parm;
+			MacroText parm;
 			Token::add(i,parm);
 			result.emplace_back(std::move(parm));
 		}
@@ -101,7 +101,7 @@ void Internal::startup(Messages& log,Db::Connection& _sql,buildKind kind) {
 		doSort(list,sort);
 		plist result;
 		for(auto& i : list) {
-			mtext parm;
+			MacroText parm;
 			Token::add(i,parm);
 //			parm.emplace_back(new Text(i));
 			result.emplace_back(std::move(parm));
@@ -172,7 +172,7 @@ void Internal::startup(Messages& log,Db::Connection& _sql,buildKind kind) {
 							auto code = edit.get(*errs, node, segment);
 							if (!code.first) { //need to do IO as well..
 								if (context && metrics) {
-									mtext result;
+									MacroText result;
 									metrics->push(node, segment);
 									for (auto &token: *(code.second)) {
 										token->expand(*errs, result, *context);

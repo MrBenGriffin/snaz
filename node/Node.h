@@ -48,12 +48,13 @@ namespace node {
 		size_t _weight;					// size of my branch.
 		string _ref;						// Unique reference string (eg, LinkRef.
 		string idStr;						// As we get this from the database, we may as well store the string 'for free'.
-		string _comment;		//comment, used by content as 'scratch'.
+		string _comment;				// comment, used by content as 'scratch'.
 		vector<const Node *> children;      // List of children
 		void common(Messages&,Db::Query*,size_t&,size_t&);
 
 	public:
 		Node() = delete;
+		Node(Node &&) noexcept; //ensure that we do not use a copy constructor on move..
 		explicit Node(Tree&);
 		virtual flavour cultivar() const = 0;
 

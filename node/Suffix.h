@@ -23,11 +23,14 @@ namespace node {
 
 	private:
 		static unordered_map<size_t,Suffix> nodes;
-		static unordered_map<string,Suffix*> refs; //reference pointers.
+		static unordered_map<string,const Suffix*> refs; //reference pointers.
 
 	public:
 		static Tree suffixes;
 		Suffix();
+		Suffix(Suffix &&) noexcept; //ensure that we do not use a copy constructor on move..
+		Suffix(const Suffix&) = delete;
+
 		flavour cultivar() const override { return flavour::suffix; }
 
 		const Node* node(Messages&, size_t, bool= false) const override; //by id.
@@ -54,7 +57,7 @@ namespace node {
 		bool _exec;
 		bool _batch;
 		bool _macro;
-		mt::mtext code;
+		mt::MacroText code;
 
 		~Suffix() override;            //deleting a Node deletes all of it's children
 	};

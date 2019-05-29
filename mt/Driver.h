@@ -18,9 +18,11 @@
 #include <functional>
 #include <memory>
 
-#include "mt.h"
 #include "parser.tab.hpp"
 #include "support/Message.h"
+
+#include "mt/mt.h"
+#include "mt/MacroText.h"
 
 namespace mt {
 	using namespace Support;
@@ -30,12 +32,9 @@ namespace mt {
 	public:
 
 		Driver(Messages&,std::istream &stream, bool);
-
 		virtual ~Driver();
 
-		mtext parse(Messages&,bool);
-		parse_result define(Messages&,bool);
-//		void expand(Messages&,std::ostream&,mstack&);
+		void define(Messages&,parse_result&,bool);
 
 		void new_macro( const std::string & );
 		void storeWss(const std::string &);
@@ -45,26 +44,19 @@ namespace mt {
 		void store_macro();
 		void setPos(pos& p) {position = std::move(p);}
 
-		static std::string expand(Messages&,std::string&,mstack&); //dirty
-		static mtext parse(Messages&,const std::string&,bool = false);
-		static void doFor(const mtext&,mtext&,const forStuff&);
-		static void expand(Messages&,const mtext&,std::ostream&,mstack&);
-
-		static std::ostream& visit(const Token&, std::ostream&);
-		static std::ostream& visit(const mtext&, std::ostream&);
-		static void inject(const mtext&,Messages&,mtext&,mstack&);
-		static void subs(const mtext&,mtext&,const std::vector<std::string>&,const std::string&);
+		void parse(Messages&,MacroText&,bool);
+		static void parse(Messages&,MacroText&,const std::string&,bool = false);
 
 	private:
 		const std::istream*			source; //only used for parse errors..
-		static int					accept;
-		pos 						position;
-		bool						iterated;
+		static int							accept;
+		pos 										position;
+		bool										iterated;
 
-		mtext						final;
-		mtext						parm;
+		MacroText*				_final;
+		MacroText					parm;
 
-		std::forward_list< std::unique_ptr<Macro> >	macro_stack;
+		std::forward_list<Macro>	macro_stack;
 
 		Parser  *parser   = nullptr;
 		Scanner *scanner  = nullptr;

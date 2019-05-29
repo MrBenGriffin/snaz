@@ -23,11 +23,11 @@ namespace mt {
 		Handler() = default;
 		virtual ~Handler() = default;
 		virtual bool inRange(size_t) const;
-		virtual void expand(Messages&,mtext&,Instance&,mstack&) const = 0;
+		virtual void expand(Messages&,MacroText&,Instance&,mstack&) const = 0;
 		virtual std::ostream& visit(std::ostream&) const;
-		virtual void inject(Messages&,mtext&,mstack&) const;
-		virtual void doFor(mtext&,const forStuff&) const;
-		virtual void subs(mtext&,std::vector<std::string>& ,const std::string&) const;
+		virtual void inject(Messages&,MacroText&,mstack&) const;
+		virtual void doFor(MacroText&,const forStuff&) const;
+		virtual void subs(MacroText&,std::vector<std::string>& ,const std::string&) const;
 		virtual std::string name() const;
 	};
 

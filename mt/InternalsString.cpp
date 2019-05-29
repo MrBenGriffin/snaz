@@ -8,7 +8,7 @@
 namespace mt {
 	using namespace Support;
 
-	void iLeft::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
+	void iLeft::expand(Messages& e,MacroText& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		string string_to_cut = my.parm(1);
 		string chars_to_keep = my.parm(2);
@@ -24,7 +24,7 @@ namespace mt {
 		my.logic(result,3); // @iLeft(text,term,?,T,F)
 	}
 
-	void iLength::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
+	void iLength::expand(Messages& e,MacroText& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		size_t value=0;
 		if(Support::length(my.parm(1),value)) {
@@ -34,7 +34,7 @@ namespace mt {
 		}
 	}
 
-	void iMid::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
+	void iMid::expand(Messages& e,MacroText& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		string string_to_cut = my.parm(1);
 		auto start = integer(my.parm(2));
@@ -56,7 +56,7 @@ namespace mt {
 		}
 	}
 
-	void iPosition::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
+	void iPosition::expand(Messages& e,MacroText& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		size_t value=0;
 		if(Support::position(my.parm(2),my.parm(1),value)) {
@@ -66,7 +66,7 @@ namespace mt {
 		}
 	}
 
-	void iRegex::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
+	void iRegex::expand(Messages& e,MacroText& o,Instance& instance,mstack& context) const {
 		if(Regex::available(e)) {
 			InternalInstance my(this,e,o,instance,context);
 			if(my.count > 2) { //otherwise there's nothing to do.
@@ -84,10 +84,10 @@ namespace mt {
 					size_t count = 0;
 					size_t start = 0;
 					size_t lastEnd = string::npos;
-					const mtext *subst = my.praw(2);
+					const MacroText *subst = my.praw(2);
 					string pattern = my.parm(1);
 					size_t base_len = scope.length();
-					mtext result;
+					MacroText result;
 					while (start <= base_len) {
 						int matches = Regex::matcher(e, pattern, scope, (int) start, ov, ovc);
 						if (matches <= 0) {
@@ -104,11 +104,11 @@ namespace mt {
 								matchend++;
 							}
 							if (matchend <= base_len) {
-								Token::add(string(scope, start, matchend - start),result);
+								result.add(string(scope, start, matchend - start));
 							}
 							start = matchend;
 						} else {
-							Token::add(string(scope, start, matchstart - start),result);
+							result.add(string(scope, start, matchstart - start));
 							vector<string> subs;
 							for (size_t n = 0; n < 10; n++) {
 								string substr;
@@ -126,7 +126,7 @@ namespace mt {
 //							we have a praw (substitute).
 //							we need to use the subs as injection points on the texts within it.
 //							Regex substitutes are \1 \2 etc..
-							Driver::subs(*subst,result,subs,"\\");
+							result.subs(subs,"\\");
 							start = matchend;
 							lastEnd = matchend;
 							count++;
@@ -134,12 +134,12 @@ namespace mt {
 						count++;
 					}
 					if (count != 0 && start < base_len) {
-						Token::add(string(scope, start, base_len - start),result);
+						result.add(string(scope, start, base_len - start));
 					}
 					delete[] ov;
 					if(!result.empty()) {
 						std::ostringstream expr;
-						Driver::expand(e, result, expr, context);
+						result.expand(e, expr, context);
 						final = expr.str();
 					}
 				}
@@ -150,18 +150,18 @@ namespace mt {
 		}
 	}
 
-	void iRembr::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
+	void iRembr::expand(Messages& e,MacroText& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		string result = my.parm(1);
 		tabstrip(result); 	//should we strip out crlf also?!
 		fandr(result,"\n"); //Should this be here?!
 		my.set(result);
 	}
-	void iRembrp::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
+	void iRembrp::expand(Messages& e,MacroText& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		my.set(my.parm(1));
 	}
-	void iReplace::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
+	void iReplace::expand(Messages& e,MacroText& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		if(my.count > 2) { //otherwise there's nothing to do. It's legal, but nothing to do this time.
 			string search = my.parm(1);
@@ -174,7 +174,7 @@ namespace mt {
 		}
 	}
 
-	void iRight::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
+	void iRight::expand(Messages& e,MacroText& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		string string_to_cut = my.parm(1);
 		string chars_to_keep = my.parm(2);
@@ -190,7 +190,7 @@ namespace mt {
 		my.logic(result,3); // @iRight(text,term,?,T,F)
 	}
 
-	void iTrim::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
+	void iTrim::expand(Messages& e,MacroText& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		string stringToTrim = my.parm(1);
 		Support::trim(stringToTrim);

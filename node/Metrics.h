@@ -35,6 +35,7 @@ namespace node {
 
 		const Content *current;
 		const content::Template *currentTemplate;
+		std::stack<bool> nullStack;
 		std::stack<const content::Segment *> segmentStack;
 		std::deque<const Content *> nodeStack;    //current node - used to pass to built-in functions
 		size_t page;

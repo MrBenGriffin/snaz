@@ -16,14 +16,14 @@
 namespace mt {
 	using namespace Support;
 
-	void iExists::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
+	void iExists::expand(Messages& e,MacroText& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		string key = my.parm(1);
 		auto sr = storage.find(key);
 		my.logic(sr.found,2); //@iExists(A,T,F)=1
 	}
 
-	void iGet::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
+	void iGet::expand(Messages& e,MacroText& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		string key = my.parm(1);
 		auto sr = storage.find(key);
@@ -32,7 +32,7 @@ namespace mt {
 		}
 	}
 
-	void iSet::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
+	void iSet::expand(Messages& e,MacroText& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		string key = my.parm(1);
 		string value;
@@ -43,7 +43,7 @@ namespace mt {
 	}
 
 
-	void iAppend::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
+	void iAppend::expand(Messages& e,MacroText& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		string key = my.parm(1);
 		if(my.count == 2) {
@@ -52,14 +52,14 @@ namespace mt {
 		}
 	}
 
-	void iReset::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
+	void iReset::expand(Messages& e,MacroText& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		string key = my.parm(1);
 		storage.erase(key);
 	}
 
 
-	void iSetCache::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
+	void iSetCache::expand(Messages& e,MacroText& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		if (my.count == 2 && my.metrics != nullptr) {
 			string key = my.parm(1);
@@ -72,21 +72,21 @@ namespace mt {
 		}
 	}
 
-	void iSig::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
+	void iSig::expand(Messages& e,MacroText& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		string key = my.parm(1);
 		auto sr = storage.find(key);
 		my.logic(sr.found && !sr.result.empty(),2); //@iSig(A,T,F)=2
 	}
 
-	void iUse::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
+	void iUse::expand(Messages& e,MacroText& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		string key = my.parm(1);
 		auto sr = storage.take(key);
 		my.set(sr.result);
 	}
 
-	void iKV::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
+	void iKV::expand(Messages& e,MacroText& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		string p1, p2, basis;
 		string repo_name = my.parm(1);
@@ -239,7 +239,7 @@ namespace mt {
 		}
 	}
 
-	void iList::expand(Messages& e,mtext& o,Instance& instance,mstack& context) const {
+	void iList::expand(Messages& e,MacroText& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		//fn: add,delete,pop,unique_add,has,count,size,nodes[:max],for[:max]
 		string name = my.parm(1);

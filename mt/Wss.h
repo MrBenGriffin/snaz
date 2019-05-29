@@ -16,19 +16,21 @@ namespace mt {
 
 	class Wss : public Script {
 	private:
-		friend class Token;
-		static std::stack<const mtext*> newline;
+		static std::stack<const MacroText*> newline;
 	public:
 		explicit Wss(std::string );
+		explicit Wss(const Wss*);
 		~Wss() override = default;
 		std::string name() const override { return "`wss`"; }
 
 		std::ostream& visit(std::ostream&) const override;
-		void expand(Messages&,mtext&,mstack&) const override;
-		void inject(Messages&,mtext&,mstack&) const override;
-		void subs(mtext&,const std::vector<std::string>&,const std::string&) const override;
+		void expand(Messages&,MacroText&,mstack&) const override;
+		void inject(Messages&,MacroText&,mstack&) const override;
+		void subs(const std::vector<std::string>&,const std::string&) override;
+		void doFor(MacroText&,const forStuff&) const override {}
+		unique_ptr<Token> clone() const override;
 
-		static void push(const mtext*);
+		static void push(const MacroText*);
 		static void pop();
 
 	};

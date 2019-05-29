@@ -11,7 +11,7 @@
 
 namespace mt {
 
-	InternalInstance::InternalInstance(const Internal *thing,Messages& e,mtext &o, Instance& i, mstack &c) :
+	InternalInstance::InternalInstance(const Internal *thing,Messages& e,MacroText &o, Instance& i, mstack &c) :
 			owner(thing),output(&o), instancePtr(&i), context(&c), errs(&e) {
 		parms = &(instancePtr->parms);
 		count = parms->size() == 1 ? parms->front().empty() ? 0 : 1 : parms->size();
@@ -74,22 +74,22 @@ namespace mt {
 		if(maxSize < nodes.size()) {
 			nodes.resize(maxSize);
 		}
-		plist result; //using plist=std::vector<mtext>;
+		plist result; //using plist=std::vector<MacroText>;
 		for(auto& i : nodes) {
-			mtext parm;
+			MacroText parm;
 			Token::add(i->ids(),parm);
 			result.emplace_back(parm);
 		}
 		return result;
 	}
 
-	void InternalInstance::generate(nlist& nodes,const mtext* program,const string value,const string countStr) {
+	void InternalInstance::generate(nlist& nodes,const MacroText* program,const string value,const string countStr) {
 		if(program != nullptr && !program->empty()) { // from an empty parm..
 			forStuff stuff(value,countStr);
 			size_t parmCount = 1;
 			for(auto& i: nodes) {
 				stuff.set(i->ids(),parmCount);
-				mtext paramOut;  //this will be the program, substituted correctly.
+				MacroText paramOut;  //this will be the program, substituted correctly.
                 auto& code = *program;
                 Driver::doFor(code,paramOut,stuff);
                 for(auto& j : paramOut) {
@@ -100,7 +100,7 @@ namespace mt {
 		}
 	}
 
-	void InternalInstance::generate(plist& parameters,const mtext* program,const string value,const string countStr) {
+	void InternalInstance::generate(plist& parameters,const MacroText* program,const string value,const string countStr) {
 		//parms,code,vToken,cToken
 		if(program != nullptr && !program->empty()) { // from an empty parm..
 			forStuff stuff(value,countStr);
@@ -109,7 +109,7 @@ namespace mt {
 				ostringstream result;
 				Driver::expand(*errs,paramIn,result,*context);
 				stuff.set(result.str(),parmCount);
-				mtext paramOut;  //this will be the program, substituted correctly.
+				MacroText paramOut;  //this will be the program, substituted correctly.
 				Driver::doFor(*program,paramOut,stuff);
 				for(auto& j : paramOut) {
 					j->expand(*errs,*output,*context);
@@ -151,7 +151,7 @@ namespace mt {
 		}
 	}
 
-	const mtext* InternalInstance::praw(size_t i) {
+	const MacroText* InternalInstance::praw(size_t i) {
         return (count >= i || parms->size() >= i ) ? &(*parms)[i -1] : nullptr;
 	}
 

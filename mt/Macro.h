@@ -17,6 +17,7 @@ namespace mt {
 		* It may be PART of a usermacro definition.
 		* With a context, it can be evaluete
 	**/
+	class MacroText;
 	class Macro : public Token {
 
 	public:
@@ -27,15 +28,17 @@ namespace mt {
 		bool empty() const override;
 		void final(std::ostream&) const override;     //return final text.
 		std::ostream& visit(std::ostream&) const override;
-		void inject(Messages&,mtext&,mstack&) const override;
-		void doFor(mtext&,const forStuff&) const override;
-		void subs(mtext&,const std::vector<std::string>&,const std::string&) const override;
-		void expand(Messages&,mtext&,mstack&) const override;
+		void inject(Messages&,MacroText&,mstack&) const override;
+		void doFor(MacroText&,const forStuff&) const override;
+		void subs(const std::vector<std::string>&,const std::string&) override;
+		void expand(Messages&,MacroText&,mstack&) const override;
 		std::string name() const override { return _name; }
+		unique_ptr<Token> clone() const override;
 
 		//used for expanding injections, etc. not sure if this should generate a copy or not..
 
 		explicit Macro(std::string);
+		explicit Macro(const Macro*);
 		Macro(std::string,plist);
 		~Macro() override = default;
 	};

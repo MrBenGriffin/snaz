@@ -19,10 +19,39 @@ namespace node {
 
 	Tree Suffix::suffixes("Suffixes");
 	unordered_map<size_t,Suffix> Suffix::nodes;
-	unordered_map<string,Suffix*> Suffix::refs;
+	unordered_map<string,const Suffix*> Suffix::refs;
 
 	Suffix::Suffix() : Node(suffixes),last(nullptr),_output(true) {}
+	
+	Suffix::Suffix(Suffix && rhs) noexcept : Node(suffixes) {
+		_tree = rhs._tree;
+		_parent = rhs._parent;
+		_id = rhs._id;
+		_tw = rhs._tw;
+		_tier = rhs._tier;
+		_sibling = rhs._sibling;
+		_weight = rhs._weight;
+		_ref=std::move(rhs._ref);
+		idStr=std::move(rhs.idStr);
+		_comment=std::move(rhs._comment);
+		children=std::move(rhs.children);
 
+//		(Node(&rhs));
+		last = rhs.last;
+		_title=std::move(rhs._title);
+		_script=std::move(rhs._script);
+		_output = rhs._output;
+		_terminal = rhs._terminal;
+		_exec = rhs._exec;
+		_batch = rhs._batch;
+		_macro = rhs._macro;
+		code.adopt(rhs.code); 	//Parsed newline.
+	}
+
+	/*
+	//only publicly available via const..
+*/
+	
 	void Suffix::loadTree(Messages& errs, Connection& sql,size_t,buildKind) {
 		size_t baked_tw = 0;  //we won't be incrementing this as we can use the native tw. But we need to declare it.
 		Timing& times = Timing::t();
@@ -74,29 +103,33 @@ namespace node {
 				 */
 				size_t parent = 0;
 				while(q->nextrow()) {
-					Suffix suffix;
-					suffix.common(errs,q,parent,baked_tw);
+//					auto suffix = make_unique<Suffix>();
+					Suffix _suffix;
+					Suffix* suffix = &_suffix;
+					suffix->common(errs,q,parent,baked_tw);
 					// Specific Suffix Values.
-					suffix._output = (suffix._ref != "XXX");
-					q->readfield(errs,"title",suffix._title);
-					q->readfield(errs,"comment",suffix._comment);		// The comment as text
-					q->readfield(errs,"macro",suffix._macro);			// is the comment a macrotext to generate the actual suffix? (always terminal).
-					q->readfield(errs,"terminal",suffix._terminal);		// Is this a 'final' suffix?
-					if(!suffix._terminal) {
-						q->readfield(errs,"scriptpath",suffix._script);	// Script to handle process of suffix mapping.
-						q->readfield(errs,"exec",suffix._exec);			// Run as executable?
-						q->readfield(errs,"batch",suffix._batch);		// Batch process?
+					suffix->_output = (suffix->_ref != "XXX");
+					q->readfield(errs,"title",suffix->_title);
+					q->readfield(errs,"comment",suffix->_comment);		// The comment as text
+					q->readfield(errs,"macro",suffix->_macro);			// is the comment a macrotext to generate the actual suffix? (always terminal).
+					q->readfield(errs,"terminal",suffix->_terminal);		// Is this a 'final' suffix?
+					if(!suffix->_terminal) {
+						q->readfield(errs,"scriptpath",suffix->_script);	// Script to handle process of suffix mapping.
+						q->readfield(errs,"exec",suffix->_exec);			// Run as executable?
+						q->readfield(errs,"batch",suffix->_batch);		// Batch process?
 					}
-					if(suffix._macro) {
-						std::istringstream program(suffix._comment);
-						suffix.code = mt::Driver(errs,program,mt::Definition::test_adv(suffix._comment)).parse(errs,true);
+					if(suffix->_macro) {
+						std::istringstream program(suffix->_comment);
+						mt::Driver(errs,program,mt::Definition::test_adv(suffix->_comment)).parse(errs,suffix->code,true);
 					}
-					auto ins = nodes.emplace(suffix._id,std::move(suffix));
+					//unordered_map<size_t,Suffix>
+					auto ins = nodes.emplace(suffix->_id,std::move(_suffix));
 					if(ins.second) {
 						Suffix* node = &(ins.first->second);
 						suffixes.add(errs,node,parent);
-						refs.emplace(node->_ref,node);
+						refs.emplace(node->ref(),std::move(node));
 					}
+			
 				}
 			}
 			sql.dispose(q);

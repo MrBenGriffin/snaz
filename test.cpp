@@ -202,7 +202,7 @@ namespace testing {
 							mt::Definition macro(*msgs,name,pcode,0,-1,false,false,false);
 							macro.visit(expansion);
 						} else {
-							mt::mtext structure = driver.parse(*msgs,false); 	//bool advanced, bool strip
+							mt::MacroText structure = driver.parse(*msgs,false); 	//bool advanced, bool strip
 							mt::Driver::visit(structure,expansion);
 						}
 						if(msgs->marked()) {
@@ -295,11 +295,11 @@ namespace testing {
 						std::istringstream code(pprogram);
 						bool advanced = mt::Definition::test_adv(pprogram);
 						mt::Driver driver(*msgs,code,advanced);
-						mt::mtext structure = driver.parse(*msgs,false); //bool advanced, bool strip
+						mt::MacroText structure = driver.parse(*msgs,false); //bool advanced, bool strip
                         pexpected = expected;
 						wss(pexpected,false);
 						ostringstream expansion; //need to set node!
-						driver.expand(*msgs,structure,expansion,context);
+						structure.expand(*msgs,expansion,context);
 						if(!error_test) {
 							bool testPassed = false;
 							if(regex_test) {
