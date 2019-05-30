@@ -3,6 +3,7 @@
 //
 
 #include <sstream>
+#include <cstring>
 #include "support/Encode.h"
 #include "support/Fandr.h"
 #include "support/Message.h"
