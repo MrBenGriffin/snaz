@@ -69,7 +69,7 @@ void Build::run(Messages &errs,Connection* _sql) {
 	} else {
 		sql = _sql;
 	}
-	std::cout << "Content-type: text/html" << endl << endl << "<!DOCTYPE html>" << endl << "<html><head><title>Macrotext</title><body><pre>";
+	std::cout << "Content-type: text/html" << endl << "Status: 200 OK" << endl << endl << "<!DOCTYPE html>" << endl << "<html><head><title>Macrotext</title><body><pre>";
 	Env& env = Env::e();
 	mt::Definition::startup(errs); //initialise internals
 	Date date;
