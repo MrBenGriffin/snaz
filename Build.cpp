@@ -69,6 +69,7 @@ void Build::run(Messages &errs,Connection* _sql) {
 	} else {
 		sql = _sql;
 	}
+	std::cout << "Content-type: text/html" << endl << endl << "<!DOCTYPE html>" << endl << "<html><head><title>Macrotext</title><body><pre>";
 	Env& env = Env::e();
 	mt::Definition::startup(errs); //initialise internals
 	Date date;
@@ -88,6 +89,8 @@ void Build::run(Messages &errs,Connection* _sql) {
 			build(errs);
 		} break;
 	}
+	std::cout << "</pre></body></html>" << endl;
+
 }
 void Build::tests(Messages &errs) {
 	mt::Definition::load(errs,*sql,_current); // This is quite slow.
