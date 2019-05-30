@@ -84,7 +84,8 @@ namespace mt {
 					size_t count = 0;
 					size_t start = 0;
 					size_t lastEnd = string::npos;
-					const MacroText *subst = my.praw(2);
+//					MacroText subst;
+//					subst.add(my.praw(2));
 					string pattern = my.parm(1);
 					size_t base_len = scope.length();
 					MacroText result;
@@ -123,10 +124,9 @@ namespace mt {
 								}
 								subs.push_back(substr);
 							}
-//							we have a praw (substitute).
 //							we need to use the subs as injection points on the texts within it.
 //							Regex substitutes are \1 \2 etc..
-							result.subs(subs,"\\");
+							my.praw(2)->subs(result,subs,"\\");
 							start = matchend;
 							lastEnd = matchend;
 							count++;

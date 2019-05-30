@@ -25,9 +25,11 @@ namespace mt {
 		newline.pop();
 	}
 	
-	unique_ptr<Token> Wss::clone() const {
-		std::unique_ptr<Token>derived = std::make_unique<Wss>(this);
-		return derived;
+	void Wss::clone(MacroText &out) const {
+		if(!text.empty()) {
+			auto token=make_unique<Wss>(this->text);
+			out.emplace(token);
+		}
 	}
 
 	void Wss::expand(Messages&,MacroText &out, mstack &) const {
@@ -64,7 +66,9 @@ namespace mt {
 		}
 	}
 
-	void Wss::subs(const std::vector<std::string>&,const std::string&) {
+	void Wss::subs(MacroText& out,const std::vector<std::string>&,const std::string&) const {
+		auto token=make_unique<Wss>(this->text);
+		out.emplace(token);
 	}
 
 }

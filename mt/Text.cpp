@@ -28,13 +28,15 @@ namespace mt {
 			mt.emplace(token);
 		}
 	}
-	
-	unique_ptr<Token> Text::clone() const {
-		std::unique_ptr<Token>derived = std::make_unique<Text>(this);
-		return derived;
+
+	void Text::clone(MacroText &out) const {
+		if(!text.empty()) {
+			auto token=make_unique<Text>(this->text);
+			out.emplace(token);
+		}
 	}
 
-	void Text::subs(const vector<string>& list,const string& prefix) {
+	void Text::subs(MacroText& o,const vector<string>& list,const string& prefix) const {
 		size_t start = 0, curr, psize = prefix.size();
 		string valStr;
 		while ((curr=text.find(prefix,start)) != string::npos) {
@@ -48,12 +50,12 @@ namespace mt {
 			} else {
 				valStr.append(prefix);
 			}
-			start += curr;
+			start = curr;
 		}
 		if(start < text.size()) {
 			valStr.append(text.substr(start));
 		}
-		swap(text,valStr);
+		o.add(valStr);
 	}
 
 	void Text::doFor(MacroText& result,const forStuff& s) const {

@@ -48,10 +48,9 @@ namespace mt {
 		std::ostream& visit(std::ostream&) const override;
 		void inject(Messages&,MacroText&,mstack&) const override;
 		void expand(Messages&,MacroText&,mstack&) const override;
-		void subs(const std::vector<std::string>&,const std::string&) override;
+		void subs(MacroText&,const std::vector<std::string>&,const std::string&) const override;
 		std::string name() const override { return "`injection`"; }
-		unique_ptr<Token> clone() const override;
-
+		void clone(MacroText&) const override;
     };
 }
 

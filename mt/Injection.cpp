@@ -138,17 +138,18 @@ namespace mt {
 		expand(errs,result,context);
 	}
 
-	unique_ptr<Token> Injection::clone() const {
-		std::unique_ptr<Token> derived = std::make_unique<Injection>(*this);
-		return derived;
+	void Injection::clone(MacroText &out) const {
+		auto token= make_unique<Injection>(*this);
+		out.emplace(token);
 	}
 
 	void Injection::final(std::ostream& o) const {
 		visit(o);
 	}
 
-	void Injection::subs(const std::vector<std::string>&,const std::string&) {
-		throw logic_error("shouldn't get to Injection::subs!");
+	void Injection::subs(MacroText& out,const std::vector<std::string>&,const std::string&) const {
+		auto token=make_unique<Injection>(*this);
+		out.emplace(token);
 	}
 
 	void Injection::expand(Messages& errs,MacroText &result,mstack &context) const {

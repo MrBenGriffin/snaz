@@ -35,10 +35,10 @@ namespace mt {
 			parms.emplace_back(move(nParm));
 		}
 	}
-	
-	unique_ptr<Token> Macro::clone() const {
-		std::unique_ptr<Token>derived = std::make_unique<Macro>(this);
-		return derived;
+
+	void Macro::clone(MacroText &out) const {
+		auto token= make_unique<Macro>(this);
+		out.emplace(token);
 	}
 
 	void Macro::doFor(MacroText& result,const forStuff& stuff) const {
@@ -61,10 +61,14 @@ namespace mt {
 		result.emplace(token);
 	}
 
-	void Macro::subs(const std::vector<std::string>& subs,const std::string& prefix) {
+	void Macro::subs(MacroText& out,const std::vector<std::string>& subs,const std::string& prefix) const {
+		auto token=make_unique<Macro>(_name);
 		for(auto& parm : parms) {
-			parm.subs(subs,prefix);
+			MacroText nParm;
+			parm.subs(nParm,subs,prefix);
+			token->parms.emplace_back(move(nParm));
 		}
+		out.emplace(token);
 	}
 
 	void Macro::expand(Messages& errs,MacroText& result,mstack &context) const {

@@ -30,12 +30,10 @@ namespace mt {
 		std::ostream& visit(std::ostream&) const override;
 		void inject(Messages&,MacroText&,mstack&) const override;
 		void doFor(MacroText&,const forStuff&) const override;
-		void subs(const std::vector<std::string>&,const std::string&) override;
+		void subs(MacroText&,const std::vector<std::string>&,const std::string&) const override;
 		void expand(Messages&,MacroText&,mstack&) const override;
 		std::string name() const override { return _name; }
-		unique_ptr<Token> clone() const override;
-
-		//used for expanding injections, etc. not sure if this should generate a copy or not..
+		void clone(MacroText&) const override;
 
 		explicit Macro(std::string);
 		explicit Macro(const Macro*);

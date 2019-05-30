@@ -51,10 +51,11 @@ namespace mt {
 		void expand(Messages&,MacroText&,mstack&) const;
 		void expand(Messages&,std::ostream&,mstack&) const;
 		std::ostream& visit(std::ostream&) const;
+		std::ostream& final(std::ostream&) const;
 		void doFor(MacroText&,const forStuff&) const;
 
 		void inject(Messages&,MacroText&,mstack&) const;
-		void subs(const std::vector<std::string>&,const std::string&);
+		void subs(MacroText&,const std::vector<std::string>&,const std::string&) const;
 
 		static std::string expand(Messages&,std::string&,mstack&,bool); //dirty
 

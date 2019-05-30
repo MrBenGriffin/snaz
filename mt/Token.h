@@ -30,8 +30,8 @@ namespace mt {
 		virtual std::ostream& visit(std::ostream&) const =0; //return text version of token.
 		virtual void final(std::ostream&) const=0;           //return text final rendered.
 		virtual void inject(Messages&,MacroText&,mstack&) const = 0;
-		virtual unique_ptr<Token> clone() const = 0;
-		virtual void subs(const std::vector<std::string>&,const std::string&) =0;
+		virtual void clone(MacroText&) const = 0;
+		virtual void subs(MacroText&,const std::vector<std::string>&,const std::string&) const =0;
 
 	};
 }

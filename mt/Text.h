@@ -20,15 +20,15 @@ namespace mt {
 		~Text() override = default;
 		explicit Text(std::string);
 		explicit Text(const Text*);
-		unique_ptr<Token> clone() const override;
+
+		void clone(MacroText&) const override;
 
 		std::ostream& visit(std::ostream&) const override;
 		void expand(Messages&,MacroText&,mstack&) const override;
 		std::string name() const override { return "`text`"; }
 
-
 		void doFor(MacroText&,const forStuff&) const override;
-		void subs(const std::vector<std::string>&,const std::string&) override;
+		void subs(MacroText&,const std::vector<std::string>&,const std::string&) const override;
 		void inject(Messages&,MacroText&,mstack&) const override;
 
 	};

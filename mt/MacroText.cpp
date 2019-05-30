@@ -86,13 +86,13 @@ namespace mt {
 	}
 	void MacroText::add(const MacroText& other) {
 		for(auto &token : other.tokens) {
-			tokens.emplace_back(token.get()->clone());
+			token.get()->clone(*this);
 		}
 	}
 	
 	void MacroText::add(const MacroText* other) {
 		for(auto &token : other->tokens) {
-			tokens.emplace_back(token.get()->clone());
+			token.get()->clone(*this);
 		}
 	}
 
@@ -111,16 +111,6 @@ namespace mt {
 		}
 	}
 
-// Migrated from Driver!
-//	void doFor(MacroText&,const forStuff&) const;
-//	void expand(Messages&,std::ostream&,mstack&) const;
-//	void inject(Messages&,MacroText&,mstack&) const;
-//	void subs(MacroText&,const std::vector<std::string>&,const std::string&) const;
-//	std::ostream& visit(std::ostream&) const;
-//
-//	static std::string expand(Messages&,std::string&,mstack&); //dirty
-//	static std::ostream& visit(const Token&, std::ostream&);
-
 //This is a static expansion for quick evaluation.
 	std::string MacroText::expand(Messages& errs,std::string& program,mstack& context,bool trim) {
 		ostringstream result;
@@ -129,7 +119,7 @@ namespace mt {
 		istringstream feed(program);
 		mt::Driver(errs,feed,mt::Definition::test_adv(program)).parse(errs,_parse,trim);
 		_parse.expand(errs,_final,context);
-		_final.visit(result);
+		_final.final(result);
 		return result.str();
 	}
 
@@ -154,7 +144,7 @@ namespace mt {
 		} catch (exception& ex) {
 			e << Message(fatal, ex.what());
 		}
-		_final.visit(o);
+		_final.final(o);
 	}
 
 	void MacroText::str(Messages &e,std::string& s,mstack &context) const {
@@ -170,6 +160,13 @@ namespace mt {
 		return o;
 	}
 
+	std::ostream& MacroText::final(std::ostream& o) const {
+		for(auto& j : tokens) {
+			j->final(o);
+		}
+		return o;
+	}
+
 // Evaluate ONLY injections.
 	void MacroText::inject(Messages& e,MacroText& x,mstack& c) const {
 		for(auto& i : tokens) {
@@ -177,9 +174,9 @@ namespace mt {
 		}
 	}
 // Do substitutes (used by iRegex).
-	void MacroText::subs(const std::vector<std::string>& subs,const std::string& prefix) {
+	void MacroText::subs(MacroText& o,const std::vector<std::string>& subs,const std::string& prefix) const {
 		for (auto &i : tokens) {
-			i->subs(subs, prefix);
+			i->subs(o, subs, prefix);
 		}
 	}
 
