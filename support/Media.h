@@ -16,7 +16,6 @@
 
 using namespace Support::Db;
 
-
 namespace node {
 	class Metrics;
 }

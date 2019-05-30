@@ -4,6 +4,12 @@
 
 #include <sstream>
 
+#include "mt/Internal.h"
+#include "mt/Driver.h"
+#include "mt/Instance.h"
+#include "mt/Definition.h"
+#include "mt/MacroText.h"
+
 #include "Media.h"
 #include "support/Timing.h"
 #include "support/Env.h"
@@ -16,10 +22,6 @@
 #include "support/db/Service.h"
 #include "node/Content.h"
 #include "node/Metrics.h"
-#include "mt/Driver.h"
-#include "mt/Instance.h"
-#include "mt/Definition.h"
-#include "mt/MacroText.h"
 #include "content/Segment.h"
 
 namespace Support {
