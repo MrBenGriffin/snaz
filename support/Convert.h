@@ -41,9 +41,9 @@ namespace Support {
 	pair<size_t,bool> znatural(string::const_iterator&,string::const_iterator&); //Given a string, returns a natural  0... +BIGINT and a flag saying if it is a number at all.
 
 	void			todigits(string&);							//strip all but digits from a string.
-	size_t	natural(const string&);						//Given a const string, returns a natural  1... +BIGINT
-	size_t	natural(string::const_iterator&);			//Given a const string, returns a natural  1... +BIGINT
-	pair<std::time_t,bool> time_t(const string&);
+	size_t			natural(const string&);						//Given a const string, returns a natural  1... +BIGINT
+	size_t			natural(string::const_iterator&);			//Given a const string, returns a natural  1... +BIGINT
+	pair<std::time_t,bool> toTime_t(const string&);
 	pair<long,bool>  integer(const string&);						//Given a string, returns an integer -BIGINT ... 0 ... +BIGINT and a flag saying if it is a number at all.
 	long			integer(string::const_iterator&);			//Given a const string, returns an integer -BIGINT ... 0 ... +BIGINT
 	double			real(string::const_iterator&);				//Given a string, returns a double.

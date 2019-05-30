@@ -276,7 +276,7 @@ namespace Support {
 	}
 
 
-	pair<std::time_t,bool> time_t(const string& s) { //Given a string, returns a natural from any digits that it STARTS with.
+	pair<std::time_t,bool> toTime_t(const string& s) { //Given a string, returns a natural from any digits that it STARTS with.
 		std::istringstream ss(s);
 		std::time_t tt;
 		ss >> tt;
