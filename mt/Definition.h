@@ -54,7 +54,6 @@ namespace mt {
 
 		std::string name() const override;
 		static bool test_adv(const std::string &);
-		//        static void add(Definition&);
 		static void del(const std::string&);
 		static bool has(const std::string&);
 

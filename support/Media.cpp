@@ -70,14 +70,14 @@ namespace Support {
 				} else {
 					metrics.push(node,nullptr);
 				}
-				directory = MacroText::expand(errs,directory,context);
+				directory = MacroText::expand(errs,directory,context,true);
 				metrics.pop();
 			} else {
-				directory = MacroText::expand(errs,directory,context);
+				directory = MacroText::expand(errs,directory,context,true);
 				media->readfield(errs,"imgbase",imgbase);
 			}
 		} else {
-			directory = MacroText::expand(errs,directory,context);
+			directory = MacroText::expand(errs,directory,context,true);
 			media->readfield(errs,"imgbase",imgbase);
 		}
 		wsstrip(directory);

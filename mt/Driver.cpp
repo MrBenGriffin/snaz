@@ -70,7 +70,7 @@ namespace mt {
 
 	void Driver::define(Messages& errs,parse_result& result,bool strip) {
 		bool success = false;
-		_final = &result;
+		_final = &(result.second.first);
 		scanner->stripped=strip;
 		scanner->defining=true;
 		parser = new Parser(errs,scanner,(*this));
@@ -115,7 +115,7 @@ namespace mt {
 
 	void Driver::storeWss(const std::string &str) {
 		if(!str.empty()) {
-			Wss wss(str);
+			auto wss = make_unique<Wss>(str);
 			if ( macro_stack.empty()) {
 				_final->emplace(wss);
 			} else {
@@ -125,8 +125,8 @@ namespace mt {
 	}
 
 	void Driver::inject(const std::string &word) {
-		Injection i(word);
-		iterated = iterated || i.iterator;
+		auto i = make_unique<Injection>(word);
+		iterated = iterated || i->iterator;
 		if ( macro_stack.empty()) {
 			_final->emplace(i);
 		} else {
@@ -136,27 +136,28 @@ namespace mt {
 
 	void Driver::store_macro() {
 		//std::forward_list< std::unique_ptr<Macro> >	macro_stack;
-		auto mac = std::move(macro_stack.front());
+		auto mac = std::move(macro_stack.front()); //mac is std::unique_ptr<Macro>
 		macro_stack.pop_front();
 		if (macro_stack.empty()) {
 			_final->emplace(mac); //This releases the macro to final.
 		} else {
-			parm = move(macro_stack.front().parms.back());
-			macro_stack.front().parms.pop_back();
+			//parm is a local MacroText.
+			parm.adopt(macro_stack.front()->parms.back());
+			macro_stack.front()->parms.pop_back();
 			parm.emplace(mac);
 		}
 	}
 
 	void Driver::new_macro(const std::string &word) {
 		if (!macro_stack.empty()) {
-			macro_stack.front().parms.emplace_back(std::move(parm));
+			macro_stack.front()->parms.emplace_back(std::move(parm));
 			parm.reset();
 		}
-		macro_stack.emplace_front(Macro(word)); // new Macro(word));
+		macro_stack.emplace_front(make_unique<Macro>(word)); // new Macro(word));
 	}
 
 	void Driver::add_parm() {
-		macro_stack.front().parms.emplace_back(parm);
+		macro_stack.front()->parms.emplace_back(std::move(parm));
 		parm.reset();
 	}
 

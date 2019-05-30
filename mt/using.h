@@ -46,7 +46,9 @@ namespace mt {
 	 *   not need to be managed using smart pointers.  As, however, they may be amended by the evaluator,
 	 *   and pass by reference has a cost, it may be better just to use a * (eep!!) - but NOT to store it.
 	 *
-	 * (2) Add a MacroText class for token management, and use 'add' or << methods for token management.
+	 * √ Add a MacroText class for token management, and use 'add' or << methods for token management. (*PHEW*)
+	 *
+	 * (3) Migrate doFor() into a single expansion run.
 	 *
 	 * Parameter rules: Pass by...
 	 * (P1) .. value when the function does not want to modify the parameter and the value is easy to copy (ints, doubles, char, bool, etc... simple types. std::string, std::vector, and all other STL containers are NOT simple types.)

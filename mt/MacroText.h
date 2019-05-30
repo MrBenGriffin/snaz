@@ -31,12 +31,11 @@ namespace mt {
 		MacroText(const MacroText&) = delete;
 
 		void adopt(MacroText &) noexcept; // = default; //ensure that we do not use a copy constructor on move..
-
 		void reset();
 
 		bool simple() const;
 		bool empty() const;
-
+		
 		void trim();
 		void emplace(unique_ptr<Wss>&);
 		void emplace(unique_ptr<Text>&);
@@ -48,6 +47,7 @@ namespace mt {
 		void add(const MacroText*);
 
 		//Migrated from Driver.
+		void str(Messages &,std::string&,mstack &) const;
 		void expand(Messages&,MacroText&,mstack&) const;
 		void expand(Messages&,std::ostream&,mstack&) const;
 		std::ostream& visit(std::ostream&) const;
@@ -56,7 +56,7 @@ namespace mt {
 		void inject(Messages&,MacroText&,mstack&) const;
 		void subs(const std::vector<std::string>&,const std::string&);
 
-		static std::string expand(Messages&,std::string&,mstack&); //dirty
+		static std::string expand(Messages&,std::string&,mstack&,bool); //dirty
 
 
 	};

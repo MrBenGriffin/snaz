@@ -44,12 +44,12 @@ namespace mt {
 		it = {pSize == 0 ? 0 : 1, pSize };
 	}
 
-	void Instance::copy(const plist *parms) {
+	void Instance::copy(const plist *parameterList) {
 		// std::vector<MacroText>
-		if(parms != nullptr) {
-			for(auto& parm : *parms) {
+		if(parameterList != nullptr) {
+			for(auto& parameter : *parameterList) {
 				MacroText nParm;
-				nParm.add(parm);
+				nParm.add(parameter);
 				parms.emplace_back(move(nParm));
 			}
 		}
@@ -76,9 +76,9 @@ namespace mt {
 		};
 	}
 
-//	forStuff::forStuff(const std::vector<std::pair<std::string,std::string>>& other) {
-//		stuff = other;
-//	}
+	forStuff::forStuff(const std::vector<std::pair<std::string,std::string>>& other) {
+		stuff = other; //copy constructor.
+	}
 
 	forStuff::forStuff(const std::string& vt,const std::string& ct) {
 		stuff = {

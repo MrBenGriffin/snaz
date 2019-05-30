@@ -102,7 +102,8 @@ namespace mt {
 			std::istringstream code(expansion_i);
 			bool advanced = test_adv(expansion_i);
 			Driver driver(errs,code,advanced);
-			parse_result result = driver.define(errs,strip);
+			parse_result result;
+			driver.define(errs,result,strip);
 			expansion.adopt(result.second.first);
 			iterated = result.second.second;
 			if(! result.first ) {
@@ -175,10 +176,10 @@ namespace mt {
 		context.emplace_front(make_pair(this,&instance)); //Construct the Carriage for this.
 		if (iterated) {
 			if(instance.myFor == nullptr) {
-				iteration& i = context.front().second->it;
-				while ( i.first <= i.second) {
+//				iteration& i = context.front().second->it;
+				while ( context.front().second->it.first <= context.front().second->it.second) {
 					expansion.expand(e,o,context);
-					i.first++;
+					context.front().second->it.first++;
 				}
 			} else {
 				assert(false);

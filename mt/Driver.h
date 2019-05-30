@@ -56,7 +56,8 @@ namespace mt {
 		MacroText*				_final;
 		MacroText					parm;
 
-		std::forward_list<Macro>	macro_stack;
+		std::forward_list< std::unique_ptr<Macro> >	macro_stack;
+//		std::forward_list<Macro>	macro_stack;
 
 		Parser  *parser   = nullptr;
 		Scanner *scanner  = nullptr;

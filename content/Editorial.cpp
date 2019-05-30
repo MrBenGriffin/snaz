@@ -124,8 +124,9 @@ namespace content {
 				if(index != qIndexes.end()) {
 					query->setRow(errs,index->second);
 					string content;
+					pair<bool,mt::MacroText> toCache;
 					query->readfield(errs, "content", content);
-					pair<bool,mt::MacroText> toCache={ false, mt::Driver::parse(errs,content,false) };
+					mt::Driver::parse(errs,toCache.second,content,false);
 					toCache.first=(toCache.second.simple());
 					auto idx = contentStore.emplace(id,std::move(toCache));
 					value.first  = idx.first->second.first;

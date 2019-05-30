@@ -139,7 +139,7 @@ namespace mt {
 	}
 
 	unique_ptr<Token> Injection::clone() const {
-		std::unique_ptr<Token>derived = std::make_unique<Injection>(this);
+		std::unique_ptr<Token> derived = std::make_unique<Injection>(*this);
 		return derived;
 	}
 
@@ -153,7 +153,7 @@ namespace mt {
 
 	void Injection::expand(Messages& errs,MacroText &result,mstack &context) const {
 		if (type == It::text) {
-			Token::add(basis,result);
+			result.add(basis);
 		} else {
 			if(!context.empty() && sValue < context.size()) {
 				auto &contextMacro = context[sValue].first;
@@ -164,24 +164,21 @@ namespace mt {
 				if (stack) {
 					for(auto& s : context) {
 						if(s.first!= nullptr) {
-							std::string macroName = (s.first)->name() + ";";
-							Token::add(macroName,result);
+							result.add((s.first)->name() + ";"); //macro name
 						}
 					}
 					auto& x = context.back().second;
 					if(x->metrics != nullptr  && (x->metrics)->currentTemplate != nullptr) {
-						Token::add(x->metrics->currentTemplate->name,result);
+						result.add(x->metrics->currentTemplate->name);
 					} else {
-						Token::add("nil",result);
+						result.add("nil");
 					}
 
 				}
 				if (list) {
 					for(size_t i=value; i <= parmCount; i++) {
-						MacroText tmp ;
-						for(auto& j : parms[i - 1]) {
-							j->inject(errs,tmp,context);
-						}
+						MacroText tmp;
+						parms[i - 1].inject(errs,tmp,context);
 						context.back().second->parms.emplace_back(std::move(tmp)); //plist is a std::vector<MacroText>;
 					}
 				}
@@ -190,20 +187,16 @@ namespace mt {
 						case It::plain:
 							if(value == 0) {
 								if(contextMacro != nullptr) {
-									Token::add(contextMacro->name(),result);
+									result.add(contextMacro->name());
 								}
 							} else {
 								bool legal = contextMacro->inRange(value);
 								if(legal && (value <= parmCount)) {
 									if (sValue == 0) {
-										for(auto& token: parms[value - 1]) {
-											token->expand(errs,result,context);
-										}
+											parms[value - 1].expand(errs,result,context);
 									} else {
 										mstack subContext(context.begin() + sValue, context.end());
-										for(auto& token: parms[value - 1]) {
-											token->expand(errs,result,subContext);
-										}
+										parms[value - 1].expand(errs,result,subContext);
 									}
 								}
 								/**
@@ -224,18 +217,14 @@ namespace mt {
 							adjust(posi);
 							if ( (0 < posi) &&  (posi <=  parmCount)) {
 								if (sValue == 0) {
-									for(auto& token: parms[posi - 1]) {
-										token->expand(errs,result,context);
-									}
+									parms[posi-1].expand(errs,result,context);
 								} else {
 									mstack subContext(context.begin() + sValue, context.end());
-									for(auto& token: parms[posi - 1]) {
-										token->expand(errs,result,subContext);
-									}
+									parms[posi-1].expand(errs,result,subContext);
 								}
 							} else {
 								if (posi == 0) {
-									Token::add(contextMacro->name(),result);
+									result.add(contextMacro->name());
 								} else {
 									//Do nothing, I guess.
 								}

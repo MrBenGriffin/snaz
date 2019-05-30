@@ -26,7 +26,8 @@ namespace mt {
 	void MacroText::reset() {
 		tokens.clear();
 	}
-	inline bool MacroText::simple() const {
+	
+	bool MacroText::simple() const {
 		return tokens.empty() ?
 		true :
 		tokens.size() > 1 ?
@@ -34,14 +35,10 @@ namespace mt {
 		dynamic_cast<Text *>(tokens.back().get()) != nullptr;
 	}
 
-	inline bool MacroText::empty() const {
+	bool MacroText::empty() const {
 		return tokens.empty();
 	}
-	
-//	void emplace(unique_ptr<Wss>&);
-//	void emplace(unique_ptr<Text>&);
-//	void emplace(unique_ptr<Macro>&);
-//	void emplace(unique_ptr<Injection>&);
+
 
 	void MacroText::emplace(unique_ptr<Wss>& token) {
 		if (!tokens.empty()) {
@@ -125,12 +122,12 @@ namespace mt {
 //	static std::ostream& visit(const Token&, std::ostream&);
 
 //This is a static expansion for quick evaluation.
-	std::string MacroText::expand(Messages& errs,std::string& program,mstack& context) {
+	std::string MacroText::expand(Messages& errs,std::string& program,mstack& context,bool trim) {
 		ostringstream result;
 		MacroText _parse;
 		MacroText _final;
 		istringstream feed(program);
-		mt::Driver(errs,feed,mt::Definition::test_adv(program)).parse(errs,_parse,false);
+		mt::Driver(errs,feed,mt::Definition::test_adv(program)).parse(errs,_parse,trim);
 		_parse.expand(errs,_final,context);
 		_final.visit(result);
 		return result.str();
@@ -146,6 +143,24 @@ namespace mt {
 		} catch (exception& ex) {
 			e << Message(fatal, ex.what());
 		}
+	}
+	
+	void MacroText::expand(Messages&e,std::ostream& o,mstack&context) const {
+		MacroText _final;
+		try {
+			for(auto& j : tokens) {
+				j->expand(e,_final,context);
+			}
+		} catch (exception& ex) {
+			e << Message(fatal, ex.what());
+		}
+		_final.visit(o);
+	}
+
+	void MacroText::str(Messages &e,std::string& s,mstack &context) const {
+		ostringstream o;
+		expand(e,o,context);
+		s = o.str();
 	}
 
 	std::ostream& MacroText::visit(std::ostream& o) const {

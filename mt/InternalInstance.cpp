@@ -77,8 +77,8 @@ namespace mt {
 		plist result; //using plist=std::vector<MacroText>;
 		for(auto& i : nodes) {
 			MacroText parm;
-			Token::add(i->ids(),parm);
-			result.emplace_back(parm);
+			parm.add(i->ids());
+			result.emplace_back(std::move(parm));
 		}
 		return result;
 	}
@@ -90,11 +90,8 @@ namespace mt {
 			for(auto& i: nodes) {
 				stuff.set(i->ids(),parmCount);
 				MacroText paramOut;  //this will be the program, substituted correctly.
-                auto& code = *program;
-                Driver::doFor(code,paramOut,stuff);
-                for(auto& j : paramOut) {
-                    j->expand(*errs,*output,*context);
-                }
+				program->doFor(paramOut,stuff);
+				paramOut.expand(*errs,*output,*context);
 				parmCount++;
 			}
 		}
@@ -107,13 +104,11 @@ namespace mt {
 			size_t parmCount = 1;
 			for(auto& paramIn: parameters) {
 				ostringstream result;
-				Driver::expand(*errs,paramIn,result,*context);
+				paramIn.expand(*errs,result,*context); //normally just numbers..
 				stuff.set(result.str(),parmCount);
-				MacroText paramOut;  //this will be the program, substituted correctly.
-				Driver::doFor(*program,paramOut,stuff);
-				for(auto& j : paramOut) {
-					j->expand(*errs,*output,*context);
-				}
+				MacroText paramOut;  											//this will be the program, substituted correctly.
+				program->doFor(paramOut,stuff);						//copy source program into paramOut (marking doFor as we go).
+				paramOut.expand(*errs,*output,*context);	//and then expanding it.  Can we not do this in 1 go?!
 				parmCount++;
 			}
 		}
@@ -124,7 +119,7 @@ namespace mt {
 			return _default;
 		} else {
 			std::ostringstream result;
-			Driver::expand(*errs,(*parms)[i - 1],result, *context);
+			((*parms)[i - 1]).expand(*errs,result,*context);
 			std::string val = result.str();
 			return val == "true" || val == "1";
 		}
@@ -135,7 +130,7 @@ namespace mt {
 			return false;
 		} else {
 			std::ostringstream result;
-			Driver::expand(*errs,(*parms)[i - 1],result, *context);
+			((*parms)[i - 1]).expand(*errs,result, *context);
 			std::string val = result.str();
 			return !val.empty() && (val[0] == 'R' || val[0] == 'r');
 		}
@@ -146,7 +141,7 @@ namespace mt {
 		if(i > count || i > parms->size()) {
 			return "";
 		} else {
-			Driver::expand(*errs,(*parms)[i - 1],result, *context);
+			((*parms)[i - 1]).expand(*errs,result, *context);
 			return result.str();
 		}
 	}
@@ -157,14 +152,12 @@ namespace mt {
 
 	void InternalInstance::expand(size_t i) {
 		if(count >= i && parms->size() >= i ) {
-			for(auto& token: (*parms)[i - 1]) {
-				token->expand(*errs,*output, *context);
-			}
+			((*parms)[i - 1]).expand(*errs,*output, *context);
 		}
 	}
 
 	void InternalInstance::set(std::string str) {
-		Token::add(str,*output);
+		output->add(str);
 	}
 
 	//offset points at the position of the TRUE parm.

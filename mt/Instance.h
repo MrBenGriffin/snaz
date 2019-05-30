@@ -23,7 +23,7 @@ namespace mt {
 		std::vector<std::pair<std::string,std::string>> stuff;
 		forStuff(const std::string&,const std::string&,size_t,size_t);
 		forStuff(const std::string&,const std::string&);
-//		forStuff(const std::vector<std::pair<std::string,std::string>>&);
+		forStuff(const std::vector<std::pair<std::string,std::string>>&);
 		void set(const std::string&,size_t);
 	};
 

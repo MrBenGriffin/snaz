@@ -14,6 +14,7 @@
 #include "mt/Driver.h"
 #include "mt/Definition.h"
 #include "mt/Internal.h"
+#include "mt/MacroText.h"
 
 #include "node/Metrics.h"
 #include "node/Content.h"
@@ -202,8 +203,9 @@ namespace testing {
 							mt::Definition macro(*msgs,name,pcode,0,-1,false,false,false);
 							macro.visit(expansion);
 						} else {
-							mt::MacroText structure = driver.parse(*msgs,false); 	//bool advanced, bool strip
-							mt::Driver::visit(structure,expansion);
+							mt::MacroText structure;
+							driver.parse(*msgs,structure,false); 	//bool advanced, bool strip
+							structure.visit(expansion);
 						}
 						if(msgs->marked()) {
 							o << lred << "Parse Errors" << endl;
@@ -295,8 +297,9 @@ namespace testing {
 						std::istringstream code(pprogram);
 						bool advanced = mt::Definition::test_adv(pprogram);
 						mt::Driver driver(*msgs,code,advanced);
-						mt::MacroText structure = driver.parse(*msgs,false); //bool advanced, bool strip
-                        pexpected = expected;
+						mt::MacroText structure;
+						driver.parse(*msgs,structure,false); //bool advanced, bool strip
+						pexpected = expected;
 						wss(pexpected,false);
 						ostringstream expansion; //need to set node!
 						structure.expand(*msgs,expansion,context);
@@ -327,7 +330,7 @@ namespace testing {
 								if(!testPassed) {
 									ostringstream pstuff;
 									string parsed,returned = expansion.str();
-									mt::Driver::visit(structure,pstuff);
+									structure.visit(pstuff);
 									parsed = pstuff.str();
 									wss(returned,true); wss(parsed,true);
 									o << lred << " - program:" << blue << program << lred << endl;
@@ -380,7 +383,7 @@ namespace testing {
 						}
 //						cout << "- name -" << endl;
 //						mt::Driver::visit(structure,cout);
-						structure.clear();
+						structure.reset();
 					}
 				}
 			}

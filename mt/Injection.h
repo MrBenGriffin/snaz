@@ -40,6 +40,7 @@ namespace mt {
     explicit Injection(std::string);
 		~Injection() override = default;
 		Injection(const Injection& ) = default;
+//		explicit Injection(const Injection*);
 
 		std::string get() const override;             //return text.
 		bool empty() const override;

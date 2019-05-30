@@ -69,7 +69,7 @@ void Internal::startup(Messages& log,Db::Connection& _sql,buildKind kind) {
 		plist result;
 		for(auto& i : list) {
 			MacroText parm;
-			Token::add(i,parm);
+			parm.add(i);
 			result.emplace_back(std::move(parm));
 		}
 		return result;
@@ -88,7 +88,7 @@ void Internal::startup(Messages& log,Db::Connection& _sql,buildKind kind) {
 		plist result;
 		for(auto& i : list) {
 			MacroText parm;
-			Token::add(i,parm);
+			parm.add(i);
 			result.emplace_back(std::move(parm));
 		}
 		return result;
@@ -102,8 +102,7 @@ void Internal::startup(Messages& log,Db::Connection& _sql,buildKind kind) {
 		plist result;
 		for(auto& i : list) {
 			MacroText parm;
-			Token::add(i,parm);
-//			parm.emplace_back(new Text(i));
+			parm.add(i);
 			result.emplace_back(std::move(parm));
 		}
 		return result;
@@ -170,27 +169,20 @@ void Internal::startup(Messages& log,Db::Connection& _sql,buildKind kind) {
 						const content::Segment *segment = node->layout()->segment(*errs, seg_ref);
 						if (segment) { //"NLTBB"
 							auto code = edit.get(*errs, node, segment);
+							string result;
 							if (!code.first) { //need to do IO as well..
 								if (context && metrics) {
-									MacroText result;
 									metrics->push(node, segment);
-									for (auto &token: *(code.second)) {
-										token->expand(*errs, result, *context);
-									}
+									code.second->str(*errs, result, *context);
 									metrics->pop();
-									if (!result.empty()) {
-										node->setComment(result.front()->get());
-										nodelist.push_back(node);
-									}
 								}
 							} else {
-								auto *result = code.second;
-								if (!result->empty()) {
-									node->setComment(result->front()->get());
-									nodelist.push_back(node);
-								}
+								code.second->str(*errs, result, *context);
 							}
-
+							if (!result.empty()) {
+								node->setComment(result);
+								nodelist.push_back(node);
+							}
 						}
 					}
 				}

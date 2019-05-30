@@ -259,7 +259,7 @@ namespace Support {
 			return -q;
 		}
 		long double modulo::evaluate(const long double,const long double p,const long double q) const {
-			return (long long)p % (long long)q;
+			return (p==0 && q==0) ? 0 : (long long)p % (long long)q;
 		}
 		long double quotient::evaluate(const long double,const long double p,const long double q) const {
 			return floor( p / q);
