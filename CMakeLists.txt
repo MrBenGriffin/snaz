@@ -1,12 +1,14 @@
 cmake_minimum_required(VERSION 3.13)
 project(macrotext)
 
-#cf. https://github.com/Genivia/RE-flex for a new version of flex..
+#message(CMAKE_BUILD_TYPE)
 
-# This needs openssl, pcre, flex, bison...
+#set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+set(CMAKE_CXX_FLAGS_DEBUG "-g")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
-SET(BISON_EXECUTABLE "/usr/local/bin/bison")
-SET(FLEX_EXECUTABLE "/usr/local/bin/flex")
+set(BISON_EXECUTABLE "/usr/local/bin/bison")
+set(FLEX_EXECUTABLE "/usr/local/bin/flex")
 
 find_package(BISON 3.3)
 find_package(FLEX 2.6)

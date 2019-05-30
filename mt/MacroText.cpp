@@ -15,7 +15,9 @@ namespace mt {
 	MacroText::MacroText() : tokens() {}
 
 	MacroText::MacroText(MacroText && rhs) noexcept {
-		tokens=std::move(rhs.tokens);
+		swap(tokens,rhs.tokens);
+		rhs.reset();
+//		tokens=std::move(rhs.tokens); (swap is MUCH faster than move!)
 	}
 
 	void MacroText::adopt(MacroText& rhs) noexcept {
