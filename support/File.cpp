@@ -1025,7 +1025,7 @@ namespace Support {
 	// Copies the current File to the specified File
 	// overwrite = true, overwrites the dest
 	//-------------------------------------------------------------------------
-	bool File::copyTo(const File newfile, Messages&, bool overwrite) const {
+	bool File::copyTo(const File newfile, Messages& errstream, bool overwrite) const {
 		bool retval = false;
 		string from_path = output();
 		string dest_path = newfile.output();
