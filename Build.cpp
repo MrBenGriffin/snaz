@@ -11,6 +11,11 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#include "mt/Internal.h"
+#include "mt/Driver.h"
+#include "mt/Instance.h"
+#include "mt/Definition.h"
+
 #include "support/Env.h"
 #include "support/File.h"
 #include "support/Date.h"
@@ -26,11 +31,6 @@
 #include "node/Suffix.h"
 #include "node/Content.h"
 #include "node/Taxon.h"
-
-#include "mt/Internal.h"
-#include "mt/Driver.h"
-#include "mt/Instance.h"
-#include "mt/Definition.h"
 
 #include "content/Template.h"
 #include "content/Segment.h"
