@@ -6,6 +6,7 @@
 #define MACROTEXT_MACROTEXT_H
 
 #include <deque>
+#include <memory>
 
 #include "support/Message.h"
 
