@@ -5,7 +5,7 @@ project(macrotext)
 
 #set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+set(CMAKE_CXX_FLAGS_RELEASE "-fpermissive  -funsigned-char -fno-asm -Wno-trigraphs -O3 -fmessage-length=0")
 
 set(BISON_EXECUTABLE "/usr/local/bin/bison")
 set(FLEX_EXECUTABLE "/usr/local/bin/flex")
