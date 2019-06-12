@@ -32,6 +32,7 @@ namespace Support {
 			virtual bool readfield(Messages &,size_t, std::string&)=0;		// string
 			virtual bool readfield(Messages &,size_t, long&)=0;				// signed
 			virtual bool readfield(Messages &,size_t, long double&)=0;		// float
+			virtual bool readfield(Messages &,size_t, uint64_t&)=0;			// uint64_t
 			virtual bool readfield(Messages &,size_t, size_t&)=0;			// size_t
 			virtual bool readfield(Messages &,size_t, bool&)=0;				// bool
 			virtual void readFieldName(Messages &,size_t i, std::string&, std::string&)=0;
@@ -49,6 +50,7 @@ namespace Support {
 
 			bool readfield(Messages&,const std::string&, std::string&);		//rebuild(10+)
 			bool readfield(Messages&,const std::string&, size_t&);
+			bool readfield(Messages&,const std::string&, uint64_t&);
 			bool readfield(Messages&,const std::string&, long&);
 			bool readfield(Messages&,const std::string&, long double&);
 			bool readfield(Messages&,const std::string&, bool&);

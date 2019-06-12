@@ -73,7 +73,6 @@ private:
 public:
 	BuildUser	user;
 	static Build& b();
-//	static Build& b(Timing&);
 	void run(Support::Messages&,Support::Db::Connection*);
 
 	Support::buildKind current() const { return _current; }

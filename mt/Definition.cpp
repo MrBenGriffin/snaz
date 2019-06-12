@@ -61,7 +61,7 @@ namespace mt {
 					if (name.empty()) {
 						errs << Message(error,"macro with id " + macro_id + " has no name!");
 					} else {
-						Messages log;
+						Messages log(errs);
 						auto macro = make_unique<Definition>(log,name,expansion,min,max,stripDef==1,stripParms==1,pre==1);
 //						Definition* macro = new Definition(log,name,expansion,min,max,stripDef==1,stripParms==1,pre==1);
 						if(log.marked()) {

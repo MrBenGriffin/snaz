@@ -34,10 +34,12 @@ namespace mt {
 			auto number = strtold(&parmValue[0], end);
 			expression.add_parm(ost.str(),number);
 		}
-		long double value = expression.process(*my.errs);
-		if(my.errs->marked()) {
-			my.errs->prefix({usage,expr});
-			my.errs->enscope("Within iExpr");
+		Messages local(e);
+		long double value = expression.process(local);
+		if(local.marked()) {
+			my.errs->push(Message(container,_name));
+			*(my.errs) += local;
+			my.errs->pop();
 		}
 		std::ostringstream ost; ost << value;
 		my.set(ost.str());
@@ -238,6 +240,7 @@ namespace mt {
 //		enum channel { fatal, error, syntax, range, parms, warn, info, debug, usage, timing, trace, code };
 		channel type = info;
 		string message;
+		Messages local(e);
 		if(my.count == 2) {
 			std::string infoStr =  my.parm(1);
 			message =  my.parm(2);
@@ -254,10 +257,10 @@ namespace mt {
 					case 'd': type=debug; break;
 					case 'u': type=usage; break;
 					case 'p': type=code; break;
-					case 't': doTrace(e,context); e.enscope(message); return;
-					case 'b': Timing::t().get(e,'b'); e.enscope(message); return;
-					case 'n': Timing::t().get(e,'n'); e.enscope(message); return;
-					case 'c': Timing::t().get(e,'c',message); return;
+					case 't': { doTrace(local,context); e.push(Message(container,message)); e+= local; e.pop(); } return;
+					case 'b': { Timing::t().get(local,'b'); e.push(Message(container,message)); e+= local; e.pop(); } return;
+					case 'n': { Timing::t().get(local,'n'); e.push(Message(container,message)); e+= local; e.pop(); } return;
+					case 'c': Timing::t().get(local,'c',message); return;
 					default: break;
 				}
 			}

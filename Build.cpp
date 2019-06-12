@@ -69,7 +69,7 @@ void Build::run(Messages &errs,Connection* _sql) {
 	} else {
 		sql = _sql;
 	}
-	std::cout << "Content-type: text/html" << endl << "Status: 200 OK" << endl << endl << "<!DOCTYPE html>" << endl << "<html><head><title>Macrotext</title><body><pre>";
+//	std::cout << "Content-type: text/html" << endl << "Status: 200 OK" << endl << endl << "<!DOCTYPE html>" << endl << "<html><head><title>Macrotext</title><body><pre>";
 	Env& env = Env::e();
 	mt::Definition::startup(errs); //initialise internals
 	Date date;
@@ -89,7 +89,7 @@ void Build::run(Messages &errs,Connection* _sql) {
 			build(errs);
 		} break;
 	}
-	std::cout << "</pre></body></html>" << endl;
+//	std::cout << "</pre></body></html>" << endl;
 
 }
 void Build::tests(Messages &errs) {
@@ -368,7 +368,8 @@ void Build::close(Support::Messages &errs) {
 	Infix::Evaluate::shutdown();
 	Timing& timer = Timing::t();
 	if (timer.show()) { timer.get(errs,'b'); }
-	errs.str(std::cout, true); //output always.
+	errs.synchronise();
+//	errs.str(std::cout, true); //output always.
 }
 
 bool Build::setLock(Support::Messages& errs,Connection& dbc) {
@@ -420,7 +421,7 @@ bool Build::setLock(Support::Messages& errs,Connection& dbc) {
 extern "C"
 void Build::releaseLock(int) {
 	Build& build = b();
-	Messages log;
+	Messages log(build.sql);
 	if (build.sql != nullptr) {
 		if (build.sql->isopen() && build.sql->dbselected() && build.sql->table_exists(log, "blddefs"))  {
 			Query* query = nullptr;

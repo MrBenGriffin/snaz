@@ -187,6 +187,36 @@ namespace Support {
 			return retval;
 		}
 
+		bool MySQLQuery::readfield(Messages &errs,size_t i, uint64_t& value) {
+			bool retval = false;
+			if (isactive) {
+				if (s->row_tell(result) != start) {
+					try {
+						fieldRangeCheck(errs,i);
+						const char *field = row[i - 1];
+						size_t length = mysqlRowLengths[i - 1];
+						if (field != nullptr && length > 0 )  {
+							string readString;
+							readString = std::string(field, length);
+							auto in=readString.begin();
+							value = 0;
+							while(isdigit(*in) ) {
+								value = value * 10 + *in - '0';
+								in++;
+							}
+							retval = true;
+						}
+					} catch (...) {
+						ostringstream message;
+						message << "MySQLQuery readField error::  for row '" << i << "'.";
+						errs << Message(error,message.str());
+						retval = false;
+					}
+				}
+			}
+			return retval;
+		}
+
 		//i is field_id, not row number..
 		bool MySQLQuery::readfield(Messages &errs,size_t i, size_t& readUnsigned) {
 			bool retval = false;

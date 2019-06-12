@@ -38,6 +38,7 @@ class BuildUser {
 public:
 	UserMay		may;
 	BuildUser();
+	size_t iD() { return id; ;}
 	std::string givenName() { return name ;}
 	std::string userName() { return username ;}
 	void load(Support::Messages&,Support::Db::Connection&);

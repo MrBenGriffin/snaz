@@ -151,7 +151,7 @@ void Internal::startup(Messages& log,Db::Connection& _sql,buildKind kind) {
 				}
 			}
 			if ((sortparm[0] == '[') && (sortparm.length() > 2)) { 			// This is a segment reference. +[aaa]
-				Messages suppress;
+				Messages suppress(e);
 				Messages* errs;
 				string seg_ref=sortparm.substr(1,sortparm.length()-2);       //take off 1 from the start + 1 from the end, =2
 				if(seg_ref[0] == '*') {

@@ -306,7 +306,7 @@ namespace testing {
 						if(!error_test) {
 							bool testPassed = false;
 							if(regex_test) {
-								Support::Messages discard;
+								Support::Messages discard(nullptr);
 								if (Support::Regex::available(discard)) {
 									testPassed = Support::Regex::fullMatch(discard, pexpected,expansion.str()); //match entire string using pcre
 									if (discard.marked()) {
@@ -349,7 +349,7 @@ namespace testing {
 							bool matched = false;
 							string message = msgs->line(error_index);
 							if(regex_test) {
-								Support::Messages discard;
+								Support::Messages discard(nullptr);
 								if(Support::Regex::available(discard)) {
 									matched= Support::Regex::fullMatch(discard,pexpected,message); //match entire string using pcre
 									if(discard.marked()) {

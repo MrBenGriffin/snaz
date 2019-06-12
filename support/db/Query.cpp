@@ -93,6 +93,17 @@ namespace Support {
 			return false;
 		}
 
+		bool Query::readfield(Messages& errs,const std::string& field, uint64_t& readUnsized) {
+			if (isactive) {
+				auto it = fieldnameidx.find(field);
+				if (it != fieldnameidx.end()) {
+					readfield(errs, it->second, readUnsized);
+					return true;
+				}
+			}
+			return false;
+		}
+
 		bool Query::readTime(Messages& errs,const std::string& field, ::time_t& time) {
 			if (isactive) {
 				auto it = fieldnameidx.find(field);

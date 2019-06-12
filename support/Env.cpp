@@ -218,12 +218,12 @@ namespace Support {
 //						showNodes = true;
 //						showTrace = true;
 //						showGetSet = true;
-						Messages::setVerbosity(9);
+//						Messages::setVerbosity(9);
 					}
 						break;
 					case 'd':
 						build.setCurrent(test); // = true;
-						Messages::setVerbosity(0);
+//						Messages::setVerbosity(0);
 						break;
 					case 'f':
 //						showFiling = true;
@@ -272,7 +272,7 @@ namespace Support {
 						if(parameter == "-tests") {
 							build.setCurrent(test); // = true;
 						} else {
-							Messages::setVerbosity(4);
+//							Messages::setVerbosity(4);
 							log << Message(error,"-t (macro tracing / parse visits) is not yet implemented.");
 						}
 						break;
@@ -280,7 +280,7 @@ namespace Support {
 						tolist(askedTechs, parameter.substr(2));
 					} break;
 					case 'V':
-						Messages::setVerbosity(natural(argi));
+//						Messages::setVerbosity(natural(argi));
 						break;
 					case 'X':
 						build.breakLock();
@@ -304,15 +304,15 @@ namespace Support {
 		setlocale(LC_ALL, "en_UK.UTF-8");
 		Db::Connection *mysql = nullptr;
 		Infix::Evaluate::startup();
-		Messages::setMarkup(area() != Console);
-		Messages log;
-		doArgs(log,argc,argv);
 		string config_path;
+		Messages log(mysql);
 		if(get("SQL_CONFIG_FILE",config_path)) {
 			mysql = Db::ServiceFactory::sf().getConnection(log,"mysql",config_path);
 		} else {
 			log << Message(fatal,"The environment variable `SQL_CONFIG_FILE` must be set.");
 		}
+		log.setConnection(mysql);
+		doArgs(log,argc,argv);
 
 		//Initialise RNG.
 		::time_t tt; time(&tt);
@@ -322,7 +322,7 @@ namespace Support {
 		log << Message(debug,"Environment is initialised.");
 
 		Build& build = Build::b();
-		Messages::defer( build.mayDefer() && (Messages::verboseness() < 2) );
+//		Messages::defer( build.mayDefer() && (Messages::verboseness() < 2) );
 		return {std::move(log),mysql};
 	}
 

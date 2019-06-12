@@ -4,55 +4,125 @@
 // Created by Ben Griffin on 2019-01-30.
 //
 
-#include "Message.h"
 #include <ostream>
+#include <thread>
+#include "support/Message.h"
+#include "support/db/Connection.h"
+#include "support/db/Query.h"
+#include "Build.h"
+#include "BuildUser.h"
 
 namespace Support {
 
-	Message::Message(channel c,string s): ch(c),content(std::move(s)) {}
+	std::atomic<uint64_t> Message::master = 1;
+
+	Message::Message(channel c,string s): id(master++),ch(c),content(std::move(s)),parent(nullptr),synched(false) {
+	}
+
+	string Message::chan() const {
+		switch (ch) { //syntax
+			case security: 	return "security"; break;
+			case fatal:  	return "fatal"; break;
+			case error:  	return "error"; break;
+			case syntax: 	return "syntax"; break;
+			case parms:  	return "parms"; break;
+			case range:  	return "range"; break;
+			case warn:   	return "warn"; break;
+			case info:   	return "info"; break;
+			case debug:  	return "debug"; break;
+			case usage:	 	return "usage"; break;
+			case trace:  	return "trace"; break;
+			case code:   	return "code"; break;
+			case timing: 	return "timing"; break;
+			case container: return "container"; break;
+			case link:   	return "link"; break;
+			case deprecated:return "deprecated"; break;
+		}
+	}
 
 	void Message::str(ostream& log) const {
-		switch (ch) { //syntax
-			case security: log << "security"; break;
-			case fatal:  log << "fatal"; break;
-			case error:  log << "error"; break;
-			case syntax: log << "syntax"; break;
-			case parms:  log << "parms"; break;
-			case range:  log << "range"; break;
-			case warn:   log << "warn"; break;
-			case info:   log << "info"; break;
-			case debug:  log << "debug"; break;
-			case scope:  log << "<<<<<"; break;
-			case endsc:  log << ">>>>>"; break;
-			case usage:	 log << "using"; break;
-			case trace:  log << "trace"; break;
-			case code:   log << "-raw-"; break;
-			case timing: log << "time"; break;
-			case even: 	 log << "-line"; break;
-			case struc:  log << "....."; break;
-			case link:   log << "link"; break;
-			case deprecated: log << "depr."; break;
+		log << chan() << ": " << content << flush;
+	}
+
+	void Message::store(Support::Messages& log,Support::Db::Connection* sql) {
+		if(sql != nullptr && !synched) {
+			Db::Query* query = nullptr;
+			ostringstream item;
+			string text(content);
+			sql->escape(text);
+			item << "insert ignore into bldlog (build,id,parent,user,channel,message) values (";
+			item << log.id() << "," << id << ",";
+			if (parent == nullptr) {
+				item << "NULL";
+			} else {
+				item << parent->id;
+			}
+			size_t user = log.uid();
+			if (user == 0) {
+				item << ",NULL,'";
+			} else {
+				item << "," << user << ",'";
+			}
+			item << chan() << "','" << text << "')";
+			if(sql->query(log,query,item.str())) {
+				query->execute(log);
+			}
+			sql->dispose(query);
+			synched = true;
 		}
-		log << ": " << content << flush;
 	}
 
-
-	Messages::format Messages::Format = Messages::Html;
-	size_t Messages::Verbosity = 3;
-	bool Messages::Deferred = true;
-
-	Messages::Messages(): _suppressed(false),_marked(false) {
-//		list.clear();
+	Messages::Messages(const Messages& o ): sql(o.sql),buildID(o.buildID),userID(o.userID),_established(o._established),_suppressed(false),_marked(false) {
 	}
 
-	void Messages::setVerbosity(size_t v) {
-		Verbosity = v;
+	Messages::Messages(Db::Connection* _sql): sql(_sql),buildID(0),userID(0),_established(false), _suppressed(false),_marked(false) {
+		startup();
 	}
-	void Messages::setMarkup(bool useMarkup) {
-		Format =  useMarkup ? Html : Console;
+
+	void Messages::setConnection(Db::Connection* _sql) {
+		if(sql == nullptr) {
+			sql = _sql;
+			startup();
+		}
 	}
-	void Messages::defer(bool defer) {
-		Deferred = defer;
+	void Messages::startup() {
+		if(sql != nullptr && ! _established) {
+			ostringstream table;
+			table << "CREATE TABLE IF NOT EXISTS `bldlog` ("
+			" `build` bigint unsigned not null,"
+			"`id` bigint unsigned not null,"
+			"`parent` bigint unsigned null,"
+			"`user` int(11),"
+			"`channel` enum ('fatal','error','syntax','range','parms','warn','deprecated','info','debug','security','usage','link','trace','code','timing','container','item') not null default 'item',"
+			"`ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,"
+			"`message` text NOT NULL,"
+			"PRIMARY KEY (`build`,`id`),"
+			"UNIQUE KEY (`id`,`parent`),KEY (`ts`),"
+			"FOREIGN KEY (parent) REFERENCES bldlog(id) ON DELETE CASCADE, "
+		 	"FOREIGN KEY (user) REFERENCES blduser(id) ON DELETE CASCADE) "
+			"ENGINE=InnoDB DEFAULT CHARSET=utf8";
+			Db::Query* query;
+			if(sql->query(*this,query,table.str())) {
+				query->execute(*this);
+			}
+			sql->dispose(query);
+			if(sql->query(*this,query,"select uuid_short() as build") && query->execute(*this)) {
+				while(query->nextrow()) {
+					query->readfield(*this,"build",buildID);
+				}
+			}
+			sql->dispose(query);
+			userID = Build::b().user.iD();
+			_established = true;
+			synchronise();
+		}
+	}
+
+	void Messages::synchronise() {
+		userID = Build::b().user.iD();
+		for (auto& m : list) {
+			m.store(*this,sql);
+		}
 	}
 
 	bool Messages::marked() const {
@@ -63,6 +133,7 @@ namespace Support {
 	}
 
 	void Messages::reset() {
+		synchronise();
 		list.clear();
 		_suppressed = false;
 		_marked = false;
@@ -77,9 +148,19 @@ namespace Support {
 		return "";
 	}
 
-	void Messages::enscope(string s) {
-		list.push_front(Message(scope,s));
-		list.push_back(Message(endsc,""));
+
+	void Messages::contain(string text,Messages& contents) {
+		list.push_back(Message(container,text));
+		*this += contents;
+
+	}
+
+	void Messages::push(const Message& m) {
+		list.push_back(std::move(m));
+	}
+
+	void Messages::pop() {
+
 	}
 
 	void Messages::prefix(Message m) {
@@ -114,4 +195,5 @@ namespace Support {
 		}
 		o << flush;
 	}
+
 }
