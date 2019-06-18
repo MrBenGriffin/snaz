@@ -300,26 +300,27 @@ namespace Support {
 		}
 	}
 
-	pair<Messages,Db::Connection*> Env::startup(int argc,const char **argv) {
+	pair< unique_ptr<Messages>,Db::Connection*> Env::startup(int argc,const char **argv) {
 		setlocale(LC_ALL, "en_UK.UTF-8");
 		Db::Connection *mysql = nullptr;
 		Infix::Evaluate::startup();
 		string config_path;
-		Messages log(mysql);
+		unique_ptr<Messages> log = make_unique<Messages>(mysql);
+//		Messages log(mysql);
 		if(get("SQL_CONFIG_FILE",config_path)) {
-			mysql = Db::ServiceFactory::sf().getConnection(log,"mysql",config_path);
+			mysql = Db::ServiceFactory::sf().getConnection(*log,"mysql",config_path);
 		} else {
-			log << Message(fatal,"The environment variable `SQL_CONFIG_FILE` must be set.");
+			*log << Message(fatal,"The environment variable `SQL_CONFIG_FILE` must be set.");
 		}
-		log.setConnection(mysql);
-		doArgs(log,argc,argv);
+		log->setConnection(mysql);
+		doArgs(*log,argc,argv);
 
 		//Initialise RNG.
 		::time_t tt; time(&tt);
 		clock_t clk = clock();
 		srand48( static_cast<long>(clk+tt) );	//need to set up the randomizer once
 
-		log << Message(debug,"Environment is initialised.");
+		*log << Message(debug,"Environment is initialised.");
 
 		Build& build = Build::b();
 //		Messages::defer( build.mayDefer() && (Messages::verboseness() < 2) );

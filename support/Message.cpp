@@ -4,6 +4,7 @@
 // Created by Ben Griffin on 2019-01-30.
 //
 
+#include <iostream>
 #include <ostream>
 #include <thread>
 #include "support/Message.h"
@@ -16,7 +17,57 @@ namespace Support {
 
 	std::atomic<uint64_t> Message::master = 1;
 
-	Message::Message(channel c,string s): id(master++),ch(c),content(std::move(s)),parent(nullptr),synched(false) {
+	Message::Message(channel c, Purpose p,string s, long double t) : id(master++),ch(c),purpose(p),content(std::move(s)),parent(0),synched(false),seconds(t),suppressed(false) {
+	}
+
+	Message::Message(channel c, Purpose p,string s) : Message(c,p,s,0) {
+	}
+
+	Message::Message(channel c,string s): Message(c,alert,s,0) {
+		switch (ch) { //syntax
+			case security:
+			case fatal:
+			case error:
+			case syntax:
+			case parms:
+			case range:
+			case warn:
+			case deprecated:
+			case usage:
+			case path:
+			case trace:  	purpose = alert; break;
+			case info:
+			case debug:
+			case code:
+			case container:
+			case link:   	purpose = progress; break;
+			case timing: 	purpose = timer; break;
+		}
+	}
+
+	void Message::setParent(uint64_t par) {
+		parent=par;
+	}
+
+	void Message::setSuppressed(bool sup) {
+		suppressed = sup;
+	}
+
+	uint64_t Message::ID() const {
+		return id;
+	}
+
+	string Message::purp() const {
+		switch (purpose) {
+			case progress:
+				return "progress";
+			case user:
+				return "user";
+			case timer:
+				return "timer";
+			case alert:
+				return "alert";
+		}
 	}
 
 	string Message::chan() const {
@@ -34,6 +85,7 @@ namespace Support {
 			case trace:  	return "trace"; break;
 			case code:   	return "code"; break;
 			case timing: 	return "timing"; break;
+			case path: 		return "path"; break;
 			case container: return "container"; break;
 			case link:   	return "link"; break;
 			case deprecated:return "deprecated"; break;
@@ -41,7 +93,7 @@ namespace Support {
 	}
 
 	void Message::str(ostream& log) const {
-		log << chan() << ": " << content << flush;
+		log << purp() << "; " << chan() << ": " << content << flush;
 	}
 
 	void Message::store(Support::Messages& log,Support::Db::Connection* sql) {
@@ -50,20 +102,27 @@ namespace Support {
 			ostringstream item;
 			string text(content);
 			sql->escape(text);
-			item << "insert ignore into bldlog (build,id,parent,user,channel,message) values (";
+			item << "insert ignore into bldlog (build,id,parent,user,purpose,channel,message,seconds,suppressed) values (";
 			item << log.id() << "," << id << ",";
-			if (parent == nullptr) {
+			if (parent == 0) {
 				item << "NULL";
 			} else {
-				item << parent->id;
+				item << parent;
 			}
 			size_t user = log.uid();
 			if (user == 0) {
-				item << ",NULL,'";
+				item << ",NULL,";
 			} else {
-				item << "," << user << ",'";
+				item << "," << user << ",";
 			}
-			item << chan() << "','" << text << "')";
+			item << "'" << purp() << "','" << chan() << "','" << text << "',";
+			if (seconds == 0) {
+				item << "NULL";
+			} else {
+				item << seconds;
+			}
+			item << "," << (suppressed? "true" : "false") << ")";
+//			item << ")";
 			if(sql->query(log,query,item.str())) {
 				query->execute(log);
 			}
@@ -72,11 +131,24 @@ namespace Support {
 		}
 	}
 
-	Messages::Messages(const Messages& o ): sql(o.sql),buildID(o.buildID),userID(o.userID),_established(o._established),_suppressed(false),_marked(false) {
+	Messages::Messages(Messages& o ): sql(o.sql),buildID(o.buildID),userID(o.userID),_established(o._established),_suppressed(false),_marked(false) {
+		container = &o;
+		_marked = false;
 	}
 
-	Messages::Messages(Db::Connection* _sql): sql(_sql),buildID(0),userID(0),_established(false), _suppressed(false),_marked(false) {
+	Messages::Messages(Db::Connection* _sql): container(nullptr),sql(_sql),buildID(0),userID(0),_established(false), _suppressed(false),_marked(false) {
 		startup();
+	}
+
+	Messages::~Messages() {
+		if(container == nullptr) {
+			synchronise();
+		} else {
+			while (! list.empty() ) {
+				container->list.push_back(std::move(list.front()));
+				list.pop_front();
+			}
+		}
 	}
 
 	void Messages::setConnection(Db::Connection* _sql) {
@@ -93,12 +165,15 @@ namespace Support {
 			"`id` bigint unsigned not null,"
 			"`parent` bigint unsigned null,"
 			"`user` int(11),"
+			"`seconds` double null,"
+			"`suppressed` bool not null default false,"
+			"`purpose` enum ('progress','user','timer','alert') not null default 'alert',"
 			"`channel` enum ('fatal','error','syntax','range','parms','warn','deprecated','info','debug','security','usage','link','trace','code','timing','container','item') not null default 'item',"
 			"`ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,"
 			"`message` text NOT NULL,"
 			"PRIMARY KEY (`build`,`id`),"
-			"UNIQUE KEY (`id`,`parent`),KEY (`ts`),"
-			"FOREIGN KEY (parent) REFERENCES bldlog(id) ON DELETE CASCADE, "
+			"KEY (`build`,`id`,`parent`),KEY (`ts`),"
+			"FOREIGN KEY (build,parent) REFERENCES bldlog(build,id) ON DELETE CASCADE, "
 		 	"FOREIGN KEY (user) REFERENCES blduser(id) ON DELETE CASCADE) "
 			"ENGINE=InnoDB DEFAULT CHARSET=utf8";
 			Db::Query* query;
@@ -120,10 +195,12 @@ namespace Support {
 
 	void Messages::synchronise() {
 		userID = Build::b().user.iD();
+		size_t listSize = list.size();
 		for (auto& m : list) {
 			m.store(*this,sql);
 		}
 	}
+
 
 	bool Messages::marked() const {
 		return _marked;
@@ -148,30 +225,27 @@ namespace Support {
 		return "";
 	}
 
-
-	void Messages::contain(string text,Messages& contents) {
-		list.push_back(Message(container,text));
-		*this += contents;
-
+	void Messages::add(const Message& m) {
+		_marked = _marked || (m.purpose == alert);
+		list.push_back(std::move(m));
+		if(!stack.empty()) {
+			list.back().setParent(stack.back());
+		}
+		list.back().setSuppressed(_suppressed);
 	}
 
 	void Messages::push(const Message& m) {
-		list.push_back(std::move(m));
+//		auto id = m.ID();
+		add(m);
+		stack.push_back(m.ID());
 	}
 
 	void Messages::pop() {
-
-	}
-
-	void Messages::prefix(Message m) {
-		list.push_front(std::move(m));
+		stack.pop_back();
 	}
 
 	void Messages::operator<< (const Message& m ) {
-		if(!_suppressed) {
-			_marked = _marked || (m.ch != info && m.ch != debug);
-			list.push_back(std::move(m));
-		}
+		add(m);
 	}
 
 	void Messages::operator+= (Messages& msgs) {

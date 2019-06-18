@@ -62,35 +62,34 @@ Build::~Build() {
 //	return b();
 //}
 
-void Build::run(Messages &errs,Connection* _sql) {
+void Build::run(Messages &log,Connection* _sql) {
 	if (_sql == nullptr) {
-		errs << Message(fatal,"Build needs an SQL connection.");
+		log << Message(fatal,"Build needs an SQL connection.");
 		return;
 	} else {
 		sql = _sql;
 	}
-//	std::cout << "Content-type: text/html" << endl << "Status: 200 OK" << endl << endl << "<!DOCTYPE html>" << endl << "<html><head><title>Macrotext</title><body><pre>";
 	Env& env = Env::e();
-	mt::Definition::startup(errs); //initialise internals
+	mt::Definition::startup(log); //initialise internals
 	Date date;
 	std::ostringstream str;
-	str << "Builder v" << std::setprecision(16) << version << " - " << env.get("RS_SITENAME") << " - ";
-	str << string(_current) << " build; started on " << date.str() << " (UTC)";
-	errs << Message(info,str.str());
+	str << "Building Site " << env.get("RS_SITENAME") << " " << string(_current) << " on " << date.str() << " (UTC)";
+	log.push(Message(info,str.str()));
+	Timing::t().get(log,'b');
 	switch(_current) {
 		case test: {
-			tests(errs);
+			tests(log);
 		} break;
 		case parse: {
-			doParse(errs,*sql);
+			doParse(log,*sql);
 		} break;
 		case draft:
 		case final: {
-			build(errs);
+			build(log);
 		} break;
 	}
-//	std::cout << "</pre></body></html>" << endl;
-
+	Timing::t().get(log,'b');
+	log.pop();
 }
 void Build::tests(Messages &errs) {
 	mt::Definition::load(errs,*sql,_current); // This is quite slow.
@@ -122,10 +121,11 @@ void Build::tests(Messages &errs) {
 	mt::Definition::shutdown(errs,*sql,_current); //bld->savePersistance(); prunePersistance(); clearPersistance();
 }
 void Build::build(Messages &errs) {
-	errs << Message(info,"Loading Builder Configuration");
+	errs.push(Message(info,"Loading Configuration"));
 	user.load(errs,*sql);
 	loadLanguages(errs,*sql);
 	loadTechs(errs,*sql);
+	errs.pop();
 	full = allLangs && allTechs && requestedNodes.empty();
 	if( (_current == final && ((full && user.may.final) || user.may.finalDown)) ||
 		(_current == draft && ((full && user.may.draft) || user.may.draftDown)) ) {
@@ -156,11 +156,14 @@ void Build::build(Messages &errs) {
 
 void Build::global(Messages& errs) {
 	Env& env = Env::e();
+	errs.push(Message(info,"Loading Macros, Suffixes, Scripts, Templates, and Segments"));
 	mt::Definition::load(errs,*sql,_current); // Set the internals.
 	env.basedir(Scripts).makeDir(errs);
 	node::Suffix().loadTree(errs,*sql,0, _current);
 	content::Template::load(errs,*sql);
 	content::Segment::load(errs,*sql,_current);
+	errs.pop();
+
 //TODO:	RunScript("PRE_PROCESSING_SCRIPT", "Pre Processor", errs);
 	langs(errs);
 //TODO:	iMedia::move(errs);
@@ -181,6 +184,7 @@ void Build::global(Messages& errs) {
 	content::Editorial::e().unload(errs,*sql);
 	mt::Definition::shutdown(errs,*sql,_current); //bld->savePersistance(); prunePersistance(); clearPersistance();
 //TODO: do FINAL_PROCESSING_SCRIPT stuff here if it's a full, final build..
+
 }
 
 void Build::langs(Messages& errs) {
@@ -249,7 +253,6 @@ void Build::doParse(Messages &errs, Connection&) {
 void Build::loadLanguages(Messages &errs, Connection& dbc) {
 	map< size_t,Language > qLangs;
 	if (dbc.dbselected() && dbc.table_exists(errs,"bldlanguage")) {
-		errs << Message(info,"Loading Languages");
 		Query* query;
 		size_t mode = _current == final ? 2 : 1;
 		ostringstream str;
@@ -366,10 +369,10 @@ void Build::list() {
 
 void Build::close(Support::Messages &errs) {
 	Infix::Evaluate::shutdown();
-	Timing& timer = Timing::t();
-	if (timer.show()) { timer.get(errs,'b'); }
+	Timing::t().get(errs,'b');
+	errs << Message(info,progress,"Build is finished");
+
 	errs.synchronise();
-//	errs.str(std::cout, true); //output always.
 }
 
 bool Build::setLock(Support::Messages& errs,Connection& dbc) {
@@ -395,12 +398,16 @@ bool Build::setLock(Support::Messages& errs,Connection& dbc) {
 		str.str("");
 		if (count == 0 || !lock) {
 			str << "replace into blddefs set type='LOCK" << (_current == draft ? "D" : "F") << "',value=concat('"
-				<< user.userName() << ", at ',now())";
+				<< user.userName() << " at ',now())";
 			if (dbc.query(errs, query, str.str()) && query->execute(errs)) {
 				response = true;
 			}
+			dbc.dispose(query); str.str("");
+			str << "replace into blddefs set type='BUILD',value=" << errs.id();
+			if (dbc.query(errs, query, str.str())) {
+				query->execute(errs);
+			}
 			dbc.dispose(query);
-
 		} else {
 			Env env = Env::e();
 			string this_script,these_parms;
@@ -426,12 +433,13 @@ void Build::releaseLock(int) {
 		if (build.sql->isopen() && build.sql->dbselected() && build.sql->table_exists(log, "blddefs"))  {
 			Query* query = nullptr;
 			ostringstream str;
-			str << "delete from blddefs where type='LOCK" << ( build._current == draft ? "D" : "F") << "'";
+			str << "delete from blddefs where type='BUILD' or type='LOCK" << ( build._current == draft ? "D" : "F") << "'";
 			if (build.sql->query(log,query,str.str())) {
 				query->execute(log);
 			}
 			build.sql->dispose(query);
 		}
 	}
-	log.str(std::cerr);
+	log.synchronise();
+//	log.str(std::cerr);
 }

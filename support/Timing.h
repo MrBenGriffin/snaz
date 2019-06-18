@@ -45,10 +45,11 @@ namespace Support {
 		void set(std::string= "custom");
 		void setShow(bool Show = true) { _show = Show; }
 		bool show() { return _show; }
-		void get(std::ostream&,char,std::string= "unknown",units=nat);
-		void get(Messages&,std::string= "unknown",units=nat);
-		void use(Messages&,std::string= "unknown",units=nat);
-		void get(Messages&,char,std::string= "unknown",units=nat);
+		timecount get(char,std::string= "unknown");
+		void get(std::ostream&,char,std::string= "unknown");
+		void get(Messages&,std::string= "unknown");
+		void use(Messages&,std::string= "unknown");
+		void get(Messages&,char,std::string= "unknown");
 		void wait(long double);
 
 	};

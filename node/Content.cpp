@@ -305,9 +305,11 @@ namespace node {
 	}
 
     void Content::compose(Messages& errs) {
-        Timing& times = Timing::t();
-        ostringstream msg; msg << "id " << idStr << " `" << _ref << "` ";
-        if (times.show()) { times.set(msg.str()); }
+		ostringstream msg; msg << "Node ID " << idStr << " `" << _ref << "` ";
+		string name(msg.str());
+		errs.push(Message(info,name));
+		Timing& times = Timing::t();
+        times.set("Node Build");
         Metrics current;
         current.nodeStack.push_back(this);
         current.current = this;
@@ -319,8 +321,8 @@ namespace node {
             std::ostringstream content;
             if(!t->code.empty() && !finalFilenames.empty()) {
                 auto file = finalFilenames[current.page];
+//		http://edit-preview.redsnapper.net/en/testl.php
                 //                errs << Message(info,file);
-                errs.str(cout);
                 errs.reset();
                 mt::Wss::push(&(t->nl)); //!!! another global.. need to add to the metrics above.
                 t->code.expand(errs, content, context); //no context here...
@@ -338,8 +340,10 @@ namespace node {
             current.page++;
         }
 		context.pop_back();
-		assert(context.empty());
+//		assert(context.empty());
         current.nodeStack.pop_back();
-        if (times.show()) { times.use(errs,msg.str()); }
+        times.use(errs,msg.str());
+		errs.pop();
+//		errs.synchronise();
     }
 }

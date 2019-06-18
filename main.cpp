@@ -13,15 +13,19 @@
 using namespace Support;
 int main( const int argc, const char **argv ) {
 	Env& env = Env::e();
-	pair<Messages,Db::Connection*> services = env.startup(argc,argv);
-	Messages& log = services.first;
+	pair< unique_ptr<Messages>,Db::Connection*> services = env.startup(argc,argv);
+	auto log = std::move(services.first);
+	std::ostringstream title;
+	title << "Builder v" << std::setprecision(16) << Build::version << ". Build: " << __DATE__ << "; " << __TIME__ ;
 	if (argc == 2 && argv[1][0]=='-' && argv[1][1]=='V') {
-		std::cout << "Builder v" << std::setprecision(16) << Build::version << ". Build: " << __DATE__ << "; " << __TIME__  << std::endl;
+		std::cout << title.str()  << std::endl;
 	} else {
 		Timing::t(); //initialise.
 		Build &build = Build::b();
-		build.run(log,services.second);
-		build.close(log);
+		log->push(Message(info,title.str()));
+		build.run(*log,services.second);
+		log->pop();
+		build.close(*log);
 	}
 	return (EXIT_SUCCESS);
 }

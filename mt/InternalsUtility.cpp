@@ -237,7 +237,6 @@ namespace mt {
 	}
 	void iConsole::expand(Messages& e,MacroText& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
-//		enum channel { fatal, error, syntax, range, parms, warn, info, debug, usage, timing, trace, code };
 		channel type = info;
 		string message;
 		Messages local(e);
@@ -257,9 +256,9 @@ namespace mt {
 					case 'd': type=debug; break;
 					case 'u': type=usage; break;
 					case 'p': type=code; break;
-					case 't': { doTrace(local,context); e.push(Message(container,message)); e+= local; e.pop(); } return;
-					case 'b': { Timing::t().get(local,'b'); e.push(Message(container,message)); e+= local; e.pop(); } return;
-					case 'n': { Timing::t().get(local,'n'); e.push(Message(container,message)); e+= local; e.pop(); } return;
+					case 't': { doTrace(local,context); e.push(Message(container,Purpose::user,message)); e+= local; e.pop(); } return;
+					case 'b': { Timing::t().get(local,'b'); e.push(Message(container,Purpose::user,message)); e+= local; e.pop(); } return;
+					case 'n': { Timing::t().get(local,'n'); e.push(Message(container,Purpose::user,message)); e+= local; e.pop(); } return;
 					case 'c': Timing::t().get(local,'c',message); return;
 					default: break;
 				}
@@ -267,7 +266,7 @@ namespace mt {
 		} else {
 			message =  my.parm(1);
 		}
-		e << Message(type,message);
+		e << Message(type,Purpose::user,message);
 	}
 	void iDate::expand(Messages& e,MacroText& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
@@ -578,19 +577,18 @@ namespace mt {
 			switch(c) {
 				case 'l': {
 					if (my.count == 3) {
-						timer.get(result,c,p2,timer.unit(my.parm(3),none));
+						timer.str(result,timer.get(c,p2),timer.unit(my.parm(3),none));
 					} else {
-						timer.get(result,c,"",timer.unit(p2,none));
+						timer.str(result,timer.get(c,""),timer.unit(p2,none));
 					}
 				} break;
 				case 'n':
-				case 'b': timer.get(result,c,"",timer.unit(p2,none)); break;
+				case 'b': timer.str(result,timer.get(c,""),timer.unit(p2,none)); break;
 				case 'c': if(!p2.empty()) timer.set(c,p2); break;
-				default : timer.get(result,'c',timerParm,timer.unit(p2,none));
+				default : timer.str(result,timer.get('c',timerParm),timer.unit(p2,none));
 			}
 		} else {
-			timer.get(result,'c',timerParm,timer.unit(p2,none));
-
+			timer.str(result,timer.get('c',timerParm),timer.unit(p2,none));
 		}
 		my.set(result.str());
 	}

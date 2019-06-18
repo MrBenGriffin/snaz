@@ -74,8 +74,8 @@ namespace Support {
 		return s < l;
 	}
 
-	void Timing::get(ostream& ostr,char timer_c,const string name,units style) {
-		timecount the_timer;
+	timecount Timing::get(char timer_c,const string name) {
+		timecount the_timer(0);
 		string uname = name;
 		timer_c = (char) tolower(timer_c);
 		switch(timer_c) {
@@ -118,31 +118,32 @@ namespace Support {
 				//build/process
 				the_timer = timer_diff(bBasetime);
 				break;
-			default:
-				return;
+			default: break;
 		}
-		str(ostr,the_timer,style);
+		return the_timer;
 	}
 
-	void Timing::get(Messages& ostr,char timer_c,const string name,units style) {
+//	void Timing::get(ostream& ostr,char timer_c,const string name,units style) {
+//		str(ostr,get(timer_c,name),style);
+//	}
+
+	void Timing::get(Messages& log,char timer_c,const string name) {
 		ostringstream repo;
-		auto base = 50;
 		switch(timer_c) {
-			case 'b': repo << setw(base+7) << "Build:"; break;
-			case 'n': repo << setw(base+7) << "Node:"; break;
-			case 'l': repo << setw(base+0) << name << " (lap):"; break;
-			case 'c': repo << setw(base+6) << name << ":"; break;
+			case 'b': repo << "Build Time"; break;
+			case 'n': repo << "Node Time"; break;
+			case 'l': repo << name << " (lap)"; break;
+			case 'c': repo << name; break;
 		}
-		get(repo,timer_c,name,style);
-		ostr << Message(timing,repo.str());
+		log << Message(timing,timer,repo.str(),Timing::seconds(get(timer_c,name)));
 	}
 
-	void Timing::get(Messages& ostr,const string name,units style) {
-		get(ostr,'c',name,style);
+	void Timing::get(Messages& log,const string name) {
+		get(log,'c',name);
 	}
 
-	void Timing::use(Messages& ostr,const string name,units style) {
-		get(ostr,'c',name,style);
+	void Timing::use(Messages& log,const string name) {
+		get(log,'c',name);
 		userTimes.erase(name);
 		lapTimes.erase(name);
 	}
