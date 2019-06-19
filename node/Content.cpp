@@ -320,6 +320,7 @@ namespace node {
         for (auto* t : layoutPtr->templates) {
             std::ostringstream content;
             if(!t->code.empty() && !finalFilenames.empty()) {
+            	current.currentTemplate = t;
                 auto file = finalFilenames[current.page];
 //		http://edit-preview.redsnapper.net/en/testl.php
                 //                errs << Message(info,file);

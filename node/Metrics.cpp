@@ -54,7 +54,20 @@ namespace node {
 		page = o->page;
 	}
 
-	const Node* Metrics::byPath(Messages &errs,const std::string &path) const {
+	void Metrics::trace(Messages &errs,const mt::mstack* context) const {
+		for (auto& i : *context) {
+			if(i.first != nullptr) {
+				errs << Message(Support::trace,i.first->name());
+			}
+		}
+		if(currentTemplate != nullptr) {
+			errs << Message(Support::trace,currentTemplate->name);
+		} else {
+			errs << Message(Support::trace,"direct"); //This is probably a test or a syntax check.
+		}
+	}
+
+	const Node* Metrics::byPath(Messages &errs,const std::string &path,const mt::mstack* context) const {
 		const Node *result = nullptr;
 		if (path.size() > 0) {    // If specified startnode, use it
 			const string relatives = "C0n+-.^RFBO"; //yes, 0 is a relative address in this case!
@@ -73,8 +86,10 @@ namespace node {
 			}
 			locator->setFrom(current);
 			result = locator->locate(errs,path.begin(),path.end());
-			if (result == nullptr) {
-				errs << Message(error, "Path: " + path + " did not find a node.");
+			if (result == nullptr && errs.storing()) {
+				errs.push(Message(error, "Path: " + path + " did not find a node."));
+				trace(errs,context);
+				errs.pop();
 			}
 			locator->setRoot(Content::root());
 		} else {
@@ -104,7 +119,7 @@ namespace node {
 		locator->setFrom(current);
 		result.first = locator->locate(errs,path.begin(),path.end());
 		result.second = locator->getFoundPageNumber();
-		if (result.first == nullptr) {
+		if (result.first == nullptr && errs.storing()) {
 			errs << Message(error, "Path: " + path + " did not find a node.");
 		}
 		if (result.second == UINTMAX_MAX) {

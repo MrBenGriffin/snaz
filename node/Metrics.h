@@ -10,6 +10,12 @@
 #include <memory>
 #include "support/Message.h"
 
+namespace mt {
+	class Handler;
+	class Instance;
+	using Carriage= std::pair<const Handler*, Instance* >;
+	using mstack  = std::deque<Carriage>;
+}
 namespace content {
 	class Template;
 	class Segment;
@@ -40,11 +46,11 @@ namespace node {
 		std::stack<const content::Segment *> segmentStack;
 		std::deque<const Content *> nodeStack;    //current node - used to pass to built-in functions
 		size_t page;
-// 		void setLocator(std::unique_ptr<Locator> l) { locator = l; }
-		const Node* byPath(Messages &,const std::string &) const;    				//returns null if not found
+		const Node* byPath(Messages &,const std::string &,const mt::mstack*) const;    	//returns null if not found
 		pair<const Node*,size_t> nodePage(Messages &,const std::string &) const;    //returns null if not found
 		void push(const Content*,const content::Segment*);
 		void pop();
+		void trace(Messages&,const mt::mstack*) const;
 
 	};
 }

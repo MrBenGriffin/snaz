@@ -47,7 +47,7 @@ namespace mt {
 
 	const node::Node* InternalInstance::node(const string& ref) {
 		if(metrics) {
-			return metrics->byPath(*errs,ref);
+			return metrics->byPath(*errs,ref,context);
 		} else {
 			return nullptr;
 		}
@@ -64,7 +64,7 @@ namespace mt {
 	plist InternalInstance::toNodeParms(const Internal* parent,vector<string>& list,string sort,size_t maxSize) {
 		vector<const node::Node*> nodes;
 		for(auto& i : list) {
-			auto* node = metrics->byPath(*errs,i);
+			auto* node = metrics->byPath(*errs,i,context);
 			if(node != nullptr) {
 				nodes.push_back(node);
 			}

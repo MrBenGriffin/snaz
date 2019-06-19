@@ -59,6 +59,7 @@ namespace Support {
 		deque<uint64_t> stack; //just the ID of the pushed alert.
 		deque<Message> list;
 	public:
+		bool storing() { return sql != nullptr; }
 		void startup();
 		void synchronise();
 		Messages(Support::Messages&);

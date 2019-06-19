@@ -20,7 +20,7 @@ namespace mt {
 		const Internal* owner;
 		const node::Metrics* metrics;// = context.back().second.metrics;
 		size_t          min{0}, max{0}, count {0};
-		MacroText*          output {nullptr};
+		MacroText*      output {nullptr};
 		Instance*  		instancePtr {nullptr};
 		const plist*    parms {nullptr};
 		mstack*         context {nullptr};

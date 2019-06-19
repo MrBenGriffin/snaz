@@ -77,7 +77,7 @@ namespace mt {
 		}
 	}
 	void iExistNode::expand(Messages& e,MacroText& o,Instance& instance,mstack& context) const {
-		Messages suppress(e); // We could add this to e in a debug.
+		Messages suppress(nullptr); // We could add this to e in a debug.
 		InternalInstance my(this,suppress,o,instance,context);
 		const Node* main = my.node(1);
 		my.errs = &e;

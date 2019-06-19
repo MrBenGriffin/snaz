@@ -118,7 +118,7 @@ void Internal::startup(Messages& log,Db::Connection& _sql,buildKind kind) {
 		if(x->metrics != nullptr  && (x->metrics)->currentTemplate != nullptr) {
 			e << Message(trace,x->metrics->currentTemplate->name);
 		} else {
-			e << Message(trace,"nil");
+			e << Message(trace,"direct"); //This is probably a test or a syntax check.
 		}
 
 	}
