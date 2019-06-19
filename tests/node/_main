@@ -7,7 +7,7 @@
 F pushNode	312
 # iSuffix
 iSuffix 01		@iSuffix(!NodeLocator)				html
-iSuffix 02		@iSuffix(!NodeLocator:1)			!1!range: Page was out of bounds.
+iSuffix 02		@iSuffix(!NodeLocator:1)			!1!alert; range: Page was out of bounds.
 iSuffix 03a		@iSuffix(232:0)						qxml
 iSuffix 03b		@iSuffix(232:1)						xml
 
@@ -16,7 +16,7 @@ iLink 01		@iLink(!NodeLocator:0)				nodelocator.html
 iLink 02		@iLink()							nodelocator.html
 iLink 03a		@iLink(232:0)						zappendtest.qxml
 iLink 03b		@iLink(232:1)						zappendtest_1.xml
-iLink 04		@iLink(232:2)						!1!range: Page was out of bounds.
+iLink 04		@iLink(232:2)						!1!alert; range: Page was out of bounds.
 
 # iLinkRef
 iLinkRef 01		@iLinkRef(312)							NodeLocation
@@ -49,7 +49,7 @@ iID 03			@iID(I0)										312
 // +-----+------+------+------------------------------+
 
 iTWxxx				@iLinkRef(/)							BuildTest
-iTW01x				@iTW(/0+1)								!1!depr.: 2019: /0+1 is deprecated for Root. Use W1 or A1 or /
+iTW01x				@iTW(/0+1)								!1!alert; deprecated: 2019: /0+1 is deprecated for Root. Use W1 or A1 or /
 iTW02a				@iTW(/0+1/^1)							1
 iTW02b				@iTW(W1)								1
 iTW02c				@iTW(I0/A1)								1
@@ -91,8 +91,8 @@ iTitle 020		[@iTitle(312/n-0)]							[Node Locator]
 iTitle 025		[@iTitle(312/n-0/n-0)]						[NL Stack]
 iTitle 030		[@iTitle(312/n-0,Node Locator,T)]			[T]
 iTitle 040		[@iTitle(312,Node Locator,T,F)]				[F]
-iTitle 050		[@iTitle(!NodeLocateTestB/n-4)]				!1!range: A child index was outside the number of children. Index:-1 Children: 3
-iTitle 060		[@iTitle(!NodeLocateTestB/n-3)]				!1!range: A child index was outside the number of children. Index:0 Children: 3
+iTitle 050		[@iTitle(!NodeLocateTestB/n-4)]				!1!alert; range: A child index was outside the number of children. Index:-1 Children: 3
+iTitle 060		[@iTitle(!NodeLocateTestB/n-3)]				!1!alert; range: A child index was outside the number of children. Index:0 Children: 3
 iTitle 070		[@iTitle(!NodeLocateTestB/n-2)]				[Node Locate Test BA]
 iTitle 080		[@iTitle(!NodeLocateTestB/n-1)]				[node locate test BB]
 iTitle 090		[@iTitle(!NodeLocateTestB/n-0)]				[Node Locate Test BC]
@@ -166,7 +166,7 @@ iECGood02i		@iExistContent(,POTA,T,F)				T
 iECGood01k		@iExistContent(,Raw,T,F)					T
 iECGood02k		@iExistContent(,RAWTA,T,F)				T
 
-iECBadSegRef	@iExistContent(,wibble,T,F)				!1!error: There is no segment with reference 'wibble' or aliased by layout 'SEGTEST'
+iECBadSegRef	@iExistContent(,wibble,T,F)				!1!alert; error: There is no segment with reference 'wibble' or aliased by layout 'SEGTEST'
 
 //cf. iCNoSegScope below for the error that occurs using a segment out of context.
 iECNoSegRef		@iExistContent(,testmedia,T,F)			F
@@ -175,10 +175,10 @@ iECNoSegRef		@iExistContent(,testmedia,T,F)			F
 iECEmptyContent	@iExistContent(,Empty,T,F)				T
 
 # iContent
-iCNoSegScope	@iContent(,BreakTestA)			!1!range: The segment with reference 'BreakTestA' is not used by layout 'SEGTEST'
+iCNoSegScope	@iContent(,BreakTestA)				!1!alert; range: The segment with reference 'BreakTestA' is not used by layout 'SEGTEST'
 
 # iSegmentName
-iSOutofScope	@iSegmentName(Stuff,T,F)			!1!error: iSegmentName called outside any segment context.
+iSOutofScope	@iSegmentName(Stuff,T,F)			!1!alert; error: iSegmentName called outside any segment context.
 # The Stuff/Code content tests iSegmentName on node 294
 iClaySeg29C		@iContent(,Stuff)					Stuff T T F
 iClaySeg294		@iContent(294,Stuff)				Stuff T T F
@@ -187,7 +187,7 @@ iCsegSeg294		@iContent(294,Code)					Stuff T T F
 iClaySeg105		@iContent(294,Stuff)				Stuff T T F
 iCsegSeg105		@iContent(294,Code)					Stuff T T F
 
-iCNoSegment		@iContent(294,wibble)				!1!error: There is no segment with reference 'wibble' or aliased by layout 'SEGTEST'
+iCNoSegment		@iContent(294,wibble)				!1!alert; error: There is no segment with reference 'wibble' or aliased by layout 'SEGTEST'
 iCsegEmpty		[@iContent(294,Empty)]				[]
 iCsegEmpty		[@iContent(294,Copy)]				[]
 iCMetaE			@iContent(294,Code,editor)			bgriffin

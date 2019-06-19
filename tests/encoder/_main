@@ -1,17 +1,17 @@
 # iBase64
 //encodes/decodes text with base64 encoding. First parameter is the encoding direction. 2nd parameter is the text to be encoded.)
-// iBase64		@iBase64(1,2)							!1!error: iBase64 is not yet implemented.
+// iBase64		@iBase64(1,2)							!1!alert; error: iBase64 is not yet implemented.
 
 iBase64 01		@iBase64(e,foo)							Zm9v
 iBase64 02 		@iBase64(eb,foo)						Zm9v
 iBase64 03		@iBase64(d,Zm9v)						foo
 iBase64 04		@iBase64(e,a tiny little bit longer text to show breaking of encode)	YSB0aW55IGxpdHRsZSBiaXQgbG9uZ2VyIHRleHQgdG8gc2hvdyBicmVha2luZyBvZiBlbmNvZGU=
 iBase64 05		@iBase64(eb,a tiny little bit longer text to show breaking of encode)	YSB0aW55IGxpdHRsZSBiaXQgbG9uZ2VyIHRleHQgdG8gc2hvdyBicmVha2luZyBvZiBlbmNv␤ZGU=
-iBase64 06		@iBase64(d,~m9v)						!1!warn: base64 decoding found illegal character.
+iBase64 06		@iBase64(d,~m9v)						!1!alert; warn: base64 decoding found illegal character.
 
 
 # iDecode
-//iDecode		@iDecode(1)											!1!error: iDecode is not yet implemented.
+//iDecode		@iDecode(1)											!1!alert; error: iDecode is not yet implemented.
 iDecode 01		@iDecode(&amp;)										&
 iDecode 01a		@iDecode(x&amp;)									x&
 iDecode 01b		@iDecode(&amp;x)									&x
@@ -36,7 +36,7 @@ iDecode 110		@iDecode(0123456&amp;0123456&amp;0123456&amp;)		0123456&0123456&012
 iDecode 111		@iDecode(0123456&amp;0123456&amp;0123456&&amp;)		0123456&0123456&0123456&&
 
 # iEncode
-//iEncode		@iEncode(1)											!1!error: iEncode is not yet implemented.
+//iEncode		@iEncode(1)											!1!alert; error: iEncode is not yet implemented.
 iEncode 01		@iEncode(&)											&amp;
 iEncode 02		@iEncode(")											&quot;
 iEncode 03		@iEncode(')											&#39;
@@ -68,8 +68,8 @@ iHex 05			@iHex(A,40,T,F)							F
 # iUnHex
 iUnHex 01		@iUnHex(666F6F)							foo
 iUnHex 02		@iUnHex(666F6F,foo,T,F)					T
-iUnHex 03		@iUnHex(GX3322)							!1!warn: hex decoding found illegal character.
-iUnHex 04		@iUnHex(GX3322,666F6F,T,F)				!1!warn: hex decoding found illegal character.
+iUnHex 03		@iUnHex(GX3322)							!1!alert; warn: hex decoding found illegal character.
+iUnHex 04		@iUnHex(GX3322,666F6F,T,F)				!1!alert; warn: hex decoding found illegal character.
 iUnHex 05		@iUnHex(7a7C6C)							z|l
 iUnHex 06		@iUnHex(7a4)							z@
 

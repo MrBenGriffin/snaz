@@ -31,7 +31,6 @@ namespace Support {
 		uint64_t parent;
 		//		const Message* parent;
 		bool synched;
-		bool suppressed;
 	public:
 		channel ch;
 		Purpose purpose;
@@ -44,7 +43,6 @@ namespace Support {
 		string purp() const;
 		uint64_t ID() const;
 		void setParent(uint64_t);
-		void setSuppressed(bool);
 		void str(ostream&) const;
 		void store(Support::Messages&,Support::Db::Connection*);
 	};
@@ -56,7 +54,6 @@ namespace Support {
 		Support::Db::Connection* sql;
 		uint64_t buildID;
 		size_t userID;
-		bool _suppressed;
 		bool _marked;
 		bool _established;
 		deque<uint64_t> stack; //just the ID of the pushed alert.
@@ -70,8 +67,6 @@ namespace Support {
 		void setConnection(Support::Db::Connection*);
 		bool marked() const;
 		void reset();
-		bool suppressed() const;
-		void suppress(bool=false);
 		void push(const Message&);
 		void add(const Message&);
 		void pop();

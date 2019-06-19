@@ -4,36 +4,36 @@ U con			1	2	11	⌽iConsole(⍟1,⍟2)
 U cdog			1	1	11	⌽con(T,⍟1)
 U ccat			1	1	11	⌽cdog(⍟1)
 
-Range 001		@iEq(T,F,W,B,C)									!1!range: Range Error in ‘iEq’; 5 parameters found. But this macro requires from 0 to 4 parameters.
-iConsole 001	[@iConsole(woot)]								!1!info: woot
-iConsole B02	[@iConsole(B,woot)]								!2?time:[ ]+Build:[ ]+\d+\.\d*(µs|ms|s)
-iConsole S03	[@iConsole(S,woot)]								!1!info: woot
-iConsole N04	[@iConsole(N,woot)]								!2?time:[ ]+Node:[ ]+\d+\.\d*(µs|ms|s)
-iConsole I05	[@iConsole(I,woot)]								!1!info: woot
-iConsole W06	[@iConsole(W,woot)]								!1!warn: woot
-iConsole E07	[@iConsole(E,woot)]								!1!error: woot
-iConsole X08	[@iConsole(X,woot)]								!1!error: woot
-iConsole T08	[@iConsole(T,woot)]								!2!trace: nil
+Range 001		@iEq(T,F,W,B,C)									!1!alert; range: Range Error in ‘iEq’; 5 parameters found. But this macro requires from 0 to 4 parameters.
+iConsole 001	[@iConsole(woot)]								!1!user; info: woot
+iConsole B02	[@iConsole(B,woot)]								!2!user; timing: Build Time
+iConsole S03	[@iConsole(S,woot)]								!1!user; info: woot
+iConsole N04	[@iConsole(N,woot)]								!2!user; timing: Node Time
+iConsole I05	[@iConsole(I,woot)]								!1!user; info: woot
+iConsole W06	[@iConsole(W,woot)]								!1!user; warn: woot
+iConsole E07	[@iConsole(E,woot)]								!1!user; error: woot
+iConsole X08	[@iConsole(X,woot)]								!1!user; error: woot
+iConsole T08	[@iConsole(T,woot)]								!2!alert; trace: nil
 
 #Console in macros.
-iConsole n001	[@con(I,woot)]									!1!info: woot
-iConsole nB02	[@con(B,woot)]									!2?time:[ ]+Build:[ ]+\d+\.\d*(µs|ms|s)
-iConsole nS03	[@con(S,woot)]									!1!info: woot
-iConsole nN04	[@con(N,woot)]									!2?time:[ ]+Node:[ ]+\d+\.\d*(µs|ms|s)
-iConsole nI05	[@con(I,woot)]									!1!info: woot
+iConsole n001	[@con(I,woot)]									!1!user; info: woot
+iConsole nB02	[@con(B,woot)]									!2?user; timing: Build Time
+iConsole nS03	[@con(S,woot)]									!1!user; info: woot
+iConsole nN04	[@con(N,woot)]									!2?user; timing: Node Time
+iConsole nI05	[@con(I,woot)]									!1!user; info: woot
 
-iConsole nW06	[@con(W,woot)]									!1!warn: woot
-iConsole nE07	[@con(E,woot)]									!1!error: woot
-iConsole nX08	[@con(X,woot)]									!1!error: woot
+iConsole nW06	[@con(W,woot)]									!1!user; warn: woot
+iConsole nE07	[@con(E,woot)]									!1!user; error: woot
+iConsole nX08	[@con(X,woot)]									!1!user; error: woot
 
 #Trace lines.
-iConsole nT91	[@cdog(woot)]									!1!<<<<<: woot
-iConsole nT08	[@con(T,woot)]									!2!trace: con
-iConsole nT92	[@cdog(woot)]									!2!trace: con
-iConsole nT93	[@cdog(woot)]									!3!trace: cdog
-iCo1			[@ccat(woot)]									!2!trace: con
-iCo2			[@ccat(woot)]									!3!trace: cdog
-iCo3			[@ccat(woot)]									!4!trace: ccat
+iConsole nT91	[@cdog(woot)]									!1!user; container: woot
+iConsole nT08	[@con(T,woot)]									!2!alert; trace: con
+iConsole nT92	[@cdog(woot)]									!2!alert; trace: con
+iConsole nT93	[@cdog(woot)]									!3!alert; trace: cdog
+iCo1			[@ccat(woot)]									!2!alert; trace: con
+iCo2			[@ccat(woot)]									!3!alert; trace: cdog
+iCo3			[@ccat(woot)]									!4!alert; trace: ccat
 
 ~con
 ~cdog

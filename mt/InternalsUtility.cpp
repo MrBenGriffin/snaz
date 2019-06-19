@@ -37,7 +37,9 @@ namespace mt {
 		Messages local(e);
 		long double value = expression.process(local);
 		if(local.marked()) {
-			my.errs->push(Message(container,_name));
+			my.errs->push(Message(container,Purpose::alert,_name));
+			local << Message(code,Purpose::alert,expr);
+			doTrace(local,context);
 			*(my.errs) += local;
 			my.errs->pop();
 		}
@@ -257,9 +259,9 @@ namespace mt {
 					case 'u': type=usage; break;
 					case 'p': type=code; break;
 					case 't': { doTrace(local,context); e.push(Message(container,Purpose::user,message)); e+= local; e.pop(); } return;
-					case 'b': { Timing::t().get(local,'b'); e.push(Message(container,Purpose::user,message)); e+= local; e.pop(); } return;
-					case 'n': { Timing::t().get(local,'n'); e.push(Message(container,Purpose::user,message)); e+= local; e.pop(); } return;
-					case 'c': Timing::t().get(local,'c',message); return;
+					case 'b': { Timing::t().get(local,'b',"",Purpose::user); e.push(Message(container,Purpose::user,message)); e+= local; e.pop(); } return;
+					case 'n': { Timing::t().get(local,'n',"",Purpose::user); e.push(Message(container,Purpose::user,message)); e+= local; e.pop(); } return;
+					case 'c': Timing::t().get(local,'c',message,Purpose::user); return;
 					default: break;
 				}
 			}

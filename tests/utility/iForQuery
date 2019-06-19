@@ -1,11 +1,11 @@
 #iForQuery
-iForQuery 001	@iForQuery(null,@iField(ref,default))								!1!error: SQL select: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'null' at line 1
-iForQuery 002	@iForQuery(update bldvar set value='bim' where name='foo',[])		!1!error: Query is not a select!
-iForQuery 003	@iForQuery(SELECT 'a';select 'b',[])								!1!error: SQL select: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'select 'b'' at line 1
+iForQuery 001	@iForQuery(null,@iField(ref,default))								!1!alert; error: SQL select: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'null' at line 1
+iForQuery 002	@iForQuery(update bldvar set value='bim' where name='foo',[])		!1!alert; error: Query is not a select!
+iForQuery 003	@iForQuery(SELECT 'a';select 'b',[])								!1!alert; error: SQL select: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'select 'b'' at line 1
 iForQuery 004	@iForQuery(SELECT DATABASE() as db,[@iField(db)])					[buildtest]
 iForQuery 005	@iKV(bar,read,:,;,@iForQuery({select id,username from blduser order by id limit 4},@iField(id):@iField(username);))[@iKV(bar,size)]	[4]
 
 //iField must be used within iForSubs or iForQuery
 # iField
-iField 001		@iField(fieldname)													!1!error: iField must be used within a context such as iForSubs or iForQuery.
+iField 001		@iField(fieldname)													!1!alert; error: iField must be used within a context such as iForSubs or iForQuery.
 

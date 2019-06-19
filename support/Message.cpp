@@ -17,7 +17,7 @@ namespace Support {
 
 	std::atomic<uint64_t> Message::master = 1;
 
-	Message::Message(channel c, Purpose p,string s, long double t) : id(master++),ch(c),purpose(p),content(std::move(s)),parent(0),synched(false),seconds(t),suppressed(false) {
+	Message::Message(channel c, Purpose p,string s, long double t) : id(master++),ch(c),purpose(p),content(std::move(s)),parent(0),synched(false),seconds(t) {
 	}
 
 	Message::Message(channel c, Purpose p,string s) : Message(c,p,s,0) {
@@ -47,10 +47,6 @@ namespace Support {
 
 	void Message::setParent(uint64_t par) {
 		parent=par;
-	}
-
-	void Message::setSuppressed(bool sup) {
-		suppressed = sup;
 	}
 
 	uint64_t Message::ID() const {
@@ -102,7 +98,7 @@ namespace Support {
 			ostringstream item;
 			string text(content);
 			sql->escape(text);
-			item << "insert ignore into bldlog (build,id,parent,user,purpose,channel,message,seconds,suppressed) values (";
+			item << "insert ignore into bldlog (build,id,parent,user,purpose,channel,message,seconds) values (";
 			item << log.id() << "," << id << ",";
 			if (parent == 0) {
 				item << "NULL";
@@ -121,8 +117,7 @@ namespace Support {
 			} else {
 				item << seconds;
 			}
-			item << "," << (suppressed? "true" : "false") << ")";
-//			item << ")";
+			item << ")";
 			if(sql->query(log,query,item.str())) {
 				query->execute(log);
 			}
@@ -131,12 +126,12 @@ namespace Support {
 		}
 	}
 
-	Messages::Messages(Messages& o ): sql(o.sql),buildID(o.buildID),userID(o.userID),_established(o._established),_suppressed(false),_marked(false) {
+	Messages::Messages(Messages& o ): sql(o.sql),buildID(o.buildID),userID(o.userID),_established(o._established),_marked(false) {
 		container = &o;
 		_marked = false;
 	}
 
-	Messages::Messages(Db::Connection* _sql): container(nullptr),sql(_sql),buildID(0),userID(0),_established(false), _suppressed(false),_marked(false) {
+	Messages::Messages(Db::Connection* _sql): container(nullptr),sql(_sql),buildID(0),userID(0),_established(false),_marked(false) {
 		startup();
 	}
 
@@ -166,7 +161,6 @@ namespace Support {
 			"`parent` bigint unsigned null,"
 			"`user` int(11),"
 			"`seconds` double null,"
-			"`suppressed` bool not null default false,"
 			"`purpose` enum ('progress','user','timer','alert') not null default 'alert',"
 			"`channel` enum ('fatal','error','syntax','range','parms','warn','deprecated','info','debug','security','usage','link','trace','code','timing','container','item') not null default 'item',"
 			"`ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,"
@@ -201,18 +195,13 @@ namespace Support {
 		}
 	}
 
-
 	bool Messages::marked() const {
 		return _marked;
-	}
-	bool Messages::suppressed() const {
-		return _suppressed;
 	}
 
 	void Messages::reset() {
 		synchronise();
 		list.clear();
-		_suppressed = false;
 		_marked = false;
 	}
 
@@ -231,11 +220,9 @@ namespace Support {
 		if(!stack.empty()) {
 			list.back().setParent(stack.back());
 		}
-		list.back().setSuppressed(_suppressed);
 	}
 
 	void Messages::push(const Message& m) {
-//		auto id = m.ID();
 		add(m);
 		stack.push_back(m.ID());
 	}
@@ -254,10 +241,6 @@ namespace Support {
 			list.push_back(std::move(msgs.list.front()));
 			msgs.list.pop_front();
 		}
-	}
-
-	void Messages::suppress(bool supp) {
-		_suppressed=supp;
 	}
 
 	void Messages::str(ostream& o, bool anyway) const {

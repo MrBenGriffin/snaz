@@ -126,22 +126,22 @@ e06 deeper		⌽e(⌽e(⌽e(⌽e(⌽e(A)))))													[~[~[~[~[~A]]]]]
 
 # Parameter range error tests
 U pt	1	1	11	Hello
-pt 001	⌽pt()																!1!range: Range error. 'pt' uses exactly 1 parameter but 0 were found.
-pt 002	⌽pt(P,Q)															!1!range: Range error. 'pt' uses exactly 1 parameter but 2 were found.
+pt 001	⌽pt()																!1!alert; range: Range error. 'pt' uses exactly 1 parameter but 0 were found.
+pt 002	⌽pt(P,Q)															!1!alert; range: Range error. 'pt' uses exactly 1 parameter but 2 were found.
 pt 003	⌽pt(P)																Hello
 
 U pt	1	-1	11	Hello
-pt 011	⌽pt()																!1!range: Range error. 'pt' uses at least 1 parameter but 0 were found.
+pt 011	⌽pt()																!1!alert; range: Range error. 'pt' uses at least 1 parameter but 0 were found.
 pt 012	⌽pt(P,Q)															Hello
 pt 013	⌽pt(P)																Hello
 
 U pt	2	-1	11	Hello
-pt 021	⌽pt()																!1!range: Range error. 'pt' uses at least 2 parameters but 0 were found.
+pt 021	⌽pt()																!1!alert; range: Range error. 'pt' uses at least 2 parameters but 0 were found.
 pt 023	⌽pt(P,Q)															Hello
 
 U pt	1	2	11	Hello
-pt 031	⌽pt()																!1!range: Range error. 'pt' uses 1 to 2 parameters but 0 were found.
-pt 032	⌽pt(P,Q,R)															!1!range: Range error. 'pt' uses 1 to 2 parameters but 3 were found.
+pt 031	⌽pt()																!1!alert; range: Range error. 'pt' uses 1 to 2 parameters but 0 were found.
+pt 032	⌽pt(P,Q,R)															!1!alert; range: Range error. 'pt' uses 1 to 2 parameters but 3 were found.
 pt 033	⌽pt(P,Q)															Hello
 pt 034	⌽pt(Q)																Hello
 

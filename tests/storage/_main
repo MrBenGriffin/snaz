@@ -40,7 +40,7 @@ sto 004		@iSet(x,bar)@iSet(x,bim)@iGet(x):@iGet(x,bar,Y,N)							bim:N
 
 # iSetCache from builderTests
 iSetC 001	[@iSetCache(~A,X)@iGet(~A)]													[X]
-iSetC 002	[@iSetCache(~B,@iTitle(0+1))]												!1!error: ~B was not cacheable. The variable was still set.
+iSetC 002	[@iSetCache(~B,@iTitle(0+1))]												!1!alert; error: ~B was not cacheable. The variable was still set.
 
 
 # iAppend from builderTests

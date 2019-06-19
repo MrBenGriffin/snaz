@@ -46,10 +46,9 @@ namespace Support {
 		void setShow(bool Show = true) { _show = Show; }
 		bool show() { return _show; }
 		timecount get(char,std::string= "unknown");
-		void get(std::ostream&,char,std::string= "unknown");
 		void get(Messages&,std::string= "unknown");
 		void use(Messages&,std::string= "unknown");
-		void get(Messages&,char,std::string= "unknown");
+		void get(Messages&,char,std::string= "unknown",const Support::Purpose = timer);
 		void wait(long double);
 
 	};

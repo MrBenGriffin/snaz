@@ -127,7 +127,7 @@ namespace Support {
 //		str(ostr,get(timer_c,name),style);
 //	}
 
-	void Timing::get(Messages& log,char timer_c,const string name) {
+	void Timing::get(Messages& log,char timer_c,const string name,const Support::Purpose purpose) {
 		ostringstream repo;
 		switch(timer_c) {
 			case 'b': repo << "Build Time"; break;
@@ -135,7 +135,7 @@ namespace Support {
 			case 'l': repo << name << " (lap)"; break;
 			case 'c': repo << name; break;
 		}
-		log << Message(timing,timer,repo.str(),Timing::seconds(get(timer_c,name)));
+		log << Message(timing,purpose,repo.str(),Timing::seconds(get(timer_c,name)));
 	}
 
 	void Timing::get(Messages& log,const string name) {

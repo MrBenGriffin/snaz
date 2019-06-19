@@ -29,23 +29,23 @@ namespace testing {
 
 	void group::title(ostream& o,string title,int type) {
 		string head; size_t length;
-		string f = "─";
-		string m = "•";
-		string n = "•";
+		string f(testing::df);
+		string m(testing::dm);
+		string n(testing::dn);
 		switch(type) {
 			case 1: {
 				Support::toupper(title);
-				f = "═";
+				m = "═";
 			} break;
 			case 2: { // good test.
-				m = green + "✔︎";
+				f = green + "✔︎";
+				m = " ";
 				n = " ";
-				f = " ";
 			} break;
 			case 3: { // bad test.
-				m = red + "✖";
+				f = red + "✖";
+				m = " ";
 				n = " ";
-				f = " ";
 			} break;
 				//o << "• " << name << " √ " << endl;
 			default: {
@@ -54,9 +54,10 @@ namespace testing {
 			} break;
 		}
 		Support::length(title,length);
-		length = length > 70 ? 70 : length;
-		for (size_t i=0 ; i < 70 - length ; i++) head.append(f);
-		o << blue << m << f << f << f << f << f << n << " " << title << " " << n << head << m << norm << endl;
+		size_t adjust = lineWidth - 11;
+		length = length > adjust ? adjust : length;
+		for (size_t i=0 ; i < adjust - length ; i++) head.append(m);
+		o << blue << f << m << m << m << m << m << n << " " << title << " " << n << head << f << norm << endl;
 	}
 
 	void group::wss(std::string& basis,bool toSym) {
@@ -388,7 +389,9 @@ namespace testing {
 				}
 			}
 			if(filename == "main") {
-				o << blue << "•═══════════════════════════════════════════════════════════════════════════════•" << endl << endl << endl;
+				string line;
+				for (size_t i=0 ; i < lineWidth - 2 ; i++) line.append("═");
+				o << blue << df << line << df << norm << endl << endl  << endl;
 			}
 			infile.close();
 		} else {
