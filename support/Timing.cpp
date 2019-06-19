@@ -123,19 +123,16 @@ namespace Support {
 		return the_timer;
 	}
 
-//	void Timing::get(ostream& ostr,char timer_c,const string name,units style) {
-//		str(ostr,get(timer_c,name),style);
-//	}
-
 	void Timing::get(Messages& log,char timer_c,const string name,const Support::Purpose purpose) {
 		ostringstream repo;
+		Support::channel channel = custom;
 		switch(timer_c) {
-			case 'b': repo << "Build Time"; break;
-			case 'n': repo << "Node Time"; break;
+			case 'b': { channel = build; repo << "Build Time"; } break;
+			case 'n': { channel = node; repo << "Node Time"; } break;
 			case 'l': repo << name << " (lap)"; break;
 			case 'c': repo << name; break;
 		}
-		log << Message(timing,purpose,repo.str(),Timing::seconds(get(timer_c,name)));
+		log << Message(channel,purpose,repo.str(),Timing::seconds(get(timer_c,name)));
 	}
 
 	void Timing::get(Messages& log,const string name) {

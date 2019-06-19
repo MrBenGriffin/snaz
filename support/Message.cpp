@@ -41,7 +41,9 @@ namespace Support {
 			case code:
 			case container:
 			case link:   	purpose = progress; break;
-			case timing: 	purpose = timer; break;
+			case node:
+			case build:
+			case custom: 	purpose = timer; break;
 		}
 	}
 
@@ -80,7 +82,9 @@ namespace Support {
 			case usage:	 	return "usage"; break;
 			case trace:  	return "trace"; break;
 			case code:   	return "code"; break;
-			case timing: 	return "timing"; break;
+			case node: 		return "node"; break;
+			case build: 	return "build"; break;
+			case custom: 	return "custom"; break;
 			case path: 		return "path"; break;
 			case container: return "container"; break;
 			case link:   	return "link"; break;
@@ -162,7 +166,7 @@ namespace Support {
 			"`user` int(11),"
 			"`seconds` double null,"
 			"`purpose` enum ('progress','user','timer','alert') not null default 'alert',"
-			"`channel` enum ('fatal','error','syntax','range','parms','warn','deprecated','info','debug','security','usage','link','trace','code','timing','container','item') not null default 'item',"
+			"`channel` enum ('fatal','error','syntax','range','parms','warn','deprecated','info','debug','security','usage','link','trace','code','node','build','custom','container','item') not null default 'item',"
 			"`ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,"
 			"`message` text NOT NULL,"
 			"PRIMARY KEY (`build`,`id`),"
