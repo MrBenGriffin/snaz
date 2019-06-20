@@ -10,6 +10,7 @@
 #include <deque>
 #include <ostream>
 #include <cstdint>
+#include <atomic>
 
 namespace Support {
 	namespace Db {
