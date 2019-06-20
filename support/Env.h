@@ -7,6 +7,7 @@
 
 #include <string>
 #include <set>
+#include <memory>
 
 #include "Definitions.h"
 #include "File.h"
