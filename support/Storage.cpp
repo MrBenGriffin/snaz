@@ -354,6 +354,7 @@ namespace Support {
 		}
 		log << Message(error,"Storage::save: Deleted variable not yet implemented.");
 
+		//TODO:: delete dead stores.
 //		log << Message(error,"Storage::save is not yet implemented.");
 //		Query *qi = sql.query();
 //		for (auto &it : store) {
