@@ -75,7 +75,6 @@ void Build::run(Messages &log,Connection* _sql) {
 	std::ostringstream str;
 	str << "Building Site " << env.get("RS_SITENAME") << " " << string(_current) << " on " << date.str() << " (UTC)";
 	log.push(Message(info,str.str()));
-	Timing::t().set("Tests");
 	switch(_current) {
 		case test: {
 			tests(log);
@@ -88,10 +87,10 @@ void Build::run(Messages &log,Connection* _sql) {
 			build(log);
 		} break;
 	}
-	Timing::t().use(log,"Tests");
 	log.pop();
 }
 void Build::tests(Messages &errs) {
+	Timing::t().set("Tests");
 	mt::Definition::load(errs,*sql,_current); // This is quite slow.
 	user.load(errs,*sql);
 	loadLanguages(errs,*sql);
@@ -118,6 +117,7 @@ void Build::tests(Messages &errs) {
 
 	content::Editorial::e().reset(errs,*sql);
 	mt::Definition::shutdown(errs,*sql,_current); //bld->savePersistance(); prunePersistance(); clearPersistance();
+	Timing::t().use(errs,"Tests");
 }
 void Build::build(Messages &errs) {
 	errs.push(Message(info,"Loading Configuration"));
@@ -179,7 +179,9 @@ void Build::global(Messages& errs) {
 
 //SuffixVal::unload();
 //  macro::terminate();			//unload
+
 	_media->close();
+	content::Editorial::e().reset(errs,*sql);
 	mt::Definition::shutdown(errs,*sql,_current); //bld->savePersistance(); prunePersistance(); clearPersistance();
 //TODO: do FINAL_PROCESSING_SCRIPT stuff here if it's a full, final build..
 
