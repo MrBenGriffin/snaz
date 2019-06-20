@@ -33,6 +33,7 @@ namespace Support {
 		operator buildKindValue() const; // { return value; }
 		explicit operator std::string() const;
 		explicit operator buildArea() const;
+		const std::string bldvar()  const;
 	};
 
 	enum buildTypeValue {

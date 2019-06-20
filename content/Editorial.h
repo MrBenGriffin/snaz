@@ -36,6 +36,7 @@ namespace content {
 	};
 
 	class Editorial {
+		// Node-Segment
 		using key=pair<size_t, size_t>;
 
 	private:
@@ -46,7 +47,6 @@ namespace content {
 		size_t lang;
 		buildKind kind;
 
-		void storeBuilt(Messages&);
 		bool sanity(Messages &,key&,const node::Content*, const Segment*) const;
 
 		Editorial(); // Disallow instantiation outside of the class.
@@ -54,11 +54,12 @@ namespace content {
 
 	public:
 		static Editorial& e();
-		void set(Messages&,Connection&,size_t,buildKind);
 		pair<bool,const mt::MacroText*> get(Messages&,const node::Content*,const Segment*);
 		std::string getMeta(Messages&,const node::Content*,const Segment*,const std::string&) const;
 		bool has(Messages&,const node::Content*,const Segment*) const;
-		void unload(Messages&,Connection&);
+		void load(Messages&,Connection&,size_t,buildKind);
+		void store(Messages&,Connection&,size_t,buildKind);
+		void reset(Messages&,Connection &);
 	};
 }
 

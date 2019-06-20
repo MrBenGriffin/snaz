@@ -24,6 +24,16 @@ namespace Support {
 		return "test";
 	}
 
+	/** This is used by storage (bldvar table enum). If bldvar is changed, this needs to be changed too **/
+	const std::string buildKind::bldvar() const {
+		switch (value) {
+			case final: return "pub";
+			case draft: return "dev";
+			default: break;
+		}
+		return "";
+	}
+
 	buildKind::operator buildArea() const {
 		switch (value) {
 			case final:

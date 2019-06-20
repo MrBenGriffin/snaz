@@ -196,9 +196,8 @@ namespace Support {
 			}
 			point++;
 		}
-
-		for (auto it = store.cbegin(); it != store.cend(); ++it) {
-		}
+//		for (auto it = store.cbegin(); it != store.cend(); ++it) {
+//		}
 		return result.str();
 	}
 
@@ -312,34 +311,52 @@ namespace Support {
 	}
 
 	void Storage::load(Messages& log,Db::Connection& sql,buildKind kind) {
-		ostringstream str;
-		Query* q = nullptr;
-		str << "select name,value from bldvar where bld='" << (kind == final ? "pub" : "dev" ) << "'";
-		if (sql.query(log,q,str.str()) && q->execute(log)) {
-			string f_name,f_value;
-			while(q->nextrow()) {
-				q->readfield(log,"name",f_name);	//discarding bool.
-				q->readfield(log,"value",f_value);	//discarding bool.
-				set(f_name, f_value);
+		string bld = kind.bldvar();
+		if(!bld.empty()) {
+			ostringstream str;
+			Query *q = nullptr;
+			str << "select name,value from bldvar where bld='" << bld << "'";
+			if (sql.query(log, q, str.str()) && q->execute(log)) {
+				string f_name, f_value;
+				while (q->nextrow()) {
+					q->readfield(log, "name", f_name);    //discarding bool.
+					q->readfield(log, "value", f_value);    //discarding bool.
+					set(f_name, f_value);
+				}
 			}
+			sql.dispose(q);
 		}
-		sql.dispose(q);
 	}
 
-	void Storage::save(Messages& log,Db::Connection&,buildKind) {
-		log << Message(error,"Storage::save is not yet implemented.");
+	void Storage::save(Messages& log,Db::Connection& sql,buildKind kind) {
+		string bld = kind.bldvar();
+		if(!bld.empty()) {
+			size_t count(0);
+			ostringstream str;
+			Query* q = nullptr;
+			str << "replace into bldvar (name,value,bld) values ";
+			for (auto item: store) {
+				string name = item.first;
+				if(!name.empty() && name[0] != '~') {
+					count++;
+					string value = item.second;
+					sql.escape(name);
+					sql.escape(value);
+					str << "('" << name << "','" << value << "','"<< "'),";
+				}
+				string query = str.str();
+				query.pop_back(); //remove the trailing comma.
+				if (sql.query(log, q, query)) {
+					q->execute(log);
+				}
+			}
+			sql.dispose(q);
+		}
+		log << Message(error,"Storage::save: Deleted variable not yet implemented.");
+
+//		log << Message(error,"Storage::save is not yet implemented.");
 //		Query *qi = sql.query();
 //		for (auto &it : store) {
-//			string name = it.first;
-//			if(name[0] != '~') {
-//				string value = it.second;
-//				ostringstream qstr;
-//				dbc->escape(name);
-//				dbc->escape(value);
-//				qstr << "replace into bldvar set name='" << name << "',value='" << value << "', bld='" << dev << "'" ;
-//				qi->setquery(qstr.str());
-//				qi->execute();
-//			}
 //		}
 //		for (auto &et : erased) {
 //			string name=et;

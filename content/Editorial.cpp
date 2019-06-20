@@ -23,7 +23,7 @@ namespace content {
 		return singleton;
 	}
 
-	void Editorial::unload(Messages &, Connection &sql) {
+	void Editorial::reset(Messages&, Connection &sql) {
 		contentStore.clear();
 		qIndexes.clear();
 		sql.dispose(query);
@@ -50,19 +50,39 @@ namespace content {
 		return value;
 	}
 
-	void Editorial::storeBuilt(Messages& errs) {
-		errs << Message(error,"Editorial::storeBuilt is not yet implemented.");
+	void Editorial::store(Messages& errs,Connection &sql,size_t langID, buildKind kind) {
+		if(kind == final) {
+			mt::mstack emptyStack;
+			Timing &times = Timing::t();
+			times.set("Editorial Store");
+			ostringstream str;
+			Query* q = nullptr;
+			str << "replace into bldcontent (node,segment,language,pubdate,bcontent) values ";
+			for (auto& item: contentStore) {
+				size_t node(item.first.first);
+				size_t segment(item.first.second);
+				str << "(" << node << "," << segment << "," << langID << ",UNIX_TIMESTAMP()"; //primary key.
+				ostringstream contentStream;
+				auto& value = item.second;
+				value.second.expand(errs,contentStream,emptyStack);
+				string content(contentStream.str());
+				sql.escape(content);
+				str << ",'" << content << "'),";
+			}
+			string queryStr = str.str();
+			queryStr.pop_back(); //remove the trailing comma.
+			queryStr.append(" on duplicate key update pubdate=values(pubdate),bcontent=values(bcontent)");
+			if (sql.query(errs, q, queryStr)) {
+				q->execute(errs);
+			}
+			sql.dispose(q);
+			times.use(errs,"Editorial Store");
+		}
 	}
 
-	void Editorial::set(Messages &errs, Connection &sql,size_t langID, buildKind _kind) {
+	void Editorial::load(Messages &errs, Connection &sql,size_t langID, buildKind _kind) {
 		Timing &times = Timing::t();
-		if (times.show()) { times.set("Editorial Index"); }
-		sql.dispose(query); //reset.
-		if(lang != 0) {
-			storeBuilt(errs);
-			contentStore.clear();
-			qIndexes.clear();
-		}
+		times.set("Editorial Index");
 		lang = langID; kind = _kind;
 		ostringstream str,content;
 		string source = (kind == draft ? "v.content" : "c.pcontent");
@@ -96,7 +116,7 @@ namespace content {
 				sql.dispose(query);
 			}
 		}
-		if (times.show()) { times.use(errs,"Editorial Index"); }
+		times.use(errs,"Editorial Index");
 	}
 
 	bool Editorial::has(Messages &errs, const node::Content* node, const Segment* segment) const {
@@ -108,7 +128,6 @@ namespace content {
 		}
 		return value;
 	}
-
 
 	pair<bool,const mt::MacroText*> Editorial::get(Messages &errs, const node::Content* node, const Segment* segment) {
 		static mt::MacroText empty;

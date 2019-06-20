@@ -60,7 +60,6 @@ namespace node {
 			Db::Query *q = nullptr;
 			if (sql.query(errs, q, str.str()) && q->execute(errs)) {
 				/**
-				 *
 				 * +----+------+------+--------+------+---------------+-----------+-----------+---------+---------+-----------+---------------------+
 				 * | id | par. | tier | layout | team | ref           | navtitle  | title     | incdate | outdate | editor    | tstamp              |
 				 * +----+------+------+--------+------+---------------+-----------+-----------+---------+---------+-----------+---------------------+
@@ -305,11 +304,11 @@ namespace node {
 	}
 
     void Content::compose(Messages& errs) {
+		Timing& times = Timing::t();
+		times.set('n'); // set node timer start.
 		ostringstream msg; msg << "Node ID " << idStr << " `" << _ref << "` ";
 		string name(msg.str());
 		errs.push(Message(info,name));
-		Timing& times = Timing::t();
-        times.set("Node Build");
         Metrics current;
         current.nodeStack.push_back(this);
         current.current = this;
@@ -322,8 +321,8 @@ namespace node {
             if(!t->code.empty() && !finalFilenames.empty()) {
             	current.currentTemplate = t;
                 auto file = finalFilenames[current.page];
-//		http://edit-preview.redsnapper.net/en/testl.php
-                //                errs << Message(info,file);
+				// http://edit-preview.redsnapper.net/en/testl.php
+                // errs << Message(info,file);
                 errs.reset();
                 mt::Wss::push(&(t->nl)); //!!! another global.. need to add to the metrics above.
                 t->code.expand(errs, content, context); //no context here...
@@ -343,7 +342,8 @@ namespace node {
 		context.pop_back();
 //		assert(context.empty());
         current.nodeStack.pop_back();
-        times.use(errs,msg.str());
+		times.get(errs,'n',name);
+//--        times.use(errs,msg.str());
 		errs.pop();
 //		errs.synchronise();
     }

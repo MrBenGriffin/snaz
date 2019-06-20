@@ -103,7 +103,7 @@ void Build::tests(Messages &errs) {
 	content::Segment::load(errs,*sql,_current);
 	node::Taxon().loadTree(errs,*sql,language, _current); 		//This is slow.
 	node::Content().loadTree(errs,*sql,language,_current);		//This is fast.
-	content::Editorial::e().set(errs,*sql,language,_current);
+	content::Editorial::e().load(errs,*sql,language,_current);
 	_media->load(errs,sql);
 
 	content::Layout::load(errs,*sql,tech(),_current);
@@ -116,8 +116,7 @@ void Build::tests(Messages &errs) {
 	tests.load(std::cout,  "main", false);   // Boolean turns on/off success reports.
 	_media->close();
 
-	content::Editorial::e().unload(errs,*sql);
-
+	content::Editorial::e().reset(errs,*sql);
 	mt::Definition::shutdown(errs,*sql,_current); //bld->savePersistance(); prunePersistance(); clearPersistance();
 }
 void Build::build(Messages &errs) {
@@ -181,7 +180,6 @@ void Build::global(Messages& errs) {
 //SuffixVal::unload();
 //  macro::terminate();			//unload
 	_media->close();
-	content::Editorial::e().unload(errs,*sql);
 	mt::Definition::shutdown(errs,*sql,_current); //bld->savePersistance(); prunePersistance(); clearPersistance();
 //TODO: do FINAL_PROCESSING_SCRIPT stuff here if it's a full, final build..
 
@@ -198,11 +196,13 @@ void Build::langs(Messages& errs) {
 		node::Content::updateContent(errs,*sql,lang.first,_current); //this moves the latest version into bldcontent.
 		//TODO:: Content APPROVERS.
 		node::Content().loadTree(errs,*sql,lang.first,_current);
-		content::Editorial::e().set(errs,*sql,lang.first,_current);
+		content::Editorial::e().load(errs,*sql,lang.first,_current);
 		////bld->all_techs && bld->fullBuild
 		_media->load(errs,sql);
 		techs(errs);
 		_media->save(errs,sql,allTechs && full); //Condition for full reset.
+		content::Editorial::e().store(errs,*sql,lang.first,_current);
+		content::Editorial::e().reset(errs,*sql);
 		//.....
 		if (times.show()) { times.use(errs,"Language " + lang.second.name); }
 		languages.pop_front();
