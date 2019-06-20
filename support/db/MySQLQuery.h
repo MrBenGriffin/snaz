@@ -40,8 +40,8 @@ namespace Support {
 			friend class Query;
 			friend class MySQLConnection;
 			bool readfield(Messages &,size_t, std::string&) override;
-			bool readfield(Messages &,size_t, uint64_t&) override;			// uint64_t
-			bool readfield(Messages &,size_t, size_t&)  override;
+			bool readfield(Messages &,size_t, unsigned long long&) override;			// uint64_t
+			bool readfield(Messages &,size_t, unsigned long&)  override;
 			bool readfield(Messages &,size_t, long&)  override;		//
 			bool readfield(Messages &,size_t, long double&)  override;		//
 			bool readfield(Messages &,size_t, size_t, std::string&) override;

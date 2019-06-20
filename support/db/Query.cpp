@@ -82,7 +82,7 @@ namespace Support {
 			return false;
 		}
 
-		bool Query::readfield(Messages& errs,const std::string& field, size_t& readUnsized) {
+		bool Query::readfield(Messages& errs,const std::string& field, unsigned long& readUnsized) {
 			if (isactive) {
 				auto it = fieldnameidx.find(field);
 				if (it != fieldnameidx.end()) {
@@ -93,7 +93,7 @@ namespace Support {
 			return false;
 		}
 
-		bool Query::readfield(Messages& errs,const std::string& field, uint64_t& readUnsized) {
+		bool Query::readfield(Messages& errs,const std::string& field, unsigned long long& readUnsized) {
 			if (isactive) {
 				auto it = fieldnameidx.find(field);
 				if (it != fieldnameidx.end()) {

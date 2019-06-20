@@ -187,7 +187,7 @@ namespace Support {
 			return retval;
 		}
 
-		bool MySQLQuery::readfield(Messages &errs,size_t i, uint64_t& value) {
+		bool MySQLQuery::readfield(Messages &errs,size_t i, unsigned long long& value) {
 			bool retval = false;
 			if (isactive) {
 				if (s->row_tell(result) != start) {
@@ -216,9 +216,8 @@ namespace Support {
 			}
 			return retval;
 		}
-
 		//i is field_id, not row number..
-		bool MySQLQuery::readfield(Messages &errs,size_t i, size_t& readUnsigned) {
+		bool MySQLQuery::readfield(Messages &errs,size_t i, unsigned long& readUnsigned) {
 			bool retval = false;
 			if (isactive) {
 				if (s->row_tell(result) != start) {

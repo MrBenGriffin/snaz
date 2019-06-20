@@ -8,6 +8,7 @@
 #include <vector>
 #include <map>
 #include <string>
+#include <cstdint>
 
 #include "Connection.h"
 #include "support/Message.h"
@@ -32,8 +33,8 @@ namespace Support {
 			virtual bool readfield(Messages &,size_t, std::string&)=0;		// string
 			virtual bool readfield(Messages &,size_t, long&)=0;				// signed
 			virtual bool readfield(Messages &,size_t, long double&)=0;		// float
-			virtual bool readfield(Messages &,size_t, uint64_t&)=0;			// uint64_t
-			virtual bool readfield(Messages &,size_t, size_t&)=0;			// size_t
+			virtual bool readfield(Messages &,size_t, unsigned long long&)=0;			// uint64_t
+			virtual bool readfield(Messages &,size_t, unsigned long&)=0;	// size_t
 			virtual bool readfield(Messages &,size_t, bool&)=0;				// bool
 			virtual void readFieldName(Messages &,size_t i, std::string&, std::string&)=0;
 			virtual void forQuery(Messages &,std::string& value)=0; //convert a string to make ready for query.. See Service::escape!!
@@ -49,8 +50,8 @@ namespace Support {
 			virtual void readfieldforquery(Messages&,size_t,size_t,std::string&)=0;	//module. escape values so that the result is ready for a query.
 
 			bool readfield(Messages&,const std::string&, std::string&);		//rebuild(10+)
-			bool readfield(Messages&,const std::string&, size_t&);
-			bool readfield(Messages&,const std::string&, uint64_t&);
+			bool readfield(Messages&,const std::string&, unsigned long&);
+			bool readfield(Messages&,const std::string&, unsigned long long&);
 			bool readfield(Messages&,const std::string&, long&);
 			bool readfield(Messages&,const std::string&, long double&);
 			bool readfield(Messages&,const std::string&, bool&);
