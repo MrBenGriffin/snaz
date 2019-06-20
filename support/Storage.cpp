@@ -277,8 +277,10 @@ namespace Support {
 			if (ppit != store.end()) {
 				store.erase(ppit);
 			}
+			if(name[0] != '~' && name[0] != '*') {
+				erased.insert(name);
+			}
 		}
-		erased.insert(name);
 	}
 
 	void Storage::regex(Messages& e,Storage& result, const string basis) const {
@@ -331,41 +333,46 @@ namespace Support {
 	void Storage::save(Messages& log,Db::Connection& sql,buildKind kind) {
 		string bld = kind.bldvar();
 		if(!bld.empty()) {
-			size_t count(0);
-			ostringstream str;
-			Query* q = nullptr;
-			str << "replace into bldvar (name,value,bld) values ";
-			for (auto item: store) {
-				string name = item.first;
-				if(!name.empty() && name[0] != '~') {
-					count++;
-					string value = item.second;
-					sql.escape(name);
-					sql.escape(value);
-					str << "('" << name << "','" << value << "','"<< "'),";
+			Query *q = nullptr;
+			if(!store.empty()) {
+				size_t count(0);
+				ostringstream str;
+				str << "insert into bldvar (name,value,bld) values ";
+				for (auto item: store) {
+					string name = item.first;
+					if (!name.empty()) {
+						count++;
+						string value = item.second;
+						sql.escape(name);
+						sql.escape(value);
+						str << "('" << name << "','" << value << "','" << bld << "'),";
+					}
 				}
 				string query = str.str();
 				query.pop_back(); //remove the trailing comma.
-				if (sql.query(log, q, query)) {
+				query.append(" on duplicate key update value=values(value),bld=values(bld)");
+				if (count > 0 && sql.query(log, q, query)) {
 					q->execute(log);
 				}
+				sql.dispose(q);
 			}
-			sql.dispose(q);
+			if(!erased.empty()) {
+				size_t count(0);
+				ostringstream str;
+				str << "delete from bldvar where name in (";
+				for(auto name: erased) {
+						count++;
+						sql.escape(name);
+						str << "'" << name << "',";
+				}
+				string query = str.str();
+				query.append("'*')"); //Add a dummy name and close brackets.
+				if (count > 0 && sql.query(log, q, query)) {
+					q->execute(log);
+				}
+				sql.dispose(q);
+			}
 		}
-		log << Message(error,"Storage::save: Deleted variable not yet implemented.");
-
-		//TODO:: delete dead stores.
-//		log << Message(error,"Storage::save is not yet implemented.");
-//		Query *qi = sql.query();
-//		for (auto &it : store) {
-//		}
-//		for (auto &et : erased) {
-//			string name=et;
-//			dbc->escape(name);
-//			qi->setquery("delete from bldvar where name='"+ name +"' and bld='" + dev + "'");
-//			qi->execute();
-//		}
-//		sql.dispose(q);
 	}
 
 //check if the book is in the library.

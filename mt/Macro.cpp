@@ -76,8 +76,13 @@ namespace mt {
 		if(librarian != Definition::library.end()) {
 			try {
 				// Expand passes by reference. Instance& (P5)
-				Instance instance(&parms,context.back().second->metrics);
-				librarian->second->expand(errs,result,instance,context);
+				if(!context.empty()) {
+					Instance instance(&parms,context.back().second->metrics);
+					librarian->second->expand(errs,result,instance,context);
+				} else {
+					Instance instance(&parms, nullptr);
+					librarian->second->expand(errs,result,instance,context);
+				}
 			} catch (...) {}
 		} else {
 			ostringstream err;

@@ -342,6 +342,7 @@ namespace node {
 		context.pop_back();
 //		assert(context.empty());
         current.nodeStack.pop_back();
+        mt::Internal::reset("*"); //reset all storage belonging to the node build.
 		times.get(errs,'n',name);
 //--        times.use(errs,msg.str());
 		errs.pop();

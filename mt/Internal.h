@@ -31,6 +31,7 @@ namespace mt {
 		size_t minParms {0}, maxParms {0};
 		static void startup(Messages&,Db::Connection&,buildKind);
 		static void shutdown(Messages&,Db::Connection&,buildKind);
+		static void reset(string);
 
 	protected:
 //Not so sure these should be here..

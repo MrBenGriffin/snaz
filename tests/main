@@ -3,8 +3,6 @@ F showDefines	1
 F showPassed	1
 
 
-//X
-
 # Strings Internals: iRegex
 //iRgx_0011		@iRegex((\d+)([;]?),[\1@iRembr(\2)],A:44;B:554;C:1)			A:[44;]B:[554;]C:[1]
 //iRgx_0012		@iRegex((\d+)([;]?),[\1@iEq(\2,;,+,-)],A:44;B:554;C:1)		A:[44+]B:[554+]C:[1-]

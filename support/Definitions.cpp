@@ -29,6 +29,7 @@ namespace Support {
 		switch (value) {
 			case final: return "pub";
 			case draft: return "dev";
+//			case test: return "dev";
 			default: break;
 		}
 		return "";

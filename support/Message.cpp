@@ -191,6 +191,13 @@ namespace Support {
 		}
 	}
 
+	void Messages::shutdown() {
+		if(sql != nullptr &&  _established) {
+			synchronise();
+		}
+	}
+
+
 	void Messages::synchronise() {
 		userID = Build::b().user.iD();
 		size_t listSize = list.size();

@@ -52,26 +52,33 @@ namespace content {
 
 	void Editorial::store(Messages& errs,Connection &sql,size_t langID, buildKind kind) {
 		if(kind == final) {
-			mt::mstack emptyStack;
+			node::Metrics metrics;
+			mt::mstack stack;
+			mt::Instance instance(&metrics);
+			stack.push_back({nullptr,&instance}); //This is our context.
+			auto* cRoot(Content::root());
+
 			Timing &times = Timing::t();
 			times.set("Editorial Store");
 			ostringstream str;
 			Query* q = nullptr;
-			str << "replace into bldcontent (node,segment,language,pubdate,bcontent) values ";
+			str << "insert into bldcontent (node,segment,language,pubdate,bcontent) values ";
 			for (auto& item: contentStore) {
 				size_t node(item.first.first);
 				size_t segment(item.first.second);
 				str << "(" << node << "," << segment << "," << langID << ",UNIX_TIMESTAMP()"; //primary key.
 				ostringstream contentStream;
 				auto& value = item.second;
-				value.second.expand(errs,contentStream,emptyStack);
+				metrics.push(cRoot->content(errs,node),Segment::get(errs,segment));
+				value.second.expand(errs,contentStream,stack);
+				metrics.pop();
 				string content(contentStream.str());
 				sql.escape(content);
 				str << ",'" << content << "'),";
 			}
 			string queryStr = str.str();
 			queryStr.pop_back(); //remove the trailing comma.
-			queryStr.append(" on duplicate key update pubdate=values(pubdate),bcontent=values(bcontent)");
+			queryStr.append(" on duplicate key update pubdate=UNIX_TIMESTAMP(),bcontent=values(bcontent)");
 			if (sql.query(errs, q, queryStr)) {
 				q->execute(errs);
 			}

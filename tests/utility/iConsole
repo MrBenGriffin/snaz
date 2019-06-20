@@ -6,20 +6,20 @@ U ccat			1	1	11	⌽cdog(⍟1)
 
 Range 001		@iEq(T,F,W,B,C)									!1!alert; range: Range Error in ‘iEq’; 5 parameters found. But this macro requires from 0 to 4 parameters.
 iConsole 001	[@iConsole(woot)]								!1!user; info: woot
-iConsole B02	[@iConsole(B,woot)]								!2!user; timing: Build Time
+iConsole B02	[@iConsole(B,woot)]								!2!user; build: Build Time
 iConsole S03	[@iConsole(S,woot)]								!1!user; info: woot
-iConsole N04	[@iConsole(N,woot)]								!2!user; timing: Node Time
+iConsole N04	[@iConsole(N,woot)]								!2!user; node: Node Time
 iConsole I05	[@iConsole(I,woot)]								!1!user; info: woot
 iConsole W06	[@iConsole(W,woot)]								!1!user; warn: woot
 iConsole E07	[@iConsole(E,woot)]								!1!user; error: woot
 iConsole X08	[@iConsole(X,woot)]								!1!user; error: woot
-iConsole T08	[@iConsole(T,woot)]								!2!alert; trace: nil
+iConsole T08	[@iConsole(T,woot)]								!2!alert; trace: direct
 
 #Console in macros.
 iConsole n001	[@con(I,woot)]									!1!user; info: woot
-iConsole nB02	[@con(B,woot)]									!2?user; timing: Build Time
+iConsole nB02	[@con(B,woot)]									!2?user; build: Build Time
 iConsole nS03	[@con(S,woot)]									!1!user; info: woot
-iConsole nN04	[@con(N,woot)]									!2?user; timing: Node Time
+iConsole nN04	[@con(N,woot)]									!2?user; node: Node Time
 iConsole nI05	[@con(I,woot)]									!1!user; info: woot
 
 iConsole nW06	[@con(W,woot)]									!1!user; warn: woot

@@ -50,7 +50,7 @@ namespace mt {
 		return _name;
 	}
 
-void Internal::startup(Messages& log,Db::Connection& _sql,buildKind kind) {
+	void Internal::startup(Messages& log,Db::Connection& _sql,buildKind kind) {
 		Timing& times = Timing::t();
 		sql = & _sql;
 		if (times.show()) { times.set("Load Site Storage"); }
@@ -59,7 +59,12 @@ void Internal::startup(Messages& log,Db::Connection& _sql,buildKind kind) {
 	}
 
 	void Internal::shutdown(Messages& log,Db::Connection&,buildKind kind) {
+		storage.reset("~");
 		storage.save(log,*sql,kind);
+	}
+
+	void Internal::reset(string prefix) {
+		storage.reset(prefix);
 	}
 
 	plist Internal::toParms(string basis,string cutter,string sort) const {

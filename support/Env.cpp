@@ -300,6 +300,11 @@ namespace Support {
 		}
 	}
 
+	void Env::shutdown(std::unique_ptr<Support::Messages>& log, Support::Db::Connection *sql) {
+		log->shutdown();
+		sql->close();
+	}
+
 	pair< unique_ptr<Messages>,Db::Connection*> Env::startup(int argc,const char **argv) {
 		setlocale(LC_ALL, "en_UK.UTF-8");
 		Db::Connection *mysql = nullptr;

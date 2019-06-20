@@ -75,7 +75,7 @@ void Build::run(Messages &log,Connection* _sql) {
 	std::ostringstream str;
 	str << "Building Site " << env.get("RS_SITENAME") << " " << string(_current) << " on " << date.str() << " (UTC)";
 	log.push(Message(info,str.str()));
-	Timing::t().get(log,'b');
+	Timing::t().set("Tests");
 	switch(_current) {
 		case test: {
 			tests(log);
@@ -88,7 +88,7 @@ void Build::run(Messages &log,Connection* _sql) {
 			build(log);
 		} break;
 	}
-	Timing::t().get(log,'b');
+	Timing::t().use(log,"Tests");
 	log.pop();
 }
 void Build::tests(Messages &errs) {
@@ -371,8 +371,6 @@ void Build::close(Support::Messages &errs) {
 	Infix::Evaluate::shutdown();
 	Timing::t().get(errs,'b');
 	errs << Message(info,progress,"Build is finished");
-
-	errs.synchronise();
 }
 
 bool Build::setLock(Support::Messages& errs,Connection& dbc) {

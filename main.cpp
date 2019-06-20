@@ -24,9 +24,10 @@ int main( const int argc, const char **argv ) {
 		Build &build = Build::b();
 		log->push(Message(info,title.str()));
 		build.run(*log,services.second);
-		log->pop();
 		build.close(*log);
+		log->pop();
 	}
+	env.shutdown(log,services.second);
 	return (EXIT_SUCCESS);
 }
 

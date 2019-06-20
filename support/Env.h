@@ -48,7 +48,9 @@ namespace Support {
 	public:
 		static Env& e();
 		pair< unique_ptr<Messages>,Db::Connection*> startup(int=0,const char** = nullptr);
-		bool   get(string,string&,string="");
+		void shutdown(unique_ptr<Messages>&,Db::Connection*);
+
+		bool get(string,string&,string="");
 		std::string get(const string&);
 		buildArea area();
 

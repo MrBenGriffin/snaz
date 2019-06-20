@@ -61,6 +61,7 @@ namespace Support {
 	public:
 		bool storing() { return sql != nullptr; }
 		void startup();
+		void shutdown();
 		void synchronise();
 		Messages(Support::Messages&);
 		Messages(Support::Db::Connection*);
