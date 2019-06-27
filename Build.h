@@ -88,6 +88,7 @@ public:
 	void setCurrent(Support::buildKind current) { _current = current; }
 	void setNodes(Support::buildType,std::deque<size_t>&);
 	Support::Media* media() const { return _media; }
+	void calculateNodesToBuild(Support::Messages&) const;
 
 	void breakLock() { lock = false; }
 

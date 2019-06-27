@@ -335,7 +335,10 @@ namespace Support {
 
 	bool Path::makeDir(Messages &e, bool recursive) const {
 		int result;
-		string dirstr(output(false).substr(0, output(false).length() - 1));
+		auto& env = Env::e();
+		Path actual(*this);
+		actual.makeAbsoluteFrom(env.workingRoot());
+		string dirstr(actual.output(true));
 		result = mkdir(dirstr.c_str(),(mode_t) S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);    //Find these at /usr/include/sys/stat.h
 		if (result == 0)
 			return true;
@@ -354,6 +357,7 @@ namespace Support {
 			return false;
 		}
 		return false;
+//			e << Message(range,"The path " + dirstr + " is not inside the current working directory.");
 	}
 
 	bool Path::removeDir(Messages& e,bool recursive, bool stop_on_error) const {
@@ -605,6 +609,16 @@ namespace Support {
 		return true;
 	}
 
+	bool Path::isInside(const Path &basePath) const {
+		if (path.size() < basePath.path.size())
+			return false;
+		size_t count;
+		for (count = 0; count < path.size(); count++) {
+			if (getPath(count) != basePath.getPath(count))
+				return false;
+		}
+		return true;
+	}
 
 	//-------------------------------------------------------------------------
 	// Makes the path relative to a specified path.
@@ -627,8 +641,16 @@ namespace Support {
 	//-------------------------------------------------------------------------
 	// Makes the current path absolute using a specified path
 	//-------------------------------------------------------------------------
-	bool Path::makeAbsoluteFrom(const Path &newPath) {
-		path = newPath.path;
+	bool Path::makeAbsoluteFrom(const Path &base) {
+		auto old = path;
+		path = base.path;
+		size_t i=0;
+		for(; i < old.size() && i< path.size(); i++) {
+			if(old[i] != path[i]) break;
+		}
+		for(; i < old.size(); i++) {
+			path.emplace_back(old[i]);
+		}
 		return true;
 	}
 

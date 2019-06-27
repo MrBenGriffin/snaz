@@ -16,14 +16,37 @@
 namespace Support {
 
 	std::atomic<uint64_t> Message::master = 1;
-
-	Message::Message(channel c, Purpose p,string s, long double t) : id(master++),ch(c),purpose(p),content(std::move(s)),parent(0),synched(false),seconds(t) {
+	Message::Message(channel c, Purpose p,string s, long double t) :
+		id(master++),ch(c),purpose(p),content(std::move(s)),parent(0),synched(false),prog(t),seconds(t) {
 	}
 
-	Message::Message(channel c, Purpose p,string s) : Message(c,p,s,0) {
+	Message::Message(channel c, string s, long double t) :  Message(c,extra,std::move(s),0.0L) {
+		switch(c) {
+			case build:
+			case ntime:
+			case custom:
+				purpose=timer;
+				seconds=t;
+				break;
+			case Support::node:
+			case Support::language:
+			case Support::technology:
+			case Support::media:
+			case Support::transform:
+			case Support::adhoc:
+			case Support::file:
+				purpose=progress;
+				prog = t;
+				break;
+			default:
+				break;
+		}
 	}
 
-	Message::Message(channel c,string s): Message(c,alert,s,0) {
+	Message::Message(channel c, Purpose p,string s) : Message(c,p,std::move(s),0.0L) {
+	}
+
+	Message::Message(channel c,string s): Message(c,alert,std::move(s),0.0L) {
 		switch (ch) { //syntax
 			case security:
 			case fatal:
@@ -36,12 +59,22 @@ namespace Support {
 			case usage:
 			case path:
 			case trace:  	purpose = alert; break;
+
+			case container:
 			case info:
 			case debug:
 			case code:
-			case container:
-			case link:   	purpose = progress; break;
-			case node:
+			case link:   	purpose = extra; break;
+
+			case channel::adhoc:
+			case channel::file:
+			case channel::node:
+			case channel::language:
+			case channel::technology:
+			case channel::media:
+			case channel::transform: purpose = progress; break;
+
+			case ntime:
 			case build:
 			case custom: 	purpose = timer; break;
 		}
@@ -55,7 +88,7 @@ namespace Support {
 		return id;
 	}
 
-	string Message::purp() const {
+	string Message::purposeStr() const {
 		switch (purpose) {
 			case progress:
 				return "progress";
@@ -65,6 +98,10 @@ namespace Support {
 				return "timer";
 			case alert:
 				return "alert";
+			case extra:
+				return "extra";
+			default:
+				return "item"; //should never reach here.
 		}
 	}
 
@@ -82,18 +119,25 @@ namespace Support {
 			case usage:	 	return "usage"; break;
 			case trace:  	return "trace"; break;
 			case code:   	return "code"; break;
-			case node: 		return "node"; break;
+			case ntime: 	return "ntime"; break;
 			case build: 	return "build"; break;
 			case custom: 	return "custom"; break;
 			case path: 		return "path"; break;
 			case container: return "container"; break;
 			case link:   	return "link"; break;
 			case deprecated:return "deprecated"; break;
+			case channel::node: return "node"; break;
+			case channel::language: return "language"; break;
+			case channel::technology: return "technology"; break;
+			case channel::media: return "media"; break;
+			case channel::transform: return "transform"; break;
+			case channel::adhoc: return "adhoc"; break;
+			case channel::file: return "file"; break;
 		}
 	}
 
 	void Message::str(ostream& log) const {
-		log << purp() << "; " << chan() << ": " << content << flush;
+		log << purposeStr() << "; " << chan() << ": " << content << endl << flush;
 	}
 
 	void Message::store(Support::Messages& log,Support::Db::Connection* sql) {
@@ -102,7 +146,7 @@ namespace Support {
 			ostringstream item;
 			string text(content);
 			sql->escape(text);
-			item << "insert ignore into bldlog (build,id,parent,user,purpose,channel,message,seconds) values (";
+			item << "insert ignore into bldlog (build,id,parent,user,purpose,channel,message,seconds,progress) values (";
 			item << log.id() << "," << id << ",";
 			if (parent == 0) {
 				item << "NULL";
@@ -115,19 +159,48 @@ namespace Support {
 			} else {
 				item << "," << user << ",";
 			}
-			item << "'" << purp() << "','" << chan() << "','" << text << "',";
+			item << "'" << purposeStr() << "','" << chan() << "','" << text << "',";
 			if (seconds == 0) {
+				item << "NULL,";
+			} else {
+				item << seconds << ",";
+			}
+			if (purpose != progress ) {
 				item << "NULL";
 			} else {
-				item << seconds;
+				item << prog ;
 			}
 			item << ")";
 			if(sql->query(log,query,item.str())) {
-				query->execute(log);
+				if(!query->execute(log)) {
+					log.str(std::cerr);
+					log.reset();
+				}
 			}
 			sql->dispose(query);
 			synched = true;
 		}
+	}
+
+	void Messages::setProgressSize(Message::level lev,size_t count) {
+		switch (lev) {
+			case Message::technology: progressSize[0] = count; break;
+			case Message::language: progressSize[1] = count; break;
+			case Message::node: progressSize[2] = count; break;
+			case Message::media: progressSize[4] = count; break;
+			case Message::transform: progressSize[5] = count; break;
+		}
+	}
+
+	void Messages::calculateProgressSize() {
+		progressAll = 1;
+		for(size_t i=2; i<3; i--) {
+			progressAll *= progressSize[i];
+		}
+		//Adhocs, Media and transforms are not nested, so are just added.
+		progressAll += progressSize[3]; // Adhocs
+		progressAll += progressSize[4]; // Media. Transforms are done (fractionally) over Media, as are templates.
+//		progressAll += progressSize[5];
 	}
 
 	Messages::Messages(Messages& o ): sql(o.sql),buildID(o.buildID),userID(o.userID),_established(o._established),_marked(false) {
@@ -144,7 +217,8 @@ namespace Support {
 			synchronise();
 		} else {
 			while (! list.empty() ) {
-				container->list.push_back(std::move(list.front()));
+				Message& item(list.front());
+				container->list.emplace_back(std::move(item));
 				list.pop_front();
 			}
 		}
@@ -156,6 +230,7 @@ namespace Support {
 			startup();
 		}
 	}
+
 	void Messages::startup() {
 		if(sql != nullptr && ! _established) {
 			ostringstream table;
@@ -165,8 +240,14 @@ namespace Support {
 			"`parent` bigint unsigned null,"
 			"`user` int(11),"
 			"`seconds` double null,"
-			"`purpose` enum ('progress','user','timer','alert') not null default 'alert',"
-			"`channel` enum ('fatal','error','syntax','range','parms','warn','deprecated','info','debug','security','usage','link','trace','code','node','build','custom','container','item') not null default 'item',"
+			"`progress` double null,"		// stored between 0..1
+			"`purpose` enum ('progress','user','timer','alert','extra') not null default 'alert',"
+			"`channel` enum ("
+   			"'fatal','error','syntax','range','parms','warn','deprecated','info','debug','security','usage'," //alerts
+	  		"'path','link','trace','code','container'," 								// extras
+	 		"'ntime','build','custom',"													// timing
+			"'node','language','technology','media','transform','adhoc','file',"		// progress
+			"'item') not null default 'item',"
 			"`ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,"
 			"`message` text NOT NULL,"
 			"PRIMARY KEY (`build`,`id`),"
@@ -199,7 +280,6 @@ namespace Support {
 
 
 	void Messages::synchronise() {
-		userID = Build::b().user.iD();
 		size_t listSize = list.size();
 		for (auto& m : list) {
 			m.store(*this,sql);
@@ -211,7 +291,6 @@ namespace Support {
 	}
 
 	void Messages::reset() {
-		synchronise();
 		list.clear();
 		_marked = false;
 	}
@@ -225,15 +304,36 @@ namespace Support {
 		return "";
 	}
 
-	void Messages::add(const Message& m) {
+	void Messages::add(Message const& m) {
 		_marked = _marked || (m.purpose == alert);
-		list.push_back(std::move(m));
+		long double progression(0L);
+		if(m.purpose == progress) {
+			switch (m.ch) {
+				case media:	//ONLY USE THIS IF NOT USING Transforms FOR THE CURRENT Media.
+				case transform:
+				case file:
+					currentProgress+= m.prog;
+					break;  //fractionals.
+
+				case node: //ONLY USE THIS IF NOT USING FILE FOR THE CURRENT NODE.
+				case adhoc:
+					currentProgress++;
+					break;
+				default: break; //only the above mean anything for progress.
+			}
+			progression = currentProgress / progressAll;
+		}
+		list.emplace_back(std::move(m));
+		if(progression != 0L) {
+			list.back().prog = progression;
+			synchronise();
+		}
 		if(!stack.empty()) {
 			list.back().setParent(stack.back());
 		}
 	}
 
-	void Messages::push(const Message& m) {
+	void Messages::push(Message const& m) {
 		add(m);
 		stack.push_back(m.ID());
 	}
@@ -242,14 +342,23 @@ namespace Support {
 		stack.pop_back();
 	}
 
-	void Messages::operator<< (const Message& m ) {
+	size_t Messages::uid() {
+		if(userID == 0)
+			userID = Build::b().user.iD();
+		return userID;
+	}
+
+	void Messages::operator<< (Message const& m) {
 		add(m);
 	}
 
 	void Messages::operator+= (Messages& msgs) {
 		_marked = _marked || msgs._marked;
 		while (! msgs.list.empty() ) {
-			list.push_back(std::move(msgs.list.front()));
+			auto* msg = &(msgs.list.front());
+			if(!msg->synched) {
+				list.emplace_back(std::move(msgs.list.front()));
+			}
 			msgs.list.pop_front();
 		}
 	}

@@ -16,10 +16,10 @@ namespace mt {
 		pair<int, bool> int_res = integer(chars_to_keep);
 		if (int_res.second) {
 			if (!left(string_to_cut, int_res.first, result)) {
-				e << Message({error,"iLeft found non-utf8 characters."});
+				e << Message(error,"iLeft found non-utf8 characters.");
 			}
 		} else {
-			e << Message({error,"iLeft found a bad integer " + chars_to_keep + " in the second parameter."});
+			e << Message(error,"iLeft found a bad integer " + chars_to_keep + " in the second parameter.");
 		}
 		my.logic(result,3); // @iLeft(text,term,?,T,F)
 	}

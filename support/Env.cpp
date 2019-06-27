@@ -44,6 +44,7 @@ namespace Support {
 		if (SiteRootDir.back() != '/') {
 			SiteRootDir.push_back('/');
 		}
+		WorkingRootPath.cd(SiteRootDir);
 	}
 
 	string Env::wd() {
@@ -53,9 +54,13 @@ namespace Support {
 		return cwd;
 	}
 
+	const Path& Env::workingRoot() const {
+		return WorkingRootPath;
+	}
+
 	Path Env::basedir(buildSpace space) {
 		string directory;
-		basedir(directory,space,true,true);
+		basedir(directory,space,false,true);
 		return Path(directory);
 	}
 
@@ -301,7 +306,9 @@ namespace Support {
 	}
 
 	void Env::shutdown(std::unique_ptr<Support::Messages>& log, Support::Db::Connection *sql) {
-		log->shutdown();
+		if(log) {
+			log->shutdown();
+		}
 		sql->close();
 	}
 

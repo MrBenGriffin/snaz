@@ -42,8 +42,8 @@ public:
 	std::string givenName() { return name ;}
 	std::string userName() { return username ;}
 	void load(Support::Messages&,Support::Db::Connection&);
-	bool check(size_t,Support::buildType);
-	bool check(Support::buildType);
+	bool check(size_t,Support::buildType) const;
+	bool check(Support::buildType) const;
 	bool mayTeamEdit(size_t);
 };
 

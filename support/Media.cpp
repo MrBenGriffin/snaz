@@ -93,9 +93,7 @@ namespace Support {
 			iStr << imgbase << "_" << version;
 			imgbase = iStr.str();
 		}
-		directory.insert(0,"/media/");
 		directory.append("/");
-
 		metrics.pop();
 		return {version,modified,directory,imgbase,extension};
 	}
@@ -275,36 +273,46 @@ namespace Support {
 			fwrite(mfile.c_str(), 1, mfile.length(), out);
 			fclose(out);
 			chmod(filename.c_str(),S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
+		} else {
+			string fileError(strerror( errno ));
+			errs << Message(error,fileError);
+
 		}
 	}
 
 	void Media::save(Messages& errs,Db::Connection* c,bool reset) {
+		Env& env = Env::e();
 		if(!mediaUsed.empty()) {
-			errs << Message(warn,"Media::save needs to be implemented.");
-			//TODO:: set this up in the proper place.
 			if ( reset ) {
-				//Built, Temporary, Scripts, Blobs, Tests
-				doSave(errs,c,Env::e().basedir(Temporary),Env::e().basedir(Blobs),reset);
+				doSave(errs,c,env.basedir(Temporary),env.basedir(Blobs),reset);
 			} else {
-				doSave(errs,c,Env::e().basedir(Blobs),Env::e().basedir(Blobs),reset);
+				doSave(errs,c,env.basedir(Blobs),env.basedir(Blobs),reset);
 			}
 		} else {
 			errs << Message(info,"No Media to generate.");
 		}
 	}
 
-//The following is run once per language per build.
+//The following is run once per build.
 	void Media::doSave(Messages& errs,Db::Connection* c,const Path& outDir,const Path& orgDir,bool reset) {
 		Query* query = c->query(errs);
 		map<size_t,size_t> store = loadBinaries(errs,query); // Now we have a version -> binary map.
+		long double adjust = media->getnumrows() - mediaUsed.size();
+		if(adjust > 0) {
+			errs << Message(channel::media,"Unused Media Skipped Here",adjust);
+		}
 		for (auto ref : mediaUsed) {
 			MediaInfo& filebits = filenames[ref]; //Get file information from the filenames map.
 
 			//Identify and construct directory for media...
 			Path outPath(outDir);
 			Path orgPath(orgDir);
+
+//				file.makeAbsoluteFrom(base);
+
 			outPath.cd(filebits.dir,true); //force append (even if dir starts with root)
 			orgPath.cd(filebits.dir,true);
+//			SiteRootDir
 			outPath.makeDir(errs,true); // This now makes the directories if they are not present.
 			orgPath.makeDir(errs,true);
 
@@ -328,34 +336,45 @@ namespace Support {
 					orgFile.copyTo(outFile,errs,false);
 				}
 			}
-			doTransforms(errs,ref,outDir,orgDir,t_origin,orgdate,filebits,reset);
+			if(instances.find(ref) != instances.end()) {
+				doTransforms(errs, ref, outDir, orgDir, t_origin, orgdate, filebits, reset);
+			} else {
+				errs << Message(channel::media,t_origin,1.0L);
+			}
 		}
 	}
 
 	void Media::doTransforms(Messages& errs,string& ref,const Path& outPath,const Path& orgPath,const string& t_origin,std::time_t orgdate,MediaInfo& filebits,bool reset) {
 		if(instances.find(ref) != instances.end()) {
 			unordered_map<string,string>& mediaTransforms = instances[ref]; //And get any transforms.
-			for (auto trn : mediaTransforms) {
-				File trOrgFile(orgPath);
-				File trOutFile(outPath);
-				trOrgFile.setFileName(trn.first,true); //ignore leading slash.
-				trOutFile.setFileName(trn.first,true);
+			long double transformCount = mediaTransforms.size();
+			if(transformCount > 0.0L) {
+				long double progressValue = 1.0L / transformCount;
+				for (auto trn : mediaTransforms) {
+					File trOrgFile(orgPath);
+					File trOutFile(outPath);
+					trOrgFile.setFileName(trn.first,true); //ignore leading slash.
+					trOutFile.setFileName(trn.first,true);
 
-				bool needGen = true;
-				if (filebits.modified <= orgdate) { //the media source is old.
-					std::time_t trdate = trOrgFile.getModDate();	//if the transform changed we will have a different md5.
-					if (trdate > 0) {
-						needGen = false;
-						if(reset) {
-							trOrgFile.copyTo(trOutFile,errs,false);
+					bool needGen = true;
+					if (filebits.modified <= orgdate) { //the media source is old.
+						std::time_t trdate = trOrgFile.getModDate();	//if the transform changed we will have a different md5.
+						if (trdate > 0) {
+							needGen = false;
+							if(reset) {
+								trOrgFile.copyTo(trOutFile,errs,false);
+							}
 						}
 					}
+					if(needGen) {
+						ostringstream tos;
+						tos << t_origin << " " << trn.second << " " << trOutFile.output(true);
+						imagick.exec(errs,tos.str());
+					}
+					errs << Message(channel::transform,trOutFile.output(false),progressValue);
 				}
-				if(needGen) {
-					ostringstream tos;
-					tos << t_origin << " " << trn.second << " " << trOutFile.output(true);
-					imagick.exec(errs,tos.str());
-				}
+			} else {
+				errs << Message(channel::transform,t_origin,1.0L);
 			}
 		} //end of transforms
 	}
@@ -392,13 +411,17 @@ namespace Support {
 //-----------------------------------------------------------------------------
 	void Media::load(Messages& errs,Db::Connection* c) {
 		Timing& times = Timing::t();
-		if (times.show()) { times.set("Media load"); }
+		times.set("Media load");
 		normalise(errs,c);
 		loadTransforms(errs,c);
 		loadMedia(errs,c,media,mediamap,false);
 		loadMedia(errs,c,emedia,embedmap,true);
-		if (times.show()) { times.use(errs,"Media load"); }
-
+		size_t mediaCount = media->getnumrows();
+		size_t eMediaCount = emedia->getnumrows();
+		errs << Message(info,to_string(eMediaCount) + " embedded media imported.");
+		errs << Message(info,to_string(mediaCount) + " media imported.");
+		errs.setProgressSize(Message::media,mediaCount);
+		times.use(errs,"Media load");
 	}
 //-----------------------------------------------------------------------------
 //Normalise Media.
@@ -465,6 +488,7 @@ namespace Support {
 					}
 				}
 			}
+			errs.setProgressSize(Message::transform,transforms.size());
 			delete q;
 			c->exec(errs,"unlock tables");
 		}
@@ -498,7 +522,6 @@ namespace Support {
 			} else {
 				errs << Message(error,"SQL Media Loading Error ");
 			}
-			errs << Message(info,to_string(media->getnumrows()) + " media imported.");
 		}
 		c->exec(errs,"unlock tables");
 	}

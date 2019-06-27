@@ -40,6 +40,7 @@ namespace Support {
 		bool ParseAdvanced;
 		bool ParseLegacy;
 
+		Path   WorkingRootPath;
 		string SiteRootDir;
 		string RemoteUser;
 		string EditNodeUrl; //= "/mortar/oedit.obyx?node=0";
@@ -58,6 +59,7 @@ namespace Support {
 		Path basedir(buildSpace);
 		void basedir(string&,buildSpace,bool,bool);
 		std::string baseUrl(buildArea);
+		const Path& workingRoot() const;
 		const std::deque<size_t>& techs() const {return askedTechs;}
 		const std::deque<size_t>& langs() const {return askedLangs;}
 //		tech& technology()  { return technologies.front(); }  //returns currently built technology.

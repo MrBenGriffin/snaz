@@ -30,6 +30,7 @@
 #include "content/Layout.h"
 #include "content/Segment.h"
 
+#include "BuildUser.h"
 #include "Build.h"
 
 namespace node {
@@ -251,14 +252,38 @@ namespace node {
 		return content(errs,id,silent);
 	}
 
+	void Content::count(const BuildUser& user,buildType type,set<size_t>& counter) {
+		switch (type) {
+			case Single:
+				if (user.check(_team, type)) {
+					counter.insert(_id);
+				}
+			break;
+			case Full:
+				if (user.check(type) && this == root()) {
+					count(user,Branch, counter);
+				}
+			break;
+			case Branch:
+				if (user.check(_team, type)) {
+					counter.insert(_id);
+					count(user,Descendants, counter);
+				}
+			break;
+			case Descendants:
+				if (user.check(_team, type)) {
+					for (auto *node : children) {
+						get(node->id()).count(user,Branch, counter);
+					}
+				}
+			break;
+		}
+	}
+
 	//-------------------------------------------------------------------
 // All builds starts here, and then any single node build goes to compose.
 	void Content::generate(Messages& errs,buildType build) {
 		Build &core = Build::b();
-//		ostringstream msg;
-//		msg << string(build) << ": " << _id << ";" << _tw << ";" << _ref;
-//		errs << Message(info,msg.str());
-//		static unordered_map<size_t,Content>  nodes;
 		switch(build) {
 			case Single:
 				if(core.user.check(_team,build)) {
@@ -285,8 +310,10 @@ namespace node {
 						auto& child = get(node->id());
 						if(child.layoutPtr != nullptr && child.layoutPtr->buildPoint) {
 							child.generate(errs,Branch);
+						} else {
+							errs << Message(channel::node,child.ids(),1.00L); //we included it, but will skip it here.
 						}
-					}
+					};
 				} else {
 					errs << Message(security,"Not allowed to descendant build here.");
 				} break;
@@ -304,6 +331,7 @@ namespace node {
 	}
 
     void Content::compose(Messages& errs) {
+		Env& env = Env::e();
 		Timing& times = Timing::t();
 		times.set('n'); // set node timer start.
 		ostringstream msg; msg << "Node ID " << idStr << " `" << _ref << "` ";
@@ -315,37 +343,46 @@ namespace node {
         current.page = 0;
 		mt::mstack context;
 		mt::Instance instance(&current);
+		Path destination = env.basedir(Built);
+		destination.makeDir(errs,true);
 		context.emplace_back(make_pair(nullptr,&instance)); //Make the carriage.
-        for (auto* t : layoutPtr->templates) {
-            std::ostringstream content;
-            if(!t->code.empty() && !finalFilenames.empty()) {
-            	current.currentTemplate = t;
-                auto file = finalFilenames[current.page];
-				// http://edit-preview.redsnapper.net/en/testl.php
-                // errs << Message(info,file);
-                errs.reset();
-                mt::Wss::push(&(t->nl)); //!!! another global.. need to add to the metrics above.
-                t->code.expand(errs, content, context); //no context here...
-                mt::Wss::pop();
-                try {
-                    std::ofstream outFile(file.c_str());
-                    outFile << content.str();
-                    outFile.close();
-                    chmod(file.c_str(), S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
-                }    //create the file!
-                catch (...) {
-                    errs << Message(error, "Failed to create file");
-                }
-           }
-            current.page++;
-        }
-		context.pop_back();
-//		assert(context.empty());
+		long double fileCount = layoutPtr->templates.size();
+		if(fileCount > 0.0L) {
+			long double progressValue = 1.0L/fileCount;
+			for (auto* t : layoutPtr->templates) {
+				string filename= _ref + " not a file";
+				std::ostringstream content;
+				if(!t->code.empty() && !finalFilenames.empty()) {
+					current.currentTemplate = t;
+					filename = finalFilenames[current.page];
+					File file(destination,finalFilenames[current.page]);
+					string filepath = file.output(true);
+					// http://edit-preview.redsnapper.net/en/testl.php
+					// errs << Message(info,file);
+					errs.reset();
+					mt::Wss::push(&(t->nl)); //!!! another global.. need to add to the metrics above.
+					t->code.expand(errs, content, context); //no context here...
+					mt::Wss::pop();
+					try {
+						std::ofstream outFile(filepath);
+						outFile << content.str();
+						outFile.close();
+						chmod(filepath.c_str(), S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
+					}    //create the file!
+					catch (...) {
+						errs << Message(error, "Failed to create file " + filepath);
+					}
+				}
+				current.page++;
+				errs << Message(channel::file,filename,progressValue); // done as a proportion.
+			}
+		} else {
+			errs << Message(channel::file,"No files to output",1.0L);  // done as a proportion.
+		}
+ 		context.pop_back();
         current.nodeStack.pop_back();
         mt::Internal::reset("*"); //reset all storage belonging to the node build.
 		times.get(errs,'n',name);
-//--        times.use(errs,msg.str());
 		errs.pop();
-//		errs.synchronise();
     }
 }

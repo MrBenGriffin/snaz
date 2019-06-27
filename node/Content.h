@@ -21,6 +21,7 @@
 using namespace Support;
 using namespace Db;
 
+class BuildUser;
 namespace content {
 	class Layout;
 	class Segment;
@@ -66,6 +67,7 @@ namespace node {
 		const std::string filename(Messages&,size_t) const;
 
 		void generate(Messages&,buildType);
+		void count(const BuildUser&,buildType,set<size_t>&);
 
 		bool   get(Messages&,boolValue) const override;
 		size_t get(Messages&,uintValue) const override;

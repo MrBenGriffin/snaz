@@ -34,7 +34,7 @@ bool BuildUser::mayTeamEdit(size_t team) {
 UserMay::UserMay() : edit(false),draft(false),final(false),draftDown(false),finalDown(false) {}
 
 
-bool BuildUser::check(buildType what) {
+bool BuildUser::check(buildType what) const {
 	buildArea area = buildArea(Build::b().current());
 	switch (area) {
 		case Final: {
@@ -73,7 +73,7 @@ bool BuildUser::check(buildType what) {
 }
 
 
-bool BuildUser::check(size_t team,buildType what) {
+bool BuildUser::check(size_t team,buildType what) const {
 	auto t = teams.find(team);
 	if(t == teams.end()) {
 		return false;

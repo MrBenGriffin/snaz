@@ -122,8 +122,8 @@ void Build::tests(Messages &errs) {
 void Build::build(Messages &errs) {
 	errs.push(Message(info,"Loading Configuration"));
 	user.load(errs,*sql);
-	loadLanguages(errs,*sql);
-	loadTechs(errs,*sql);
+	loadLanguages(errs,*sql); //This will set Languages
+	loadTechs(errs,*sql); //This will set the number of Technologies.
 	errs.pop();
 	full = allLangs && allTechs && requestedNodes.empty();
 	if( (_current == final && ((full && user.may.final) || user.may.finalDown)) ||
@@ -155,17 +155,17 @@ void Build::build(Messages &errs) {
 
 void Build::global(Messages& errs) {
 	Env& env = Env::e();
-	errs.push(Message(info,"Loading Macros, Suffixes, Scripts, Templates, and Segments"));
+	errs.push(Message(info,"Loading Macros, Suffixes, Scripts, Templates, Segments, and Media"));
 	mt::Definition::load(errs,*sql,_current); // Set the internals.
 	env.basedir(Scripts).makeDir(errs);
 	node::Suffix().loadTree(errs,*sql,0, _current);
 	content::Template::load(errs,*sql);
 	content::Segment::load(errs,*sql,_current);
+	_media->load(errs,sql);
 	errs.pop();
 
 //TODO:	RunScript("PRE_PROCESSING_SCRIPT", "Pre Processor", errs);
 	langs(errs);
-//TODO:	iMedia::move(errs);
 //
 //TODO:	storageResult script = bld->varStorage.find("FINAL_PROCESSING_SCRIPT");
 //	if (script.found) {
@@ -175,11 +175,9 @@ void Build::global(Messages& errs) {
 //TODO:	RunScript("POST_PROCESSING_SCRIPT", "Post Processor", errs);
 //	RunScript("~POST_PROCESSING_SCRIPT", "Post Processor", errs);
 //	errs.str(Logger::log);
-//	iMedia::close(); (not sure why this is here).
 
-//SuffixVal::unload();
-//  macro::terminate();			//unload
-
+	_media->save(errs,sql,allTechs && full); //Condition for full reset.
+//TODO:	iMedia::move(errs);
 	_media->close();
 	content::Editorial::e().reset(errs,*sql);
 	mt::Definition::shutdown(errs,*sql,_current); //bld->savePersistance(); prunePersistance(); clearPersistance();
@@ -188,26 +186,29 @@ void Build::global(Messages& errs) {
 }
 
 void Build::langs(Messages& errs) {
+	static bool calculatedProgress(false);
 	Timing& times = Timing::t();
-//	times.wait(30.0);
 	while (!languages.empty()) {
 		auto lang = languages.front();
-		if (times.show()) { times.set("Language " + lang.second.name); }
+		times.set("Language " + lang.second.name);
 		node::Taxon().loadTree(errs,*sql,lang.first, _current);
 		node::Content::updateBirthAndDeath(errs,*sql,lang.first,_current); //* Per Language.
 		node::Content::updateContent(errs,*sql,lang.first,_current); //this moves the latest version into bldcontent.
-		//TODO:: Content APPROVERS.
+		//TODO:: Content APPROVERS??.
 		node::Content().loadTree(errs,*sql,lang.first,_current);
 		content::Editorial::e().load(errs,*sql,lang.first,_current);
-		////bld->all_techs && bld->fullBuild
-		_media->load(errs,sql);
+		if(!calculatedProgress) {
+			calculateNodesToBuild(errs);  //If we use the tech1 layoutlist, we get
+			errs.calculateProgressSize(); //We can now determine progress!
+			calculatedProgress = true;
+			errs << Message(channel::adhoc,"Finished Loading",1.0L);
+		}
 		techs(errs);
-		_media->save(errs,sql,allTechs && full); //Condition for full reset.
 		content::Editorial::e().store(errs,*sql,lang.first,_current);
 		content::Editorial::e().reset(errs,*sql);
-		//.....
-		if (times.show()) { times.use(errs,"Language " + lang.second.name); }
+		times.use(errs,"Language " + lang.second.name);
 		languages.pop_front();
+		errs << Message(channel::language,lang.second.name,1.0L);
 	}
 }
 
@@ -215,7 +216,7 @@ void Build::techs(Messages& errs) {
 	Timing& times = Timing::t();
 	while (!technologies.empty()) {
 		size_t techID = tech();
-		if (times.show()) { times.set("Tech " + techName()); }
+		times.set("Tech " + techName());
 		content::Layout::load(errs,*sql,techID,_current);
 		node::Content().setLayouts(errs);
 		_media->setFilenames(errs);
@@ -226,13 +227,13 @@ void Build::techs(Messages& errs) {
 			errs << Message(fatal,"exception thrown.");
 		}
 		//.....
-		if (times.show()) { times.use(errs,"Tech " + techName()); }
+		times.use(errs,"Tech " + techName());
 		technologies.pop_front();
+		errs << Message(channel::technology,techName(),1.0L);
 	}
 }
 
-void  Build::files(Messages& errs) {
-//	node::Content::root()->str(cout);
+void Build::files(Messages& errs) {
 	if(requestedNodes.empty()) {
 		node::Content::get(node::Content::root()->id()).generate(errs,Full);
 	} else {
@@ -246,6 +247,24 @@ void  Build::files(Messages& errs) {
 			}
 		}
 	}
+}
+
+void Build::calculateNodesToBuild(Messages& errs) const {
+	std::set<size_t> counter;
+	if(requestedNodes.empty()) {
+		node::Content::get(node::Content::root()->id()).count(user,Full,counter);
+	} else {
+		for (auto t : requestedNodes) { //t.first is the buildType.
+			for(auto n : t.second ) { // t.second is the deque of node IDs for this buildtype.
+				const node::Content* node = node::Content::root()->content(errs,n);
+				if(node != nullptr) {
+					auto& base = node::Content::get(node->id());
+					base.count(user,t.first,counter);
+				}
+			}
+		}
+	}
+	errs.setProgressSize(Message::node,counter.size());
 }
 
 void Build::doParse(Messages &errs, Connection&) {
@@ -304,6 +323,7 @@ void Build::loadLanguages(Messages &errs, Connection& dbc) {
 		ostringstream msg;
 		msg  << languages.size() << " Languag" << (languages.size()==1? "e":"es") << " Loaded";
 		errs << Message(info,msg.str());
+		errs.setProgressSize(Message::language,languages.size());
 	}
 }
 
@@ -318,7 +338,6 @@ void Build::loadTechs(Messages &errs, Connection& dbc) {
 				query->readfield(errs,"name",name);
 				qTechs.insert({id,name});
 			}
-//			delete query; query= nullptr;
 		}
 		dbc.dispose(query);
 	}
@@ -340,6 +359,7 @@ void Build::loadTechs(Messages &errs, Connection& dbc) {
 	ostringstream msg;
 	msg  << technologies.size() << " Technolog" << (technologies.size()==1? "y":"ies") << " Loaded";
 	errs << Message(info,msg.str());
+	errs.setProgressSize(Message::technology,technologies.size());
 }
 
 void Build::setNodes(Support::buildType style,std::deque<size_t>& list) {
@@ -369,10 +389,10 @@ void Build::list() {
 	}
 }
 
-void Build::close(Support::Messages &errs) {
+void Build::close(Support::Messages &log) {
 	Infix::Evaluate::shutdown();
-	Timing::t().get(errs,'b');
-	errs << Message(info,progress,"Build is finished");
+	Timing::t().get(log,'b');
+	log << Message(channel::adhoc,"Build is finished",1.0L);
 }
 
 bool Build::setLock(Support::Messages& errs,Connection& dbc) {
@@ -441,5 +461,4 @@ void Build::releaseLock(int) {
 		}
 	}
 	log.synchronise();
-//	log.str(std::cerr);
 }

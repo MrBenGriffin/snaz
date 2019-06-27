@@ -53,6 +53,7 @@ namespace Support {
 		const int getPathCount() const;
 		void cd(string,bool=false);
 		bool match(Messages&,const string&,const string&) const;
+		bool isInside(const Path &) const;
 		virtual const string output(bool) const;
 
 		virtual bool exists() const;
@@ -118,9 +119,6 @@ namespace Support {
 		bool empty() const { return path.empty(); }
 		string exec(Messages&,const string&);
 		File &operator=(const File &o);
-
-
-
 
 	};
 

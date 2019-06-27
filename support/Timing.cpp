@@ -128,11 +128,14 @@ namespace Support {
 		Support::channel channel = custom;
 		switch(timer_c) {
 			case 'b': { channel = build; repo << "Build Time"; } break;
-			case 'n': { channel = node; repo << "Node Time"; } break;
+			case 'n': { channel = ntime; repo << "Node Time"; } break;
 			case 'l': repo << name << " (lap)"; break;
 			case 'c': repo << name; break;
 		}
-		log << Message(channel,purpose,repo.str(),Timing::seconds(get(timer_c,name)));
+		if(purpose != timer) {
+			repo << " (Macro Defined)";
+		}
+		log << Message(channel,repo.str(),Timing::seconds(get(timer_c,name)));
 	}
 
 	void Timing::get(Messages& log,const string name) {
