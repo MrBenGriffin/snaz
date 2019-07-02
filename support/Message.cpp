@@ -324,12 +324,12 @@ namespace Support {
 			progression = currentProgress / progressAll;
 		}
 		list.emplace_back(std::move(m));
+		if(!stack.empty()) {
+			list.back().setParent(stack.back());
+		}
 		if(progression != 0L) {
 			list.back().prog = progression;
 			synchronise();
-		}
-		if(!stack.empty()) {
-			list.back().setParent(stack.back());
 		}
 	}
 

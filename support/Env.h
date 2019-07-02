@@ -62,7 +62,6 @@ namespace Support {
 		const Path& workingRoot() const;
 		const std::deque<size_t>& techs() const {return askedTechs;}
 		const std::deque<size_t>& langs() const {return askedLangs;}
-//		tech& technology()  { return technologies.front(); }  //returns currently built technology.
 	};
 
 }
