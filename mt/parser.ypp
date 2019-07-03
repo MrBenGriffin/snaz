@@ -1,8 +1,8 @@
 %skeleton "lalr1.cc"
-%require  "3.2"
+%require  "3.3"
 %defines
 %define api.namespace {mt}
-%define parser_class_name {Parser}
+%define api.parser.class {Parser}
 %define parse.trace
 
 %code requires{

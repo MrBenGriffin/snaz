@@ -320,7 +320,7 @@ namespace mt {
 		//second parameter is 'true' or 'false' - (default = false) and represents whether
 		//or not to treat the file as macrotext.
 		InternalInstance my(this,e,o,instance,context);
-		Path base = Env::e().basedir(Built);
+		Path base = Env::e().unixDir(Built);
 		std::string filename = my.parm(1);
 		File file(base,filename);
 		if(file.makeRelativeTo(base)) {

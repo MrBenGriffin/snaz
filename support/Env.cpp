@@ -58,37 +58,55 @@ namespace Support {
 		return WorkingRootPath;
 	}
 
-	Path Env::basedir(buildSpace space) {
+	//Full path to a directory.
+	Path Env::unixDir(buildSpace space) {
 		string directory;
 		basedir(directory,space,false,true);
 		return Path(directory);
 	}
 
-	void Env::basedir(string& base,buildSpace space,bool addslash,bool full) {	//returns e.g.  /home/web/site/collins/buildlog/BUILDxxxx/ OR /home/web/site/collins/approve/
+	//Path to directory (from siteroot)
+	Path Env::siteDir(buildSpace space) {
+		string directory;
+		basedir(directory,space,false,false);
+		return Path(directory);
+	}
+
+	void Env::basedir(string& base,buildSpace space,bool addslash,bool full) {
 		Build& build = Build::b();
-		string dirbit,extrabit;
-		switch (build.current()) {
-			case test: 		dirbit = TestsDir; break;
-			case final:   	dirbit = FinalDir; break;
-			case draft:   	dirbit = DraftDir; break;
-			case parse:   	dirbit = "/tmp"; break;
+		string dirbit;
+		if(full) {
+			switch (build.current()) {
+				case test:
+					dirbit = TestsDir;
+					break;
+				case final:
+					dirbit = FinalDir;
+					break;
+				case draft:
+					dirbit = DraftDir;
+					break;
+				case parse:
+					dirbit = "/tmp";
+					break;
+			}
 		}
 		switch (space) {
-			case Built:		break;
-			case Blobs:		dirbit.append("/media"); break;
+			case Blobs:
+				if(full) dirbit.push_back('/');
+				dirbit.append(MediaDir);
+				break;
+			case Built:
 			case Temporary:	{
 			} break;
 			case Scripts: {
-				base= ScriptsDir;
-				full = false;
+				dirbit= ScriptsDir;
 			} break;
 			case Tests:	{
 				dirbit = "tests";
 			} break;
 		}
-		if (full) {
-			base = SiteRootDir + dirbit;
-		}
+		base = full ? SiteRootDir + dirbit : dirbit;
 		if (addslash) base.append("/");
 	}
 

@@ -382,8 +382,6 @@ namespace testing {
 								}
 							}
 						}
-//						cout << "- name -" << endl;
-//						mt::Driver::visit(structure,cout);
 						structure.reset();
 					}
 				}

@@ -109,7 +109,6 @@ void Build::tests(Messages &errs) {
 	node::Content().setLayouts(errs);
 	_media->setFilenames(errs);
 
-	errs.str(cout);
 	testing::group tests(errs,"tests/");        	 // Set the working directory from the Run|Edit Configurations... menu.
 	tests.title(std::cout, "Main");
 	tests.load(std::cout,  "main", false);   // Boolean turns on/off success reports.
@@ -118,6 +117,7 @@ void Build::tests(Messages &errs) {
 	content::Editorial::e().reset(errs,*sql);
 	mt::Definition::shutdown(errs,*sql,_current); //bld->savePersistance(); prunePersistance(); clearPersistance();
 	Timing::t().use(errs,"Tests");
+	errs.str(cout);
 }
 void Build::build(Messages &errs) {
 	errs.push(Message(info,"Loading Configuration"));
@@ -157,7 +157,7 @@ void Build::global(Messages& errs) {
 	Env& env = Env::e();
 	errs.push(Message(info,"Loading Macros, Suffixes, Scripts, Templates, Segments, and Media"));
 	mt::Definition::load(errs,*sql,_current); // Set the internals.
-	env.basedir(Scripts).makeDir(errs);
+	env.unixDir(Scripts).makeDir(errs);
 	node::Suffix().loadTree(errs,*sql,0, _current);
 	content::Template::load(errs,*sql);
 	content::Segment::load(errs,*sql,_current);

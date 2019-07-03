@@ -140,14 +140,14 @@ namespace Support {
 		if (chdir(wdptr) != 0) { /* report an error here. */ }
 	}
 
-	Path::Path() : path(), directory_separator("/"),doWrite(true) {
+	Path::Path() : path(), doWrite(true) {
 	}
 
 	Path::Path(const Path &newpath) : doWrite(true) {
 		*this = newpath;
 	}
 
-	Path::Path(const string newpath) : doWrite(true), path(), directory_separator("/") {
+	Path::Path(const string newpath) : doWrite(true), path() {
 		setPath(newpath);
 	}
 
@@ -158,17 +158,16 @@ namespace Support {
 
 	Path &Path::operator=(const Path &o) {
 		path = o.path;
-		directory_separator = o.directory_separator;
 		return *this;
 	}
 
-	void Path::setDirectorySeparator(const string separator) {
-		directory_separator = separator;
-	}
-
-	const string Path::getDirectorySeparator() const {
-		return directory_separator;
-	}
+//	void Path::setDirectorySeparator(const string separator) {
+//		directory_separator = separator;
+//	}
+//
+//	const string Path::getDirectorySeparator() const {
+//		return directory_separator;
+//	}
 
 	void Path::setPath(const string newpath) {
 		path.clear();
@@ -228,7 +227,7 @@ namespace Support {
 				size_t dsep = newpath.find(directory_separator, 0);
 				if (dsep < newpath.size()) {
 					if (append && dsep == 0 && !path.empty()) {
-						addPath(newpath.substr(directory_separator.size()));
+						addPath(newpath.substr(1));
 					} else {
 						addPath(newpath);
 					}
@@ -292,18 +291,18 @@ namespace Support {
 		closedir(dir);
 	}
 
-	int Path::getSizeA() const {
-		string tempPath = output(false);
-		// stat does not like '/' terminated paths
-		if (!tempPath.empty())
-			tempPath = tempPath.erase(tempPath.length() - 1, 1);
-		int result;
-		struct stat buf{};
-		result = stat(tempPath.c_str(), &buf);
-		if (result == 0 && buf.st_mode & S_IFDIR)
-			return (int)buf.st_size; //64 bit to 32 bit conversion...
-		return 0;
-	}
+//	int Path::getSizeA() const {
+//		string tempPath = output(false);
+//		// stat does not like '/' terminated paths
+//		if (!tempPath.empty())
+//			tempPath = tempPath.erase(tempPath.length() - 1, 1);
+//		int result;
+//		struct stat buf{};
+//		result = stat(tempPath.c_str(), &buf);
+//		if (result == 0 && buf.st_mode & S_IFDIR)
+//			return (int)buf.st_size; //64 bit to 32 bit conversion...
+//		return 0;
+//	}
 
 
 	void Path::listFiles(Messages &e, vector<File *> *list, bool recursive, const string regexp) const {
@@ -676,6 +675,31 @@ namespace Support {
 		return true;
 	}
 
+/**
+ * head uses this path as the head of the tail, and adds tail to this.
+ * Eg, this = /var/www/alpha/foo and bar= /wibble/alpha/foo/bar
+ *     this => /var/www/alpha/bar
+ */
+	bool Path::head(const Path& tail, Messages& errs) {
+//		auto old = path;
+		auto& tailPath = tail.path;
+		size_t i=0,j=0;
+		for(; i < path.size(); i++) {
+			for(j=0; j < path.size() && j< tailPath.size(); j++) {
+				if(path[i] == tailPath[j]) break;
+			}
+			if(j < tailPath.size()) {
+				break;
+			}
+		}
+		path.resize(i);
+		for(; j < tailPath.size(); j++) {
+			path.emplace_back(tailPath[j]);
+		}
+		return true;
+	}
+
+
 	string Path::generateTempName(const string &newfilename) const {
 		ostringstream result;
 		Date now;
@@ -890,17 +914,16 @@ namespace Support {
 		return extension;
 	}
 
-
 	//-------------------------------------------------------------------------
 	// Sets the filename
 	//-------------------------------------------------------------------------
 	void File::setFileName(const string newfilename, bool ignoreRoot) {
 		string thefile(newfilename);
-		if (thefile.compare(0, directory_separator.length(), directory_separator) == 0) {
+		if (thefile.compare(0, 1, directory_separator) == 0) {
 			size_t slash = thefile.rfind(directory_separator);
 			cd(thefile.substr(0, slash), ignoreRoot);
 //				setPath(thefile.substr(0, slash));
-			thefile = thefile.substr(slash + directory_separator.length(), string::npos);
+			thefile = thefile.substr(slash + 1, string::npos);
 		}
 		size_t dot = thefile.rfind(getExtensionSeparator());
 		if (dot != string::npos) {

@@ -343,7 +343,7 @@ namespace node {
         current.page = 0;
 		mt::mstack context;
 		mt::Instance instance(&current);
-		Path destination = env.basedir(Built);
+		Path destination = env.unixDir(Built);
 		destination.makeDir(errs,true);
 		context.emplace_back(make_pair(nullptr,&instance)); //Make the carriage.
 		long double fileCount = layoutPtr->templates.size();

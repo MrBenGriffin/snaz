@@ -34,7 +34,7 @@ namespace Support {
 	}
 
 	MediaInfo Media::setfile(Messages& errs,const std::string &ref,size_t index) {
-
+		auto& env=Env::e();
 		string fpath,directory,imgbase,extension;
 		::time_t modified;
 		size_t version;
@@ -46,6 +46,7 @@ namespace Support {
 		mstack context;
 		auto instance =Instance(&metrics);
 		context.push_back({nullptr,&instance}); //This is our context.
+		auto base = env.siteDir(Blobs);
 
 		media->setRow(errs,index);
 		media->readfield(errs,"version", version);   // not sure why we do it this way...
@@ -85,6 +86,7 @@ namespace Support {
 		wsstrip(directory);
 		wsstrip(extension);
 		wsstrip(imgbase);
+		tolower(directory);
 		tolower(imgbase);
 		fandr(imgbase,".");
 		fandr(imgbase,"_","-");  //This has to happen in order to catch linkrefs that have _ in them.
@@ -93,9 +95,10 @@ namespace Support {
 			iStr << imgbase << "_" << version;
 			imgbase = iStr.str();
 		}
-		directory.append("/");
+		Path dir(directory);
+		dir.makeAbsoluteFrom(base);
 		metrics.pop();
-		return {version,modified,directory,imgbase,extension};
+		return {version,modified,dir,imgbase,extension};
 	}
 
 	string Media::transFile(Messages& errs,const node::Metrics* metrics,pair<string,string>& ref,size_t index) {
@@ -138,7 +141,7 @@ namespace Support {
 		}
 
 		MediaInfo& filebits = filenames[ref.first];
-		string media_uniq= filebits.dir + filebits.base + "." + filebits.ext;
+		string media_uniq= filebits.dir.output() + filebits.base + "." + filebits.ext;
 		string extension=filebits.ext;
 		auto tx = trExtensions.find(transName);
 		if(tx != trExtensions.end()) {
@@ -146,7 +149,7 @@ namespace Support {
 		}
 		//uniqueness requires version_id and the evaluation of this particular transform (including parameters).
 		string tr_hash = Digest::hash(media_uniq + "@" + transName + "@" + transformCode,errs);
-		string filename = filebits.dir + filebits.base + "_" + transName + "_" + tr_hash + "." + extension;
+		string filename = filebits.dir.output() + filebits.base + "_" + transName + "_" + tr_hash + "." + extension;
 		mediaUsed.emplace(ref.first);
 		auto it = instances.find(ref.first);
 		if(it == instances.end()) {
@@ -205,7 +208,7 @@ namespace Support {
 				media->setRow(errs, index);
 				media->readfield(errs, "ext", extension);     //not sure why we do it this way...
 				MediaInfo &filebits = filenames[mtrans.first];
-				filename = filebits.dir + filebits.base + "." + extension;
+				filename = filebits.dir.output() + filebits.base + "." + extension;
 				mediaUsed.emplace(mtrans.first);
 				return filename;
 			}
@@ -284,9 +287,9 @@ namespace Support {
 		Env& env = Env::e();
 		if(!mediaUsed.empty()) {
 			if ( reset ) {
-				doSave(errs,c,env.basedir(Temporary),env.basedir(Blobs),reset);
+				doSave(errs,c,env.unixDir(Temporary),env.unixDir(Blobs),reset);
 			} else {
-				doSave(errs,c,env.basedir(Blobs),env.basedir(Blobs),reset);
+				doSave(errs,c,env.unixDir(Blobs),env.unixDir(Blobs),reset);
 			}
 		} else {
 			errs << Message(info,"No Media to generate.");
@@ -310,8 +313,8 @@ namespace Support {
 
 //				file.makeAbsoluteFrom(base);
 
-			outPath.cd(filebits.dir,true); //force append (even if dir starts with root)
-			orgPath.cd(filebits.dir,true);
+			outPath.head(filebits.dir,errs); //force append (even if dir starts with root)
+			orgPath.head(filebits.dir,errs);
 //			SiteRootDir
 			outPath.makeDir(errs,true); // This now makes the directories if they are not present.
 			orgPath.makeDir(errs,true);

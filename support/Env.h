@@ -28,6 +28,7 @@ namespace Support {
 		static constexpr auto StagingDir 	= "staging";
 		static constexpr auto ReleaseDir 	= "release";
 		static constexpr auto IncludeDir 	= "include";
+		static constexpr auto MediaDir 	    = "media";
 
 		Storage storage;
 		std::deque<size_t> askedTechs;
@@ -56,7 +57,8 @@ namespace Support {
 		std::string get(const string&);
 		buildArea area();
 
-		Path basedir(buildSpace);
+		Path unixDir(buildSpace);
+		Path siteDir(buildSpace);
 		void basedir(string&,buildSpace,bool,bool);
 		std::string baseUrl(buildArea);
 		const Path& workingRoot() const;

@@ -25,10 +25,10 @@ namespace Support {
 	protected:
 		static std::stack<string> wdstack;
 		vector<string> path;
-		string	directory_separator;
+		static constexpr auto directory_separator = "/";
 
 	protected:
-		int getSizeA() const;
+//		int getSizeA() const;
 
 	public:
 		Path();
@@ -43,8 +43,8 @@ namespace Support {
 		Path& operator=(const Path&);
 		void listFiles(Messages &,vector<File *> *,bool,string) const;
 		void listFilesA(Messages&,vector<File *> *,string) const;
-		void setDirectorySeparator(string separator);
-		const string getDirectorySeparator() const;
+//		void setDirectorySeparator(string separator);
+//		const string getDirectorySeparator() const;
 		void setPath(string);
 		void addPath(string);
 		const string getPath() const;
@@ -54,7 +54,7 @@ namespace Support {
 		void cd(string,bool=false);
 		bool match(Messages&,const string&,const string&) const;
 		bool isInside(const Path &) const;
-		virtual const string output(bool) const;
+		virtual const string output(bool = true) const;
 
 		virtual bool exists() const;
 		bool makeDir(Messages&,bool=false) const;
@@ -62,6 +62,7 @@ namespace Support {
 		bool moveTo(Messages&,const Path &) const ;
 		bool copyTo(const Path&,  Messages&, bool=false,bool=false) const;
 		bool mergeTo(const Path&, Messages&, bool=true,bool=false) const;
+		bool head(const Path&, Messages&);
 
 		void listDirs(vector<Path *>*, bool=false) const;
 

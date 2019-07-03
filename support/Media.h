@@ -32,7 +32,7 @@ namespace Support {
 		size_t 	version;
 //		string 	versionStr;
 		::time_t modified;
-		string 	dir;
+		Path 	dir;
 		string 	base;
 		string 	ext;
 	};

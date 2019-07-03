@@ -137,7 +137,7 @@ namespace Support {
 	}
 
 	void Message::str(ostream& log) const {
-		log << purposeStr() << "; " << chan() << ": " << content << endl << flush;
+		log << purposeStr() << "; " << chan() << ": " << content << flush;
 	}
 
 	void Message::store(Support::Messages& log,Support::Db::Connection* sql) {
