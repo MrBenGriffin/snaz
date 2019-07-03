@@ -30,7 +30,6 @@ namespace Support {
 
 	struct MediaInfo {
 		size_t 	version;
-//		string 	versionStr;
 		::time_t modified;
 		Path 	dir;
 		string 	base;
@@ -53,7 +52,6 @@ namespace Support {
 
 		pair<string,string> getRef(const string &) const;
 		string transFile(Messages&,const node::Metrics*,pair<string,string>&,size_t);
-//		string transMacroName(const string&);
 
 		//Load / Save etc.
 		string loaderSQL(bool);

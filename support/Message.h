@@ -98,8 +98,8 @@ namespace Support {
 		deque<Message> list;
 		//                          T L N A Mx Mt
 		size_t progressSize [6] = { 1,1,1,2,1,1 };  //This must be filled before progress can be recorded.
-		long double progressAll     = {1.0};
-		long double currentProgress = {0.0};
+		long double progressAll     = {1.0}; //eg 360
+		long double currentProgress = {0.0}; //eg 212
 
 	public:
 		void calculateProgressSize();

@@ -193,14 +193,15 @@ namespace Support {
 	}
 
 	void Messages::calculateProgressSize() {
-		progressAll = 1;
-		for(size_t i=2; i<3; i--) {
+		progressAll = 1.0L;
+		for(size_t i=0; i<3; i++) {
+			// Calculate node progress as tech*language*nodes
+			// Templates are calculated as a fraction of each node.
 			progressAll *= progressSize[i];
 		}
 		//Adhocs, Media and transforms are not nested, so are just added.
-		progressAll += progressSize[3]; // Adhocs
+		progressAll += progressSize[3]; // Adhocs (currently there are 2).
 		progressAll += progressSize[4]; // Media. Transforms are done (fractionally) over Media, as are templates.
-//		progressAll += progressSize[5];
 	}
 
 	Messages::Messages(Messages& o ): sql(o.sql),buildID(o.buildID),userID(o.userID),_established(o._established),_marked(false) {
@@ -336,6 +337,8 @@ namespace Support {
 	void Messages::push(Message const& m) {
 		add(m);
 		stack.push_back(m.ID());
+		synchronise();
+			// We have to push the stack message in order to ensure that we get referential integrity on parent.
 	}
 
 	void Messages::pop() {

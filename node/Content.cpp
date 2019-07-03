@@ -348,7 +348,7 @@ namespace node {
 		context.emplace_back(make_pair(nullptr,&instance)); //Make the carriage.
 		long double fileCount = layoutPtr->templates.size();
 		if(fileCount > 0.0L) {
-			long double progressValue = 1.0L/fileCount;
+			long double progressValue(1.0L / fileCount);  //eg 1/2 for two files.
 			for (auto* t : layoutPtr->templates) {
 				string filename= _ref + " not a file";
 				std::ostringstream content;
@@ -377,7 +377,7 @@ namespace node {
 				errs << Message(channel::file,filename,progressValue); // done as a proportion.
 			}
 		} else {
-			errs << Message(channel::file,"No files to output",1.0L);  // done as a proportion.
+			errs << Message(channel::node,"No files to output",1.0L);  // done as a proportion.
 		}
  		context.pop_back();
         current.nodeStack.pop_back();

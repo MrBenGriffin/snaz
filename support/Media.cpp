@@ -286,11 +286,14 @@ namespace Support {
 	void Media::save(Messages& errs,Db::Connection* c,bool reset) {
 		Env& env = Env::e();
 		if(!mediaUsed.empty()) {
+			Timing& times = Timing::t();
+			times.set("Media");
 			if ( reset ) {
 				doSave(errs,c,env.unixDir(Temporary),env.unixDir(Blobs),reset);
 			} else {
 				doSave(errs,c,env.unixDir(Blobs),env.unixDir(Blobs),reset);
 			}
+			times.use(errs,"Media");
 		} else {
 			errs << Message(info,"No Media to generate.");
 		}
@@ -298,14 +301,18 @@ namespace Support {
 
 //The following is run once per build.
 	void Media::doSave(Messages& errs,Db::Connection* c,const Path& outDir,const Path& orgDir,bool reset) {
+		Timing& times = Timing::t();
 		Query* query = c->query(errs);
 		map<size_t,size_t> store = loadBinaries(errs,query); // Now we have a version -> binary map.
-		long double adjust = media->getnumrows() - mediaUsed.size();
+		long double adjust = mediamap.size() - mediaUsed.size();
 		if(adjust > 0) {
-			errs << Message(channel::media,"Unused Media Skipped Here",adjust);
+			ostringstream str;
+			str << (unsigned)adjust << " unused media skipped";
+			errs << Message(channel::media,str.str(),adjust);
 		}
 		for (auto ref : mediaUsed) {
 			MediaInfo& filebits = filenames[ref]; //Get file information from the filenames map.
+			times.set(ref);
 
 			//Identify and construct directory for media...
 			Path outPath(outDir);
@@ -342,8 +349,9 @@ namespace Support {
 			if(instances.find(ref) != instances.end()) {
 				doTransforms(errs, ref, outDir, orgDir, t_origin, orgdate, filebits, reset);
 			} else {
-				errs << Message(channel::media,t_origin,1.0L);
+				errs << Message(channel::media,ref,1.0L);
 			}
+			times.use(errs,ref);
 		}
 	}
 
@@ -352,7 +360,7 @@ namespace Support {
 			unordered_map<string,string>& mediaTransforms = instances[ref]; //And get any transforms.
 			long double transformCount = mediaTransforms.size();
 			if(transformCount > 0.0L) {
-				long double progressValue = 1.0L / transformCount;
+				long double progressValue(1.0L / transformCount);  //eg 1/2 for two transforms.
 				for (auto trn : mediaTransforms) {
 					File trOrgFile(orgPath);
 					File trOutFile(outPath);
@@ -374,10 +382,10 @@ namespace Support {
 						tos << t_origin << " " << trn.second << " " << trOutFile.output(true);
 						imagick.exec(errs,tos.str());
 					}
-					errs << Message(channel::transform,trOutFile.output(false),progressValue);
+					errs << Message(channel::transform,ref + ":" + trn.first,progressValue);
 				}
 			} else {
-				errs << Message(channel::transform,t_origin,1.0L);
+				errs << Message(channel::transform,ref,1.0L);
 			}
 		} //end of transforms
 	}
@@ -419,8 +427,8 @@ namespace Support {
 		loadTransforms(errs,c);
 		loadMedia(errs,c,media,mediamap,false);
 		loadMedia(errs,c,emedia,embedmap,true);
-		size_t mediaCount = media->getnumrows();
-		size_t eMediaCount = emedia->getnumrows();
+		size_t mediaCount = mediamap.size();
+		size_t eMediaCount = embedmap.size();
 		errs << Message(info,to_string(eMediaCount) + " embedded media imported.");
 		errs << Message(info,to_string(mediaCount) + " media imported.");
 		errs.setProgressSize(Message::media,mediaCount);
