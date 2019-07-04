@@ -3,6 +3,7 @@
 //
 
 #include <sstream>
+#include <cerrno>
 
 #include "mt/Internal.h"
 #include "mt/Driver.h"

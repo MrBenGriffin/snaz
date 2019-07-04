@@ -58,13 +58,15 @@ namespace Support {
 			case deprecated:
 			case usage:
 			case path:
-			case trace:  	purpose = alert; break;
+				purpose = alert; break;
 
 			case container:
+			case trace:
 			case info:
 			case debug:
 			case code:
-			case link:   	purpose = extra; break;
+			case link:
+				purpose = extra; break;
 
 			case channel::adhoc:
 			case channel::file:
@@ -72,11 +74,13 @@ namespace Support {
 			case channel::language:
 			case channel::technology:
 			case channel::media:
-			case channel::transform: purpose = progress; break;
+			case channel::transform:
+				purpose = progress; break;
 
 			case ntime:
 			case build:
-			case custom: 	purpose = timer; break;
+			case custom:
+				purpose = timer; break;
 		}
 	}
 
