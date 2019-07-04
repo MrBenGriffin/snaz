@@ -138,6 +138,7 @@ namespace Support {
 			case channel::adhoc: return "adhoc"; break;
 			case channel::file: return "file"; break;
 		}
+		return "item";
 	}
 
 	void Message::str(ostream& log) const {
