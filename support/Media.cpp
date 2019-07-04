@@ -4,7 +4,7 @@
 
 #include <sstream>
 #include <cerrno>
-#include <cstdlib>
+#include <cstring>
 
 #include "mt/Internal.h"
 #include "mt/Driver.h"
