@@ -88,6 +88,7 @@ void Build::run(Messages &log,Connection* _sql) {
 		} break;
 	}
 	log.pop();
+	log << Message(info,"Build is finished.");
 }
 void Build::tests(Messages &errs) {
 	Timing::t().set("Tests");
