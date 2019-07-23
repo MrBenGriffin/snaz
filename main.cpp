@@ -22,10 +22,12 @@ int main( const int argc, const char **argv ) {
 	} else {
 		Timing::t(); //initialise.
 		Build &build = Build::b();
-		log->push(Message(info,title.str()));
+		log->push(Message(container,title.str()));
 		build.run(*log,services.second);
 		build.close(*log);
 		log->pop();
+		*log << Message(container,"Build is finished.");
+
 	}
 	env.shutdown(log,services.second);
 	return (EXIT_SUCCESS);
