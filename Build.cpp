@@ -74,7 +74,7 @@ void Build::run(Messages &log,Connection* _sql) {
 	Date date;
 	std::ostringstream str;
 	str << "Building Site " << env.get("RS_SITENAME") << " " << string(_current) << " on " << date.str() << " (UTC)";
-	log.push(Message(info,str.str()));
+	log.push(Message(container,str.str()));
 	switch(_current) {
 		case test: {
 			tests(log);
@@ -88,7 +88,7 @@ void Build::run(Messages &log,Connection* _sql) {
 		} break;
 	}
 	log.pop();
-	log << Message(info,"Build is finished.");
+	log << Message(container,"Build is finished.");
 }
 void Build::tests(Messages &errs) {
 	Timing::t().set("Tests");
