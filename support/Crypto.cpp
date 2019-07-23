@@ -80,7 +80,7 @@ namespace Support {
 				if (!errors.marked()) {
 					loaded = true;
 					OPENSSL_init_crypto(0x00000008L, nullptr);
-					context = EVP_MD_CTX_create();
+					context = EVP_MD_CTX_new();
 					md[0] = EVP_get_digestbyname("md2");
 					md[1] = EVP_get_digestbyname("md4");
 					md[2] = EVP_get_digestbyname("md5");
@@ -106,7 +106,7 @@ namespace Support {
 	}
 	bool Digest::shutdown() {											 //necessary IFF script uses pcre.
 		if (loaded) {
-			EVP_MD_CTX_destroy(context);
+			EVP_MD_CTX_free(context);
 		}
 		if ( lib_handle != nullptr ) {
 			dlclose(lib_handle);
