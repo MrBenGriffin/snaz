@@ -325,9 +325,14 @@ namespace Support {
 
 	void Env::shutdown(std::unique_ptr<Support::Messages>& log, Support::Db::Connection *sql) {
 		if(log) {
+			if(!sql) {
+				log->str(std::cerr,true);
+			}
 			log->shutdown();
 		}
-		sql->close();
+		if(sql) {
+			sql->close();
+		}
 	}
 
 	pair< unique_ptr<Messages>,Db::Connection*> Env::startup(int argc,const char **argv) {
