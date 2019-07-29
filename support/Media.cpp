@@ -31,7 +31,9 @@ namespace Support {
 	using namespace mt;
 	Media::Media() {
 		string magicPath;
-		Env::e().get("IMAGEMAGICK",magicPath,"/usr/bin/convert -background none");
+		Env::e().get("IMAGEMAGICK",magicPath,"/usr/bin/convert");
+		auto imagick = File(magicPath);
+		imagick.addArgs("-background none");
 		imagick = File(magicPath);
 	}
 

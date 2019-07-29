@@ -85,6 +85,7 @@ namespace Support {
 		string base;
 		char extension_separator;
 		string extension;
+		string args;
 
 	public:
 		File();
@@ -96,6 +97,7 @@ namespace Support {
 		explicit File(string);
 		File(string,string);
 		~File()= default;
+		void addArgs(string);
 		void clear() override;
 		void setExtensionSeparator(char);
 		const char getExtensionSeparator() const;

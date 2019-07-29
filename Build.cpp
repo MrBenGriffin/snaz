@@ -120,15 +120,16 @@ void Build::tests(Messages &errs) {
 	errs.str(cout);
 }
 void Build::build(Messages &errs) {
-	errs.push(Message(info,"Loading Configuration"));
-	user.load(errs,*sql);
-	loadLanguages(errs,*sql); //This will set Languages
-	loadTechs(errs,*sql); //This will set the number of Technologies.
-	errs.pop();
-	full = allLangs && allTechs && requestedNodes.empty();
-	if( (_current == final && ((full && user.may.final) || user.may.finalDown)) ||
-		(_current == draft && ((full && user.may.draft) || user.may.draftDown)) ) {
-		if(setLock(errs,*sql)) {
+	if(setLock(errs,*sql)) {
+		errs.push(Message(info,"Loading Configuration"));
+		user.load(errs,*sql);
+		loadLanguages(errs,*sql); //This will set Languages
+		loadTechs(errs,*sql); //This will set the number of Technologies.
+		errs.pop();
+
+		full = allLangs && allTechs && requestedNodes.empty();
+		if( (_current == final && ((full && user.may.final) || user.may.finalDown)) ||
+			(_current == draft && ((full && user.may.draft) || user.may.draftDown)) ) {
 			if(full) {
 				errs << Message(info,"This is a full build.");
 			} else {
@@ -140,15 +141,15 @@ void Build::build(Messages &errs) {
 				errs << Message(info,log.str());
 			}
 			global(errs);
-			releaseLock(0);
 		} else {
 			ostringstream err;
-			err << "A build is currently being run by " << user.givenName();
+			err << "This build is not allowed by " << user.givenName();
 			errs << Message(fatal,err.str());
 		}
+		releaseLock(0);
 	} else {
 		ostringstream err;
-		err << "This build is not allowed by " << user.givenName();
+		err << "A build is currently being run by " << user.givenName();
 		errs << Message(fatal,err.str());
 	}
 }
@@ -399,9 +400,12 @@ bool Build::setLock(Support::Messages& errs,Connection& dbc) {
 	bool response = false;
 	ostringstream str;
 	string otherUser = "Unknown";
-	signal(SIGINT, releaseLock);        // On a Ctrl-C, we must delete our lock file.
-	signal(SIGTERM, releaseLock);
-	if (!lock) { releaseLock(0); }
+	signal(SIGINT, Build::releaseLock);        // On a Ctrl-C, we must delete our lock file.
+	signal(SIGQUIT, Build::releaseLock);
+	signal(SIGHUP, Build::releaseLock);
+	signal(SIGTERM, Build::releaseLock);
+	signal(SIGKILL, Build::releaseLock);        // Won't do much.
+//	if (!lock) { releaseLock(0); }
 	if (dbc.dbselected() && dbc.table_exists(errs, "blddefs")) {
 		size_t count = 0;
 		Query *query;
@@ -421,6 +425,7 @@ bool Build::setLock(Support::Messages& errs,Connection& dbc) {
 				<< user.userName() << " at ',now())";
 			if (dbc.query(errs, query, str.str()) && query->execute(errs)) {
 				response = true;
+				lock = true;
 			}
 			dbc.dispose(query); str.str("");
 			str << "replace into blddefs set type='BUILD',value=" << errs.id();
@@ -446,10 +451,15 @@ bool Build::setLock(Support::Messages& errs,Connection& dbc) {
 }
 
 extern "C"
-void Build::releaseLock(int) {
+void Build::releaseLock(int signal) {
 	Build& build = b();
 	Messages log(build.sql);
+	if (signal != 0) {
+		log << Message(fatal,"Build was terminated early - maybe a crash or override?!");
+		log << Message(container,"Build is finished.");
+	}
 	if (build.sql != nullptr) {
+		log.synchronise();
 		if (build.sql->isopen() && build.sql->dbselected() && build.sql->table_exists(log, "blddefs"))  {
 			Query* query = nullptr;
 			ostringstream str;
@@ -459,6 +469,7 @@ void Build::releaseLock(int) {
 			}
 			build.sql->dispose(query);
 		}
+	} else {
+		log.synchronise();
 	}
-	log.synchronise();
 }

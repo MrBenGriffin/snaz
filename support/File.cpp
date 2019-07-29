@@ -729,9 +729,9 @@ namespace Support {
 		string result;
 		if (exists()) {
 			ostringstream execute;
-			execute << output(true) << " " << cmd << " 2>&1";
+			execute << output(true) << " " << args << " " << cmd << " 2>&1";
 			const int max_buffer = 256;
-			char buffer[max_buffer];
+			char buffer[max_buffer] = {0};
 			FILE* pipe = popen(execute.str().c_str(),"r");
 			while (!feof(pipe)) {
 				char* size = fgets(buffer, max_buffer, pipe);
@@ -741,7 +741,7 @@ namespace Support {
 			}
 			pclose(pipe);
 		} else {
-			string name = output(false);
+			string name = output(true);
 			errs << Message(error,name + " does not exist.");
 		}
 		vector<string> lines;
@@ -779,6 +779,7 @@ namespace Support {
 			base = o.base;
 			extension_separator = o.extension_separator;
 			extension = o.extension;
+			args = o.args;
 		}
 		return *this;
 	}
@@ -786,12 +787,12 @@ namespace Support {
 	//-------------------------------------------------------------------------
 	// Constructs a new File given a specified File
 	//-------------------------------------------------------------------------
-	File::File(const File &newfile) : Path(newfile) {
-		base = newfile.base;
-		extension_separator = newfile.extension_separator;
-		extension = newfile.extension;
+	File::File(const File &ofile) : Path(ofile) {
+		base = ofile.base;
+		extension_separator = ofile.extension_separator;
+		extension = ofile.extension;
+		args = ofile.args;
 	}
-
 
 	//-------------------------------------------------------------------------
 	//  Constructs a new File given a Path
@@ -824,23 +825,14 @@ namespace Support {
 	}
 
 
-	//-------------------------------------------------------------------------
-	// Constructs a new File given a device, path, filename
-	//-------------------------------------------------------------------------
-//	File::File(const string newdevice, const string newpath, const string newfilename) : Path(newdevice, newpath),extension_separator('.') {
-//		setFileName(newfilename);
-//	}
-//
-
-	//-------------------------------------------------------------------------
-	// Construct a new File given a device, path, base, extension
-	//-------------------------------------------------------------------------
-//	File::File(const string newdevice, const string newpath, const string newbase, const string newextension) : Path(
-//			newdevice, newpath),extension_separator('.') {
-//		setBase(newbase);
-//		setExtension(newextension);
-//	}
-
+	void File::addArgs(const string arguments) {
+		if(!arguments.empty()) {
+			if (!args.empty() && args.back() != ' ') {
+				args.push_back(' ');
+			}
+			args.append(arguments);
+		}
+	}
 
 	//-------------------------------------------------------------------------
 	// Clears the File
@@ -850,18 +842,6 @@ namespace Support {
 		base = "";
 		extension = "";
 	}
-
-
-	//-------------------------------------------------------------------------
-	// Copies the contents from the specified File
-	//-------------------------------------------------------------------------
-//	File &File::operator=(const File newfile) {
-//		Path::operator=(newfile);
-//		base = newfile.base;
-//		extension_separator = newfile.extension_separator;
-//		extension = newfile.extension;
-//		return *this;
-//	}
 
 
 	//-------------------------------------------------------------------------
