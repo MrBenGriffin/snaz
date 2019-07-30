@@ -185,8 +185,8 @@ namespace Support {
 				case 3:
 				case 4:
 				case 5: {
-					e << Message(error,"Scss Memory allocation error");
-					*Logger::log << Log::error << "Scss Unexpected/Unknown exception error type: " << retval << Log::end;
+					string value = tostring(retval);
+					e << Message(error,"Scss Unexpected/Unknown exception error type: " + value);
 				} break;
 				default: {
 					string value = tostring(retval);
@@ -211,7 +211,6 @@ namespace Support {
 			map = string(map_result);
 		}
 		sass_delete_data_context(ctx);
-		//        free(source_string);      Weirdly, SASS is freeing our memory.. eurgh.
 		return (retval == 0); //no error..
 	}
 
