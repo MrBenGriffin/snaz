@@ -37,7 +37,7 @@ namespace Support {
 
 	public:
 		static bool startup(Messages&);
-		static bool available(Messages& e);
+		static bool available(Messages&);
 		static bool shutdown();
 		static int  matcher(Messages&,const string&, const string&, int,int*&,int&);
 		static int  replace(Messages&,const string &,const string &,string &);   //replace uses pcre - bbedit like search/replace stuff.
