@@ -9,9 +9,8 @@
 #include <string>
 #include <map>
 #include <unordered_map>
-#include <sass.h>
 #include <sass/context.h>
-#include "Message.h"
+#include "support/Message.h"
 
 using namespace std;
 
