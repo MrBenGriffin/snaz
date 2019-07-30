@@ -196,9 +196,10 @@ namespace node {
 		Env& env = Env::e();
 		Timing& times = Timing::t();
 		times.set("setLayouts");
-		auto unix = env.unixDir(Built);
-		env.doLangTech(unix);
-		unix.makeDir(errs,true);
+
+		auto nixDir = env.unixDir(Built);
+		env.doLangTech(nixDir);
+		nixDir.makeDir(errs,true);
 
 		auto siteDir =  env.siteDir(Built);
 		env.doLangTech(siteDir);
