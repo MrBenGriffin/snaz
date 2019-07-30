@@ -365,15 +365,12 @@ namespace node {
 			for (auto* t : layoutPtr->templates) {
 				string filename= _ref + " not a file";
 				std::ostringstream content;
-				if(!t->code.empty() && !finalFilenames.empty()) {
+				if(!t->code.empty() && !finalFilenames.empty() && finalFilenames.size() >= current.page) {
 					current.currentTemplate = t;
-//					filename = finalFilenames[current.page];
 					File file(finalFilenames[current.page]);
 					file.makeAbsoluteFrom(destination);
-//					outPath.head(filebits.dir,errs); //force append (even if dir starts with root)
 					string filepath = file.output(true);
-					// http://edit-preview.redsnapper.net/en/testl.php
-					// errs << Message(info,file);
+					filename = file.getFileName(); //used in logging...
 					errs.reset();
 					mt::Wss::push(&(t->nl)); //!!! another global.. need to add to the metrics above.
 					t->code.expand(errs, content, context); //no context here...
@@ -385,7 +382,7 @@ namespace node {
 						chmod(filepath.c_str(), S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
 					}    //create the file!
 					catch (...) {
-						errs << Message(error, "Failed to create file " + filepath);
+						errs << Message(error, "Failed to create file " + filename);
 					}
 				}
 				current.page++;
