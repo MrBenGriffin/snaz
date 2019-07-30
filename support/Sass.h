@@ -23,10 +23,6 @@ namespace Support {
 
 	class Sass {
 	private:
-		static void * pcre_lib_handle;
-		static bool loadattempted;	//used to show if the service is up or down.
-		static bool loaded;	//used to show if the service is up or down.
-
 		static void * sass_lib_handle;
 		static bool loadattempted;    //used to show if the service is up or down.
 		static bool loaded;    //used to show if the service is up or down.
