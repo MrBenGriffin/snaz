@@ -23,6 +23,7 @@
 #include "support/Convert.h"
 #include "support/Encode.h"
 #include "support/Env.h"
+#include "support/File.h"
 #include "support/Timing.h"
 #include "support/db/Query.h"
 
@@ -35,6 +36,7 @@
 
 namespace node {
 	using namespace std;
+	using namespace Support;
 
 	Tree Content::editorial("Content");
 	unordered_map<size_t,Content> Content::nodes;
@@ -193,9 +195,8 @@ namespace node {
 	void Content::setLayouts(Messages &errs) {
 		Env& env = Env::e();
 		Timing& times = Timing::t();
-		if (times.show()) { times.set("setLayouts"); }
-
-		Path unix = env.unixDir(Built);
+		times.set("setLayouts");
+		auto unix = env.unixDir(Built);
 		env.doLangTech(unix);
 		unix.makeDir(errs,true);
 
@@ -228,7 +229,7 @@ namespace node {
 				}
 			}
 		}
-		if (times.show()) { times.use(errs,"setLayouts"); }
+		times.use(errs,"setLayouts");
 	}
 
 	void Content::reset() {
