@@ -319,20 +319,14 @@ namespace Support {
 			MediaInfo& filebits = filenames[ref]; //Get file information from the filenames map.
 			times.set(ref);
 
-			//Identify and construct directory for media...
-			Path outPath(outDir);
-			Path orgPath(orgDir);
-
-			outPath.makeDir(errs,true); // This now makes the directories if they are not present.
-			orgPath.makeDir(errs,true);
-
 			ostringstream filename;
 			filename << filebits.base << "." << filebits.ext;
 			File outFile(filebits.dir,filename.str());
-			outFile.makeAbsoluteFrom(outPath);
+			outFile.makeAbsoluteFrom(outDir);
+			outFile.makeDir(errs, true);
 
 			File orgFile(filebits.dir,filename.str());
-			orgFile.makeAbsoluteFrom(outPath);
+			orgFile.makeAbsoluteFrom(orgDir);
 			//set up the basis for the file.
 
 			::time_t orgdate = orgFile.getModDate();				// the unix_time value of the modification date of the current published file (or zero).
