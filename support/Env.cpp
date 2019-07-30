@@ -155,18 +155,19 @@ namespace Support {
 		return retval;
 	}
 
-	Path& Env::doLang(Path& path) {
+//	Path& Env::doLang(Path& path) {
+//		static Build& build = Build::b();
+//		if (getBool("RS_USE_LANGUAGE",true))
+//			path.cd(build.language().ln);
+//		return path;
+//	}
+
+	void Env::doLangTech(Path& path) {
 		static Build& build = Build::b();
 		if (getBool("RS_USE_LANGUAGE",true))
 			path.cd(build.language().ln);
-		return path;
-	}
-
-	Path& Env::doTech(Path& path) {
-		static Build& build = Build::b();
 		if (getBool("RS_USE_TECHNOLOGY",true))
 			path.cd(build.technology().dir);
-		return path;
 	}
 
 	std::string Env::baseUrl(buildArea area) {

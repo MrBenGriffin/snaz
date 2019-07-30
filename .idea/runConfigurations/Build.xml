@@ -4,9 +4,10 @@
       <env name="LIBMYSQLCRSO" value="/usr/local/mysql/lib/libmysqlclient.dylib" />
       <env name="SQL_CONFIG_FILE" value="$USER_HOME$/build.cnf" />
       <env name="REMOTE_USER" value="bgriffin" />
-      <env name="RS_USE_LANGUAGE" value="false" />
+      <env name="RS_USE_LANGUAGE" value="true" />
       <env name="RS_SITENAME" value="testBuild" />
       <env name="RS_PATH" value="/Documents/build" />
+      <env name="RS_USE_TECHNOLOGY" value="false" />
     </envs>
     <method v="2">
       <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />

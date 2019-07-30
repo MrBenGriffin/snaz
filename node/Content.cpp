@@ -194,8 +194,13 @@ namespace node {
 		Env& env = Env::e();
 		Timing& times = Timing::t();
 		if (times.show()) { times.set("setLayouts"); }
+
+		Path unix = env.unixDir(Built);
+		env.doLangTech(unix);
+		unix.makeDir(errs,true);
+
 		auto siteDir =  env.siteDir(Built);
-		env.doTech(env.doLang(siteDir));
+		env.doLangTech(siteDir);
 
 		for (auto i : editorial.twNodes) {
 			Content& node = nodes[i.second->id()];
@@ -217,7 +222,7 @@ namespace node {
 						}
 						Support::File file(siteDir,base.str());
 						file.setExtension(finalSuffix->ref());
-						node.finalFilenames.push_back(file.output(false));
+						node.finalFilenames.push_back(file);
 					}
 					fileNum++;
 				}
@@ -327,7 +332,8 @@ namespace node {
 	const std::string Content::filename(Messages& errs,size_t page) const {
 		string value = "";
 		if(page < finalFilenames.size()) {
-			value = finalFilenames[page];
+			auto& file = finalFilenames[page];
+			value = file.getFileName(); // maybe if we had a FROM we could work out relative/absolute...
 		} else {
 			errs << Message(range,"Requested page number too high for this node");
 		}
@@ -349,7 +355,7 @@ namespace node {
 		mt::mstack context;
 		mt::Instance instance(&current);
 		Path destination = env.unixDir(Built);
-		destination.makeDir(errs,true);
+//		destination.makeDir(errs,true);
 		context.emplace_back(make_pair(nullptr,&instance)); //Make the carriage.
 		long double fileCount = layoutPtr->templates.size();
 		if(fileCount > 0.0L) {
@@ -359,8 +365,10 @@ namespace node {
 				std::ostringstream content;
 				if(!t->code.empty() && !finalFilenames.empty()) {
 					current.currentTemplate = t;
-					filename = finalFilenames[current.page];
-					File file(destination,finalFilenames[current.page]);
+//					filename = finalFilenames[current.page];
+					File file(finalFilenames[current.page]);
+					file.makeAbsoluteFrom(destination);
+//					outPath.head(filebits.dir,errs); //force append (even if dir starts with root)
 					string filepath = file.output(true);
 					// http://edit-preview.redsnapper.net/en/testl.php
 					// errs << Message(info,file);
