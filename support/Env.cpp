@@ -37,7 +37,7 @@ namespace Support {
 		return singleton;
 	}
 
-	Env::Env() {
+	Env::Env() : ParseAdvanced(false),ParseLegacy(false) {
 		if (!get("RS_PATH",SiteRootDir))  {
 			SiteRootDir=wd();
 		}

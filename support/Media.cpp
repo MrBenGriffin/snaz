@@ -294,9 +294,9 @@ namespace Support {
 			Timing& times = Timing::t();
 			times.set("Media");
 			if ( reset ) {
-				doSave(errs,c,env.unixDir(Temporary),env.unixDir(Blobs),reset);
+				doSave(errs,c,env.unixDir(Temporary),env.unixDir(Built),reset);
 			} else {
-				doSave(errs,c,env.unixDir(Blobs),env.unixDir(Blobs),reset);
+				doSave(errs,c,env.unixDir(Built),env.unixDir(Built),reset);
 			}
 			times.use(errs,"Media");
 		} else {
@@ -323,19 +323,17 @@ namespace Support {
 			Path outPath(outDir);
 			Path orgPath(orgDir);
 
-			outPath.head(filebits.dir,errs); //force append (even if dir starts with root)
-			orgPath.head(filebits.dir,errs);
-//			SiteRootDir
 			outPath.makeDir(errs,true); // This now makes the directories if they are not present.
 			orgPath.makeDir(errs,true);
 
+			ostringstream filename;
+			filename << filebits.base << "." << filebits.ext;
+			File outFile(filebits.dir,filename.str());
+			outFile.makeAbsoluteFrom(outPath);
+
+			File orgFile(filebits.dir,filename.str());
+			orgFile.makeAbsoluteFrom(outPath);
 			//set up the basis for the file.
-			File outFile(outPath);
-			outFile.setBase(filebits.base);
-			outFile.setExtension(filebits.ext);
-			File orgFile(orgPath);
-			orgFile.setBase(filebits.base);
-			orgFile.setExtension(filebits.ext);
 
 			::time_t orgdate = orgFile.getModDate();				// the unix_time value of the modification date of the current published file (or zero).
 			string outfp = outFile.output(true);
