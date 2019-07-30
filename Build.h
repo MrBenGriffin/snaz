@@ -38,6 +38,12 @@ struct Language {
 	std::string ref;
 };
 
+struct Technology {
+	size_t id;
+	std::string name;
+	std::string dir;
+};
+
 class Build {
 
 public:
@@ -51,7 +57,7 @@ private:
 	std::string currentSuffix;
 	Support::Db::Connection* sql;
 	std::deque< std::pair<size_t,Language> > languages;
-	std::deque< std::pair<size_t,std::string> > technologies;
+	std::deque< std::pair<size_t,Technology> > technologies;
 	Support::Media* _media;
 
 	Build();
@@ -79,11 +85,11 @@ public:
 	bool fullBuild() const { return full; }
 	size_t page() const { return currentPage; }
 	std::string suffix() const { return currentSuffix; }
+	const Technology& technology() const { return technologies.front().second; }
 	size_t tech() const { return technologies.empty() ? 0 : technologies.front().first; }
-	std::string techName() const { return technologies.empty() ? "None" : technologies.front().second; }
-	size_t lang() const { return languages.empty() ? 0 : languages.front().first; }
 	const Language& language() const { return languages.front().second; }
-	void setSuffix(std::string suffix) { currentSuffix = suffix; }
+	size_t lang() const { return languages.empty() ? 0 : languages.front().first; }
+	void setSuffix(std::string suffix) { currentSuffix = std::move(suffix); }
 	void setPage(size_t page) { currentPage = page; }
 	void setCurrent(Support::buildKind current) { _current = current; }
 	void setNodes(Support::buildType,std::deque<size_t>&);

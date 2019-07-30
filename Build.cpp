@@ -216,9 +216,9 @@ void Build::langs(Messages& errs) {
 void Build::techs(Messages& errs) {
 	Timing& times = Timing::t();
 	while (!technologies.empty()) {
-		size_t techID = tech();
-		times.set("Tech " + techName());
-		content::Layout::load(errs,*sql,techID,_current);
+		auto techno = technologies.front();
+		times.set("Tech " + techno.second.name);
+		content::Layout::load(errs,*sql,techno.first,_current);
 		node::Content().setLayouts(errs);
 		_media->setFilenames(errs);
 		//.....
@@ -228,9 +228,9 @@ void Build::techs(Messages& errs) {
 			errs << Message(fatal,"exception thrown.");
 		}
 		//.....
-		times.use(errs,"Tech " + techName());
+		times.use(errs,"Tech " + techno.second.name);
 		technologies.pop_front();
-		errs << Message(channel::technology,techName(),1.0L);
+		errs << Message(channel::technology,techno.second.name,1.0L);
 	}
 }
 
@@ -318,7 +318,7 @@ void Build::loadLanguages(Messages &errs, Connection& dbc) {
 		} else {
 			allLangs = true;
 			for(auto& i : qLangs) {
-				languages.push_back(i);
+				languages.emplace_back(i);
 			}
 		}
 		ostringstream msg;
@@ -329,15 +329,17 @@ void Build::loadLanguages(Messages &errs, Connection& dbc) {
 }
 
 void Build::loadTechs(Messages &errs, Connection& dbc) {
-	map<size_t,string> qTechs;
+	map<size_t,Technology> qTechs;
 	if (dbc.dbselected() && dbc.table_exists(errs,"bldtechnology")) {
 		Query* query;
 		if(dbc.query(errs,query,"select id,name from bldtechnology where used='on' order by id") && query->execute(errs)) {
 			while(query->nextrow()) {
-				size_t id; string name;
-				query->readfield(errs,"id",id);
-				query->readfield(errs,"name",name);
-				qTechs.insert({id,name});
+				Technology item;
+				size_t id; string dir, name;
+				query->readfield(errs,"id",item.id);
+				query->readfield(errs,"id",item.dir);
+				query->readfield(errs,"name",item.name);
+				qTechs.insert({item.id,item});
 			}
 		}
 		dbc.dispose(query);
@@ -345,9 +347,9 @@ void Build::loadTechs(Messages &errs, Connection& dbc) {
 	auto& techs = Env::e().techs();
 	if(!techs.empty()) {
 		for(size_t i : techs) {
-			auto lng = qTechs.find(i);
-			if(lng != qTechs.end()) {
-				technologies.push_back({i,lng->second});
+			auto tech = qTechs.find(i);
+			if(tech != qTechs.end()) {
+				technologies.push_back({i,tech->second});
 			}
 		}
 		allTechs = technologies.size() == qTechs.size();

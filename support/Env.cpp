@@ -155,6 +155,20 @@ namespace Support {
 		return retval;
 	}
 
+	Path& Env::doLang(Path& path) {
+		static Build& build = Build::b();
+		if (getBool("RS_USE_LANGUAGE",true))
+			path.cd(build.language().ln);
+		return path;
+	}
+
+	Path& Env::doTech(Path& path) {
+		static Build& build = Build::b();
+		if (getBool("RS_USE_TECHNOLOGY",true))
+			path.cd(build.technology().dir);
+		return path;
+	}
+
 	std::string Env::baseUrl(buildArea area) {
 			std::string response;
 			std::string url;
@@ -179,6 +193,22 @@ namespace Support {
 		string value=name;
 		get(name,value); //discarding bool.
 		return value;
+	}
+
+	bool Env::getBool(const string& name,const bool& Default=false) {
+		auto discovery = storage.find(name);
+		if(discovery.found) {
+			return discovery.result == "true";
+		} else {
+			char* tmp = std::getenv(name.c_str());
+			if(tmp != nullptr) {
+				string value = tmp;
+				storage.set(name,value);
+				return value == "true";
+			} else {
+				return Default;
+			}
+		}
 	}
 
 	bool Env::get(string name,string& value,string Default) {

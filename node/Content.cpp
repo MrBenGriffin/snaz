@@ -191,8 +191,12 @@ namespace node {
 	};
 
 	void Content::setLayouts(Messages &errs) {
+		Env& env = Env::e();
 		Timing& times = Timing::t();
 		if (times.show()) { times.set("setLayouts"); }
+		auto siteDir =  env.siteDir(Built);
+		env.doTech(env.doLang(siteDir));
+
 		for (auto i : editorial.twNodes) {
 			Content& node = nodes[i.second->id()];
 			node.layoutPtr = content::Layout::get(errs,node._layout);
@@ -211,7 +215,7 @@ namespace node {
 						if(fileNum > 0) {
 							base << "_" << fileNum;
 						}
-						Support::File file(base.str());
+						Support::File file(siteDir,base.str());
 						file.setExtension(finalSuffix->ref());
 						node.finalFilenames.push_back(file.output(false));
 					}
@@ -332,6 +336,7 @@ namespace node {
 
     void Content::compose(Messages& errs) {
 		Env& env = Env::e();
+
 		Timing& times = Timing::t();
 		times.set('n'); // set node timer start.
 		ostringstream msg; msg << "Node ID " << idStr << " `" << _ref << "` ";

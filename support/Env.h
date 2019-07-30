@@ -54,11 +54,16 @@ namespace Support {
 		void shutdown(unique_ptr<Messages>&,Db::Connection*);
 
 		bool get(string,string&,string="");
+		bool getBool(const string&,const bool&);
 		std::string get(const string&);
 		buildArea area();
 
 		Path unixDir(buildSpace);
 		Path siteDir(buildSpace);
+
+		Path& doTech(Path&);
+		Path& doLang(Path&);
+
 		void basedir(string&,buildSpace,bool,bool);
 		std::string baseUrl(buildArea);
 		const Path& workingRoot() const;

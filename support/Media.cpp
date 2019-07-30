@@ -50,7 +50,7 @@ namespace Support {
 		mstack context;
 		auto instance =Instance(&metrics);
 		context.push_back({nullptr,&instance}); //This is our context.
-		auto base = env.siteDir(Blobs);
+		auto mediaDir = env.siteDir(Blobs);
 
 		media->setRow(errs,index);
 		media->readfield(errs,"version", version);   // not sure why we do it this way...
@@ -88,9 +88,12 @@ namespace Support {
 			media->readfield(errs,"imgbase",imgbase);
 		}
 		wsstrip(directory);
+		if(!directory.empty()) {
+			tolower(directory);
+			mediaDir.cd(directory);
+		}
 		wsstrip(extension);
 		wsstrip(imgbase);
-		tolower(directory);
 		tolower(imgbase);
 		fandr(imgbase,".");
 		fandr(imgbase,"_","-");  //This has to happen in order to catch linkrefs that have _ in them.
@@ -99,10 +102,8 @@ namespace Support {
 			iStr << imgbase << "_" << version;
 			imgbase = iStr.str();
 		}
-		Path dir(directory);
-		dir.makeAbsoluteFrom(base);
 		metrics.pop();
-		return {version,modified,dir,imgbase,extension};
+		return {version,modified,mediaDir,imgbase,extension};
 	}
 
 	string Media::transFile(Messages& errs,const node::Metrics* metrics,pair<string,string>& ref,size_t index) {
@@ -321,8 +322,6 @@ namespace Support {
 			//Identify and construct directory for media...
 			Path outPath(outDir);
 			Path orgPath(orgDir);
-
-//				file.makeAbsoluteFrom(base);
 
 			outPath.head(filebits.dir,errs); //force append (even if dir starts with root)
 			orgPath.head(filebits.dir,errs);

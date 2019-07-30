@@ -103,7 +103,7 @@ namespace Support {
 		const char getExtensionSeparator() const;
 		void setBase(string);
 		const string getBase() const;
-		void setExtension(const string);
+		void setExtension(string);
 		const string getExtension() const;
 		void setFileName(string,bool=false);
 		const string getFileName() const;
