@@ -107,7 +107,7 @@ namespace node {
 			}
 			sql.dispose(q);
 			sql.unlock(errs);
-			if(nodes.size() > 0) {
+			if(!nodes.empty()) {
 				nodes.find(editorial.root()->id())->second.weigh();
 			}
 		}
