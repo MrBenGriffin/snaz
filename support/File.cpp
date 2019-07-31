@@ -161,6 +161,11 @@ namespace Support {
 		return *this;
 	}
 
+	bool Path::operator==(const Path& o) const {
+		return path == o.path;
+	}
+
+
 //	void Path::setDirectorySeparator(const string separator) {
 //		directory_separator = separator;
 //	}
@@ -783,6 +788,15 @@ namespace Support {
 		}
 		return *this;
 	}
+
+	bool File::operator==(const File& o) const {
+		return Path::operator==(o)
+			&& base == o.base
+			&& extension_separator == o.extension_separator
+			&& extension == o.extension
+			&& args == o.args;
+	}
+
 
 	//-------------------------------------------------------------------------
 	// Constructs a new File given a specified File

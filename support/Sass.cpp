@@ -3,7 +3,7 @@
 #include <dlfcn.h>
 #include <iostream>
 
-#include "support/Env.h"
+//#include "support/Env.h"
 #include "support/Convert.h"
 #include "support/Sass.h"
 #include "support/Message.h"
@@ -63,7 +63,7 @@ namespace Support {
 					if(!err) { sass_data_context_set_options = (void (*)(struct Sass_Data_Context*, struct Sass_Options*)) dlsym(sass_lib_handle,"sass_data_context_set_options"); err = dlerr(errors); }
 					if(!err) { sass_compile_data_context = (int (*)(struct Sass_Data_Context*)) dlsym(sass_lib_handle,"sass_compile_data_context"); err = dlerr(errors); }
 					if(!err) { sass_delete_data_context = (void (*)(struct Sass_Data_Context*)) dlsym(sass_lib_handle,"sass_delete_data_context"); err = dlerr(errors); }
-					if(!err) { sass_make_options = (struct Sass_Options* (*)(void)) dlsym(sass_lib_handle,"sass_make_options"); err = dlerr(errors); }
+					if(!err) { sass_make_options = (struct Sass_Options* (*)()) dlsym(sass_lib_handle,"sass_make_options"); err = dlerr(errors); }
 					if(!err) { sass_context_get_output_string = (const char* (*)(struct Sass_Context*)) dlsym(sass_lib_handle,"sass_context_get_output_string"); err = dlerr(errors); }
 					if(!err) { sass_context_get_source_map_string=(const char* (*)(struct Sass_Context*)) dlsym(sass_lib_handle,"sass_context_get_source_map_string"); err = dlerr(errors); }
 					if(!err) { sass_context_get_error_message=(const char* (*)(struct Sass_Context*)) dlsym(sass_lib_handle,"sass_context_get_error_message"); err = dlerr(errors); }

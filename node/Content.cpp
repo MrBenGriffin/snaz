@@ -357,17 +357,17 @@ namespace node {
 		mt::mstack context;
 		mt::Instance instance(&current);
 		Path destination = env.unixDir(Built);
-//		destination.makeDir(errs,true);
 		context.emplace_back(make_pair(nullptr,&instance)); //Make the carriage.
 		long double fileCount = layoutPtr->templates.size();
 		if(fileCount > 0.0L) {
 			long double progressValue(1.0L / fileCount);  //eg 1/2 for two files.
 			for (auto* t : layoutPtr->templates) {
+				File file(destination);
 				string filename= _ref + " not a file";
 				std::ostringstream content;
 				if(!t->code.empty() && !finalFilenames.empty() && finalFilenames.size() >= current.page) {
 					current.currentTemplate = t;
-					File file(finalFilenames[current.page]);
+					file = finalFilenames[current.page];
 					file.makeAbsoluteFrom(destination);
 					string filepath = file.output(true);
 					filename = file.getFileName(); //used in logging...
@@ -384,6 +384,9 @@ namespace node {
 					catch (...) {
 						errs << Message(error, "Failed to create file " + filename);
 					}
+				}
+				if(t->suffix) {
+					t->suffix->process(errs,this,file);
 				}
 				current.page++;
 				errs << Message(channel::file,filename,progressValue); // done as a proportion.

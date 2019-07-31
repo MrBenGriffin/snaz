@@ -35,13 +35,15 @@ namespace Support {
 		Path(const Path&);
 
 		explicit Path(string);
-		Path(string,string);
+//		Path(string,string);
 
 		~Path() = default;
 
 		virtual void clear();
 		Path& operator=(const Path&);
-		void listFiles(Messages &,vector<File *> *,bool,string) const;
+		bool operator==(const Path&) const;
+
+			void listFiles(Messages &,vector<File *> *,bool,string) const;
 		void listFilesA(Messages&,vector<File *> *,string) const;
 //		void setDirectorySeparator(string separator);
 //		const string getDirectorySeparator() const;
@@ -122,6 +124,7 @@ namespace Support {
 		bool empty() const { return path.empty(); }
 		string exec(Messages&,const string&);
 		File &operator=(const File &o);
+		bool operator==(const File&) const;
 
 	};
 

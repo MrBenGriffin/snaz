@@ -3,8 +3,11 @@
 //
 #include <sstream>
 
-#include "support/Timing.h"
 #include "support/db/Query.h"
+#include "support/Timing.h"
+#include "support/Env.h"
+#include "support/File.h"
+#include "support/Definitions.h"
 
 #include "mt/Definition.h"
 #include "mt/Driver.h"
@@ -13,6 +16,8 @@
 #include "node/Node.h"
 #include "node/Suffix.h"
 
+#include "Build.h"
+
 using namespace std;
 
 namespace node {
@@ -20,6 +25,9 @@ namespace node {
 	Tree Suffix::suffixes("Suffixes");
 	unordered_map<size_t,Suffix> Suffix::nodes;
 	unordered_map<string,const Suffix*> Suffix::refs;
+	unordered_set<Batch, hashBatch> Suffix::batches;	// Batch files.
+	unordered_set<string> Suffix::scsses;	 			// SCSS files.
+
 
 	Suffix::Suffix() : Node(suffixes),last(nullptr),_output(true) {}
 	
@@ -48,10 +56,6 @@ namespace node {
 		code.adopt(rhs.code); 	//Parsed newline.
 	}
 
-	/*
-	//only publicly available via const..
-*/
-	
 	void Suffix::loadTree(Messages& errs, Connection& sql,size_t,buildKind) {
 		size_t baked_tw = 0;  //we won't be incrementing this as we can use the native tw. But we need to declare it.
 		Timing& times = Timing::t();
@@ -114,7 +118,7 @@ namespace node {
 					q->readfield(errs,"macro",suffix->_macro);			// is the comment a macrotext to generate the actual suffix? (always terminal).
 					q->readfield(errs,"terminal",suffix->_terminal);		// Is this a 'final' suffix?
 					if(!suffix->_terminal) {
-						q->readfield(errs,"scriptpath",suffix->_script);	// Script to handle process of suffix mapping.
+						q->readfield(errs,"script",suffix->_script);	// Script to handle process of suffix mapping.
 						q->readfield(errs,"exec",suffix->_exec);			// Run as executable?
 						q->readfield(errs,"batch",suffix->_batch);		// Batch process?
 					}
@@ -141,7 +145,6 @@ namespace node {
 		if (times.show()) { times.use(errs,"Load Suffixes"); }
 	}
 
-//	const Suffix* final;
 	void Suffix::weigh() {
 		_weight = 1;
 		if(_tier > 1 && _parent) {
@@ -203,11 +206,58 @@ namespace node {
 			default: break;
 		}
 		return result;
-	};
+	}
 
 	size_t Suffix::get(Messages&,uintValue) const {
 		return 0;
-	};
+	}
+
+	void Suffix::process(Messages& log,const Content* content,File& file) const {
+		// file contains the current suffix, I think.
+		if(	! _terminal ) {
+			Env& env = Env::e();
+			File script(env.unixDir(Scripts));
+			auto* parent = dynamic_cast<const Suffix *>(_parent);
+			auto next = file;
+			next.setExtension(parent->_ref);
+			if ( _batch ) {
+				if(! _script.empty()) {
+					script.setFileName(_script, true);
+					if (script.exists()) {
+						Batch batch({script, file, _ref});
+						batches.insert(batch);
+					} else {
+						log << Message(error, "Script " + script.output(true) + " does not exist");
+					}
+				} else {
+					log << Message(error, "Batch file marked with an empty script");
+				}
+			} else {
+				if(! _script.empty()) {
+					script.setFileName(_script,true);
+					if(script.exists()) {
+						auto kind = (std::string)(Build::b().current());
+						ostringstream run;
+						run << script.output(true) << " ";
+						run << file.output(true) << " " <<  kind << " > " << next.output(true);
+						log << Message(debug,"About to run script " + run.str());
+						system(run.str().c_str());                                // Call system to run the script
+						file.removeFile();
+					} else {
+						log << Message(error,"Script " + script.output(true) + " does not exist");
+					}
+				} else {
+					file.moveTo(log, next);
+				}
+				parent->process(log,content,next);
+			}
+		} else {
+			if ( _ref == "scss" ) {
+				scsses.insert(file.output(true));
+			}
+		}
+	}
+
 	string Suffix::get(Messages&,textValue field) const {
 		string result;
 		switch(field) {
@@ -217,10 +267,11 @@ namespace node {
 			default: break;
 		}
 		return result;
-	};
+	}
+
 	Date Suffix::get(Messages&,dateValue) const {
 		Date result;
 		return result;
-	};
+	}
 
 }
