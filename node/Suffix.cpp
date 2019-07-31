@@ -211,6 +211,13 @@ namespace node {
 	size_t Suffix::get(Messages&,uintValue) const {
 		return 0;
 	}
+/**
+ *
+ * TODO:
+ * process scss
+ * process batch
+ * Add both scss and batch to progress logging.
+ */
 
 	void Suffix::process(Messages& log,const Content* content,File& file) const {
 		// file contains the current suffix, I think.
