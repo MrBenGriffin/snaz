@@ -109,9 +109,7 @@ namespace Support {
 	//•	sass expansion.
 	bool Sass::expand(Messages& e,const string &source,string &result,string &map,const string& map_file,bool nestit) {
 		int retval=0;
-		char* source_string = new char[source.size()+1];
-		strcpy(source_string,source.c_str());
-		struct Sass_Data_Context*ctx = sass_make_data_context(source_string);
+		struct Sass_Data_Context*ctx = sass_make_data_context(const_cast<char *>(source.c_str()));
 		struct Sass_Options* options = sass_make_options();
 		sass_option_set_precision (options,6);
 		string pathList;
