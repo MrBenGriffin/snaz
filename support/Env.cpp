@@ -19,6 +19,7 @@
 #include "support/Timing.h"
 #include "support/Message.h"
 #include "support/db/ServiceFactory.h"
+#include "support/File.h"
 
 #include "mt/Definition.h"
 

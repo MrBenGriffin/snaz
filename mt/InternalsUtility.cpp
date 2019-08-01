@@ -8,6 +8,7 @@
 #include "support/Env.h"
 #include "node/Node.h"
 #include "node/Content.h"
+#include "node/File.h"
 
 #include <iomanip>
 
