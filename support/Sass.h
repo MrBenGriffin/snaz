@@ -26,7 +26,8 @@ namespace Support {
 		static bool loadattempted;    //used to show if the service is up or down.
 		static bool loaded;    //used to show if the service is up or down.
 
-		static string inc_paths;    //colon delimited set of search paths for file inclusion.
+//		static string inc_paths;    	//colon delimited set of search paths for file inclusion.
+		static set<string> inc_paths;   //colon delimited set of search paths for file inclusion.
 
 		//The sass API that we use.
 		static struct Sass_Data_Context *(*sass_make_data_context)(char *);
@@ -60,7 +61,7 @@ namespace Support {
 
 		static void resetpath();
 		static void addpath(const string &);
-		static bool expand(Messages&, const string&, string&, string&, string&,const string&, bool = true);   //expand a string.
+		static bool expand(Messages&, const string&, string&, string&,const string&, bool = true);   //expand a string.
 	};
 
 }

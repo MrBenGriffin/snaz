@@ -33,7 +33,7 @@ namespace Support {
 		string magicPath;
 		Env::e().get("IMAGEMAGICK",magicPath,"/usr/bin/convert");
 		auto imagick = File(magicPath);
-		imagick.addArgs("-background none");
+		imagick.addArg("-background none");
 		imagick = File(magicPath);
 	}
 

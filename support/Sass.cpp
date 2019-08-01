@@ -13,14 +13,13 @@ using namespace std;
 
 namespace Support {
 
-
-	string Sass::inc_paths("");	//colon delimited set of search paths for file inclusion.
+	set<string> Sass::inc_paths;
 	bool Sass::loadattempted = false;
 	bool Sass::loaded = false;
 	void* Sass::sass_lib_handle = nullptr;
 
 	struct Sass_Data_Context*   (*Sass::sass_make_data_context)(char*)= nullptr;
-	struct Sass_Options*        (*Sass::sass_make_options)(void)= nullptr;
+	struct Sass_Options*        (*Sass::sass_make_options)()= nullptr;
 	struct Sass_Context*        (*Sass::sass_data_context_get_context)(struct Sass_Data_Context*)= nullptr;
 	void                        (*Sass::sass_data_context_set_options)(struct Sass_Data_Context*, struct Sass_Options*)= nullptr;
 	int                         (*Sass::sass_compile_data_context)(struct Sass_Data_Context*)= nullptr;
@@ -99,27 +98,30 @@ namespace Support {
 	}
 
 	void Sass::addpath(const string &path) {
-		if (!inc_paths.empty()) {
-			inc_paths.push_back(':');
-		}
-		inc_paths.append(path);
+		inc_paths.insert(path);
 	}
 
 	void Sass::resetpath() {
 		inc_paths.clear();
 	}
 
-
 	//• --------------------------------------------------------------------------
 	//•	sass expansion.
-	bool Sass::expand(Messages& e,const string &source,string &result,string &errs,string &map,const string& map_file,bool nestit) {
+	bool Sass::expand(Messages& e,const string &source,string &result,string &map,const string& map_file,bool nestit) {
 		int retval=0;
 		char* source_string = new char[source.size()+1];
 		strcpy(source_string,source.c_str());
 		struct Sass_Data_Context*ctx = sass_make_data_context(source_string);
 		struct Sass_Options* options = sass_make_options();
 		sass_option_set_precision (options,6);
-		sass_option_set_include_path(options,inc_paths.c_str());  //this is a : delimited list.
+		string pathList;
+		for (auto& path : inc_paths) {
+			pathList.append(path);
+			pathList.push_back(':');
+		}
+		pathList.pop_back();
+
+		sass_option_set_include_path(options,pathList.c_str());  //this is a : delimited list.
 
 		if (nestit) {
 			sass_option_set_output_style(options,SASS_STYLE_NESTED);
@@ -194,13 +196,13 @@ namespace Support {
 				} break;
 			}
 		}
-		const char* trrstr  =sass_context_get_error_message(ctx_out);
-		const char* jsonstr =sass_context_get_error_json(ctx_out);
-		if (trrstr != nullptr) {
-			errs = string(trrstr);  //returned, and output by caller.
+		const char* sass_err  =sass_context_get_error_message(ctx_out);
+		const char* json_err =sass_context_get_error_json(ctx_out);
+		if (sass_err != nullptr) {
+			e << Message(error,string(sass_err));
 		}
-		if (jsonstr != nullptr) {
-			errs = "<code>" + string(jsonstr) + "</code>";  //returned, and output by caller.
+		if (json_err != nullptr) {
+			e << Message(error,string(json_err));
 		}
 		const char* sass_result = sass_context_get_output_string(ctx_out);
 		if (sass_result != nullptr) {

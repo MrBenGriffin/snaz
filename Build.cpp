@@ -176,6 +176,9 @@ void Build::global(Messages& errs) {
 //TODO:	RunScript("POST_PROCESSING_SCRIPT", "Post Processor", errs);
 //	RunScript("~POST_PROCESSING_SCRIPT", "Post Processor", errs);
 //	errs.str(Logger::log);
+// This is a post-processing script, NOT a suffix mapping script.
+// Therefore, there is only one parameter - the path to the final web root directory
+
 
 	_media->save(errs,sql,allTechs && full); //Condition for full reset.
 //TODO:	iMedia::move(errs);
@@ -224,6 +227,8 @@ void Build::techs(Messages& errs) {
 		//.....
 		try {
 			files(errs);
+			node::Suffix::processScss(errs);
+			node::Suffix::processBatches(errs);
 		} catch (...) {
 			errs << Message(fatal,"exception thrown.");
 		}

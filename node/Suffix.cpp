@@ -8,6 +8,9 @@
 #include "support/Env.h"
 #include "support/File.h"
 #include "support/Definitions.h"
+#include "support/Message.h"
+#include "support/Sass.h"
+#include "support/Fandr.h"
 
 #include "mt/Definition.h"
 #include "mt/Driver.h"
@@ -26,8 +29,7 @@ namespace node {
 	unordered_map<size_t,Suffix> Suffix::nodes;
 	unordered_map<string,const Suffix*> Suffix::refs;
 	unordered_set<Batch, hashBatch> Suffix::batches;	// Batch files.
-	unordered_set<string> Suffix::scsses;	 			// SCSS files.
-
+	unordered_set<File, hashFile> Suffix::scssFiles;	 			// SCSS files.
 
 	Suffix::Suffix() : Node(suffixes),last(nullptr),_output(true) {}
 	
@@ -212,55 +214,132 @@ namespace node {
 		return 0;
 	}
 /**
- *
  * TODO:
- * process scss
- * process batch
- * Add both scss and batch to progress logging.
  */
+
+	void Suffix::processScss(Messages& log) {
+		log.push(Message(info,"Processing Scss Files"));
+		log << Message(custom, "Scss Files");
+		Env &env = Env::e();
+		Path final(env.unixDir(Built));
+		if (Sass::available(log)) {
+			Sass::resetpath();
+			Sass::addpath("/websites/shared/live/");
+			for (auto& scss : scssFiles) {
+				Sass::addpath(scss.getDir());
+			}
+			for (auto& scss : scssFiles) {
+				string file = scss.output(true);
+				log << Message(debug, file);
+				ostringstream scss_oss;
+				string sass_result;
+				scss_oss << "@import '" << file << "scss';";
+				File mapFile(scss);
+				mapFile.setExtension("map");
+				string map_result;
+				bool compress = Build::b().current() == Support::final;
+				if (Sass::expand(log,scss_oss.str(),sass_result,map_result,mapFile.output(true),compress)) {
+					File resultFile(scss);
+					resultFile.setExtension("css");
+					fandr(sass_result, "/websites/shared/live/", "/c/");
+					resultFile.write(log,sass_result);
+					if (!map_result.empty()) {
+						mapFile.write(log,map_result);
+					}
+				}
+			}
+		}
+		log << Message(custom, "Scss Files");
+		log.pop();
+	}
+
+	void Suffix::processBatches(Messages& log) {
+		/**
+		 * Batch scripts are passed the following parameters:
+		 * 1: the directory that it is to work from.
+		 * 2: the directory that it is to work to.
+		 * 3: the build kind (draft/final).
+		 * 4: the source extension - the suffix to consume
+		 * 5: the destination extension - the suffix to produce
+		 **/
+		log.push(Message(info,"Processing Batch Files"));
+		log << Message(custom, "Batch Files");
+		Env &env = Env::e();
+		Path final(env.unixDir(Built));
+		auto kind = (std::string) (Build::b().current());
+		for (auto& batch : batches) {
+			auto* current = batch.suffix;
+			File batchFile(batch.script);
+			while (current && !current->_terminal) {
+				auto *parent = dynamic_cast<const Suffix *>(current->_parent);
+				batchFile.addArg(batch.dir.output(true));
+				batchFile.addArg(parent->_terminal ? final.output(true) : batch.script.output(true));
+				batchFile.addArg(kind);
+				batchFile.addArg(current->_ref);
+				batchFile.addArg(parent->_ref);
+				log << Message(debug,batchFile.exec(log));
+				if (!parent->_terminal) {
+					if (parent->_batch && !parent->_script.empty()) {
+						File script(env.unixDir(Scripts), parent->_script);
+						if (script.exists()) {
+							batchFile = script;
+						} else {
+							log << Message(error, "Script " + script.output(true) + " does not exist");
+						}
+					} else {
+						log << Message(error, "Nested batch suffices must be contained by batch suffixes. " + parent->_ref + " is either marked as not a batch file or is missing a script name.");
+					}
+				}
+				current = parent;
+			}
+		}
+		log << Message(custom, "Batch Files");
+		log.pop();
+	}
+
 
 	void Suffix::process(Messages& log,const Content* content,File& file) const {
 		// file contains the current suffix, I think.
 		if(	! _terminal ) {
-			Env& env = Env::e();
-			File script(env.unixDir(Scripts));
-			auto* parent = dynamic_cast<const Suffix *>(_parent);
-			auto next = file;
-			next.setExtension(parent->_ref);
-			if ( _batch ) {
-				if(! _script.empty()) {
-					script.setFileName(_script, true);
-					if (script.exists()) {
-						Batch batch({script, file, _ref});
-						batches.insert(batch);
-					} else {
-						log << Message(error, "Script " + script.output(true) + " does not exist");
-					}
-				} else {
-					log << Message(error, "Batch file marked with an empty script");
-				}
+			if ( _ref == "scssi" ) {
+				scssFiles.insert(file);
 			} else {
-				if(! _script.empty()) {
-					script.setFileName(_script,true);
-					if(script.exists()) {
-						auto kind = (std::string)(Build::b().current());
-						ostringstream run;
-						run << script.output(true) << " ";
-						run << file.output(true) << " " <<  kind << " > " << next.output(true);
-						log << Message(debug,"About to run script " + run.str());
-						system(run.str().c_str());                                // Call system to run the script
-						file.removeFile();
+				Env &env = Env::e();
+				File script(env.unixDir(Scripts));
+				auto *parent = dynamic_cast<const Suffix *>(_parent);
+				auto next = file;
+				next.setExtension(parent->_ref);
+				if (_batch) {
+					if (!_script.empty()) {
+						script.setFileName(_script, true);
+						if (script.exists()) {
+							Batch batch({this, script, file});
+							batches.insert(batch);
+						} else {
+							log << Message(error, "Script " + script.output(true) + " does not exist");
+						}
 					} else {
-						log << Message(error,"Script " + script.output(true) + " does not exist");
+						log << Message(error, "Batch file marked with an empty script");
 					}
 				} else {
-					file.moveTo(log, next);
+					if (!_script.empty()) {
+						script.setFileName(_script, true);
+						if (script.exists()) {
+							auto kind = (std::string) (Build::b().current());
+							ostringstream run;
+							run << script.output(true) << " ";
+							run << file.output(true) << " " << kind << " > " << next.output(true);
+							log << Message(debug, "About to run script " + run.str());
+							system(run.str().c_str());                                // Call system to run the script
+							file.removeFile();
+						} else {
+							log << Message(error, "Script " + script.output(true) + " does not exist");
+						}
+					} else {
+						file.moveTo(log, next);
+					}
+					parent->process(log, content, next);
 				}
-				parent->process(log,content,next);
-			}
-		} else {
-			if ( _ref == "scss" ) {
-				scsses.insert(file.output(true));
 			}
 		}
 	}

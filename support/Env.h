@@ -62,7 +62,6 @@ namespace Support {
 		Path siteDir(buildSpace);
 
 		void doLangTech(Path&);
-//		Path& doLang(Path&);
 
 		void basedir(string&,buildSpace,bool,bool);
 		std::string baseUrl(buildArea);

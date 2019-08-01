@@ -11,6 +11,7 @@
 #include <iomanip>
 #include <iostream>
 #include <sstream>
+#include <functional>
 #include <string>
 #include <sys/stat.h>
 #include <sys/time.h>
@@ -93,6 +94,29 @@ namespace Support {
 		return getDeviceName(abs);
 	}
 **/
+
+	uintmax_t hashPath::operator()(const Path& b) const noexcept { //hash function
+		std::hash<std::string> hash_str;
+		uintmax_t result = 0x9e3779b97f4a7c17;
+		for( auto& part : b.path ) {
+			uintmax_t bit = hash_str(part);
+			result =  result ^ (bit + 0x9e3779b97f4a7c17 + (result << 6) + (result >> 2));
+		}
+		return result;
+	}
+
+	uintmax_t hashFile::operator()(const File& b) const noexcept { //hash function
+		std::hash<std::string> hash_str;
+		uintmax_t result = hashPath()(b);
+		result =  result ^ (hash_str(b.base) + 0x9e3779b97f4a7c17 + (result << 6) + (result >> 2));
+		result =  result ^ (hash_str(b.extension) + 0x9e3779b97f4a7c17 + (result << 6) + (result >> 2));
+		for( auto& arg : b.args ) {
+			uintmax_t bit = hash_str(arg);
+			result =  result ^ (bit + 0x9e3779b97f4a7c17 + (result << 6) + (result >> 2));
+		}
+		return result;
+	}
+
 	bool Path::match(Messages& e,const string &text, const string &pattern) const {
 		bool retval = false;
 		if ( Regex::available(e) ) {
@@ -157,7 +181,11 @@ namespace Support {
 	}
 
 	Path &Path::operator=(const Path &o) {
-		path = o.path;
+		path.clear();
+		path.reserve(o.path.size());
+		for (auto& p : o.path) {
+			path.push_back(p);
+		}
 		return *this;
 	}
 
@@ -220,11 +248,11 @@ namespace Support {
 		return (int) path.size();
 	}
 
-	const string Path::getEndPath() const {
+	string Path::getEndPath() const {
 		return path.back();
 	}
 
-	void Path::cd(const string newpath, bool append) {
+	void Path::cd(const string& newpath, bool append) {
 		if (!newpath.empty()) {
 			if (newpath == "/") {
 				clear();
@@ -321,7 +349,7 @@ namespace Support {
 	}
 
 
-	const string Path::output(bool abs) const {
+	string Path::output(bool abs) const {
 		string retval = abs ? "/" : "";
 		retval.append(getPath());
 		return retval;
@@ -730,13 +758,77 @@ namespace Support {
 	}
 
 
-	string File::exec(Messages& errs,const string& cmd) {
+
+
+	//-------------------------------------------------------------------------
+	// Basic Constructor
+	//-------------------------------------------------------------------------
+	File::File() : Path(),extension_separator('.') {
+	}
+
+	//Assignment operator.
+	File &File::operator=(const File &o) {
+		if (this != &o) {
+			Path::operator=(o);
+			base = o.base;
+			extension_separator = o.extension_separator;
+			extension = o.extension;
+			args.clear();
+			args.reserve(o.args.size());
+			for (auto& arg : o.args) {
+				args.push_back(arg);
+			}
+		}
+		return *this;
+	}
+
+	bool File::operator==(const File& o) const {
+		return Path::operator==(o)
+			&& base == o.base
+			&& extension_separator == o.extension_separator
+			&& extension == o.extension
+			&& args == o.args;
+	}
+
+	//-------------------------------------------------------------------------
+	// Constructs a new File given a specified File
+	//-------------------------------------------------------------------------
+	File::File(const File &ofile) : Path(ofile) {
+		base = ofile.base;
+		extension_separator = ofile.extension_separator;
+		extension = ofile.extension;
+		args = ofile.args;
+	}
+
+	//-------------------------------------------------------------------------
+	//  Constructs a new File given a Path
+	//-------------------------------------------------------------------------
+	File::File(const Path newpath) : Path(newpath),extension_separator('.') {
+	}
+
+	void File::resetArgs() {
+		args.clear();
+	}
+
+	//-------------------------------------------------------------------------
+	//  Execute a file..
+	//-------------------------------------------------------------------------
+	string File::exec(Messages& errs,const string& extra) const {
 		string result;
 		if (exists()) {
 			ostringstream execute;
-			execute << output(true) << " " << args << " " << cmd << " 2>&1";
+			execute << output(true);
+			for (auto& arg : args) {
+				execute << " " << arg;
+			}
+			if(!extra.empty()) {
+				execute << " " << extra;
+			}
+			execute << " 2>&1";
 			const int max_buffer = 256;
 			char buffer[max_buffer] = {0};
+			errs << Message(debug, execute.str());
+
 			FILE* pipe = popen(execute.str().c_str(),"r");
 			while (!feof(pipe)) {
 				char* size = fgets(buffer, max_buffer, pipe);
@@ -770,58 +862,12 @@ namespace Support {
 		return result;
 	}
 
-
-	//-------------------------------------------------------------------------
-	// Basic Constructor
-	//-------------------------------------------------------------------------
-	File::File() : Path(),extension_separator('.') {
-	}
-
-	//Assignment operator.
-	File &File::operator=(const File &o) {
-		if (this != &o) {
-			Path::operator=(o);
-			base = o.base;
-			extension_separator = o.extension_separator;
-			extension = o.extension;
-			args = o.args;
-		}
-		return *this;
-	}
-
-	bool File::operator==(const File& o) const {
-		return Path::operator==(o)
-			&& base == o.base
-			&& extension_separator == o.extension_separator
-			&& extension == o.extension
-			&& args == o.args;
-	}
-
-
-	//-------------------------------------------------------------------------
-	// Constructs a new File given a specified File
-	//-------------------------------------------------------------------------
-	File::File(const File &ofile) : Path(ofile) {
-		base = ofile.base;
-		extension_separator = ofile.extension_separator;
-		extension = ofile.extension;
-		args = ofile.args;
-	}
-
-	//-------------------------------------------------------------------------
-	//  Constructs a new File given a Path
-	//-------------------------------------------------------------------------
-	File::File(const Path newpath) : Path(newpath),extension_separator('.') {
-	}
-
-
 	//-------------------------------------------------------------------------
 	// Constructs a new File given a Path and a filename
 	//-------------------------------------------------------------------------
-	File::File(const Path newpath, const string newfilename) : Path(newpath),extension_separator('.') {
+	File::File(const Path newpath, const string& newfilename) : Path(newpath),extension_separator('.') {
 		setFileName(newfilename);
 	}
-
 
 	//-------------------------------------------------------------------------
 	// Constructs a new File given a filename
@@ -829,7 +875,6 @@ namespace Support {
 	File::File(const string newfilename) : Path(),extension_separator('.') {
 		setFileName(newfilename);
 	}
-
 
 	//-------------------------------------------------------------------------
 	// Constructs a new File given a path and filename
@@ -839,13 +884,8 @@ namespace Support {
 	}
 
 
-	void File::addArgs(const string arguments) {
-		if(!arguments.empty()) {
-			if (!args.empty() && args.back() != ' ') {
-				args.push_back(' ');
-			}
-			args.append(arguments);
-		}
+	void File::addArg(const string& argument) {
+		args.push_back(argument);
 	}
 
 	//-------------------------------------------------------------------------
@@ -855,6 +895,7 @@ namespace Support {
 		Path::clear();
 		base = "";
 		extension = "";
+		args.clear();
 	}
 
 
@@ -887,9 +928,10 @@ namespace Support {
 
 	//-------------------------------------------------------------------------
 	// Gets the filename Base
+	// if withPath is true, then it is the same as output(true) without the extension.
 	//-------------------------------------------------------------------------
-	const string File::getBase() const {
-		return base;
+	string File::getBase() const {
+			return base;
 	}
 
 
@@ -911,7 +953,7 @@ namespace Support {
 	//-------------------------------------------------------------------------
 	// Sets the filename
 	//-------------------------------------------------------------------------
-	void File::setFileName(const string newfilename, bool ignoreRoot) {
+	void File::setFileName(const string& newfilename, bool ignoreRoot) {
 		string thefile(newfilename);
 		if (thefile.compare(0, 1, directory_separator) == 0) {
 			size_t slash = thefile.rfind(directory_separator);
@@ -941,22 +983,18 @@ namespace Support {
 	//-------------------------------------------------------------------------
 	// Gets the formatted FileName
 	//-------------------------------------------------------------------------
-	const string File::getFileName() const {
-		string result;
-		// No extesnion, return just Base
-		if (extension.empty())
-			result = getBase();
-		else
-			result = getBase() + getExtensionSeparator() + getExtension();
+	string File::getFileName() const {
+		string result = base;
+		if (!extension.empty())
+			result.append(extension_separator + extension);
 		return result;
 	}
-
 
 	//-------------------------------------------------------------------------
 	// Returns a formatted FileName
 	// abs = true, forces an absolute FileName
 	//-------------------------------------------------------------------------
-	const string File::output(bool abs=false) const {
+	string File::output(bool abs=false) const {
 		return Path::output(abs) + getFileName();
 	}
 
@@ -976,7 +1014,7 @@ namespace Support {
 	//-------------------------------------------------------------------------
 	// Moves the current File to the specified File
 	//-------------------------------------------------------------------------
-	bool File::moveTo(Messages&,const File file) const {
+	bool File::moveTo(Messages&,const File& file) const {
 		if (file.exists())
 			return false;
 		File newfile = file;
@@ -995,7 +1033,7 @@ namespace Support {
 	//-------------------------------------------------------------------------
 	// Moves the current File to the specified Path
 	//-------------------------------------------------------------------------
-	bool File::moveTo(Messages&,const Path newpath) const {
+	bool File::moveTo(Messages&,const Path& newpath) const {
 		if (!newpath.exists())
 			return false;
 		File file1(newpath, getFileName());
@@ -1064,7 +1102,7 @@ namespace Support {
 	// Copies the current File to the specified File
 	// overwrite = true, overwrites the dest
 	//-------------------------------------------------------------------------
-	bool File::copyTo(const File newfile, Messages& errstream, bool overwrite) const {
+	bool File::copyTo(const File& newfile, Messages& errstream, bool overwrite) const {
 		bool retval = false;
 		string from_path = output();
 		string dest_path = newfile.output();
@@ -1137,16 +1175,29 @@ namespace Support {
 		return retval;
 	}
 
-
 	//-------------------------------------------------------------------------
 	// Copy the current File to the specified Path
 	// overwrite = true, overwrites the dest
 	//-------------------------------------------------------------------------
-	bool File::copyTo(const Path newpath, Messages& errs, bool overwrite) const {
+	bool File::copyTo(const Path& newpath, Messages& errs, bool overwrite) const {
 		File file1(newpath, getFileName());
 		return copyTo(file1, errs, overwrite);
 	}
 
+	//-------------------------------------------------------------------------
+	// writes a string into the file...
+	// overwrite = true, overwrites the dest - otherwise skip.
+	//-------------------------------------------------------------------------
+	void File::write(Messages& errs,const string& contents,bool overwrite) const {
+		size_t size = contents.size();
+		if (size > 0 && (overwrite || !exists())) {
+			string name = output(true);
+			ofstream outFile(name.c_str());
+			outFile << contents;
+			outFile.close();
+			chmod(name.c_str(),S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
+		}
+	}
 
 	//-------------------------------------------------------------------------
 	// Copies a file into a string
