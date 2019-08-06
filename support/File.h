@@ -11,6 +11,7 @@
 #include <ctime>
 
 #include "Message.h"
+#include "Definitions.h"
 
 namespace Support {
 
@@ -24,73 +25,46 @@ namespace Support {
 	private:
 		bool doWrite;
 
+		const int getPathCount() const;
 		string generateTempName(const string &) const;
+//		Path() = default;
 
 	protected:
 		friend class hashPath;
+		friend class File;
+		static Path siteRoot;
 		static std::stack<string> wdstack;
-		vector<string> path;
 		static constexpr auto directory_separator = "/";
+		vector<string> path;
 
-	protected:
-//		int getSizeA() const;
-
-	public:
-		Path();
-
-		Path(const Path &);
-
-		explicit Path(string);
-//		Path(string,string);
-
-		~Path() = default;
-
-		virtual void clear();
-
-		Path &operator=(const Path &);
-
-		bool operator==(const Path &) const;
-
-		void listFiles(Messages &, vector<File *> *, bool, string) const;
-
-		void listFilesA(Messages &, vector<File *> *, string) const;
-
-//		void setDirectorySeparator(string separator);
-//		const string getDirectorySeparator() const;
-		void setPath(string);
-
-		void addPath(string);
-
-		const string getPath() const;
-
-		const string getPath(size_t) const;
-
+		const string getDirAt(size_t) const;
 		string getEndPath() const;
-
-		const int getPathCount() const;
-
-		void cd(const string&, bool= false);
-
-		bool match(Messages &, const string &, const string &) const;
-
+		void listFiles(Messages &, vector<File *> *, bool, string) const;
+		void listFilesA(Messages &, vector<File *> *, string) const;
 		bool isInside(const Path &) const;
 
+	public:
+		Path(bool = true);
+		Path(const Path &);
+		explicit Path(string);
+		~Path() = default;
+		virtual void clear();
+		Path &operator=(const Path &);
+		bool operator==(const Path &) const;
+		void setPath(string);
+		void addPath(string);
+		const string getPath(size_t = 0) const;
+		void cd(const string&, bool= false);
+		void pop();
+		bool match(Messages &, const string &, const string &) const;
 		virtual string output(bool = true) const;
-
 		virtual bool exists() const;
-
 		bool makeDir(Messages &, bool= false) const;
-
 		bool removeDir(Messages &, bool= false, bool= false) const;
-
 		bool moveTo(Messages &, const Path &) const;
-
 		bool copyTo(const Path &, Messages &, bool= false, bool= false) const;
-
 		bool mergeTo(const Path &, Messages &, bool= true, bool= false) const;
-
 		bool head(const Path &, Messages &);
-
 		void listDirs(vector<Path *> *, bool= false) const;
 
 		void setNoOutput() { doWrite = false; }
@@ -104,6 +78,8 @@ namespace Support {
 		bool makeAbsolute(vector<Path *> *);
 
 		bool makeTempDir(Messages &, string= "TEMP");
+
+		static void setSiteRoot(Path&);
 
 		static std::string wd();
 
@@ -133,7 +109,7 @@ namespace Support {
 
 		explicit File(string);
 
-		File(string, string);
+//		File(string, string);
 
 		~File() = default;
 
@@ -166,6 +142,8 @@ namespace Support {
 		const string getDir() const;
 
 		string output(bool) const override;
+
+		string url(Messages&, buildArea) const;
 
 		bool exists() const override;
 

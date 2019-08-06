@@ -50,7 +50,7 @@ namespace Support {
 		mstack context;
 		auto instance =Instance(&metrics);
 		context.push_back({nullptr,&instance}); //This is our context.
-		auto mediaDir = env.siteDir(Blobs);
+		auto mediaDir = env.dir(Built, Blobs);
 
 		media->setRow(errs,index);
 		media->readfield(errs,"version", version);   // not sure why we do it this way...
@@ -294,9 +294,9 @@ namespace Support {
 			Timing& times = Timing::t();
 			times.set("Media");
 			if ( reset ) {
-				doSave(errs,c,env.unixDir(Temporary),env.unixDir(Built),reset);
+				doSave(errs,c,env.dir(Temporary),env.dir(Built),reset);
 			} else {
-				doSave(errs,c,env.unixDir(Built),env.unixDir(Built),reset);
+				doSave(errs,c,env.dir(Built),env.dir(Built),reset);
 			}
 			times.use(errs,"Media");
 		} else {
@@ -389,28 +389,30 @@ namespace Support {
 //-----------------------------------------------------------------------------
 //Happens once per build... or not at all..
 	void Media::move(Messages& errs,bool reset) {
-		ostringstream mvos,mvts,rmos;
-		string outDir;
-		string retval;
-		File move("/bin/mv");
-		File del("/bin/rm");
-		errs << Message(warn,"Media::move is not yet properly implemented.");
-//TODO:: sort all the below this out.
-		Env::e().basedir(outDir,Temporary,true,true);
+		auto& env = Env::e();
+		Path outDir = env.dir(Temporary, Blobs);
+		File removeDir("/bin","rm"); removeDir.addArg("-rf");
 		if ( reset ) {
-			string orgDir;
-			Env::e().basedir(orgDir,Blobs,true,true);
-			mvos << "-f  " << orgDir << "media " << orgDir << "media_old";
-			mvts << "-f  " << outDir << "media " << orgDir << "media";
-			rmos << "-rf " << orgDir << "media_old";
+			Path orgDir = env.dir(Built, Blobs);
+			Path orgOld = orgDir; orgOld.pop(); orgOld.cd("old");
+			File moveOrgToOld("/bin","mv"); moveOrgToOld.addArg("-f");
+			File moveOutToOrg(moveOrgToOld);
 
-			move.exec(errs,rmos.str()); //remove media_old if it's there.
-			move.exec(errs,mvos.str());
-			move.exec(errs,mvts.str());
-			del.exec(errs,rmos.str());
-		} else {		//the built media have been moved/copied just delete temp.
-			rmos << " -rf " << outDir;
-			del.exec(errs,rmos.str());
+			//move org to old.
+			moveOrgToOld.addArg(orgDir.output(true));
+			moveOrgToOld.addArg(orgOld.output(true));
+			moveOrgToOld.exec(errs);
+			//move out to org.
+			moveOutToOrg.addArg(outDir.output(true));
+			moveOutToOrg.addArg(orgDir.output(true));
+			moveOutToOrg.exec(errs);
+			//remove old..
+			removeDir.addArg(orgOld.output(true));
+			removeDir.exec(errs);
+		} else {
+			//the built media have been moved/copied just delete temp.
+			removeDir.addArg(outDir.output(true));
+			removeDir.exec(errs);
 		}
 	}
 

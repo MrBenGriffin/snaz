@@ -7,11 +7,9 @@
 #include <cstring>
 #include <sstream>
 #include <clocale>
-//#if __has_include(<filesystem>)
-//#include <filesystem>
-//#else
+//#include <sys/types.h>
 #include <unistd.h>
-//#endif
+
 #include "support/Env.h"
 #include "support/Fandr.h"
 #include "support/Infix.h"
@@ -39,13 +37,12 @@ namespace Support {
 	}
 
 	Env::Env() : ParseAdvanced(false),ParseLegacy(false) {
+		string SiteRootDir;
 		if (!get("RS_PATH",SiteRootDir))  {
 			SiteRootDir=wd();
 		}
-		if (SiteRootDir.back() != '/') {
-			SiteRootDir.push_back('/');
-		}
-		WorkingRootPath.cd(SiteRootDir);
+		Path root(SiteRootDir);
+		Path::setSiteRoot(root);
 	}
 
 	string Env::wd() {
@@ -55,60 +52,76 @@ namespace Support {
 		return cwd;
 	}
 
-	const Path& Env::workingRoot() const {
-		return WorkingRootPath;
-	}
-
 	//Full path to a directory.
-	Path Env::unixDir(buildSpace space) {
-		string directory;
-		basedir(directory,space,false,true);
-		return Path(directory);
-	}
+//	Path Env::unixDir(buildSpace space,buildSub sub) {
+//		return dir(space, sub);
+//	}
 
-	//Path to directory (from siteroot)
-	Path Env::siteDir(buildSpace space) {
-		string directory;
-		basedir(directory,space,false,false);
-		return Path(directory);
-	}
-
-	void Env::basedir(string& base,buildSpace space,bool addslash,bool full) {
+	//Path to urlRoot (from siteroot)
+	Path Env::urlRoot() {
 		Build& build = Build::b();
-		string dirbit;
-		if(full) {
-			switch (build.current()) {
-				case test:
-					dirbit = TestsDir;
-					break;
-				case final:
-					dirbit = FinalDir;
-					break;
-				case draft:
-					dirbit = DraftDir;
-					break;
-				case parse:
-					dirbit = "/tmp";
-					break;
-			}
-		}
-		switch (space) {
-			case Blobs:
-				if(full) dirbit.push_back('/');
-				dirbit.append(MediaDir);
+		Path path(true); //rooted at siteroot.
+		switch (build.current()) {
+			case test:
+				path.cd(TestsDir);
 				break;
-			case Built:
-			case Temporary:	{
+			case final:
+				path.cd(FinalDir);
+				break;
+			case draft:
+				path.cd(DraftDir);
+				break;
+			case parse:
+				path.setPath(TmpDir);
+				break;
+		}
+		return path;
+	}
+
+	Path Env::dir(buildSpace space, buildSub sub) {
+		Build& build = Build::b();
+		Path path(true); //rooted at siteroot.
+		switch (space) {
+			case Temporary:
+				path = WorkingDir;
+				//drop down into Built.
+			case Built: {
+				auto kind = build.current();
+				switch (kind) {
+					case test:
+						path.cd(TestsDir);
+						break;
+					case final:
+						path.cd(FinalDir);
+						break;
+					case draft:
+						path.cd(DraftDir);
+						break;
+					case parse:
+						path.setPath(TmpDir);
+						break;
+				}
+				if(kind == final || kind == draft) {
+					switch(sub) {
+						case Blobs:
+							path.cd(MediaDir);
+							break;
+						case Content:
+							doLangTech(path);
+							break;
+						case Root:
+							break;
+					}
+				}
 			} break;
 			case Scripts: {
-				dirbit= ScriptsDir;
+				path.cd(ScriptsDir);
 			} break;
 			case Tests:	{
-				dirbit = "tests";
+				path.cd(TestsDir);
 			} break;
 		}
-		base = full ? SiteRootDir + dirbit : dirbit;
-		if (addslash) base.append("/");
+		return path;
 	}
 
 	buildArea Env::area() {
@@ -156,13 +169,6 @@ namespace Support {
 		return retval;
 	}
 
-//	Path& Env::doLang(Path& path) {
-//		static Build& build = Build::b();
-//		if (getBool("RS_USE_LANGUAGE",true))
-//			path.cd(build.language().ln);
-//		return path;
-//	}
-
 	void Env::doLangTech(Path& path) {
 		static Build& build = Build::b();
 		if (getBool("RS_USE_LANGUAGE",true))
@@ -185,8 +191,8 @@ namespace Support {
 			if(found) {
 				response = "https://" + url ;
 			} else {
-				basedir(url,Built,false,true);
-				response = "file:" + url ;
+				auto base = dir(Built).output(true);
+				response = "file:" + base + url ;
 			}
 		return response;
 	}
@@ -228,6 +234,15 @@ namespace Support {
 				value = std::move(Default);
 				return false;
 			}
+		}
+	}
+
+	void Env::setWorkingDir(Messages& log, bool fullBuild) {
+		if(fullBuild) {
+			WorkingDir = Path(true);
+			WorkingDir.makeTempDir(log);
+		} else {
+			WorkingDir = dir(Built, Root);
 		}
 	}
 

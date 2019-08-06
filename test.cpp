@@ -76,9 +76,8 @@ namespace testing {
 
 	void group::load(ostream& o,string filename="main", bool showGood, bool showDefines) {
 		Support::Env& env = Support::Env::e();
-		string newBase;
-		env.basedir(newBase,Support::Tests,true,true);
-		ifstream infile(newBase+filename);
+		File file(Support::Tests,filename);
+		ifstream infile(file.output(true));
 
 		// We need a node to be 'current'.
 		mt::mstack context;
@@ -393,7 +392,7 @@ namespace testing {
 			}
 			infile.close();
 		} else {
-			title(o,"filename "+filename+" not found in "+ newBase,3);
+			title(o,"filename "+filename+" not found in "+ file.output(true),3);
 		}
 	}
 

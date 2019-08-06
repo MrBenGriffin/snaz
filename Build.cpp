@@ -126,7 +126,6 @@ void Build::build(Messages &errs) {
 		loadLanguages(errs,*sql); //This will set Languages
 		loadTechs(errs,*sql); //This will set the number of Technologies.
 		errs.pop();
-
 		full = allLangs && allTechs && requestedNodes.empty();
 		if( (_current == final && ((full && user.may.final) || user.may.finalDown)) ||
 			(_current == draft && ((full && user.may.draft) || user.may.draftDown)) ) {
@@ -158,7 +157,8 @@ void Build::global(Messages& errs) {
 	Env& env = Env::e();
 	errs.push(Message(info,"Loading Macros, Suffixes, Scripts, Templates, Segments, and Media"));
 	mt::Definition::load(errs,*sql,_current); // Set the internals.
-	env.unixDir(Scripts).makeDir(errs);
+	env.dir(Scripts).makeDir(errs);
+	env.setWorkingDir(errs,full);
 	node::Suffix().loadTree(errs,*sql,0, _current);
 	content::Template::load(errs,*sql);
 	content::Segment::load(errs,*sql,_current);

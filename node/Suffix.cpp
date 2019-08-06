@@ -221,7 +221,7 @@ namespace node {
 		log.push(Message(info,"Processing Scss Files"));
 		log << Message(custom, "Scss Files");
 		Env &env = Env::e();
-		Path final(env.unixDir(Built));
+		Path final(env.dir(Built, Support::Content));
 		if (Sass::available(log)) {
 			Sass::resetpath();
 			Sass::addpath("/websites/shared/live/");
@@ -255,6 +255,7 @@ namespace node {
 
 	void Suffix::processBatches(Messages& log) {
 		/**
+		 * /websites/site/edit_f/scripts/set /websites/site/edit_f/draft/en/ /websites/site/edit_f/draft/en draft txti txt 2>&1
 		 * Batch scripts are passed the following parameters:
 		 * 1: the directory that it is to work from.
 		 * 2: the directory that it is to work to.
@@ -265,7 +266,7 @@ namespace node {
 		log.push(Message(info,"Processing Batch Files"));
 		log << Message(custom, "Batch Files");
 		Env &env = Env::e();
-		Path final(env.unixDir(Built));
+		Path final(env.dir(Built, Support::Content));
 		auto kind = (std::string) (Build::b().current());
 		for (auto& batch : batches) {
 			auto* current = batch.suffix;
@@ -280,7 +281,7 @@ namespace node {
 				log << Message(debug,batchFile.exec(log));
 				if (!parent->_terminal) {
 					if (parent->_batch && !parent->_script.empty()) {
-						File script(env.unixDir(Scripts), parent->_script);
+						File script(env.dir(Scripts), parent->_script);
 						if (script.exists()) {
 							batchFile = script;
 						} else {
@@ -305,7 +306,7 @@ namespace node {
 				scssFiles.insert(file);
 			} else {
 				Env &env = Env::e();
-				File script(env.unixDir(Scripts));
+				File script(env.dir(Scripts));
 				auto *parent = dynamic_cast<const Suffix *>(_parent);
 				auto next = file;
 				next.setExtension(parent->_ref);

@@ -321,30 +321,23 @@ namespace mt {
 		//second parameter is 'true' or 'false' - (default = false) and represents whether
 		//or not to treat the file as macrotext.
 		InternalInstance my(this,e,o,instance,context);
-		Path base = Env::e().unixDir(Built);
-		std::string filename = my.parm(1);
-		File file(base,filename);
-		if(file.makeRelativeTo(base)) {
-			file.makeAbsoluteFrom(base);
-			if(file.exists()) {
-				string contents = file.readFile();
-				bool evaluate = my.boolParm(2);
-				if(evaluate) {
-					std::istringstream code(contents);
-					mt::Driver driver(e,code,Definition::test_adv(contents));
-					mt::MacroText structure;
-					driver.parse(e,structure,false); //bool advanced, bool strip
-					ostringstream result;
-					structure.expand(e,result,context);
-					my.set(result.str());
-				} else {
-					my.set(contents);
-				}
+		File file(Path(),my.parm(1));
+		if(file.exists()) {
+			string contents = file.readFile();
+			bool evaluate = my.boolParm(2);
+			if(evaluate) {
+				std::istringstream code(contents);
+				mt::Driver driver(e,code,Definition::test_adv(contents));
+				mt::MacroText structure;
+				driver.parse(e,structure,false); //bool advanced, bool strip
+				ostringstream result;
+				structure.expand(e,result,context);
+				my.set(result.str());
 			} else {
-				e << Message(error,"File "+ file.output(true) +" was not found.");
+				my.set(contents);
 			}
 		} else {
-			e << Message(error,"File "+ file.output(true) +" is not in a place to be found.");
+			e << Message(error,"File "+ file.output(true) +" was not found.");
 		}
 	}
 

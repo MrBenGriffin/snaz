@@ -36,64 +36,9 @@
 
 namespace Support {
 	using namespace std;
+	Path Path::siteRoot;
 
 	std::stack<string> Path::wdstack;
-/**
- * Device::Device() { init(); }
-	Device::Device(const string &newdevice) : device(newdevice) { init(); }
-	Device::Device(const Device &newdevice) {
-		init();
-		device = newdevice.device;
-		root_separator = newdevice.root_separator;
-	}
-
-	Device::~Device() = default;
-
-	void Device::init() {
-		root_separator = "/";
-	}
-
-	void Device::clear() {
-		device = "";
-	}
-
-	void Device::setRootSeparator(const string &separator) {
-		root_separator = separator;
-	}
-
-	const string Device::getRootSeparator() const {
-		return root_separator;
-	}
-
-	void Device::setDevice(const string &newDevice) {
-		device = newDevice;
-	}
-
-	const string Device::getDevice() const {
-		return device;
-	}
-
-	const string Device::getDeviceName(bool abs) const {
-		string result;
-		if (!device.empty()) {
-			if (device == root_separator)
-				result = root_separator;
-			else {
-				result = device;
-				result.append(root_separator);
-			}
-		} else {
-			if (abs) {
-				result = root_separator;
-			}
-		}
-		return result;
-	}
-
-	const string Device::output(bool abs=false) const {
-		return getDeviceName(abs);
-	}
-**/
 
 	uintmax_t hashPath::operator()(const Path& b) const noexcept { //hash function
 		std::hash<std::string> hash_str;
@@ -117,6 +62,10 @@ namespace Support {
 		return result;
 	}
 
+	void Path::setSiteRoot(Path& root) {
+		siteRoot = std::move(root);
+	}
+
 	bool Path::match(Messages& e,const string &text, const string &pattern) const {
 		bool retval = false;
 		if ( Regex::available(e) ) {
@@ -124,7 +73,6 @@ namespace Support {
 		}
 		return retval;
 	}
-
 
 	void Path::push_wd(std::string new_wd) {
 		char tmp[255];
@@ -164,7 +112,10 @@ namespace Support {
 		if (chdir(wdptr) != 0) { /* report an error here. */ }
 	}
 
-	Path::Path() : path(), doWrite(true) {
+	Path::Path(bool rooted) : path(), doWrite(true) {
+		if(rooted) {
+			path = siteRoot.path;
+		}
 	}
 
 	Path::Path(const Path &newpath) : doWrite(true) {
@@ -192,15 +143,6 @@ namespace Support {
 	bool Path::operator==(const Path& o) const {
 		return path == o.path;
 	}
-
-
-//	void Path::setDirectorySeparator(const string separator) {
-//		directory_separator = separator;
-//	}
-//
-//	const string Path::getDirectorySeparator() const {
-//		return directory_separator;
-//	}
 
 	void Path::setPath(const string newpath) {
 		path.clear();
@@ -230,14 +172,15 @@ namespace Support {
 		}
 	}
 
-	const string Path::getPath() const {
-		string result;
-		for (int i = 0; i < getPathCount(); i++)
-			result += getPath(i) + directory_separator;
-		return result;
+	const string Path::getPath(size_t offset) const {
+		ostringstream result;
+		for (size_t i = offset; i < path.size(); i++) {
+			result << path[i] << directory_separator;
+		}
+		return result.str();
 	}
 
-	const string Path::getPath(size_t index) const {
+	const string Path::getDirAt(size_t index) const {
 		if (index < path.size()) {
 			return path.at(index);
 		}
@@ -253,6 +196,10 @@ namespace Support {
 	}
 
 	void Path::cd(const string& newpath, bool append) {
+		/**
+		 * Append=true only has an effect if the initial character of the newpath is a '/'
+		 * So, normally we have append = false - if we set this to "/tmp/x" we want to change the directory.
+		 */
 		if (!newpath.empty()) {
 			if (newpath == "/") {
 				clear();
@@ -266,9 +213,7 @@ namespace Support {
 					}
 				} else {
 					if (newpath == "..") {
-						if (!path.empty()) {
-							this->path.pop_back();
-						}
+						pop();
 					} else {
 						if (newpath != ".") {
 							this->path.push_back(newpath);
@@ -276,6 +221,12 @@ namespace Support {
 					}
 				}
 			}
+		}
+	}
+
+	void Path::pop() {
+		if(!path.empty()) {
+			path.pop_back();
 		}
 	}
 
@@ -367,29 +318,27 @@ namespace Support {
 
 	bool Path::makeDir(Messages &e, bool recursive) const {
 		int result;
-		auto& env = Env::e();
-		Path actual(*this);
-		actual.makeAbsoluteFrom(env.workingRoot());
-		string dirstr(actual.output(true));
-		result = mkdir(dirstr.c_str(),(mode_t) S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);    //Find these at /usr/include/sys/stat.h
-		if (result == 0)
-			return true;
-		else if (errno == EEXIST || errno == EISDIR)    // If already exists or is a directory
-			return true;
-		else if ((errno == ENOENT) && recursive) {    // If not exists and recursive
-			Path path1 = *this;
-			path1.cd("/");
-			for (size_t i = 0; i < this->getPathCount() - 1; i++) {
-				path1.cd(this->getPath(i));
-				if (!path1.makeDir(e,false))
-					return false;
+		string dirStr(output(true));
+		if (isInside(siteRoot)) {
+			result = mkdir(dirStr.c_str(),(mode_t) S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);    //Find these at /usr/include/sys/stat.h
+			if (result == 0)
+				return true;
+			else if (errno == EEXIST || errno == EISDIR)    // If already exists or is a directory
+				return true;
+			else if ((errno == ENOENT) && recursive) {    // If not exists and recursive
+				Path path1 = *this;
+				path1.cd("/");
+				for (size_t i = 0; i < path.size() - 1; i++) {
+					path1.cd(this->getDirAt(i));
+					if (!path1.makeDir(e,false))
+						return false;
+				}
+				return this->makeDir(e,false);
 			}
-			return this->makeDir(e,false);
-		} else if (!recursive || errno != ENOENT) {
-			return false;
+		} else {
+			e << Message(range,"The path " + dirStr + " is not inside the current working directory.");
 		}
 		return false;
-//			e << Message(range,"The path " + dirstr + " is not inside the current working directory.");
 	}
 
 	bool Path::removeDir(Messages& e,bool recursive, bool stop_on_error) const {
@@ -644,9 +593,8 @@ namespace Support {
 	bool Path::isInside(const Path &basePath) const {
 		if (path.size() < basePath.path.size())
 			return false;
-		size_t count;
-		for (count = 0; count < path.size(); count++) {
-			if (getPath(count) != basePath.getPath(count))
+		for (size_t count = 0; count < path.size(); count++) {
+			if (path[count] != basePath.path[count])
 				return false;
 		}
 		return true;
@@ -662,7 +610,7 @@ namespace Support {
 		int count;
 		// Find out when the paths diverge
 		for (count = 0; count < newpath.getPathCount(); count++) {
-			if (getPath(count) != newpath.getPath(count))
+			if (getDirAt(count) != newpath.getDirAt(count))
 				return false;
 		}
 		// Removes the relative path elements
@@ -731,7 +679,6 @@ namespace Support {
 		}
 		return true;
 	}
-
 
 	string Path::generateTempName(const string &newfilename) const {
 		ostringstream result;
@@ -872,15 +819,8 @@ namespace Support {
 	//-------------------------------------------------------------------------
 	// Constructs a new File given a filename
 	//-------------------------------------------------------------------------
-	File::File(const string newfilename) : Path(),extension_separator('.') {
-		setFileName(newfilename);
-	}
-
-	//-------------------------------------------------------------------------
-	// Constructs a new File given a path and filename
-	//-------------------------------------------------------------------------
-	File::File(const string newpath, const string newfilename) : Path(newpath),extension_separator('.') {
-		setFileName(newfilename);
+	File::File(const string newFilename) : Path(),extension_separator('.') {
+		setFileName(newFilename);
 	}
 
 
@@ -1216,6 +1156,32 @@ namespace Support {
 					delete[] tbuf;
 				}
 			}
+		}
+		return result;
+	}
+
+	//-------------------------------------------------------------------------
+	// Return file as a URL.
+	//-------------------------------------------------------------------------
+	// 	Path Env::basedir(buildSpace space) {
+
+//	std::string Env::baseUrl(buildArea area) {
+// 		Editorial, Final, Draft, [Console, Release, Staging, Testing, Parse]
+	string File::url(Messages& errs, buildArea space) const {
+		ostringstream msg;
+		Path urlBase = Env::e().urlRoot();
+		auto baseSize = urlBase.path.size();
+		auto pathSize = path.size();
+		string result;
+		if (isInside(siteRoot)) {
+			if (pathSize == baseSize) {
+				result = getFileName();
+			}
+			return getPath(baseSize - path.size()) + result;
+		} else {
+			string file = output(true);
+			msg << "The file " << file << " isn't within the site url root";
+			errs << Message(warn,msg.str());
 		}
 		return result;
 	}

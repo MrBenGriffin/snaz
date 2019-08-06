@@ -9,9 +9,9 @@
 #include <set>
 #include <memory>
 
-#include "Definitions.h"
-#include "File.h"
-#include "Storage.h"
+#include "support/Definitions.h"
+#include "support/File.h"
+#include "support/Storage.h"
 #include "db/Connection.h"
 
 namespace Support {
@@ -20,6 +20,8 @@ namespace Support {
 	class Env {
 	private:
 
+		static constexpr auto TmpDir 		= "tmp";
+		static constexpr auto TmpBase 		= "tmp_";
 		static constexpr auto LogsDir 		= "logs";
 		static constexpr auto TestsDir 		= "tests";
 		static constexpr auto FinalDir 		= "final";
@@ -41,12 +43,12 @@ namespace Support {
 		bool ParseAdvanced;
 		bool ParseLegacy;
 
-		Path   WorkingRootPath;
-		string SiteRootDir;
+		Path WorkingDir;
 		string RemoteUser;
 		string EditNodeUrl; //= "/mortar/oedit.obyx?node=0";
 
 		void doArgs(Messages&,int,const char**);
+		void doLangTech(Path&);
 
 	public:
 		static Env& e();
@@ -58,14 +60,11 @@ namespace Support {
 		std::string get(const string&);
 		buildArea area();
 
-		Path unixDir(buildSpace);
-		Path siteDir(buildSpace);
+		Path dir(buildSpace, buildSub=Root);
+		Path urlRoot();
 
-		void doLangTech(Path&);
-
-		void basedir(string&,buildSpace,bool,bool);
 		std::string baseUrl(buildArea);
-		const Path& workingRoot() const;
+		void setWorkingDir(Messages&, bool);
 		const std::deque<size_t>& techs() const {return askedTechs;}
 		const std::deque<size_t>& langs() const {return askedLangs;}
 	};

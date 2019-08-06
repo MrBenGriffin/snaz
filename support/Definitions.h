@@ -9,8 +9,12 @@
 
 namespace Support {
 
+	enum buildSub {
+		Blobs, Content, Root
+	};  // for directory / file management. Blobs are media directory.. ;-/
+
 	enum buildSpace {
-		Built, Temporary, Scripts, Blobs, Tests
+		Built, Temporary, Scripts, Tests
 	};  // for directory / file management. Blobs are media directory.. ;-/
 
 	enum buildArea {

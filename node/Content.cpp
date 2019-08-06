@@ -197,12 +197,8 @@ namespace node {
 		Timing& times = Timing::t();
 		times.set("setLayouts");
 
-		auto nixDir = env.unixDir(Built);
-		env.doLangTech(nixDir);
-		nixDir.makeDir(errs,true);
-
-		auto siteDir =  env.siteDir(Built);
-		env.doLangTech(siteDir);
+		auto siteDir = env.dir(Built, Support::Content);
+		siteDir.makeDir(errs,true);
 
 		for (auto i : editorial.twNodes) {
 			Content& node = nodes[i.second->id()];
@@ -356,7 +352,7 @@ namespace node {
         current.page = 0;
 		mt::mstack context;
 		mt::Instance instance(&current);
-		Path destination = env.unixDir(Built);
+		Path destination = env.dir(Built, Support::Content);
 		context.emplace_back(make_pair(nullptr,&instance)); //Make the carriage.
 		long double fileCount = layoutPtr->templates.size();
 		if(fileCount > 0.0L) {
