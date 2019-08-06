@@ -336,7 +336,8 @@ namespace Support {
 				return this->makeDir(e,false);
 			}
 		} else {
-			e << Message(range,"The path " + dirStr + " is not inside the current working directory.");
+			string rootStr(siteRoot.output(true));
+			e << Message(range,"The path " + dirStr + " is not inside the directory " + rootStr);
 		}
 		return false;
 	}
@@ -691,17 +692,8 @@ namespace Support {
 
 
 	bool Path::makeTempDir(Messages& e,const string name) {
-		string tail = generateTempName(name);
-		cd(tail);
-		int i = 0;
-		while (!makeDir(e) && i < 10000) {
-			cd("..");
-			ostringstream newtail;
-			newtail << tail << "_" << i;
-			cd(newtail.str());
-			i++;
-		}
-		return i >= 10000 ? false : true;
+		cd(generateTempName(name));
+		return makeDir(e);
 	}
 
 
