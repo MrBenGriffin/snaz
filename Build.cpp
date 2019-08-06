@@ -228,7 +228,7 @@ void Build::techs(Messages& errs) {
 		try {
 			files(errs);
 			node::Suffix::processScss(errs);
-			node::Suffix::processBatches(errs);
+			node::Suffix::processBatches(errs);  //Per Tech.
 		} catch (...) {
 			errs << Message(fatal,"exception thrown.");
 		}

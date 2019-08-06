@@ -263,39 +263,44 @@ namespace node {
 		 * 4: the source extension - the suffix to consume
 		 * 5: the destination extension - the suffix to produce
 		 **/
-		log.push(Message(info,"Processing Batch Files"));
-		log << Message(custom, "Batch Files");
-		Env &env = Env::e();
-		Path final(env.dir(Built, Support::Content));
-		auto kind = (std::string) (Build::b().current());
-		for (auto& batch : batches) {
-			auto* current = batch.suffix;
-			File batchFile(batch.script);
-			while (current && !current->_terminal) {
-				auto *parent = dynamic_cast<const Suffix *>(current->_parent);
-				batchFile.addArg(batch.dir.output(true));
-				batchFile.addArg(parent->_terminal ? final.output(true) : batch.script.output(true));
-				batchFile.addArg(kind);
-				batchFile.addArg(current->_ref);
-				batchFile.addArg(parent->_ref);
-				log << Message(debug,batchFile.exec(log));
-				if (!parent->_terminal) {
-					if (parent->_batch && !parent->_script.empty()) {
-						File script(env.dir(Scripts), parent->_script);
-						if (script.exists()) {
-							batchFile = script;
+		if(!batches.empty()) {
+			log.push(Message(info, "Processing Batch Files"));
+			log << Message(custom, "Batch Files");
+			Env &env = Env::e();
+			Path final(env.dir(Built, Support::Content));
+			auto kind = (std::string) (Build::b().current());
+			for (auto &batch : batches) {
+				auto *current = batch.suffix;
+				File batchFile(batch.script);
+				while (current && !current->_terminal) {
+					auto *parent = dynamic_cast<const Suffix *>(current->_parent);
+					batchFile.addArg(batch.dir.output(false));
+					batchFile.addArg(parent->_terminal ? final.output(false) : batch.script.output(false));
+					batchFile.addArg(kind);
+					batchFile.addArg(current->_ref);
+					batchFile.addArg(parent->_ref);
+					batchFile.exec(log);
+//					log << Message(debug, batchFile.exec(log));
+					if (!parent->_terminal) {
+						if (parent->_batch && !parent->_script.empty()) {
+							File script(env.dir(Scripts), parent->_script);
+							if (script.exists()) {
+								batchFile = script;
+							} else {
+								log << Message(error, "Script " + script.output(true) + " does not exist");
+							}
 						} else {
-							log << Message(error, "Script " + script.output(true) + " does not exist");
+							log << Message(error, "Nested batch suffices must be contained by batch suffixes. " +
+												  parent->_ref +
+												  " is either marked as not a batch file or is missing a script name.");
 						}
-					} else {
-						log << Message(error, "Nested batch suffices must be contained by batch suffixes. " + parent->_ref + " is either marked as not a batch file or is missing a script name.");
 					}
+					current = parent;
 				}
-				current = parent;
 			}
+			log << Message(custom, "Batch Files");
+			log.pop();
 		}
-		log << Message(custom, "Batch Files");
-		log.pop();
 	}
 
 
@@ -305,8 +310,7 @@ namespace node {
 			if ( _ref == "scssi" ) {
 				scssFiles.insert(file);
 			} else {
-				Env &env = Env::e();
-				File script(env.dir(Scripts));
+				File script(Env::e().dir(Scripts));
 				auto *parent = dynamic_cast<const Suffix *>(_parent);
 				auto next = file;
 				next.setExtension(parent->_ref);

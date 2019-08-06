@@ -234,16 +234,13 @@ namespace Support {
 	{
 		struct dirent *dent;
 		DIR *dir = opendir(output(false).c_str());
-		while ((dent = readdir(dir)) != nullptr)
-		{
+		while ((dent = readdir(dir)) != nullptr) {
 			string tfilename = dent->d_name;
 			// We ignore system directories
-			if (tfilename != "." && tfilename != "..")
-			{
+			if (tfilename != "." && tfilename != "..") {
 				auto *path1 = new Path(*this);
 				path1->cd(dent->d_name);
-				if (path1->exists())
-				{
+				if (path1->exists()) {
 					list->push_back(path1);
 					if (recursive)
 						path1->listDirs(list, recursive);
@@ -299,11 +296,22 @@ namespace Support {
 			((Path *) it)->listFilesA(e, list, regexp);
 	}
 
-
-	string Path::output(bool abs) const {
-		string retval = abs ? "/" : "";
-		retval.append(getPath());
-		return retval;
+	string Path::output(bool trailing) const {
+		ostringstream result;
+		if(!relative) {
+			result << "/";
+		}
+		if(!path.empty()) {
+			size_t p = path.size() - 1;
+			for (size_t i = 0; i < p; i++) {
+				result << path[i] << directory_separator;
+			}
+		}
+		result << path.back();
+		if(trailing) {
+			result << directory_separator;
+		}
+		return result.str();
 	}
 
 	bool Path::exists() const {
@@ -775,9 +783,10 @@ namespace Support {
 			execute << " 2>&1";
 			const int max_buffer = 256;
 			char buffer[max_buffer] = {0};
-			errs << Message(debug, execute.str());
+			string command = execute.str();
+			errs << Message(debug, command);
 
-			FILE* pipe = popen(execute.str().c_str(),"r");
+			FILE* pipe = popen(command.c_str(),"r");
 			while (!feof(pipe)) {
 				char* size = fgets(buffer, max_buffer, pipe);
 				if(size) {
@@ -936,7 +945,7 @@ namespace Support {
 	// abs = true, forces an absolute FileName
 	//-------------------------------------------------------------------------
 	string File::output(bool abs=false) const {
-		return Path::output(abs) + getFileName();
+		return Path::output(true) + getFileName();
 	}
 
 	//-------------------------------------------------------------------------

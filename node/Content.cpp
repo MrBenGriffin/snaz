@@ -364,9 +364,9 @@ namespace node {
 				if(!t->code.empty() && !finalFilenames.empty() && finalFilenames.size() >= current.page) {
 					current.currentTemplate = t;
 					file = finalFilenames[current.page];
-					file.makeAbsoluteFrom(destination);
-					string filepath = file.output(true);
+					file.setExtension(t->suffix->ref());
 					filename = file.getFileName(); //used in logging...
+					string filepath = file.output(true);
 					errs.reset();
 					mt::Wss::push(&(t->nl)); //!!! another global.. need to add to the metrics above.
 					t->code.expand(errs, content, context); //no context here...

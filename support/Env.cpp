@@ -59,6 +59,7 @@ namespace Support {
 		return path;
 	}
 
+	//Path final(env.dir(Built, Support::Content));
 	Path Env::dir(buildSpace bspace, buildSub sub) {
 		Path path= urlRoot(bspace); //rooted at siteroot.
 		if(bspace == Temporary || bspace == Built) {
@@ -80,7 +81,7 @@ namespace Support {
 		switch (space) {
 			case Temporary:
 				path = WorkingDir;
-				//drop down into Built.
+				break;
 			case Built: {
 				switch (kind) {
 					case test:
