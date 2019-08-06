@@ -594,7 +594,7 @@ namespace Support {
 	bool Path::isInside(const Path &basePath) const {
 		if (path.size() < basePath.path.size())
 			return false;
-		for (size_t count = 0; count < path.size(); count++) {
+		for (size_t count = 0; count < basePath.path.size(); count++) {
 			if (path[count] != basePath.path[count])
 				return false;
 		}
