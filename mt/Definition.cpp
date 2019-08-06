@@ -92,7 +92,7 @@ namespace mt {
 	Definition::Definition(
 			Messages& errs,std::string name_i, std::string expansion_i,
 			long min, long max, bool strip, bool trimParms_i, bool preExpand_i)
-			: Handler(), counter(0), _name(std::move(name_i)), trimParms(trimParms_i), preExpand(preExpand_i) {
+			: Handler(),  _name(std::move(name_i)), counter(0), trimParms(trimParms_i), preExpand(preExpand_i) {
 		minParms = min == -1 ? 0 : min;
 		maxParms = max == -1 ? INT_MAX : max;
 		if(expansion_i.empty()) {
@@ -117,7 +117,7 @@ namespace mt {
 	//used for pre-parsed definitions (eg in iForSibs)
 	Definition::Definition(MacroText& code,
 		long min, long max, bool iter, bool tP, bool preEx): Handler(),
-		counter(0), _name(":internal:"),iterated(iter), trimParms(tP), preExpand(preEx) {
+		_name(":internal:"),counter(0),iterated(iter), trimParms(tP), preExpand(preEx) {
 		expansion.adopt(code);
 		minParms = min == -1 ? 0 : min;
 		maxParms = max == -1 ? INT_MAX : max;

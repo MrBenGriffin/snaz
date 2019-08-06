@@ -15,7 +15,7 @@ namespace Support {
 
 	enum buildSpace {
 		Built, Temporary, Scripts, Tests
-	};  // for directory / file management. Blobs are media directory.. ;-/
+	};  // for directory / file management.
 
 	enum buildArea {
 		Editorial, Final, Draft, Console, Release, Staging, Testing, Parse

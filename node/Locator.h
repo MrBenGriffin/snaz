@@ -18,7 +18,7 @@ using namespace Support;
 namespace node {
 
 	class Node;
-	struct Metrics;
+	class Metrics;
 
 	class Locator {
 

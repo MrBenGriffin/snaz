@@ -18,42 +18,42 @@ namespace Support {
 	using namespace std;
 
 	class File;
-	class hashFile;
-	class hashPath;
+	struct hashFile;
+	struct hashPath;
 
 	class Path {
 	private:
 		bool doWrite;
+		bool relative;
 
-		const int getPathCount() const;
+		int getPathCount() const;
 		string generateTempName(const string &) const;
-//		Path() = default;
 
 	protected:
-		friend class hashPath;
+		friend struct hashPath;
 		friend class File;
 		static Path siteRoot;
 		static std::stack<string> wdstack;
 		static constexpr auto directory_separator = "/";
 		vector<string> path;
 
-		const string getDirAt(size_t) const;
+		string getDirAt(size_t) const;
 		string getEndPath() const;
 		void listFiles(Messages &, vector<File *> *, bool, string) const;
 		void listFilesA(Messages &, vector<File *> *, string) const;
 		bool isInside(const Path &) const;
 
 	public:
-		Path(bool = true);
+		Path();
 		Path(const Path &);
 		explicit Path(string);
-		~Path() = default;
+		virtual ~Path() = default;
 		virtual void clear();
 		Path &operator=(const Path &);
 		bool operator==(const Path &) const;
-		void setPath(string);
-		void addPath(string);
-		const string getPath(size_t = 0) const;
+		void setPath(const string&);
+		void addPath(const string&);
+		string getPath(size_t = 0) const;
 		void cd(const string&, bool= false);
 		void pop();
 		bool match(Messages &, const string &, const string &) const;
@@ -92,7 +92,7 @@ namespace Support {
 
 	class File : public Path {
 	protected:
-		friend class hashFile;
+		friend struct hashFile;
 		string base;
 		char extension_separator;
 		string extension;
@@ -111,7 +111,7 @@ namespace Support {
 
 //		File(string, string);
 
-		~File() = default;
+		~File() override =  default;
 
 		File &operator=(const File &o);
 
@@ -143,7 +143,7 @@ namespace Support {
 
 		string output(bool) const override;
 
-		string url(Messages&, buildArea) const;
+		string url(Messages&, buildSpace=Built) const;
 
 		bool exists() const override;
 

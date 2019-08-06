@@ -51,6 +51,7 @@ namespace Support {
 		auto instance =Instance(&metrics);
 		context.push_back({nullptr,&instance}); //This is our context.
 		auto mediaDir = env.dir(Built, Blobs);
+		mediaDir.makeRelativeTo(env.dir(Built));
 
 		media->setRow(errs,index);
 		media->readfield(errs,"version", version);   // not sure why we do it this way...
@@ -183,6 +184,9 @@ namespace Support {
 
 //-----------------------------------------------------------------------------
 	std::string Media::file(Messages& errs,const node::Metrics* metrics,const string& ref) {
+		/**
+		 * Returns the URL-component of a media file..
+		 */
 		pair<string,string> mtrans = getRef(ref);
 		auto mi = mediamap.find(mtrans.first);
 		if(mi == mediamap.end()) {
@@ -213,7 +217,9 @@ namespace Support {
 				media->setRow(errs, index);
 				media->readfield(errs, "ext", extension);     //not sure why we do it this way...
 				MediaInfo &filebits = filenames[mtrans.first];
-				filename = filebits.dir.output() + filebits.base + "." + extension;
+				Path url = Env::e().urlRoot();
+				File mediaFile(filebits.dir, filebits.base + "." + extension);
+				filename = mediaFile.url(errs);
 				mediaUsed.emplace(mtrans.first);
 				return filename;
 			}
@@ -391,11 +397,11 @@ namespace Support {
 	void Media::move(Messages& errs,bool reset) {
 		auto& env = Env::e();
 		Path outDir = env.dir(Temporary, Blobs);
-		File removeDir("/bin","rm"); removeDir.addArg("-rf");
+		File removeDir(Path("/bin"),"rm"); removeDir.addArg("-rf");
 		if ( reset ) {
 			Path orgDir = env.dir(Built, Blobs);
 			Path orgOld = orgDir; orgOld.pop(); orgOld.cd("old");
-			File moveOrgToOld("/bin","mv"); moveOrgToOld.addArg("-f");
+			File moveOrgToOld(Path("/bin"),"mv"); moveOrgToOld.addArg("-f");
 			File moveOutToOrg(moveOrgToOld);
 
 			//move org to old.

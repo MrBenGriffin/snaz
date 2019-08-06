@@ -76,7 +76,7 @@ namespace testing {
 
 	void group::load(ostream& o,string filename="main", bool showGood, bool showDefines) {
 		Support::Env& env = Support::Env::e();
-		File file(Support::Tests,filename);
+		File file(env.dir(Support::Tests),filename);
 		ifstream infile(file.output(true));
 
 		// We need a node to be 'current'.

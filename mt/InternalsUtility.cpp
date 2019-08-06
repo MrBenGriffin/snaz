@@ -321,7 +321,7 @@ namespace mt {
 		//second parameter is 'true' or 'false' - (default = false) and represents whether
 		//or not to treat the file as macrotext.
 		InternalInstance my(this,e,o,instance,context);
-		File file(Path(),my.parm(1));
+		File file(Env::e().dir(Built),my.parm(1));
 		if(file.exists()) {
 			string contents = file.readFile();
 			bool evaluate = my.boolParm(2);

@@ -17,7 +17,7 @@ using namespace std;
 using namespace Support;
 namespace node {
 
-	struct Metrics;
+	class Metrics;
 	class Tree {
 	private:
 		string name;

@@ -52,41 +52,36 @@ namespace Support {
 		return cwd;
 	}
 
-	//Full path to a directory.
-//	Path Env::unixDir(buildSpace space,buildSub sub) {
-//		return dir(space, sub);
-//	}
+	Path Env::urlRoot(buildSpace bspace) {
+		Path path = Path(); //rooted at siteroot.
+		auto kind = Build::b().current();
+		space(path,bspace,kind);
+		return path;
+	}
 
-	//Path to urlRoot (from siteroot)
-	Path Env::urlRoot() {
-		Build& build = Build::b();
-		Path path(true); //rooted at siteroot.
-		switch (build.current()) {
-			case test:
-				path.cd(TestsDir);
-				break;
-			case final:
-				path.cd(FinalDir);
-				break;
-			case draft:
-				path.cd(DraftDir);
-				break;
-			case parse:
-				path.setPath(TmpDir);
-				break;
+	Path Env::dir(buildSpace bspace, buildSub sub) {
+		Path path= urlRoot(bspace); //rooted at siteroot.
+		if(bspace == Temporary || bspace == Built) {
+			switch (sub) {
+				case Blobs:
+					path.cd(MediaDir);
+					break;
+				case Content:
+					doLangTech(path);
+					break;
+				case Root:
+					break;
+			}
 		}
 		return path;
 	}
 
-	Path Env::dir(buildSpace space, buildSub sub) {
-		Build& build = Build::b();
-		Path path(true); //rooted at siteroot.
+	void Env::space(Path& path,buildSpace space, buildKind kind) {
 		switch (space) {
 			case Temporary:
 				path = WorkingDir;
 				//drop down into Built.
 			case Built: {
-				auto kind = build.current();
 				switch (kind) {
 					case test:
 						path.cd(TestsDir);
@@ -98,20 +93,8 @@ namespace Support {
 						path.cd(DraftDir);
 						break;
 					case parse:
-						path.setPath(TmpDir);
+						path.cd(TmpDir);
 						break;
-				}
-				if(kind == final || kind == draft) {
-					switch(sub) {
-						case Blobs:
-							path.cd(MediaDir);
-							break;
-						case Content:
-							doLangTech(path);
-							break;
-						case Root:
-							break;
-					}
 				}
 			} break;
 			case Scripts: {
@@ -121,7 +104,6 @@ namespace Support {
 				path.cd(TestsDir);
 			} break;
 		}
-		return path;
 	}
 
 	buildArea Env::area() {
@@ -239,8 +221,9 @@ namespace Support {
 
 	void Env::setWorkingDir(Messages& log, bool fullBuild) {
 		if(fullBuild) {
-			WorkingDir = Path(true);
-			WorkingDir.makeTempDir(log);
+			WorkingDir = Path();
+			WorkingDir.cd(BuildDir);
+			WorkingDir.makeTempDir(log,string(Build::b().current()));
 		} else {
 			WorkingDir = dir(Built, Root);
 		}
@@ -404,7 +387,7 @@ namespace Support {
 
 		*log << Message(debug,"Environment is initialised.");
 
-		Build& build = Build::b();
+//		Build& build = Build::b();
 //		Messages::defer( build.mayDefer() && (Messages::verboseness() < 2) );
 		return {std::move(log),mysql};
 	}

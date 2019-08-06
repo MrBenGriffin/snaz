@@ -17,7 +17,7 @@ namespace Support {
 		return tt < that.tt;
 	}
 
-	Date::Date() : local(nullptr),utc(nullptr),tt(0) {
+	Date::Date() : tt(0),local(nullptr),utc(nullptr) {
 		tt = time(&tt);
 		local = localtime(&tt);
 		utc = gmtime(&tt);
@@ -113,7 +113,7 @@ namespace Support {
 		normalise(local); normalise(utc);
 	}
 
-	const time_t Date::getUTC() const {
+	time_t Date::getUTC() const {
 		return tt;
 	}
 	void Date::getNow(std::string& cont) {

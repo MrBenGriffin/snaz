@@ -21,7 +21,7 @@ namespace Support {
 	private:
 
 		static constexpr auto TmpDir 		= "tmp";
-		static constexpr auto TmpBase 		= "tmp_";
+		static constexpr auto BuildDir 		= "buildlog";
 		static constexpr auto LogsDir 		= "logs";
 		static constexpr auto TestsDir 		= "tests";
 		static constexpr auto FinalDir 		= "final";
@@ -61,7 +61,8 @@ namespace Support {
 		buildArea area();
 
 		Path dir(buildSpace, buildSub=Root);
-		Path urlRoot();
+		Path urlRoot(buildSpace=Built);
+		void space(Path&,buildSpace,buildKind);
 
 		std::string baseUrl(buildArea);
 		void setWorkingDir(Messages&, bool);

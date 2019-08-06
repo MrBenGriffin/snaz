@@ -112,17 +112,15 @@ namespace Support {
 		if (chdir(wdptr) != 0) { /* report an error here. */ }
 	}
 
-	Path::Path(bool rooted) : path(), doWrite(true) {
-		if(rooted) {
-			path = siteRoot.path;
-		}
+	Path::Path() : path(), doWrite(true),relative(false) {
+		path = siteRoot.path;
 	}
 
 	Path::Path(const Path &newpath) : doWrite(true) {
 		*this = newpath;
 	}
 
-	Path::Path(const string newpath) : doWrite(true), path() {
+	Path::Path(const string newpath) : doWrite(true),relative(false), path() {
 		setPath(newpath);
 	}
 
@@ -132,6 +130,7 @@ namespace Support {
 	}
 
 	Path &Path::operator=(const Path &o) {
+		relative = o.relative;
 		path.clear();
 		path.reserve(o.path.size());
 		for (auto& p : o.path) {
@@ -141,21 +140,21 @@ namespace Support {
 	}
 
 	bool Path::operator==(const Path& o) const {
-		return path == o.path;
+		return relative == o.relative && path == o.path;
 	}
 
-	void Path::setPath(const string newpath) {
+	void Path::setPath(const string& newPath) {
 		path.clear();
-		cd(newpath);
+		cd(newPath);
 	}
 
-	void Path::addPath(const string newpath) {
+	void Path::addPath(const string& newPath) {
 		unsigned long start = 0;
-		unsigned long next = newpath.find(directory_separator, start);
-		while (next < newpath.length()) {
+		unsigned long next = newPath.find(directory_separator, start);
+		while (next < newPath.length()) {
 			// Add an element
 			if (next != start) {
-				string str(newpath.substr(start, next - start));
+				string str(newPath.substr(start, next - start));
 				cd(str);
 			}
 				// if a root separator is the first character
@@ -163,16 +162,16 @@ namespace Support {
 				cd("/");
 			}
 			start = next + 1;
-			next = newpath.find(directory_separator, start);
+			next = newPath.find(directory_separator, start);
 		}
 		// Add the last element to the path
-		if (start != newpath.length()) {
-			string str(newpath.substr(start, newpath.length()));
+		if (start != newPath.length()) {
+			string str(newPath.substr(start, newPath.length()));
 			cd(str);
 		}
 	}
 
-	const string Path::getPath(size_t offset) const {
+	string Path::getPath(size_t offset) const {
 		ostringstream result;
 		for (size_t i = offset; i < path.size(); i++) {
 			result << path[i] << directory_separator;
@@ -180,14 +179,14 @@ namespace Support {
 		return result.str();
 	}
 
-	const string Path::getDirAt(size_t index) const {
+	string Path::getDirAt(size_t index) const {
 		if (index < path.size()) {
 			return path.at(index);
 		}
 		return "";
 	}
 
-	const int Path::getPathCount() const {
+	int Path::getPathCount() const {
 		return (int) path.size();
 	}
 
@@ -195,28 +194,29 @@ namespace Support {
 		return path.back();
 	}
 
-	void Path::cd(const string& newpath, bool append) {
+	void Path::cd(const string& newPath, bool append) {
 		/**
 		 * Append=true only has an effect if the initial character of the newpath is a '/'
 		 * So, normally we have append = false - if we set this to "/tmp/x" we want to change the directory.
 		 */
-		if (!newpath.empty()) {
-			if (newpath == "/") {
+		if (!newPath.empty()) {
+			if (newPath == "/") {
 				clear();
+				relative = false;
 			} else {
-				size_t dsep = newpath.find(directory_separator, 0);
-				if (dsep < newpath.size()) {
+				size_t dsep = newPath.find(directory_separator, 0);
+				if (dsep < newPath.size()) {
 					if (append && dsep == 0 && !path.empty()) {
-						addPath(newpath.substr(1));
+						addPath(newPath.substr(1));
 					} else {
-						addPath(newpath);
+						addPath(newPath);
 					}
 				} else {
-					if (newpath == "..") {
+					if (newPath == "..") {
 						pop();
 					} else {
-						if (newpath != ".") {
-							this->path.push_back(newpath);
+						if (newPath != ".") {
+							this->path.push_back(newPath);
 						}
 					}
 				}
@@ -605,17 +605,20 @@ namespace Support {
 	// Makes the path relative to a specified path.
 	//-------------------------------------------------------------------------
 	bool Path::makeRelativeTo(const Path &newpath) {
-		// relative path must be a subset of the current path
-		if (path.size() < newpath.path.size())
-			return false;
-		int count;
-		// Find out when the paths diverge
-		for (count = 0; count < newpath.getPathCount(); count++) {
-			if (getDirAt(count) != newpath.getDirAt(count))
+		if (!relative) {
+			relative = true;
+			// relative path must be a subset of the current path
+			if (path.size() < newpath.path.size())
 				return false;
+			int count;
+			// Find out when the paths diverge
+			for (count = 0; count < newpath.getPathCount(); count++) {
+				if (getDirAt(count) != newpath.getDirAt(count))
+					return false;
+			}
+			// Removes the relative path elements
+			path.erase(path.begin(), path.begin() + count);
 		}
-		// Removes the relative path elements
-		path.erase(path.begin(), path.begin() + count);
 		return true;
 	}
 
@@ -626,12 +629,15 @@ namespace Support {
 		auto old = path;
 		path = base.path;
 		size_t i=0;
-		for(; i < old.size() && i< path.size(); i++) {
-			if(old[i] != path[i]) break;
+		if(!relative) {
+			for (; i < old.size() && i < path.size(); i++) {
+				if (old[i] != path[i]) break;
+			}
 		}
 		for(; i < old.size(); i++) {
 			path.emplace_back(old[i]);
 		}
+		relative = false;
 		return true;
 	}
 
@@ -663,16 +669,19 @@ namespace Support {
  *     this => /var/www/alpha/bar
  */
 	bool Path::head(const Path& tail, Messages& errs) {
-//		auto old = path;
 		auto& tailPath = tail.path;
 		size_t i=0,j=0;
-		for(; i < path.size(); i++) {
-			for(j=0; j < path.size() && j< tailPath.size(); j++) {
-				if(path[i] == tailPath[j]) break;
+		if(!tail.relative) {
+			for (; i < path.size(); i++) {
+				for (j = 0; j < path.size() && j < tailPath.size(); j++) {
+					if (path[i] == tailPath[j]) break;
+				}
+				if (j < tailPath.size()) {
+					break;
+				}
 			}
-			if(j < tailPath.size()) {
-				break;
-			}
+		} else {
+			i = tailPath.size();
 		}
 		path.resize(i);
 		for(; j < tailPath.size(); j++) {
@@ -1158,24 +1167,27 @@ namespace Support {
 	// 	Path Env::basedir(buildSpace space) {
 
 //	std::string Env::baseUrl(buildArea area) {
-// 		Editorial, Final, Draft, [Console, Release, Staging, Testing, Parse]
-	string File::url(Messages& errs, buildArea space) const {
-		ostringstream msg;
-		Path urlBase = Env::e().urlRoot();
-		auto baseSize = urlBase.path.size();
-		auto pathSize = path.size();
-		string result;
-		if (isInside(siteRoot)) {
-			if (pathSize == baseSize) {
-				result = getFileName();
-			}
-			return getPath(baseSize - path.size()) + result;
+	string File::url(Messages& errs,buildSpace space) const {
+		if(relative) {
+			return output(true);
 		} else {
-			string file = output(true);
-			msg << "The file " << file << " isn't within the site url root";
-			errs << Message(warn,msg.str());
+			string result;
+			ostringstream msg;
+			Path urlBase = Env::e().urlRoot(space);
+			auto baseSize = urlBase.path.size();
+			auto pathSize = path.size();
+			if (isInside(siteRoot)) {
+				if (pathSize == baseSize) {
+					result = getFileName();
+				}
+				return getPath(baseSize - path.size()) + result;
+			} else {
+				string file = output(true);
+				msg << "The file " << file << " isn't within the site url root";
+				errs << Message(warn, msg.str());
+			}
+			return result;
 		}
-		return result;
 	}
 
 }

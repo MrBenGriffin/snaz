@@ -114,8 +114,8 @@ namespace mt {
 							for (size_t n = 0; n < 10; n++) {
 								string substr;
 								int pos = ov[2 * n],pos2 = ov[2 * n + 1];
-								if (pos >= scope.size()) break;
 								if (pos >= 0) {
+									if(pos  >= scope.size()) break;
 									if(pos2 >= scope.length()) {
 										substr = scope.substr(pos);
 									} else {

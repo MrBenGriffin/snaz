@@ -286,7 +286,6 @@ namespace Support {
 
 
 	void Messages::synchronise() {
-		size_t listSize = list.size();
 		for (auto& m : list) {
 			m.store(*this,sql);
 		}

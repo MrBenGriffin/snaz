@@ -109,7 +109,7 @@ void Build::tests(Messages &errs) {
 	node::Content().setLayouts(errs);
 	_media->setFilenames(errs);
 
-	testing::group tests(errs,"tests/");        	 // Set the working directory from the Run|Edit Configurations... menu.
+	testing::group tests(errs,"tests");        	 // Set the working directory from the Run|Edit Configurations... menu.
 	tests.title(std::cout, "Main");
 	tests.load(std::cout,  "main", false);   // Boolean turns on/off success reports.
 	_media->close();
@@ -340,7 +340,7 @@ void Build::loadTechs(Messages &errs, Connection& dbc) {
 		if(dbc.query(errs,query,"select id,name from bldtechnology where used='on' order by id") && query->execute(errs)) {
 			while(query->nextrow()) {
 				Technology item;
-				size_t id; string dir, name;
+				string dir, name;
 				query->readfield(errs,"id",item.id);
 				query->readfield(errs,"id",item.dir);
 				query->readfield(errs,"name",item.name);

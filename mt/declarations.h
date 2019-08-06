@@ -18,108 +18,108 @@ namespace mt {
 	class Content;
 
 //•------------  Utility macros
-	class iEq;
-	class iIndex;
-	class iForIndex;
-	class iExpr;
-	class iConsole;
-	class iDate;
-	class iEval;
-	class iFile;
-	class iField;
-	class iForSubs;
-	class iForQuery;
-	class iMath;
-	class iNull;
-	class iTiming;
+	struct iEq;
+	struct iIndex;
+	struct iForIndex;
+	struct iExpr;
+	struct iConsole;
+	struct iDate;
+	struct iEval;
+	struct iFile;
+	struct iField;
+	struct iForSubs;
+	struct iForQuery;
+	struct iMath;
+	struct iNull;
+	struct iTiming;
 
 //•------------  Storage macros
-	class iExists;
-	class iSet;
-	class iGet;
-	class iAppend;
-	class iKV;
-	class iList;
-	class iReset;
-	class iSetCache;
-	class iSig;
-	class iUse;
+	struct iExists;
+	struct iSet;
+	struct iGet;
+	struct iAppend;
+	struct iKV;
+	struct iList;
+	struct iReset;
+	struct iSetCache;
+	struct iSig;
+	struct iUse;
 
 //•------------  String macros
-	class iLeft;
-	class iLength;
-	class iMid;
-	class iPosition;
-	class iRegex;
-	class iRembr;
-	class iRembrp;
-	class iReplace;
-	class iRight;
-	class iTrim;
+	struct iLeft;
+	struct iLength;
+	struct iMid;
+	struct iPosition;
+	struct iRegex;
+	struct iRembr;
+	struct iRembrp;
+	struct iReplace;
+	struct iRight;
+	struct iTrim;
 
 //•------------ Encoder macros
-	class iBase64;
-	class iDecode;
-	class iEncode;
-	class iHex;
-	class iUnHex;
-	class iUpper;
-	class iLower;
-	class iUrlEncode;
-	class iDigest;
+	struct iBase64;
+	struct iDecode;
+	struct iEncode;
+	struct iHex;
+	struct iUnHex;
+	struct iUpper;
+	struct iLower;
+	struct iUrlEncode;
+	struct iDigest;
 
 //•------------ NodeTree
-	class iNumChildren;
-	class iNumGen;
-	class iNumGens;
-	class iNumPage;
-	class iNumPages;
-	class iNumSib;
-	class iEqFamily;
-	class iEqNode;
-	class iEqSibs;
-	class iExistNode;
-	class iForAncestry;
-	class iForNodes;
-	class iForPeers;
-	class iForSibs;
-	class iSize;
+	struct iNumChildren;
+	struct iNumGen;
+	struct iNumGens;
+	struct iNumPage;
+	struct iNumPages;
+	struct iNumSib;
+	struct iEqFamily;
+	struct iEqNode;
+	struct iEqSibs;
+	struct iExistNode;
+	struct iForAncestry;
+	struct iForNodes;
+	struct iForPeers;
+	struct iForSibs;
+	struct iSize;
 
 //•------------ BuildAccessors
-	class iTech;
-	class iPreview;
-	class iLang;
-	class iLangID;
-	class iFullBuild;
+	struct iTech;
+	struct iPreview;
+	struct iLang;
+	struct iLangID;
+	struct iFullBuild;
 
 //•------------ NodeAccessors
-	class iTitle;
-	class iTeam;
-	class iSuffix;
-	class iShortTitle;
-	class iSegmentName;
-	class iLayout;
-	class iLayoutName;
-	class iLink;
-	class iLinkRef;
-	class iID;
-	class iBirth;
-	class iContent;
-	class iDeath;
-	class iExistContent;
-	class iTW;
+	struct iTitle;
+	struct iTeam;
+	struct iSuffix;
+	struct iShortTitle;
+	struct iSegmentName;
+	struct iLayout;
+	struct iLayoutName;
+	struct iLink;
+	struct iLinkRef;
+	struct iID;
+	struct iBirth;
+	struct iContent;
+	struct iDeath;
+	struct iExistContent;
+	struct iTW;
 
 //•------------ Media
-	class iMedia;
-	class iEmbed;
-	class iExistMedia;
+	struct iMedia;
+	struct iEmbed;
+	struct iExistMedia;
 
 //•------------ Taxonomy
-	class iTax;
-	class iForTax;
-	class iForTaxNodes;
-	class iExistSimilar;
-	class iForSimilar;
+	struct iTax;
+	struct iForTax;
+	struct iForTaxNodes;
+	struct iExistSimilar;
+	struct iForSimilar;
 
 }
 
