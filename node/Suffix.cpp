@@ -230,7 +230,6 @@ namespace node {
 				}
 				for (auto &scss : scssFiles) {
 					string file = scss.output(true);
-//					log << Message(debug, file);
 					ostringstream scss_oss;
 					string sass_result;
 					scss_oss << "@import '" << file << "';";
@@ -241,12 +240,18 @@ namespace node {
 					string mapFilename = mapFile.output(true); //We need this to be a non const.
 					bool compress = Build::b().current() == Support::final;
 					if (Sass::expand(log, source, sass_result, map_result, mapFilename, compress)) {
-						File resultFile(scss);
-						resultFile.setExtension("css");
-						fandr(sass_result, "/websites/shared/live/", "/c/");
-						resultFile.write(log, sass_result);
-						if (!map_result.empty()) {
-							mapFile.write(log, map_result);
+						if(!sass_result.empty()) {
+							File resultFile(scss);
+							resultFile.setExtension("css");
+							fandr(sass_result, "/websites/shared/live/", "/c/");
+							resultFile.write(log, sass_result);
+							if (!map_result.empty()) {
+								mapFile.write(log, map_result);
+							}
+							string resultName = resultFile.output(true);
+							log << Message(debug, "scss file " + resultName + " saved.");
+						} else {
+							log << Message(warn, "scss file " + file + " returned empty.");
 						}
 					}
 				}

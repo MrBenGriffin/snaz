@@ -125,26 +125,6 @@ namespace Support {
 	void Sass::resetpath() {
 		inc_paths.clear();
 	}
-/**
-//√		context = sass_make_data_context("div { a { color: blue; } }")
-//√		options = sass_data_context_get_options(context)
-//√		sass_option_set_precision(options, 1)
-//√		sass_option_set_source_comments(options, true)
-//
-//		sass_data_context_set_options(context, options)
-//
-//		compiler = sass_make_data_compiler(context)
-//		sass_compiler_parse(compiler)
-//		sass_compiler_execute(compiler)
-//
-//		output = sass_context_get_output_string(context)
-// div a { color: blue; }
-// Retrieve errors during compilation
-//		error_status = sass_context_get_error_status(context)
-//		json_error = sass_context_get_error_json(context)
-//// Release memory dedicated to the C compiler
-//		sass_delete_compiler(compiler)
- */
 
 	//• --------------------------------------------------------------------------
 	//•	sass expansion.
@@ -159,7 +139,7 @@ namespace Support {
 		}
 		pathList.pop_back();
 
-		char* src = new char[source.size() + 1];  //ffs. maybe sass decides to free this itself.
+		char* src = new char[source.size() + 1];  // ffs. maybe sass decides to free this itself.
 		::strcpy(src, source.c_str());
 
 //      https://stackoverflow.com/questions/347949/how-to-convert-a-stdstring-to-const-char-or-char/4152881#4152881
@@ -189,54 +169,33 @@ namespace Support {
 			sass_option_set_source_map_embed(options,true);
 		}
 		sass_data_context_set_options(data_ctx, options);
-//		auto *compiler = sass_make_data_compiler(data_ctx);
 
-/*
-//		//capture cerr.
-//		ostringstream msgc,msge;
-//		std::streambuf *tmpe = cerr.rdbuf(msge.rdbuf());
-//		std::streambuf *tmpc = cout.rdbuf(msgc.rdbuf());
-*/
+		//capture cerr.
+		ostringstream msge;
+		std::streambuf *tmpe = cerr.rdbuf(msge.rdbuf());
+
 		try {
-			retval = sass_compile_data_context(data_ctx);
-//			retval = sass_compiler_parse(compiler);
-//			if (retval == 0) {
-//				retval = sass_compiler_execute(compiler);
-//			}
+			log << Message(debug,"Sass::compilation about to commence.");
+			sass_compile_data_context(data_ctx);
+			log << Message(debug,"Sass::compilation is complete.");
 		} catch (...) {
 			log << Message(error,"Unexpected sass throw. ");
 		}
-/**
-//		try {
-//			log << Message(debug,"Sass::compilation about to commence.");
-//			sass_compile_data_context(data_ctx);
-//			log << Message(debug,"Sass::compilation is complete.");
-//		} catch (...) {
-//			log << Message(error,"Unexpected sass throw. ");
-//		}
 
-//		cerr.rdbuf( tmpe );
-//		cout.rdbuf( tmpc );
-//		string console = msgc.str();
-//		string warnings = msge.str();
+		cerr.rdbuf( tmpe );
+		string warnings = msge.str();
+		if (!warnings.empty()) {
+			log.push(Message(warn,"Sass Warnings that went to cerr!"));
+			vector<string> msgs;
+			tolist(msgs,warnings,"WARNING: "); //given a cutter(string) delimited set of strings, return a vector of strings.
+			for (size_t i=0; i < msgs.size(); i++) {
+				if (! msgs[i].empty()) {
+					log << Message(warn,msgs[i]);
+				}
+			}
+			log.pop();
+		}
 
-//		if (!console.empty()) {
-//			log << Message(error,"Unexpected sass cout output");
-//			log << Message(info,console);
-//		}
-
-//		if (!warnings.empty()) {
-//			log.push(Message(warn,"Sass Warnings"));
-//			vector<string> msgs;
-//			tolist(msgs,warnings,"WARNING: "); //given a cutter(string) delimited set of strings, return a vector of strings.
-//			for (size_t i=0; i < msgs.size(); i++) {
-//				if (! msgs[i].empty()) {
-//					log << Message(warn,msgs[i]);
-//				}
-//			}
-//			log.pop();
-//		}
- */
 		if (retval != 0) {
 			switch (retval) {
 				case 1: {
@@ -274,7 +233,6 @@ namespace Support {
 			map = string(map_result);
 		}
 		sass_delete_data_context(data_ctx);
-//		sass_delete_compiler(compiler);
 		return (retval == 0); //no error..
 	}
 
