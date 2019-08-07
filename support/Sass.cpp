@@ -158,8 +158,12 @@ namespace Support {
 		}
 		pathList.pop_back();
 
+		char* src = new char[source.size() + 1];  //ffs. maybe sass decides to free this itself.
+		strcpy(src, source.c_str());
+
 //      https://stackoverflow.com/questions/347949/how-to-convert-a-stdstring-to-const-char-or-char/4152881#4152881
-		auto* data_ctx = sass_make_data_context(&source[0]);
+//		auto* data_ctx = sass_make_data_context(&source[0]);
+		auto* data_ctx = sass_make_data_context(src);
 		auto* ctx = sass_data_context_get_context(data_ctx);
 		auto* options = sass_data_context_get_options(data_ctx);
 
@@ -184,7 +188,7 @@ namespace Support {
 			sass_option_set_source_map_embed(options,true);
 		}
 		sass_data_context_set_options(data_ctx, options);
-		auto *compiler = sass_make_data_compiler(data_ctx);
+//		auto *compiler = sass_make_data_compiler(data_ctx);
 
 /*
 //		//capture cerr.
@@ -193,10 +197,11 @@ namespace Support {
 //		std::streambuf *tmpc = cout.rdbuf(msgc.rdbuf());
 */
 		try {
-			retval = sass_compiler_parse(compiler);
-			if (retval == 0) {
-				retval = sass_compiler_execute(compiler);
-			}
+			retval = sass_compile_data_context(data_ctx);
+//			retval = sass_compiler_parse(compiler);
+//			if (retval == 0) {
+//				retval = sass_compiler_execute(compiler);
+//			}
 		} catch (...) {
 			log << Message(error,"Unexpected sass throw. ");
 		}
@@ -251,8 +256,8 @@ namespace Support {
 				} break;
 			}
 		}
-		const char* sass_err  =sass_context_get_error_message(ctx);
-		const char* json_err =sass_context_get_error_json(ctx);
+		const char* sass_err  = sass_context_get_error_message(ctx);
+		const char* json_err  = sass_context_get_error_json(ctx);
 		if (sass_err != nullptr) {
 			log << Message(error,string(sass_err));
 		}
@@ -267,8 +272,8 @@ namespace Support {
 		if (map_result != nullptr) {
 			map = string(map_result);
 		}
-//		sass_delete_data_context(data_ctx);
-		sass_delete_compiler(compiler);
+		sass_delete_data_context(data_ctx);
+//		sass_delete_compiler(compiler);
 		return (retval == 0); //no error..
 	}
 
