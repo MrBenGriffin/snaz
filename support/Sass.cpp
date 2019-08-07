@@ -267,7 +267,7 @@ namespace Support {
 		if (map_result != nullptr) {
 			map = string(map_result);
 		}
-		sass_delete_data_context(data_ctx);
+//		sass_delete_data_context(data_ctx);
 		sass_delete_compiler(compiler);
 		return (retval == 0); //no error..
 	}
