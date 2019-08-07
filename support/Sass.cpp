@@ -103,7 +103,7 @@ namespace Support {
 	void Sass::addpath(Messages& log, const Path &path) {
 		string pathStr = path.output();
 		if(path.exists()) {
-			log << Message(debug,"Sass: Adding path " + pathStr);
+//			log << Message(debug,"Sass: Adding path " + pathStr);
 			inc_paths.insert(pathStr);
 		} else {
 			log << Message(warn,"Sass: Path " + pathStr + " does not exist so it will not be included for Sass.");
@@ -153,8 +153,8 @@ namespace Support {
 	//•	sass expansion.
 	bool Sass::expand(Messages& log,string &source,string &result,string &map,string& map_file,bool nestit) {
 		int retval=0;
+		string empty;
 		log << Message(debug,source);
-//		char *cstr = &str[0];
 //      https://stackoverflow.com/questions/347949/how-to-convert-a-stdstring-to-const-char-or-char/4152881#4152881
 		struct Sass_Data_Context* ctx = sass_make_data_context(&source[0]);
 		struct Sass_Options* options = sass_make_options();
@@ -165,9 +165,8 @@ namespace Support {
 			pathList.push_back(':');
 		}
 		pathList.pop_back();
-		sass_option_set_include_path(options,pathList.c_str());  //this is a : delimited list.
-//		string list("Sass::pathList: ");
-//		log << Message(debug, list + pathList.c_str());
+		sass_option_set_include_path(options,&pathList[0]);  //this is a : delimited list.
+//		log << Message(debug, list + pathList);
 
 		if (nestit) {
 //			log << Message(debug,"Sass::expansion - using Nested Style.");
@@ -181,7 +180,7 @@ namespace Support {
 		} else {
 //			log << Message(debug,"Sass::expansion - using Compressed Style.");
 			sass_option_set_output_style(options,SASS_STYLE_COMPRESSED);
-			sass_option_set_source_map_file(options,"");
+			sass_option_set_source_map_file(options,&empty[0]);
 			sass_option_set_omit_source_map_url(options,true);
 			sass_option_set_is_indented_syntax_src(options,false);
 			sass_option_set_source_comments(options,false);
