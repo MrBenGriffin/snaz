@@ -48,7 +48,7 @@ namespace Support {
 	bool Sass::startup(Messages& errors) {
 		bool err = false; //necessary IFF script uses pcre.
 		if ( ! loadattempted ) {
-			errors << Message(debug,"Sass: Attempting to load dynamic library.");
+//			errors << Message(debug,"Sass: Attempting to load dynamic library.");
 
 			loadattempted = true;
 			loaded = false;
@@ -153,6 +153,7 @@ namespace Support {
 	//•	sass expansion.
 	bool Sass::expand(Messages& log,const string &source,string &result,string &map,const string& map_file,bool nestit) {
 		int retval=0;
+		log << Message(debug,source);
 		//ADDAPI struct Sass_Data_Context* ADDCALL sass_make_data_context (char* source_string);
 		struct Sass_Data_Context* ctx = sass_make_data_context(const_cast<char *>(source.c_str()));
 		struct Sass_Options* options = sass_make_options();
@@ -163,7 +164,6 @@ namespace Support {
 			pathList.push_back(':');
 		}
 		pathList.pop_back();
-
 		sass_option_set_include_path(options,pathList.c_str());  //this is a : delimited list.
 //		string list("Sass::pathList: ");
 //		log << Message(debug, list + pathList.c_str());
