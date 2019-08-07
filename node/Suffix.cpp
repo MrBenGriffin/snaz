@@ -218,39 +218,45 @@ namespace node {
  */
 
 	void Suffix::processScss(Messages& log) {
-		log.push(Message(info,"Processing Scss Files"));
-		log << Message(custom, "Scss Files");
-		Env &env = Env::e();
-		Path final(env.dir(Built, Support::Content));
-		if (Sass::available(log)) {
-			Sass::resetpath();
-			Sass::addpath("/websites/shared/live/");
-			for (auto& scss : scssFiles) {
-				Sass::addpath(scss.getDir());
-			}
-			for (auto& scss : scssFiles) {
-				string file = scss.output(true);
-				log << Message(debug, file);
-				ostringstream scss_oss;
-				string sass_result;
-				scss_oss << "@import '" << file << "scss';";
-				File mapFile(scss);
-				mapFile.setExtension("map");
-				string map_result;
-				bool compress = Build::b().current() == Support::final;
-				if (Sass::expand(log,scss_oss.str(),sass_result,map_result,mapFile.output(true),compress)) {
-					File resultFile(scss);
-					resultFile.setExtension("css");
-					fandr(sass_result, "/websites/shared/live/", "/c/");
-					resultFile.write(log,sass_result);
-					if (!map_result.empty()) {
-						mapFile.write(log,map_result);
+		if(!scssFiles.empty()) {
+			log.push(Message(info, "Processing Scss Files"));
+			log << Message(custom, "Scss Files");
+			Env &env = Env::e();
+			Path final(env.dir(Built, Support::Content));
+			if (Sass::available(log)) {
+				Sass::resetpath();
+				Sass::addpath("/websites/shared/live/");
+				for (auto &scss : scssFiles) {
+					Sass::addpath(scss.getDir());
+				}
+				for (auto &scss : scssFiles) {
+					string file = scss.output(true);
+					log << Message(debug, file);
+					ostringstream scss_oss;
+					string sass_result;
+					scss_oss << "@import '" << file << "scss';";
+					File mapFile(scss);
+					mapFile.setExtension("map");
+					string map_result;
+					bool compress = Build::b().current() == Support::final;
+					if (Sass::expand(log, scss_oss.str(), sass_result, map_result, mapFile.output(true), compress)) {
+						File resultFile(scss);
+						resultFile.setExtension("css");
+						fandr(sass_result, "/websites/shared/live/", "/c/");
+						resultFile.write(log, sass_result);
+						if (!map_result.empty()) {
+							mapFile.write(log, map_result);
+						}
 					}
 				}
+			} else {
+				log << Message(error, "Sass is not available despite there being scss files to process.");
 			}
+			log << Message(custom, "Scss Files");
+			log.pop();
+		} else {
+			log << Message(debug, "No SCSS found for processing.");
 		}
-		log << Message(custom, "Scss Files");
-		log.pop();
 	}
 
 	void Suffix::processBatches(Messages& log) {
@@ -280,7 +286,6 @@ namespace node {
 					batchFile.addArg(current->_ref);
 					batchFile.addArg(parent->_ref);
 					batchFile.exec(log);
-//					log << Message(debug, batchFile.exec(log));
 					if (!parent->_terminal) {
 						if (parent->_batch && !parent->_script.empty()) {
 							File script(env.dir(Scripts), parent->_script);
