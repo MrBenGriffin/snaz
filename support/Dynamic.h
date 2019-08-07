@@ -18,12 +18,15 @@
 
 namespace Support {
 	static bool dlerr(Messages &e) {
+		/**
+		 * Returns false if there is NO Error.
+		 */
 		const char *err = dlerror();
 		if (err != nullptr) {
 			string msg = err;
 			ostringstream errs;
 			errs << "Dynamic library load report: '" << err << "'.";
-			e << Message(fatal, errs.str());
+			e << Message(error, errs.str());
 			return true;
 		}
 		return false;

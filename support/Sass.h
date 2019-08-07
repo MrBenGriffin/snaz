@@ -60,7 +60,7 @@ namespace Support {
 		static bool shutdown();
 
 		static void resetpath();
-		static void addpath(const string &);
+		static void addpath(Messages&, const string &);
 		static bool expand(Messages&, const string&, string&, string&,const string&, bool = true);   //expand a string.
 	};
 

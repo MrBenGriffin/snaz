@@ -49,6 +49,8 @@ namespace Support {
 	bool Sass::startup(Messages& errors) {
 		bool err = false; //necessary IFF script uses pcre.
 		if ( ! loadattempted ) {
+			errors << Message(debug,"Sass: Attempting to load dynamic library.");
+
 			loadattempted = true;
 			loaded = false;
 			string sasslib = SO(libsass); //directory
@@ -83,7 +85,9 @@ namespace Support {
 				string what = e.what();
 				errors << Message(error,what);
 			}
-			if(!loaded) {
+			if(loaded) {
+				errors << Message(debug,"Sass::startup() The sass library was found and successfully loaded.");
+			} else {
 				errors << Message(error,"Sass::startup() The sass library was not found.");
 			}
 		}
@@ -97,7 +101,8 @@ namespace Support {
 		return true;
 	}
 
-	void Sass::addpath(const string &path) {
+	void Sass::addpath(Messages& log, const string &path) {
+		log << Message(debug,"Sass: Adding path " + path);
 		inc_paths.insert(path);
 	}
 
@@ -107,7 +112,7 @@ namespace Support {
 
 	//• --------------------------------------------------------------------------
 	//•	sass expansion.
-	bool Sass::expand(Messages& e,const string &source,string &result,string &map,const string& map_file,bool nestit) {
+	bool Sass::expand(Messages& log,const string &source,string &result,string &map,const string& map_file,bool nestit) {
 		int retval=0;
 		struct Sass_Data_Context*ctx = sass_make_data_context(const_cast<char *>(source.c_str()));
 		struct Sass_Options* options = sass_make_options();
@@ -122,6 +127,7 @@ namespace Support {
 		sass_option_set_include_path(options,pathList.c_str());  //this is a : delimited list.
 
 		if (nestit) {
+			log << Message(debug,"Sass::expansion - using Nested Style.");
 			sass_option_set_output_style(options,SASS_STYLE_NESTED);
 			sass_option_set_source_map_file(options,map_file.c_str());
 			sass_option_set_omit_source_map_url(options,false);
@@ -130,6 +136,7 @@ namespace Support {
 			sass_option_set_source_map_contents(options,true);
 			sass_option_set_source_map_embed(options,true);
 		} else {
+			log << Message(debug,"Sass::expansion - using Compressed Style.");
 			sass_option_set_output_style(options,SASS_STYLE_COMPRESSED);
 			sass_option_set_source_map_file(options,"");
 			sass_option_set_omit_source_map_url(options,true);
@@ -146,9 +153,11 @@ namespace Support {
 		std::streambuf *tmpc = cout.rdbuf(msgc.rdbuf());
 
 		try {
+			log << Message(debug,"Sass::compilation about to commence.");
 			sass_compile_data_context(ctx);
+			log << Message(debug,"Sass::compilation is complete.");
 		} catch (...) {
-			e << Message(error,"Unexpected sass throw. ");
+			log << Message(error,"Unexpected sass throw. ");
 		}
 
 		cerr.rdbuf( tmpe );
@@ -157,50 +166,50 @@ namespace Support {
 		string warnings = msge.str();
 
 		if (!console.empty()) {
-			e << Message(error,"Unexpected sass cout output");
-			e << Message(info,console);
+			log << Message(error,"Unexpected sass cout output");
+			log << Message(info,console);
 		}
 
 		if (!warnings.empty()) {
-			e.push(Message(warn,"Sass Warnings"));
+			log.push(Message(warn,"Sass Warnings"));
 			vector<string> msgs;
 			tolist(msgs,warnings,"WARNING: "); //given a cutter(string) delimited set of strings, return a vector of strings.
 			for (size_t i=0; i < msgs.size(); i++) {
 				if (! msgs[i].empty()) {
-					e << Message(warn,msgs[i]);
+					log << Message(warn,msgs[i]);
 				}
 			}
-			e.pop();
+			log.pop();
 		}
 		struct Sass_Context* ctx_out = sass_data_context_get_context(ctx);
 		retval = sass_context_get_error_status(ctx_out);
 		if (retval != 0) {
 			switch (retval) {
 				case 1: {
-					e << Message(error,"Scss Parse/Evaluation error");
+					log << Message(error,"Scss Parse/Evaluation error");
 				} break;
 				case 2: {
-					e << Message(error,"Scss Memory allocation error");
+					log << Message(error,"Scss Memory allocation error");
 				} break;
 				case 3:
 				case 4:
 				case 5: {
 					string value = tostring(retval);
-					e << Message(error,"Scss Unexpected/Unknown exception error type: " + value);
+					log << Message(error,"Scss Unexpected/Unknown exception error type: " + value);
 				} break;
 				default: {
 					string value = tostring(retval);
-					e << Message(error,"Scss Unknown error: " + value);
+					log << Message(error,"Scss Unknown error: " + value);
 				} break;
 			}
 		}
 		const char* sass_err  =sass_context_get_error_message(ctx_out);
 		const char* json_err =sass_context_get_error_json(ctx_out);
 		if (sass_err != nullptr) {
-			e << Message(error,string(sass_err));
+			log << Message(error,string(sass_err));
 		}
 		if (json_err != nullptr) {
-			e << Message(error,string(json_err));
+			log << Message(error,string(json_err));
 		}
 		const char* sass_result = sass_context_get_output_string(ctx_out);
 		if (sass_result != nullptr) {

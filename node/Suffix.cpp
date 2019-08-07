@@ -220,14 +220,13 @@ namespace node {
 	void Suffix::processScss(Messages& log) {
 		if(!scssFiles.empty()) {
 			log.push(Message(info, "Processing Scss Files"));
-			log << Message(custom, "Scss Files");
 			Env &env = Env::e();
 			Path final(env.dir(Built, Support::Content));
 			if (Sass::available(log)) {
 				Sass::resetpath();
-				Sass::addpath("/websites/shared/live/");
+				Sass::addpath(log, "/websites/shared/live/");
 				for (auto &scss : scssFiles) {
-					Sass::addpath(scss.getDir());
+					Sass::addpath(log, scss.getDir());
 				}
 				for (auto &scss : scssFiles) {
 					string file = scss.output(true);
@@ -252,7 +251,6 @@ namespace node {
 			} else {
 				log << Message(error, "Sass is not available despite there being scss files to process.");
 			}
-			log << Message(custom, "Scss Files");
 			log.pop();
 		} else {
 			log << Message(debug, "No SCSS found for processing.");

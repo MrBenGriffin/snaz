@@ -239,11 +239,6 @@ namespace Support {
 			string::const_iterator argi = parameter.begin();
 			if(*argi++ == '-') { // expect a '-'
 				switch(*argi++) {
-					case 'a':   //dynamically assessed classic/advanced parse
-//--??				doParse = tostring(argi,' ');
-						ParseAdvanced = false;
-						build.setCurrent(draft);
-						break;
 					case 'A':
 						timer.setShow(true);
 						break;
@@ -258,53 +253,29 @@ namespace Support {
 					case 'c':   //forced advanced parse switch.
 //--??					doParse = String::tostring(argi,' '); (text to parse?)
 						build.setCurrent(parse);
-					case 'C':
-//--??					showProfile = true; //NOW used to show min/max macro parameter warnings.
-						break;
 					case 'D': {
-//						Messages::setdebug(true);
-//						showMediaReqs = true;
 						node::Locator::showPaths = true;
 						content::Template::show(true);
-//						showQueries = true;
-//						showProfile = true; //NOW used to show min/max macro parameter warnings.
-//						showFiling = true;
-//						showNodes = true;
-//						showTrace = true;
-//						showGetSet = true;
-//						Messages::setVerbosity(9);
 					}
 						break;
 					case 'd':
 						build.setCurrent(test); // = true;
-//						Messages::setVerbosity(0);
-						break;
-					case 'f':
-//						showFiling = true;
 						break;
 					case 'F':{
 						deque<size_t> nodes;
 						tolist(nodes, parameter.substr(2)); //setnodes
 						build.setNodes(Descendants,nodes);
-				} break;
-					case 'I':
-//						showMediaReqs = true;
-						break;
+					} break;
 					case 'L': {
 						tolist(askedLangs, parameter.substr(2));
-					}
-						break;
+					} break;
 					case 'M': {
 						string cssurl;
 						get("RS_CSSFILE", cssurl);         //rebuild.css   rebuild.css
 						fandr(cssurl, "[S]", parameter.substr(
 								2));  //allow for a css switch. eg rebuild[S].css env and -MAdmin -> rebuildA.css
 						get("RS_BUILDNODEPATH", EditNodeUrl, "/mortar/oedit.obyx?node=0"); //if none, keep default.
-					}
-						break;
-					case 'n':
-//						showNodes = true;
-						break;
+					} break;
 					case 'O': {
 						deque<size_t> nodes;
 						tolist(nodes, parameter.substr(2));
@@ -333,19 +304,13 @@ namespace Support {
 					case 'T': {
 						tolist(askedTechs, parameter.substr(2));
 					} break;
-					case 'V':
-//						Messages::setVerbosity(natural(argi));
-						break;
 					case 'X':
 						build.breakLock();
 						break;
 					case 'x': //comment until next -
 						break;
-					case 'z':
-//						keepTmp = true;
-						break;
 					default:
-						log << Message(warn,"Parameter (" + parameter + ") is unknown.");
+						log << Message(warn,"Parameter (" + parameter + ") is unknown or no longer used.");
 						break;
 				}
 			} else {
