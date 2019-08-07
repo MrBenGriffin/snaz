@@ -18,8 +18,13 @@ namespace Support {
 	bool Sass::loaded = false;
 	void* Sass::sass_lib_handle = nullptr;
 
+	void 						(*Sass::sass_delete_compiler)(struct Sass_Compiler *)= nullptr;
 	struct Sass_Data_Context*   (*Sass::sass_make_data_context)(char*)= nullptr;
 	struct Sass_Options*        (*Sass::sass_make_options)()= nullptr;
+	struct Sass_Options*		(*Sass::sass_data_context_get_options)(struct Sass_Data_Context *)= nullptr;
+	struct Sass_Compiler*		(*Sass::sass_make_data_compiler)(struct Sass_Data_Context *)= nullptr;
+	int							(*Sass::sass_compiler_parse)(struct Sass_Compiler *)= nullptr;
+	int							(*Sass::sass_compiler_execute)(struct Sass_Compiler *)= nullptr;
 	void 						(*Sass::sass_delete_options)(struct Sass_Options *)= nullptr;
 	struct Sass_Context*        (*Sass::sass_data_context_get_context)(struct Sass_Data_Context*)= nullptr;
 	void                        (*Sass::sass_data_context_set_options)(struct Sass_Data_Context*, struct Sass_Options*)= nullptr;
@@ -30,7 +35,6 @@ namespace Support {
 	const char*                 (*Sass::sass_context_get_error_json)(struct Sass_Context*)=nullptr;
 	const char*                 (*Sass::sass_context_get_error_message)(struct Sass_Context*)=nullptr;
 	int                         (*Sass::sass_context_get_error_status)(struct Sass_Context*)=nullptr;
-
 	void                        (*Sass::sass_option_set_output_style) (struct Sass_Options*,enum Sass_Output_Style)=nullptr;
 	void                        (*Sass::sass_option_set_source_map_file) (struct Sass_Options*,const char*)=nullptr;
 	void                        (*Sass::sass_option_set_omit_source_map_url) (struct Sass_Options*,bool)=nullptr;
@@ -59,6 +63,11 @@ namespace Support {
 
 			try {
 				if (!err && sass_lib_handle != nullptr ) {
+					if(!err) { sass_delete_compiler = (void (*)(struct Sass_Compiler *)) dlsym(sass_lib_handle,"sass_delete_compiler"); err = dlerr(errors); }
+					if(!err) { sass_compiler_parse = (int (*)(struct Sass_Compiler *)) dlsym(sass_lib_handle,"sass_compiler_parse"); err = dlerr(errors); }
+					if(!err) { sass_compiler_execute = (int (*)(struct Sass_Compiler *)) dlsym(sass_lib_handle,"sass_compiler_execute"); err = dlerr(errors); }
+					if(!err) { sass_data_context_get_options = (struct Sass_Options*(*)(struct Sass_Data_Context *)) dlsym(sass_lib_handle,"sass_data_context_get_options"); err = dlerr(errors); }
+					if(!err) { sass_make_data_compiler = (struct Sass_Compiler*(*)(struct Sass_Data_Context *)) dlsym(sass_lib_handle,"sass_make_data_compiler"); err = dlerr(errors); }
 					if(!err) { sass_make_data_context = (struct Sass_Data_Context*(*)(char*)) dlsym(sass_lib_handle,"sass_make_data_context"); err = dlerr(errors); }
 					if(!err) { sass_data_context_get_context = (struct Sass_Context*(*)(struct Sass_Data_Context*)) dlsym(sass_lib_handle,"sass_data_context_get_context"); err = dlerr(errors); }
 					if(!err) { sass_data_context_set_options = (void (*)(struct Sass_Data_Context*, struct Sass_Options*)) dlsym(sass_lib_handle,"sass_data_context_set_options"); err = dlerr(errors); }
@@ -116,40 +125,24 @@ namespace Support {
 		inc_paths.clear();
 	}
 /**
- * Taken from https://github.com/sass/sassc/blob/master/sassc.c
- * √ struct Sass_Options* options = sass_make_options();
- *
-	int Sass::compile_file(struct Sass_Options* options, char* input_path, char* outfile) {
-		int ret;
-		struct Sass_File_Context* ctx = sass_make_file_context(input_path);
-		struct Sass_Context* ctx_out = sass_file_context_get_context(ctx);
-		if (outfile) sass_option_set_output_path(options, outfile);
-		const char* srcmap_file = sass_option_get_source_map_file(options);
-		sass_option_set_input_path(options, input_path);
-		sass_file_context_set_options(ctx, options);
-
-		sass_compile_file_context(ctx);
-
-		ret = output(
-				sass_context_get_error_status(ctx_out),
-				sass_context_get_error_message(ctx_out),
-				sass_context_get_output_string(ctx_out),
-				outfile
-		);
-
-		if (ret == 0 && srcmap_file) {
-			ret = output(
-					sass_context_get_error_status(ctx_out),
-					sass_context_get_error_message(ctx_out),
-					sass_context_get_source_map_string(ctx_out),
-					srcmap_file
-			);
-		}
-
-		sass_delete_file_context(ctx);
-		return ret;
-	}
-   sass_delete_options(options);
+//√		context = sass_make_data_context("div { a { color: blue; } }")
+//√		options = sass_data_context_get_options(context)
+//√		sass_option_set_precision(options, 1)
+//√		sass_option_set_source_comments(options, true)
+//
+//		sass_data_context_set_options(context, options)
+//
+//		compiler = sass_make_data_compiler(context)
+//		sass_compiler_parse(compiler)
+//		sass_compiler_execute(compiler)
+//
+//		output = sass_context_get_output_string(context)
+// div a { color: blue; }
+// Retrieve errors during compilation
+//		error_status = sass_context_get_error_status(context)
+//		json_error = sass_context_get_error_json(context)
+//// Release memory dedicated to the C compiler
+//		sass_delete_compiler(compiler)
  */
 
 	//• --------------------------------------------------------------------------
@@ -158,21 +151,22 @@ namespace Support {
 		int retval=0;
 		string empty;
 		log << Message(debug,source);
-//      https://stackoverflow.com/questions/347949/how-to-convert-a-stdstring-to-const-char-or-char/4152881#4152881
-		struct Sass_Data_Context* ctx = sass_make_data_context(&source[0]);
-		struct Sass_Options* options = sass_make_options();
-		sass_option_set_precision (options,6);
 		string pathList;
 		for (auto& path : inc_paths) {
 			pathList.append(path);
 			pathList.push_back(':');
 		}
 		pathList.pop_back();
+
+//      https://stackoverflow.com/questions/347949/how-to-convert-a-stdstring-to-const-char-or-char/4152881#4152881
+		auto* data_ctx = sass_make_data_context(&source[0]);
+		auto* ctx = sass_data_context_get_context(data_ctx);
+		auto* options = sass_data_context_get_options(data_ctx);
+
+		sass_option_set_precision (options,6);
 		sass_option_set_include_path(options,&pathList[0]);  //this is a : delimited list.
-//		log << Message(debug, list + pathList);
 
 		if (nestit) {
-//			log << Message(debug,"Sass::expansion - using Nested Style.");
 			sass_option_set_output_style(options,SASS_STYLE_NESTED);
 			sass_option_set_source_map_file(options,&map_file[0]);
 			sass_option_set_omit_source_map_url(options,false);
@@ -181,7 +175,6 @@ namespace Support {
 			sass_option_set_source_map_contents(options,true);
 			sass_option_set_source_map_embed(options,true);
 		} else {
-//			log << Message(debug,"Sass::expansion - using Compressed Style.");
 			sass_option_set_output_style(options,SASS_STYLE_COMPRESSED);
 			sass_option_set_source_map_file(options,&empty[0]);
 			sass_option_set_omit_source_map_url(options,true);
@@ -190,45 +183,54 @@ namespace Support {
 			sass_option_set_source_map_contents(options,true);
 			sass_option_set_source_map_embed(options,true);
 		}
-		sass_data_context_set_options(ctx, options);
-//		log << Message(debug,"Sass:expansion. Options are set.");
+		sass_data_context_set_options(data_ctx, options);
+		auto *compiler = sass_make_data_compiler(data_ctx);
 
-		//capture cerr.
-		ostringstream msgc,msge;
-		std::streambuf *tmpe = cerr.rdbuf(msge.rdbuf());
-		std::streambuf *tmpc = cout.rdbuf(msgc.rdbuf());
-
+/*
+//		//capture cerr.
+//		ostringstream msgc,msge;
+//		std::streambuf *tmpe = cerr.rdbuf(msge.rdbuf());
+//		std::streambuf *tmpc = cout.rdbuf(msgc.rdbuf());
+*/
 		try {
-			log << Message(debug,"Sass::compilation about to commence.");
-			sass_compile_data_context(ctx);
-			log << Message(debug,"Sass::compilation is complete.");
+			retval = sass_compiler_parse(compiler);
+			if (retval == 0) {
+				retval = sass_compiler_execute(compiler);
+			}
 		} catch (...) {
 			log << Message(error,"Unexpected sass throw. ");
 		}
+/**
+//		try {
+//			log << Message(debug,"Sass::compilation about to commence.");
+//			sass_compile_data_context(data_ctx);
+//			log << Message(debug,"Sass::compilation is complete.");
+//		} catch (...) {
+//			log << Message(error,"Unexpected sass throw. ");
+//		}
 
-		cerr.rdbuf( tmpe );
-		cout.rdbuf( tmpc );
-		string console = msgc.str();
-		string warnings = msge.str();
+//		cerr.rdbuf( tmpe );
+//		cout.rdbuf( tmpc );
+//		string console = msgc.str();
+//		string warnings = msge.str();
 
-		if (!console.empty()) {
-			log << Message(error,"Unexpected sass cout output");
-			log << Message(info,console);
-		}
+//		if (!console.empty()) {
+//			log << Message(error,"Unexpected sass cout output");
+//			log << Message(info,console);
+//		}
 
-		if (!warnings.empty()) {
-			log.push(Message(warn,"Sass Warnings"));
-			vector<string> msgs;
-			tolist(msgs,warnings,"WARNING: "); //given a cutter(string) delimited set of strings, return a vector of strings.
-			for (size_t i=0; i < msgs.size(); i++) {
-				if (! msgs[i].empty()) {
-					log << Message(warn,msgs[i]);
-				}
-			}
-			log.pop();
-		}
-		struct Sass_Context* ctx_out = sass_data_context_get_context(ctx);
-		retval = sass_context_get_error_status(ctx_out);
+//		if (!warnings.empty()) {
+//			log.push(Message(warn,"Sass Warnings"));
+//			vector<string> msgs;
+//			tolist(msgs,warnings,"WARNING: "); //given a cutter(string) delimited set of strings, return a vector of strings.
+//			for (size_t i=0; i < msgs.size(); i++) {
+//				if (! msgs[i].empty()) {
+//					log << Message(warn,msgs[i]);
+//				}
+//			}
+//			log.pop();
+//		}
+ */
 		if (retval != 0) {
 			switch (retval) {
 				case 1: {
@@ -249,24 +251,24 @@ namespace Support {
 				} break;
 			}
 		}
-		const char* sass_err  =sass_context_get_error_message(ctx_out);
-		const char* json_err =sass_context_get_error_json(ctx_out);
+		const char* sass_err  =sass_context_get_error_message(ctx);
+		const char* json_err =sass_context_get_error_json(ctx);
 		if (sass_err != nullptr) {
 			log << Message(error,string(sass_err));
 		}
 		if (json_err != nullptr) {
 			log << Message(error,string(json_err));
 		}
-		const char* sass_result = sass_context_get_output_string(ctx_out);
+		const char* sass_result = sass_context_get_output_string(ctx);
 		if (sass_result != nullptr) {
 			result = string(sass_result);
 		}
-		const char* map_result = sass_context_get_source_map_string(ctx_out);
+		const char* map_result = sass_context_get_source_map_string(ctx);
 		if (map_result != nullptr) {
 			map = string(map_result);
 		}
-		sass_delete_data_context(ctx);
-		sass_delete_options(options);
+		sass_delete_data_context(data_ctx);
+		sass_delete_compiler(compiler);
 		return (retval == 0); //no error..
 	}
 
