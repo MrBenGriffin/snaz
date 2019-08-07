@@ -159,7 +159,7 @@ namespace Support {
 		pathList.pop_back();
 
 		char* src = new char[source.size() + 1];  //ffs. maybe sass decides to free this itself.
-		strcpy(src, source.c_str());
+		std::strcpy(src, source.c_str());
 
 //      https://stackoverflow.com/questions/347949/how-to-convert-a-stdstring-to-const-char-or-char/4152881#4152881
 //		auto* data_ctx = sass_make_data_context(&source[0]);
