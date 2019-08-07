@@ -233,7 +233,7 @@ namespace node {
 					log << Message(debug, file);
 					ostringstream scss_oss;
 					string sass_result;
-					scss_oss << "@import '" << file << "scss';";
+					scss_oss << "@import '" << file << "';";
 					File mapFile(scss);
 					mapFile.setExtension("map");
 					string map_result;
