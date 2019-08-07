@@ -9,8 +9,10 @@
 #include <string>
 #include <map>
 #include <unordered_map>
+#include <set>
 #include <sass/context.h>
 #include "support/Message.h"
+#include "support/File.h"
 
 using namespace std;
 
@@ -26,7 +28,6 @@ namespace Support {
 		static bool loadattempted;    //used to show if the service is up or down.
 		static bool loaded;    //used to show if the service is up or down.
 
-//		static string inc_paths;    	//colon delimited set of search paths for file inclusion.
 		static set<string> inc_paths;   //colon delimited set of search paths for file inclusion.
 
 		//The sass API that we use.
@@ -60,7 +61,7 @@ namespace Support {
 		static bool shutdown();
 
 		static void resetpath();
-		static void addpath(Messages&, const string &);
+		static void addpath(Messages&, const Path&);
 		static bool expand(Messages&, const string&, string&, string&,const string&, bool = true);   //expand a string.
 	};
 

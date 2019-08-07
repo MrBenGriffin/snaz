@@ -224,9 +224,9 @@ namespace node {
 			Path final(env.dir(Built, Support::Content));
 			if (Sass::available(log)) {
 				Sass::resetpath();
-				Sass::addpath(log, "/websites/shared/live/");
+				Sass::addpath(log, Path("/websites/shared/live/"));
 				for (auto &scss : scssFiles) {
-					Sass::addpath(log, scss.getDir());
+					Sass::addpath(log, scss);
 				}
 				for (auto &scss : scssFiles) {
 					string file = scss.output(true);

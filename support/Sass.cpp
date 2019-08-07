@@ -40,7 +40,6 @@ namespace Support {
 	void                        (*Sass::sass_option_set_include_path) (struct Sass_Options*, const char*)=nullptr;
 	void                        (*Sass::sass_option_set_precision) (struct Sass_Options*,int)=nullptr;
 
-
 	bool Sass::available(Messages& e) {
 		if (!loadattempted) startup(e);
 		return loaded;
@@ -101,9 +100,14 @@ namespace Support {
 		return true;
 	}
 
-	void Sass::addpath(Messages& log, const string &path) {
-		log << Message(debug,"Sass: Adding path " + path);
-		inc_paths.insert(path);
+	void Sass::addpath(Messages& log, const Path &path) {
+		string pathStr = path.output();
+		if(path.exists()) {
+			log << Message(debug,"Sass: Adding path " + pathStr);
+			inc_paths.insert(pathStr);
+		} else {
+			log << Message(warn,"Sass: Path " + pathStr + " does not exist so it will not be included for Sass.");
+		}
 	}
 
 	void Sass::resetpath() {
@@ -184,11 +188,13 @@ namespace Support {
 			sass_option_set_source_map_embed(options,true);
 		}
 		sass_data_context_set_options(ctx, options);
-/*
+		log << Message(debug,"Sass:expansion. Options are set.");
+
 		//capture cerr.
 		ostringstream msgc,msge;
 		std::streambuf *tmpe = cerr.rdbuf(msge.rdbuf());
 		std::streambuf *tmpc = cout.rdbuf(msgc.rdbuf());
+/*
 
 		try {
 			log << Message(debug,"Sass::compilation about to commence.");
