@@ -230,15 +230,17 @@ namespace node {
 				}
 				for (auto &scss : scssFiles) {
 					string file = scss.output(true);
-					log << Message(debug, file);
+//					log << Message(debug, file);
 					ostringstream scss_oss;
 					string sass_result;
 					scss_oss << "@import '" << file << "';";
 					File mapFile(scss);
 					mapFile.setExtension("map");
 					string map_result;
+					string source = scss_oss.str(); //We need this to be a non const.
+					string mapFilename = mapFile.output(true); //We need this to be a non const.
 					bool compress = Build::b().current() == Support::final;
-					if (Sass::expand(log, scss_oss.str(), sass_result, map_result, mapFile.output(true), compress)) {
+					if (Sass::expand(log, source, sass_result, map_result, mapFilename, compress)) {
 						File resultFile(scss);
 						resultFile.setExtension("css");
 						fandr(sass_result, "/websites/shared/live/", "/c/");

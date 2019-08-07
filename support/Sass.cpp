@@ -151,11 +151,12 @@ namespace Support {
 
 	//• --------------------------------------------------------------------------
 	//•	sass expansion.
-	bool Sass::expand(Messages& log,const string &source,string &result,string &map,const string& map_file,bool nestit) {
+	bool Sass::expand(Messages& log,string &source,string &result,string &map,string& map_file,bool nestit) {
 		int retval=0;
 		log << Message(debug,source);
-		//ADDAPI struct Sass_Data_Context* ADDCALL sass_make_data_context (char* source_string);
-		struct Sass_Data_Context* ctx = sass_make_data_context(const_cast<char *>(source.c_str()));
+//		char *cstr = &str[0];
+//      https://stackoverflow.com/questions/347949/how-to-convert-a-stdstring-to-const-char-or-char/4152881#4152881
+		struct Sass_Data_Context* ctx = sass_make_data_context(&source[0]);
 		struct Sass_Options* options = sass_make_options();
 		sass_option_set_precision (options,6);
 		string pathList;
@@ -171,7 +172,7 @@ namespace Support {
 		if (nestit) {
 //			log << Message(debug,"Sass::expansion - using Nested Style.");
 			sass_option_set_output_style(options,SASS_STYLE_NESTED);
-			sass_option_set_source_map_file(options,map_file.c_str());
+			sass_option_set_source_map_file(options,&map_file[0]);
 			sass_option_set_omit_source_map_url(options,false);
 			sass_option_set_is_indented_syntax_src(options,false);
 			sass_option_set_source_comments(options,true);
