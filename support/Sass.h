@@ -33,6 +33,7 @@ namespace Support {
 		//The sass API that we use.
 		static struct Sass_Data_Context *(*sass_make_data_context)(char *);
 		static struct Sass_Options *(*sass_make_options)(void);
+		static void (*sass_delete_options)(struct Sass_Options *);
 		static struct Sass_Context *(*sass_data_context_get_context)(struct Sass_Data_Context *);
 		static void (*sass_data_context_set_options)(struct Sass_Data_Context *, struct Sass_Options *);
 		static int (*sass_compile_data_context)(struct Sass_Data_Context *);

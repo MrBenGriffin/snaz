@@ -20,6 +20,7 @@ namespace Support {
 
 	struct Sass_Data_Context*   (*Sass::sass_make_data_context)(char*)= nullptr;
 	struct Sass_Options*        (*Sass::sass_make_options)()= nullptr;
+	void 						(*Sass::sass_delete_options)(struct Sass_Options *)= nullptr;
 	struct Sass_Context*        (*Sass::sass_data_context_get_context)(struct Sass_Data_Context*)= nullptr;
 	void                        (*Sass::sass_data_context_set_options)(struct Sass_Data_Context*, struct Sass_Options*)= nullptr;
 	int                         (*Sass::sass_compile_data_context)(struct Sass_Data_Context*)= nullptr;
@@ -64,6 +65,7 @@ namespace Support {
 					if(!err) { sass_compile_data_context = (int (*)(struct Sass_Data_Context*)) dlsym(sass_lib_handle,"sass_compile_data_context"); err = dlerr(errors); }
 					if(!err) { sass_delete_data_context = (void (*)(struct Sass_Data_Context*)) dlsym(sass_lib_handle,"sass_delete_data_context"); err = dlerr(errors); }
 					if(!err) { sass_make_options = (struct Sass_Options* (*)()) dlsym(sass_lib_handle,"sass_make_options"); err = dlerr(errors); }
+					if(!err) { sass_delete_options = (void (*)(struct Sass_Options*)) dlsym(sass_lib_handle,"sass_delete_options"); err = dlerr(errors); }
 					if(!err) { sass_context_get_output_string = (const char* (*)(struct Sass_Context*)) dlsym(sass_lib_handle,"sass_context_get_output_string"); err = dlerr(errors); }
 					if(!err) { sass_context_get_source_map_string=(const char* (*)(struct Sass_Context*)) dlsym(sass_lib_handle,"sass_context_get_source_map_string"); err = dlerr(errors); }
 					if(!err) { sass_context_get_error_message=(const char* (*)(struct Sass_Context*)) dlsym(sass_lib_handle,"sass_context_get_error_message"); err = dlerr(errors); }
@@ -147,6 +149,7 @@ namespace Support {
 		sass_delete_file_context(ctx);
 		return ret;
 	}
+   sass_delete_options(options);
  */
 
 	//• --------------------------------------------------------------------------
@@ -263,6 +266,7 @@ namespace Support {
 			map = string(map_result);
 		}
 		sass_delete_data_context(ctx);
+		sass_delete_options(options);
 		return (retval == 0); //no error..
 	}
 
