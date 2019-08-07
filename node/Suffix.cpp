@@ -226,7 +226,7 @@ namespace node {
 				Sass::resetpath();
 				Sass::addpath(log, Path("/websites/shared/live/"));
 				for (auto &scss : scssFiles) {
-					Sass::addpath(log, scss);
+					Sass::addpath(log, Path(scss));
 				}
 				for (auto &scss : scssFiles) {
 					string file = scss.output(true);
