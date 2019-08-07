@@ -203,6 +203,7 @@ namespace Support {
 		} catch (...) {
 			log << Message(error,"Unexpected sass throw. ");
 		}
+*/
 
 		cerr.rdbuf( tmpe );
 		cout.rdbuf( tmpc );
@@ -263,7 +264,6 @@ namespace Support {
 		if (map_result != nullptr) {
 			map = string(map_result);
 		}
-*/
 		sass_delete_data_context(ctx);
 		return (retval == 0); //no error..
 	}
