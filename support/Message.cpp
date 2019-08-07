@@ -336,6 +336,9 @@ namespace Support {
 			list.back().prog = progression;
 			synchronise();
 		}
+		if(m.ch == debug) {
+			synchronise();
+		}
 	}
 
 	void Messages::push(Message const& m) {

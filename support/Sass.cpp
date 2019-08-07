@@ -109,12 +109,48 @@ namespace Support {
 	void Sass::resetpath() {
 		inc_paths.clear();
 	}
+/**
+ * Taken from https://github.com/sass/sassc/blob/master/sassc.c
+ * √ struct Sass_Options* options = sass_make_options();
+ *
+	int Sass::compile_file(struct Sass_Options* options, char* input_path, char* outfile) {
+		int ret;
+		struct Sass_File_Context* ctx = sass_make_file_context(input_path);
+		struct Sass_Context* ctx_out = sass_file_context_get_context(ctx);
+		if (outfile) sass_option_set_output_path(options, outfile);
+		const char* srcmap_file = sass_option_get_source_map_file(options);
+		sass_option_set_input_path(options, input_path);
+		sass_file_context_set_options(ctx, options);
+
+		sass_compile_file_context(ctx);
+
+		ret = output(
+				sass_context_get_error_status(ctx_out),
+				sass_context_get_error_message(ctx_out),
+				sass_context_get_output_string(ctx_out),
+				outfile
+		);
+
+		if (ret == 0 && srcmap_file) {
+			ret = output(
+					sass_context_get_error_status(ctx_out),
+					sass_context_get_error_message(ctx_out),
+					sass_context_get_source_map_string(ctx_out),
+					srcmap_file
+			);
+		}
+
+		sass_delete_file_context(ctx);
+		return ret;
+	}
+ */
 
 	//• --------------------------------------------------------------------------
 	//•	sass expansion.
 	bool Sass::expand(Messages& log,const string &source,string &result,string &map,const string& map_file,bool nestit) {
 		int retval=0;
-		struct Sass_Data_Context*ctx = sass_make_data_context(const_cast<char *>(source.c_str()));
+		//ADDAPI struct Sass_Data_Context* ADDCALL sass_make_data_context (char* source_string);
+		struct Sass_Data_Context* ctx = sass_make_data_context(const_cast<char *>(source.c_str()));
 		struct Sass_Options* options = sass_make_options();
 		sass_option_set_precision (options,6);
 		string pathList;
@@ -125,6 +161,8 @@ namespace Support {
 		pathList.pop_back();
 
 		sass_option_set_include_path(options,pathList.c_str());  //this is a : delimited list.
+		string list("Sass::pathList: ");
+		log << Message(debug, list + pathList.c_str());
 
 		if (nestit) {
 			log << Message(debug,"Sass::expansion - using Nested Style.");
@@ -146,7 +184,7 @@ namespace Support {
 			sass_option_set_source_map_embed(options,true);
 		}
 		sass_data_context_set_options(ctx, options);
-
+/*
 		//capture cerr.
 		ostringstream msgc,msge;
 		std::streambuf *tmpe = cerr.rdbuf(msge.rdbuf());
@@ -219,6 +257,7 @@ namespace Support {
 		if (map_result != nullptr) {
 			map = string(map_result);
 		}
+*/
 		sass_delete_data_context(ctx);
 		return (retval == 0); //no error..
 	}
