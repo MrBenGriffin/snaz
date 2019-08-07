@@ -165,11 +165,11 @@ namespace Support {
 		pathList.pop_back();
 
 		sass_option_set_include_path(options,pathList.c_str());  //this is a : delimited list.
-		string list("Sass::pathList: ");
-		log << Message(debug, list + pathList.c_str());
+//		string list("Sass::pathList: ");
+//		log << Message(debug, list + pathList.c_str());
 
 		if (nestit) {
-			log << Message(debug,"Sass::expansion - using Nested Style.");
+//			log << Message(debug,"Sass::expansion - using Nested Style.");
 			sass_option_set_output_style(options,SASS_STYLE_NESTED);
 			sass_option_set_source_map_file(options,map_file.c_str());
 			sass_option_set_omit_source_map_url(options,false);
@@ -178,7 +178,7 @@ namespace Support {
 			sass_option_set_source_map_contents(options,true);
 			sass_option_set_source_map_embed(options,true);
 		} else {
-			log << Message(debug,"Sass::expansion - using Compressed Style.");
+//			log << Message(debug,"Sass::expansion - using Compressed Style.");
 			sass_option_set_output_style(options,SASS_STYLE_COMPRESSED);
 			sass_option_set_source_map_file(options,"");
 			sass_option_set_omit_source_map_url(options,true);
@@ -188,13 +188,12 @@ namespace Support {
 			sass_option_set_source_map_embed(options,true);
 		}
 		sass_data_context_set_options(ctx, options);
-		log << Message(debug,"Sass:expansion. Options are set.");
+//		log << Message(debug,"Sass:expansion. Options are set.");
 
 		//capture cerr.
 		ostringstream msgc,msge;
 		std::streambuf *tmpe = cerr.rdbuf(msge.rdbuf());
 		std::streambuf *tmpc = cout.rdbuf(msgc.rdbuf());
-/*
 
 		try {
 			log << Message(debug,"Sass::compilation about to commence.");
@@ -203,7 +202,6 @@ namespace Support {
 		} catch (...) {
 			log << Message(error,"Unexpected sass throw. ");
 		}
-*/
 
 		cerr.rdbuf( tmpe );
 		cout.rdbuf( tmpc );
