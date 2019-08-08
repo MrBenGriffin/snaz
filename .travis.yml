@@ -19,6 +19,11 @@ install:
   - cd ${DEPS_DIR}/flex
   - ./configure --prefix=${OUT_DIR} --quiet && make install
   - export PATH=${OUT_DIR}/bin:${PATH}
+  - cd ${DEPS_DIR}
+  - CMAKE_URL="https://cmake.org/files/v3.13/cmake-3.13.0-rc3-Linux-x86_64.tar.gz"
+  - mkdir -p ${DEPS_DIR}/cmake
+  - travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
+  - export PATH=${DEPS_DIR}/cmake/bin:${PATH}
 
 
 before_script:
