@@ -1,4 +1,5 @@
 language: cpp
+dist: bionic
 
 install:
   - DEPS_DIR="${HOME}/deps"
@@ -6,14 +7,11 @@ install:
   - CMAKE_URL="https://cmake.org/files/v3.13/cmake-3.13.0-rc3-Linux-x86_64.tar.gz"
   - mkdir cmake && travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
   - export PATH=${DEPS_DIR}/cmake/bin:${PATH}
-  - echo ${PATH}
 
 
 before_script:
-  - cd ${HOME}
-  - which cmake
-  - mkdir cmake-build-debug
-  - cd cmake-build-debug
+  - cd ${TRAVIS_BUILD_DIR}
+  - mkdir cmake-build-debug && cd cmake-build-debug
   - cmake ..
 
 script: make
