@@ -24,8 +24,8 @@ install:
   - mkdir -p ${DEPS_DIR}/cmake
   - travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
   - export PATH=${DEPS_DIR}/cmake/bin:${PATH}
-  - sudo ln -s /usr/local/bin/bison ${OUT_DIR}/bin/bison
-  - sudo ln -s /usr/local/bin/flex ${OUT_DIR}/bin/flex
+  - sudo ln -s ${OUT_DIR}/bin/bison /usr/local/bin/bison
+  - sudo ln -s ${OUT_DIR}/bin/flex /usr/local/bin/flex
 
 
 before_script:
