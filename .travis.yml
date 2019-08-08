@@ -2,7 +2,7 @@ language: cpp
 
 before_script:
   - mkdir cmake-build-debug
-  - cd build
+  - cd cmake-build-debug
   - cmake ..
 
 script: make
