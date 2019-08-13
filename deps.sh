@@ -28,6 +28,7 @@ if [ "${bison_v##* }" != "3.4" ]; then
   $retry wget --no-check-certificate --quiet -O - ${BISON_URL} | tar --strip-components=1 -xz -C bison
   cd ${DEPS_DIR}/bison
   ./configure --prefix=${LOCAL_DIR} --quiet
+  make
 else
   mkdir -p ${DEPS_DIR}/bison
 fi
@@ -42,7 +43,8 @@ if [ "${flex_v##* }" != "2.6.4" ]; then
   FLEX_URL="https://github.com/westes/flex/releases/download/v2.6.4/flex-2.6.4.tar.gz"
   $retry wget --no-check-certificate --quiet -O - ${FLEX_URL} | tar --strip-components=1 -xz -C flex
   cd ${DEPS_DIR}/flex
-./configure --prefix=${LOCAL_DIR} --quiet
+  ./configure --prefix=${LOCAL_DIR} --quiet
+  make
 else
   mkdir -p ${DEPS_DIR}/flex
 fi
