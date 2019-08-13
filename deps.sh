@@ -1,6 +1,10 @@
 #!/bin/bash
-set -ev
+function ver()
+{
+    printf "%02d%02d%02d%02d" ${1//./ }
+}
 
+set -ev
 retry=""
 if [ "$1" == "travis" ]; then
   export retry=travis_retry
@@ -20,9 +24,8 @@ if [ ! -f ${DEPS_DIR}/libsass/config.log ]; then
   sudo make install
 fi
 
-bison_v=`bison -V | grep bison`
-badVersion=$(echo "${bison_v##* } < 3.4" | bc)
-if [ -z ${badVersion} ]; then
+vstring=`bison -V | grep bison`
+if [ $(ver ${vstring##* }) -lt $(ver 3.4) ]; then
   echo "Bison ${bison_v##* }  too low"
   cd ${DEPS_DIR}
   rm -rf ${DEPS_DIR}/bison
@@ -34,9 +37,8 @@ if [ -z ${badVersion} ]; then
   sudo make install
 fi
 
-flex_v=`flex -V`
-badVersion=$(echo "${flex_v##* } < 2.6.3" | bc)
-if [ -z ${badVersion} ]; then
+vstring=`flex -V`
+if [ $(ver ${vstring##* }) -lt $(ver 2.6.3) ]; then
   echo "Flex ${flex_v##* }  too low"
   cd ${DEPS_DIR}
   rm -rf ${DEPS_DIR}/flex
@@ -47,9 +49,8 @@ if [ -z ${badVersion} ]; then
   ./configure --prefix=${LOCAL_DIR} --quiet && sudo make install
 fi
 
-cmake_v=`cmake --version | grep version`
-badVersion=$(echo "${cmake_v##* } < 3.13.0" | bc)
-if [ -z ${badVersion} ]; then
+vstring=`cmake --version | grep version`
+if [ $(ver ${vstring##* }) -lt $(ver 3.13.0) ]; then
   echo "Cmake ${cmake_v##* } too low"
   cd ${DEPS_DIR}
   rm -rf ${DEPS_DIR}/cmake
