@@ -3,8 +3,10 @@ project(macrotext)
 
 #message(CMAKE_BUILD_TYPE)
 IF(EXISTS ${HOME}/deps/local)
+    message(STATUS "Local include found")
     set(LOCAL_DIR "${HOME}/deps/local")
 ELSE()
+    message(STATUS "Local include not found")
     set(LOCAL_DIR "/usr/local")
 ENDIF()
 
