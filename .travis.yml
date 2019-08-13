@@ -1,5 +1,8 @@
 language: cpp
-cache: ccache
+cache:
+  - ccache
+  - directories:
+      - ${HOME}/deps
 dist: bionic
 services:
   - mysql
@@ -12,35 +15,10 @@ install:
   - sudo apt-get -q -y install build-essential automake libtool git
   - DEPS_DIR="${HOME}/deps"
   - export LOCAL_DIR="${HOME}/deps/local"
-  - mkdir -p ${DEPS_DIR}
   - mkdir -p ${LOCAL_DIR}
-  - cd ${DEPS_DIR}
-  - mkdir -p ${DEPS_DIR}/libsass
-  - export SASS_LIBSASS_PATH="${DEPS_DIR}/libsass"
-  - version="3.6.1"
-  - git clone -q https://github.com/sass/libsass --branch $version --depth 1 > /dev/null 2>&1 && cd libsass
-  - autoreconf --force --install
-  - ./configure --enable-shared --prefix=${LOCAL_DIR}
-  - make
-  - make install
-  - cd ${DEPS_DIR}
-  - BISON_URL="http://ftp.gnu.org/gnu/bison/bison-3.4.tar.gz"
-  - mkdir -p ${DEPS_DIR}/bison
-  - travis_retry wget --no-check-certificate --quiet -O - ${BISON_URL} | tar --strip-components=1 -xz -C bison
-  - cd ${DEPS_DIR}/bison
-  - ./configure --prefix=${LOCAL_DIR} --quiet && make install
-  - cd ${DEPS_DIR}
-  - FLEX_URL="https://github.com/westes/flex/releases/download/v2.6.3/flex-2.6.3.tar.gz"
-  - mkdir -p ${DEPS_DIR}/flex
-  - travis_retry wget --no-check-certificate --quiet -O - ${FLEX_URL} | tar -xz --strip-components=1 -C flex
-  - cd ${DEPS_DIR}/flex
-  - ./configure --prefix=${LOCAL_DIR} --quiet && make install
-  - export PATH=${LOCAL_DIR}/bin:${PATH}
-  - cd ${DEPS_DIR}
-  - CMAKE_URL="https://cmake.org/files/v3.13/cmake-3.13.0-rc3-Linux-x86_64.tar.gz"
-  - mkdir -p ${DEPS_DIR}/cmake
-  - travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
-  - export PATH=${DEPS_DIR}/cmake/bin:${PATH}
+  - mkdir -p ${DEPS_DIR}/cmake/bin
+  - export PATH=${LOCAL_DIR}/bin:${DEPS_DIR}/cmake/bin:${PATH}
+  - script: ${TRAVIS_BUILD_DIR}/deps.sh travis
 
 before_script:
   - export LOCAL_DIR="${HOME}/deps/local"
@@ -52,7 +30,8 @@ before_script:
 script:
   - cd ${TRAVIS_BUILD_DIR}/cmake-build-debug
   - make
-  - export SQL_CONFIG_FILE="${TRAVIS_BUILD_DIR}/travis.cnf"
-  - export REMOTE_USER="bgriffin"
-  - export RS_SITENAME="Test Builder"
-  - ./macrotext -tests
+  - cd ${TRAVIS_BUILD_DIR}
+  - export SQL_CONFIG_FILE=${TRAVIS_BUILD_DIR}/travis.cnf
+  - export REMOTE_USER=bgriffin
+  - export RS_SITENAME=TestBuilder
+  - cmake-build-debug/macrotext -tests
