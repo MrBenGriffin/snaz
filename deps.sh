@@ -6,10 +6,6 @@ if [ "$1" == "travis" ]; then
   export retry=travis_retry
 fi
 
-DEPS_DIR="${HOME}/deps"
-export LOCAL_DIR="${HOME}/deps/local"
-PATH=${LOCAL_DIR}/bin:${DEPS_DIR}/cmake/bin:${PATH}
-
 mkdir -p ${DEPS_DIR}/libsass
 cd ${DEPS_DIR}/libsass
 if [ ! -f ${DEPS_DIR}/libsass/config.log ]; then

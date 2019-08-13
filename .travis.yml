@@ -18,7 +18,7 @@ install:
   - mkdir -p ${LOCAL_DIR}
   - mkdir -p ${DEPS_DIR}/cmake/bin
   - export PATH=${LOCAL_DIR}/bin:${DEPS_DIR}/cmake/bin:${PATH}
-  - script: "${TRAVIS_BUILD_DIR}/deps.sh travis"
+  - source ${TRAVIS_BUILD_DIR}/deps.sh travis
 
 before_script:
   - export LOCAL_DIR="${HOME}/deps/local"
