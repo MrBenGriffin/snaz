@@ -23,7 +23,8 @@ install:
   - CMAKE_URL="https://cmake.org/files/v3.13/cmake-3.13.0-rc3-Linux-x86_64.tar.gz"
   - mkdir -p ${DEPS_DIR}/cmake
   - travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
-  - ls -l ${LOCAL_DIR}
+  - echo ${LOCAL_DIR}
+  - find ${LOCAL_DIR} -ls
   - export PATH=${DEPS_DIR}/cmake/bin:${PATH}
   - if [ ! -f /usr/local/bin/bison ]; then sudo ln -s ${LOCAL_DIR}/bin/bison /usr/local/bin/bison; fi
   - if [ ! -f /usr/local/bin/flex ]; then sudo ln -s ${LOCAL_DIR}/bin/flex /usr/local/bin/flex; fi
