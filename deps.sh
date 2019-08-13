@@ -8,6 +8,7 @@ fi
 
 DEPS_DIR="${HOME}/deps"
 export LOCAL_DIR="${HOME}/deps/local"
+PATH=${LOCAL_DIR}/bin:${DEPS_DIR}/cmake/bin:${PATH}
 
 mkdir -p ${DEPS_DIR}/libsass
 cd ${DEPS_DIR}/libsass
