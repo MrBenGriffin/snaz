@@ -1,6 +1,12 @@
 language: cpp
 cache: ccache
 dist: bionic
+services:
+  - mysql
+
+before_install:
+  - mysql -e 'CREATE DATABASE buildtest;'
+  - mysql buildtest < ${TRAVIS_BUILD_DIR}/buildtest_edit.sql
 
 install:
   - sudo apt-get -q -y install build-essential automake libtool git
@@ -41,5 +47,6 @@ before_script:
   - cd ${TRAVIS_BUILD_DIR}
   - mkdir cmake-build-debug && cd cmake-build-debug
   - cmake  ..
+  - cd ${TRAVIS_BUILD_DIR}
 
 script: make
