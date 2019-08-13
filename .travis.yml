@@ -34,4 +34,4 @@ before_script:
   - mkdir cmake-build-debug && cd cmake-build-debug
   - cmake  ..
 
-script: cd cmake-build-debug; make
+script: make
