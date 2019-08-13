@@ -1,0 +1,8 @@
+[mysql]
+database=buildtest
+
+[client]
+user=travis
+password=
+host=localhost
+default-character-set=utf8

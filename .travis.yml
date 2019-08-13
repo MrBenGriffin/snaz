@@ -49,4 +49,10 @@ before_script:
   - cmake  ..
   - cd ${TRAVIS_BUILD_DIR}
 
-script: make
+script:
+  - cd ${TRAVIS_BUILD_DIR}/cmake-build-debug
+  - make
+  - export SQL_CONFIG_FILE="${TRAVIS_BUILD_DIR}/travis.cnf"
+  - export REMOTE_USER="bgriffin"
+  - export RS_SITENAME="Test Builder"
+  - ./macrotext -tests
