@@ -9,6 +9,7 @@ fi
 mkdir -p ${DEPS_DIR}/libsass
 cd ${DEPS_DIR}/libsass
 if [ ! -f ${DEPS_DIR}/libsass/config.log ]; then
+  echo "libsass incorrect"
   cd ${DEPS_DIR}
   export SASS_LIBSASS_PATH="${DEPS_DIR}/libsass"
   version="3.6.1"
@@ -21,6 +22,7 @@ fi
 
 bison_v=`bison -V | grep bison`
 if [ "${bison_v##* }" != "3.4" ]; then
+  echo "Bison ${bison_v##* } incorrect"
   cd ${DEPS_DIR}
   rm -rf ${DEPS_DIR}/bison
   mkdir -p ${DEPS_DIR}/bison
@@ -33,8 +35,8 @@ fi
 
 flex_v=`flex -V`
 if [ "${flex_v##* }" != "2.6.3" ]; then
+  echo "Flex ${flex_v##* } incorrect"
   cd ${DEPS_DIR}
-  echo "$flex_v incorrect"
   rm -rf ${DEPS_DIR}/flex
   mkdir -p ${DEPS_DIR}/flex
   FLEX_URL="https://github.com/westes/flex/releases/download/v2.6.3/flex-2.6.3.tar.gz"
@@ -45,6 +47,7 @@ fi
 
 cmake_v=`cmake --version | grep version`
 if [ "${cmake_v##* }" != "3.13.0" ]; then
+  echo "Cmake ${cmake_v##* } incorrect"
   cd ${DEPS_DIR}
   rm -rf ${DEPS_DIR}/cmake
   mkdir -p ${DEPS_DIR}/cmake
