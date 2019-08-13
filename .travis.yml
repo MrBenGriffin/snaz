@@ -2,11 +2,20 @@ language: cpp
 dist: bionic
 
 install:
+  - sudo apt-get -q -y install build-essential automake libtool git
   - DEPS_DIR="${HOME}/deps"
   - export LOCAL_DIR="${HOME}/deps/local"
   - mkdir -p ${DEPS_DIR}
   - mkdir -p ${LOCAL_DIR}
   - cd ${DEPS_DIR}
+  - mkdir -p ${DEPS_DIR}/libsass
+  - export SASS_LIBSASS_PATH="${DEPS_DIR}/libsass"
+  - version="3.6.1"
+  - git clone -q https://github.com/sass/libsass --branch $version --depth 1 > /dev/null 2>&1 && cd libsass
+  - autoreconf --force --install
+  - ./configure --enable-shared --prefix=${LOCAL_DIR}
+  - make
+  - make install
   - BISON_URL="http://ftp.gnu.org/gnu/bison/bison-3.4.tar.gz"
   - mkdir -p ${DEPS_DIR}/bison
   - travis_retry wget --no-check-certificate --quiet -O - ${BISON_URL} | tar --strip-components=1 -xz -C bison
@@ -24,10 +33,6 @@ install:
   - mkdir -p ${DEPS_DIR}/cmake
   - travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
   - export PATH=${DEPS_DIR}/cmake/bin:${PATH}
-  - if [ ! -f /usr/local/bin/bison ]; then sudo ln -s ${LOCAL_DIR}/bin/bison /usr/local/bin/bison; fi
-  - if [ ! -f /usr/local/bin/flex ]; then sudo ln -s ${LOCAL_DIR}/bin/flex /usr/local/bin/flex; fi
-  - if [ ! -f /usr/local/include/bison ]; then sudo ln -s ${LOCAL_DIR}/include/bison /usr/local/include/bison; fi
-  - if [ ! -f /usr/local/include/flex ]; then sudo ln -s ${LOCAL_DIR}/include/flex /usr/local/include/flex; fi
 
 before_script:
   - export LOCAL_DIR="${HOME}/deps/local"
