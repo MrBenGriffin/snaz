@@ -28,9 +28,8 @@ install:
   - if [ ! -f /usr/local/bin/flex ]; then sudo ln -s ${LOCAL_DIR}/bin/flex /usr/local/bin/flex; fi
 
 before_script:
-  - export LOCAL_DIR="${HOME}/deps/local"
   - cd ${TRAVIS_BUILD_DIR}
   - mkdir cmake-build-debug && cd cmake-build-debug
-  - cmake -DCMAKE_RULE_MESSAGES:BOOL=OFF -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..
+  - cmake  ..
 
-script: make
+script: cd cmake-build-debug; make

@@ -2,9 +2,11 @@ cmake_minimum_required(VERSION 3.13)
 project(macrotext)
 
 #message(CMAKE_BUILD_TYPE)
-if(NOT DEFINED LOCAL_DIR)
+IF(EXISTS ${HOME}/deps/local)
+    set(LOCAL_DIR "${HOME}/deps/local")
+ELSE()
     set(LOCAL_DIR "/usr/local")
-endif()
+ENDIF()
 
 #set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 set(CMAKE_CXX_FLAGS_DEBUG "-g -Wmismatched-tags -Wdelete-non-virtual-dtor -Wunused-variable -Wcast-qual")
