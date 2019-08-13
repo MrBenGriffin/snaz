@@ -41,6 +41,5 @@ script:
   - export SQL_CONFIG_FILE=${TRAVIS_BUILD_DIR}/travis.cnf
   - export REMOTE_USER=bgriffin
   - export RS_SITENAME=TestBuilder
-  - cmake-build-debug/macrotext -tests > log
-  - cat log
+  - cmake-build-debug/macrotext -tests
   - mysql --defaults-extra-file=${TRAVIS_BUILD_DIR}/travis.cnf -e 'select purpose,channel,replace(message,"\n"," ") as msg from bldlog order by ts';

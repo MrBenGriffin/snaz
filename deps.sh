@@ -21,8 +21,9 @@ if [ ! -f ${DEPS_DIR}/libsass/config.log ]; then
 fi
 
 bison_v=`bison -V | grep bison`
-if [ "${bison_v##* }" != "3.4" ]; then
-  echo "Bison ${bison_v##* } incorrect"
+badVersion=$(echo "${bison_v##* } < 3.4" | bc)
+if [ -z ${badVersion} ]; then
+  echo "Bison ${bison_v##* }  too low"
   cd ${DEPS_DIR}
   rm -rf ${DEPS_DIR}/bison
   mkdir -p ${DEPS_DIR}/bison
@@ -34,8 +35,9 @@ if [ "${bison_v##* }" != "3.4" ]; then
 fi
 
 flex_v=`flex -V`
-if [ "${flex_v##* }" != "2.6.3" ]; then
-  echo "Flex ${flex_v##* } incorrect"
+badVersion=$(echo "${flex_v##* } < 2.6.3" | bc)
+if [ -z ${badVersion} ]; then
+  echo "Flex ${flex_v##* }  too low"
   cd ${DEPS_DIR}
   rm -rf ${DEPS_DIR}/flex
   mkdir -p ${DEPS_DIR}/flex
@@ -46,8 +48,9 @@ if [ "${flex_v##* }" != "2.6.3" ]; then
 fi
 
 cmake_v=`cmake --version | grep version`
-if [ "${cmake_v##* }" != "3.13.0" ]; then
-  echo "Cmake ${cmake_v##* } incorrect"
+badVersion=$(echo "${cmake_v##* } < 3.13.0" | bc)
+if [ -z ${badVersion} ]; then
+  echo "Cmake ${cmake_v##* } too low"
   cd ${DEPS_DIR}
   rm -rf ${DEPS_DIR}/cmake
   mkdir -p ${DEPS_DIR}/cmake
