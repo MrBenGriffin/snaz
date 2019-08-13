@@ -30,6 +30,7 @@ install:
   - if [ ! -f /usr/local/include/flex ]; then sudo ln -s ${LOCAL_DIR}/include/flex /usr/local/include/flex; fi
 
 before_script:
+  - find . -name FlexLexer.h
   - cd ${TRAVIS_BUILD_DIR}
   - mkdir cmake-build-debug && cd cmake-build-debug
   - cmake  ..
