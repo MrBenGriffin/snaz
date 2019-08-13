@@ -16,44 +16,36 @@ if [ ! -f ${DEPS_DIR}/libsass/config.log ]; then
   autoreconf --force --install
   ./configure --enable-shared --prefix=${LOCAL_DIR}
   make
+  sudo make install
 fi
-sudo make install
 
-cd ${DEPS_DIR}
 bison_v=`bison -V | grep bison`
 if [ "${bison_v##* }" != "3.4" ]; then
+  cd ${DEPS_DIR}
   rm -rf ${DEPS_DIR}/bison
   mkdir -p ${DEPS_DIR}/bison
   BISON_URL="http://ftp.gnu.org/gnu/bison/bison-3.4.tar.gz"
   $retry wget --no-check-certificate --quiet -O - ${BISON_URL} | tar --strip-components=1 -xz -C bison
   cd ${DEPS_DIR}/bison
   ./configure --prefix=${LOCAL_DIR} --quiet
-  make
-else
-  mkdir -p ${DEPS_DIR}/bison
+  sudo make install
 fi
-cd ${DEPS_DIR}/bison
-sudo make install
 
-cd ${DEPS_DIR}
 flex_v=`flex -V`
-if [ "${flex_v##* }" != "2.6.4" ]; then
+if [ "${flex_v##* }" != "2.6.3" ]; then
+  cd ${DEPS_DIR}
+  echo "$flex_v incorrect"
   rm -rf ${DEPS_DIR}/flex
   mkdir -p ${DEPS_DIR}/flex
-  FLEX_URL="https://github.com/westes/flex/releases/download/v2.6.4/flex-2.6.4.tar.gz"
+  FLEX_URL="https://github.com/westes/flex/releases/download/v2.6.3/flex-2.6.3.tar.gz"
   $retry wget --no-check-certificate --quiet -O - ${FLEX_URL} | tar --strip-components=1 -xz -C flex
   cd ${DEPS_DIR}/flex
-  ./configure --prefix=${LOCAL_DIR} --quiet
-  make
-else
-  mkdir -p ${DEPS_DIR}/flex
+  ./configure --prefix=${LOCAL_DIR} --quiet && sudo make install
 fi
-cd ${DEPS_DIR}/flex
-sudo make install
 
-cd ${DEPS_DIR}
 cmake_v=`cmake --version | grep version`
 if [ "${cmake_v##* }" != "3.13.0" ]; then
+  cd ${DEPS_DIR}
   rm -rf ${DEPS_DIR}/cmake
   mkdir -p ${DEPS_DIR}/cmake
   CMAKE_URL="https://cmake.org/files/v3.13/cmake-3.13.0-rc3-Linux-x86_64.tar.gz"
