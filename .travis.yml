@@ -3,9 +3,9 @@ dist: bionic
 
 install:
   - DEPS_DIR="${HOME}/deps"
-  - OUT_DIR="${DEPS_DIR}/local"
+  - LOCAL_DIR="${DEPS_DIR}/local"
   - mkdir -p ${DEPS_DIR}
-  - mkdir -p ${OUT_DIR}
+  - mkdir -p ${LOCAL_DIR}
   - cd ${DEPS_DIR}
   - BISON_URL="http://ftp.gnu.org/gnu/bison/bison-3.4.tar.gz"
   - mkdir -p ${DEPS_DIR}/bison
@@ -24,11 +24,12 @@ install:
   - mkdir -p ${DEPS_DIR}/cmake
   - travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
   - export PATH=${DEPS_DIR}/cmake/bin:${PATH}
-  - sudo ln -s ${OUT_DIR}/bin/bison /usr/local/bin/bison
-  - sudo ln -s ${OUT_DIR}/bin/flex /usr/local/bin/flex
-
+  - if [ ! -f /usr/local/bin/bison ]; then sudo ln -s ${LOCAL_DIR}/bin/bison /usr/local/bin/bison; fi
+  - if [ ! -f /usr/local/bin/flex ]; then sudo ln -s ${LOCAL_DIR}/bin/flex /usr/local/bin/flex; fi
 
 before_script:
+  - DEPS_DIR="${HOME}/deps"
+  - export LOCAL_DIR="${DEPS_DIR}/local"
   - cd ${TRAVIS_BUILD_DIR}
   - mkdir cmake-build-debug && cd cmake-build-debug
   - cmake ..

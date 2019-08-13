@@ -2,20 +2,23 @@ cmake_minimum_required(VERSION 3.13)
 project(macrotext)
 
 #message(CMAKE_BUILD_TYPE)
+if(NOT DEFINED LOCAL_DIR)
+    set(LOCAL_DIR "/usr/local/")
+endif()
 
 #set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 set(CMAKE_CXX_FLAGS_DEBUG "-g -Wmismatched-tags -Wdelete-non-virtual-dtor -Wunused-variable -Wcast-qual")
 set(CMAKE_CXX_FLAGS_RELEASE "-fpermissive  -funsigned-char -fno-asm -Wno-trigraphs -O3 -fmessage-length=0")
 
-set(BISON_EXECUTABLE "/usr/local/bin/bison")
-set(FLEX_EXECUTABLE "/usr/local/bin/flex")
+set(BISON_EXECUTABLE "${LOCAL_DIR}/bin/bison")
+set(FLEX_EXECUTABLE "${LOCAL_DIR}/bin/flex")
 
 find_package(BISON 3.3)
 find_package(FLEX 2.6)
 
 set(CMAKE_CXX_STANDARD 17)
 
-include_directories(SYSTEM /usr/local/include;/usr/local/mysql/include;/usr/include/mysql)
+include_directories(SYSTEM ${LOCAL_DIR}/include;/usr/local/include;/usr/local/mysql/include;/usr/include/mysql)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR};${CMAKE_CURRENT_BINARY_DIR})
 #find_library(MYSQLCLIENT libmysqlclient HINTS "/usr/local/mysql/lib" )
 #MESSAGE("MYSQL LIB: " ${MYSQLCLIENT})
