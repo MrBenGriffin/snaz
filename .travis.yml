@@ -41,4 +41,5 @@ script:
   - export SQL_CONFIG_FILE=${TRAVIS_BUILD_DIR}/travis.cnf
   - export REMOTE_USER=bgriffin
   - export RS_SITENAME=TestBuilder
-  - unbuffer cmake-build-debug/macrotext --color=yes -tests
+  - cmake-build-debug/macrotext -tests > log
+  - cat log
