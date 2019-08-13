@@ -3,7 +3,7 @@ dist: bionic
 
 install:
   - DEPS_DIR="${HOME}/deps"
-  - LOCAL_DIR="${DEPS_DIR}/local"
+  - export LOCAL_DIR="${HOME}/deps/local"
   - mkdir -p ${DEPS_DIR}
   - mkdir -p ${LOCAL_DIR}
   - cd ${DEPS_DIR}
@@ -11,14 +11,14 @@ install:
   - mkdir -p ${DEPS_DIR}/bison
   - travis_retry wget --no-check-certificate --quiet -O - ${BISON_URL} | tar --strip-components=1 -xz -C bison
   - cd ${DEPS_DIR}/bison
-  - ./configure --prefix=${OUT_DIR} --quiet && make install
+  - ./configure --prefix=${LOCAL_DIR} --quiet && make install
   - cd ${DEPS_DIR}
   - FLEX_URL="https://github.com/westes/flex/releases/download/v2.6.3/flex-2.6.3.tar.gz"
   - mkdir -p ${DEPS_DIR}/flex
   - travis_retry wget --no-check-certificate --quiet -O - ${FLEX_URL} | tar -xz --strip-components=1 -C flex
   - cd ${DEPS_DIR}/flex
-  - ./configure --prefix=${OUT_DIR} --quiet && make install
-  - export PATH=${OUT_DIR}/bin:${PATH}
+  - ./configure --prefix=${LOCAL_DIR} --quiet && make install
+  - export PATH=${LOCAL_DIR}/bin:${PATH}
   - cd ${DEPS_DIR}
   - CMAKE_URL="https://cmake.org/files/v3.13/cmake-3.13.0-rc3-Linux-x86_64.tar.gz"
   - mkdir -p ${DEPS_DIR}/cmake
@@ -28,8 +28,7 @@ install:
   - if [ ! -f /usr/local/bin/flex ]; then sudo ln -s ${LOCAL_DIR}/bin/flex /usr/local/bin/flex; fi
 
 before_script:
-  - DEPS_DIR="${HOME}/deps"
-  - export LOCAL_DIR="${DEPS_DIR}/local"
+  - export LOCAL_DIR="${HOME}/deps/local"
   - cd ${TRAVIS_BUILD_DIR}
   - mkdir cmake-build-debug && cd cmake-build-debug
   - cmake ..
