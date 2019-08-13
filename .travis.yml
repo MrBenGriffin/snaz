@@ -31,6 +31,6 @@ before_script:
   - export LOCAL_DIR="${HOME}/deps/local"
   - cd ${TRAVIS_BUILD_DIR}
   - mkdir cmake-build-debug && cd cmake-build-debug
-  - cmake ..
+  - cmake -DCMAKE_RULE_MESSAGES:BOOL=OFF -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..
 
 script: make
