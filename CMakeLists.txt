@@ -19,7 +19,7 @@ find_package(FLEX 2.6)
 
 set(CMAKE_CXX_STANDARD 17)
 
-include_directories(SYSTEM ${LOCAL_DIR}/include;/usr/local/include;/usr/local/mysql/include;/usr/include/mysql)
+include_directories(SYSTEM ${LOCAL_DIR}/include;${HOME}/local/include;/usr/local/include;/usr/local/mysql/include;/usr/include/mysql)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR};${CMAKE_CURRENT_BINARY_DIR})
 message(STATUS "Local Include: ${LOCAL_DIR}/include")
 #find_library(MYSQLCLIENT libmysqlclient HINTS "/usr/local/mysql/lib" )
