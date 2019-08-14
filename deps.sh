@@ -1,9 +1,16 @@
 #!/bin/bash
 set -ev
 
-function ver()
+function vGood()
 {
-    printf "%02d%02d%02d%02d" ${1//./ }
+ base=$1
+ args=( "$@" )
+ small=$(IFS=$'\n'; echo "${args[*]}" | sort -V | head -n1 )
+ if [ "${base}" == "${small}" ]; then
+   echo 1
+ else
+   echo 0
+ fi
 }
 
 retry=""
@@ -26,12 +33,12 @@ if [ ! -f ${DEPS_DIR}/libsass/config.log ]; then
 fi
 
 vstring=$(bison -V | grep bison)
-if [ $(ver ${vstring##* }) -lt $(ver 3.4) ]; then
-  echo "Bison ${bison_v##* }  too low"
+if [ 0 -eq $(vGood 3.4.1 ${vstring##* }) ]; then
+  echo "Bison ${vstring##* }  too low"
   cd ${DEPS_DIR}
   rm -rf ${DEPS_DIR}/bison
   mkdir -p ${DEPS_DIR}/bison
-  BISON_URL="http://ftp.gnu.org/gnu/bison/bison-3.4.tar.gz"
+  BISON_URL="http://ftp.gnu.org/gnu/bison/bison-3.4.1.tar.gz"
   $retry wget --no-check-certificate --quiet -O - ${BISON_URL} | tar --strip-components=1 -xz -C bison
   cd ${DEPS_DIR}/bison
   ./configure --prefix=${LOCAL_DIR} --quiet
@@ -39,8 +46,8 @@ if [ $(ver ${vstring##* }) -lt $(ver 3.4) ]; then
 fi
 
 vstring=$(flex -V)
-if [ $(ver ${vstring##* }) -lt $(ver 2.6.3) ]; then
-  echo "Flex ${flex_v##* }  too low"
+if [ 0 -eq $(vGood 2.6.3 ${vstring##* }) ]; then
+  echo "Flex ${vstring##* }  too low"
   cd ${DEPS_DIR}
   rm -rf ${DEPS_DIR}/flex
   mkdir -p ${DEPS_DIR}/flex
@@ -51,8 +58,8 @@ if [ $(ver ${vstring##* }) -lt $(ver 2.6.3) ]; then
 fi
 
 vstring=$(cmake --version | grep version)
-if [ $(ver ${vstring##* }) -lt $(ver 3.13.0) ]; then
-  echo "Cmake ${cmake_v##* } too low"
+if [ 0 -eq $(vGood 3.13.0 ${vstring##* }) ]; then
+  echo "Cmake ${vstring##* } too low"
   cd ${DEPS_DIR}
   rm -rf ${DEPS_DIR}/cmake
   mkdir -p ${DEPS_DIR}/cmake
