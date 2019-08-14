@@ -35,7 +35,7 @@ before_install:
   - cd ${TRAVIS_BUILD_DIR}
 
 install:
-  - build.sh
+  - ./build.sh
 
 before_script:
   - mysql -e 'CREATE DATABASE buildtest;'
