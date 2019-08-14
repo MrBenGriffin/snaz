@@ -217,7 +217,6 @@ namespace Support {
 				media->setRow(errs, index);
 				media->readfield(errs, "ext", extension);     //not sure why we do it this way...
 				MediaInfo &filebits = filenames[mtrans.first];
-				Path url = Env::e().urlRoot();
 				File mediaFile(filebits.dir, filebits.base + "." + extension);
 				filename = mediaFile.url(errs);
 				mediaUsed.emplace(mtrans.first);

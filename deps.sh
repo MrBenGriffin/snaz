@@ -1,10 +1,11 @@
 #!/bin/bash
+set -ev
+
 function ver()
 {
     printf "%02d%02d%02d%02d" ${1//./ }
 }
 
-set -ev
 retry=""
 if [ "$1" == "travis" ]; then
   export retry=travis_retry
@@ -24,7 +25,7 @@ if [ ! -f ${DEPS_DIR}/libsass/config.log ]; then
   sudo make install
 fi
 
-vstring=`bison -V | grep bison`
+vstring=$(bison -V | grep bison)
 if [ $(ver ${vstring##* }) -lt $(ver 3.4) ]; then
   echo "Bison ${bison_v##* }  too low"
   cd ${DEPS_DIR}
@@ -37,7 +38,7 @@ if [ $(ver ${vstring##* }) -lt $(ver 3.4) ]; then
   sudo make install
 fi
 
-vstring=`flex -V`
+vstring=$(flex -V)
 if [ $(ver ${vstring##* }) -lt $(ver 2.6.3) ]; then
   echo "Flex ${flex_v##* }  too low"
   cd ${DEPS_DIR}
@@ -49,7 +50,7 @@ if [ $(ver ${vstring##* }) -lt $(ver 2.6.3) ]; then
   ./configure --prefix=${LOCAL_DIR} --quiet && sudo make install
 fi
 
-vstring=`cmake --version | grep version`
+vstring=$(cmake --version | grep version)
 if [ $(ver ${vstring##* }) -lt $(ver 3.13.0) ]; then
   echo "Cmake ${cmake_v##* } too low"
   cd ${DEPS_DIR}

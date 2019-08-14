@@ -66,6 +66,7 @@ namespace Support {
 		bool mergeTo(const Path &, Messages &, bool= true, bool= false) const;
 		bool head(const Path &, Messages &);
 		void listDirs(vector<Path *> *, bool= false) const;
+		void setRelative(bool value) { relative =value; }
 
 		void setNoOutput() { doWrite = false; }
 

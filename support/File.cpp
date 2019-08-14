@@ -1178,7 +1178,7 @@ namespace Support {
 //	std::string Env::baseUrl(buildArea area) {
 	string File::url(Messages& errs,buildSpace space) const {
 		if(relative) {
-			return output(true);
+			return "/" + output(true);
 		} else {
 			string result;
 			ostringstream msg;
