@@ -18,13 +18,8 @@ addons:
       description: "Snaz"
     notification_email: auto@redsnapper.net
 #    build_command_prepend: "<Your build preprocessing command here>"
-    build_command:
-      - export LOCAL_DIR="${HOME}/deps/local"
-      - cd ${TRAVIS_BUILD_DIR}
-      - mkdir cmake-build-debug && cd cmake-build-debug
-      - cmake  ..
-      - make
-      branch_pattern: master
+    build_command: "cd ${TRAVIS_BUILD_DIR} && mkdir cmake-build-debug && cd cmake-build-debug && cmake  .. && make"
+    branch_pattern: master
 
 services:
   - mysql
