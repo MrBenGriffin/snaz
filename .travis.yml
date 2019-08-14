@@ -18,7 +18,7 @@ addons:
       description: "Snaz"
     notification_email: auto@redsnapper.net
 #    build_command_prepend: "<Your build preprocessing command here>"
-    build_command: "cd ${TRAVIS_BUILD_DIR} && mkdir cmake-build-debug && cd cmake-build-debug && cmake  .. && make"
+    build_command: "${TRAVIS_BUILD_DIR}/build.sh"
     branch_pattern: master
 
 services:
@@ -26,7 +26,7 @@ services:
 
 before_install:
   - echo -n | openssl s_client -connect https://scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
-  - DEPS_DIR="${HOME}/deps"
+  - export DEPS_DIR="${HOME}/deps"
   - export LOCAL_DIR="${HOME}/deps/local"
   - mkdir -p ${LOCAL_DIR}
   - mkdir -p ${DEPS_DIR}/cmake/bin
@@ -34,11 +34,7 @@ before_install:
   - source ${TRAVIS_BUILD_DIR}/deps.sh travis
 
 install:
-  - export LOCAL_DIR="${HOME}/deps/local"
-  - cd ${TRAVIS_BUILD_DIR}
-  - mkdir cmake-build-debug && cd cmake-build-debug
-  - cmake  ..
-  - make
+  - ${TRAVIS_BUILD_DIR}/build.sh
 
 before_script:
   - mysql -e 'CREATE DATABASE buildtest;'
