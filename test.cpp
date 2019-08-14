@@ -34,21 +34,25 @@ namespace testing {
 		string n(testing::dn);
 		switch(type) {
 			case 1: {
+				o << purple;
 				Support::toupper(title);
 				m = "═";
 			} break;
 			case 2: { // good test.
-				f = green + "✔︎";
+				o << green;
+				f = "✔︎";
 				m = " ";
 				n = " ";
 			} break;
 			case 3: { // bad test.
-				f = red + "✖";
+				o << red;
+				f = "✖";
 				m = " ";
 				n = " ";
 			} break;
 				//o << "• " << name << " √ " << endl;
 			default: {
+				o << blue;
 				title.insert(0,1,' ');
 				title.push_back(' ');
 			} break;
@@ -57,7 +61,7 @@ namespace testing {
 		size_t adjust = lineWidth - 11;
 		length = length > adjust ? adjust : length;
 		for (size_t i=0 ; i < adjust - length ; i++) head.append(m);
-		o << blue << f << m << m << m << m << m << n << " " << title << " " << n << head << f << norm << endl;
+		o << f << m << m << m << m << m << n << " " << title << " " << n << head << f << norm << endl;
 	}
 
 	void group::wss(std::string& basis,bool toSym) {
