@@ -28,6 +28,7 @@ before_install:
   - echo -n | openssl s_client -connect https://scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
   - export DEPS_DIR="${HOME}/deps"
   - export LOCAL_DIR="${HOME}/deps/local"
+  - chmod 755 *.sh
   - mkdir -p ${LOCAL_DIR}
   - mkdir -p ${DEPS_DIR}/cmake/bin
   - export PATH=${LOCAL_DIR}/bin:${DEPS_DIR}/cmake/bin:${PATH}
