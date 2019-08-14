@@ -12,14 +12,25 @@ addons:
       - automake
       - libtool
       - git
+  coverity_scan:
+    project:
+      name: "MrBenGriffin/snaz"
+      description: "Snaz"
+    notification_email: auto@redsnapper.net
+#    build_command_prepend: "<Your build preprocessing command here>"
+    build_command:
+      - export LOCAL_DIR="${HOME}/deps/local"
+      - cd ${TRAVIS_BUILD_DIR}
+      - mkdir cmake-build-debug && cd cmake-build-debug
+      - cmake  ..
+      - make
+      branch_pattern: master
+
 services:
   - mysql
 
 before_install:
-  - mysql -e 'CREATE DATABASE buildtest;'
-  - mysql buildtest < ${TRAVIS_BUILD_DIR}/buildtest_edit.sql
-
-install:
+  - echo -n | openssl s_client -connect https://scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
   - DEPS_DIR="${HOME}/deps"
   - export LOCAL_DIR="${HOME}/deps/local"
   - mkdir -p ${LOCAL_DIR}
@@ -27,16 +38,18 @@ install:
   - export PATH=${LOCAL_DIR}/bin:${DEPS_DIR}/cmake/bin:${PATH}
   - source ${TRAVIS_BUILD_DIR}/deps.sh travis
 
-before_script:
+install:
   - export LOCAL_DIR="${HOME}/deps/local"
   - cd ${TRAVIS_BUILD_DIR}
   - mkdir cmake-build-debug && cd cmake-build-debug
   - cmake  ..
-  - cd ${TRAVIS_BUILD_DIR}
+  - make
+
+before_script:
+  - mysql -e 'CREATE DATABASE buildtest;'
+  - mysql buildtest < ${TRAVIS_BUILD_DIR}/buildtest_edit.sql
 
 script:
-  - cd ${TRAVIS_BUILD_DIR}/cmake-build-debug
-  - make
   - cd ${TRAVIS_BUILD_DIR}
   - export SQL_CONFIG_FILE=${TRAVIS_BUILD_DIR}/travis.cnf
   - export REMOTE_USER=bgriffin
