@@ -32,9 +32,9 @@ before_install:
   - mkdir -p ${DEPS_DIR}/cmake/bin
   - export PATH=${LOCAL_DIR}/bin:${DEPS_DIR}/cmake/bin:${PATH}
   - source ${TRAVIS_BUILD_DIR}/deps.sh travis
+  - cd ${TRAVIS_BUILD_DIR}
 
 install:
-  - pwd
   - build.sh
 
 before_script:
