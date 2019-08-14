@@ -15,9 +15,9 @@ using namespace Support;
 namespace testing {
 
     using test = tuple<string,string,string>;
-	constexpr const char* df = "•";
-	constexpr const char* dm = "─";
-	constexpr const char* dn = "•";
+	constexpr const char* df = "+";
+	constexpr const char* dm = "-";
+	constexpr const char* dn = "+";
 	constexpr const size_t lineWidth = 96;
 
     class group {

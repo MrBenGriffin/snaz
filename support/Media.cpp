@@ -209,19 +209,20 @@ namespace Support {
 				return result;
 			}
 		} else {
+			string filename;
 			size_t index = mi->second;
 			if (!mtrans.second.empty()) { //has a transform..
-				return transFile(errs, metrics, mtrans, index);
+				filename = "/" + transFile(errs, metrics, mtrans, index);
 			} else {
-				string filename, extension;
+				string extension;
 				media->setRow(errs, index);
 				media->readfield(errs, "ext", extension);     //not sure why we do it this way...
 				MediaInfo &filebits = filenames[mtrans.first];
 				File mediaFile(filebits.dir, filebits.base + "." + extension);
 				filename = mediaFile.url(errs);
 				mediaUsed.emplace(mtrans.first);
-				return filename;
 			}
+			return filename;
 		}
 	}
 
