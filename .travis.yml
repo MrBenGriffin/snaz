@@ -43,3 +43,9 @@ script:
   - export RS_SITENAME=TestBuilder
   - cmake-build-debug/macrotext -tests
   - mysql --defaults-extra-file=${TRAVIS_BUILD_DIR}/travis.cnf -e 'select purpose,channel,replace(message,"\n"," ") as msg from bldlog order by ts';
+  - mysql --defaults-extra-file=${TRAVIS_BUILD_DIR}/travis.cnf -e 'delete from bldlog';
+  - cmake-build-debug/macrotext -P
+  - mysql --defaults-extra-file=${TRAVIS_BUILD_DIR}/travis.cnf -e 'select purpose,channel,replace(message,"\n"," ") as msg from bldlog order by ts';
+  - mysql --defaults-extra-file=${TRAVIS_BUILD_DIR}/travis.cnf -e 'delete from bldlog';
+
+
