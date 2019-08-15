@@ -19,7 +19,7 @@ addons:
     notification_email: auto@redsnapper.net
 #    build_command_prepend: "<Your build preprocessing command here>"
     build_command: "${TRAVIS_BUILD_DIR}/build.sh"
-    branch_pattern: master
+    branch_pattern: coverity
 
 services:
   - mysql
