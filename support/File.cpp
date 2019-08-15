@@ -120,7 +120,7 @@ namespace Support {
 		*this = newpath;
 	}
 
-	Path::Path(const string newpath) : doWrite(true),relative(false), path() {
+	Path::Path(const string newpath) : doWrite(true),relative(true), path() {
 		setPath(newpath);
 	}
 
@@ -271,20 +271,6 @@ namespace Support {
 		}
 		closedir(dir);
 	}
-
-//	int Path::getSizeA() const {
-//		string tempPath = output(false);
-//		// stat does not like '/' terminated paths
-//		if (!tempPath.empty())
-//			tempPath = tempPath.erase(tempPath.length() - 1, 1);
-//		int result;
-//		struct stat buf{};
-//		result = stat(tempPath.c_str(), &buf);
-//		if (result == 0 && buf.st_mode & S_IFDIR)
-//			return (int)buf.st_size; //64 bit to 32 bit conversion...
-//		return 0;
-//	}
-
 
 	void Path::listFiles(Messages &e, vector<File *> *list, bool recursive, const string regexp) const {
 		auto *dirList = new vector<Path *>;
