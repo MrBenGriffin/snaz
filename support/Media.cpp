@@ -32,9 +32,8 @@ namespace Support {
 	Media::Media() {
 		string magicPath;
 		Env::e().get("IMAGEMAGICK",magicPath,"/usr/bin/convert");
-		auto imagick = File(magicPath);
-		imagick.addArg("-background none");
 		imagick = File(magicPath);
+		imagick.addArg("-background none");
 	}
 
 	MediaInfo Media::setfile(Messages& errs,const std::string &ref,size_t index) {

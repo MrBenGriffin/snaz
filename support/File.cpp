@@ -829,10 +829,11 @@ namespace Support {
 	//-------------------------------------------------------------------------
 	// Constructs a new File given a filename
 	//-------------------------------------------------------------------------
-	File::File(const string newFilename) : Path(),extension_separator('.') {
-		setFileName(newFilename);
+	File::File(const string theFile) : Path(),extension_separator('.') {
+		size_t slash = theFile.rfind(directory_separator);
+		cd(theFile.substr(0, slash));
+		setFileName(theFile.substr(slash + 1, string::npos));
 	}
-
 
 	void File::addArg(const string& argument) {
 		args.push_back(argument);
