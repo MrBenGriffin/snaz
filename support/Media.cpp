@@ -380,9 +380,12 @@ namespace Support {
 					// Need to test against the master file AND the transformed file.
 					if(filebits.modified > original_date || orgdate > original_date) { // needs outputting.
 						errs << Message(debug,trn.first + " (transform)");
-						std::ostringstream tos;
-						tos << t_origin << " " << trn.second << " " << outFile.output(true);
-						imagick.exec(errs,tos.str());
+						File transform(imagick);
+						transform.addArg(t_origin);
+						transform.addArg(trn.second);
+						transform.addArg(outFile.output(true));
+						transform.dryRun(errs);
+						transform.exec(errs);
 					} else {
 						errs << Message(debug,trn.first + " (use original) ");
 						if ( reset ) {

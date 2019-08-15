@@ -168,6 +168,7 @@ namespace Support {
 
 		bool empty() const { return path.empty(); }
 
+		void dryRun(Messages &, const string& ="") const;
 		string exec(Messages &, const string& ="") const;
 		void write(Messages&,const string&,bool=true) const;
 

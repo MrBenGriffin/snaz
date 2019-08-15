@@ -799,6 +799,26 @@ namespace Support {
 		return result;
 	}
 
+	void File::dryRun(Messages& errs,const string& extra) const {
+		string result;
+		if (exists()) {
+			ostringstream execute;
+			execute << output(true);
+			for (auto& arg : args) {
+				execute << " " << arg;
+			}
+			if(!extra.empty()) {
+				execute << " " << extra;
+			}
+			execute << " 2>&1";
+			errs << Message(debug, execute.str() + " (dry run)");
+		} else {
+			string name = output(true);
+			errs << Message(error,name + " does not exist. (dry run)");
+		}
+	}
+
+
 	//-------------------------------------------------------------------------
 	// Constructs a new File given a Path and a filename
 	//-------------------------------------------------------------------------
