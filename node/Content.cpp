@@ -287,7 +287,7 @@ namespace node {
 		}
 	}
 
-	//-------------------------------------------------------------------
+//-------------------------------------------------------------------
 // All builds starts here, and then any single node build goes to compose.
 	void Content::generate(Messages& errs,buildType build) {
 		Build &core = Build::b();
@@ -353,37 +353,37 @@ namespace node {
 		mt::mstack context;
 		mt::Instance instance(&current);
 		Path destination = env.dir(Temporary, Support::Content);
-		errs << Message(debug, destination.output() + "; base directory");
+//		errs << Message(debug, destination.output() + "; base directory");
 		context.emplace_back(make_pair(nullptr,&instance)); //Make the carriage.
 		long double fileCount = layoutPtr->templates.size();
 		if(fileCount > 0.0L) {
 			long double progressValue(1.0L / fileCount);  //eg 1/2 for two files.
 			for (auto* t : layoutPtr->templates) {
-				File file(destination);
+				File build(destination);
 				string filename= _ref + " not a file";
 				std::ostringstream content;
 				if(!t->code.empty() && !finalFilenames.empty() && finalFilenames.size() >= current.page) {
 					current.currentTemplate = t;
-					file = finalFilenames[current.page];
-					file.setExtension(t->suffix->ref());
-//					filename = file.getFileName(); //used in logging...
-					filename = file.output(true);
+					filename = finalFilenames[current.page].getFileName();
+					build.setFileName(filename);
+					build.setExtension(t->suffix->ref());
+					auto filepath = build.output(true);
 					errs.reset();
 					mt::Wss::push(&(t->nl)); //!!! another global.. need to add to the metrics above.
 					t->code.expand(errs, content, context); //no context here...
 					mt::Wss::pop();
 					try {
-						std::ofstream outFile(filename);
+						std::ofstream outFile(filepath);
 						outFile << content.str();
 						outFile.close();
 						chmod(filename.c_str(), (S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH));
 					}    //create the file!
 					catch (...) {
-						errs << Message(error, "Failed to create file " + filename);
+						errs << Message(error, "Failed to create file " + filepath);
 					}
 				}
 				if(t->suffix) {
-					t->suffix->process(errs,this,file);
+					t->suffix->process(errs,this,build);
 				}
 				current.page++;
 				errs << Message(channel::file,filename,progressValue); // done as a proportion.
