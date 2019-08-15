@@ -43,8 +43,9 @@ namespace content {
 			result = found->second;
 		} else {
 			ostringstream err;
-			err << "There is no segment with reference '" << ref << "' or aliased by layout '" << layout->ref << "'";
-			errs << Message(error,err.str());
+			err << "The segment name with reference '" << ref
+				<< "' is not defined on this website and is not an alias of layout '" << layout->ref << "'";
+			errs << Message(trace,err.str());
 		}
 		return result;
 	}
