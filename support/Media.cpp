@@ -365,25 +365,25 @@ namespace Support {
 
 	void Media::doTransforms(Messages& errs,string& ref,const Path& buildDir,const Path& finalDir,const string& t_origin,std::time_t orgdate,MediaInfo& filebits,bool reset) {
 		if(instances.find(ref) != instances.end()) {
+			//The stored transform has the full filename = eg /media/images/foo_bar..  so don't prefix directories!
 			unordered_map<string,string>& mediaTransforms = instances[ref]; //And get any transforms.
 			long double transformCount = mediaTransforms.size();
 			if(transformCount > 0.0L) {
 				long double progressValue(1.0L / transformCount);  //eg 1/2 for two transforms.
 				for (auto trn : mediaTransforms) {
-					File outFile(filebits.dir,trn.first);
+					File outFile(trn.first);
 					outFile.makeAbsoluteFrom(buildDir);
 					outFile.makeDir(errs);
-					File orgFile(filebits.dir,trn.first);
+					File orgFile(trn.first);
 					orgFile.makeAbsoluteFrom(finalDir);
 					::time_t original_date = orgFile.getModDate();				// the unix_time value of the modification date of the current published file (or zero).
 					// Need to test against the master file AND the transformed file.
-					if(filebits.modified > original_date || orgdate > original_date) { // needs outputting.
+					if(filebits.modified > original_date || filebits.modified > orgdate ) { // needs outputting.
 						errs << Message(debug,trn.first + " (transform)");
 						File transform(imagick);
 						transform.addArg(t_origin);
 						transform.addArg(trn.second);
 						transform.addArg(outFile.output(true));
-						transform.dryRun(errs);
 						transform.exec(errs);
 					} else {
 						errs << Message(debug,trn.first + " (use original) ");

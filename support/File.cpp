@@ -831,7 +831,9 @@ namespace Support {
 	//-------------------------------------------------------------------------
 	File::File(const string theFile) : Path(),extension_separator('.') {
 		size_t slash = theFile.rfind(directory_separator);
-		cd(theFile.substr(0, slash));
+		if(slash > 0) {
+			setPath(theFile.substr(0, slash));
+		}
 		setFileName(theFile.substr(slash + 1, string::npos));
 	}
 
