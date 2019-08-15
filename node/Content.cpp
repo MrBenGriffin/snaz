@@ -291,10 +291,13 @@ namespace node {
 // All builds starts here, and then any single node build goes to compose.
 	void Content::generate(Messages& errs,buildType build) {
 		Build &core = Build::b();
+		Path destination = Env::e().dir(Temporary, Support::Content);
+		destination.makeDir(errs);
+
 		switch(build) {
 			case Single:
 				if(core.user.check(_team,build)) {
-					compose(errs);
+					compose(errs, destination);
 				} else {
 					errs << Message(security,"Not allowed to build this node.");
 				} break;
@@ -306,7 +309,7 @@ namespace node {
 				} break;
 			case Branch:
 				if(core.user.check(_team,build)) {
-					compose(errs);
+					compose(errs, destination);
 					generate(errs,Descendants);
 				} else {
 					errs << Message(security,"Not allowed to branch build here.");
@@ -338,9 +341,7 @@ namespace node {
 		return value;
 	}
 
-    void Content::compose(Messages& errs) {
-		Env& env = Env::e();
-
+    void Content::compose(Messages& errs, Path& destination) {
 		Timing& times = Timing::t();
 		times.set('n'); // set node timer start.
 		ostringstream msg; msg << "Node ID " << idStr << " `" << _ref << "` ";
@@ -352,8 +353,6 @@ namespace node {
         current.page = 0;
 		mt::mstack context;
 		mt::Instance instance(&current);
-		Path destination = env.dir(Temporary, Support::Content);
-//		errs << Message(debug, destination.output() + "; base directory");
 		context.emplace_back(make_pair(nullptr,&instance)); //Make the carriage.
 		long double fileCount = layoutPtr->templates.size();
 		if(fileCount > 0.0L) {

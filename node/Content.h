@@ -51,7 +51,7 @@ namespace node {
 		void reset();
 
 		// Single Node Build.
-		void compose(Messages&);
+		void compose(Messages&, Path&);
 
 	public:
 		static Tree editorial;
