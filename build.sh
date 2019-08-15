@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ev
+#set -ev
 cd ${BUILD_DIR}
 mkdir -p cmake-build-debug
 cd cmake-build-debug
