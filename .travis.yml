@@ -3,6 +3,8 @@ cache:
   - ccache
   - directories:
       - ${HOME}/deps
+      - ${TRAVIS_BUILD_DIR}/cmake-build-release/CMakeFiles
+      - ${TRAVIS_BUILD_DIR}/cmake-build-debug/CMakeFiles
 dist: bionic
 addons:
   apt:
