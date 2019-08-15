@@ -700,14 +700,10 @@ namespace Support {
 		return result.str();
 	}
 
-
 	bool Path::makeTempDir(Messages& e,const string name) {
 		cd(generateTempName(name));
-		return makeDir(e);
+		return makeDir(e, true);
 	}
-
-
-
 
 	//-------------------------------------------------------------------------
 	// Basic Constructor

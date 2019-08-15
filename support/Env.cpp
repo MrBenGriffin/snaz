@@ -223,7 +223,8 @@ namespace Support {
 	void Env::setWorkingDir(Messages& log, bool fullBuild) {
 		if(fullBuild) {
 			WorkingDir = Path();
-//			BuildDir
+			WorkingDir.cd(LogsDir);
+			WorkingDir.cd(BuildDir);
 			WorkingDir.makeTempDir(log,string(Build::b().current()));
 		} else {
 			WorkingDir = dir(Built, Root);

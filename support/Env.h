@@ -21,7 +21,7 @@ namespace Support {
 	private:
 
 		static constexpr auto TmpDir 		= "tmp";
-		static constexpr auto BuildDir 		= "buildlog";
+		static constexpr auto BuildDir 		= "build";
 		static constexpr auto LogsDir 		= "logs";
 		static constexpr auto TestsDir 		= "tests";
 		static constexpr auto FinalDir 		= "final";
