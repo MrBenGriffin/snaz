@@ -298,13 +298,15 @@ namespace Support {
 		Env& env = Env::e();
 		if(!mediaUsed.empty()) {
 			Timing& times = Timing::t();
-			times.set("Media");
+			times.set("Media::save");
 			if ( reset ) {
+				errs << Message(debug,"Found media to save with reset");
 				doSave(errs,c,env.dir(Temporary),env.dir(Built),reset);
 			} else {
+				errs << Message(debug,"Found media to save with no reset");
 				doSave(errs,c,env.dir(Built),env.dir(Built),reset);
 			}
-			times.use(errs,"Media");
+			times.use(errs,"Media::save");
 		} else {
 			errs << Message(info,"No Media to generate.");
 		}
