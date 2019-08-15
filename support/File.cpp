@@ -312,8 +312,15 @@ namespace Support {
 
 	bool Path::makeDir(Messages &e, bool recursive) const {
 		int result;
-		string dirStr(output(true));
-		if (isInside(siteRoot)) {
+		string dirStr;
+		if(relative) {
+			Path full(*this);
+			full.makeAbsoluteFrom(siteRoot);
+			dirStr = full.output();
+		} else {
+			dirStr = output();
+		}
+		if(relative || isInside(siteRoot)) {
 			result = mkdir(dirStr.c_str(),(mode_t) S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);    //Find these at /usr/include/sys/stat.h
 			if (result == 0)
 				return true;

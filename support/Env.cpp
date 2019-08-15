@@ -222,12 +222,13 @@ namespace Support {
 
 	void Env::setWorkingDir(Messages& log, bool fullBuild) {
 		if(fullBuild) {
-			WorkingDir = Path(BuildDir);
+			WorkingDir = Path();
+//			BuildDir
 			WorkingDir.makeTempDir(log,string(Build::b().current()));
 		} else {
 			WorkingDir = dir(Built, Root);
 		}
-		log << Message(debug,WorkingDir.output() + "Working Dir");
+		log << Message(debug,WorkingDir.output() + " (Working Dir)");
 	}
 
 	void Env::doArgs(Messages& log,const int argc,const char **argv) {
