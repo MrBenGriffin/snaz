@@ -167,11 +167,14 @@ void Build::global(Messages& errs) {
 
 //TODO:	RunScript("PRE_PROCESSING_SCRIPT", "Pre Processor", errs);
 	langs(errs);
+	errs  << Message(debug, " TODO:: FINAL_PROCESSING_SCRIPT/POST_PROCESSING_SCRIPT here.");
+
 //
 //TODO:	storageResult script = bld->varStorage.find("FINAL_PROCESSING_SCRIPT");
 //	if (script.found) {
 //		finalscript = script.result;
 //	}
+
 
 //TODO:	RunScript("POST_PROCESSING_SCRIPT", "Post Processor", errs);
 //	RunScript("~POST_PROCESSING_SCRIPT", "Post Processor", errs);
@@ -179,13 +182,16 @@ void Build::global(Messages& errs) {
 // This is a post-processing script, NOT a suffix mapping script.
 // Therefore, there is only one parameter - the path to the final web root directory
 
-
+	errs.push(Message(info,"Saving Media"));
 	_media->save(errs,sql,allTechs && full); //Condition for full reset.
-//TODO:	iMedia::move(errs);
 	_media->close();
+	errs.pop();
+	errs.push(Message(info,"Resetting Content"));
 	content::Editorial::e().reset(errs,*sql);
 	mt::Definition::shutdown(errs,*sql,_current); //bld->savePersistance(); prunePersistance(); clearPersistance();
+	errs.pop();
 //TODO: do FINAL_PROCESSING_SCRIPT stuff here if it's a full, final build..
+	errs  << Message(debug, " TODO:: FINAL_PROCESSING_SCRIPT here.");
 
 }
 
