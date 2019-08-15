@@ -321,17 +321,12 @@ namespace Support {
 		auto dirStr = siteRoot.output(true); // We want to trail a slash here..
 		for(auto& bit : path) {
 			dirStr.append(bit);
-			result = mkdir(dirStr.c_str(), (mode_t) S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);    // /usr/include/sys/stat.h
+			result = mkdir(dirStr.c_str(), (mode_t)(S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH));    // /usr/include/sys/stat.h
 			if(result == 0 || errno == EEXIST || errno == EISDIR) {
 				dirStr.push_back('/');
 			} else {
-				string message("Directry creation '" + dirStr + "' failed: ");
-				char* errstr = strerror(errno);
-				if(errstr != nullptr) {
-					message.append(errstr);
-				} else {
-					message.append("for an unknown reason");
-				}
+				string message("Directory creation '" + dirStr + "' failed: ");
+				message.append(std::strerror(errno));
 				e << Message(error,message);
 				return false;
 			}

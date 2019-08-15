@@ -245,6 +245,8 @@ void Build::techs(Messages& errs) {
 	}
 }
 
+//doSave(errs,c,env.dir(Temporary),env.dir(Built),reset);
+
 void Build::files(Messages& errs) {
 	if(requestedNodes.empty()) {
 		node::Content::get(node::Content::root()->id()).generate(errs,Full);

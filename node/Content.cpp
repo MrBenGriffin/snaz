@@ -365,17 +365,17 @@ namespace node {
 					current.currentTemplate = t;
 					file = finalFilenames[current.page];
 					file.setExtension(t->suffix->ref());
-					filename = file.getFileName(); //used in logging...
-					string filepath = file.output(true);
+//					filename = file.getFileName(); //used in logging...
+					filename = file.output(true);
 					errs.reset();
 					mt::Wss::push(&(t->nl)); //!!! another global.. need to add to the metrics above.
 					t->code.expand(errs, content, context); //no context here...
 					mt::Wss::pop();
 					try {
-						std::ofstream outFile(filepath);
+						std::ofstream outFile(filename);
 						outFile << content.str();
 						outFile.close();
-						chmod(filepath.c_str(), S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
+						chmod(filename.c_str(), (S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH));
 					}    //create the file!
 					catch (...) {
 						errs << Message(error, "Failed to create file " + filename);
