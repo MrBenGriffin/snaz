@@ -26,32 +26,33 @@ services:
 
 before_install:
   - echo -n | openssl s_client -connect https://scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+  - export BUILD_DIR="${TRAVIS_BUILD_DIR}"
   - export DEPS_DIR="${HOME}/deps"
   - export LOCAL_DIR="${HOME}/deps/local"
   - chmod 755 *.sh
   - mkdir -p ${LOCAL_DIR}
   - mkdir -p ${DEPS_DIR}/cmake/bin
   - export PATH=${LOCAL_DIR}/bin:${DEPS_DIR}/cmake/bin:${PATH}
-  - source ${TRAVIS_BUILD_DIR}/deps.sh travis
-  - cd ${TRAVIS_BUILD_DIR}
+  - source ${BUILD_DIR}/deps.sh travis
+  - cd ${BUILD_DIR}
 
 install:
-  - ./build.sh
+  - source build.sh
 
 before_script:
   - mysql -e 'CREATE DATABASE buildtest;'
-  - mysql buildtest < ${TRAVIS_BUILD_DIR}/buildtest_edit.sql
+  - mysql buildtest < ${BUILD_DIR}/buildtest_edit.sql
 
 script:
-  - cd ${TRAVIS_BUILD_DIR}
-  - export SQL_CONFIG_FILE=${TRAVIS_BUILD_DIR}/travis.cnf
+  - cd ${BUILD_DIR}
+  - export SQL_CONFIG_FILE=${BUILD_DIR}/travis.cnf
   - export REMOTE_USER=bgriffin
   - export RS_SITENAME=TestBuilder
   - cmake-build-debug/macrotext -tests
-  - mysql --defaults-extra-file=${TRAVIS_BUILD_DIR}/travis.cnf -e 'select purpose,channel,replace(message,"\n"," ") as msg from bldlog order by ts';
-  - mysql --defaults-extra-file=${TRAVIS_BUILD_DIR}/travis.cnf -e 'delete from bldlog';
+  - mysql --defaults-extra-file=${BUILD_DIR}/travis.cnf -e 'select purpose,channel,replace(message,"\n"," ") as msg from bldlog order by ts';
+  - mysql --defaults-extra-file=${BUILD_DIR}/travis.cnf -e 'delete from bldlog';
   - cmake-build-debug/macrotext -P
-  - mysql --defaults-extra-file=${TRAVIS_BUILD_DIR}/travis.cnf -e 'select purpose,channel,replace(message,"\n"," ") as msg from bldlog order by ts';
-  - mysql --defaults-extra-file=${TRAVIS_BUILD_DIR}/travis.cnf -e 'delete from bldlog';
+  - mysql --defaults-extra-file=${BUILD_DIR}/travis.cnf -e 'select purpose,channel,replace(message,"\n"," ") as msg from bldlog order by ts';
+  - mysql --defaults-extra-file=${BUILD_DIR}/travis.cnf -e 'delete from bldlog';
 
 
