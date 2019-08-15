@@ -175,6 +175,7 @@ void Build::global(Messages& errs) {
 //		finalscript = script.result;
 //	}
 
+	node::Content::move(errs,allTechs && full);
 
 //TODO:	RunScript("POST_PROCESSING_SCRIPT", "Post Processor", errs);
 //	RunScript("~POST_PROCESSING_SCRIPT", "Post Processor", errs);
@@ -206,7 +207,6 @@ void Build::langs(Messages& errs) {
 		node::Taxon().loadTree(errs,*sql,lang.first, _current);
 		node::Content::updateBirthAndDeath(errs,*sql,lang.first,_current); //* Per Language.
 		node::Content::updateContent(errs,*sql,lang.first,_current); //this moves the latest version into bldcontent.
-		//TODO:: Content APPROVERS??.
 		node::Content().loadTree(errs,*sql,lang.first,_current);
 		content::Editorial::e().load(errs,*sql,lang.first,_current);
 		if(!calculatedProgress) {
