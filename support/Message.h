@@ -117,6 +117,7 @@ namespace Support {
 		void reset();
 		void push(Message const&);
 		void add(Message const&);
+		bool justMarked() const;
 		void pop();
 
 		string line(size_t) const;

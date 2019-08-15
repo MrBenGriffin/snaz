@@ -295,6 +295,13 @@ namespace Support {
 		return _marked;
 	}
 
+	bool Messages::justMarked() const {
+		if (_marked && !list.empty()) {
+			auto& m = list.back();
+			return m.purpose == alert;
+		} else return false;
+	}
+
 	void Messages::reset() {
 		list.clear();
 		_marked = false;

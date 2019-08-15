@@ -45,7 +45,7 @@ namespace content {
 			ostringstream err;
 			err << "The segment name with reference '" << ref
 				<< "' is not defined on this website and is not an alias of layout '" << layout->ref << "'";
-			errs << Message(trace,err.str());
+			errs << Message(error,err.str());
 		}
 		return result;
 	}

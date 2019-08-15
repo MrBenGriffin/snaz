@@ -160,6 +160,9 @@ namespace mt {
 			const content::Layout* layout = interest->layout();
 			if(layout) {
 				auto segment = layout->segmentInScope(e,my.parm(2));
+				if(e.justMarked()) {
+					doTrace(e, context);
+				}
 				my.logic(segment.first,3);
 			} else {
 				e << Message(error,_name + " has no layout.");
