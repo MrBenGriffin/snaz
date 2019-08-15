@@ -327,9 +327,8 @@ namespace Support {
 		}
 		errs << Message(debug,buildDir.output() + " (Build)");
 		errs << Message(debug,finalDir.output() + " (Final)");
-		buildDir.makeDir(errs, true);
-		finalDir.makeDir(errs, true);
-
+		buildDir.makeDir(errs);
+		finalDir.makeDir(errs);
 
 		for (auto ref : mediaUsed) {
 			MediaInfo& filebits = filenames[ref]; //Get file information from the filenames map.
@@ -339,7 +338,7 @@ namespace Support {
 			filename << filebits.base << "." << filebits.ext;
 			File outFile(filebits.dir,filename.str());
 			outFile.makeAbsoluteFrom(buildDir);
-			outFile.makeDir(errs, true);
+			outFile.makeDir(errs);
 
 			File orgFile(filebits.dir,filename.str());
 			orgFile.makeAbsoluteFrom(finalDir);

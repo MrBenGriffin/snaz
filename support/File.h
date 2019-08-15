@@ -59,7 +59,7 @@ namespace Support {
 		bool match(Messages &, const string &, const string &) const;
 		virtual string output(bool = true) const;
 		virtual bool exists() const;
-		bool makeDir(Messages &, bool= false) const;
+		bool makeDir(Messages &) const;
 		bool removeDir(Messages &, bool= false, bool= false) const;
 		bool moveTo(Messages &, const Path &) const;
 		bool copyTo(const Path &, Messages &, bool= false, bool= false) const;

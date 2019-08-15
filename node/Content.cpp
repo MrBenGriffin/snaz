@@ -198,7 +198,7 @@ namespace node {
 		times.set("setLayouts");
 
 		auto siteDir = env.dir(Built, Support::Content);
-		siteDir.makeDir(errs,true);
+		siteDir.makeDir(errs);
 
 		for (auto i : editorial.twNodes) {
 			Content& node = nodes[i.second->id()];

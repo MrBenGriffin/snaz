@@ -3,6 +3,7 @@
 //
 
 #include <cerrno>
+#include <cstring>
 #include <cstdio>
 #include <cstring>
 #include <ctime>
@@ -285,7 +286,7 @@ namespace Support {
 	string Path::output(bool trailing) const {
 		ostringstream result;
 		if(!relative) {
-			result << "/";
+			result << directory_separator;
 		}
 		if(!path.empty()) {
 			size_t p = path.size() - 1;
@@ -310,37 +311,32 @@ namespace Support {
 		return result == 0 && buf.st_mode & S_IFDIR;
 	}
 
-	bool Path::makeDir(Messages &e, bool recursive) const {
+	bool Path::makeDir(Messages &e) const {
 		int result;
-		string dirStr;
-		if(relative) {
-			Path full(*this);
-			full.makeAbsoluteFrom(siteRoot);
-			dirStr = full.output();
-		} else {
-			dirStr = output();
+		if(!relative) {
+			Path rel(*this);
+			rel.makeRelativeTo(siteRoot);
+			return rel.makeDir(e);
 		}
-		if(relative || isInside(siteRoot)) {
-			result = mkdir(dirStr.c_str(),(mode_t) S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);    //Find these at /usr/include/sys/stat.h
-			if (result == 0)
-				return true;
-			else if (errno == EEXIST || errno == EISDIR)    // If already exists or is a directory
-				return true;
-			else if ((errno == ENOENT) && recursive) {    // If not exists and recursive
-				Path path1 = *this;
-				path1.cd("/");
-				for (size_t i = 0; i < path.size() - 1; i++) {
-					path1.cd(this->getDirAt(i));
-					if (!path1.makeDir(e,false))
-						return false;
+		auto dirStr = siteRoot.output(true); // We want to trail a slash here..
+		for(auto& bit : path) {
+			dirStr.append(bit);
+			result = mkdir(dirStr.c_str(), (mode_t) S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);    // /usr/include/sys/stat.h
+			if(result == 0 || errno == EEXIST || errno == EISDIR) {
+				dirStr.push_back('/');
+			} else {
+				string message("Directry creation '" + dirStr + "' failed: ");
+				char* errstr = strerror(errno);
+				if(errstr != nullptr) {
+					message.append(errstr);
+				} else {
+					message.append("for an unknown reason");
 				}
-				return this->makeDir(e,false);
+				e << Message(error,message);
+				return false;
 			}
-		} else {
-			string rootStr(siteRoot.output(true));
-			e << Message(range,"The path " + dirStr + " is not inside the directory " + rootStr);
 		}
-		return false;
+		return true;
 	}
 
 	bool Path::removeDir(Messages& e,bool recursive, bool stop_on_error) const {
@@ -702,7 +698,7 @@ namespace Support {
 
 	bool Path::makeTempDir(Messages& e,const string name) {
 		cd(generateTempName(name));
-		return makeDir(e, true);
+		return makeDir(e);
 	}
 
 	//-------------------------------------------------------------------------
