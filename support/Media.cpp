@@ -364,32 +364,28 @@ namespace Support {
 		}
 	}
 
-	void Media::doTransforms(Messages& errs,string& ref,const Path& buildDir,const Path& finalDir,const string& t_origin,std::time_t orgdate,MediaInfo& filebits,bool reset) {
+	void Media::doTransforms(Messages& errs,string& ref,const Path& buildDir,const Path& finalDir,const string& t_origin,std::time_t original_date,MediaInfo& filebits,bool reset) {
 		if(instances.find(ref) != instances.end()) {
 			unordered_map<string,string>& mediaTransforms = instances[ref]; //And get any transforms.
 			long double transformCount = mediaTransforms.size();
 			if(transformCount > 0.0L) {
 				long double progressValue(1.0L / transformCount);  //eg 1/2 for two transforms.
 				for (auto trn : mediaTransforms) {
-					File trFinalFile(finalDir);
-					File trBuildFile(buildDir);
-					trFinalFile.setFileName(trn.first,true); //ignore leading slash.
-					trBuildFile.setFileName(trn.first,true);
-
-					bool needGen = true;
-					if (filebits.modified <= orgdate) { //the media source is old.
-						std::time_t trdate = trFinalFile.getModDate();	//if the transform changed we will have a different md5.
-						if (trdate > 0) {
-							needGen = false;
-							if(reset) {
-								trFinalFile.copyTo(trBuildFile,errs,false);
-							}
-						}
-					}
-					if(needGen) {
-						ostringstream tos;
-						tos << t_origin << " " << trn.second << " " << trBuildFile.output(true);
+					File outFile(filebits.dir,trn.first);
+					outFile.makeAbsoluteFrom(buildDir);
+					outFile.makeDir(errs);
+					File orgFile(filebits.dir,trn.first);
+					orgFile.makeAbsoluteFrom(finalDir);
+					if(filebits.modified > original_date) { // needs outputting.
+						errs << Message(debug,trn.first + " (transform)");
+						std::ostringstream tos;
+						tos << t_origin << " " << trn.second << " " << outFile.output(true);
 						imagick.exec(errs,tos.str());
+					} else {
+						errs << Message(debug,trn.first + " (use original) ");
+						if ( reset ) {
+							orgFile.copyTo(outFile,errs,false);
+						}
 					}
 					errs << Message(channel::transform,ref + ":" + trn.first,progressValue);
 				}
