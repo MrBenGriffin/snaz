@@ -327,6 +327,9 @@ namespace Support {
 		}
 		errs << Message(debug,buildDir.output() + " (Build)");
 		errs << Message(debug,finalDir.output() + " (Final)");
+		buildDir.makeDir(errs, true);
+		finalDir.makeDir(errs, true);
+
 
 		for (auto ref : mediaUsed) {
 			MediaInfo& filebits = filenames[ref]; //Get file information from the filenames map.
