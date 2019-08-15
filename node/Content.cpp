@@ -397,38 +397,4 @@ namespace node {
 		errs.pop();
     }
 
-//-----------------------------------------------------------------------------
-// Happens once per build... or not at all..
-// TODO:: This should really be refactored into a Path function
-	void Content::move(Messages& errs,bool reset) {
-		auto& env = Env::e();
-		Path buildDir = env.dir(Temporary, Support::Content);
-		File removeDir(Path("/bin"),"rm"); removeDir.addArg("-rf");
-		if ( reset ) {
-			errs << Message(info, " Moving Content");
-			Path finalDir = env.dir(Built, Support::Content);
-			Path finalDirOld = finalDir; finalDirOld.pop(); finalDirOld.cd("old");
-			File moveOrgToOld(Path("/bin"),"mv"); moveOrgToOld.addArg("-f");
-			File moveOutToOrg(moveOrgToOld);
-
-			//move org to old.
-			moveOrgToOld.addArg(finalDir.output(false));
-			moveOrgToOld.addArg(finalDirOld.output(false));
-			moveOrgToOld.exec(errs);
-			//move out to org.
-			moveOutToOrg.addArg(buildDir.output(false));
-			moveOutToOrg.addArg(finalDir.output(false));
-			moveOutToOrg.exec(errs);
-			//remove old..
-			removeDir.addArg(finalDirOld.output(false));
-			removeDir.exec(errs);
-		} else {
-			errs << Message(info, "Removing Temporary");
-			//the built media have been moved/copied just delete temp.
-			removeDir.addArg(buildDir.output(false));
-			removeDir.exec(errs);
-		}
-	}
-
-
 }

@@ -42,6 +42,7 @@ struct Technology {
 	size_t id;
 	std::string name;
 	std::string dir;
+	void move(Support::Messages&,bool);
 };
 
 class Build {

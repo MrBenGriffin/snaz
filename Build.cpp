@@ -44,6 +44,40 @@ using namespace std;
 using namespace Support;
 using namespace Support::Db;
 
+//-----------------------------------------------------------------------------
+// Happens once per build... or not at all..
+// TODO:: The most of this should really be refactored into a Path function
+void Technology::move(Messages& errs,bool reset) {
+	auto& env = Env::e();
+	Path buildDir = env.dir(Temporary, Support::Content);
+	File removeDir(Path("/bin"),"rm"); removeDir.addArg("-rf");
+	if ( reset ) {
+		errs << Message(info, " Moving Content");
+		Path finalDir = env.dir(Built, Support::Content);
+		Path finalDirOld = finalDir; finalDirOld.pop(); finalDirOld.cd("old");
+		File moveOrgToOld(Path("/bin"),"mv"); moveOrgToOld.addArg("-f");
+		File moveOutToOrg(moveOrgToOld);
+
+		//move org to old.
+		moveOrgToOld.addArg(finalDir.output(false));
+		moveOrgToOld.addArg(finalDirOld.output(false));
+		moveOrgToOld.exec(errs);
+		//move out to org.
+		moveOutToOrg.addArg(buildDir.output(false));
+		moveOutToOrg.addArg(finalDir.output(false));
+		moveOutToOrg.exec(errs);
+		//remove old..
+		removeDir.addArg(finalDirOld.output(false));
+		removeDir.exec(errs);
+	} else {
+		errs << Message(info, "Removing Temporary");
+		//the built media have been moved/copied just delete temp.
+		removeDir.addArg(buildDir.output(false));
+		removeDir.exec(errs);
+	}
+}
+
+
 Build& Build::b() {
 	static Build singleton;
 	return singleton;
@@ -175,8 +209,6 @@ void Build::global(Messages& errs) {
 //		finalscript = script.result;
 //	}
 
-	node::Content::move(errs,allTechs && full);
-
 //TODO:	RunScript("POST_PROCESSING_SCRIPT", "Post Processor", errs);
 //	RunScript("~POST_PROCESSING_SCRIPT", "Post Processor", errs);
 //	errs.str(Logger::log);
@@ -241,13 +273,12 @@ void Build::techs(Messages& errs) {
 			errs << Message(fatal,"exception thrown.");
 		}
 		//.....
+		techno.second.move(errs,allTechs && full);
 		times.use(errs,"Tech " + techno.second.name);
 		technologies.pop_front();
 		errs << Message(channel::technology,techno.second.name,1.0L);
 	}
 }
-
-//doSave(errs,c,env.dir(Temporary),env.dir(Built),reset);
 
 void Build::files(Messages& errs) {
 	if(requestedNodes.empty()) {
