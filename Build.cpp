@@ -216,14 +216,16 @@ void Build::global(Messages& errs) {
 // Therefore, there is only one parameter - the path to the final web root directory
 
 	 errs.push(Message(info,"Saving Media"));
-	_media->save(errs,sql,allTechs && full); //Condition for full reset.
-	_media->move(errs,allTechs && full);
+	_media->save(errs,sql,full); //Condition for full reset.
+	_media->move(errs,full);
 	_media->close();
 	errs.pop();
 
 	errs.push(Message(info,"Resetting Content"));
 	content::Editorial::e().reset(errs,*sql);
 	mt::Definition::shutdown(errs,*sql,_current); //bld->savePersistance(); prunePersistance(); clearPersistance();
+	env.releaseWorkingDir(errs,full);
+
 	errs.pop();
 //TODO: do FINAL_PROCESSING_SCRIPT stuff here if it's a full, final build..
 	errs  << Message(debug, " TODO:: FINAL_PROCESSING_SCRIPT here.");
@@ -273,7 +275,7 @@ void Build::techs(Messages& errs) {
 			errs << Message(fatal,"exception thrown.");
 		}
 		//.....
-		techno.second.move(errs,allTechs && full);
+		techno.second.move(errs,full);
 		times.use(errs,"Tech " + techno.second.name);
 		technologies.pop_front();
 		errs << Message(channel::technology,techno.second.name,1.0L);

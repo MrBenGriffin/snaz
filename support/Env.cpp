@@ -232,6 +232,14 @@ namespace Support {
 		log << Message(debug,WorkingDir.output() + " (Working Dir)");
 	}
 
+	void Env::releaseWorkingDir(Messages& log, bool fullBuild) {
+		if(fullBuild) {
+			WorkingDir.removeDir(log);
+		}
+		log << Message(debug,"Released (Working Dir)");
+	}
+
+
 	void Env::doArgs(Messages& log,const int argc,const char **argv) {
 		Timing& timer = Timing::t(); //auto startup at instantiation.
 		Build& build = Build::b();

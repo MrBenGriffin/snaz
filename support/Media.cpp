@@ -300,6 +300,8 @@ namespace Support {
 			errs.push(Message(container,"Saving Media"));
 			Timing& times = Timing::t();
 			times.set("Media::save");
+			env.dir(Temporary, Blobs).makeDir(errs);
+			env.dir(Built, Blobs).makeDir(errs);
 			if ( reset ) {
 				errs << Message(debug,"Found media to save with reset");
 				doSave(errs,c,env.dir(Temporary),env.dir(Built),reset);
@@ -325,11 +327,6 @@ namespace Support {
 			str << (unsigned)adjust << " unused media skipped";
 			errs << Message(channel::media,str.str(),adjust);
 		}
-		errs << Message(debug,buildDir.output() + " (Build)");
-		errs << Message(debug,finalDir.output() + " (Final)");
-		buildDir.makeDir(errs);
-		finalDir.makeDir(errs);
-
 		for (auto ref : mediaUsed) {
 			MediaInfo& filebits = filenames[ref]; //Get file information from the filenames map.
 			times.set(ref);
@@ -342,21 +339,23 @@ namespace Support {
 
 			File orgFile(filebits.dir,filename.str());
 			orgFile.makeAbsoluteFrom(finalDir);
-			//set up the basis for the file.
 
 			::time_t orgdate = orgFile.getModDate();				// the unix_time value of the modification date of the current published file (or zero).
 			string outfp = outFile.output(true);
 			string t_origin = outfp; //what to use as the basis of a transform.
 			if(filebits.modified > orgdate) { // needs outputting.
+				errs << Message(debug,outfp + " (write)");
 				writeMedia(errs,query,store[filebits.version],outfp);
 			} else {
 				string orgfp = orgFile.output(true);
 				t_origin = orgfp;
+				errs << Message(debug,outfp + " (copy from) " + orgfp);
 				if ( reset ) {
 					orgFile.copyTo(outFile,errs,false);
 				}
 			}
 			if(instances.find(ref) != instances.end()) {
+				errs << Message(debug,ref + " needs transforms..");
 				doTransforms(errs, ref, buildDir, finalDir, t_origin, orgdate, filebits, reset);
 			} else {
 				errs << Message(channel::media,ref,1.0L);

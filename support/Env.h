@@ -66,6 +66,8 @@ namespace Support {
 
 		std::string baseUrl(buildArea);
 		void setWorkingDir(Messages&, bool);
+		void releaseWorkingDir(Messages&, bool);
+
 		const std::deque<size_t>& techs() const {return askedTechs;}
 		const std::deque<size_t>& langs() const {return askedLangs;}
 	};
