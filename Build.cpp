@@ -182,10 +182,12 @@ void Build::global(Messages& errs) {
 // This is a post-processing script, NOT a suffix mapping script.
 // Therefore, there is only one parameter - the path to the final web root directory
 
-	errs.push(Message(info,"Saving Media"));
+	 errs.push(Message(info,"Saving Media"));
 	_media->save(errs,sql,allTechs && full); //Condition for full reset.
+	_media->move(errs,allTechs && full);
 	_media->close();
 	errs.pop();
+
 	errs.push(Message(info,"Resetting Content"));
 	content::Editorial::e().reset(errs,*sql);
 	mt::Definition::shutdown(errs,*sql,_current); //bld->savePersistance(); prunePersistance(); clearPersistance();

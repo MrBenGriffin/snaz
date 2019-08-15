@@ -365,31 +365,31 @@ namespace Support {
 		}
 	}
 
-	void Media::doTransforms(Messages& errs,string& ref,const Path& outPath,const Path& orgPath,const string& t_origin,std::time_t orgdate,MediaInfo& filebits,bool reset) {
+	void Media::doTransforms(Messages& errs,string& ref,const Path& buildDir,const Path& finalDir,const string& t_origin,std::time_t orgdate,MediaInfo& filebits,bool reset) {
 		if(instances.find(ref) != instances.end()) {
 			unordered_map<string,string>& mediaTransforms = instances[ref]; //And get any transforms.
 			long double transformCount = mediaTransforms.size();
 			if(transformCount > 0.0L) {
 				long double progressValue(1.0L / transformCount);  //eg 1/2 for two transforms.
 				for (auto trn : mediaTransforms) {
-					File trOrgFile(orgPath);
-					File trOutFile(outPath);
-					trOrgFile.setFileName(trn.first,true); //ignore leading slash.
-					trOutFile.setFileName(trn.first,true);
+					File trFinalFile(finalDir);
+					File trBuildFile(buildDir);
+					trFinalFile.setFileName(trn.first,true); //ignore leading slash.
+					trBuildFile.setFileName(trn.first,true);
 
 					bool needGen = true;
 					if (filebits.modified <= orgdate) { //the media source is old.
-						std::time_t trdate = trOrgFile.getModDate();	//if the transform changed we will have a different md5.
+						std::time_t trdate = trFinalFile.getModDate();	//if the transform changed we will have a different md5.
 						if (trdate > 0) {
 							needGen = false;
 							if(reset) {
-								trOrgFile.copyTo(trOutFile,errs,false);
+								trFinalFile.copyTo(trBuildFile,errs,false);
 							}
 						}
 					}
 					if(needGen) {
 						ostringstream tos;
-						tos << t_origin << " " << trn.second << " " << trOutFile.output(true);
+						tos << t_origin << " " << trn.second << " " << trBuildFile.output(true);
 						imagick.exec(errs,tos.str());
 					}
 					errs << Message(channel::transform,ref + ":" + trn.first,progressValue);
@@ -408,6 +408,7 @@ namespace Support {
 		Path buildDir = env.dir(Temporary, Blobs);
 		File removeDir(Path("/bin"),"rm"); removeDir.addArg("-rf");
 		if ( reset ) {
+			errs << Message(info, " Moving Media");
 			Path finalDir = env.dir(Built, Blobs);
 			Path finalDirOld = finalDir; finalDirOld.pop(); finalDirOld.cd("old");
 			File moveOrgToOld(Path("/bin"),"mv"); moveOrgToOld.addArg("-f");
@@ -425,6 +426,7 @@ namespace Support {
 			removeDir.addArg(finalDirOld.output(true));
 			removeDir.exec(errs);
 		} else {
+			errs << Message(info, "Removing Temporary");
 			//the built media have been moved/copied just delete temp.
 			removeDir.addArg(buildDir.output(true));
 			removeDir.exec(errs);
