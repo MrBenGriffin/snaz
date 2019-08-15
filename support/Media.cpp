@@ -364,7 +364,7 @@ namespace Support {
 		}
 	}
 
-	void Media::doTransforms(Messages& errs,string& ref,const Path& buildDir,const Path& finalDir,const string& t_origin,std::time_t original_date,MediaInfo& filebits,bool reset) {
+	void Media::doTransforms(Messages& errs,string& ref,const Path& buildDir,const Path& finalDir,const string& t_origin,std::time_t orgdate,MediaInfo& filebits,bool reset) {
 		if(instances.find(ref) != instances.end()) {
 			unordered_map<string,string>& mediaTransforms = instances[ref]; //And get any transforms.
 			long double transformCount = mediaTransforms.size();
@@ -376,7 +376,9 @@ namespace Support {
 					outFile.makeDir(errs);
 					File orgFile(filebits.dir,trn.first);
 					orgFile.makeAbsoluteFrom(finalDir);
-					if(filebits.modified > original_date) { // needs outputting.
+					::time_t original_date = orgFile.getModDate();				// the unix_time value of the modification date of the current published file (or zero).
+					// Need to test against the master file AND the transformed file.
+					if(filebits.modified > original_date || orgdate > original_date) { // needs outputting.
 						errs << Message(debug,trn.first + " (transform)");
 						std::ostringstream tos;
 						tos << t_origin << " " << trn.second << " " << outFile.output(true);
