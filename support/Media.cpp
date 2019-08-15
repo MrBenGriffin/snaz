@@ -297,23 +297,25 @@ namespace Support {
 	void Media::save(Messages& errs,Db::Connection* c,bool reset) {
 		Env& env = Env::e();
 		if(!mediaUsed.empty()) {
+			errs.push(Message(container,"Saving Media"));
 			Timing& times = Timing::t();
 			times.set("Media::save");
 			if ( reset ) {
 				errs << Message(debug,"Found media to save with reset");
-				doSave(errs,c,env.dir(Temporary),env.dir(Built),reset);
+				doSave(errs,c,env.dir(Temporary, Blobs),env.dir(Built, Blobs),reset);
 			} else {
 				errs << Message(debug,"Found media to save with no reset");
-				doSave(errs,c,env.dir(Built),env.dir(Built),reset);
+				doSave(errs,c,env.dir(Built, Blobs),env.dir(Built, Blobs),reset);
 			}
 			times.use(errs,"Media::save");
+			errs.pop();
 		} else {
 			errs << Message(info,"No Media to generate.");
 		}
 	}
 
 //The following is run once per build.
-	void Media::doSave(Messages& errs,Db::Connection* c,const Path& outDir,const Path& orgDir,bool reset) {
+	void Media::doSave(Messages& errs,Db::Connection* c,const Path& buildDir,const Path& finalDir,bool reset) {
 		Timing& times = Timing::t();
 		Query* query = c->query(errs);
 		map<size_t,size_t> store = loadBinaries(errs,query); // Now we have a version -> binary map.
@@ -323,6 +325,9 @@ namespace Support {
 			str << (unsigned)adjust << " unused media skipped";
 			errs << Message(channel::media,str.str(),adjust);
 		}
+		errs << Message(debug,buildDir.output() + " (Build)");
+		errs << Message(debug,finalDir.output() + " (Final)");
+
 		for (auto ref : mediaUsed) {
 			MediaInfo& filebits = filenames[ref]; //Get file information from the filenames map.
 			times.set(ref);
@@ -330,11 +335,11 @@ namespace Support {
 			ostringstream filename;
 			filename << filebits.base << "." << filebits.ext;
 			File outFile(filebits.dir,filename.str());
-			outFile.makeAbsoluteFrom(outDir);
+			outFile.makeAbsoluteFrom(buildDir);
 			outFile.makeDir(errs, true);
 
 			File orgFile(filebits.dir,filename.str());
-			orgFile.makeAbsoluteFrom(orgDir);
+			orgFile.makeAbsoluteFrom(finalDir);
 			//set up the basis for the file.
 
 			::time_t orgdate = orgFile.getModDate();				// the unix_time value of the modification date of the current published file (or zero).
@@ -350,7 +355,7 @@ namespace Support {
 				}
 			}
 			if(instances.find(ref) != instances.end()) {
-				doTransforms(errs, ref, outDir, orgDir, t_origin, orgdate, filebits, reset);
+				doTransforms(errs, ref, buildDir, finalDir, t_origin, orgdate, filebits, reset);
 			} else {
 				errs << Message(channel::media,ref,1.0L);
 			}
@@ -398,28 +403,28 @@ namespace Support {
 //Happens once per build... or not at all..
 	void Media::move(Messages& errs,bool reset) {
 		auto& env = Env::e();
-		Path outDir = env.dir(Temporary, Blobs);
+		Path buildDir = env.dir(Temporary, Blobs);
 		File removeDir(Path("/bin"),"rm"); removeDir.addArg("-rf");
 		if ( reset ) {
-			Path orgDir = env.dir(Built, Blobs);
-			Path orgOld = orgDir; orgOld.pop(); orgOld.cd("old");
+			Path finalDir = env.dir(Built, Blobs);
+			Path finalDirOld = finalDir; finalDirOld.pop(); finalDirOld.cd("old");
 			File moveOrgToOld(Path("/bin"),"mv"); moveOrgToOld.addArg("-f");
 			File moveOutToOrg(moveOrgToOld);
 
 			//move org to old.
-			moveOrgToOld.addArg(orgDir.output(true));
-			moveOrgToOld.addArg(orgOld.output(true));
+			moveOrgToOld.addArg(finalDir.output(true));
+			moveOrgToOld.addArg(finalDirOld.output(true));
 			moveOrgToOld.exec(errs);
 			//move out to org.
-			moveOutToOrg.addArg(outDir.output(true));
-			moveOutToOrg.addArg(orgDir.output(true));
+			moveOutToOrg.addArg(buildDir.output(true));
+			moveOutToOrg.addArg(finalDir.output(true));
 			moveOutToOrg.exec(errs);
 			//remove old..
-			removeDir.addArg(orgOld.output(true));
+			removeDir.addArg(finalDirOld.output(true));
 			removeDir.exec(errs);
 		} else {
 			//the built media have been moved/copied just delete temp.
-			removeDir.addArg(outDir.output(true));
+			removeDir.addArg(buildDir.output(true));
 			removeDir.exec(errs);
 		}
 	}
