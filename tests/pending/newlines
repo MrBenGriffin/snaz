@@ -1,0 +1,12 @@
+// Still getting really weird values for rh etc.
+// 111 expansion (111 = strip,ptrim,preparse) newline:[␤ ␊ ␍] tab:␉
+// Foundation has the following definitions.
+// CRLF stuff rh: 7B7C0D0A7C7D
+// r: 7B0D0A7D
+
+# cr/crlf/newline tests
+U	frh		0	0	00	{|␍␊|}
+U	frr		0	0	00	{␍␊}
+
+frh01		[@frh()]		[␍␊]
+frr01		[@frr()]		[␍␊]

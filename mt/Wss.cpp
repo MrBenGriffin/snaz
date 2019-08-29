@@ -35,7 +35,10 @@ namespace mt {
 	void Wss::expand(Messages&,MacroText &out, mstack &) const {
 		if (!out.empty()) {
 			vector<string> notNL;
-			Support::tolist(notNL, text, "\n");
+			Support::tolist(notNL, text, "\r\n");
+			if (notNL.size() == 1) {
+				Support::tolist(notNL, text, "\n");
+			}
 			if(notNL.size() == 1) {
 				if(!text.empty()) {
 					auto token=make_unique<Wss>(this->text);

@@ -30,7 +30,7 @@ include_directories(SYSTEM ${LOCAL_DIR}/include;$ENV{HOME}/local/include;/usr/lo
 include_directories(${CMAKE_CURRENT_SOURCE_DIR};${CMAKE_CURRENT_BINARY_DIR})
 message(STATUS "Local Include: ${LOCAL_DIR}/include")
 #find_library(MYSQLCLIENT libmysqlclient HINTS "/usr/local/mysql/lib" )
-#MESSAGE("MYSQL LIB: " ${MYSQLCLIENT})
+#MESSAGE("MYSQL LIB:" ${MYSQLCLIENT})
 
 link_libraries(${CMAKE_DL_LIBS})
 
@@ -39,7 +39,6 @@ FLEX_TARGET(classic mt/classic.lpp ${CMAKE_CURRENT_BINARY_DIR}/classic.yy.cpp CO
 BISON_TARGET(parser mt/parser.ypp ${CMAKE_CURRENT_BINARY_DIR}/parser.tab.cpp COMPILE_FLAGS "-Wother -Wconflicts-sr")
 ADD_FLEX_BISON_DEPENDENCY(advanced parser)
 ADD_FLEX_BISON_DEPENDENCY(classic parser)
-
 
 add_executable(macrotext ${BISON_parser_OUTPUTS} ${FLEX_advanced_OUTPUTS} ${FLEX_classic_OUTPUTS}
         mt/Advanced.h mt/Classic.h mt/Scanner.h mt/declarations.h
