@@ -405,11 +405,11 @@ namespace Support {
 // TODO:: This should really be refactored into a Path function
 	void Media::move(Messages& errs,bool reset) {
 		auto& env = Env::e();
+		Path finalDir = env.dir(Built, Blobs);
 		Path buildDir = env.dir(Temporary, Blobs);
 		File removeDir(Path("/bin"),"rm"); removeDir.addArg("-rf");
 		if ( reset ) {
 			errs << Message(info, " Moving Media");
-			Path finalDir = env.dir(Built, Blobs);
 			Path finalDirOld = finalDir; finalDirOld.pop(); finalDirOld.cd("old");
 			File moveOrgToOld(Path("/bin"),"mv"); moveOrgToOld.addArg("-f");
 			File moveOutToOrg(moveOrgToOld);
@@ -426,10 +426,12 @@ namespace Support {
 			removeDir.addArg(finalDirOld.output(false));
 			removeDir.exec(errs);
 		} else {
-			errs << Message(info, "Removing Temporary");
-			//the built media have been moved/copied just delete temp.
-			removeDir.addArg(buildDir.output(false));
-			removeDir.exec(errs);
+			if(! (finalDir == buildDir)) {
+				//the built media have been moved/copied just delete temp.
+				errs << Message(info, "Removing Temporary Media Directory");
+				removeDir.addArg(buildDir.output(false));
+				removeDir.exec(errs);
+			}
 		}
 	}
 
