@@ -143,7 +143,6 @@ namespace Support {
 		::strcpy(src, source.c_str());
 
 //      https://stackoverflow.com/questions/347949/how-to-convert-a-stdstring-to-const-char-or-char/4152881#4152881
-//		auto* data_ctx = sass_make_data_context(&source[0]);
 		auto* data_ctx = sass_make_data_context(src);
 		auto* ctx = sass_data_context_get_context(data_ctx);
 		auto* options = sass_data_context_get_options(data_ctx);
@@ -173,7 +172,6 @@ namespace Support {
 		//capture cerr.
 		ostringstream msge;
 		std::streambuf *tmpe = cerr.rdbuf(msge.rdbuf());
-
 		try {
 			log << Message(debug,"Sass::compilation about to commence.");
 			sass_compile_data_context(data_ctx);
