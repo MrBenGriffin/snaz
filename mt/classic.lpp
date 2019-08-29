@@ -64,10 +64,9 @@ I_ITER		([ijkn]([.+-][0-9]+)?)
 I_MORE		([0-9]+("+"?))
 MACRO_SIGN	@
 MACRO_NAME	[a-zA-Z_0-9]+
-NEWLINES	[\x0d\x0a]+
 WHITESPACE	[\t\x0d\x0a]+
 LITERAL_OUT			\|\}
-NOT_LITERAL_OUT		([^|\x0d\x0a]|\|[^}])
+NOT_LITERAL_OUT		([^|]|\|[^}])
 
 NOT_SPECIAL_1C		([^\t\x0d\x0a,\(\)\{\}@%\xe2])
 NOT_SPECIAL_3C		(\xe2(([^\x9d][^\0])|(\x9d[^\xab])))
@@ -82,17 +81,12 @@ NOT_SPECIAL_3C		(\xe2(([^\x9d][^\0])|(\x9d[^\xab])))
 	yy_flex_debug=0;
 %}
 
-	/** everything is unrestricted in literal context, except for newlines and close literal **/
+	/** everything is unrestricted in literal ⎣ context, except for close literal. E2 8E A6 = close lit **/
 <literal>{
 
-	({NEWLINES})+ {
-		yylval->build<std::string>(yytext);
-		return( token::WSS );
-	}
-
-	({NOT_LITERAL_OUT})*{LITERAL_OUT} {
-		yy_pop_state(); /**  Pop Literal **/
+	{NOT_LITERAL_OUT}*{LITERAL_OUT} {
 		yylval->build<std::string>(std::string(yytext, yyleng -2));
+		yy_pop_state(); /**  Pop Literal **/
 		return( token::TEXT );
 	}
 
