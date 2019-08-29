@@ -31,13 +31,21 @@ namespace mt {
 			out.emplace(token);
 		}
 	}
-
+//	There are a few characters which can indicate a new line. The usual ones are these two: '\n' or '0x0A' (10 in decimal) -> This character is called "Line Feed" (LF). '\r' or '0x0D' (13 in decimal) -> This one is called "Carriage return" (CR).24 Jul 2005
 	void Wss::expand(Messages&,MacroText &out, mstack &) const {
 		if (!out.empty()) {
 			vector<string> notNL;
-			Support::tolist(notNL, text, "\r\n");
+//			Support::fandr(basis, "␍", "\x0D");
+//			Support::fandr(basis, "␊", "\x0A");
+
+			Support::tolist(notNL, text, "\x0D\x0A"  );
+			if(notNL.size() == 1) {
+				notNL.clear();
+				Support::tolist(notNL, text, "\x0A");
+			}
 			if (notNL.size() == 1) {
-				Support::tolist(notNL, text, "\n");
+				notNL.clear();
+				Support::tolist(notNL, text, "\x0D");
 			}
 			if(notNL.size() == 1) {
 				if(!text.empty()) {
@@ -46,7 +54,7 @@ namespace mt {
 				}
 			} else {
 				for (auto& i : notNL) {
-					if(!text.empty()) {
+					if(!i.empty()) {
 						out.add(i);
 					}
 					if (i != notNL.back() && !newline.empty()) {
