@@ -44,17 +44,17 @@ namespace mt {
 //			Support::fandr(basis, "␍", "\x0D");
 //			Support::fandr(basis, "␊", "\x0A");
 			if (string::npos == text.find("\x0D\x0A")) {
-				Support::tolist(notNL, text, "\x0D\x0A" );
+				Support::tolist(notNL, text, "\x0D\x0A");
 			} else {
-				if (string::npos == text.find("\x0D")) {
-					Support::tolist(notNL, text, "\x0D"  );
+				if (string::npos == text.find("\x0A")) {
+					Support::tolist(notNL, text, "\x0A");
 				} else {
-					if (string::npos == text.find("\x0A")) {
-						Support::tolist(notNL, text, "\x0A"  );
+					if (string::npos == text.find("\x0D")) {
+						Support::tolist(notNL, text, "\x0D");
 					} else {
 						// This is a tab or tabs..
 						// Not sure I know why this is here..
-						auto token=make_unique<Text>(this->text);
+						auto token = make_unique<Text>(this->text);
 						out.emplace(token);
 					}
 				}

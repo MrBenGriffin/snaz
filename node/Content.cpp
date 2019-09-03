@@ -383,7 +383,6 @@ namespace node {
 						errs << Message(error, "Failed to create file " + filepath);
 					}
 					messages << build.getFileName() << " size:" << contents.size();
-					errs << Message(channel::debug,messages.str()); // done as a proportion.
 					if( ! t->suffix->final() ) {
 						messages << " (" << filename << ")";
 					}
