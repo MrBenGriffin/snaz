@@ -174,7 +174,7 @@ namespace Support {
 		std::streambuf *tmpe = cerr.rdbuf(msge.rdbuf());
 		try {
 			log << Message(debug,"Sass::compilation about to commence.");
-			sass_compile_data_context(data_ctx);
+			retval = sass_compile_data_context(data_ctx);
 			log << Message(debug,"Sass::compilation is complete.");
 		} catch (...) {
 			log << Message(error,"Unexpected sass throw. ");
@@ -188,11 +188,7 @@ namespace Support {
 			tolist(msgs,warnings,"WARNING: "); //given a cutter(string) delimited set of strings, return a vector of strings.
 			for (size_t i=0; i < msgs.size(); i++) {
 				if (! msgs[i].empty()) {
-					vector<string> subs;
-					Support::tolist(subs, msgs[i], "\\n");
-					for (size_t j=0; j < subs.size(); j++) {
-						log << Message(warn, msgs[i]);
-					}
+					log << Message(warn,msgs[i]);
 				}
 			}
 			log.pop();
@@ -221,7 +217,14 @@ namespace Support {
 		const char* sass_err  = sass_context_get_error_message(ctx);
 		const char* json_err  = sass_context_get_error_json(ctx);
 		if (sass_err != nullptr) {
-			log << Message(error,string(sass_err));
+			string sassErrors(sass_err);
+			if (! sassErrors.empty()) {
+				vector<string> subs;
+				Support::tolist(subs, sassErrors, "\n");
+				for (size_t j=0; j < subs.size(); j++) {
+					log << Message(error, subs[j]);
+				}
+			}
 		}
 		if (json_err != nullptr) {
 			log << Message(error,string(json_err));

@@ -251,10 +251,7 @@ namespace node {
 							string resultName = resultFile.output(true);
 							log << Message(debug, "scss file " + resultName + " saved.");
 						} else {
-							File resultFile(scss);
-							resultFile.setExtension("source");
-							resultFile.write(log, source);
-							log << Message(warn, "scss file " + file + " returned empty. see .source file");
+							log << Message(warn, "scss file " + file + " failed to compile.");
 						}
 					}
 				}
