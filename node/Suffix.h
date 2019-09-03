@@ -67,6 +67,7 @@ namespace node {
 		Suffix(const Suffix&) = delete;
 
 		flavour cultivar() const override { return flavour::suffix; }
+		bool   final() const { return _terminal; }
 
 		const Node* node(Messages&, size_t, bool= false) const override; //by id.
 		static const Suffix* suffix(Messages&, size_t, bool= false); //Suffix by id.

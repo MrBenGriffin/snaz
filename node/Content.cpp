@@ -380,12 +380,18 @@ namespace node {
 					catch (...) {
 						errs << Message(error, "Failed to create file " + filepath);
 					}
+					if( t->suffix->final() ) {
+						errs << Message(channel::file,filename,progressValue); // done as a proportion.
+					} else {
+						ostringstream fileInfo;
+						fileInfo << build.getFileName() << " (" << filename << ")";
+						errs << Message(channel::file,fileInfo.str(),progressValue); // done as a proportion.
+					}
 				}
 				if(t->suffix) {
 					t->suffix->process(errs,this,build);
 				}
 				current.page++;
-				errs << Message(channel::file,filename,progressValue); // done as a proportion.
 			}
 		} else {
 			errs << Message(channel::node,"No files to output",1.0L);  // done as a proportion.
