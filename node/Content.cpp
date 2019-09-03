@@ -360,6 +360,7 @@ namespace node {
 			for (auto* t : layoutPtr->templates) {
 				File build(destination);
 				string filename= _ref + " not a file";
+				std::ostringstream messages;
 				std::ostringstream content;
 				if(!t->code.empty() && !finalFilenames.empty() && finalFilenames.size() >= current.page) {
 					current.currentTemplate = t;
@@ -371,21 +372,24 @@ namespace node {
 					mt::Wss::push(&(t->nl)); //!!! another global.. need to add to the metrics above.
 					t->code.expand(errs, content, context); //no context here...
 					mt::Wss::pop();
+					string contents = content.str();
 					try {
 						std::ofstream outFile(filepath);
-						outFile << content.str();
+						outFile << contents;
 						outFile.close();
 						chmod(filename.c_str(), (S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH));
 					}    //create the file!
 					catch (...) {
 						errs << Message(error, "Failed to create file " + filepath);
 					}
+					messages << build.getFileName() << " size:" << contents.size();
+					errs << Message(channel::debug,messages.str()); // done as a proportion.
 					if( t->suffix->final() ) {
 						errs << Message(channel::file,filename,progressValue); // done as a proportion.
 					} else {
-						ostringstream fileInfo;
-						fileInfo << build.getFileName() << " (" << filename << ")";
-						errs << Message(channel::file,fileInfo.str(),progressValue); // done as a proportion.
+						messages.str();
+						messages << build.getFileName() << " (" << filename << ")";
+						errs << Message(channel::file,messages.str(),progressValue); // done as a proportion.
 					}
 				}
 				if(t->suffix) {
@@ -402,5 +406,4 @@ namespace node {
 		times.get(errs,'n',name);
 		errs.pop();
     }
-
 }
