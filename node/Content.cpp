@@ -384,13 +384,10 @@ namespace node {
 					}
 					messages << build.getFileName() << " size:" << contents.size();
 					errs << Message(channel::debug,messages.str()); // done as a proportion.
-					if( t->suffix->final() ) {
-						errs << Message(channel::file,filename,progressValue); // done as a proportion.
-					} else {
-						messages.str();
-						messages << build.getFileName() << " (" << filename << ")";
-						errs << Message(channel::file,messages.str(),progressValue); // done as a proportion.
+					if( ! t->suffix->final() ) {
+						messages << " (" << filename << ")";
 					}
+					errs << Message(channel::file,messages.str(),progressValue); // done as a proportion.
 				}
 				if(t->suffix) {
 					t->suffix->process(errs,this,build);
