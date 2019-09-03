@@ -17,6 +17,7 @@ namespace mt {
 	class Wss : public Script {
 	private:
 		static std::stack<const MacroText*> newline;
+		static MacroText empty;
 	public:
 		explicit Wss(std::string );
 		explicit Wss(const Wss*);

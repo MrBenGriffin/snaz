@@ -7,8 +7,11 @@
 #include "support/Convert.h"
 #include "mt.h"
 namespace mt {
+	MacroText Wss::empty = MacroText();
+
 	std::stack<const MacroText*> Wss::newline;
-	Wss::Wss(std::string w) : Script(std::move(w)) {}
+	Wss::Wss(std::string w) : Script(std::move(w)) {
+	}
 	Wss::Wss(const Wss* o) : Script(o->text) {
 		if(o->text.empty()) {
 			throw bad_alloc();
@@ -31,41 +34,45 @@ namespace mt {
 			out.emplace(token);
 		}
 	}
-//	There are a few characters which can indicate a new line. The usual ones are these two: '\n' or '0x0A' (10 in decimal) -> This character is called "Line Feed" (LF). '\r' or '0x0D' (13 in decimal) -> This one is called "Carriage return" (CR).24 Jul 2005
+//	There are a few characters which can indicate a new line.
+//	The usual ones are these two: '\n' or '0x0A' (10 in decimal) ->
+//	This character is called "Line Feed" (LF). '\r' or '0x0D' (13 in decimal) ->
+//	This one is called "Carriage return" (CR).
 	void Wss::expand(Messages&e ,MacroText &out, mstack &context) const {
-		if (!out.empty()) {
+		if (!text.empty()) {
 			vector<string> notNL;
 //			Support::fandr(basis, "␍", "\x0D");
 //			Support::fandr(basis, "␊", "\x0A");
-
-			Support::tolist(notNL, text, "\x0D\x0A"  );
-			if(notNL.size() == 1) {
-				notNL.clear();
-				Support::tolist(notNL, text, "\x0A");
-			}
-			if (notNL.size() == 1) {
-				notNL.clear();
-				Support::tolist(notNL, text, "\x0D");
-			}
-			if(notNL.size() == 1) {
-				if(!text.empty()) {
-					auto token=make_unique<Wss>(this->text);
-					out.emplace(token);
-				}
+			if (string::npos == text.find("\x0D\x0A")) {
+				Support::tolist(notNL, text, "\x0D\x0A" );
 			} else {
+				if (string::npos == text.find("\x0D")) {
+					Support::tolist(notNL, text, "\x0D"  );
+				} else {
+					if (string::npos == text.find("\x0A")) {
+						Support::tolist(notNL, text, "\x0A"  );
+					} else {
+						// This is a tab or tabs..
+						// Not sure I know why this is here..
+						auto token=make_unique<Text>(this->text);
+						out.emplace(token);
+					}
+				}
+			}
+			if(!notNL.empty()) {
 				for (auto& i : notNL) {
 					if(!i.empty()) {
 						out.add(i);
 					}
 					if (i != notNL.back() && !newline.empty()) {
-						newline.top()->expand(e,out,context);
+						auto* current = newline.top();
+						if(!current->empty()) {
+							newline.push(&empty);  // Otherwise newline top may try to expand itself.
+							current->expand(e,out,context);
+							newline.pop();
+						}
 					}
 				}
-			}
-		} else {
-			if(!text.empty()) {
-				auto token=make_unique<Wss>(this->text);
-				out.emplace(token);
 			}
 		}
 	}
