@@ -111,7 +111,8 @@ namespace Support {
 		pair<string,string> trRef;
 		string transName = ref.second;
 		string parmList;
-		split('(',transName,trRef);
+		// @tvImage(@tContent($NODE$,c_image_1):recolour[@kColorThree()]
+		split('[',transName,trRef);
 		string transformCode;
 
 		if(!trRef.second.empty()) {
