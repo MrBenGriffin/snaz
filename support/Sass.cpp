@@ -188,7 +188,11 @@ namespace Support {
 			tolist(msgs,warnings,"WARNING: "); //given a cutter(string) delimited set of strings, return a vector of strings.
 			for (size_t i=0; i < msgs.size(); i++) {
 				if (! msgs[i].empty()) {
-					log << Message(warn,msgs[i]);
+					vector<string> subs;
+					Support::tolist(subs, msgs[i], "\n");
+					for (size_t j=0; j < subs.size(); j++) {
+						log << Message(warn, msgs[i]);
+					}
 				}
 			}
 			log.pop();
