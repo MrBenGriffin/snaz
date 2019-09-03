@@ -39,6 +39,7 @@ namespace Support {
 				prog = t;
 				break;
 			default:
+				prog = t;
 				break;
 		}
 	}

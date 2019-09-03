@@ -318,7 +318,7 @@ namespace node {
 				if(core.user.check(_team,build)) {
 					for(auto* node : children) {
 						auto& child = get(node->id());
-						if(child.layoutPtr != nullptr /* && child.layoutPtr->buildPoint */) {
+						if(child.layoutPtr != nullptr) {
 							child.generate(errs,Branch);
 						} else {
 							errs << Message(channel::node,child.ids(),1.00L); //we included it, but will skip it here.
@@ -366,7 +366,6 @@ namespace node {
 					filename = finalFilenames[current.page].getFileName();
 					messages << filename << " skipped.";
 					errs << Message(channel::file, messages.str(), progressValue); // done as a proportion.
-					errs << Message(channel::deprecated,"XXX templates are no longer needed. Layouts now support no templates.", progressValue); // done as a proportion.
 				} else {
 					if (!t->code.empty() && !finalFilenames.empty() && finalFilenames.size() >= current.page) {
 						current.currentTemplate = t;
