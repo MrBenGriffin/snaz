@@ -318,7 +318,7 @@ namespace node {
 				if(core.user.check(_team,build)) {
 					for(auto* node : children) {
 						auto& child = get(node->id());
-						if(child.layoutPtr != nullptr && child.layoutPtr->buildPoint) {
+						if(child.layoutPtr != nullptr /* && child.layoutPtr->buildPoint */) {
 							child.generate(errs,Branch);
 						} else {
 							errs << Message(channel::node,child.ids(),1.00L); //we included it, but will skip it here.
