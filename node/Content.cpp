@@ -364,8 +364,9 @@ namespace node {
 				std::ostringstream content;
 				if(t->suffix->ref() == "XXX") {
 					filename = finalFilenames[current.page].getFileName();
-					messages << filename << " skipped. XXX templates are no longer needed. Layouts now support no templates.";
-					errs << Message(channel::deprecated,messages.str(), progressValue); // done as a proportion.
+					messages << filename << " skipped.";
+					errs << Message(channel::file, messages.str(), progressValue); // done as a proportion.
+					errs << Message(channel::deprecated,"XXX templates are no longer needed. Layouts now support no templates.", progressValue); // done as a proportion.
 				} else {
 					if (!t->code.empty() && !finalFilenames.empty() && finalFilenames.size() >= current.page) {
 						current.currentTemplate = t;
