@@ -350,7 +350,7 @@ namespace Support {
 	//---------------------------------------------------------------------------
 	void fileEncode(string& str) { //remove all tabs.
 		tolower(str);
-		fandr(str,"-");
+//		fandr(str,"-");
 		fandr(str,"_");
 		fandr(str," ","-");
 		string fileCh=":-abcdefghijklmnopqrstuvwxyz0123456789";

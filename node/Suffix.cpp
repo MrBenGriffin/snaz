@@ -268,8 +268,8 @@ namespace node {
 		/**
 		 * /websites/site/edit_f/scripts/set /websites/site/edit_f/draft/en/ /websites/site/edit_f/draft/en draft txti txt 2>&1
 		 * Batch scripts are passed the following parameters:
-		 * 1: the directory that it is to work from.
-		 * 2: the directory that it is to work to.
+		 * 1: the directory that it is to work from (and to!).
+		 * 2: the directory that it is ending up in
 		 * 3: the build kind (draft/final).
 		 * 4: the source extension - the suffix to consume
 		 * 5: the destination extension - the suffix to produce
