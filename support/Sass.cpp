@@ -189,7 +189,7 @@ namespace Support {
 			for (size_t i=0; i < msgs.size(); i++) {
 				if (! msgs[i].empty()) {
 					vector<string> subs;
-					Support::tolist(subs, msgs[i], "\n");
+					Support::tolist(subs, msgs[i], "\\n");
 					for (size_t j=0; j < subs.size(); j++) {
 						log << Message(warn, msgs[i]);
 					}
