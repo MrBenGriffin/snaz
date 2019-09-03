@@ -126,16 +126,15 @@ namespace mt {
 			const content::Layout* layout = interest->layout();
 			if(layout) {
 				auto* segment = layout->segment(e,my.parm(2));
-				bool old_advanced = false;
+				bool advanced = false;
 				if(my.count > 2) {
 					auto p3 = my.parm(3);
 					if (p3 == "A") {
-						old_advanced = true;
-						e << Message(deprecated, "A is no longer necessary as a third parameter when parsing advanced content");
+						advanced = true;
 					}
 				}
-				if(my.count == 2 || old_advanced) {
-					auto code = content::Editorial::e().get(e,interest,segment);
+				if(my.count == 2 || advanced) {
+					auto code = content::Editorial::e().get(e,interest,segment,advanced);
 					if(!code.first) { //need to do IO as well..
 						auto* metrics = const_cast<Metrics*>(my.metrics);
 						metrics->push(interest,segment);

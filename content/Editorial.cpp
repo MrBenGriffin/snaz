@@ -136,7 +136,7 @@ namespace content {
 		return value;
 	}
 
-	pair<bool,const mt::MacroText*> Editorial::get(Messages &errs, const node::Content* node, const Segment* segment) {
+	pair<bool,const mt::MacroText*> Editorial::get(Messages &errs, const node::Content* node, const Segment* segment, bool knownToBeAdvanced) {
 		static mt::MacroText empty;
 		pair<bool,const mt::MacroText*> value = { true, &empty};
 		key id;
@@ -152,7 +152,13 @@ namespace content {
 					string content;
 					pair<bool,mt::MacroText> toCache;
 					query->readfield(errs, "content", content);
-					mt::Driver::parse(errs,toCache.second,content,false);
+					if(knownToBeAdvanced) {
+						std::istringstream codeStream(content);
+						mt::Driver driver(errs,codeStream,true);
+						driver.parse(errs,toCache.second,false);
+					} else {
+						mt::Driver::parse(errs,toCache.second,content,false);
+					}
 					toCache.first=(toCache.second.simple());
 					auto idx = contentStore.emplace(id,std::move(toCache));
 					value.first  = idx.first->second.first;

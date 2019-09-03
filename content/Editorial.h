@@ -54,7 +54,7 @@ namespace content {
 
 	public:
 		static Editorial& e();
-		pair<bool,const mt::MacroText*> get(Messages&,const node::Content*,const Segment*);
+		pair<bool,const mt::MacroText*> get(Messages&,const node::Content*,const Segment*,bool=false);
 		std::string getMeta(Messages&,const node::Content*,const Segment*,const std::string&) const;
 		bool has(Messages&,const node::Content*,const Segment*) const;
 		void load(Messages&,Connection&,size_t,buildKind);
