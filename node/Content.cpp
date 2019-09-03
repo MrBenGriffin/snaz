@@ -362,34 +362,40 @@ namespace node {
 				string filename= _ref + " not a file";
 				std::ostringstream messages;
 				std::ostringstream content;
-				if(!t->code.empty() && !finalFilenames.empty() && finalFilenames.size() >= current.page) {
-					current.currentTemplate = t;
+				if(t->suffix->ref() == "XXX") {
 					filename = finalFilenames[current.page].getFileName();
-					build.setFileName(filename);
-					build.setExtension(t->suffix->ref());
-					auto filepath = build.output(true);
-					errs.reset();
-					mt::Wss::push(&(t->nl)); //!!! another global.. need to add to the metrics above.
-					t->code.expand(errs, content, context); //no context here...
-					mt::Wss::pop();
-					string contents = content.str();
-					try {
-						std::ofstream outFile(filepath);
-						outFile << contents;
-						outFile.close();
-						chmod(filename.c_str(), (S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH));
-					}    //create the file!
-					catch (...) {
-						errs << Message(error, "Failed to create file " + filepath);
+					messages << filename << " skipped. XXX templates are no longer needed. Layouts now support no templates.";
+					errs << Message(channel::deprecated,messages.str(), progressValue); // done as a proportion.
+				} else {
+					if (!t->code.empty() && !finalFilenames.empty() && finalFilenames.size() >= current.page) {
+						current.currentTemplate = t;
+						filename = finalFilenames[current.page].getFileName();
+						build.setFileName(filename);
+						build.setExtension(t->suffix->ref());
+						auto filepath = build.output(true);
+						errs.reset();
+						mt::Wss::push(&(t->nl)); //!!! another global.. need to add to the metrics above.
+						t->code.expand(errs, content, context); //no context here...
+						mt::Wss::pop();
+						string contents = content.str();
+						try {
+							std::ofstream outFile(filepath);
+							outFile << contents;
+							outFile.close();
+							chmod(filename.c_str(), (S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH));
+						}    //create the file!
+						catch (...) {
+							errs << Message(error, "Failed to create file " + filepath);
+						}
+						messages << build.getFileName() << " size:" << contents.size();
+						if (!t->suffix->final()) {
+							messages << " (" << filename << ")";
+						}
+						errs << Message(channel::file, messages.str(), progressValue); // done as a proportion.
 					}
-					messages << build.getFileName() << " size:" << contents.size();
-					if( ! t->suffix->final() ) {
-						messages << " (" << filename << ")";
+					if (t->suffix) {
+						t->suffix->process(errs, this, build);
 					}
-					errs << Message(channel::file,messages.str(),progressValue); // done as a proportion.
-				}
-				if(t->suffix) {
-					t->suffix->process(errs,this,build);
 				}
 				current.page++;
 			}
