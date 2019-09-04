@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.13)
 project(macrotext)
 
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release)
+endif()
+
 #message(CMAKE_BUILD_TYPE)
 IF(EXISTS $ENV{LOCAL_DIR})
         message(STATUS "environment LOCAL_DIR found: $ENV{LOCAL_DIR}")
