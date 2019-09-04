@@ -1,5 +1,5 @@
 // Lines starting with a U are user macro definitions
-// 111 expansion (111 = strip,ptrim,preparse) newline:[␤ ␊ ␍] tab:␉
+// 111 expansion (11 = strip,ptrim,preparse) newline:[␤ ␊ ␍] tab:␉
 // macro 'a' is used as a simple [] wrapper in various tests
 
 U hw		0	0	00	Hello world
@@ -53,6 +53,11 @@ U bxts		1	1	11	[⌽iMid(⍟1,0,1)][⌽iMid(⍟1,1,1)][⌽iMid(⍟1,2,1)]
 
 # For simple syntax.
 U onlyMe	0	0	00	⍟0
+U foofy	0	2	00	[%1 %2 *%0 @iEq(*%0,*foofy,%0-cat,No %0-cat)]
+U zif	0	1	00	[@iAppend(*%0fo,%0:[%1])@iUse(*%0fo)]
+U zifa	0	1	00	@iReset(*%0headJS)@iSet(~jsInclude,Bobby%1)@iAppend(*%0headJS,@iUse(~jsInclude))
+U zifb	0	1	00	%0:@zifa(%0)@iGet(*zifaheadJS)
+
 
 U commas	1	-1	010	⍟(i)⌽iEq(⍟(k),⍟(n),,⎡-⎤)
 U ucomma	1	-1	010	[⌽commas(⍟(1+))]

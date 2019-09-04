@@ -159,9 +159,12 @@ bar 01			@bar(A,B)																(bar:(foo:A:B:A):(foo:B,A:A:B,A))
 ~bim
 ~bar
 
-#
-03 special			[@onlyMe()]															[onlyMe]
-04 nonmacro			[%0]																[%0]
+# Testing parameter zero.
+p003 special			[@onlyMe()]															[onlyMe]
+p004 nonmacro			[%0]																[%0]
+p005 foofy				@foofy(big,bad)														[big bad *foofy foofy-cat]
+p006 zif01				@zif(foofy)															[zif:[foofy]]
+p007 zifb				@zifb(foofy)														zifb:Bobbyzifb
 
 # Testing Injection Iterations.
 U iter		0	-1	11	[%(i)]

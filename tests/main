@@ -1,9 +1,11 @@
 // Debugging / Testing
-F showDefines	1
-F showPassed	1
+F showDefines	0
+F showPassed	0
 
 //!	pending/newlines
-//X
+!	grammar/_main
+
+X
 
 F showDefines	0
 F showPassed	0
