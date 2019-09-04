@@ -68,7 +68,7 @@ namespace mt {
 	}
 
 	plist Internal::toParms(string basis,string cutter,string sort) const {
-		vector<string> list;
+		deque<string> list;
 		Support::tolist(list,basis,cutter);
 		doSort(list,sort);
 		plist result;
@@ -81,7 +81,7 @@ namespace mt {
 	}
 
 	plist Internal::toParms(const listType* orig,string sort,size_t maxSize) const {
-		vector<string> list;
+		deque<string> list;
 		long count = min(maxSize,list.size());
 		for(auto& i : *orig) {
 			if(count > 0) {
@@ -99,7 +99,7 @@ namespace mt {
 		return result;
 	}
 
-	plist Internal::toParms(vector<string>& list,string sort,size_t maxSize) const {
+	plist Internal::toParms(deque<string>& list,string sort,size_t maxSize) const {
 		if(maxSize < list.size()) {
 			list.resize(maxSize);
 		}
@@ -144,7 +144,7 @@ namespace mt {
  |R     | RANDOM       |  -         |  -       |  -  |
  +------+--------------+------------+----------+-----+
  */
-	void Internal::doSort(Messages& e,vector<const Node*>& nodelist,string sortparm,mstack* context,Metrics* metrics) const {
+	void Internal::doSort(Messages& e,deque<const Node*>& nodelist,string sortparm,mstack* context,Metrics* metrics) const {
 		bool backwards = false;
 		if (!sortparm.empty()) {
 			if (sortparm[0] == '-') {
@@ -165,7 +165,7 @@ namespace mt {
 				} else {
 					errs = &e;
 				}
-				vector<const Node *>nodes(nodelist); //used by segment sort..
+				deque<const Node *>nodes(nodelist); //used by segment sort..
 				nodelist.clear();
 				auto& edit = content::Editorial::e();
 				for (auto* item : nodes) {
@@ -200,7 +200,7 @@ namespace mt {
 		}
 	}
 
-	void Internal::sortnodes(vector<const Node *>& nodelist,bool backwards,char function) const {
+	void Internal::sortnodes(deque<const Node *>& nodelist,bool backwards,char function) const {
 		switch(function) {
 			case('B'): sort(nodelist.begin(), nodelist.end(), sortbirth); break;
 			case('b'): sort(nodelist.begin(), nodelist.end(), sortbirth); break;
@@ -228,7 +228,7 @@ namespace mt {
 		}
 	}
 
-	void Internal::doSort(vector<string>& idx,string sortstr) const {
+	void Internal::doSort(deque<string>& idx,string sortstr) const {
 		// [+-](d|n|i|c)[(numeric offset)]
 		char dir='+',sortfn=' ';	//default = ascending,none.
 		enum stype {numeric,date,caseinsensitive,casesensitive,random,none} sorter = none;

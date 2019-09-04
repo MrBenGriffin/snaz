@@ -184,7 +184,7 @@ namespace Support {
 		string warnings = msge.str();
 		if (!warnings.empty()) {
 			log.push(Message(warn,"Sass Warnings that went to cerr!"));
-			vector<string> msgs;
+			deque<string> msgs;
 			tolist(msgs,warnings,"WARNING: "); //given a cutter(string) delimited set of strings, return a vector of strings.
 			for (size_t i=0; i < msgs.size(); i++) {
 				if (! msgs[i].empty()) {
@@ -219,7 +219,7 @@ namespace Support {
 		if (sass_err != nullptr) {
 			string sassErrors(sass_err);
 			if (! sassErrors.empty()) {
-				vector<string> subs;
+				deque<string> subs;
 				Support::tolist(subs, sassErrors, "\n");
 				for (size_t j=0; j < subs.size(); j++) {
 					log << Message(error, subs[j]);

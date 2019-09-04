@@ -1,6 +1,6 @@
 
 #include <sstream>
-#include <vector>
+#include <deque>
 #include <iterator>
 
 #include "support/Storage.h"
@@ -49,7 +49,7 @@ namespace Support {
 		return result;
 	}
 
-	void LStore::get(const string& name,vector<string>& repo) const {
+	void LStore::get(const string& name,deque<string>& repo) const {
 		auto it = store.find(name);
 		if (it != store.end()) {
 			for(auto &i : it->second) {
@@ -173,13 +173,13 @@ namespace Support {
 		return store.cend();
 	}
 
-	void Storage::keys(vector<string> &repo) const {
+	void Storage::keys(deque<string> &repo) const {
 		for (auto item: store) {
 			repo.push_back(item.first);
 		}
 	}
 
-	void Storage::values(vector<string> &repo) const {
+	void Storage::values(deque<string> &repo) const {
 		for (auto item: store) {
 			repo.push_back(item.second);
 		}

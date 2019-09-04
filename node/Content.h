@@ -45,7 +45,7 @@ namespace node {
 		Date _birth;
 		Date _death;
 		const content::Layout* layoutPtr;
-		vector<File>	finalFilenames;	//final filenames - in page order.
+		deque<File>	finalFilenames;	//final filenames - in page order.
 		string baseFileName;
 
 		void reset();

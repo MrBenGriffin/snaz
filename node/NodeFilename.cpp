@@ -9,7 +9,7 @@
 #include <string>
 #include <map>
 #include <utility>
-#include <vector>
+#include <deque>
 #include <functional>
 
 //#include "buildsettings.h"

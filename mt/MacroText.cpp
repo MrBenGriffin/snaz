@@ -73,17 +73,19 @@ namespace mt {
 		tokens.emplace_back(move(token));
 	}
 	void MacroText::add(const string& value) {
-		if (!tokens.empty()) {
-			Text *ptr = dynamic_cast<Text *>(tokens.back().get());
-			if (ptr != nullptr) {
-				ptr->text.append(value);
+		if(!value.empty()) {
+			if (!tokens.empty()) {
+				Text *ptr = dynamic_cast<Text *>(tokens.back().get());
+				if (ptr != nullptr) {
+					ptr->text.append(value);
+				} else {
+					auto token = make_unique<Text>(value);
+					tokens.emplace_back(move(token));
+				}
 			} else {
-				auto token=make_unique<Text>(value);
+				auto token = make_unique<Text>(value);
 				tokens.emplace_back(move(token));
 			}
-		} else {
-			auto token=make_unique<Text>(value);
-			tokens.emplace_back(move(token));
 		}
 	}
 	void MacroText::add(const MacroText& other) {
@@ -107,9 +109,9 @@ namespace mt {
 		}
 	}
 
-	void MacroText::doFor(MacroText& out,const forStuff& stuff) const {
+	void MacroText::doFor(Messages& log,MacroText& out,const forStuff& stuff,mstack& context) const {
 		for (auto& t : tokens) {
-			t->doFor(out, stuff);
+			t->doFor(log, out, stuff, context);
 		}
 	}
 
@@ -176,7 +178,7 @@ namespace mt {
 		}
 	}
 // Do substitutes (used by iRegex).
-	void MacroText::subs(MacroText& o,const std::vector<std::string>& subs,const std::string& prefix) const {
+	void MacroText::subs(MacroText& o,const std::deque<std::string>& subs,const std::string& prefix) const {
 		for (auto &i : tokens) {
 			i->subs(o, subs, prefix);
 		}

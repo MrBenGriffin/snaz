@@ -94,8 +94,8 @@ namespace node {
 	}
 
 
-	pair<size_t,vector<const Node *>> Node::siblings() const {
-		pair<size_t,vector<const Node *>> result;
+	pair<size_t,deque<const Node *>> Node::siblings() const {
+		pair<size_t,deque<const Node *>> result;
 		if(_parent != nullptr) {
 			for (auto kid: _parent->children) {
 				if(kid->_id == _id) { //zero-indexed position of self
@@ -116,8 +116,8 @@ namespace node {
 			   && _tw <  (anc->_tw+anc->_weight);
 	}
 
-	vector<const Node *> Node::ancestors(const Node *anc) const {
-		vector<const Node *> result;
+	deque<const Node *> Node::ancestors(const Node *anc) const {
+		deque<const Node *> result;
 		const Node *cursor = this;
 		while ((cursor != anc) && cursor->_parent != nullptr) {
 			result.push_back(cursor);
@@ -130,7 +130,7 @@ namespace node {
 	}
 
 	//internal recursive function used to gather nodes at a given depth...
-	void Node::addToPeerList(pair<size_t,vector<const Node *>> &result,const Node *orig) const {
+	void Node::addToPeerList(pair<size_t,deque<const Node *>> &result,const Node *orig) const {
 		if ( orig->_tier == _tier + 1) {
 			for (auto kid: children) {
 				if(kid->_id == orig->_id) {  //zero-indexed position of self
@@ -145,8 +145,8 @@ namespace node {
 		}
 	}
 
-	pair<size_t,vector<const Node *>> Node::peers(const Node *anc) const {
-		pair<size_t, vector<const Node *>> result;
+	pair<size_t,deque<const Node *>> Node::peers(const Node *anc) const {
+		pair<size_t, deque<const Node *>> result;
 		if (hasAncestor(anc)) {
 			if(anc->_id != _id) {
 				anc->addToPeerList(result, this); // All the nodes that are at my tier.

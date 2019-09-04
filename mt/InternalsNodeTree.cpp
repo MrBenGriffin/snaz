@@ -87,7 +87,7 @@ namespace mt {
 		InternalInstance my(this,e,o,instance,context);
 		const Node *n = my.node(1);
 		if (n != nullptr) {
-			vector<const Node*> nodelist;
+			deque<const Node*> nodelist;
 			string terminator = my.parm(3);
 			if (terminator.size() > 0) {
 				switch (terminator[0]) {
@@ -153,7 +153,7 @@ namespace mt {
 	}
 	void iForNodes::expand(Messages& e,MacroText& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
-		vector<string> nodeList;
+		deque<string> nodeList;
 		toDecimalList(nodeList,my.parm(1));
 		plist parms = my.toNodeParms(this,nodeList,my.parm(4)); //nodes, and sorted..
 		my.generate(parms,my.praw(5),my.parm(2),my.parm(3));

@@ -64,11 +64,10 @@ namespace mt {
 	class forStuff;    //inside Instance.h
 	class Handler;
 	class MacroText;
-//	using MacroText=		MacroText;
 	using parse_result=	std::pair<bool,std::pair<MacroText, bool>>;
 	using iteration=	std::pair<size_t,size_t>;
 	using plist=		std::vector<MacroText>;
-	using nlist=		std::vector<const node::Node *>;
+	using nlist=		std::deque<const node::Node *>;
 	using pos=			std::pair<size_t,size_t>;
 	//Instances need to be shared, because of subcontexts in injections.
 	using Carriage=		std::pair<const Handler*, Instance* >;

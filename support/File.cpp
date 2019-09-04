@@ -778,7 +778,7 @@ namespace Support {
 			string name = output(true);
 			errs << Message(error,name + " does not exist.");
 		}
-		vector<string> lines;
+		deque<string> lines;
 		tolist(lines,result,"\n");
 		for(auto &line : lines) {
 			channel kind = debug;

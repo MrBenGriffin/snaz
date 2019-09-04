@@ -107,7 +107,7 @@ namespace Support {
 	}
 
 	string Media::transFile(Messages& errs,const node::Metrics* metrics,pair<string,string>& ref,size_t index) {
-		vector<string> parms;
+		deque<string> parms;
 		pair<string,string> trRef;
 		string transName = ref.second;
 		string parmList;

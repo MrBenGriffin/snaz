@@ -13,7 +13,7 @@
 namespace mt {
 
 	void Token::expand(Messages&,MacroText&,mstack&) const {}
-	void Token::doFor(MacroText&,const forStuff&) const {}
+	void Token::doFor(Messages&,MacroText&,const forStuff&,mstack&) const {}
 	bool Token::empty() const { return true; }
 
 }

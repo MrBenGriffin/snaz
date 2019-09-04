@@ -145,7 +145,7 @@ namespace mt {
 					} break;
 					case 'k': { //keys
 						if (book != nullptr) {
-							vector<string> keys;
+							deque<string> keys;
 							book->keys(keys);
 							auto &end = keys.back();
 							string result;
@@ -183,10 +183,10 @@ namespace mt {
 							book = library.touch( repo_name );
 						}
 						book->clear();
-						vector<string> keyvals;
+						deque<string> keyvals;
 						Support::tolist(keyvals,basis,p2);
 						for (const auto &keyval : keyvals) {
-							vector<string> kv;
+							deque<string> kv;
 							Support::tolist(kv, keyval,p1);
 							string& key=kv[0];
 							string value;
@@ -218,7 +218,7 @@ namespace mt {
 					} break;
 					case 'v': { //values
 						if (book != nullptr) {
-							vector<string> items;
+							deque<string> items;
 							book->values(items);
 							string result;
 							for (const auto &item : items) {
@@ -284,7 +284,7 @@ namespace mt {
 						pair<string,string> value = split(':',func);
 						size_t maxItems = value.second.empty() ? string::npos : natural(value.second);
 						//@iList(foo,nodes,R,*,[*])
-						vector<string> list;
+						deque<string> list;
 						lStore.get(name,list);
 						if(!list.empty()) {
 							plist parms = my.toNodeParms(this,list,my.parm(3),maxItems);
@@ -295,7 +295,7 @@ namespace mt {
 						pair<string,string> value = split(':',func);
 						size_t maxItems = value.second.empty() ? string::npos : natural(value.second);
 						//@iList(foo,for,R,*,[*])
-						vector<string> list;
+						deque<string> list;
 						lStore.get(name,list);
 						if(!list.empty()) {
 							//'const mt::iList' to 'mt::Internal'

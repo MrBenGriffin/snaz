@@ -14,7 +14,7 @@
 #include <unordered_map>
 #include <set>
 #include <map>
-#include <vector>
+#include <deque>
 
 using namespace std;
 using namespace Support;
@@ -35,7 +35,7 @@ namespace node {
 	 */
 	class Content;
 	using nodeScore  = pair<long double,const Content*>;
-	using nodeScores = vector< nodeScore >;
+	using nodeScores = deque< nodeScore >;
 
 	class Taxon : public Node {
 	private:

@@ -22,11 +22,11 @@ namespace node {
 namespace mt {
 	class Internal : public Handler {
 	private:
-		void sortnodes(vector<const node::Node *>&,bool,char) const;
+		void sortnodes(deque<const node::Node *>&,bool,char) const;
 
 	public:
 		bool inRange(size_t) const override;
-		void doSort(Support::Messages&,vector<const node::Node*>&,std::string,mstack* = nullptr,node::Metrics* = nullptr) const;
+		void doSort(Support::Messages&,deque<const node::Node*>&,std::string,mstack* = nullptr,node::Metrics* = nullptr) const;
 		std::string name() const override;
 		size_t minParms {0}, maxParms {0};
 		static void startup(Messages&,Db::Connection&,buildKind);
@@ -44,8 +44,8 @@ namespace mt {
 		Internal(std::string name,size_t min,size_t max);
 		plist toParms(string,string,string) const;
 		plist toParms(const listType*,string,size_t = string::npos) const;
-		plist toParms(vector<string>&,string,size_t = string::npos) const;
-		void doSort(vector<std::string>&,std::string) const;
+		plist toParms(deque<string>&,string,size_t = string::npos) const;
+		void doSort(deque<std::string>&,std::string) const;
 		void doTrace(Support::Messages&,mstack&) const;
 
 	};

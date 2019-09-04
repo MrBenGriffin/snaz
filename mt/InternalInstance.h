@@ -16,6 +16,8 @@ namespace mt {
 	// So using a base class isn't so good.
 	// and also manages common utility functions.
 	class InternalInstance {
+	private:
+		void 			nParms(plist&,const nlist&);
 	public:
 		const Internal* owner;
 		const node::Metrics* metrics;// = context.back().second.metrics;
@@ -40,7 +42,7 @@ namespace mt {
 		void            logic(size_t,size_t);
 		void            logic(const std::string&,size_t);
 		void            logic(long double,std::string,size_t);
-		plist 			toNodeParms(const Internal*,vector<string>&,string,size_t = string::npos);
+		plist 			toNodeParms(const Internal*,deque<string>&,string,size_t = string::npos);
 		const node::Node*					node(size_t);
 		const node::Node* 					node(const string&);
 		pair<const node::Node*,size_t>		nodePage(size_t);

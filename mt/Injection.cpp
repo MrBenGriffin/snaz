@@ -138,6 +138,10 @@ namespace mt {
 		expand(errs,result,context);
 	}
 
+	void Injection::doFor(Messages& errs,MacroText &result,const forStuff&,mstack &context) const {
+		expand(errs,result,context);
+	}
+
 	void Injection::clone(MacroText &out) const {
 		auto token= make_unique<Injection>(*this);
 		out.emplace(token);
@@ -147,7 +151,7 @@ namespace mt {
 		visit(o);
 	}
 
-	void Injection::subs(MacroText& out,const std::vector<std::string>&,const std::string&) const {
+	void Injection::subs(MacroText& out,const std::deque<std::string>&,const std::string&) const {
 		auto token=make_unique<Injection>(*this);
 		out.emplace(token);
 	}
@@ -180,7 +184,7 @@ namespace mt {
 					for(size_t i=value; i <= parmCount; i++) {
 						MacroText tmp;
 						parms[i - 1].inject(errs,tmp,context);
-						context.back().second->parms.emplace_back(std::move(tmp)); //plist is a std::vector<MacroText>;
+						context.back().second->parms.emplace_back(std::move(tmp)); //plist is a std::deque<MacroText>;
 					}
 				}
 				if(!stack && !list) {
@@ -189,6 +193,8 @@ namespace mt {
 							if(value == 0) {
 								if(contextMacro != nullptr) {
 									result.add(contextMacro->name());
+								} else {
+									errs << Message(trace,"Reference to Parm 0 with no context present.");
 								}
 							} else {
 								bool legal = contextMacro->inRange(value);

@@ -10,11 +10,15 @@
 #include "support/Message.h"
 #include "Script.h"
 #include "mt/using.h"
+#include "mt/Injection.h"
 
 namespace mt {
 	using namespace Support;
 
 	class Text : public Script {
+		static Injection i,k;
+	private:
+		void interpolate(const string&,const string&,MacroText&, Injection&) const;
 	public:
 		Text() = default;
 		~Text() override = default;
@@ -27,8 +31,8 @@ namespace mt {
 		void expand(Messages&,MacroText&,mstack&) const override;
 		std::string name() const override { return "`text`"; }
 
-		void doFor(MacroText&,const forStuff&) const override;
-		void subs(MacroText&,const std::vector<std::string>&,const std::string&) const override;
+		void doFor(Messages&,MacroText&,const forStuff&,mstack&) const override;
+		void subs(MacroText&,const std::deque<std::string>&,const std::string&) const override;
 		void inject(Messages&,MacroText&,mstack&) const override;
 
 	};

@@ -115,12 +115,8 @@ namespace mt {
 	}
 
 	//used for pre-parsed definitions (eg in iForSibs)
-	Definition::Definition(MacroText& code,
-		long min, long max, bool iter, bool tP, bool preEx): Handler(),
-		_name(":internal:"),counter(0),iterated(iter), trimParms(tP), preExpand(preEx) {
-		expansion.adopt(code);
-		minParms = min == -1 ? 0 : min;
-		maxParms = max == -1 ? INT_MAX : max;
+	Definition::Definition(): Handler(),
+		_name(":expansion:"),counter(0),iterated(true), trimParms(false), preExpand(false),minParms(0),maxParms(INT_MAX) {
 	}
 
 	bool Definition::inRange(size_t i) const {
@@ -176,29 +172,12 @@ namespace mt {
 		context.emplace_front(make_pair(this,&instance)); //Construct the Carriage for this.
 		if (iterated) {
 			if(instance.myFor == nullptr) {
-//				iteration& i = context.front().second->it;
 				while ( context.front().second->it.first <= context.front().second->it.second) {
 					expansion.expand(e,o,context);
 					context.front().second->it.first++;
 				}
 			} else {
 				assert(false);
-				/**
-				 * doFor is now done elsewhere, and this is not needed, I think!!
-				Instance specific(instance);
-				iteration* i = &(specific.it); //so we are iterating front (because not all are generated).
-				for (i->first = 1; i->first <= i->second; i->first++) {
-					std::ostringstream value;
-					const MacroText& parm = specific.parms[i->first - 1];
-					Driver::expand(e,parm,value,context);
-					MacroText done_parm;
-					specific.myFor->set(value.str(),i->first); value.str("");
-					Driver::doFor(expansion,done_parm,*(specific.myFor));
-					for(auto& token : done_parm) {
-						token->expand(e,o,context);
-					}
-				}
-				 */
 			}
 		} else {
 			expansion.expand(e,o,context);

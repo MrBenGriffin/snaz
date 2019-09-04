@@ -3,7 +3,7 @@
 
 #include <string>
 #include <utility>
-#include <vector>
+#include <deque>
 #include <deque>
 #include <map>
 #include <sstream>
@@ -36,7 +36,7 @@ namespace node {
 	class Node {                    // build the tree..
 	private:
 
-		void addToPeerList(pair<size_t,vector<const Node *>> &, const Node*) const; //internal recursion function used by peers().
+		void addToPeerList(pair<size_t,deque<const Node *>> &, const Node*) const; //internal recursion function used by peers().
 
 	protected:
 		Tree* _tree;						// The tree I belong to.
@@ -49,7 +49,7 @@ namespace node {
 		string _ref;						// Unique reference string (eg, LinkRef.
 		string idStr;						// As we get this from the database, we may as well store the string 'for free'.
 		string _comment;				// comment, used by content as 'scratch'.
-		vector<const Node *> children;      // List of children
+		deque<const Node *> children;      // List of children
 		void common(Messages&,Db::Query*,size_t&,size_t&);
 
 	public:
@@ -68,9 +68,9 @@ namespace node {
 //Node-tree (within a node context).
 		void addChild(Messages&,Node*);
 		size_t getChildCount() const;        //accessor
-		vector<const Node *> ancestors(const Node* = nullptr) const;
-		pair<size_t,vector<const Node *>> siblings() const;
-		pair<size_t,vector<const Node *>> peers(const Node* = nullptr) const;
+		deque<const Node *> ancestors(const Node* = nullptr) const;
+		pair<size_t,deque<const Node *>> siblings() const;
+		pair<size_t,deque<const Node *>> peers(const Node* = nullptr) const;
 
 		void  setComment(std::string);
 		const Node* parent() const { return _parent; }

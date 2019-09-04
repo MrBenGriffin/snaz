@@ -9,7 +9,7 @@
 #include <iostream>
 #include <string>
 #include <map>
-#include <vector>
+#include <deque>
 
 using namespace std;
 namespace node {

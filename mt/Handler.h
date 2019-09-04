@@ -7,7 +7,7 @@
 
 #include <string>
 #include <variant>
-#include <vector>
+#include <deque>
 
 #include "support/Message.h"
 #include "mt/using.h"
@@ -27,7 +27,7 @@ namespace mt {
 		virtual std::ostream& visit(std::ostream&) const;
 		virtual void inject(Messages&,MacroText&,mstack&) const;
 		virtual void doFor(MacroText&,const forStuff&) const;
-		virtual void subs(MacroText&,std::vector<std::string>& ,const std::string&) const;
+		virtual void subs(MacroText&,std::deque<std::string>& ,const std::string&) const;
 		virtual std::string name() const;
 	};
 

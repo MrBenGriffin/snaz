@@ -70,7 +70,7 @@ namespace node {
 		if(current != nullptr) {
 			root = root ? root : _root;
 			if (current->hasAncestor(root)) { //FYI, I am my own ancestor.
-				pair<size_t,vector<const Node *>> list =  current->peers(root);
+				pair<size_t,deque<const Node *>> list =  current->peers(root);
 				signed long pos = offset + list.first;  // list.first is 0-indexed.
 				if(pos > 0 && pos <= list.second.size()) {
 					result = list.second[pos];

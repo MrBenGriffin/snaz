@@ -283,7 +283,7 @@ namespace Support {
 		return pair<std::time_t,bool>(tt,ss.good());
 	}
 	//-----------------------------------------------------------------------------
-	void toDecimalList(vector<string>& list,string basis) {
+	void toDecimalList(deque<string>& list,string basis) {
 		while (!basis.empty() ) {
 			string::size_type pos = basis.find_first_not_of("0123456789");
 			if (pos != string::npos) {
@@ -297,11 +297,13 @@ namespace Support {
 	}
 
 	//-----------------------------------------------------------------------------
-	void tolist(vector<string>& list,string basis,const string& cutter) {
+	bool tolist(deque<string>& list,string basis,const string& cutter) {
+		bool found = false;
 		if (!cutter.empty()) {
 			while (!basis.empty() ) {
 				string::size_type pos = basis.find(cutter);
 				if (pos != string::npos) {
+					found = true;
 					list.push_back(basis.substr(0, pos)); //pos says 2
 					basis = basis.substr(pos+cutter.size(),string::npos);
 				} else {
@@ -310,18 +312,19 @@ namespace Support {
 				}
 			}
 		}
+		return found;
 	}
 	//-----------------------------------------------------------------------------
-	void tolist(vector<size_t>& ilist,const string &s) {
-		ilist.clear();
-		size_t i;
-		char comma;
-		istringstream ist(s);
-		while (ist >> i) {
-			ilist.push_back(i);
-			ist >> comma;
-		}
-	}
+//	void tolist(deque<size_t>& ilist,const string &s) {
+//		ilist.clear();
+//		size_t i;
+//		char comma;
+//		istringstream ist(s);
+//		while (ist >> i) {
+//			ilist.push_back(i);
+//			ist >> comma;
+//		}
+//	}
 	//-----------------------------------------------------------------------------
 	void toSet(set<size_t>& iset,const string &s) {
 		iset.clear();

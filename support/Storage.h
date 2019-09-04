@@ -15,7 +15,7 @@ namespace Support {
 
 	using listType = std::multiset<std::string>;
 	using kv = std::pair<std::string, std::string>;
-	using kvec = std::pair<std::string, std::vector<std::string> >;
+	using kvec = std::pair<std::string, std::deque<std::string> >;
 	using storage_map_type = std::unordered_map<std::string, std::string>;
 	using list_map_type = std::unordered_map<std::string, listType>;
 	using mark = storage_map_type::const_iterator;
@@ -38,7 +38,7 @@ namespace Support {
 		size_t size(std::string) const;
 
 		const listType *get(std::string) const;
-		void get(const std::string&,vector<string>&) const;
+		void get(const std::string&,deque<string>&) const;
 
 		bool has(std::string, std::string) const;
 		size_t count(std::string, std::string) const;
@@ -96,9 +96,9 @@ namespace Support {
 
 		kv get(mark) const;
 
-		void keys(std::vector<std::string> &) const;
+		void keys(std::deque<std::string> &) const;
 
-		void values(std::vector<std::string> &) const;
+		void values(std::deque<std::string> &) const;
 
 		size_t size() const;
 

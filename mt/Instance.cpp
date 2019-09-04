@@ -45,7 +45,7 @@ namespace mt {
 	}
 
 	void Instance::copy(const plist *parameterList) {
-		// std::vector<MacroText>
+		// std::deque<MacroText>
 		if(parameterList != nullptr) {
 			for(auto& parameter : *parameterList) {
 				MacroText nParm;
@@ -65,8 +65,6 @@ namespace mt {
 		parms.clear();
 	}
 
-//	Instance::Instance(unique_ptr<forStuff>& myFor) : myFor(std::move(myFor)) {}
-
 
 	forStuff::forStuff(const std::string& vt,const std::string& ct,size_t v,size_t c) {
 		stuff = {
@@ -76,7 +74,7 @@ namespace mt {
 		};
 	}
 
-	forStuff::forStuff(const std::vector<std::pair<std::string,std::string>>& other) {
+	forStuff::forStuff(const std::deque<std::pair<std::string,std::string>>& other) {
 		stuff = other; //copy constructor.
 	}
 

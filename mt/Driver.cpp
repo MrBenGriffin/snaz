@@ -30,7 +30,7 @@ namespace mt {
 	}
 
 	void Driver::parseError(Support::Messages &errs) {
-		vector<std::string> lines;
+		deque<std::string> lines;
 		auto* prog = dynamic_cast<const std::istringstream*>(source);
 		string line = prog->str();
 		Support::fandr(line, "\n"  , "␤");

@@ -7,7 +7,7 @@
 #include "InternalInstance.h"
 #include "node/Node.h"
 #include "node/Metrics.h"
-//#include <cmath> //for nan test.
+#include "mt/Definition.h"
 
 namespace mt {
 
@@ -61,8 +61,8 @@ namespace mt {
 		}
 	}
 
-	plist InternalInstance::toNodeParms(const Internal* parent,vector<string>& list,string sort,size_t maxSize) {
-		vector<const node::Node*> nodes;
+	plist InternalInstance::toNodeParms(const Internal* parent,deque<string>& list,string sort,size_t maxSize) {
+		deque<const node::Node*> nodes;
 		for(auto& i : list) {
 			auto* node = metrics->byPath(*errs,i,context);
 			if(node != nullptr) {
@@ -74,43 +74,42 @@ namespace mt {
 		if(maxSize < nodes.size()) {
 			nodes.resize(maxSize);
 		}
-		plist result; //using plist=std::vector<MacroText>;
+		plist result;
+		nParms(result,nodes);
+		return result;
+	}
+
+	void InternalInstance::nParms(plist& result,const nlist& nodes) {
 		for(auto& i : nodes) {
 			MacroText parm;
 			parm.add(i->ids());
 			result.emplace_back(std::move(parm));
 		}
-		return result;
 	}
 
 	void InternalInstance::generate(nlist& nodes,const MacroText* program,const string value,const string countStr) {
 		if(program != nullptr && !program->empty()) { // from an empty parm..
+			Definition def;
 			forStuff stuff(value,countStr);
-			size_t parmCount = 1;
-			for(auto& i: nodes) {
-				stuff.set(i->ids(),parmCount);
-				MacroText paramOut;  //this will be the program, substituted correctly.
-				program->doFor(paramOut,stuff);
-				paramOut.expand(*errs,*output,*context);
-				parmCount++;
-			}
+			program->doFor(*errs,def.expansion,stuff,*context);
+			node::Metrics local(metrics);
+			auto instance = Instance(&local);
+			instance.generated = true;
+			nParms(instance.parms,nodes);
+			def.expand(*errs,*output,instance,*context);
 		}
 	}
 
 	void InternalInstance::generate(plist& parameters,const MacroText* program,const string value,const string countStr) {
-		//parms,code,vToken,cToken
 		if(program != nullptr && !program->empty()) { // from an empty parm..
+			Definition def;
 			forStuff stuff(value,countStr);
-			size_t parmCount = 1;
-			for(auto& paramIn: parameters) {
-				ostringstream result;
-				paramIn.expand(*errs,result,*context); //normally just numbers..
-				stuff.set(result.str(),parmCount);
-				MacroText paramOut;  											//this will be the program, substituted correctly.
-				program->doFor(paramOut,stuff);						//copy source program into paramOut (marking doFor as we go).
-				paramOut.expand(*errs,*output,*context);	//and then expanding it.  Can we not do this in 1 go?!
-				parmCount++;
-			}
+			program->doFor(*errs,def.expansion,stuff,*context);
+			node::Metrics local(metrics);
+			auto instance = Instance(&local);
+			instance.generated = true;
+			instance.copy(&parameters);
+			def.expand(*errs,*output,instance,*context);
 		}
 	}
 

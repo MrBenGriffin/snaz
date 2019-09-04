@@ -21,18 +21,18 @@ namespace mt {
 		forStuff() = default;
 	public:
 		~forStuff();
-		std::vector<std::pair<std::string,std::string>> stuff;
+		std::deque<std::pair<std::string,std::string>> stuff;
 		forStuff(const std::string&,const std::string&,size_t,size_t);
 		forStuff(const std::string&,const std::string&);
-		forStuff(const std::vector<std::pair<std::string,std::string>>&);
+		forStuff(const std::deque<std::pair<std::string,std::string>>&);
 		void set(const std::string&,size_t);
+//		void set(const std::string&,size_t);
 	};
 
 	class Instance {
 	private:
-		void copy(const plist *);
 	public:
-		plist parms;			//std::vector<MacroText>*
+		plist parms;			//std::deque<MacroText>*
 		bool generated;     	//internal generation via e.g. iForX
 		iteration it = {0, 0};
 		std::unique_ptr<forStuff> myFor;
@@ -42,10 +42,9 @@ namespace mt {
 		Instance(const Instance &);
 		~Instance();
 		Instance(const plist*,node::Metrics*, bool= false);
-//		Instance(plist, iteration, node::Metrics*, bool= false);
 		Instance(const plist*, std::unique_ptr<forStuff>&, node::Metrics*);
-//		Instance(std::unique_ptr<forStuff>&);
 		explicit Instance(node::Metrics*);
+		void copy(const plist *);
 		void tidy();
 
 	};

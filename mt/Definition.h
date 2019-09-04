@@ -33,7 +33,6 @@ namespace mt {
 	private:
 		size_t minParms, maxParms;
 		std::string _name;
-		MacroText expansion;
 
 		static void trim(plist&);
 
@@ -41,10 +40,11 @@ namespace mt {
 		size_t counter;
 
 	public:
+		MacroText expansion;
 		bool iterated, trimParms, preExpand;
 
+		Definition();
 		Definition(Messages&,std::string, std::string, long = 0, long = -1, bool= true, bool= true, bool= false);
-		Definition(MacroText&, long = 0, long = -1, bool= true, bool= true, bool= false);
 
 		// Handler virtuals.
 		bool inRange(size_t) const override;

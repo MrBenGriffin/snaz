@@ -40,7 +40,7 @@ namespace mt {
 //	This one is called "Carriage return" (CR).
 	void Wss::expand(Messages&e ,MacroText &out, mstack &context) const {
 		if (!text.empty()) {
-			vector<string> notNL;
+			deque<string> notNL;
 //			Support::fandr(basis, "␍", "\x0D");
 //			Support::fandr(basis, "␊", "\x0A");
 			if (string::npos == text.find("\x0D\x0A")) {
@@ -84,9 +84,18 @@ namespace mt {
 		}
 	}
 
-	void Wss::subs(MacroText& out,const std::vector<std::string>&,const std::string&) const {
-		auto token=make_unique<Wss>(this->text);
-		out.emplace(token);
+	void Wss::doFor(Messages&,MacroText& out,const forStuff& s,mstack&) const {
+		if(!text.empty()) {
+			auto token=make_unique<Wss>(text);
+			out.emplace(token);
+		}
+	}
+
+	void Wss::subs(MacroText& out,const std::deque<std::string>&,const std::string&) const {
+		if(!text.empty()) {
+			auto token = make_unique<Wss>(this->text);
+			out.emplace(token);
+		}
 	}
 
 }

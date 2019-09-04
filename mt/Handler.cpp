@@ -11,7 +11,7 @@ namespace mt {
 	std::ostream& Handler::visit(std::ostream& o) const { return o;}
 	void Handler::inject(Messages&,MacroText&,mstack&) const {}
 	void Handler::doFor(MacroText&,const forStuff&) const {}
-	void Handler::subs(MacroText&,std::vector<std::string>& ,const std::string&) const {}
+	void Handler::subs(MacroText&,std::deque<std::string>& ,const std::string&) const {}
 	bool Handler::inRange(size_t) const { return false; };
 	std::string Handler::name() const { return ""; }
 

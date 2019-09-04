@@ -41,11 +41,11 @@ namespace mt {
 		out.emplace(token);
 	}
 
-	void Macro::doFor(MacroText& result,const forStuff& stuff) const {
+	void Macro::doFor(Messages& e,MacroText& result,const forStuff& stuff,mstack& c) const {
 		auto token=make_unique<Macro>(_name);
 		for(auto& parm : parms) {
 			MacroText nParm;
-			parm.doFor(nParm,stuff);
+			parm.doFor(e,nParm,stuff,c);
 			token->parms.emplace_back(move(nParm));
 		}
 		result.emplace(token);
@@ -61,7 +61,7 @@ namespace mt {
 		result.emplace(token);
 	}
 
-	void Macro::subs(MacroText& out,const std::vector<std::string>& subs,const std::string& prefix) const {
+	void Macro::subs(MacroText& out,const std::deque<std::string>& subs,const std::string& prefix) const {
 		auto token=make_unique<Macro>(_name);
 		for(auto& parm : parms) {
 			MacroText nParm;

@@ -1,11 +1,14 @@
 // Debugging / Testing
-F showDefines	0
-F showPassed	0
+F showDefines	1
+F showPassed	1
 
-//!	pending/newlines
-!	grammar/_main
+//iForP04	@iForPeers(!NLTBB,!NodeLocateTestB,*,#,,[#:@iTW(*)])						[1:115][2:116][3:117]
 
-X
+//U zen	0	0	00	@iReset(~%0h)@iForSibs(I0/0+1,*,$,@iAppend(~%0h,[$]))@iUse(~%0h)
+//p009 zen				@zen()							[1][2][3][4][5][6][7][8][9][10][11][12][13][14][15][16][17][18]
+//iMed 07	@iMedia(mod_style_a:x400[100,200])				/media/images/a_x400_6C94234A10D044370A62E1BDCE628115.png
+//iMed 08	@iMedia(mod_style_a:x400[100,250])				/media/images/a_x400_A6AF0FB29C7A31861DCA3074AE9B1A7F.png
+//
 
 F showDefines	0
 F showPassed	0

@@ -110,7 +110,7 @@ namespace mt {
 							start = matchend;
 						} else {
 							result.add(string(scope, start, matchstart - start));
-							vector<string> subs;
+							deque<string> subs;
 							for (size_t n = 0; n < 10; n++) {
 								string substr;
 								int pos = ov[2 * n],pos2 = ov[2 * n + 1];

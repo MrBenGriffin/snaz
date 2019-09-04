@@ -9,6 +9,9 @@
 
 namespace mt {
 
+	Injection Text::i = Injection("i");
+	Injection Text::k = Injection("k");
+
 	Text::Text(std::string w) : Script(std::move(w)) {}
 
 	Text::Text(const Text* o) : Script(o->text) {
@@ -36,7 +39,7 @@ namespace mt {
 		}
 	}
 
-	void Text::subs(MacroText& o,const vector<string>& list,const string& prefix) const {
+	void Text::subs(MacroText& o,const deque<string>& list,const string& prefix) const {
 		size_t start = 0, curr, psize = prefix.size();
 		string valStr;
 		while ((curr=text.find(prefix,start)) != string::npos) {
@@ -58,14 +61,47 @@ namespace mt {
 		o.add(valStr);
 	}
 
-	void Text::doFor(MacroText& result,const forStuff& s) const {
-		string basis(text);
-		Support::fandr(basis,s.stuff[0].first,s.stuff[0].second);
-		Support::fandr(basis,s.stuff[1].first,s.stuff[1].second);
+	void Text::interpolate(const string& str,const string& cutter,MacroText& result, Injection& inter) const {
+		if (!cutter.empty()) {
+			string basis = str;
+			while (!basis.empty() ) {
+				string::size_type pos = basis.find(cutter);
+				if (pos != string::npos) {
+					result.add(basis.substr(0, pos)); //pos says 2
+					basis = basis.substr(pos+cutter.size(),string::npos);
+					auto token=make_unique<Injection>(inter);
+					result.emplace(token);
+				} else {
+					result.add(basis);
+					basis.clear();
+				}
+			}
+		} else {
+			result.add(str);
+		}
+	}
 
-		if(!basis.empty()) {
-			auto token=make_unique<Text>((basis));
-			result.emplace(token);
+	void Text::doFor(Messages&,MacroText& result,const forStuff& s,mstack&) const {
+		if (!text.empty()) {
+			auto& cutter = s.stuff[0].first;
+			auto& iter = s.stuff[1].first;
+			if (!cutter.empty()) {
+				string basis = text;
+				while (!basis.empty() ) {
+					string::size_type pos = basis.find(cutter);
+					if (pos != string::npos) {
+						interpolate(basis.substr(0, pos),iter,result,Text::k);
+						basis = basis.substr(pos+cutter.size(),string::npos);
+						auto token=make_unique<Injection>(Text::i);
+						result.emplace(token);
+					} else {
+						interpolate(basis,iter,result,Text::k);
+						basis.clear();
+					}
+				}
+			} else {
+				interpolate(text,iter,result,Text::k);
+			}
 		}
 	}
 
