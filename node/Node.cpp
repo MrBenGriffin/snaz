@@ -32,9 +32,9 @@ namespace node {
 	size_t Node::sibling() 	 	 const	{ return _sibling; }    	// my number from 1 to n (NOT a zero prefixed array!)
 	size_t Node::size() 		 const 	{ return _weight; }
 	size_t Node::getChildCount() const  { return children.size(); }
-	const string Node::ref() 	 const	{ return _ref; }        	// unique id as a string
-	const string Node::ids() 	 const	{ return idStr; }        	// unique id as a string
-	const string Node::comm() 	 const	{ return _comment; }		// comment as a string
+	string Node::ref() 	 		 const	{ return _ref; }        	// unique id as a string
+	string Node::ids() 	 		 const	{ return idStr; }        	// unique id as a string
+	string Node::comm() 	 	 const	{ return _comment; }		// comment as a string
 
 	//-------------------------------------------------------------------
 	Node::Node(Tree& tree) : _tree(&tree),_parent(nullptr),_id(0),_tw(0),_tier(0),_weight(1),_sibling(1),idStr("") {
@@ -43,6 +43,11 @@ namespace node {
 	const Content* Node::content() const 	{ return dynamic_cast<const Content*>(this); }
 	const Taxon* Node::taxon() const 		{ return dynamic_cast<const Taxon*>(this); }
 	const Suffix* Node::suffix() const 		{ return dynamic_cast<const Suffix*>(this); }
+
+	pair<valueField, vType> Node::field(Messages& e,const std::string& name) const {
+		auto vf = gets[name];
+		return { vf, vTypes[vf] };
+	}
 
 	//-------------------------------------------------------------------
 	//Read fields common to all nodes here.
@@ -175,6 +180,62 @@ namespace node {
 			const_cast<Node*>(i)->weigh();
 			_weight += i->_weight;
 		}
+	}
+
+	bool Node::bGet(Messages &, valueField field) const {
+		bool result = false;
+		switch (field) {
+			default:
+				break;
+		}
+		return result;
+	}
+
+	size_t Node::iGet(Messages&, valueField field) const {
+		size_t result = 0;
+		switch (field) {
+			case node::id:
+				result = _id;
+				break;
+			case node::tw:
+				result = _tw;
+				break;
+			case node::tier:
+				result = _tier;
+				break;
+			case node::sibling:
+				result = _sibling;
+				break;
+			case weight:
+				result = _weight;
+			default:
+				break;
+		}
+		return result;
+	}
+
+	string Node::sGet(Messages&, valueField field) const {
+		string result;
+		switch (field) {
+			case node::ref:
+				result = _ref;
+				break;
+			case node::comment:
+				result = _comment;
+				break;
+			default:
+				break;
+		}
+		return result;
+	}
+
+	Date Node::dGet(Messages &, valueField field) const {
+		Date result;
+		switch (field) {
+			default:
+				break;
+		}
+		return result;
 	}
 
 //-------------------------------------------------------------------

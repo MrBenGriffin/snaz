@@ -154,41 +154,39 @@ namespace node {
 		}
 	}
 
-	bool Content::get(Messages&,boolValue) const {
-		return false;
+	bool Content::bGet(Messages& e,valueField field) const {
+		return Node::bGet(e, field);
 	};
-	size_t Content::get(Messages&,uintValue field) const {
+	size_t Content::iGet(Messages& e,valueField field) const {
 		size_t result=0;
 		switch(field) {
 			case team: result = _team; break;
-			case uintValue::layout: result = _layout; break;
+			case valueField::layout: result = _layout; break;
 			case templates: result= finalFilenames.size(); break;
+			default:
+				result = Node::iGet(e, field);
 		}
 		return result;
 	};
-	string Content::get(Messages&,textValue field) const {
+	string Content::sGet(Messages& e,valueField field) const {
 		string result;
 		switch(field) {
 			case title: 		result= _title; break;
 			case shortTitle: 	result= _shortTitle; break;
 			case comment: 		result= _comment; break;
 			case baseFilename: 	result=baseFileName; break;
-			case scope: break;
-			case classCode: break;
-			case synonyms: break;
-			case keywords: break;
-			case description: break;
-			case fileSuffix: break;
-			case script: break;
 			case editor: result = _editor; break;
+			default:
+				result = Node::sGet(e, field);
 		}
 		return result;
 	};
-	Date   Content::get(Messages&,dateValue field) const {
+	Date   Content::dGet(Messages& e,valueField field) const {
 		switch(field) {
 			case modified: return Date();
 			case birth: return _birth;
 			case death: return _death;
+			default: return Node::dGet(e, field);
 		}
 	};
 

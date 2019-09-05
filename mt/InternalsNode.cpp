@@ -17,15 +17,14 @@ namespace mt {
 
 		const Node* interest = my.node(1);
 		if (interest != nullptr) {
-			string result = interest->get(e,title);
-			my.logic(result,2);
+			my.logic(interest->sGet(e,title),2);
 		}
 	}
 	void iTeam::expand(Messages& e,MacroText& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		const Node* interest = my.node(1);
 		if (interest != nullptr) {
-			my.logic(interest->get(e,team),2);
+			my.logic(interest->iGet(e,team),2);
 		}
 	}
 	void iSuffix::expand(Messages& e,MacroText& o,Instance& instance,mstack& context) const {
@@ -45,8 +44,7 @@ namespace mt {
 		InternalInstance my(this,e,o,instance,context);
 		const Node* interest = my.node(1);
 		if (interest != nullptr) {
-			string result = interest->get(e,shortTitle);
-			my.logic(result,2);
+			my.logic(interest->sGet(e,shortTitle),2);
 		}
 	}
 
@@ -115,7 +113,7 @@ namespace mt {
 		InternalInstance my(this,e,o,instance,context);
 		const node::Node* interest = my.node(1);
 		if(interest) {
-			my.logic(interest->get(e,birth).str(),2);
+			my.logic(interest->dGet(e,birth).str(),2);
 		}
 		my.logic(false,1);
 	}
@@ -156,7 +154,7 @@ namespace mt {
 		InternalInstance my(this,e,o,instance,context);
 		const node::Node* interest = my.node(1);
 		if(interest) {
-			my.logic(interest->get(e,death).str(),2);
+			my.logic(interest->dGet(e,death).str(),2);
 		}
 		my.logic(false,1);
 	}

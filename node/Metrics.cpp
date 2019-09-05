@@ -8,6 +8,7 @@
 #include "content/Segment.h"
 
 #include "node/Content.h"
+#include "node/Taxon.h"
 #include "node/Node.h"
 #include "node/Locator.h"
 
@@ -18,6 +19,8 @@ namespace node {
 	Metrics::Metrics() : current(nullptr),currentTemplate(nullptr),page(0) {
 		locator =  std::make_unique<Locator>(this);
 		locator->setRoot(Content::root());
+		taxonlocator = std::make_unique<Locator>(this);
+		taxonlocator->setRoot(Taxon::root());
 	}
 	Metrics::~Metrics() {
 	}
@@ -65,6 +68,21 @@ namespace node {
 		} else {
 			errs << Message(Support::trace,"direct"); //This is probably a test or a syntax check.
 		}
+	}
+
+	const Node* Metrics::taxon(Messages &errs,const std::string &path,const mt::mstack* context) const {
+		const Node *result = nullptr;
+		if (!path.empty()) {    // If specified startnode, use it
+			taxonlocator->setFrom(Taxon::root());
+			result = taxonlocator->locate(errs,path.begin(),path.end());
+			if (result == nullptr && errs.storing()) {
+				errs.push(Message(error, "Path: " + path + " did not find a node."));
+				trace(errs,context);
+				errs.pop();
+			}
+			locator->setRoot(Taxon::root());
+		}
+		return result;
 	}
 
 	const Node* Metrics::byPath(Messages &errs,const std::string &path,const mt::mstack* context) const {

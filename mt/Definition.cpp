@@ -92,7 +92,7 @@ namespace mt {
 	Definition::Definition(
 			Messages& errs,std::string name_i, std::string expansion_i,
 			long min, long max, bool strip, bool trimParms_i, bool preExpand_i)
-			: Handler(),  _name(std::move(name_i)), counter(0), trimParms(trimParms_i), preExpand(preExpand_i) {
+			: Handler(),  _name(std::move(name_i)), counter(0), trimParms(trimParms_i), preExpand(preExpand_i), iterationOffset(1) {
 		minParms = min == -1 ? 0 : min;
 		maxParms = max == -1 ? INT_MAX : max;
 		if(expansion_i.empty()) {
@@ -171,10 +171,11 @@ namespace mt {
 		}
 		context.emplace_front(make_pair(this,&instance)); //Construct the Carriage for this.
 		if (iterated) {
+			size_t increment = iterationOffset < 1 ? 1 : iterationOffset;
 			if(instance.myFor == nullptr) {
 				while ( context.front().second->it.first <= context.front().second->it.second) {
 					expansion.expand(e,o,context);
-					context.front().second->it.first++;
+					context.front().second->it.first+= increment;
 				}
 			} else {
 				assert(false);
@@ -184,6 +185,13 @@ namespace mt {
 		}
 		context.pop_front();
 	}
+
+	void Definition::setIterationOffset(Messages& m, size_t offset) {
+		if(iterated && offset > 0) {
+			iterationOffset = offset;
+		}
+	}
+
 
 	bool Definition::test_adv(const std::string &basis) {
 		//⌽E2.8C.BD ⍟E2.8D.9F ⎣E2.8E.A3 ⎡e2.8e.A1 	/** ALL START E2. (⌽ 8c bd)(⍟ 8d 9F)(⎡8e A1)(⎤ 8e A4)(⎣ 8e A3)(❫ 9D AB) **/

@@ -38,6 +38,7 @@ namespace mt {
 
 	protected:
 		size_t counter;
+		size_t iterationOffset;
 
 	public:
 		MacroText expansion;
@@ -45,6 +46,7 @@ namespace mt {
 
 		Definition();
 		Definition(Messages&,std::string, std::string, long = 0, long = -1, bool= true, bool= true, bool= false);
+		void setIterationOffset(Messages&, size_t);
 
 		// Handler virtuals.
 		bool inRange(size_t) const override;

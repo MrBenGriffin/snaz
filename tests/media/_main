@@ -88,8 +88,8 @@ iMed 03	@iMedia(mod_style_a,editor)						bgriffin
 iMed 04	@iMedia(mod_style_a,width)						9
 iMed 05	@iMedia(mod_style_a,height)						40
 iMed 06	@iMedia(mod_style_a:trans)						/media/images/a_trans_AF387E9B439F869AF91FF61D9EB52006.png
-iMed 07	@iMedia(mod_style_a:x400[100,200])				/media/images/a_x400_6C94234A10D044370A62E1BDCE628115.png
-iMed 08	@iMedia(mod_style_a:x400[100,250])				/media/images/a_x400_A6AF0FB29C7A31861DCA3074AE9B1A7F.png
+iMed 07	@iMedia({mod_style_a:x400[100,200]})				/media/images/a_x400_6C94234A10D044370A62E1BDCE628115.png
+iMed 08	@iMedia({mod_style_a:x400[100,250]})				/media/images/a_x400_A6AF0FB29C7A31861DCA3074AE9B1A7F.png
 
 # iEmbed
 iEmbed	[@iEmbed(embedtext)]							[This is the embedded message.]

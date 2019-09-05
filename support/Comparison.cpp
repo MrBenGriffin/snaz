@@ -92,23 +92,23 @@ namespace Support {
 	}
 	bool sortfname(const Node *n1,const Node *n2)   {
 		Messages e(nullptr);
-		return (n1->get(e,baseFilename).compare(n2->get(e,baseFilename)) < 0);
+		return (n1->sGet(e,baseFilename).compare(n2->sGet(e,baseFilename)) < 0);
 	}
 	bool sortbirth(const Node *n1,const Node *n2)   {
 		Messages e(nullptr);
-		return n1->get(e,birth) < n2->get(e,birth);
+		return n1->dGet(e,birth) < n2->dGet(e,birth);
 	}
 	bool sortdeath(const Node *n1,const Node *n2)   {
 		Messages e(nullptr);
-		return n1->get(e,death) < n2->get(e,death);
+		return n1->dGet(e,death) < n2->dGet(e,death);
 	}
 	bool sorttitle(const Node *n1,const Node *n2)   {
 		Messages e(nullptr);
-		return (n1->get(e,title).compare(n2->get(e,title)) < 0);
+		return (n1->sGet(e,title).compare(n2->sGet(e,title)) < 0);
 	}
 	bool sorttitlei(const Node *n1,const Node *n2)   {
 		Messages e(nullptr);
-		return asc_caseinsensitive(n1->get(e,title),n2->get(e,title));
+		return asc_caseinsensitive(n1->sGet(e,title),n2->sGet(e,title));
 	}
 	bool sortlinkref(const Node *n1,const Node *n2)  {
 		return (n1->ref().compare(n2->ref()) < 0);
@@ -118,11 +118,11 @@ namespace Support {
 	}
 	bool sortshorttitle(const Node *n1,const Node *n2)   {
 		Messages e(nullptr);
-		return (n1->get(e,shortTitle).compare(n2->get(e,shortTitle)) < 0);
+		return (n1->sGet(e,shortTitle).compare(n2->sGet(e,shortTitle)) < 0);
 	}
 	bool sortshorttitlei(const Node *n1,const Node *n2)   {
 		Messages e(nullptr);
-		return asc_caseinsensitive(n1->get(e,shortTitle),n2->get(e,shortTitle));
+		return asc_caseinsensitive(n1->sGet(e,shortTitle),n2->sGet(e,shortTitle));
 	}
 
 }

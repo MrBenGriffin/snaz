@@ -75,10 +75,10 @@ namespace node {
 
 		void process(Messages&,const Content*,File&) const;
 
-		bool   get(Messages&,boolValue) const override;
-		size_t get(Messages&,uintValue) const override;
-		string get(Messages&,textValue) const override;
-		Date   get(Messages&,dateValue) const override;
+		bool   bGet(Messages&,valueField) const override;
+		size_t iGet(Messages&,valueField) const override;
+		string sGet(Messages&,valueField) const override;
+		Date   dGet(Messages&,valueField) const override;
 
 		void loadTree(Messages&, Connection&, size_t,buildKind = Support::final) override;
 

@@ -198,24 +198,38 @@ namespace node {
 
 	Suffix::~Suffix() {}
 
-	bool Suffix::get(Messages&,boolValue field) const {
+	bool Suffix::bGet(Messages& e,valueField field) const {
 		bool result=false;
 		switch(field) {
 			case exec: result = _exec; break;
 			case batch: result = _batch; break;
 			case terminal: result = _terminal; break;
 			case evaluate: result = _macro; break;
-			default: break;
+			default:
+				result = Node::bGet(e, field);
+
 		}
 		return result;
 	}
 
-	size_t Suffix::get(Messages&,uintValue) const {
+	size_t Suffix::iGet(Messages&,valueField) const {
 		return 0;
 	}
-/**
- * TODO:
- */
+
+	string Suffix::sGet(Messages& e,valueField field) const {
+		string result;
+		switch(field) {
+			case title: result = _title; break;
+			case script: result = _script; break;
+			default:
+				result = Node::sGet(e, field);
+		}
+		return result;
+	}
+
+	Date Suffix::dGet(Messages& e,valueField field) const {
+		return Node::dGet(e, field);
+	}
 
 	void Suffix::processScss(Messages& log) {
 		if(!scssFiles.empty()) {
@@ -359,20 +373,5 @@ namespace node {
 		}
 	}
 
-	string Suffix::get(Messages&,textValue field) const {
-		string result;
-		switch(field) {
-			case title: result = _title; break;
-			case script: result = _script; break;
-//			case comment: result = _comment; break;
-			default: break;
-		}
-		return result;
-	}
-
-	Date Suffix::get(Messages&,dateValue) const {
-		Date result;
-		return result;
-	}
 
 }

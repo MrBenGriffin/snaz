@@ -31,7 +31,7 @@ namespace mt {
 
 		metrics = o.metrics;
 		if(o.myFor != nullptr) {
-			myFor = make_unique<forStuff>(o.myFor->stuff);
+			myFor = make_unique<forStuff>(*o.myFor);
 		}
 	}
 
@@ -55,38 +55,15 @@ namespace mt {
 		}
 	}
 
-	forStuff::~forStuff() {
-		stuff.clear();
-	}
-
 	Instance::~Instance() {
 		metrics = nullptr;
 		myFor = nullptr;
 		parms.clear();
 	}
 
-
-	forStuff::forStuff(const std::string& vt,const std::string& ct,size_t v,size_t c) {
-		stuff = {
-				{vt,Support::tostring(v)}
-			,
-				{ct,Support::tostring(c)}
-		};
+	forStuff::forStuff(const std::string& vt,const std::string& ct) : nodeSym(vt),iterSym(ct),nodeInj("i"),iterInj("k") {
 	}
 
-	forStuff::forStuff(const std::deque<std::pair<std::string,std::string>>& other) {
-		stuff = other; //copy constructor.
-	}
-
-	forStuff::forStuff(const std::string& vt,const std::string& ct) {
-		stuff = {
-				{vt,""},{ct,""}
-		};
-	}
-
-	void forStuff::set(const std::string& value,size_t count) {
-		stuff[0].second = value;
-		stuff[1].second = Support::tostring(count);
-	}
+	forStuff::forStuff(const forStuff& o) : nodeSym(o.nodeSym),iterSym(o.iterSym),nodeInj(o.nodeInj),iterInj(o.iterInj) {}
 
 }

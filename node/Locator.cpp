@@ -299,7 +299,7 @@ namespace node {
 					//current 110/RL (use layout of 110 and find next)
 					in++;
 					bool next = false;
-					size_t layoutId = from->get(errs,layout);
+					size_t layoutId = from->iGet(errs,layout);
 					if (in != out) {
 						if (*in == 'N') { //RLN find next layout (unrooted).
 							if (showPaths) message << "RLN{" << layoutId << "}";
@@ -545,7 +545,7 @@ namespace node {
 							size_t kids = from->getChildCount();
 							for (size_t i = 1; i <= kids; i++) {
 								const Node *cn = from->child(errs, i);
-								if (cn->get(errs,layout) == ilayout.first) {
+								if (cn->iGet(errs,layout) == ilayout.first) {
 									find = cn;
 									break;
 								}
@@ -594,7 +594,7 @@ namespace node {
 		pair<size_t, bool> page = znatural(in);
 		if (page.second) {
 			if (showPaths) message << "[" << page.first << "]";
-			if (page.first >= find->get(errs,templates)) {
+			if (page.first >= find->iGet(errs,templates)) {
 				pageNum = UINTMAX_MAX;    //No pages at that count.
 			} else {
 				pageNum = page.first;
@@ -643,7 +643,7 @@ namespace node {
 				find = nullptr; // not found yet
 				const Node *cn = from;
 				while (cn != root) {
-					if (cn->get(errs,layout) == ilayout.first) {
+					if (cn->iGet(errs,layout) == ilayout.first) {
 						find = cn;
 						cn = root;
 					} else {
@@ -686,7 +686,7 @@ namespace node {
 			} else {
 				if (showPaths) message << "^L[" << ilayout.first << "]";
 				find = from;
-				while (find->get(errs,layout) != ilayout.first && find != nullptr) { //this assumes that the node is actually content!
+				while (find->iGet(errs,layout) != ilayout.first && find != nullptr) { //this assumes that the node is actually content!
 					find = find->parent();
 				}
 			}

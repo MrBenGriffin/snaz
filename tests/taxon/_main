@@ -1,0 +1,29 @@
+
+
+# Taxon Accessors.
+aTacc01	@iTitle(T4218)						Flat
+
+# Taxon Internals: iTax
+iTax01	@iTax(4218,id)						4218
+iTax02	@iTax(4218,scope)					FX
+iTax03	@iTax(4218,linkref)					flat
+iTax04	@iTax(4218,tier)					4
+iTax05	@iTax(4218,team)					0
+iTax06	@iTax(4218,title)					Flat
+iTax07	@iTax(4218,shorttitle)				Flat
+iTax08	@iTax(4218,classcode)				FT
+iTax09	@iTax(4218,synonyms)				Apartment
+iTax10	@iTax(4218,article)					A self-contained set of rooms.
+iTax11	@iTax(4218,title,Flat,T,F)			T
+iTax12	@iTax(4218,title,Flot,T,F)			F
+
+# Taxon Internals: iForTax
+F pushNode	297
+iTaxRef		@iTax(4215,ref)											house-tax
+iFTax01		@iForTax(297,!house-tax,*,[@iTax(*,title)])				[House][Flat][Bedsit][Detatched][Semi-detatched][Terraced]
+iFTN001		@iForTaxNodes(!flat,*,$,+t,[@iTitle(*)])				[iExistSimilar][iForSimilar][Internal Node Accessors][node locate test BB][Non existent nodes test]
+iExSimilar	@iExistSimilar(!NLTBB,T,F)								T
+iForSim001	@iForSimilar(!NLTBB,*,#,4,1,[@iLinkRef(*):#])			[IntNodeAccess:100.0000]
+iForSim002	@iForSimilar(!NLTBB,*,#,2,,[@iLinkRef(*):#])			[IntNodeAccess:100.00][iExistSimilar:25.00][iForSimilar:25.00]
+
+F popNode 297

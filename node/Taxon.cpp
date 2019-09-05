@@ -33,7 +33,7 @@ namespace node {
 
 	void Taxon::loadTree(Messages &errs, Connection &sql, size_t language, buildKind kind) {
 		Timing &times = Timing::t();
-		if (times.show()) { times.set("Load Taxonomies"); }
+		times.set("Load Taxonomies");
 		if (sql.dbselected() && sql.table_exists(errs, "bldtax") && sql.table_exists(errs, "bldtaxlang")) {
 			sql.lock(errs, "bldtax n read,bldtaxlang l read,bldtax t read,bldtax g read");
 			std::ostringstream str;
@@ -81,7 +81,7 @@ namespace node {
 					q->readfield(errs, "shorttitle", taxon._shortTitle);
 					q->readfield(errs, "synonyms", taxon._synonyms);
 					q->readfield(errs, "keywords", taxon._keywords);
-					q->readfield(errs, "descr", taxon._descr);
+					q->readfield(errs, "descr", taxon._article);
 					q->readfield(errs, "editor", taxon._editor);
 					q->readfield(errs, "container", taxon._container);
 					q->readTime(errs, "modified", modified);
@@ -115,34 +115,35 @@ namespace node {
 			}
 		}
 		loadSubs(errs, sql, language, kind);
-		if (times.show()) { times.use(errs, "Load Taxonomies"); }
+		times.use(errs, "Load Taxonomies");
 	}
 
-	bool Taxon::get(Messages &, boolValue field) const {
+	const Taxon* Taxon::root() {
+		return dynamic_cast<const Taxon*>(taxonomies.root());
+	}
+
+	bool Taxon::bGet(Messages& e, valueField field) const {
 		bool result = false;
 		switch (field) {
 			case container:
 				result = _container;
 				break;
 			default:
-				break;
+				result = Node::bGet(e, field);
 		}
 		return result;
 	};
 
-	size_t Taxon::get(Messages&, uintValue field) const {
-		bool result = 0;
+	size_t Taxon::iGet(Messages&e, valueField field) const {
+		size_t result = 0;
 		switch (field) {
-			case team:
-				result = _team;
-				break;
 			default:
-				break;
+				result = Node::iGet(e, field);
 		}
 		return result;
 	};
 
-	string Taxon::get(Messages&, textValue field) const {
+	string Taxon::sGet(Messages& e, valueField field) const {
 		string result;
 		switch (field) {
 			case classCode:
@@ -164,25 +165,25 @@ namespace node {
 				result = _keywords;
 				break;
 			case description:
-				result = _descr;
+				result = _article;
 				break;
 			case editor:
 				result = _editor;
 				break;
 			default:
-				break;
+				result = Node::sGet(e, field);
 		}
 		return result;
 	};
 
-	Date Taxon::get(Messages &, dateValue field) const {
+	Date Taxon::dGet(Messages &e, valueField field) const {
 		Date result;
 		switch (field) {
 			case modified:
 				result = _modified;
 				break;
 			default:
-				break;
+				result = Node::dGet(e, field);
 		}
 		return result;
 	};
@@ -205,8 +206,6 @@ namespace node {
 	const Node *Taxon::node(Messages &errs, size_t id, bool silent) const {
 		return taxon(errs,id,silent);
 	}
-
-
 
 	Taxon::~Taxon() {}
 
@@ -240,11 +239,31 @@ namespace node {
 		if (times.show()) { times.use(errs, "Subscriptions"); }
 	}
 
+	void Taxon::contentNodes(Messages& errs,mt::nlist& result, const Node* tie) const {
+		auto range = contentToTaxon.equal_range(tie->id());
+		for (auto i = range.first; i != range.second; ++i) {
+			auto found = nodes.find(i->second); //i->first is the content->id.
+			if (found != nodes.end()) {
+				if(found->second.hasAncestor(this)) {
+					result.push_back(&found->second);
+				}
+			}
+		}
+	}
+
+	void Taxon::nodeContent(Messages& errs,mt::nlist& result) const {
+		auto range = taxonToContent.equal_range(_id);
+		for (auto i = range.first; i != range.second; ++i) {
+			auto& found = Content::get(i->second); //i->first is the content->id.
+			result.push_back(&found);
+		}
+	}
+
 	bool Taxon::hasSimilar(Messages &errs, Connection &sql,const Content* node) {
 		if (similarScores.find(node->id()) == similarScores.end()) {
 			return loadSimilar(errs, sql, node) != nullptr;
 		}
-		return true;
+		return false;
 	}
 
 	const nodeScores *Taxon::getSimilar(Messages &errs, Connection &sql,const Content* node) {
@@ -261,7 +280,7 @@ namespace node {
 		if (sql.dbselected() && sql.table_exists(errs, "bldtaxscore")) {
 			sql.lock(errs, "bldtaxscore read");
 			std::ostringstream str;
-			str << "select j as other,score from bldtaxscore where i=" << node;
+			str << "select j as other,score from bldtaxscore where i=" << node->id();
 			Db::Query *q = nullptr;
 			nodeScores scores;
 			if (sql.query(errs, q, str.str()) && q->execute(errs)) {

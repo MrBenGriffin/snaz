@@ -39,6 +39,7 @@ namespace node {
 		~Metrics();
 		Metrics(const Metrics*);
         std::unique_ptr<Locator> locator;
+		std::unique_ptr<Locator> taxonlocator;
 
 		const Content *current;
 		const content::Template *currentTemplate;
@@ -47,6 +48,7 @@ namespace node {
 		std::deque<const Content *> nodeStack;    //current node - used to pass to built-in functions
 		size_t page;
 		const Node* byPath(Messages &,const std::string &,const mt::mstack*) const;    	//returns null if not found
+		const Node* taxon(Messages &,const std::string &,const mt::mstack*) const;    	//returns null if not found
 		pair<const Node*,size_t> nodePage(Messages &,const std::string &) const;    //returns null if not found
 		void push(const Content*,const content::Segment*);
 		void pop();

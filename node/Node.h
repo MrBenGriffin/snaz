@@ -4,7 +4,7 @@
 #include <string>
 #include <utility>
 #include <deque>
-#include <deque>
+#include <variant>
 #include <map>
 #include <sstream>
 
@@ -26,12 +26,34 @@ namespace node {
 	class Taxon;
 	class Suffix;
 
-	enum boolValue  { exec,batch,terminal,evaluate,container};
-	enum uintValue  { team,layout,templates};
-	enum textValue  { title,shortTitle,comment,baseFilename,scope,classCode,synonyms,keywords,description,fileSuffix,script,editor};
-	enum dateValue  { modified,birth,death};
+	enum valueField : unsigned int {
+		exec=100,batch=101,terminal=102,evaluate=103,container=104,
+		team=200,layout=201,templates=202,tier=203,id=204,tw=205,sibling=206,weight=207,
+		title=300,shortTitle=301,comment=302,baseFilename=303,scope=304,classCode=305,synonyms=306,
+		keywords=307,description=308,fileSuffix=309,script=310,editor=311,ref=312,
+		modified=401,birth=402,death=403
+	};
+	enum flavour    { content,taxon,suffix};
+	enum vType : unsigned int 		{ vBool = 100, vNumber = 200, vString = 300,  vDate = 400 };
 
-	enum flavour { content,taxon,suffix};
+	static unordered_map<string,valueField> gets({
+			{"exec",exec},{"batch",batch},{"terminal",terminal},{"evaluate",evaluate},{"container",container},
+			{"team",team},{"layout",layout},{"templates",templates},{"tier",tier},{"id",id},{"tw",tw},{"sibling",sibling},{"weight",weight},
+			{"title",title},{"shortTitle",shortTitle},{"comment",comment},{"baseFilename",baseFilename},{"scope",scope},
+			{"classCode",classCode},{"synonyms",synonyms},{"keywords",keywords},
+			{"description",description},{"fileSuffix",fileSuffix},{"script",script},{"editor",editor},{"ref",ref},
+			{"modified",modified},{"birth",birth},{"death",death},
+// Synonyms
+			{"linkref",ref},{"shorttitle",shortTitle},{"classcode",classCode},{"article",description}
+	});
+
+	static unordered_map<valueField, vType> vTypes({
+		   {exec,vBool},{batch,vBool},{terminal,vBool},{evaluate,vBool},{container,vBool},
+		   {team,vNumber},{layout,vNumber},{templates,vNumber},{tier,vNumber},{id,vNumber},{tw,vNumber},{sibling,vNumber},{weight,vNumber},
+		   {title,vString},{shortTitle,vString},{comment,vString},{baseFilename,vString},{scope,vString},{classCode,vString},{synonyms,vString},
+		   {keywords,vString},{description,vString},{fileSuffix,vString},{script,vString},{editor,vString},{ref,vString},
+		   {modified,vDate},{birth,vDate},{death,vDate}
+	});
 
 	class Node {                    // build the tree..
 	private:
@@ -85,9 +107,9 @@ namespace node {
 		size_t tier() const;	 	// my tier number from 1 to n
 		size_t sibling() const;		// my sibling number from 1 to n
 		size_t size() const;
-		const string ids() const;	// unique id as a string
-		const string ref() const;	// linkref as a string
-		const string comm() const;	// comment as a string
+		string ids() const;			// unique id as a string
+		string ref() const;			// linkref as a string
+		string comm() const;		// comment as a string
 
 		void str(ostream&) const;			 // show the Node..
 		virtual void weigh();
@@ -97,10 +119,13 @@ namespace node {
 		const Suffix* suffix() const; //{ return dynamic_cast<const Suffix*>(this); }
 
 		//Accessors to Value data
-		virtual bool   get(Messages&,boolValue) const = 0;
-		virtual size_t get(Messages&,uintValue) const = 0;
-		virtual string get(Messages&,textValue) const = 0;
-		virtual Date   get(Messages&,dateValue) const = 0;
+		//bool, size_t, string, Date
+		pair<valueField, vType> field(Messages&,const std::string&) const;
+
+		virtual bool   bGet(Messages&,valueField) const;
+		virtual size_t iGet(Messages&,valueField) const;
+		virtual string sGet(Messages&,valueField) const;
+		virtual Date   dGet(Messages&,valueField) const;
 
 	};
 

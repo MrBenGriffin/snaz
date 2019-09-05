@@ -11,6 +11,7 @@
 #include <memory>
 
 #include "mt/using.h"
+#include "mt/Injection.h"
 #include "node/Node.h"
 #include "node/Metrics.h"
 
@@ -20,13 +21,12 @@ namespace mt {
 	private:
 		forStuff() = default;
 	public:
-		~forStuff();
-		std::deque<std::pair<std::string,std::string>> stuff;
-		forStuff(const std::string&,const std::string&,size_t,size_t);
+		string nodeSym;
+		string iterSym;
+		Injection nodeInj;
+		Injection iterInj;
 		forStuff(const std::string&,const std::string&);
-		forStuff(const std::deque<std::pair<std::string,std::string>>&);
-		void set(const std::string&,size_t);
-//		void set(const std::string&,size_t);
+		forStuff(const forStuff&); //copy constructor
 	};
 
 	class Instance {

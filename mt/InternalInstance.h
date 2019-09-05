@@ -43,10 +43,9 @@ namespace mt {
 		void            logic(const std::string&,size_t);
 		void            logic(long double,std::string,size_t);
 		plist 			toNodeParms(const Internal*,deque<string>&,string,size_t = string::npos);
-		const node::Node*					node(size_t);
-		const node::Node* 					node(const string&);
+		const node::Node*					node(size_t, node::flavour = node::content);
+		const node::Node* 					node(const string&, node::flavour = node::content);
 		pair<const node::Node*,size_t>		nodePage(size_t);
-
 
 	};
 

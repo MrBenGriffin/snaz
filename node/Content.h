@@ -69,10 +69,10 @@ namespace node {
 		void generate(Messages&,buildType);
 		void count(const BuildUser&,buildType,set<size_t>&);
 
-		bool   get(Messages&,boolValue) const override;
-		size_t get(Messages&,uintValue) const override;
-		string get(Messages&,textValue) const override;
-		Date   get(Messages&,dateValue) const override;
+		bool   bGet(Messages&,valueField) const override;
+		size_t iGet(Messages&,valueField) const override;
+		string sGet(Messages&,valueField) const override;
+		Date   dGet(Messages&,valueField) const override;
 		void   loadTree(Messages&, Connection&, size_t,buildKind) override; //depends upon Node flavour of
 		void 	setLayouts(Messages &); 		//Set all the layouts for a nodetree
 		flavour cultivar() const override { return flavour::content; }

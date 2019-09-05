@@ -17,6 +17,7 @@ iTax 09				[@iTax(164,article)]										[]
 iTax 10				@iTax(164,synonyms,trends,T,F)								T
 iTax 11				@iTax(164,synonyms,tronds,T,F)								F
 
+//297
 iForTax 01			@iForTax(!simple,!Regions,*,[@iTitle(T*)])						[Norway][Poland][Switzerland][Brunei]
 iForTax 02			@iForTax(!simple,!Regions,*,[@iID(T*)])							[111][112][118][314]
 iForTax 03			@iForTax(!simple,!Regions,*,[@iTax(*,scope)])					[22][23][29][]

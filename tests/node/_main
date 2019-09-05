@@ -166,7 +166,7 @@ iECGood02i		@iExistContent(,POTA,T,F)				T
 iECGood01k		@iExistContent(,Raw,T,F)					T
 iECGood02k		@iExistContent(,RAWTA,T,F)				T
 
-iECBadSegRef	@iExistContent(,wibble,T,F)				!1!alert; error: There is no segment with reference 'wibble' or aliased by layout 'SEGTEST'
+iECBadSegRef	@iExistContent(,wibble,T,F)				!1!alert; error: The segment name with reference 'wibble' is not defined on this website and is not an alias of layout 'SEGTEST'
 
 //cf. iCNoSegScope below for the error that occurs using a segment out of context.
 iECNoSegRef		@iExistContent(,testmedia,T,F)			F
@@ -187,7 +187,7 @@ iCsegSeg294		@iContent(294,Code)					Stuff T T F
 iClaySeg105		@iContent(294,Stuff)				Stuff T T F
 iCsegSeg105		@iContent(294,Code)					Stuff T T F
 
-iCNoSegment		@iContent(294,wibble)				!1!alert; error: There is no segment with reference 'wibble' or aliased by layout 'SEGTEST'
+iCNoSegment		@iContent(294,wibble)				!1!alert; error: The segment name with reference 'wibble' is not defined on this website and is not an alias of layout 'SEGTEST'
 iCsegEmpty		[@iContent(294,Empty)]				[]
 iCsegEmpty		[@iContent(294,Copy)]				[]
 iCMetaE			@iContent(294,Code,editor)			bgriffin

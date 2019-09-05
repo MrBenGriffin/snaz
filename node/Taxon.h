@@ -6,6 +6,8 @@
 #define MACROTEXT_NODE_TAXON_H
 
 #include "node/Node.h"
+#include "mt/using.h"
+
 #include "support/Message.h"
 #include "support/Definitions.h"
 
@@ -52,15 +54,19 @@ namespace node {
 		Taxon();
 		Taxon(Taxon &&) = default; //ensure that we do not use a copy constructor on move..
 		Taxon(const Taxon&) = delete;
+		static const Taxon* root();// { return dynamic_cast<const Content*>(editorial.root()); }
 
 		flavour cultivar() const override { return flavour::taxon; }
 		virtual ~Taxon();            //deleting a Node deletes all of it's children
 		const Node* node(Messages&, size_t, bool= false) const override; //by id.
 		static const Taxon* taxon(Messages&, size_t, bool= false); //by id.
-		bool   get(Messages&,boolValue) const override;
-		size_t get(Messages&,uintValue) const override;
-		string get(Messages&,textValue) const override;
-		Date   get(Messages&,dateValue) const override;
+		void contentNodes(Messages&, mt::nlist&, const Node* ) const;
+		void nodeContent(Messages&,mt::nlist&) const;
+
+		bool   bGet(Messages&,valueField) const override;
+		size_t iGet(Messages&,valueField) const override;
+		string sGet(Messages&,valueField) const override;
+		Date   dGet(Messages&,valueField) const override;
 		void 	loadTree(Messages&, Connection&, size_t, buildKind) override; //depends upon Node flavour of
 
 		static bool hasSimilar(Messages&, Connection&,const Content*);
@@ -74,7 +80,7 @@ namespace node {
 		string _shortTitle;
 		string _synonyms;
 		string _keywords;
-		string _descr;
+		string _article;
 		string _editor;
 		bool _container;
 		Date _modified;

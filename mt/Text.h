@@ -16,9 +16,9 @@ namespace mt {
 	using namespace Support;
 
 	class Text : public Script {
-		static Injection i,k;
+//		static Injection i,k;
 	private:
-		void interpolate(const string&,const string&,MacroText&, Injection&) const;
+		void interpolate(const string&,MacroText&,const forStuff&) const;
 	public:
 		Text() = default;
 		~Text() override = default;

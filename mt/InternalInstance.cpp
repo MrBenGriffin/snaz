@@ -41,13 +41,23 @@ namespace mt {
 		}
 	}
 
-	const node::Node* InternalInstance::node(size_t ref) {
-		return node(parm(ref));
+	const node::Node* InternalInstance::node(size_t ref, enum node::flavour flavour) {
+		return node(parm(ref), flavour);
 	}
 
-	const node::Node* InternalInstance::node(const string& ref) {
+	const node::Node* InternalInstance::node(const string& ref, enum node::flavour flavour) {
 		if(metrics) {
-			return metrics->byPath(*errs,ref,context);
+			switch(flavour) {
+				case node::taxon:
+					return metrics->taxon(*errs,ref,context);
+					break;
+				case node::content:
+					return metrics->byPath(*errs,ref,context);
+					break;
+				case node::suffix:
+					return nullptr;
+					break;
+			}
 		} else {
 			return nullptr;
 		}

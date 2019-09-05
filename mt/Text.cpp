@@ -8,9 +8,9 @@
 #include "mt.h"
 
 namespace mt {
-
-	Injection Text::i = Injection("i");
-	Injection Text::k = Injection("k");
+//	static Injection i,k;
+//	Injection Text::i = Injection("i");
+//	Injection Text::k = Injection("k");
 
 	Text::Text(std::string w) : Script(std::move(w)) {}
 
@@ -61,15 +61,15 @@ namespace mt {
 		o.add(valStr);
 	}
 
-	void Text::interpolate(const string& str,const string& cutter,MacroText& result, Injection& inter) const {
-		if (!cutter.empty()) {
+	void Text::interpolate(const string& str,MacroText& result,const forStuff& s) const {
+		if (!s.iterSym.empty()) {
 			string basis = str;
 			while (!basis.empty() ) {
-				string::size_type pos = basis.find(cutter);
+				string::size_type pos = basis.find(s.iterSym);
 				if (pos != string::npos) {
 					result.add(basis.substr(0, pos)); //pos says 2
-					basis = basis.substr(pos+cutter.size(),string::npos);
-					auto token=make_unique<Injection>(inter);
+					basis = basis.substr(pos+s.iterSym.size(),string::npos);
+					auto token=make_unique<Injection>(s.iterInj);
 					result.emplace(token);
 				} else {
 					result.add(basis);
@@ -83,24 +83,22 @@ namespace mt {
 
 	void Text::doFor(Messages&,MacroText& result,const forStuff& s,mstack&) const {
 		if (!text.empty()) {
-			auto& cutter = s.stuff[0].first;
-			auto& iter = s.stuff[1].first;
-			if (!cutter.empty()) {
+			if (!s.nodeSym.empty()) {
 				string basis = text;
 				while (!basis.empty() ) {
-					string::size_type pos = basis.find(cutter);
+					string::size_type pos = basis.find(s.nodeSym);
 					if (pos != string::npos) {
-						interpolate(basis.substr(0, pos),iter,result,Text::k);
-						basis = basis.substr(pos+cutter.size(),string::npos);
-						auto token=make_unique<Injection>(Text::i);
+						interpolate(basis.substr(0, pos),result,s);
+						basis = basis.substr(pos+s.nodeSym.size(),string::npos);
+						auto token=make_unique<Injection>(s.nodeInj);
 						result.emplace(token);
 					} else {
-						interpolate(basis,iter,result,Text::k);
+						interpolate(basis,result,s);
 						basis.clear();
 					}
 				}
 			} else {
-				interpolate(text,iter,result,Text::k);
+				interpolate(text,result,s);
 			}
 		}
 	}
