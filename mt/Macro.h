@@ -5,6 +5,7 @@
 #ifndef MACROTEXT_MACRO_H
 #define MACROTEXT_MACRO_H
 
+#include <memory>
 #include <string>
 #include "support/Message.h"
 #include "Token.h"
