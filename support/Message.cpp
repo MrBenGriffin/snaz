@@ -350,8 +350,9 @@ namespace Support {
 	}
 
 	void Messages::push(Message const& m) {
+		auto id = m.ID();
 		add(m);
-		stack.push_back(m.ID());
+		stack.push_back(id);
 		synchronise();
 			// We have to push the stack message in order to ensure that we get referential integrity on parent.
 	}

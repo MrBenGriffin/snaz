@@ -41,6 +41,9 @@ namespace mt {
 		return tokens.empty();
 	}
 
+	MacroText::MacroText(unique_ptr<Token>* t) {
+		tokens.emplace_back(move(*t));
+	}
 
 	void MacroText::emplace(unique_ptr<Wss>& token) {
 		if (!tokens.empty()) {
@@ -66,6 +69,11 @@ namespace mt {
 			tokens.emplace_back(move(token));
 		}
 	}
+
+//	void MacroText::emplace(Token* token) {
+//
+//	}
+
 	void MacroText::emplace(unique_ptr<Macro>& token) {
 		tokens.emplace_back(move(token));
 	}
@@ -139,7 +147,7 @@ namespace mt {
 		}
 	}
 	
-	void MacroText::expand(Messages&e,std::ostream& o,mstack&context) const {
+	void MacroText::expand(Messages&e,std::ostream& o,mstack& context) const {
 		MacroText _final;
 		try {
 			for(auto& j : tokens) {

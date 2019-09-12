@@ -1,3 +1,4 @@
+#include <sstream>
 #include "Internal.h"
 #include "InternalInstance.h"
 #include "support/Message.h"
@@ -163,7 +164,25 @@ namespace mt {
 		const Node* main = my.node(1);
 		if (main != nullptr) {
 			auto sibs = main->siblings();
-			my.generate(sibs.second,my.praw(4),my.parm(2),my.parm(3)); //template,node*,position.
+			string valSub = my.parm(2);
+			string iteSub = my.parm(3);
+			if(my.count > 4) {
+//				@iEqNode(*,%1,%5,%4)
+				auto eqn=make_unique<Macro>("iEqNode");
+				eqn->addParm(make_unique<Injection>("i"));
+				eqn->addParm(make_unique<Text>(main->ids()));
+				eqn->addParms(2);
+				instance.parms[4].doFor(e,eqn->parms[2],{valSub,iteSub},context);
+				instance.parms[3].doFor(e,eqn->parms[3],{valSub,iteSub},context);
+				//
+				Definition def(name() + "_iForSibs_P45");
+				def.expansion.emplace(eqn);
+				auto inst = Instance(instance.metrics, true);
+				my.nParms(inst.parms,sibs.second);
+				def.expand(e,o,inst,context);
+			} else {
+				my.generate(sibs.second, my.praw(4), valSub, iteSub); //template,node*,position.
+			}
 		}
 	}
 	void iSize::expand(Messages& e,MacroText& o,Instance& instance,mstack& context) const {

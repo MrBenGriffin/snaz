@@ -18,8 +18,8 @@ namespace mt {
 		copy(p); tidy();
 	}
 
-	Instance::Instance(node::Metrics* m) :
-		generated(false),myFor(nullptr),metrics(m) {
+	Instance::Instance(node::Metrics* m, bool gen) :
+		generated(gen),myFor(nullptr),metrics(m) {
 	}
 
 	Instance::Instance(const Instance & o) : myFor(nullptr),generated(o.generated),it(o.it) {

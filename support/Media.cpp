@@ -192,19 +192,32 @@ namespace Support {
 		if(mi == mediamap.end()) {
 			mi = embedmap.find(mtrans.first);
 			if(mi == embedmap.end()) {
-				errs << Message(error,mtrans.first + " was not found in as media.");
+				errs << Message(error,mtrans.first + " was not found in media.");
 				return "";
 			} else {
 				size_t index = mi->second;
 				string mime,text,result;
-				if ((ref.size() < 4) || (ref[0]!='C') || (ref[1]!='M') || (ref[2]!='_')) {
-					errs << Message(warn, mtrans.first + " is embedded. Use iEmbedMedia.");
-				}
 				emedia->setRow(errs,index);
-				emedia->readfield(errs,"mime",mime);
-				emedia->readfield(errs,"img",result);
-				if(!left(mime,4,text) || text != "text") {
-					base64encode(result);
+				if(mtrans.second.empty()) {
+					if ((ref.size() < 4) || (ref[0]!='C') || (ref[1]!='M') || (ref[2]!='_')) {
+						ostringstream msg;
+						msg << "Media referenced as " << ref << " appears to be embedded. "
+							<< mtrans.first << " was found in embedded media. Use iEmbed for this.";
+						errs << Message(warn, msg.str());
+					}
+					emedia->readfield(errs,"mime",mime);
+					emedia->readfield(errs,"img",result);
+					if(!left(mime,4,text) || text != "text") {
+						base64encode(result);
+					}
+				} else {
+					// This embed is now required as an output for conversion.
+					string extension;
+					media->readfield(errs, "ext", extension);     //not sure why we do it this way...
+					MediaInfo &filebits = filenames[mtrans.first];
+					File mediaFile(filebits.dir, filebits.base + "." + extension);
+					result = mediaFile.url(errs);
+					mediaUsed.emplace(mtrans.first);
 				}
 				return result;
 			}

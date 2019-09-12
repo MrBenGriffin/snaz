@@ -25,6 +25,7 @@ namespace mt {
 		virtual void doFor(Messages&,MacroText&,const forStuff&, mstack&) const;
 
 		//pure virtual
+//		virtual bool empty() const;
 		virtual std::string name() const = 0;
 		virtual std::string get() const =0;             	 //return text final rendered.
 		virtual std::ostream& visit(std::ostream&) const =0; //return text version of token.

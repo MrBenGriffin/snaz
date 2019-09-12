@@ -43,7 +43,7 @@ namespace mt {
 		~Instance();
 		Instance(const plist*,node::Metrics*, bool= false);
 		Instance(const plist*, std::unique_ptr<forStuff>&, node::Metrics*);
-		explicit Instance(node::Metrics*);
+		Instance(node::Metrics*, bool = false);
 		void copy(const plist *);
 		void tidy();
 

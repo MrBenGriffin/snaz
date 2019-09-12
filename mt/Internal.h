@@ -25,6 +25,7 @@ namespace mt {
 		void sortnodes(deque<const node::Node *>&,bool,char) const;
 
 	public:
+		bool internal() const override { return true; }
 		bool inRange(size_t) const override;
 		void doSort(Support::Messages&,deque<const node::Node*>&,std::string,mstack* = nullptr,node::Metrics* = nullptr) const;
 		std::string name() const override;
@@ -32,6 +33,7 @@ namespace mt {
 		static void startup(Messages&,Db::Connection&,buildKind);
 		static void shutdown(Messages&,Db::Connection&,buildKind);
 		static void reset(string);
+		void doTrace(Support::Messages&,mstack&) const;
 
 	protected:
 //Not so sure these should be here..
@@ -46,7 +48,6 @@ namespace mt {
 		plist toParms(const listType*,string,size_t = string::npos) const;
 		plist toParms(deque<string>&,string,size_t = string::npos) const;
 		void doSort(deque<std::string>&,std::string) const;
-		void doTrace(Support::Messages&,mstack&) const;
 
 	};
 
@@ -299,7 +300,7 @@ namespace mt {
 		void expand(Support::Messages&,MacroText&,Instance&,mstack&) const override;
 	};
 	struct iForSibs : public Internal {
-		iForSibs() : Internal("iForSibs",4,4) {}
+		iForSibs() : Internal("iForSibs",4,5) {}
 		void expand(Support::Messages&,MacroText&,Instance&,mstack&) const override;
 	};
 	struct iSize : public Internal {

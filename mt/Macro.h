@@ -18,11 +18,20 @@ namespace mt {
 		* With a context, it can be evaluete
 	**/
 	class MacroText;
+	class Wss;
+	class Text;
+	class Injection;
 	class Macro : public Token {
 
 	public:
 		std::string _name;
 		plist parms;        /* parsed parms */
+
+		void addParms(size_t = 1);
+		void addParm(unique_ptr<Wss>);
+		void addParm(unique_ptr<Text>);
+		void addParm(unique_ptr<Macro>);
+		void addParm(unique_ptr<Injection>);
 
 		std::string get() const override;             //return text.
 		bool empty() const override;

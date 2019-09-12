@@ -138,7 +138,14 @@ namespace mt {
 		expand(errs,result,context);
 	}
 
-	void Injection::doFor(Messages& errs,MacroText &result,const forStuff&,mstack &context) const {
+	void Injection::doFor(Messages& errs,MacroText &result,const forStuff& fs,mstack &context) const {
+		/*
+		 * So here are where the original parameters are referenced.
+		 * We need to evaluate them as-is, so that we can do the evaluation with %(i) etc.
+		 * We do NOT want to run a doFor on them, as they are outside the scope of the $NODE$ expansion declaration.
+		 * For example, imagine a node title contains '*' where we have @doThis(I0,@iTitle(I0)) and the expansion is
+		 * @iForSibs(%1,*,$,[@iTitle(*) - %2]) The * in the title would be expanded! (not so good).
+		 * */
 		expand(errs,result,context);
 	}
 
@@ -160,9 +167,13 @@ namespace mt {
 		if (type == It::text) {
 			result.add(basis);
 		} else {
-			if(!context.empty() && sValue < context.size()) {
-				auto &contextMacro = context[sValue].first;
-				auto* instance = context[sValue].second;  //Carriage passes instance by pointer.
+			auto sOffset = sValue;
+			while(context[sOffset].first->internal()) {
+				sOffset++;
+			}
+			if(!context.empty() && sOffset < context.size()) {
+				auto &contextMacro = context[sOffset].first;
+				auto* instance = context[sOffset].second;  //Carriage passes instance by pointer.
 				auto &parms = instance->parms;
 				auto &iter = instance->it;
 				size_t parmCount = parms.size();
@@ -199,10 +210,10 @@ namespace mt {
 							} else {
 								bool legal = contextMacro->inRange(value);
 								if(legal && (value <= parmCount)) {
-									if (sValue == 0) {
+									if (sOffset == 0) {
 											parms[value - 1].expand(errs,result,context);
 									} else {
-										mstack subContext(context.begin() + sValue, context.end());
+										mstack subContext(context.begin() + sOffset, context.end());
 										parms[value - 1].expand(errs,result,subContext);
 									}
 								}
@@ -223,11 +234,16 @@ namespace mt {
 							auto posi = iter.first;
 							adjust(posi);
 							if ( (0 < posi) &&  (posi <=  parmCount)) {
-								if (sValue == 0) {
+								if (sOffset == 0) {
 									parms[posi-1].expand(errs,result,context);
 								} else {
-									mstack subContext(context.begin() + sValue, context.end());
-									parms[posi-1].expand(errs,result,subContext);
+									auto x = context.size();
+									if (sOffset <= x) {
+										mstack subContext(context.begin() + sOffset, context.end());
+										parms[posi-1].expand(errs,result,subContext);
+									} else {
+										throw ("eep");
+									}
 								}
 							} else {
 								if (posi == 0) {
@@ -257,7 +273,7 @@ namespace mt {
 				}
 			} else {
 				std::ostringstream ers;
-				ers << " Offset " << sValue << "is greater than the current stack size of " << context.size();
+				ers << " Offset " << sOffset << "is greater than the current stack size of " << context.size();
 				errs << Message(error,ers.str());
 
 			}

@@ -266,8 +266,7 @@ namespace Support {
 					case 'D': {
 						node::Locator::showPaths = true;
 						content::Template::show(true);
-					}
-						break;
+					} break;
 					case 'd':
 						build.setCurrent(test); // = true;
 						break;

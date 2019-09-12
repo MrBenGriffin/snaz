@@ -22,6 +22,7 @@ namespace mt {
 	public:
 		Handler() = default;
 		virtual ~Handler() = default;
+		virtual bool internal() const = 0;
 		virtual bool inRange(size_t) const;
 		virtual void expand(Messages&,MacroText&,Instance&,mstack&) const = 0;
 		virtual std::ostream& visit(std::ostream&) const;

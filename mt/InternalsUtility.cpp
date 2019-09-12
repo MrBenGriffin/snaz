@@ -10,6 +10,7 @@
 #include "node/Node.h"
 #include "node/Content.h"
 
+#include <cmath>
 #include <iomanip>
 
 namespace mt {
@@ -421,9 +422,10 @@ namespace mt {
 	void iMath::expand(Messages& e,MacroText& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
 		ostringstream msg;
+		long double nearZero = nextafter(0L, 0.000000001L);
 		long double nan = numeric_limits<long double>::signaling_NaN();
-		long double x = 0.0;
-		long double y = 0.0;
+		long double x = 0.0L;
+		long double y = 0.0L;
 		string operation = my.parm(1);
 		string operandx = my.parm(2);
 		string operandy;
@@ -476,7 +478,14 @@ namespace mt {
 
 				case 'M':            //Mod
 				case 'm':
-					answer = static_cast<int>(x) % static_cast<int>(y);
+					if (y < nearZero) {
+						answer = nan;
+						e.push(Message(error,"Mod 0 is NaN."));
+						doTrace(e, context);
+						e.pop();
+					} else {
+						answer = llround(x) % llround(y);
+					}
 					break;
 				case 'L':    //lessthan
 				case '<':
@@ -501,10 +510,10 @@ namespace mt {
 					else answer = 0;
 					break;
 				case 'U':
-					answer = (static_cast<int>(x) | static_cast<int>(y));
+					answer = (llround(x) | llround(y));
 					break; //answer = 1; else answer = 0; break;
 				case 'N':
-					answer = (static_cast<int>(x) & static_cast<int>(y));
+					answer = (llround(x) & llround(y));
 					break; //answer = 1; else answer = 0; break;
 				case 'f': { //Floor / minimum
 					if (my.count < 3 || operandy.empty() || y == nan) {

@@ -31,10 +31,13 @@ namespace mt {
 
 	public:
 
+		Driver(MacroText&);
 		Driver(Messages&,std::istream &stream, bool);
 		virtual ~Driver();
 
 		void define(Messages&,parse_result&,bool);
+		void adoptParm(MacroText&);
+		void addParm(const std::string &);
 
 		void new_macro( const std::string & );
 		void storeWss(const std::string &);
@@ -43,18 +46,20 @@ namespace mt {
 		void add_parm();
 		void store_macro();
 		void setPos(pos& p) {position = std::move(p);}
+		void yield(MacroText&);
 
 		void parse(Messages&,MacroText&,bool);
 		static void parse(Messages&,MacroText&,const std::string&,bool = false);
 
 	private:
 		const std::istream*			source; //only used for parse errors..
-		static int							accept;
-		pos 										position;
-		bool										iterated;
+		static int					accept;
+		pos 						position;
+		bool						iterated;
 
 		MacroText*				_final;
-		MacroText					parm;
+//		MacroText				_alternative;
+		MacroText				parm;
 
 		std::forward_list< std::unique_ptr<Macro> >	macro_stack;
 //		std::forward_list<Macro>	macro_stack;

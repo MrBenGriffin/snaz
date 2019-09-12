@@ -11,9 +11,17 @@
 
 namespace mt {
 
+	InternalInstance::~InternalInstance() {
+		context->pop_front(); //Construct the Carriage for this.
+	}
+
+//	c.emplace_front(make_pair(thing,&i)); //Construct the Carriage for this.
+
 	InternalInstance::InternalInstance(const Internal *thing,Messages& e,MacroText &o, Instance& i, mstack &c) :
 			owner(thing),output(&o), instancePtr(&i), context(&c), errs(&e) {
 		parms = &(instancePtr->parms);
+		context->emplace_front(make_pair(thing,&i)); //Construct the Carriage for this.
+
 		count = parms->size() == 1 ? parms->front().empty() ? 0 : 1 : parms->size();
 		min = thing->minParms;
 		max = thing->maxParms;
@@ -35,9 +43,11 @@ namespace mt {
 					err << " from " << min << " to " << max << " parameters.";
 				}
 			}
-			e << Message(range,err.str());
+			e.push(Message(range,err.str()));
+			thing->doTrace(e,*context);
+			e.pop();
 			count = max;
-			throw runtime_error("No Metrics.");
+//			throw runtime_error("No Metrics.");
 		}
 	}
 
@@ -97,27 +107,23 @@ namespace mt {
 		}
 	}
 
-	void InternalInstance::generate(nlist& nodes,const MacroText* program,const string value,const string countStr) {
+	void InternalInstance::generate(nlist& nodes,const MacroText* program,const string valSub,const string iteSub) {
 		if(program != nullptr && !program->empty()) { // from an empty parm..
-			Definition def;
-			forStuff stuff(value,countStr);
-			program->doFor(*errs,def.expansion,stuff,*context);
+			Definition def(owner->name() + " expansion");
+			program->doFor(*errs,def.expansion,{valSub,iteSub},*context);
 			node::Metrics local(metrics);
-			auto instance = Instance(&local);
-			instance.generated = true;
+			auto instance = Instance(&local, true);
 			nParms(instance.parms,nodes);
 			def.expand(*errs,*output,instance,*context);
 		}
 	}
 
-	void InternalInstance::generate(plist& parameters,const MacroText* program,const string value,const string countStr) {
+	void InternalInstance::generate(plist& parameters,const MacroText* program,const string valSub,const string iteSub) {
 		if(program != nullptr && !program->empty()) { // from an empty parm..
-			Definition def;
-			forStuff stuff(value,countStr);
-			program->doFor(*errs,def.expansion,stuff,*context);
+			Definition def(owner->name() + " expansion");
+			program->doFor(*errs,def.expansion,{valSub,iteSub},*context);
 			node::Metrics local(metrics);
-			auto instance = Instance(&local);
-			instance.generated = true;
+			auto instance = Instance(&local, true);
 			instance.copy(&parameters);
 			def.expand(*errs,*output,instance,*context);
 		}

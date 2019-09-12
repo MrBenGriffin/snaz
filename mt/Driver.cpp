@@ -15,65 +15,70 @@
 namespace mt {
 
 	using namespace Support;
-	int 	Driver::accept = 0;
+	int    Driver::accept = 0;
 
-	Driver::Driver(Messages& errs,std::istream &stream,bool advanced) :
-		_final(nullptr),iterated(false) {
+	void Driver::yield(MacroText& result) { result.adopt(*_final); }
+
+	Driver::Driver(MacroText& text) : _final(&text), iterated(false) {}
+
+	Driver::Driver(Messages &errs, std::istream &stream, bool advanced) :
+			_final(nullptr), iterated(false) {
 		if (stream.good() && !stream.eof()) {
 			source = &stream; //only used for parse errors..
-			if(advanced) {
-				scanner = new Advanced(errs,&stream);
+			if (advanced) {
+				scanner = new Advanced(errs, &stream);
 			} else {
-				scanner = new Classic(errs,&stream);
+				scanner = new Classic(errs, &stream);
 			}
 		}
 	}
 
 	void Driver::parseError(Support::Messages &errs) {
 		deque<std::string> lines;
-		auto* prog = dynamic_cast<const std::istringstream*>(source);
+		auto *prog = dynamic_cast<const std::istringstream *>(source);
 		string line = prog->str();
-		Support::fandr(line, "\n"  , "␤");
+		Support::fandr(line, "\n", "␤");
 		size_t c1 = position.first;
 		size_t c2 = position.second;
-		std::string marker(c1-2,'.');
+		std::string marker(c1 - 2, '.');
 		marker.push_back('^');
-		if((c2-c1) > 2) {
-			marker.append(std::string(c2-c1-1,'.'));
+		if ((c2 - c1) > 2) {
+			marker.append(std::string(c2 - c1 - 1, '.'));
 		}
-		if((c2-c1) > 0) {
+		if ((c2 - c1) > 0) {
 			marker.push_back('^');
 		}
-		errs << Message(syntax,line);
-		errs << Message(syntax,marker);
+		errs << Message(syntax, line);
+		errs << Message(syntax, marker);
 	}
 
-	void Driver::parse(Messages& errs,MacroText& result,bool strip) {
+	void Driver::parse(Messages &errs, MacroText &result, bool strip) {
 		_final = &result;
-		scanner->stripped=strip;
-		scanner->defining=false;
-		parser = new Parser(errs,scanner,(*this));
+		scanner->stripped = strip;
+		scanner->defining = false;
+		parser = new Parser(errs, scanner, (*this));
 		if (parser->parse() != accept) {
 			parseError(errs);
 		}
-		delete parser; parser= nullptr;
+		delete parser;
+		parser = nullptr;
 		_final = nullptr;
 //		result = std::move(final);
 	}
 
-	void Driver::parse(Messages& errs,MacroText& result,const std::string& code,bool strip) {
+	void Driver::parse(Messages &errs, MacroText &result, const std::string &code, bool strip) {
 		bool advanced = Definition::test_adv(code);
 		std::istringstream codeStream(code);
-		Driver driver(errs,codeStream,advanced);
-		driver.parse(errs,result,strip);
+		Driver driver(errs, codeStream, advanced);
+		driver.parse(errs, result, strip);
 	}
 
-	void Driver::define(Messages& errs,parse_result& result,bool strip) {
+	void Driver::define(Messages &errs, parse_result &result, bool strip) {
 		bool success = false;
 		_final = &(result.second.first);
-		scanner->stripped=strip;
-		scanner->defining=true;
-		parser = new Parser(errs,scanner,(*this));
+		scanner->stripped = strip;
+		scanner->defining = true;
+		parser = new Parser(errs, scanner, (*this));
 		try {
 			success = parser->parse() == accept;
 			if (!success) {
@@ -82,7 +87,8 @@ namespace mt {
 		} catch (...) {
 //			scanner.
 		}
-		delete parser; parser= nullptr;
+		delete parser;
+		parser = nullptr;
 		_final = nullptr;
 		result.first = success;
 		result.second.second = iterated;
@@ -104,8 +110,8 @@ namespace mt {
 	 *
 	 * */
 	void Driver::store(const std::string &str) {
-		if(!str.empty()) {
-			if ( macro_stack.empty()) {
+		if (!str.empty()) {
+			if (macro_stack.empty()) {
 				_final->add(str);
 			} else {
 				parm.add(str);
@@ -114,9 +120,9 @@ namespace mt {
 	}
 
 	void Driver::storeWss(const std::string &str) {
-		if(!str.empty()) {
+		if (!str.empty()) {
 			auto wss = make_unique<Wss>(str);
-			if ( macro_stack.empty()) {
+			if (macro_stack.empty()) {
 				_final->emplace(wss);
 			} else {
 				parm.emplace(wss);
@@ -127,7 +133,7 @@ namespace mt {
 	void Driver::inject(const std::string &word) {
 		auto i = make_unique<Injection>(word);
 		iterated = iterated || i->iterator;
-		if ( macro_stack.empty()) {
+		if (macro_stack.empty()) {
 			_final->emplace(i);
 		} else {
 			parm.emplace(i);
@@ -160,6 +166,19 @@ namespace mt {
 		macro_stack.front()->parms.emplace_back(std::move(parm));
 		parm.reset();
 	}
+
+	/*
+	 * The following are NOT used by the parser, but for manual composition.
+	 * */
+
+	void Driver::addParm(const std::string &p) {
+		store(p); add_parm();
+	}
+
+	void Driver::adoptParm(MacroText& t) {
+		macro_stack.front()->parms.emplace_back(std::move(t));
+	}
+
 
 	/*
 	 * So that's it for the parser methods.

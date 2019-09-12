@@ -44,15 +44,17 @@ namespace mt {
 		MacroText expansion;
 		bool iterated, trimParms, preExpand;
 
-		Definition();
-		Definition(Messages&,std::string, std::string, long = 0, long = -1, bool= true, bool= true, bool= false);
+		Definition(const std::string&);
+		Definition(Messages&,const std::string&,const std::string&, long = 0, long = -1, bool= true, bool= true, bool= false);
 		void setIterationOffset(Messages&, size_t);
 
 		// Handler virtuals.
 		bool inRange(size_t) const override;
+		bool internal() const override { return false; }
 		bool parmCheck(Messages&,size_t) const;
 		std::ostream &visit(std::ostream &) const override;
 		void expand(Messages&,MacroText&,Instance&,mstack&) const override;
+
 
 		std::string name() const override;
 		static bool test_adv(const std::string &);

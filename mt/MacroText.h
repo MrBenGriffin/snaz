@@ -30,6 +30,7 @@ namespace mt {
 		MacroText();
 		MacroText(MacroText &&) noexcept; // = default; //ensure that we do not use a copy constructor on move..
 		MacroText(const MacroText&) = delete;
+		explicit MacroText(unique_ptr<Token>*);
 
 		void adopt(MacroText &) noexcept; // = default; //ensure that we do not use a copy constructor on move..
 		void reset();
@@ -38,6 +39,7 @@ namespace mt {
 		bool empty() const;
 		
 		void trim();
+//		void emplace(Token*);
 		void emplace(unique_ptr<Wss>&);
 		void emplace(unique_ptr<Text>&);
 		void emplace(unique_ptr<Macro>&);

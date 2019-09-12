@@ -17,7 +17,6 @@ namespace mt {
 	// and also manages common utility functions.
 	class InternalInstance {
 	private:
-		void 			nParms(plist&,const nlist&);
 	public:
 		const Internal* owner;
 		const node::Metrics* metrics;// = context.back().second.metrics;
@@ -28,9 +27,11 @@ namespace mt {
 		mstack*         context {nullptr};
 		Messages*       errs;
 		InternalInstance(const Internal*,Support::Messages&,MacroText&,Instance&,mstack&);
+		~InternalInstance();
 
-		void generate(plist&,const MacroText*,const string,const string="");
-		void generate(nlist&,const MacroText*,const string,const string="");
+		void 			nParms(plist&,const nlist&);
+		void 			generate(plist&,const MacroText*,const string,const string="");
+		void 			generate(nlist&,const MacroText*,const string,const string="");
 
 		bool			boolParm(size_t,bool=false); //a boolean value (with a default).
 		bool			reverse(size_t);

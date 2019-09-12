@@ -108,7 +108,7 @@ namespace mt {
 					string format = my.parm(4);
 					const MacroText* program = my.praw(6);
 					if(program != nullptr && !program->empty()) { // from an empty parm..
-						Definition def;
+						Definition def(name() + " expansion");
 						def.setIterationOffset(e,2);
 						forStuff stuff(my.parm(2),my.parm(3));
 						stuff.iterInj = Injection("i+1");

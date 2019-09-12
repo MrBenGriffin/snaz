@@ -35,6 +35,27 @@ namespace mt {
 			parms.emplace_back(move(nParm));
 		}
 	}
+	void Macro::addParms( size_t count) { //add empty parms.
+		for (size_t i=0; i < count; ++i) {
+			parms.emplace_back(MacroText());
+		}
+	}
+	void Macro::addParm(unique_ptr<Wss> token) {
+		MacroText mt; mt.emplace(token);
+		parms.emplace_back(move(mt));
+	}
+	void Macro::addParm(unique_ptr<Text> token) {
+		MacroText mt; mt.emplace(token);
+		parms.emplace_back(move(mt));
+	}
+	void Macro::addParm(unique_ptr<Macro> token) {
+		MacroText mt; mt.emplace(token);
+		parms.emplace_back(move(mt));
+	}
+	void Macro::addParm(unique_ptr<Injection> token) {
+		MacroText mt; mt.emplace(token);
+		parms.emplace_back(move(mt));
+	}
 
 	void Macro::clone(MacroText &out) const {
 		auto token= make_unique<Macro>(this);

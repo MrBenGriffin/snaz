@@ -109,11 +109,14 @@ forNest02	@iLength(@iForSibs(W113,*,$,x))					3
 forNest03	@iForAncestry(W113,R,,*,@iNumGen(*);)			1;2;3;4;5;
 forNest04	[@iForAncestry(W113,R,W113/^2,NODE,@iNumGen(NODE))]	[345]
 forNest05	@iForSibs(W113,*,$,[@iForAncestry(*,R,*/^2,NODE,@iNumGen(NODE))])	[345][345][345]
+iFsTest		@iForSibs(W113,*,$,[@iID(*)])					[111][112][113]
 
 //Actual nested parameters..
-fNest02	@iForSibs(W113,*,$,[@iForAncestry(*,R,*/^2,NODE,@iNumGen(*))])	[555][555][555]
+fNest02		@iForSibs(W113,*,$,[@iForAncestry(*,R,*/^2,NODE,@iNumGen(*))])	[555][555][555]
+iF5007		@iForSibs(W113,*,$,@iEqNode(*,W113,[@iID(*)],(@iID(*))))		(111)(112)[113]
+iF5008		@iForSibs(W113,*,$,(@iID(*)),[@iID(*)])							(111)(112)[113]
 
-//-------------------------------------------------------------------------------
-# NOT YET IMPLEMENTED.
+
+
 iForNodes007	[@iIndex(;,@iForNodes(@iGet(*Z),*,$,+[*EventStart],@iID(*);))]		[114;111;112;119;113;118;116;115]
 F popNode	167

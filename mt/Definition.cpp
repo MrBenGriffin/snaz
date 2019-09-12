@@ -90,7 +90,7 @@ namespace mt {
 	}
 
 	Definition::Definition(
-			Messages& errs,std::string name_i, std::string expansion_i,
+			Messages& errs,const std::string& name_i,const std::string& expansion_i,
 			long min, long max, bool strip, bool trimParms_i, bool preExpand_i)
 			: Handler(),  _name(std::move(name_i)), counter(0), trimParms(trimParms_i), preExpand(preExpand_i), iterationOffset(1) {
 		minParms = min == -1 ? 0 : min;
@@ -115,8 +115,8 @@ namespace mt {
 	}
 
 	//used for pre-parsed definitions (eg in iForSibs)
-	Definition::Definition(): Handler(),
-		_name(":expansion:"),counter(0),iterated(true), trimParms(false), preExpand(false),minParms(0),maxParms(INT_MAX) {
+	Definition::Definition(const std::string& name_i): Handler(),
+		_name(name_i),counter(0),iterated(true), trimParms(false), preExpand(false),minParms(0),maxParms(INT_MAX),iterationOffset(1) {
 	}
 
 	bool Definition::inRange(size_t i) const {
