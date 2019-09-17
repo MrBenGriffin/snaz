@@ -27,7 +27,7 @@ ELSE()
     ENDIF()
 ENDIF()
 
-set(CMAKE_CXX_FLAGS_DEBUG "-H -g -Wmismatched-tags -Wdelete-non-virtual-dtor -Wunused-variable -Wcast-qual")
+set(CMAKE_CXX_FLAGS_DEBUG "-H -g -O0 -Wunused-variable -Wcast-qual")
 set(CMAKE_CXX_FLAGS_RELEASE "-H  -funsigned-char -fno-asm -Wno-trigraphs -O3 -fmessage-length=0")
 
 set(BISON_EXECUTABLE "${LOCAL_DIR}/bin/bison")
