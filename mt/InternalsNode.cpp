@@ -126,6 +126,7 @@ namespace mt {
 				const content::Layout* layout = interest->layout();
 				if(layout) {
 					auto* segment = layout->segment(e,my.parm(2));
+					auto segName = my.parm(2);
 					bool advanced = false;
 					if(my.count > 2) {
 						auto p3 = my.parm(3);
@@ -171,13 +172,6 @@ namespace mt {
 				if (layout) {
 					auto segName = my.parm(2);
 					auto segment = layout->segmentInScope(e, segName);
-//				if(e.justMarked()) {
-//					ostringstream msg;
-//					msg << "Parameter 2: Segment '" << segName << "' not in scope for layout '" << layout->ref << "'";
-//					e.push(Message(error,msg.str()));
-//					doTrace(e, context);
-//					e.pop();
-//				}
 					my.logic(segment.first, 3); // segment first is whether or not it was found.
 				} else {
 					e << Message(error, _name + " has no layout.");

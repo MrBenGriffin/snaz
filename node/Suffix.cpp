@@ -281,7 +281,7 @@ namespace node {
 	void Suffix::processBatches(Messages& log) {
 		/**
 		 * /websites/site/edit_f/scripts/set /websites/site/edit_f/draft/en/ /websites/site/edit_f/draft/en draft txti txt 2>&1
-		 * Batch scripts are passed the following parameters:
+		 * 'Version 2' Batch scripts are passed the following parameters:
 		 * 1: the directory that it is to work from (and to!).
 		 * 2: the directory that it is ending up in
 		 * 3: the build kind (draft/final).
@@ -297,6 +297,12 @@ namespace node {
 			for (auto &batch : batches) {
 				auto *current = batch.suffix;
 				File batchFile(batch.script);
+				if(batchFile.getExtension().empty()) {
+					batchFile.setExtension("v2");		// Revised version 2...
+					if (!batchFile.exists()) {
+						batchFile.setExtension("");		// Restore no extension.
+					}
+				}
 				while (current && !current->_terminal) {
 					auto *parent = dynamic_cast<const Suffix *>(current->_parent);
 					batchFile.addArg(batch.dir.output(false));
