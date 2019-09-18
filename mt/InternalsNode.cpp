@@ -119,34 +119,37 @@ namespace mt {
 	}
 	void iContent::expand(Messages& e,MacroText& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
-		const node::Content* interest = my.node(1)->content();
-		if(interest) {
-			const content::Layout* layout = interest->layout();
-			if(layout) {
-				auto* segment = layout->segment(e,my.parm(2));
-				bool advanced = false;
-				if(my.count > 2) {
-					auto p3 = my.parm(3);
-					if (p3 == "A") {
-						advanced = true;
+		const node::Node* subject = my.node(1);
+		if (subject) {
+			const node::Content* interest = subject->content();
+			if(interest) {
+				const content::Layout* layout = interest->layout();
+				if(layout) {
+					auto* segment = layout->segment(e,my.parm(2));
+					bool advanced = false;
+					if(my.count > 2) {
+						auto p3 = my.parm(3);
+						if (p3 == "A") {
+							advanced = true;
+						}
 					}
-				}
-				if(my.count == 2 || advanced) {
-					auto code = content::Editorial::e().get(e,interest,segment,advanced);
-					if(!code.first) { //need to do IO as well..
-						auto* metrics = const_cast<Metrics*>(my.metrics);
-						metrics->push(interest,segment);
-						code.second->expand(e,o,context);
-						metrics->pop();
+					if(my.count == 2 || advanced) {
+						auto code = content::Editorial::e().get(e,interest,segment,advanced);
+						if(!code.first) { //need to do IO as well..
+							auto* metrics = const_cast<Metrics*>(my.metrics);
+							metrics->push(interest,segment);
+							code.second->expand(e,o,context);
+							metrics->pop();
+						} else {
+							o.add(*code.second);
+						}
 					} else {
-						o.add(*code.second);
+						my.set(content::Editorial::e().getMeta(e,interest,segment,my.parm(3)));
 					}
 				} else {
-					my.set(content::Editorial::e().getMeta(e,interest,segment,my.parm(3)));
+					e << Message(error,_name + " has no layout.");
+					my.logic(false,3);
 				}
-			} else {
-				e << Message(error,_name + " has no layout.");
-				my.logic(false,3);
 			}
 		}
 	}
@@ -160,12 +163,14 @@ namespace mt {
 	}
 	void iExistContent::expand(Messages& e,MacroText& o,Instance& instance,mstack& context) const {
 		InternalInstance my(this,e,o,instance,context);
-		const node::Content* interest = my.node(1)->content();
-		if(interest) {
-			const content::Layout* layout = interest->layout();
-			if(layout) {
-				auto segName = my.parm(2);
-				auto segment = layout->segmentInScope(e,segName);
+		const node::Node* subject = my.node(1);
+		if (subject) {
+			const node::Content *interest = subject->content();
+			if (interest) {
+				const content::Layout *layout = interest->layout();
+				if (layout) {
+					auto segName = my.parm(2);
+					auto segment = layout->segmentInScope(e, segName);
 //				if(e.justMarked()) {
 //					ostringstream msg;
 //					msg << "Parameter 2: Segment '" << segName << "' not in scope for layout '" << layout->ref << "'";
@@ -173,10 +178,11 @@ namespace mt {
 //					doTrace(e, context);
 //					e.pop();
 //				}
-				my.logic(segment.first,3); // segment first is whether or not it was found.
-			} else {
-				e << Message(error,_name + " has no layout.");
-				my.logic(false,3);
+					my.logic(segment.first, 3); // segment first is whether or not it was found.
+				} else {
+					e << Message(error, _name + " has no layout.");
+					my.logic(false, 3);
+				}
 			}
 		}
 	}
