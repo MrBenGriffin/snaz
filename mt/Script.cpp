@@ -14,6 +14,10 @@ namespace mt {
 		swap(text,w);
 	}
 
+	Script::Script(std::string w,location& pos) : Token(pos) {
+		swap(text,w);
+	}
+
 	bool Script::empty() const {
 		return text.empty();
 	}

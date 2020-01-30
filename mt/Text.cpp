@@ -2,6 +2,7 @@
 // Created by Ben on 2019-01-23.
 //
 
+#include <iomanip>
 #include "support/Message.h"
 #include "support/Convert.h"
 #include "support/Fandr.h"
@@ -11,6 +12,9 @@ namespace mt {
 //	static Injection i,k;
 //	Injection Text::i = Injection("i");
 //	Injection Text::k = Injection("k");
+ Text::Text() : Script("") {}
+
+	Text::Text(std::string w,location& pos) : Script(std::move(w), pos) {}
 
 	Text::Text(std::string w) : Script(std::move(w)) {}
 
@@ -20,8 +24,13 @@ namespace mt {
 		}
 	}
 
-	std::ostream &Text::visit(std::ostream &o) const {
-		o << "“" << text << "”" << std::flush;
+	std::ostream& Text::visit(std::ostream& o, int style) const {
+		switch(style) {
+			case 0: o << "“" << text << "”"; break;
+			case 1: o << text; break;
+			case 2: o << text; break;
+			case 3: o << setfill('t') << setw((int)text.size()) << ""; break;
+		}
 		return o;
 	}
 
@@ -35,6 +44,7 @@ namespace mt {
 	void Text::clone(MacroText &out) const {
 		if(!text.empty()) {
 			auto token=make_unique<Text>(this->text);
+			token->pos = pos;
 			out.emplace(token);
 		}
 	}

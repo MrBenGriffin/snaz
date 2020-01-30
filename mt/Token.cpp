@@ -12,6 +12,7 @@
 
 namespace mt {
 
+	void Token::check(Messages &,mstack&) const {};
 	void Token::expand(Messages&,MacroText&,mstack&) const {}
 	void Token::doFor(Messages&,MacroText&,const forStuff&,mstack&) const {}
 	bool Token::empty() const { return true; }

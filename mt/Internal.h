@@ -41,6 +41,7 @@ namespace mt {
 		static Library library;
 		static LStore  lStore;    //'list store'  string:multiset(string)
 		static Db::Connection* sql;
+		static bool just_parsing;
 
 		std::string _name;
 		Internal(std::string name,size_t min,size_t max);
@@ -48,6 +49,7 @@ namespace mt {
 		plist toParms(const listType*,string,size_t = string::npos) const;
 		plist toParms(deque<string>&,string,size_t = string::npos) const;
 		void doSort(deque<std::string>&,std::string) const;
+		void check(Support::Messages&,Instance&,const location&) const override;
 
 	};
 

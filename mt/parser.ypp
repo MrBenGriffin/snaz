@@ -3,7 +3,7 @@
 %defines
 %define api.namespace {mt}
 %define api.parser.class {Parser}
-%define parse.trace
+%define parse.error verbose
 
 %code requires{
   namespace Support {
@@ -30,6 +30,7 @@
 
 #undef yylex
 #define yylex scanner->yylex
+
 }
 
 %define api.value.type variant
@@ -55,16 +56,18 @@ list
   ;
 
 item
-  : TEXT			{ driver.store($1); }
-  | WSS		        { driver.storeWss($1); }
-  | INJECTION		{ driver.inject($1); }
-  | macro			{ driver.store_macro(); }
+  : TEXT			{
+		driver.store($1, yyla.location);
+	}
+  | WSS		      { driver.storeWss($1, yyla.location); }
+  | INJECTION		{ driver.inject($1, yyla.location); }
+  | macro			  { driver.store_macro(); }
   ;
 
 macro
-  : MACRO_IN		{ driver.new_macro($1); }
+: MACRO_IN		{ driver.new_macro($1, yyla.location); }
     parms
-    MACRO_OUT		{ driver.store($4); driver.add_parm(); }
+    MACRO_OUT		{ driver.store($4, yyla.location); driver.add_parm(); }
   ;
 
 parms
@@ -79,17 +82,22 @@ parm
 
 pitem
   : PARM			{ driver.add_parm(); }
-  | WSS		        { driver.storeWss($1); }
-  | TEXT			{ driver.store($1); }
-  | INJECTION		{ driver.inject($1); }
+  | WSS		        { driver.storeWss($1, yyla.location); }
+  | TEXT			{ driver.store($1, yyla.location); }
+  | INJECTION		{ driver.inject($1, yyla.location); }
   | macro			{ driver.store_macro(); }
   ;
 
 %%
-void mt::Parser::error( const location_type &l, const std::string &err_message ) {
-  /**	mt::pos p({{l.begin.line,l.begin.column},{l.end.line,l.end.column}}); **/
-	mt::pos p({l.begin.column,l.end.column});
-	driver.setPos(p);
-	errs << Message(syntax,err_message);
+void mt::Parser::error( const location_type &loc, const std::string &err_message ) {
+	std::string data(err_message);
+	if(data.find("syntax error, ") == 0) {
+		data.erase(0, 14);
+	}
+	size_t pos = data.find("file");
+	while (pos != std::string::npos) {
+		data.replace(pos, 4, "text");
+		pos = data.find("file", pos + 4);
+	}
+	errs << Message(fatal,data,loc);
 }
-

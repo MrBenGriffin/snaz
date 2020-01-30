@@ -15,14 +15,16 @@ namespace mt {
 		Advanced(Support::Messages& m,std::istream *in) : Scanner(m),aFlexLexer(in) {}
 		virtual ~Advanced() = default;
 		using aFlexLexer::yylex;
-		virtual int yylex(mt::Parser::semantic_type *const,mt::Parser::location_type *);
+		virtual int yylex(mt::Parser::semantic_type *const,mt::Parser::location_type*);
 		virtual void LexerError(const char* msg) {
-        	std::string err(msg); errs << Support::Message(Support::syntax,err);
-        }
+			std::string err(msg);
+			errs << Support::Message(Support::fatal,err);
+    }
 	private:
 		mt::Parser::semantic_type *yylval = nullptr;
 	};
 }
+
 #undef  YY_DECL
 #define YY_DECL int mt::Advanced::yylex( mt::Parser::semantic_type * const lval, mt::Parser::location_type *loc )
 
@@ -34,6 +36,7 @@ using token = mt::Parser::token;
 
 /* update location on matching */
 #define YY_USER_ACTION loc->step(); loc->columns(yyleng);
+//offset+=yyleng;
 
 %}
 
@@ -92,6 +95,14 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 		yy_pop_state(); /**  Pop Literal **/
 		return( token::TEXT );
 	}
+	
+	<<EOF>> {
+		std::ostringstream eStream;
+		eStream << "expected close literal before end of text" << yytext;
+		errs << Support::Message(Support::syntax,eStream.str(),*loc);
+		yy_pop_state();
+	}
+
 }
 
 <parm>{
@@ -133,6 +144,13 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 		/** yymore(); **/
 	}
 
+	<<EOF>> {
+		std::ostringstream eStream;
+		eStream << "expected close macro before end of text" << yytext;
+		errs << Support::Message(Support::syntax,eStream.str(),*loc);
+		yy_pop_state();
+	}
+
 }
 
 	/** braces are to be honoured in brace and parm context only **/
@@ -168,6 +186,14 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
         return( token::TEXT );
         /** yymore(); **/
 	};
+	
+	<<EOF>> {
+		std::ostringstream eStream;
+		eStream << "expected close brace before end of text" << yytext;
+		errs << Support::Message(Support::syntax,eStream.str(),*loc);
+		yy_pop_state();
+	}
+
 }
 
 	/** braces are unrestricted in bracket context, close bracket pops **/
@@ -184,6 +210,14 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
         return( token::TEXT );
         /** yymore(); **/
 	}
+	
+	<<EOF>> {
+		std::ostringstream eStream;
+		eStream << "expected close bracket before end of text" << yytext;
+		errs << Support::Message(Support::syntax,eStream.str(),*loc);
+		yy_pop_state();
+	}
+
 }
 
 	/** honour (fat)macros and injections anywhere but in a macro name,literal **/
@@ -261,10 +295,11 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 }
 
 .	{
-		std::ostringstream eStream;
-		eStream << "Bad input character " << yytext;
-		errs << Support::Message(Support::syntax,eStream.str());
-	}
+	std::ostringstream eStream;
+	eStream << "Unexpected character " << yytext;
+	errs << Support::Message(Support::syntax,eStream.str(),*loc);
+	yy_pop_state();
+}
 
 %%
 

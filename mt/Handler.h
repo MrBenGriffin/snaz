@@ -30,6 +30,8 @@ namespace mt {
 		virtual void doFor(MacroText&,const forStuff&) const;
 		virtual void subs(MacroText&,std::deque<std::string>& ,const std::string&) const;
 		virtual std::string name() const;
+		virtual void check(Messages&,Instance&,const location&) const {}
+
 	};
 
 }

@@ -1,4 +1,5 @@
 #include <utility>
+#include <iomanip>
 
 //
 // Created by Ben on 2019-01-23.
@@ -9,6 +10,7 @@
 #include "node/Metrics.h"
 #include "content/Template.h"
 #include "mt/Token.h"
+#include "Build.h"
 
 namespace mt {
 
@@ -66,6 +68,7 @@ namespace mt {
 				type = It::size;
 				break;
 			default:
+				//cannot get here.
 				break;
 		}
 		basis.erase(0, 1);
@@ -105,7 +108,6 @@ namespace mt {
 			}
 		}
 	}
-
 	void Injection::parseParent() {
 		while (basis[0] == '^') {       // go up the stack.
 			sValue++;
@@ -123,6 +125,13 @@ namespace mt {
 			type(It::plain), value(0), sValue(0), offset(0),
 			modulus(false), stack(false), list(false), iterator(false), basis(std::move(src)) {
 		// ⍟^*([ijk]|[0-9]+|\(^*([ijkn]([.+-][0-9]+)?|[0-9]++?|(p(s|[0-9]?)))\))
+//			auto* log = Build::b().logger;
+			parseStart();
+	}
+
+	Injection::Injection(std::string src,location& pos): Token(pos), type(It::plain), value(0), sValue(0), offset(0),
+	modulus(false), stack(false), list(false), iterator(false), basis(std::move(src)) {
+//		auto* log = Build::b().logger;
 		parseStart();
 	}
 
@@ -151,16 +160,25 @@ namespace mt {
 
 	void Injection::clone(MacroText &out) const {
 		auto token= make_unique<Injection>(*this);
+		token->pos = pos;
 		out.emplace(token);
 	}
 
 	void Injection::final(std::ostream& o) const {
-		visit(o);
+		visit(o, 0);
 	}
 
 	void Injection::subs(MacroText& out,const std::deque<std::string>&,const std::string&) const {
 		auto token=make_unique<Injection>(*this);
 		out.emplace(token);
+	}
+
+	void Injection::check(Messages &errs, mstack& context) const {
+		// During define, when this gets evaluated, we may easily want to allow
+		// The macro type to be changed, so we don't want to be too introspective at this point.
+//		if (type != It::text) {
+//			errs << Message(info,"Need to test the injection here");
+//		}
 	}
 
 	void Injection::expand(Messages& errs,MacroText &result,mstack &context) const {
@@ -285,8 +303,14 @@ namespace mt {
 		base = modulus ? base % offset : base + offset;
 	}
 
-	std::ostream &Injection::visit(std::ostream &result) const {
-		result << "⁅";
+	std::ostream &Injection::visit(std::ostream &result, int style) const {
+		switch(style) {
+			case 0: result << "⁅"; break;
+			case 1: result << "⍟"; break;
+			case 2: result << "%"; break;
+			case 3: result << setfill('i') << setw((int)basis.size() + 1) << ""; return result;
+		}
+
 		if (type == It::text) {
 			result << basis;
 		} else {
@@ -324,7 +348,11 @@ namespace mt {
 				result << "+";
 			}
 		}
-		result << "⁆" << std::flush;
+		switch(style) {
+			case 0: result << "⁆"; break;
+			case 1:
+			case 2: break;
+		}
 		return result;
 	}
 }

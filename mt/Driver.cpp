@@ -11,6 +11,7 @@
 #include "Classic.h"
 #include "Internal.h"
 #include "support/Fandr.h"
+//#include "parser.tab.hpp"
 
 namespace mt {
 
@@ -34,22 +35,7 @@ namespace mt {
 	}
 
 	void Driver::parseError(Support::Messages &errs) {
-		deque<std::string> lines;
-		auto *prog = dynamic_cast<const std::istringstream *>(source);
-		string line = prog->str();
-		Support::fandr(line, "\n", "␤");
-		size_t c1 = position.first;
-		size_t c2 = position.second;
-		std::string marker(c1 - 2, '.');
-		marker.push_back('^');
-		if ((c2 - c1) > 2) {
-			marker.append(std::string(c2 - c1 - 1, '.'));
-		}
-		if ((c2 - c1) > 0) {
-			marker.push_back('^');
-		}
-		errs << Message(syntax, line);
-		errs << Message(syntax, marker);
+		errs.push(Message(fatal, "Parse Failed."));
 	}
 
 	void Driver::parse(Messages &errs, MacroText &result, bool strip) {
@@ -57,13 +43,14 @@ namespace mt {
 		scanner->stripped = strip;
 		scanner->defining = false;
 		parser = new Parser(errs, scanner, (*this));
-		if (parser->parse() != accept) {
+		try {
+			parser->parse(); //if this is not accept, it failed. (but errs are done already)
+		} catch (...) {
 			parseError(errs);
 		}
 		delete parser;
 		parser = nullptr;
 		_final = nullptr;
-//		result = std::move(final);
 	}
 
 	void Driver::parse(Messages &errs, MacroText &result, const std::string &code, bool strip) {
@@ -85,7 +72,7 @@ namespace mt {
 				parseError(errs);
 			}
 		} catch (...) {
-//			scanner.
+			parseError(errs);
 		}
 		delete parser;
 		parser = nullptr;
@@ -109,7 +96,7 @@ namespace mt {
 	 * driver.add_parm(); }
 	 *
 	 * */
-	void Driver::store(const std::string &str) {
+	void Driver::store(const std::string &str, Parser::location_type&) {
 		if (!str.empty()) {
 			if (macro_stack.empty()) {
 				_final->add(str);
@@ -119,9 +106,9 @@ namespace mt {
 		}
 	}
 
-	void Driver::storeWss(const std::string &str) {
+	void Driver::storeWss(const std::string &str, Parser::location_type& pos) {
 		if (!str.empty()) {
-			auto wss = make_unique<Wss>(str);
+			auto wss = make_unique<Wss>(str, pos);
 			if (macro_stack.empty()) {
 				_final->emplace(wss);
 			} else {
@@ -130,8 +117,8 @@ namespace mt {
 		}
 	}
 
-	void Driver::inject(const std::string &word) {
-		auto i = make_unique<Injection>(word);
+	void Driver::inject(const std::string &word, Parser::location_type& pos) {
+		auto i = make_unique<Injection>(word, pos);
 		iterated = iterated || i->iterator;
 		if (macro_stack.empty()) {
 			_final->emplace(i);
@@ -154,12 +141,12 @@ namespace mt {
 		}
 	}
 
-	void Driver::new_macro(const std::string &word) {
+	void Driver::new_macro(const std::string &word, Parser::location_type& pos) {
 		if (!macro_stack.empty()) {
 			macro_stack.front()->parms.emplace_back(std::move(parm));
 			parm.reset();
 		}
-		macro_stack.emplace_front(make_unique<Macro>(word)); // new Macro(word));
+		macro_stack.emplace_front(make_unique<Macro>(word, pos)); // new Macro(word));
 	}
 
 	void Driver::add_parm() {
@@ -171,8 +158,8 @@ namespace mt {
 	 * The following are NOT used by the parser, but for manual composition.
 	 * */
 
-	void Driver::addParm(const std::string &p) {
-		store(p); add_parm();
+	void Driver::addParm(const std::string &p, Parser::location_type& pos) {
+		store(p, pos); add_parm();
 	}
 
 	void Driver::adoptParm(MacroText& t) {

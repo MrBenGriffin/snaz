@@ -37,7 +37,8 @@ namespace mt {
 		std::string get() const override;             //return text.
 		bool empty() const override;
 		void final(std::ostream&) const override;     //return final text.
-		std::ostream& visit(std::ostream&) const override;
+		std::ostream& visit(std::ostream&, int) const override;
+		void check(Messages &,mstack&) const override;
 		void inject(Messages&,MacroText&,mstack&) const override;
 		void doFor(Messages&,MacroText&,const forStuff&,mstack&) const override;
 		void subs(MacroText&,const std::deque<std::string>&,const std::string&) const override;
@@ -47,6 +48,7 @@ namespace mt {
 
 		explicit Macro(std::string);
 		explicit Macro(const Macro*);
+		Macro(std::string,location&);
 		Macro(std::string,plist);
 		~Macro() override = default;
 	};

@@ -94,6 +94,7 @@ namespace Support {
 						path.cd(DraftDir);
 						break;
 					case parse:
+					case define:
 						path.cd(TmpDir);
 						break;
 				}
@@ -260,15 +261,38 @@ namespace Support {
 						tolist(nodes, parameter.substr(2));
 						build.setNodes(Branch,nodes);
 					} break;
-					case 'c':   //forced advanced parse switch.
-//--??					doParse = String::tostring(argi,' '); (text to parse?)
-						build.setCurrent(parse);
+					case 'c':
+						if(parameter == "-check") {
+							build.setCurrent(parse); // = true;
+							if (i == argc) {
+								log << Message(error," -check needs a path to the file to test");
+							} else {
+								file_to_check = string(argv[++i]);
+								log.reset();
+								log.set_no_store();
+								log.set_debug(false);
+							}
+						} else {
+							log << Message(error,"-c is old. Please use -check {path_to_file}");
+						}
 					case 'D': {
 						node::Locator::showPaths = true;
 						content::Template::show(true);
 					} break;
 					case 'd':
-						build.setCurrent(test); // = true;
+						if(parameter == "-define") {
+							build.setCurrent(define); // = true;
+							if (i == argc) {
+								log << Message(error," -define needs a path to the file to test");
+							} else {
+								file_to_check = string(argv[++i]);
+								log.reset();
+								log.set_no_store();
+								log.set_debug(false);
+							}
+						} else {
+							build.setCurrent(test); // = true;
+						}
 						break;
 					case 'F':{
 						deque<size_t> nodes;
@@ -305,6 +329,7 @@ namespace Support {
 					case 't':
 						if(parameter == "-tests") {
 							build.setCurrent(test); // = true;
+							log.set_no_store();
 						} else {
 //							Messages::setVerbosity(4);
 							log << Message(error,"-t (macro tracing / parse visits) is not yet implemented.");

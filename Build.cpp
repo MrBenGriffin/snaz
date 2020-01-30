@@ -99,6 +99,8 @@ Build::~Build() {
 //}
 
 void Build::run(Messages &log,Connection* _sql) {
+//	Messages *log;
+	logger = &log;
 	if (_sql == nullptr) {
 		log << Message(fatal,"Build needs an SQL connection.");
 		return;
@@ -107,25 +109,27 @@ void Build::run(Messages &log,Connection* _sql) {
 	}
 	Env& env = Env::e();
 	mt::Definition::startup(log); //initialise internals
-	Date date;
-	std::ostringstream str;
-	str << "Building Site " << env.get("RS_SITENAME") << " " << string(_current) << " on " << date.str() << " (UTC)";
-	log.push(Message(info,str.str()));
 	switch(_current) {
 		case test: {
-			tests(log);
+			tests(env, log);
 		} break;
+		case define:
 		case parse: {
-			doParse(log,*sql);
+			check(env, log,*sql);
 		} break;
 		case draft:
 		case final: {
-			build(log);
+			build(env, log);
 		} break;
 	}
-	log.pop();
 }
-void Build::tests(Messages &errs) {
+void Build::tests(Env& env, Messages &errs) {
+	Date date;
+
+	std::ostringstream str;
+	str << "Building Site " << env.get("RS_SITENAME") << " " << string(_current) << " on " << date.str() << " (UTC)";
+	errs.push(Message(info,str.str()));
+
 	Timing::t().set("Tests");
 	mt::Definition::load(errs,*sql,_current); // This is quite slow.
 	user.load(errs,*sql);
@@ -154,8 +158,14 @@ void Build::tests(Messages &errs) {
 	mt::Definition::shutdown(errs,*sql,_current); //bld->savePersistance(); prunePersistance(); clearPersistance();
 	Timing::t().use(errs,"Tests");
 	errs.str(cout);
+	errs.pop();
 }
-void Build::build(Messages &errs) {
+void Build::build(Env& env,Messages &errs) {
+	Date date;
+	std::ostringstream str;
+	str << "Building Site " << env.get("RS_SITENAME") << " " << string(_current) << " on " << date.str() << " (UTC)";
+	errs.push(Message(info,str.str()));
+
 	if(setLock(errs,*sql)) {
 		errs.push(Message(info,"Loading Configuration"));
 		user.load(errs,*sql);
@@ -187,8 +197,8 @@ void Build::build(Messages &errs) {
 		err << "A build is currently being run by " << user.givenName();
 		errs << Message(fatal,err.str());
 	}
+	errs.pop();
 }
-
 void Build::global(Messages& errs) {
 	Env& env = Env::e();
 	errs.push(Message(info,"Loading Macros, Suffixes, Scripts, Templates, Segments, and Media"));
@@ -233,7 +243,6 @@ void Build::global(Messages& errs) {
 	errs  << Message(debug, " TODO:: FINAL_PROCESSING_SCRIPT here.");
 
 }
-
 void Build::langs(Messages& errs) {
 	static bool calculatedProgress(false);
 	Timing& times = Timing::t();
@@ -259,7 +268,6 @@ void Build::langs(Messages& errs) {
 		errs << Message(channel::language,lang.second.name,1.0L);
 	}
 }
-
 void Build::techs(Messages& errs) {
 	Timing& times = Timing::t();
 	while (!technologies.empty()) {
@@ -283,7 +291,6 @@ void Build::techs(Messages& errs) {
 		errs << Message(channel::technology,techno.second.name,1.0L);
 	}
 }
-
 void Build::files(Messages& errs) {
 	if(requestedNodes.empty()) {
 		node::Content::get(node::Content::root()->id()).generate(errs,Full);
@@ -299,7 +306,6 @@ void Build::files(Messages& errs) {
 		}
 	}
 }
-
 void Build::calculateNodesToBuild(Messages& errs) const {
 	std::set<size_t> counter;
 	if(requestedNodes.empty()) {
@@ -318,8 +324,36 @@ void Build::calculateNodesToBuild(Messages& errs) const {
 	errs.setProgressSize(Message::node,counter.size());
 }
 
-void Build::doParse(Messages &errs, Connection&) {
-	errs << Message(fatal,"Parse is not yet implemented.");
+void Build::check(Env& env, Messages &errs, Connection&) {
+	errs.reset();
+	mt::Definition::load(errs,*sql,_current); // This is quite slow
+	File parse_source(env.file_to_check);
+	if(parse_source.exists()) {
+		string text_to_parse = parse_source.readFile();
+		std::istringstream code(text_to_parse);
+		bool advanced = mt::Definition::test_adv(text_to_parse);
+		mt::Driver driver(errs,code,advanced);
+		mt::mstack context;
+		mt::parse_result result;
+		mt::MacroText& structure = result.second.first;
+		if(_current != define) {
+			driver.parse(errs,structure,false); //bool advanced, bool strip
+			structure.check(errs, context);
+		} else {
+			driver.define(errs, result, false); //bool advanced, bool strip
+			structure.check(errs, context);
+		}
+//		if(! structure.empty()) {
+//			ostringstream tokens;
+//			structure.visit(tokens, 3);
+//			errs << Message(info, tokens.str());
+//		}
+
+//		parse_source.removeFile();
+	} else {
+		errs << Message(fatal,"file to parse '" + env.file_to_check + "' was not found");
+	}
+	errs.json(cout);
 }
 
 void Build::loadLanguages(Messages &errs, Connection& dbc) {

@@ -14,6 +14,7 @@
 #include "mt/Text.h"
 #include "mt/Macro.h"
 #include "mt/Injection.h"
+//#include "parser.tab.hpp"
 
 // Tokens are one of (macro,script(text,wss),injection).
 
@@ -50,10 +51,11 @@ namespace mt {
 		void add(const MacroText*);
 
 		//Migrated from Driver.
-		void str(Messages &,std::string&,mstack &) const;
+		void str(Messages &,std::string&,mstack&) const;
 		void expand(Messages&,MacroText&,mstack&) const;
 		void expand(Messages&,std::ostream&,mstack&) const;
-		std::ostream& visit(std::ostream&) const;
+		void check(Messages&,mstack&) const;
+		std::ostream& visit(std::ostream&, int=0) const;
 		std::ostream& final(std::ostream&) const;
 		void doFor(Messages&,MacroText&,const forStuff&,mstack&) const;
 		void inject(Messages&,MacroText&,mstack&) const;

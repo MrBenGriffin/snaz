@@ -1,4 +1,5 @@
 #include <utility>
+#include <iomanip>
 
 //
 // Created by Ben on 2019-01-23.
@@ -6,10 +7,15 @@
 
 #include "support/Convert.h"
 #include "mt.h"
+//#include "location.hh"
+
 namespace mt {
 	MacroText Wss::empty = MacroText();
 
 	std::stack<const MacroText*> Wss::newline;
+
+	Wss::Wss(std::string w,location& pos) : Script(std::move(w), pos) {}
+
 	Wss::Wss(std::string w) : Script(std::move(w)) {
 	}
 	Wss::Wss(const Wss* o) : Script(o->text) {
@@ -17,8 +23,13 @@ namespace mt {
 			throw bad_alloc();
 		}
 	}
-	std::ostream& Wss::visit(std::ostream& o) const {
-		o << "‘" << text << "’" << std::flush;
+	std::ostream& Wss::visit(std::ostream& o, int style) const {
+		switch(style) {
+			case 0: o << "‘" << text << "’"; break;
+			case 1: o << text; break;
+			case 2: o << text; break;
+			case 3: o << setfill('s') << setw((int)text.size()) << ""; break;
+		}
 		return o;
 	}
 	void Wss::push(const MacroText* nl) {
@@ -31,6 +42,7 @@ namespace mt {
 	void Wss::clone(MacroText &out) const {
 		if(!text.empty()) {
 			auto token=make_unique<Wss>(this->text);
+			token->pos = pos;
 			out.emplace(token);
 		}
 	}

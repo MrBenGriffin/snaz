@@ -37,12 +37,13 @@ namespace mt {
 
 		void define(Messages&,parse_result&,bool);
 		void adoptParm(MacroText&);
-		void addParm(const std::string &);
-
-		void new_macro( const std::string & );
-		void storeWss(const std::string &);
-		void store( const std::string &);
-		void inject( const std::string &);
+		
+		void addParm(const std::string &, Parser::location_type&);
+		void new_macro( const std::string &, Parser::location_type&);
+		void storeWss(const std::string &, Parser::location_type&);
+		void store( const std::string &, Parser::location_type&);
+		void inject( const std::string &, Parser::location_type&);
+		
 		void add_parm();
 		void store_macro();
 		void setPos(pos& p) {position = std::move(p);}

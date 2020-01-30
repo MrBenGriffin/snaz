@@ -51,9 +51,10 @@ namespace mt {
 		// Handler virtuals.
 		bool inRange(size_t) const override;
 		bool internal() const override { return false; }
-		bool parmCheck(Messages&,size_t) const;
+		bool parmCheck(Messages&,size_t,const location*) const;
 		std::ostream &visit(std::ostream &) const override;
 		void expand(Messages&,MacroText&,Instance&,mstack&) const override;
+		void check(Messages&,Instance&,const location&) const override;
 
 
 		std::string name() const override;

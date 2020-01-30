@@ -55,6 +55,8 @@ namespace Support {
 		pair< unique_ptr<Messages>,Db::Connection*> startup(int=0,const char** = nullptr);
 		void shutdown(unique_ptr<Messages>&,Db::Connection*);
 
+		string file_to_check;	// File to be used when checking syntax.
+
 		bool get(string,string&,string="");
 		bool getBool(const string&,const bool&);
 		std::string get(const string&);

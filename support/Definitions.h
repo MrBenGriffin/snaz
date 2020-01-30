@@ -22,7 +22,7 @@ namespace Support {
 	}; // for url generation, etc.
 
 	enum buildKindValue {
-		parse, final, draft, test
+		parse, define, final, draft, test
 	}; // kinds of build that there are.. (each instance of builder runs one of these).
 
 	// kinds of build that there are.. (each instance of builder runs one of these).

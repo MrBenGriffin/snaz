@@ -17,6 +17,7 @@ namespace Support {
 	buildKind::operator std::string() const {
 		switch (value) {
 			case parse: return "parse";
+			case define: return "define";
 			case final: return "final";
 			case draft: return "draft";
 			case test: return "test";
@@ -42,6 +43,7 @@ namespace Support {
 			case draft:
 				return Draft;
 			case parse:
+			case define:
 				return Parse;
 			case test:
 				return Testing;

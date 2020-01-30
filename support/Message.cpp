@@ -8,6 +8,7 @@
 #include <ostream>
 #include <thread>
 #include "support/Message.h"
+#include "support/Fandr.h"
 #include "support/db/Connection.h"
 #include "support/db/Query.h"
 #include "Build.h"
@@ -45,6 +46,10 @@ namespace Support {
 	}
 
 	Message::Message(channel c, Purpose p,string s) : Message(c,p,std::move(s),0.0L) {
+	}
+
+	Message::Message(channel c, string s,const mt::location& l) : Message(c,alert,std::move(s),0.0L) {
+		loc = l;
 	}
 
 	Message::Message(channel c,string s): Message(c,alert,std::move(s),0.0L) {
@@ -143,7 +148,27 @@ namespace Support {
 	}
 
 	void Message::str(ostream& log) const {
-		log << purposeStr() << "; " << chan() << ": " << content << flush;
+		log << purposeStr() << "; " << chan() << ": " << content;
+	}
+
+//{
+//	"channel": "syntax|range",
+//	"message": "@iFooBoo is unknown"
+//}
+
+	void Message::json(ostream& o) const {
+		string x(content);
+		Support::fandr(x, "\"", "\\\"");
+		o << "\t\t\t{" << endl;
+		o << "\t\t\t\t\"channel\": \"" << chan() << "\"," << endl;
+		o << "\t\t\t\t\"message\": \"" << content << "\"";
+		if (loc.end.column - loc.begin.column > 0) {
+			o << "," << endl << "\t\t\t\t\"offset\": " << loc.begin.column << "," << endl;
+			o << "\t\t\t\t\"length\": " << loc.end.column - loc.begin.column << endl;
+		} else {
+			o << endl;
+		}
+		o << "\t\t\t}";
 	}
 
 	void Message::store(Support::Messages& log,Support::Db::Connection* sql) {
@@ -210,12 +235,11 @@ namespace Support {
 		progressAll += progressSize[4]; // Media. Transforms are done (fractionally) over Media, as are templates.
 	}
 
-	Messages::Messages(Messages& o ): sql(o.sql),buildID(o.buildID),userID(o.userID),_established(o._established),_marked(false) {
+	Messages::Messages(Messages& o ): sql(o.sql),buildID(o.buildID),userID(o.userID),_established(o._established),_marked(false),_debug(o._debug) {
 		container = &o;
-		_marked = false;
 	}
 
-	Messages::Messages(Db::Connection* _sql): container(nullptr),sql(_sql),buildID(0),userID(0),_established(false),_marked(false) {
+	Messages::Messages(Db::Connection* _sql): container(nullptr),sql(_sql),buildID(0),userID(0),_established(false),_marked(false),_debug(true) {
 		startup();
 	}
 
@@ -318,34 +342,37 @@ namespace Support {
 	}
 
 	void Messages::add(Message const& m) {
-		_marked = _marked || (m.purpose == alert);
-		long double progression(0L);
-		if(m.purpose == progress) {
-			switch (m.ch) {
-				case media:	//ONLY USE THIS IF NOT USING Transforms FOR THE CURRENT Media.
-				case transform:
-				case file:
-					currentProgress+= m.prog;
-					break;  //fractionals.
+		if (_debug || m.ch != debug) {
+			_marked = _marked || (m.purpose == alert);
+			long double progression(0L);
+			if (m.purpose == progress) {
+				switch (m.ch) {
+					case media:    //ONLY USE THIS IF NOT USING Transforms FOR THE CURRENT Media.
+					case transform:
+					case file:
+						currentProgress += m.prog;
+						break;  //fractionals.
 
-				case node: //ONLY USE THIS IF NOT USING FILE FOR THE CURRENT NODE.
-				case adhoc:
-					currentProgress++;
-					break;
-				default: break; //only the above mean anything for progress.
+					case node: //ONLY USE THIS IF NOT USING FILE FOR THE CURRENT NODE.
+					case adhoc:
+						currentProgress++;
+						break;
+					default:
+						break; //only the above mean anything for progress.
+				}
+				progression = currentProgress / progressAll;
 			}
-			progression = currentProgress / progressAll;
-		}
-		list.emplace_back(std::move(m));
-		if(!stack.empty()) {
-			list.back().setParent(stack.back());
-		}
-		if(progression != 0L) {
-			list.back().prog = progression;
-			synchronise();
-		}
-		if(m.ch == debug) {
-			synchronise();
+			list.emplace_back(std::move(m));
+			if (!stack.empty()) {
+				list.back().setParent(stack.back());
+			}
+			if (progression != 0L) {
+				list.back().prog = progression;
+				synchronise();
+			}
+			if (m.ch == debug) {
+				synchronise();
+			}
 		}
 	}
 
@@ -380,6 +407,20 @@ namespace Support {
 			}
 			msgs.list.pop_front();
 		}
+	}
+
+	void Messages::json(ostream& o) const {
+		o << "{" << endl << "\t\"data\":{" << endl;
+		o << "\t\t\"passed\":" << (_marked ? "false" : "true")
+			<< "," << endl << "\t\t\"errors\": [" << endl;
+		for (auto& m : list) {
+			m.json(o);
+			if (&m != &list.back()) {
+				o << "," ;
+			}
+			o << endl;
+		}
+		o << "\t\t]" << endl << "\t}" << endl << "}" << endl << flush;
 	}
 
 	void Messages::str(ostream& o, bool anyway) const {

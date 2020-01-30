@@ -38,14 +38,16 @@ namespace mt {
 
 		Injection();
     explicit Injection(std::string);
+		Injection(std::string,location&);
+
 		~Injection() override = default;
 		Injection(const Injection& ) = default;
-//		explicit Injection(const Injection*);
 
 		std::string get() const override;             //return text.
 		bool empty() const override;
 		void final(std::ostream&) const override;     //return final text.
-		std::ostream& visit(std::ostream&) const override;
+		void check(Messages &,mstack&) const override;
+		std::ostream& visit(std::ostream&, int) const override;
 		void inject(Messages&,MacroText&,mstack&) const override;
 		void expand(Messages&,MacroText&,mstack&) const override;
 		void subs(MacroText&,const std::deque<std::string>&,const std::string&) const override;

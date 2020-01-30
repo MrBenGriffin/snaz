@@ -137,6 +137,17 @@ namespace mt {
 
 //Template, Macro, and Parameters all come in here.
 //	void expand(Messages&,MacroText&,mstack&) const;
+
+	void MacroText::check(Messages &e,mstack &context) const {
+		try {
+			for(auto& j : tokens) {
+					j->check(e, context);
+			}
+		} catch (exception& ex) {
+			e << Message(fatal, ex.what());
+		}
+	}
+
 	void MacroText::expand(Messages &e, MacroText &result,mstack &context) const {
 		try {
 			for(auto& j : tokens) {
@@ -165,9 +176,9 @@ namespace mt {
 		s = o.str();
 	}
 
-	std::ostream& MacroText::visit(std::ostream& o) const {
+	std::ostream& MacroText::visit(std::ostream& o, int style) const {
 		for(auto& j : tokens) {
-			j->visit(o);
+			j->visit(o, style);
 		}
 		return o;
 	}

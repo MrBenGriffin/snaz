@@ -15,7 +15,10 @@ namespace mt {
 		bool stripped;
 		bool defining;
 		virtual int yylex(Parser::semantic_type *const, Parser::location_type *)=0;
-		virtual void LexerError(const char*) {};
+		virtual void LexerError(const char* error) {
+			std::string text(error);
+			errs.add(Support::Message(Support::syntax, text));
+		};
 		virtual ~Scanner() = default;
 	};
 }

@@ -21,10 +21,11 @@ namespace mt {
 	public:
 		explicit Wss(std::string );
 		explicit Wss(const Wss*);
+		Wss(std::string,location&);
 		~Wss() override = default;
 		std::string name() const override { return "`wss`"; }
 
-		std::ostream& visit(std::ostream&) const override;
+		std::ostream& visit(std::ostream&, int) const override;
 		void expand(Messages&,MacroText&,mstack&) const override;
 		void inject(Messages&,MacroText&,mstack&) const override;
 		void subs(MacroText&,const std::deque<std::string>&,const std::string&) const override;

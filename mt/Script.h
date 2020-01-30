@@ -21,6 +21,7 @@ namespace mt {
 		std::string text;
 	public:
 		explicit Script(std::string);
+		Script(std::string,location&);
 		~Script() override = default;
 		void append(std::string);
 		void final(std::ostream&) const override;     //return final text.

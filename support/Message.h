@@ -11,6 +11,7 @@
 #include <ostream>
 #include <cstdint>
 #include <atomic>
+#include "location.hh"
 
 namespace Support {
 	namespace Db {
@@ -66,6 +67,7 @@ namespace Support {
 		static std::atomic<uint64_t> master;
 		uint64_t id;
 		uint64_t parent;
+		mt::location loc;
 
 		Message(channel,Purpose,string,long double);
 //		Message(const Message&) = delete;
@@ -77,12 +79,14 @@ namespace Support {
 		long double seconds;
 		Message(channel,string);
 		Message(channel,Purpose,string);
+		Message(channel,string,const mt::location&);
 		Message(channel,string,long double);
 		string chan() const;
 		string purposeStr() const;
 		uint64_t ID() const;
 		void setParent(uint64_t);
 		void str(ostream&) const;
+		void json(ostream&) const;
 		void store(Support::Messages&,Support::Db::Connection*);
 	};
 
@@ -92,6 +96,7 @@ namespace Support {
 		Support::Db::Connection* sql;
 		uint64_t buildID{0};
 		size_t userID{0};
+		bool _debug{true};
 		bool _marked{false};
 		bool _established{false};
 		deque<uint64_t> stack; //just the ID of the pushed alert.
@@ -107,6 +112,9 @@ namespace Support {
 
 		bool storing() { return sql != nullptr; }
 		void startup();
+		void set_debug(bool debug=false) { _debug = debug;}
+		void set_no_store() { sql = nullptr; }
+
 		void shutdown();
 		void synchronise();
 		Messages(Support::Messages&);
@@ -128,6 +136,8 @@ namespace Support {
 		void operator+= ( Messages& );
 
 		void str(ostream&, bool=false) const;
+		void json(ostream&) const;
+
 	};
 
 }

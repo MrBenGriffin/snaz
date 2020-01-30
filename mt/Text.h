@@ -20,14 +20,16 @@ namespace mt {
 	private:
 		void interpolate(const string&,MacroText&,const forStuff&) const;
 	public:
-		Text() = default;
+		Text();
 		~Text() override = default;
 		explicit Text(std::string);
 		explicit Text(const Text*);
+		Text(std::string,location&);
+
 
 		void clone(MacroText&) const override;
 
-		std::ostream& visit(std::ostream&) const override;
+		std::ostream& visit(std::ostream&, int) const override;
 		void expand(Messages&,MacroText&,mstack&) const override;
 		std::string name() const override { return "`text`"; }
 

@@ -27,6 +27,7 @@
 
 #include "Internal.h"
 #include "InternalInstance.h"
+#include "Build.h"
 
 namespace mt {
     using namespace Support;
@@ -36,7 +37,9 @@ namespace mt {
     Storage Internal::storage;
     Library Internal::library;
     LStore Internal::lStore;
-	Db::Connection* Internal::sql;
+		Db::Connection* Internal::sql;
+		bool Internal::just_parsing = false;
+
 
 	Internal::Internal(std::string name, size_t min, size_t max) :
 		Handler(),_name(std::move(name)),minParms(min),maxParms(max) {}
@@ -53,6 +56,7 @@ namespace mt {
 	void Internal::startup(Messages& log,Db::Connection& _sql,buildKind kind) {
 		Timing& times = Timing::t();
 		sql = & _sql;
+		just_parsing = (kind == parse || kind == define);
 		if (times.show()) { times.set("Load Site Storage"); }
 		storage.load(log,_sql,kind);
 		if (times.show()) { times.use(log,"Load Site Storage"); }
@@ -127,6 +131,29 @@ namespace mt {
 		}
 
 	}
+
+	void Internal::check(Messages& e,Instance& instance,const location& pos) const {
+		auto count = instance.parms.size() == 1 ? instance.parms.front().empty() ? 0 : 1 : instance.parms.size();
+		if(!inRange(count)) {
+			ostringstream err;
+			err << "Range Error while using internal ‘" << name() << "’; " << count << " parameters found. But this macro requires";
+			if (maxParms == INT_MAX) {
+				err << " at least " << minParms << " parameters.";
+			} else {
+				if(minParms == maxParms) {
+					err << " exactly " << minParms << " parameter" << ( minParms == 1 ? "." : "s.");
+				} else {
+					err << " from " << minParms << " to " << maxParms << " parameters.";
+				}
+			}
+			e << Message(range,err.str(),pos);
+		}
+		mstack context;
+		for (auto &parm : instance.parms) {
+			parm.check(e,context);
+		}
+	}
+
 
 /*
  +------+--------------+------------+----------+-----+

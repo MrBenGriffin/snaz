@@ -12,6 +12,7 @@
 #include <map>
 
 #include "support/Message.h"
+#include "support/Env.h"
 #include "BuildUser.h"
 
 namespace Support {
@@ -66,10 +67,11 @@ private:
 	void loadLanguages(Support::Messages&,Support::Db::Connection&);
 	void loadTechs(Support::Messages&,Support::Db::Connection&);
 	bool setLock(Support::Messages&,Support::Db::Connection&);
-	void doParse(Support::Messages&,Support::Db::Connection&);
 
-	void tests(Support::Messages&);
-	void build(Support::Messages&);
+	void check(Support::Env&,Support::Messages&,Support::Db::Connection&);
+	void tests(Support::Env&, Support::Messages&);
+	void build(Support::Env&, Support::Messages&);
+
 	void global(Support::Messages&);
 	void langs(Support::Messages&);
 	void techs(Support::Messages&);
@@ -78,6 +80,7 @@ private:
 	static void releaseLock(int);
 
 public:
+	Support::Messages *logger;
 	BuildUser	user;
 	static Build& b();
 	void run(Support::Messages&,Support::Db::Connection*);

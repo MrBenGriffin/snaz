@@ -123,7 +123,7 @@ namespace mt {
 		return (i <= maxParms);
 	}
 
-	bool Definition::parmCheck(Support::Messages& e,size_t parmcount) const {
+	bool Definition::parmCheck(Support::Messages& e,size_t parmcount,const location* pos = nullptr) const {
 		if((minParms <= parmcount) && (parmcount <= maxParms)) {
 			return true;
 		}
@@ -141,8 +141,20 @@ namespace mt {
 			}
 		}
 		errstr << " but " << parmcount << " were found.";
-		e << Message(range,errstr.str());
+		if(pos) {
+			e << Message(range,errstr.str(), *pos);
+		} else {
+			e << Message(range,errstr.str());
+		}
 		return false;
+	}
+
+	void Definition::check(Messages& e,Instance& instance,const location& pos) const {
+		parmCheck(e,instance.size(),&pos);
+		mstack context;
+		for (auto &parm : instance.parms) {
+			parm.check(e,context);
+		}
 	}
 
 	void Definition::expand(Support::Messages& e,MacroText& o,Instance& instance, mstack &context) const {

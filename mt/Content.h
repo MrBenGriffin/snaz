@@ -10,13 +10,14 @@
 #include "mt/Handler.h"
 
 namespace mt {
-    using namespace Support;
-    class Content : public Handler {
-        std::string _name;
-        std::string name() const;
-        bool inRange(size_t i) const;
-        Content(std::string name);
-      };
+	using namespace Support;
+	class Content : public Handler {
+		std::string _name;
+		std::string name() const override;
+		bool inRange(size_t i) const override;
+		Content(std::string name);
+	};
 }
 
 #endif //MACROTEXT_CONTENT_H
+
