@@ -3,7 +3,7 @@
 //
 
 #include <iomanip>
-#include "build.h"
+#include "Build.h"
 #include "mt/mt.h"
 #include "mt/Definition.h"
 #include "mt/MacroText.h"
