@@ -3,6 +3,7 @@
 #include <cstring>
 #include <string>
 #include <iostream>
+#include <algorithm>
 
 /* Implementation of yyFlexScanner */
 #include "parser.tab.hpp"
@@ -226,10 +227,12 @@ NOT_SPECIAL_3C		(\xe2(([^\x9d][^\0])|(\x9d[^\xab])))
 		yy_push_state(literal);
 	}
 
-	({WHITESPACE})+ {
+	({WHITESPACE}) {
 		std::string value(YYText());
 		if(value.find_first_of ("\x0d\x0a") != std::string::npos) {
-			loc->lines();
+			size_t d = std::count(value.begin(), value.end(), '\x0d');
+			size_t a = std::count(value.begin(), value.end(), '\x0a');
+			loc->lines(d == 0 ? a:d );
 			loc->end.column = 1;
 		}
 		if(!stripped) {
