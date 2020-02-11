@@ -163,8 +163,15 @@ namespace Support {
 		o << "\t\t\t\t\"channel\": \"" << chan() << "\"," << endl;
 		o << "\t\t\t\t\"message\": \"" << content << "\"";
 		if (loc.end.column - loc.begin.column > 0) {
-			o << "," << endl << "\t\t\t\t\"offset\": " << loc.begin.column << "," << endl;
-			o << "\t\t\t\t\"length\": " << loc.end.column - loc.begin.column << endl;
+			o << "," << endl;
+			o << "\t\t\t\t\"begin\": {" << endl;
+			o << "\t\t\t\t\t\"col\": " << loc.begin.column << "," << endl;
+			o << "\t\t\t\t\t\"row\": " << loc.begin.line << endl;
+			o << "\t\t\t\t}," << endl;
+			o << "\t\t\t\t\"end\": {" << endl;
+			o << "\t\t\t\t\t\"col\": " << loc.end.column << "," << endl;
+			o << "\t\t\t\t\t\"row\": " << loc.end.line << endl;
+			o << "\t\t\t\t}" << endl;
 		} else {
 			o << endl;
 		}
