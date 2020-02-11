@@ -233,7 +233,8 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 			if(value.find_first_of ("\x0d\x0a") != std::string::npos) {
 				size_t d = std::count(value.begin(), value.end(), '\x0d');
 				size_t a = std::count(value.begin(), value.end(), '\x0a');
-				size_t t = std::count(value.begin(), value.end(), '\x09');
+				size_t t = value.find_last_not_of("\x09");
+				t = t == std::string::npos ? value.size() : value.size() - (t + 1);
 				loc->lines(d == 0 ? a:d );
 				loc->end.column = 1 + t;
 			}
