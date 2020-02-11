@@ -232,8 +232,9 @@ NOT_SPECIAL_3C		(\xe2(([^\x9d][^\0])|(\x9d[^\xab])))
 		if(value.find_first_of ("\x0d\x0a") != std::string::npos) {
 			size_t d = std::count(value.begin(), value.end(), '\x0d');
 			size_t a = std::count(value.begin(), value.end(), '\x0a');
+			size_t t = std::count(value.begin(), value.end(), '\x09');
 			loc->lines(d == 0 ? a:d );
-			loc->end.column = 1;
+			loc->end.column = 1 + t;
 		}
 		if(!stripped) {
 			yylval->build<std::string>(yytext);
