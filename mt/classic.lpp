@@ -1,5 +1,6 @@
 %{
 /* C++ string header, for string ops below */
+#include <cstring>
 #include <string>
 #include <iostream>
 
@@ -35,7 +36,6 @@ using token = mt::Parser::token;
 
 /* update location on matching */
 #define YY_USER_ACTION loc->step(); loc->columns(yyleng);
-//offset+=yyleng;
 
 %}
 %option debug
@@ -227,6 +227,11 @@ NOT_SPECIAL_3C		(\xe2(([^\x9d][^\0])|(\x9d[^\xab])))
 	}
 
 	({WHITESPACE})+ {
+		std::string value(YYText());
+		if(value.find_first_of ("\x0d\x0a") != std::string::npos) {
+			loc->lines();
+			loc->end.column = 1;
+		}
 		if(!stripped) {
 			yylval->build<std::string>(yytext);
 			return( token::WSS );

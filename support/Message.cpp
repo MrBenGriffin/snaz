@@ -169,7 +169,7 @@ namespace Support {
 			o << "\t\t\t\t\t\"row\": " << loc.begin.line << endl;
 			o << "\t\t\t\t}," << endl;
 			o << "\t\t\t\t\"end\": {" << endl;
-			o << "\t\t\t\t\t\"col\": " << loc.end.column << "," << endl;
+			o << "\t\t\t\t\t\"col\": " << loc.end.column - 1 << "," << endl;
 			o << "\t\t\t\t\t\"row\": " << loc.end.line << endl;
 			o << "\t\t\t\t}" << endl;
 		} else {

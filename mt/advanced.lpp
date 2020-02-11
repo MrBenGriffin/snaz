@@ -227,12 +227,17 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 		yy_push_state(literal);
 	}
 
-	({WHITESPACE})+ {
-		if(!stripped) {
-			yylval->build<std::string>(yytext);
-			return( token::WSS );
+		({WHITESPACE})+ {
+			std::string value(YYText());
+			if(value.find_first_of ("\x0d\x0a") != std::string::npos) {
+				loc->lines();
+				loc->end.column = 1;
+			}
+			if(!stripped) {
+				yylval->build<std::string>(yytext);
+				return( token::WSS );
+			}
 		}
-	}
 
 	{MACRO_SIGN}{MACRO_NAME}{BRACKET_IN} {
 		yylval->build< std::string >( std::string(yytext + 3, yyleng -4) );

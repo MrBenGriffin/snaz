@@ -65,17 +65,15 @@ namespace mt {
 		_final = &(result.second.first);
 		scanner->stripped = strip;
 		scanner->defining = true;
-		parser = new Parser(errs, scanner, (*this));
+		Parser theParser(errs, scanner, (*this));
 		try {
-			success = parser->parse() == accept;
+			success = theParser.parse() == accept;
 			if (!success) {
 				parseError(errs);
 			}
 		} catch (...) {
 			parseError(errs);
 		}
-		delete parser;
-		parser = nullptr;
 		_final = nullptr;
 		result.first = success;
 		result.second.second = iterated;
