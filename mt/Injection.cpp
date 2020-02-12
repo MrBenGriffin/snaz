@@ -191,14 +191,14 @@ void Injection::check(Messages &errs, mstack& context) const {
 							}
 							if(list && !def->unlimited()) {
 								ostringstream estr;
-								estr << "Injection value " << value << " is marked as a list, and the macro has a fixed number of maximum parameters";
+								estr << "Injection '" << value << "+' is a list but the macro has a fixed number of maximum parameters.";
 								errs << Message(warn,estr.str(),pos);
 							}
 						} break;
 						case It::current:
 						case It::count:  {
 							if(!def->unlimited()) {
-								errs << Message(range,"Injection is iterated but the macro has a fixed number of maximum parameters",pos);
+								errs << Message(range,"Injection is iterated but the macro has a fixed number of maximum parameters.",pos);
 							}
 						} break;
 						case It::size: break;
