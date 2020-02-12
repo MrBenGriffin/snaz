@@ -49,48 +49,56 @@ namespace Support {
 	}
 
 	Message::Message(channel c, string s,const mt::location& l,string addon) : Message(c,alert,std::move(s),0.0L) {
+		setPurpose();
 		loc = l;
 		additional=addon;
 	}
 
 	Message::Message(channel c,string s): Message(c,alert,std::move(s),0.0L) {
-		switch (ch) { //syntax
-			case security:
-			case fatal:
-			case error:
-			case syntax:
-			case undefined:
-			case parms:
-			case range:
-			case warn:
-			case deprecated:
-			case usage:
-			case path:
-				purpose = alert; break;
-
-			case container:
-			case trace:
-			case info:
-			case debug:
-			case code:
-			case link:
-				purpose = extra; break;
-
-			case channel::adhoc:
-			case channel::file:
-			case channel::node:
-			case channel::language:
-			case channel::technology:
-			case channel::media:
-			case channel::transform:
-				purpose = progress; break;
-
-			case ntime:
-			case build:
-			case custom:
-				purpose = timer; break;
-		}
+		setPurpose();
 	}
+
+void Message::setPurpose() {
+	switch (ch) { //syntax
+		case security:
+		case fatal:
+		case error:
+		case syntax:
+		case undefined:
+		case parms:
+		case range:
+			purpose = alert; break;
+			
+		case warn:
+		case deprecated:
+		case usage:
+		case path:
+			purpose = notice; break;
+
+		case container:
+		case trace:
+		case info:
+		case debug:
+		case code:
+		case link:
+			purpose = extra; break;
+
+		case channel::adhoc:
+		case channel::file:
+		case channel::node:
+		case channel::language:
+		case channel::technology:
+		case channel::media:
+		case channel::transform:
+			purpose = progress; break;
+
+		case ntime:
+		case build:
+		case custom:
+			purpose = timer; break;
+	}
+
+}
 
 	void Message::setParent(uint64_t par) {
 		parent=par;
@@ -110,6 +118,8 @@ namespace Support {
 				return "timer";
 			case alert:
 				return "alert";
+			case notice:
+				return "notice";
 			case extra:
 				return "extra";
 			default:
@@ -280,9 +290,9 @@ namespace Support {
 			"`user` int(11),"
 			"`seconds` double null,"
 			"`progress` double null,"		// stored between 0..1
-			"`purpose` enum ('progress','user','timer','alert','extra') not null default 'alert',"
+			"`purpose` enum ('progress','user','timer','alert','notice','extra') not null default 'alert',"
 			"`channel` enum ("
-   			"'fatal','error','syntax','range','parms','warn','deprecated','info','debug','security','usage'," //alerts
+   			"'fatal','error','syntax','range','parms','warn','undefined','deprecated','info','debug','security','usage'," //alerts
 	  		"'path','link','trace','code','container'," 								// extras
 	 		"'ntime','build','custom',"													// timing
 			"'node','language','technology','media','transform','adhoc','file',"		// progress

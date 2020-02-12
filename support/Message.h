@@ -28,7 +28,7 @@ namespace Support {
 			ntime, build, custom,		   // timing
 			node, language, technology, media, transform, adhoc, file     // progress
 			};
-	enum Purpose { user, progress, timer, alert, extra };
+	enum Purpose { user, progress, timer, alert, notice, extra };
 
 	class Message {
 /**
@@ -70,6 +70,7 @@ namespace Support {
 		mt::location loc;
 
 		Message(channel,Purpose,string,long double);
+		void setPurpose();
 //		Message(const Message&) = delete;
 	public:
 		channel ch;
