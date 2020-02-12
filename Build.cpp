@@ -85,7 +85,7 @@ Build& Build::b() {
 	return singleton;
 }
 
-Build::Build() : _current(final),lock(true),full(false),allTechs(false),allLangs(false),sql(nullptr),_media(nullptr),user() {
+Build::Build() : _current(final),lock(true),full(false),allTechs(false),allLangs(false),sql(nullptr),_media(nullptr),user(),macroReference() {
 	_media = new Media();
 }
 
@@ -343,13 +343,6 @@ void Build::check(Env& env, Messages &errs, Connection&) {
 			driver.define(errs, result, false); //bool advanced, bool strip
 			structure.check(errs, context);
 		}
-//		if(! structure.empty()) {
-//			ostringstream tokens;
-//			structure.visit(tokens, 3);
-//			errs << Message(info, tokens.str());
-//		}
-
-//		parse_source.removeFile();
 	} else {
 		errs << Message(fatal,"file to parse '" + env.file_to_check + "' was not found");
 	}

@@ -34,9 +34,9 @@ namespace mt {
 		if (times.show()) { times.set("Load Site Macros"); }
 		//Now load macros.
 		if ( sql.dbselected() && sql.table_exists(errs,"bldmacro") && sql.table_exists(errs,"bldmacrov") ) {
-			sql.lock(errs,"bldmacro as m read,bldmacrov as v read");
 			std::ostringstream str;
-			str << "select m.search,v.expansion,m.id,v.stripf='on' as strip_d,v.stripx='on' as strip_p,v.preparse='on' as pre_p,v.minparms,v.maxparms from bldmacro m,bldmacrov v where v.id=m.version and v.expansion !='internal'";
+			sql.lock(errs,"bldmacro as m read,bldmacrov as v read");
+			str << "select m.search,v.expansion,m.id,v.stripf='on' as strip_d,v.stripx='on' as strip_p,v.preparse='on' as pre_p,v.minparms,v.maxparms,m.editor_template as example from bldmacro m,bldmacrov v where v.id=m.version and v.expansion !='internal'";
 			Db::Query* q = nullptr;
 			if (sql.query(errs,q,str.str()) && q != nullptr && q->execute(errs)) {
 //				+---------+-----------+----+---------+---------+-------+----------+----------+
@@ -44,11 +44,9 @@ namespace mt {
 //				+---------+-----------+----+---------+---------+-------+----------+----------+
 //				| wa      |  %1="%2"  | 66 |       1 |       1 |     0 |        2 |        2 |
 //				+---------+-----------+----+---------+---------+-------+----------+----------+
-				std::string name,expansion,macro_id;
+				std::string name,expansion,macro_id,example;
 				signed long min,max;
 				size_t pre,stripDef,stripParms;
-//				str.str(""); str << "Found " << q->getnumrows() << " macro Definitions";
-//				errs << Message(debug,str.str());
 				while(q->nextrow()) {
 					q->readfield(errs,"search",name);
 					q->readfield(errs,"expansion",expansion);
@@ -58,12 +56,14 @@ namespace mt {
 					q->readfield(errs,"preparse",pre);
 					q->readfield(errs,"minparms",min);
 					q->readfield(errs,"maxparms",max);
+					q->readfield(errs,"example",example);
+
 					if (name.empty()) {
 						errs << Message(error,"macro with id " + macro_id + " has no name!");
 					} else {
 						Messages log(errs);
 						auto macro = make_unique<Definition>(log,name,expansion,min,max,stripDef==1,stripParms==1,pre==1);
-//						Definition* macro = new Definition(log,name,expansion,min,max,stripDef==1,stripParms==1,pre==1);
+						macro->example = example;
 						if(log.marked()) {
 							str.str(""); str << "Define `" << name << "` failed while parsing `" << expansion << "`";
 							errs << Message(error,str.str());
@@ -75,8 +75,6 @@ namespace mt {
 						}
 					}
 				}
-//				str.str(""); str << "Loaded " << library.size() << " Macro Definitions";
-//				errs << Message(debug,str.str());
 			}
 			sql.dispose(q);
 			sql.unlock(errs);
@@ -142,7 +140,7 @@ namespace mt {
 		}
 		errstr << " but " << parmcount << " were found.";
 		if(pos) {
-			e << Message(range,errstr.str(), *pos);
+			e << Message(range,errstr.str(), *pos, example);
 		} else {
 			e << Message(range,errstr.str());
 		}

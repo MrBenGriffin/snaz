@@ -44,7 +44,9 @@ namespace mt {
 		static bool just_parsing;
 
 		std::string _name;
-		Internal(std::string name,size_t min,size_t max);
+		std::string example;
+
+		Internal(std::string,size_t,size_t,string="");
 		plist toParms(string,string,string) const;
 		plist toParms(const listType*,string,size_t = string::npos) const;
 		plist toParms(deque<string>&,string,size_t = string::npos) const;
@@ -55,7 +57,7 @@ namespace mt {
 
 	class FieldContext: public Internal {
 	protected:
-		FieldContext(std::string name,size_t min,size_t max) : Internal(name,min,max) {}
+		FieldContext(std::string name,size_t min,size_t max,string example="") : Internal(name,min,max,example) {}
 
 	public:
 		virtual string get(Messages&,const string& name) const = 0;
@@ -63,109 +65,109 @@ namespace mt {
 
 	//•------------ √ Utility macros
 	struct iEq : public Internal {
-		iEq() : Internal("iEq",0,4) {}
+		iEq() : Internal("iEq",0,4,"@iEq(TEXT,COMPARATOR,[TRUE,[FALSE]])") {}
 		void expand(Support::Messages&,MacroText&,Instance&,mstack&) const override;
 	};
 	struct iExpr : public Internal {
-		iExpr() : Internal("iExpr",1,INT_MAX) {}
+		iExpr() : Internal("iExpr",1,INT_MAX,"@iExpr(SCRIPT,[PARAMETER]+)") {}
 		void expand(Support::Messages&,MacroText&,Instance&,mstack&) const override;
 	};
 
 	struct iIndex : public Internal {
-		iIndex() : Internal("iIndex",1,6) {}
+		iIndex() : Internal("iIndex",1,6,"@iIndex(DELIMITER,LIST,OPERATION,[EXTRA_1,EXTRA_2])") {}
 		void expand(Support::Messages&,MacroText&,Instance&,mstack&) const override;
 	};
 
 	struct iForIndex : public Internal {
-		iForIndex() : Internal("iForIndex",1,6) {}
+		iForIndex() : Internal("iForIndex",1,6,"@iForIndex(DELIMITER,LIST,PATTERN,IT-PATTERN,SORT,EXPANSION)") {}
 		void expand(Support::Messages&,MacroText&,Instance&,mstack&) const override;
 	};
 
 	struct iConsole : public Internal {
-		iConsole() : Internal("iConsole",1,2) {}
+		iConsole() : Internal("iConsole",1,2,"@iConsole(N|I|W|E|T,TEXT)") {}
 		void expand(Support::Messages&,MacroText&,Instance&,mstack&) const override;
 	};
 	struct iDate : public Internal {
-		iDate() : Internal("iDate",0,5) {}
+		iDate() : Internal("iDate",0,5,"@iDate(DATE,[FORMAT,[COMPARATOR,[TRUE,[FALSE]]]])") {}
 		void expand(Support::Messages&,MacroText&,Instance&,mstack&) const override;
 	};
 	struct iEval : public Internal {
-		iEval() : Internal("iEval",1,INT_MAX) {}
+		iEval() : Internal("iEval",1,INT_MAX,"@iEval(TEXT+)") {}
 		void expand(Support::Messages&,MacroText&,Instance&,mstack&) const override;
 	};
 	struct iFile : public Internal {
-		iFile() : Internal("iFile",1,2) {}
+		iFile() : Internal("iFile",1,2,"@iFile(FILENAME,[true|false])") {}
 		void expand(Support::Messages&,MacroText&,Instance&,mstack&) const override;
 	};
 	struct iField : public Internal {
 		static std::stack<const FieldContext*> contextStack;
-		iField() : Internal("iField",1,1) {}
+		iField() : Internal("iField",1,1,"@iField(FIELDNAME)") {}
 		void expand(Support::Messages&,MacroText&,Instance&,mstack&) const override;
 	};
 	struct iForSubs : public FieldContext {
 		static Support::Db::Query* query;
-		iForSubs() : FieldContext("iForSubs",5,5) {}
+		iForSubs() : FieldContext("iForSubs",5,5,"@iForSubs(TABLE,NODE,KEYFIELD,SORTFIELD,EXPANSION)") {}
 		string get(Messages&,const string&) const override;
 		void expand(Support::Messages&,MacroText&,Instance&,mstack&) const override;
 	};
 	struct iForQuery : public FieldContext {
 		static Support::Db::Query* query;
-		iForQuery() : FieldContext("iForQuery",2,2) {}
+		iForQuery() : FieldContext("iForQuery",2,2,"@iForQuery(QUERY,EXPANSION)") {}
 		string get(Messages&,const string&) const override;
 		void expand(Support::Messages&,MacroText&,Instance&,mstack&) const override;
 	};
 	struct iMath : public Internal {
-		iMath() : Internal("iMath",2,7) {}
+		iMath() : Internal("iMath",2,7,"@iMath(OPERATION,INPUT1,INPUT2,[COMPARATOR,[TRUE,[FALSE]]]])") {}
 		void expand(Support::Messages&,MacroText&,Instance&,mstack&) const override;
 	};
 	struct iNull : public Internal {
-		iNull() : Internal("iNull",0,INT_MAX) {}
+		iNull() : Internal("iNull",0,INT_MAX,"@iNull(TEXT)") {}
 		void expand(Support::Messages&,MacroText&,Instance&,mstack&) const override;
 	};
 	struct iTiming : public Internal {
-		iTiming() : Internal("iTiming",0,3) {}
+		iTiming() : Internal("iTiming",0,3,"@iTiming(MODE,[[NAME],UNITS])") {}
 		void expand(Support::Messages&,MacroText&,Instance&,mstack&) const override;
 	};
 
 //•------------ √ Storage macros
 	struct iExists : public Internal {
-		iExists() : Internal("iExists",1,3) {}
+		iExists() : Internal("iExists",1,3,"@iExists(NAME,[TRUE,[FALSE]])") {}
 		void expand(Support::Messages&,MacroText&,Instance&,mstack&) const override;
 	};
 	struct iGet : public Internal {
-		iGet() : Internal("iGet",1,4) {}
+		iGet() : Internal("iGet",1,4,"@iGet(NAME,[COMPARATOR,[TRUE,[FALSE]]])") {}
 		void expand(Support::Messages&,MacroText&,Instance&,mstack&) const override;
 	};
 	struct iSet : public Internal {
-		iSet() : Internal("iSet",1,2) {}
+		iSet() : Internal("iSet",1,2,"@iSet(NAME,VALUE)") {}
 		void expand(Support::Messages&,MacroText&,Instance&,mstack&) const override;
 	};
 	struct iAppend : public Internal {
-		iAppend() : Internal("iAppend",1,2) {}
+		iAppend() : Internal("iAppend",1,2,"@iAppend(NAME,VALUE)") {}
 		void expand(Support::Messages&,MacroText&,Instance&,mstack&) const override;
 	};
 	struct iKV : public Internal {
-		iKV() : Internal("iKV",2,5) {}
+		iKV() : Internal("iKV",2,5,"@iKV(NAME,OPERATION,[OP. PARAMETER]+") {}
 		void expand(Support::Messages&,MacroText&,Instance&,mstack&) const override;
 	};
 	struct iList : public Internal {
-		iList() : Internal("iList",2,5) {}
+		iList() : Internal("iList",2,5,"@iList(NAME,OPERATION,[OP. PARAMETER]+)") {}
 		void expand(Support::Messages&,MacroText&,Instance&,mstack&) const override;
 	};
 	struct iReset : public Internal {
-		iReset() : Internal("iReset",1,1) {}
+		iReset() : Internal("iReset",1,1,"@iReset(NAME)") {}
 		void expand(Support::Messages&,MacroText&,Instance&,mstack&) const override;
 	};
 	struct iSetCache : public Internal {
-		iSetCache() : Internal("iSetCache",2,2) {}
+		iSetCache() : Internal("iSetCache",2,2,"@iSetCache(NAME,VALUE)") {}
 		void expand(Support::Messages&,MacroText&,Instance&,mstack&) const override;
 	};
 	struct iSig : public Internal {
-		iSig() : Internal("iSig",1,3) {}
+		iSig() : Internal("iSig",1,3,"@iSig(NAME,[TRUE,[FALSE]])") {}
 		void expand(Support::Messages&,MacroText&,Instance&,mstack&) const override;
 	};
 	struct iUse : public Internal {
-		iUse() : Internal("iUse",1,1) {}
+		iUse() : Internal("iUse",1,1,"@iUse(NAME)") {}
 		void expand(Support::Messages&,MacroText&,Instance&,mstack&) const override;
 	};
 

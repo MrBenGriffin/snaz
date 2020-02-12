@@ -43,6 +43,7 @@ namespace mt {
 	public:
 		MacroText expansion;
 		bool iterated, trimParms, preExpand;
+		string example;
 
 		Definition(const std::string&);
 		Definition(Messages&,const std::string&,const std::string&, long = 0, long = -1, bool= true, bool= true, bool= false);
@@ -50,6 +51,7 @@ namespace mt {
 
 		// Handler virtuals.
 		bool inRange(size_t) const override;
+		bool unlimited() const { return maxParms == INT_MAX; }
 		bool internal() const override { return false; }
 		bool parmCheck(Messages&,size_t,const location*) const;
 		std::ostream &visit(std::ostream &) const override;

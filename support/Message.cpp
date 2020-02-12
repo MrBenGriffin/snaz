@@ -48,8 +48,9 @@ namespace Support {
 	Message::Message(channel c, Purpose p,string s) : Message(c,p,std::move(s),0.0L) {
 	}
 
-	Message::Message(channel c, string s,const mt::location& l) : Message(c,alert,std::move(s),0.0L) {
+	Message::Message(channel c, string s,const mt::location& l,string addon) : Message(c,alert,std::move(s),0.0L) {
 		loc = l;
+		additional=addon;
 	}
 
 	Message::Message(channel c,string s): Message(c,alert,std::move(s),0.0L) {
@@ -159,6 +160,9 @@ namespace Support {
 		o << "\t\t\t{" << endl;
 		o << "\t\t\t\t\"channel\": \"" << chan() << "\"," << endl;
 		o << "\t\t\t\t\"message\": \"" << content << "\"";
+		if(!additional.empty()) {
+			o << "," << endl << "\t\t\t\t\"example\": \"" << additional << "\"";
+		}
 		if (loc.end.column - loc.begin.column > 0) {
 			o << "," << endl;
 			o << "\t\t\t\t\"begin\": {" << endl;

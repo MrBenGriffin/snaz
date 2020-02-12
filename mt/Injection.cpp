@@ -173,13 +173,45 @@ namespace mt {
 		out.emplace(token);
 	}
 
-	void Injection::check(Messages &errs, mstack& context) const {
-		// During define, when this gets evaluated, we may easily want to allow
-		// The macro type to be changed, so we don't want to be too introspective at this point.
-//		if (type != It::text) {
-//			errs << Message(info,"Need to test the injection here");
-//		}
+void Injection::check(Messages &errs, mstack& context) const {
+	if (type != It::text) {
+		if(sValue == 0 && !stack) {
+			auto macroRef = Build::b().macro();
+			if(!macroRef.empty()) {
+				auto librarian = Definition::library.find(macroRef);
+				if(librarian != Definition::library.end()) {
+					auto& mdef = *(librarian->second);
+					auto* def = dynamic_cast<Definition*>(&mdef);
+					switch (type) {
+						case It::plain: {
+							if(!def->inRange(value)) {
+								ostringstream estr;
+								estr << "Injection value " << value << " is outside the range for this macro.";
+								errs << Message(range,estr.str(),pos);
+							}
+							if(list && !def->unlimited()) {
+								ostringstream estr;
+								estr << "Injection value " << value << " is marked as a list, and the macro has a fixed number of maximum parameters";
+								errs << Message(range,estr.str(),pos);
+							}
+						} break;
+						case It::current:
+						case It::count:
+						case It::size: {
+							if(!def->iterated) {
+								errs << Message(undefined,"Injection types (i,k,n) can only be used by an iterated macro.",pos);
+							}
+							if(!def->unlimited()) {
+								errs << Message(range,"Injection and macro is iterated but the macro has a fixed number of maximum parameters",pos);
+							}
+						} break;
+						case It::text: break;
+					}
+				}
+			}
+		}
 	}
+}
 
 	void Injection::expand(Messages& errs,MacroText &result,mstack &context) const {
 		if (type == It::text) {

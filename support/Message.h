@@ -75,11 +75,12 @@ namespace Support {
 		channel ch;
 		Purpose purpose;
 		string content;
+		string additional;
 		long double prog; //current progress out of
 		long double seconds;
 		Message(channel,string);
 		Message(channel,Purpose,string);
-		Message(channel,string,const mt::location&);
+		Message(channel,string,const mt::location&,string="");
 		Message(channel,string,long double);
 		string chan() const;
 		string purposeStr() const;

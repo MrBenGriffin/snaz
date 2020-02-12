@@ -309,6 +309,15 @@ namespace Support {
 								2));  //allow for a css switch. eg rebuild[S].css env and -MAdmin -> rebuildA.css
 						get("RS_BUILDNODEPATH", EditNodeUrl, "/mortar/oedit.obyx?node=0"); //if none, keep default.
 					} break;
+						case 'm': {
+							if(parameter == "-macro") {
+								if (i == argc) {
+									log << Message(error," -macro needs the name of the macro being defined.");
+								} else {
+									build.setMacro(string(argv[++i]));
+								}
+							}
+						} break;
 					case 'O': {
 						deque<size_t> nodes;
 						tolist(nodes, parameter.substr(2));

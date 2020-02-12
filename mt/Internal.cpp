@@ -41,8 +41,8 @@ namespace mt {
 		bool Internal::just_parsing = false;
 
 
-	Internal::Internal(std::string name, size_t min, size_t max) :
-		Handler(),_name(std::move(name)),minParms(min),maxParms(max) {}
+	Internal::Internal(std::string name, size_t min, size_t max,string eg) :
+		Handler(),_name(std::move(name)),minParms(min),maxParms(max),example(eg) {}
 
 	bool Internal::inRange(size_t i) const {
 		return (minParms <= i) && (i <= maxParms);
@@ -146,7 +146,7 @@ namespace mt {
 					err << " from " << minParms << " to " << maxParms << " parameters.";
 				}
 			}
-			e << Message(range,err.str(),pos);
+			e << Message(range,err.str(),pos, example);
 		}
 		mstack context;
 		for (auto &parm : instance.parms) {

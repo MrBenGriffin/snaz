@@ -89,6 +89,7 @@ public:
 	bool fullBuild() const { return full; }
 	size_t page() const { return currentPage; }
 	std::string suffix() const { return currentSuffix; }
+	std::string macro() const { return macroReference; }
 	const Technology& technology() const { return technologies.front().second; }
 	size_t tech() const { return technologies.empty() ? 0 : technologies.front().first; }
 	const Language& language() const { return languages.front().second; }
@@ -97,6 +98,7 @@ public:
 	void setPage(size_t page) { currentPage = page; }
 	void setCurrent(Support::buildKind current) { _current = current; }
 	void setNodes(Support::buildType,std::deque<size_t>&);
+	void setMacro(std::string ref) { macroReference = ref; }
 	Support::Media* media() const { return _media; }
 	void calculateNodesToBuild(Support::Messages&) const;
 
@@ -107,6 +109,7 @@ public:
 	void close(Support::Messages&);
 
 private:
+	std::string macroReference;
 	Support::buildKind _current;	//one of Final/Draft/Test/Parse
 	std::set<Support::buildType> builds;
 	std::map<Support::buildType,std::deque<size_t>> requestedNodes;
