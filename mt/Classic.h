@@ -20,6 +20,7 @@ namespace mt {
 		virtual ~Classic() = default;
 		using cFlexLexer::yylex;
 		virtual int yylex(mt::Parser::semantic_type *const,mt::Parser::location_type *);
+		virtual void LexerError(const char* msg);
 	private:
 		mt::Parser::semantic_type *yylval = nullptr;
 	};

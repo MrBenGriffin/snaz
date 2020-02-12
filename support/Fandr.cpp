@@ -83,6 +83,76 @@ namespace Support {
 	int fandr(string &t, const string s) {
 		return fandr(t,s,"");
 	}
+
+//• --------------------------------------------------------------------------
+// Given a line and a column (in bytes) return the column position (in characters)
+// col is 1-indexed.
+	size_t char_col(string const line,size_t col) {
+		size_t retval = string::npos;
+		size_t len = line.size();
+		if (--col < len) {
+			retval = 1;
+			size_t cursor = 0;
+			while (cursor < col) {
+				if((line[cursor] & 0x80) == 0x00) { //1 byte code
+					retval++;
+					cursor++;
+				} else if ((len-cursor > 1) && (line[cursor] & 0xe0) == 0xc0 && (line[cursor+1] & 0xc0) == 0x80) { //2 byte code
+					retval++;
+					cursor+=2;
+				} else if ((len-cursor > 2) && (line[cursor] & 0xf0) == 0xe0 && (line[cursor+1] & 0xc0) == 0x80 && (line[cursor+2] & 0xc0) == 0x80) {
+					retval++;
+					cursor+=3;
+				} else if ((len-cursor > 3) && (line[cursor] & 0xf8) == 0xf0 && (line[cursor+1] & 0xc0) == 0x80 && (line[cursor+2] & 0xc0) == 0x80 && (line[cursor+3] & 0xc0) == 0x80) {
+					retval++;
+					cursor+=4;
+				} else {
+					return string::npos; //Not UTF-8
+				}
+			}
+		}
+		return retval;
+	}
+
+	// stream version of utf-8 column counting
+	int length(char*& text, int& length) {
+		int result = 0;
+		size_t f1 = 0;
+		size_t l1 = length;
+		while (f1 < l1) {
+			if ((text[f1] & 0x80) == 0x00) {
+				f1++;
+				result++;
+			} else if ((l1-f1 > 1) && (text[f1] & 0xe0) == 0xc0 && (text[f1+1] & 0xc0) == 0x80) {
+				f1 += 2;
+				result++;
+			} else if ((l1-f1 > 2) && (text[f1] & 0xf0) == 0xe0 && (text[f1+1] & 0xc0) == 0x80 && (text[f1+2] & 0xc0) == 0x80) {
+				f1 += 3;
+				result++;
+			} else if ((l1-f1 > 3) && (text[f1] & 0xf8) == 0xf0 && (text[f1+1] & 0xc0) == 0x80 && (text[f1+2] & 0xc0) == 0x80 && (text[f1+3] & 0xc0) == 0x80) {
+				f1 += 4;
+				result++;
+			} else {
+				return length; // illegal utf-8
+			}
+		}
+		return result;
+	}
+
+
+	//• --------------------------------------------------------------------------
+	// Given a string of lines, with row and column (in bytes) return the column position (in characters)
+  // Row and col are 1-indexed.
+	size_t char_col(string const basis,size_t row,size_t col) {
+		size_t retval = string::npos;
+		deque<string> lines;
+		tolines(lines, basis);
+		if (row <= lines.size()) {
+			return char_col(lines[row - 1],col);
+		}
+		return retval;
+	}
+
 	//• --------------------------------------------------------------------------
 	bool position(string const searchtext,string const context,size_t& result) {
 		bool retval = false;

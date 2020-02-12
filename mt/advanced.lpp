@@ -5,6 +5,7 @@
 #include <sstream>
 #include <algorithm>
 #include <support/Message.h>
+#include <support/Fandr.h>
 
 /* Implementation of yyFlexScanner */ 
 #include "parser.tab.hpp"
@@ -36,8 +37,7 @@ using token = mt::Parser::token;
 #define yyterminate() return( token::END )
 
 /* update location on matching */
-#define YY_USER_ACTION loc->step(); loc->columns(yyleng);
-//offset+=yyleng;
+#define YY_USER_ACTION loc->step();  loc->columns(Support::length(yytext, yyleng));
 
 %}
 

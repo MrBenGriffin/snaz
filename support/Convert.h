@@ -51,9 +51,9 @@ namespace Support {
 	size_t	hex(string::const_iterator&,long double&); 		//input e.g. x32dda outputs a hex double. error needs NaN returns bytes used
 	void 			toDecimalList(deque<string>&,string);
 	void			tolist(deque<size_t>&,const string &); //given a comma delimited set of naturals, returns a deque of naturals
-	bool 			tolist(deque<string>&,string,const string&); //given a cutter(string) delimited set of strings, return a vector of strings.
-	void 			toSet(set<size_t>&,const string&); //given a comma-delimited set of strings, return a set of size_t.
-
+	bool			tolist(deque<string>&,string,const string&); //given a cutter(string) delimited set of strings, return a vector of strings.
+	void			toSet(set<size_t>&,const string&); //given a comma-delimited set of strings, return a set of size_t.
+	void			tolines(deque<string>&,const string &); //return a deque of lines from a start line.
 	bool			isint(const string&);
 	bool			isfloat(const string &);
 	bool			isdouble(const string &);

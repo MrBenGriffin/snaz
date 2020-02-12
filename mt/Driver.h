@@ -53,22 +53,19 @@ namespace mt {
 		static void parse(Messages&,MacroText&,const std::string&,bool = false);
 
 	private:
-		const std::istream*			source; //only used for parse errors..
-		static int					accept;
-		pos 						position;
-		bool						iterated;
+		const std::istream*		source; //only used for parse errors..
+		static int						accept;
+		pos 									position;
+		bool									iterated;
 
-		MacroText*				_final;
-//		MacroText				_alternative;
-		MacroText				parm;
+		MacroText*						_final;
+		MacroText							parm;
 
 		std::forward_list< std::unique_ptr<Macro> >	macro_stack;
-//		std::forward_list<Macro>	macro_stack;
 
-		Parser  *parser   = nullptr;
 		Scanner *scanner  = nullptr;
 
-		void parseError(Messages&);
+//		void parseError(Messages&, Message&);
 
 	};
 

@@ -9,6 +9,7 @@
 #include "parser.tab.hpp"
 #include "mt/Scanner.h"
 #include "support/Message.h"
+#include "support/Fandr.h"
 
 namespace mt {
 	class Classic : public Scanner, public cFlexLexer {
@@ -21,7 +22,6 @@ namespace mt {
 				std::string err(msg); errs << Support::Message(Support::fatal,err);
     }
 	private:
-//		size_t offset;
 		mt::Parser::semantic_type *yylval = nullptr;
 	};
 }
@@ -36,7 +36,7 @@ using token = mt::Parser::token;
 #define yyterminate() return( token::END )
 
 /* update location on matching */
-#define YY_USER_ACTION loc->step(); loc->columns(yyleng);
+#define YY_USER_ACTION loc->step();  loc->columns(Support::length(yytext, yyleng));
 
 %}
 %option debug

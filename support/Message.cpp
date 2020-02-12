@@ -151,11 +151,6 @@ namespace Support {
 		log << purposeStr() << "; " << chan() << ": " << content;
 	}
 
-//{
-//	"channel": "syntax|range",
-//	"message": "@iFooBoo is unknown"
-//}
-
 	void Message::json(ostream& o) const {
 		string x(content);
 		Support::fandr(x, "\"", "\\\"");
@@ -392,6 +387,11 @@ namespace Support {
 	}
 
 	void Messages::pop() {
+		auto top = stack.back();
+		auto curr = list.back().ID();
+		if (top == curr) {
+			list.pop_back();
+		}
 		stack.pop_back();
 	}
 

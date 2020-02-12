@@ -4,6 +4,7 @@
 #include <string>
 #include <sstream>
 #include <iomanip>
+#include <algorithm>
 
 //for NAN
 #include <cmath>
@@ -295,6 +296,25 @@ namespace Support {
 			}
 		}
 	}
+
+//-----------------------------------------------------------------------------
+void tolines(deque<string>& list,const string &basis) { //return a deque of lines from a start line.
+	if (!basis.empty()) {
+		size_t d = std::count(basis.begin(), basis.end(), '\x0d');
+		size_t a = std::count(basis.begin(), basis.end(), '\x0a');
+		if(d > 0) {
+			if(a > 0) {
+				tolist(list,basis,"\x0d\x0a");
+			} else {
+				tolist(list,basis,"\x0d");
+			}
+		} else {
+			tolist(list,basis,"\x0a");
+		}
+	} else {
+		list.emplace_back("");
+	}
+}
 
 	//-----------------------------------------------------------------------------
 	bool tolist(deque<string>& list,string basis,const string& cutter) {
