@@ -34,8 +34,6 @@ namespace mt {
 	}
 
 	void Driver::parse(Messages &errs, MacroText &result, bool strip) {
-		Message parse_container(container,"Parse Errors");
-		errs.push(parse_container);
 		_final = &result;
 		scanner->stripped = strip;
 		scanner->defining = false;
@@ -44,7 +42,6 @@ namespace mt {
 			parser.parse();
 		} catch (...) {}
 		_final = nullptr;
-		errs.pop();
 	}
 
 	void Driver::parse(Messages &errs, MacroText &result, const std::string &code, bool strip) {
@@ -55,8 +52,6 @@ namespace mt {
 	}
 
 	void Driver::define(Messages &errs, parse_result &result, bool strip) {
-		Message parse_container(container,"Parse Errors");
-		errs.push(parse_container);
 		bool success = false;
 		_final = &(result.second.first);
 		scanner->stripped = strip;
@@ -68,7 +63,6 @@ namespace mt {
 		_final = nullptr;
 		result.first = success;
 		result.second.second = iterated;
-		errs.pop();
 	}
 
 	/*

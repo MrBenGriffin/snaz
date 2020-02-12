@@ -23,7 +23,7 @@ namespace Support {
 	using namespace std;
 // 'item' is used in the database for undefined...
 	enum channel {
-			fatal, error, syntax, range, parms, warn, deprecated, info, debug, security, usage, //alerts
+			fatal, error, syntax, range, parms, undefined, warn, deprecated, info, debug, security, usage, //alerts
 			path, container, link, trace, code,  // extra
 			ntime, build, custom,		   // timing
 			node, language, technology, media, transform, adhoc, file     // progress

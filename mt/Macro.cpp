@@ -115,7 +115,7 @@ namespace mt {
 		} else {
 			ostringstream err;
 			err << "Macro '" << _name << "' is undefined." << flush;
-			errs << Message(error, err.str(), pos);
+			errs << Message(undefined, err.str(), pos);
 			Instance instance(&parms, nullptr);
 			for (auto &parm : instance.parms) {
 				parm.check(errs,context);
@@ -141,7 +141,7 @@ namespace mt {
 			err << "Macro '" << flush;
 			visit(err, 0);
 			err << flush << "' was not recognised. It will be skipped.";
-			errs << Message(error,err.str());
+			errs << Message(undefined,err.str());
 		}
 	}
 

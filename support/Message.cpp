@@ -58,6 +58,7 @@ namespace Support {
 			case fatal:
 			case error:
 			case syntax:
+			case undefined:
 			case parms:
 			case range:
 			case warn:
@@ -121,6 +122,7 @@ namespace Support {
 			case fatal:  	return "fatal"; break;
 			case error:  	return "error"; break;
 			case syntax: 	return "syntax"; break;
+			case undefined: return "undefined"; break;
 			case parms:  	return "parms"; break;
 			case range:  	return "range"; break;
 			case warn:   	return "warn"; break;

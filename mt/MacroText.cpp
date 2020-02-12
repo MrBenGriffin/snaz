@@ -70,10 +70,6 @@ namespace mt {
 		}
 	}
 
-//	void MacroText::emplace(Token* token) {
-//
-//	}
-
 	void MacroText::emplace(unique_ptr<Macro>& token) {
 		tokens.emplace_back(move(token));
 	}

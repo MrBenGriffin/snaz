@@ -106,7 +106,7 @@ namespace Support {
 							}
 							//need to test the below with eg "4-3)"
 							if( ssig !='(' ) {
-								errs << Message(syntax,"Error. Unbalanced bracket.");
+								errs << Message(syntax,"Unbalanced bracket.");
 							} else {
 								if( !opstack.empty() && opstack.back()->sig() == 'f') {
 									evalstack(errs); //was a function declaration. so do it.
