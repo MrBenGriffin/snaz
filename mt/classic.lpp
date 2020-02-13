@@ -88,6 +88,19 @@ NOT_SPECIAL_3C		(\xe2(([^\x9d][^\0])|(\x9d[^\xab])))
 
 	/** everything is unrestricted in literal ⎣ context, except for close literal. E2 8E A6 = close lit **/
 <literal>{
+	
+	{WHITESPACE} {
+		std::string value(YYText());
+		if(value.find_first_of ("\x0d\x0a") != std::string::npos) {
+			size_t d = std::count(value.begin(), value.end(), '\x0d');
+			size_t a = std::count(value.begin(), value.end(), '\x0a');
+			size_t t = value.find_last_not_of("\x09");
+			t = t == std::string::npos ? value.size() : value.size() - (t + 1);
+			loc->lines(d == 0 ? a:d );
+			loc->end.column = 1 + t;
+		}
+	}
+
 	{NOT_LITERAL_OUT}*
 
 	{LITERAL_OUT} {
