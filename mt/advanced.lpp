@@ -7,7 +7,7 @@
 #include <support/Message.h>
 #include <support/Fandr.h>
 
-/* Implementation of yyFlexScanner */ 
+/* Implementation of yyFlexScanner */
 #include "parser.tab.hpp"
 
 #include "mt/Scanner.h"
@@ -90,21 +90,8 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 
 	/** everything is unrestricted in literal ⎣ context, except for close literal. E2 8E A6 = close lit **/
 <literal>{
-	
-	{WHITESPACE} {
-		std::string value(YYText());
-		if(value.find_first_of ("\x0d\x0a") != std::string::npos) {
-			size_t d = std::count(value.begin(), value.end(), '\x0d');
-			size_t a = std::count(value.begin(), value.end(), '\x0a');
-			size_t t = value.find_last_not_of("\x09");
-			t = t == std::string::npos ? value.size() : value.size() - (t + 1);
-			loc->lines(d == 0 ? a:d );
-			loc->end.column = 1 + t;
-		}
-	}
-
 	{NOT_LITERAL_OUT}*
-
+	
 	{LITERAL_OUT} {
 		yylval->build<std::string>(std::string(yytext, yyleng -3));
 		yy_pop_state(); /**  Pop Literal **/
@@ -337,4 +324,3 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 }
 
 %%
-
