@@ -71,6 +71,7 @@ MACRO_NAME	[a-zA-Z_0-9]+
 WHITESPACE	[\t\x0d\x0a]+
 LITERAL_OUT			\|\}
 NOT_LITERAL_OUT		([^|]|\|[^}])
+LITERAL_END  \|
 
 NOT_SPECIAL_1C		([^\t\x0d\x0a,\(\)\{\}@%\xe2])
 NOT_SPECIAL_3C		(\xe2(([^\x9d][^\0])|(\x9d[^\xab])))
@@ -96,9 +97,12 @@ NOT_SPECIAL_3C		(\xe2(([^\x9d][^\0])|(\x9d[^\xab])))
 		return( token::TEXT );
 	}
 
+	{LITERAL_END}
+	
 	<<EOF>>	{
 		std::ostringstream eStream;
 		eStream << "Expected close literal before end of text." << yytext;
+		lit_stack.top().end = loc->end;
 		errs << Support::Message(Support::syntax,eStream.str(), lit_stack.top());
 		lit_stack.pop();
 		yy_pop_state();
@@ -150,6 +154,7 @@ NOT_SPECIAL_3C		(\xe2(([^\x9d][^\0])|(\x9d[^\xab])))
 	<<EOF>> {
 		std::ostringstream eStream;
 		eStream << "expected close macro before end of text" << yytext;
+		mac_stack.top().end = loc->end;
 		errs << Support::Message(Support::syntax,eStream.str(), mac_stack.top());
 		mac_stack.pop();
 		yy_pop_state();
@@ -198,6 +203,7 @@ NOT_SPECIAL_3C		(\xe2(([^\x9d][^\0])|(\x9d[^\xab])))
 	<<EOF>> {
 		std::ostringstream eStream;
 		eStream << "Expected close brace before end of text." << yytext;
+		brc_stack.top().end = loc->end;
 		errs << Support::Message(Support::syntax,eStream.str(), brc_stack.top());
 		brc_stack.pop();
 		yy_pop_state();
@@ -225,6 +231,7 @@ NOT_SPECIAL_3C		(\xe2(([^\x9d][^\0])|(\x9d[^\xab])))
 	<<EOF>> {
 		std::ostringstream eStream;
 		eStream << "Expected close bracket before end of text." << yytext;
+		brk_stack.top().end = loc->end;
 		errs << Support::Message(Support::syntax,eStream.str(), brk_stack.top());
 		yy_pop_state();
 		brk_stack.pop();
