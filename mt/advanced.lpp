@@ -19,8 +19,7 @@ namespace mt {
 		using aFlexLexer::yylex;
 		virtual int yylex(mt::Parser::semantic_type *const,mt::Parser::location_type*);
 		virtual void LexerError(const char* msg) {
-			std::string err(msg);
-			errs << Support::Message(Support::fatal,err);
+			std::string err("Advanced: "); err.append(msg); errs << Support::Message(Support::fatal,err);
     }
 	private:
 		mt::Parser::semantic_type *yylval = nullptr;
@@ -91,16 +90,20 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 
 	/** everything is unrestricted in literal ⎣ context, except for close literal. E2 8E A6 = close lit **/
 <literal>{
-	{NOT_LITERAL_OUT}*{LITERAL_OUT} {
+	{NOT_LITERAL_OUT}*
+	
+	{LITERAL_OUT} {
 		yylval->build<std::string>(std::string(yytext, yyleng -3));
 		yy_pop_state(); /**  Pop Literal **/
+		lit_stack.pop();
 		return( token::TEXT );
 	}
 	
 	<<EOF>> {
 		std::ostringstream eStream;
-		eStream << "expected close literal before end of text" << yytext;
-		errs << Support::Message(Support::syntax,eStream.str(),*loc);
+		eStream << "Expected close literal before end of text." << yytext;
+		errs << Support::Message(Support::syntax,eStream.str(),lit_stack.top());
+		lit_stack.pop();
 		yy_pop_state();
 	}
 
@@ -118,6 +121,7 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 			yylval->build<std::string>(std::string(yytext, yyleng -1));
 			yy_pop_state(); /**  Pop Parm to macro **/
 			yy_pop_state(); /**  Pop Macro **/
+			mac_stack.pop();
 			return( token::MACRO_OUT );
 		} else {
             yylval->build<std::string>(yytext);
@@ -131,6 +135,7 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 			yylval->build<std::string>(std::string(yytext, yyleng -3));
 			yy_pop_state(); /**  Pop Parm to macro **/
 			yy_pop_state(); /**  Pop Macro **/
+			mac_stack.pop();
 			return( token::MACRO_OUT );
 		} else {
             yylval->build<std::string>(yytext);
@@ -147,21 +152,25 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 
 	<<EOF>> {
 		std::ostringstream eStream;
-		eStream << "expected close macro before end of text" << yytext;
-		errs << Support::Message(Support::syntax,eStream.str(),*loc);
+		eStream << "Expected close macro before end of text." << yytext;
+		errs << Support::Message(Support::syntax,eStream.str(),mac_stack.top());
 		yy_pop_state();
+		yy_pop_state();
+		mac_stack.pop();
 	}
 
 }
 
 	/** braces are to be honoured in brace and parm context only **/
 <parm,brace>{BRACE_IN} {
+	brc_stack.push(*loc);
 	yy_push_state(brace);
 }
 
   /** brackets are to be honoured in brackets and parm context only **/
 <parm,bracket>{BRACKET_IN} {
-    yylval->build<std::string>(yytext);
+	yylval->build<std::string>(yytext);
+	brk_stack.push(*loc);
 	yy_push_state(bracket);
     return( token::TEXT );
  	/** yymore(); **/
@@ -179,6 +188,7 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 	{BRACE_OUT} {
 		yylval->build<std::string>(std::string(yytext, yyleng -3));
 		yy_pop_state();
+		brc_stack.pop();
 		return( token::TEXT );
 	}
 
@@ -191,7 +201,8 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 	<<EOF>> {
 		std::ostringstream eStream;
 		eStream << "expected close brace before end of text" << yytext;
-		errs << Support::Message(Support::syntax,eStream.str(),*loc);
+		errs << Support::Message(Support::syntax,eStream.str(),brc_stack.top());
+		brc_stack.pop();
 		yy_pop_state();
 	}
 
@@ -203,6 +214,7 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 	{BRACKET_OUT} {
 		yylval->build<std::string>(yytext);
 		yy_pop_state();
+		brk_stack.pop();
 		return( token::TEXT );
 	}
 
@@ -215,7 +227,8 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 	<<EOF>> {
 		std::ostringstream eStream;
 		eStream << "expected close bracket before end of text" << yytext;
-		errs << Support::Message(Support::syntax,eStream.str(),*loc);
+		errs << Support::Message(Support::syntax,eStream.str(),brk_stack.top());
+		brk_stack.pop();
 		yy_pop_state();
 	}
 
@@ -225,6 +238,7 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 <INITIAL,parm,brace,bracket>{
 
 	{LITERAL_IN} {
+		lit_stack.push(*loc);
 		yy_push_state(literal);
 	}
 
@@ -246,6 +260,7 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 
 	{MACRO_SIGN}{MACRO_NAME}{BRACKET_IN} {
 		yylval->build< std::string >( std::string(yytext + 3, yyleng -4) );
+		mac_stack.push(*loc);
 		yy_push_state(macro);
 		yy_push_state(parm);
 		return( token::MACRO_IN );
@@ -253,6 +268,7 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 
 	{MACRO_SIGN}{MACRO_NAME}{FAT_ONE_IN} {
 		yylval->build< std::string >( std::string(yytext + 3, yyleng -6) );
+		mac_stack.push(*loc);
 		yy_push_state(fatmac);
 		yy_push_state(parm);
 		return( token::MACRO_IN );
@@ -290,16 +306,8 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 	}
 
 	{BRACE_IN} {
+		brc_stack.push(*loc);
 		yy_push_state(brace);
-		/**
-		if(!defining) {
-			yy_push_state(brace);
-		} else {
-            yylval->build<std::string>(yytext);
-            return( token::TEXT );
-            /-- yymore(); --/
-		}
-		**/
 	}
 
 }
