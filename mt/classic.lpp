@@ -70,7 +70,7 @@ MACRO_SIGN	@
 MACRO_NAME	[a-zA-Z_0-9]+
 WHITESPACE	[\t\x0d\x0a]+
 LITERAL_OUT			\|\}
-NOT_LITERAL_OUT		([^|]|\|[^}])
+NOT_LITERAL_OUT		([^|i\x0d\x0a]|\|[^}\x0d\x0a])
 LITERAL_END  \|
 
 NOT_SPECIAL_1C		([^\t\x0d\x0a,\(\)\{\}@%\xe2])
