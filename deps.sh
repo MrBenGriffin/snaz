@@ -32,7 +32,7 @@ if [ ! -f ${DEPS_DIR}/libsass/config.log ]; then
   echo "libsass incorrect"
   cd ${DEPS_DIR}
   export SASS_LIBSASS_PATH="${DEPS_DIR}/libsass"
-  version="3.6.1"
+  version="3.6.5"
   git clone -q https://github.com/sass/libsass --branch $version --depth 1 && cd libsass
   autoreconf --force --install
   ./configure --enable-shared --prefix=${LOCAL_DIR}
