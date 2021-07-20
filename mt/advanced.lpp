@@ -41,7 +41,6 @@ using token = mt::Parser::token;
 
 %}
 
-%option debug
 %option yyclass="mt::Advanced"
 %option prefix="a"
 %option noyywrap noinput nounput nodefault
@@ -91,20 +90,22 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 
 	/** everything is unrestricted in literal ⎣ context, except for close literal. E2 8E A6 = close lit **/
 <literal>{
-	{NOT_LITERAL_OUT}*
-	
+
 	{LITERAL_OUT} {
-		yylval->build<std::string>(std::string(yytext, yyleng -3));
 		yy_pop_state(); /**  Pop Literal **/
 		lit_stack.pop();
+	}
+
+	{NOT_LITERAL_OUT}* {
+		yylval->emplace<std::string>(yytext);
 		return( token::TEXT );
 	}
-	
-	<<EOF>> {
+
+	<<EOF>>	{
 		std::ostringstream eStream;
 		eStream << "Expected close literal before end of text." << yytext;
 		lit_stack.top().end = position(nullptr,INT_MAX,INT_MAX);
-		errs << Support::Message(Support::syntax,eStream.str(),lit_stack.top());
+		errs << Support::Message(Support::syntax,eStream.str(), lit_stack.top());
 		lit_stack.pop();
 		yy_pop_state();
 	}
@@ -114,19 +115,19 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 <parm>{
 
 	{DELIMITER} {
-		/** yylval->build<std::string>(std::string(yytext, yyleng -1)); **/
+		/** yylval->emplace<std::string>(std::string(yytext, yyleng -1)); **/
 		return( token::PARM );
 	}
 
 	{BRACKET_OUT} {
 		if(yy_top_state() == macro) {
-			yylval->build<std::string>(std::string(yytext, yyleng -1));
+			yylval->emplace<std::string>(std::string(yytext, yyleng -1));
 			yy_pop_state(); /**  Pop Parm to macro **/
 			yy_pop_state(); /**  Pop Macro **/
 			mac_stack.pop();
 			return( token::MACRO_OUT );
 		} else {
-            yylval->build<std::string>(yytext);
+            yylval->emplace<std::string>(yytext);
             return( token::TEXT );
             /** yymore(); **/
 		}
@@ -134,20 +135,20 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 
 	{FAT_ONE_OUT} {
 		if(yy_top_state() == fatmac) {
-			yylval->build<std::string>(std::string(yytext, yyleng -3));
+			yylval->emplace<std::string>(std::string(yytext, yyleng -3));
 			yy_pop_state(); /**  Pop Parm to macro **/
 			yy_pop_state(); /**  Pop Macro **/
 			mac_stack.pop();
 			return( token::MACRO_OUT );
 		} else {
-            yylval->build<std::string>(yytext);
+            yylval->emplace<std::string>(yytext);
             return( token::TEXT );
             /** yymore(); **/
 		}
 	}
 
 	{BRACE_OUT} {
-	    yylval->build<std::string>(yytext);
+	    yylval->emplace<std::string>(yytext);
         return( token::TEXT );
 		/** yymore(); **/
 	}
@@ -172,7 +173,7 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 
   /** brackets are to be honoured in brackets and parm context only **/
 <parm,bracket>{BRACKET_IN} {
-	yylval->build<std::string>(yytext);
+	yylval->emplace<std::string>(yytext);
 	brk_stack.push(*loc);
 	yy_push_state(bracket);
     return( token::TEXT );
@@ -181,7 +182,7 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 
   /** comma is unrestricted inside brace or bracket. Maybe we can fix these text tokens later.. **/
 <brace,bracket>{DELIMITER} {
-    yylval->build<std::string>(yytext);
+    yylval->emplace<std::string>(yytext);
     return( token::TEXT );
 }
 
@@ -189,14 +190,14 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 <brace>{
 
 	{BRACE_OUT} {
-		yylval->build<std::string>(std::string(yytext, yyleng -3));
+		yylval->emplace<std::string>(std::string(yytext, yyleng -3));
 		yy_pop_state();
 		brc_stack.pop();
 		return( token::TEXT );
 	}
 
 	({BRACKET_IN}|{BRACKET_OUT}|{FAT_ONE_IN}|{FAT_ONE_OUT})+ {
-        yylval->build<std::string>(yytext);
+        yylval->emplace<std::string>(yytext);
         return( token::TEXT );
         /** yymore(); **/
 	};
@@ -216,14 +217,14 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 <bracket>{
 
 	{BRACKET_OUT} {
-		yylval->build<std::string>(yytext);
+		yylval->emplace<std::string>(yytext);
 		yy_pop_state();
 		brk_stack.pop();
 		return( token::TEXT );
 	}
 
 	({BRACE_IN}|{BRACE_OUT}|{FAT_ONE_IN}|{FAT_ONE_OUT})+ {
-        yylval->build<std::string>(yytext);
+        yylval->emplace<std::string>(yytext);
         return( token::TEXT );
         /** yymore(); **/
 	}
@@ -258,13 +259,13 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 				loc->end.column = 1 + t;
 			}
 			if(!stripped) {
-				yylval->build<std::string>(yytext);
+				yylval->emplace<std::string>(yytext);
 				return( token::WSS );
 			}
 		}
 
 	{MACRO_SIGN}{MACRO_NAME}{BRACKET_IN} {
-		yylval->build< std::string >( std::string(yytext + 3, yyleng -4) );
+		yylval->emplace< std::string >( std::string(yytext + 3, yyleng -4) );
 		mac_stack.push(*loc);
 		yy_push_state(macro);
 		yy_push_state(parm);
@@ -272,7 +273,7 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 	}
 
 	{MACRO_SIGN}{MACRO_NAME}{FAT_ONE_IN} {
-		yylval->build< std::string >( std::string(yytext + 3, yyleng -6) );
+		yylval->emplace< std::string >( std::string(yytext + 3, yyleng -6) );
 		mac_stack.push(*loc);
 		yy_push_state(fatmac);
 		yy_push_state(parm);
@@ -281,22 +282,22 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 
 	{INJECT_SIGN}{I_OFFSET}({I_NUMBER}|{I_ITS}|({BRACKET_IN}{I_OFFSET}({I_STACK}|{I_ITER}|{I_MORE}){BRACKET_OUT})) {
 		if(defining) {
-			yylval->build< std::string >(std::string(yytext+3, yyleng -3));
+			yylval->emplace< std::string >(std::string(yytext+3, yyleng -3));
 			return(token::INJECTION);
 		} else {
-			yylval->build< std::string >( yytext );
+			yylval->emplace< std::string >( yytext );
 			return( token::TEXT );
 		}
 	}
 
 	/** NOT ",\t\n()⌽⍟⎡⎤⎣❫" **/
 	({NOT_SPECIAL_1C}|{NOT_SPECIAL_3C})+ {
-		yylval->build<std::string>(yytext);
+		yylval->emplace<std::string>(yytext);
 		return( token::TEXT );
 	}
 
 	{MACRO_SIGN}|{INJECT_SIGN} {
-		yylval->build<std::string>(yytext);
+		yylval->emplace<std::string>(yytext);
 		return( token::TEXT );
     }
 
@@ -306,7 +307,7 @@ NOT_SPECIAL_3C		(\xe2(([^\x8c\x8d\x8e\x9d][^\0])|(\x8c[^\xbd])|(\x8d[^\x9f])|(\x
 <INITIAL>{
 
 	({DELIMITER}|{BRACKET_IN}|{BRACKET_OUT}|{BRACE_OUT}|{FAT_ONE_OUT})+ {
-		yylval->build< std::string >(yytext);
+		yylval->emplace< std::string >(yytext);
 		return(token::TEXT);
 	}
 

@@ -247,7 +247,7 @@ namespace mt {
 		void expand(Support::Messages&,MacroText&,Instance&,mstack&) const override;
 	};
 	struct iDigest : public Internal {
-		iDigest() : Internal("iDigest",0,1,"@iDigest(TEXT)") {}
+		iDigest() : Internal("iDigest",0,2,"@iDigest(TEXT)") {}
 		void expand(Support::Messages&,MacroText&,Instance&,mstack&) const override;
 	};
 //•------------ √ NodeTree

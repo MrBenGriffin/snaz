@@ -1,13 +1,15 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Build" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="-X -P -A" WORKING_DIR="file://$USER_HOME$" PASS_PARENT_ENVS_2="false" PROJECT_NAME="macrotext" TARGET_NAME="macrotext" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="macrotext" RUN_TARGET_NAME="macrotext">
+  <configuration default="false" name="Build" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="-X -P -A" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://$USER_HOME$" PASS_PARENT_ENVS_2="false" PROJECT_NAME="macrotext" TARGET_NAME="macrotext" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="macrotext" RUN_TARGET_NAME="macrotext">
     <envs>
       <env name="LIBMYSQLCRSO" value="/usr/local/mysql/lib/libmysqlclient.dylib" />
       <env name="SQL_CONFIG_FILE" value="$USER_HOME$/build.cnf" />
       <env name="REMOTE_USER" value="bgriffin" />
       <env name="RS_USE_LANGUAGE" value="true" />
       <env name="RS_SITENAME" value="testBuild" />
-      <env name="RS_PATH" value="/Documents/build" />
+      <env name="RS_PATH" value="$PROJECT_DIR$/../build" />
       <env name="RS_USE_TECHNOLOGY" value="false" />
+      <env name="DYLD_LIBRARY_PATH" value="$MAGICK_HOME/lib/" />
+      <env name="MAGICK_HOME" value="$PROJECT_DIR$/../ImageMagick-7.0.1" />
     </envs>
     <method v="2">
       <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />

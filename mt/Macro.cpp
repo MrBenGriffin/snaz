@@ -151,19 +151,24 @@ namespace mt {
 			case 1: result << "⌽" << _name; break;
 			case 2: result << "@" << _name; break;
 			case 3: result << "@" << setfill('m') << setw((int)_name.size()) << ""; break;
+			default: break;
 		}
-		string split = "(";
+		string p_in,p_out;
+		switch(style) {
+			case 0: p_in="「"; p_out = "」"; break;
+			case 3: p_out = ","; break;
+			default: break;
+		}
+		if (style > 0)
+			result << "(";
+
 		for (auto &p : parms) {
-			result << split;
+			result << p_in;
 			p.visit(result, style);
-			switch(style) {
-				case 0: split = "」"; break;
-				case 1:
-				case 2:
-				case 3: split = ","; break;
-			}
+			result << p_out;
 		}
-		result << ")";
+		if (style > 0)
+			result << ")";
 		return result;
 	}
 

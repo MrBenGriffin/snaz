@@ -48,7 +48,7 @@ if [ 0 -eq $(vGood 3.4.1 ${vstring##* }) ]; then
     rm -rf ${DEPS_DIR}/bison
     mkdir -p ${DEPS_DIR}/bison
     cd ${DEPS_DIR}
-    BISON_URL="http://ftp.gnu.org/gnu/bison/bison-3.4.1.tar.gz"
+    BISON_URL="http://ftp.gnu.org/gnu/bison/bison-3.7.tar.gz"
     $retry wget --no-check-certificate --quiet -O - ${BISON_URL} | tar --strip-components=1 -xz -C bison
   fi
   cd ${DEPS_DIR}/bison
