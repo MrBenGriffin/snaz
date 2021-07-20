@@ -73,14 +73,14 @@ if [ 0 -eq $(vGood 2.6.3 ${vstring##* }) ]; then
 fi
 
 vstring=$(cmake --version | grep version)
-if [ 0 -eq $(vGood 3.13.0 ${vstring##* }) ]; then
+if [ 0 -eq $(vGood 3.21.0 ${vstring##* }) ]; then
   echo "Cmake ${vstring##* } too low"
   if [ ! -f ${DEPS_DIR}/cmake/bin/cmake ]; then
     echo "Cmake dep not found."
     cd ${DEPS_DIR}
     rm -rf ${DEPS_DIR}/cmake
     mkdir -p ${DEPS_DIR}/cmake
-    CMAKE_URL="https://cmake.org/files/v3.13/cmake-3.13.0-rc3-Linux-x86_64.tar.gz"
+    CMAKE_URL="https://github.com/Kitware/CMake/releases/download/v3.21.0/cmake-3.21.0.tar.gz"
     $retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
   fi
 fi
